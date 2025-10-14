@@ -20,6 +20,12 @@ class IyzicoClient {
   private client: any;
   private config: IyzicoConfig;
 
+  private ensureInitialized() {
+    if (!this.client) {
+      throw new Error('iyzico client not initialized. Please configure IYZICO_API_KEY and IYZICO_SECRET_KEY in environment variables.');
+    }
+  }
+
   constructor() {
     this.config = {
       apiKey: process.env.IYZICO_API_KEY || '',
@@ -29,13 +35,20 @@ class IyzicoClient {
         : 'https://sandbox-api.iyzipay.com',
     };
 
+    // Only initialize if credentials are provided
+    if (!this.config.apiKey || !this.config.secretKey) {
+      log.warn('⚠️  iyzico credentials not found. Payment features disabled.');
+      this.client = null;
+      return;
+    }
+
     this.client = new Iyzipay({
       apiKey: this.config.apiKey,
       secretKey: this.config.secretKey,
       uri: this.config.uri,
     });
 
-    log.info('iyzico Client initialized:', {
+    log.info('✅ iyzico Client initialized:', {
       environment: process.env.NODE_ENV,
       uri: this.config.uri,
     });
@@ -92,6 +105,10 @@ class IyzicoClient {
     }>;
     callbackUrl: string;
   }): Promise<any> {
+    if (!this.client) {
+      throw new Error('iyzico client not initialized. Please configure IYZICO_API_KEY and IYZICO_SECRET_KEY.');
+    }
+    
     return new Promise((resolve, reject) => {
       const request = {
         locale: Iyzipay.LOCALE.TR,
@@ -141,6 +158,7 @@ class IyzicoClient {
     conversationId: string,
     paymentId: string
   ): Promise<any> {
+    this.ensureInitialized();
     return new Promise((resolve, reject) => {
       const request = {
         locale: Iyzipay.LOCALE.TR,
@@ -523,3 +541,4 @@ export const validateExpiry = (month: string, year: string): boolean => {
 };
 
 export default iyzicoClient;
+
