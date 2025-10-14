@@ -15,44 +15,32 @@ const Pricing: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      {/* Header */}
-      <div className="bg-white border-b border-neutral-200 p-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-neutral-900">Akıllı Fiyatlandırma</h1>
-          <p className="text-neutral-600 mt-1">
-            Dinamik fiyat kuralları, indirim kodları ve ekipman paketleri oluşturun
-          </p>
-        </div>
-      </div>
-
+    <div className="space-y-6">
       {/* Tabs */}
-      <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex space-x-1">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === tab.id
-                      ? 'border-neutral-900 text-neutral-900'
-                      : 'border-transparent text-neutral-600 hover:text-neutral-800 hover:border-neutral-300'
-                  }`}
-                >
-                  <span className="text-xl">{tab.icon}</span>
-                  {tab.name}
-                </button>
-              ))}
-            </div>
-          </div>
+      <div className="bg-white rounded-2xl border border-neutral-200">
+        <div className="flex border-b border-neutral-200">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium transition-colors ${
+                activeTab === tab.id
+                  ? 'bg-neutral-50 text-neutral-900 font-semibold'
+                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50/50'
+              }`}
+            >
+              <span>{tab.icon}</span>
+              {tab.name}
+            </button>
+          ))}
         </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto p-6">
-        {activeTab === 'rules' && <PricingRuleManager />}
-        {activeTab === 'discounts' && <DiscountCodeManager />}
-        {activeTab === 'bundles' && <BundleBuilder />}
+        {/* Content */}
+        <div className="p-6">
+          {activeTab === 'rules' && <PricingRuleManager />}
+          {activeTab === 'discounts' && <DiscountCodeManager />}
+          {activeTab === 'bundles' && <BundleBuilder />}
+        </div>
       </div>
     </div>
   );
