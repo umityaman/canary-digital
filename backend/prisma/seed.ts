@@ -143,6 +143,62 @@ async function main() {
 
   console.log('✅ Customers created');
 
+  // Tedarikçiler oluştur
+  const suppliers = await prisma.supplier.createMany({
+    data: [
+      {
+        name: 'Canon Türkiye',
+        email: 'info@canon.com.tr',
+        phone: '+90 212 123 4567',
+        address: 'Maslak, İstanbul',
+        contactPerson: 'Mehmet Yılmaz',
+        website: 'https://www.canon.com.tr',
+        taxNumber: '1234567890',
+        taxOffice: 'Maslak VD',
+        notes: 'Kamera ve lens tedarikçisi. Ana tedarikçimiz.',
+        companyId: company.id
+      },
+      {
+        name: 'Sony Professional',
+        email: 'pro@sony.com.tr',
+        phone: '+90 216 987 6543',
+        address: 'Kadıköy, İstanbul',
+        contactPerson: 'Ayşe Demir',
+        website: 'https://www.sony.com.tr',
+        taxNumber: '0987654321',
+        taxOffice: 'Kadıköy VD',
+        notes: 'Video ekipmanları ve kamera tedarikçisi.',
+        companyId: company.id
+      },
+      {
+        name: 'DJI Authorized Dealer',
+        email: 'sales@dji.com.tr',
+        phone: '+90 212 555 0123',
+        address: 'Beşiktaş, İstanbul',
+        contactPerson: 'Ali Kaya',
+        website: 'https://www.dji.com',
+        taxNumber: '5555555555',
+        taxOffice: 'Beşiktaş VD',
+        notes: 'Drone, gimbal ve aksesuar tedarikçisi.',
+        companyId: company.id
+      },
+      {
+        name: 'Manfrotto Turkey',
+        email: 'info@manfrotto.com.tr',
+        phone: '+90 212 444 5566',
+        address: 'Şişli, İstanbul',
+        contactPerson: 'Zeynep Aydın',
+        website: 'https://www.manfrotto.com',
+        taxNumber: '9876543210',
+        taxOffice: 'Şişli VD',
+        notes: 'Tripod, monopod ve kamera destekleri.',
+        companyId: company.id
+      }
+    ]
+  });
+
+  console.log('✅ Suppliers created');
+
   // Sample sipariş oluştur
   const order = await prisma.order.create({
     data: {
@@ -171,77 +227,6 @@ async function main() {
   });
 
   console.log('✅ Sample order created');
-
-  // Kategoriler oluştur
-  const categories = await prisma.category.createMany({
-    data: [
-      {
-        name: 'Kamera',
-        description: 'Fotoğraf ve video kameraları',
-        icon: 'Camera',
-        color: '#3b82f6',
-        companyId: company.id
-      },
-      {
-        name: 'Lens',
-        description: 'Kamera lensleri ve optikler',
-        icon: 'Circle',
-        color: '#8b5cf6',
-        companyId: company.id
-      },
-      {
-        name: 'Aydınlatma',
-        description: 'LED ışıklar, softbox, reflektör',
-        icon: 'Lightbulb',
-        color: '#f59e0b',
-        companyId: company.id
-      },
-      {
-        name: 'Ses',
-        description: 'Mikrofonlar ve ses ekipmanları',
-        icon: 'Mic',
-        color: '#10b981',
-        companyId: company.id
-      },
-      {
-        name: 'Aksesuar',
-        description: 'Kamera aksesuarları',
-        icon: 'Package',
-        color: '#6366f1',
-        companyId: company.id
-      },
-      {
-        name: 'Tripod',
-        description: 'Tripodlar ve montaj ekipmanları',
-        icon: 'Grid2X2',
-        color: '#ec4899',
-        companyId: company.id
-      },
-      {
-        name: 'Gimbal',
-        description: 'Gimbal ve stabilizatörler',
-        icon: 'Move',
-        color: '#14b8a6',
-        companyId: company.id
-      },
-      {
-        name: 'Drone',
-        description: 'Drone ve havadan çekim ekipmanları',
-        icon: 'Plane',
-        color: '#0ea5e9',
-        companyId: company.id
-      },
-      {
-        name: 'Diğer',
-        description: 'Diğer ekipmanlar',
-        icon: 'MoreHorizontal',
-        color: '#64748b',
-        companyId: company.id
-      }
-    ]
-  });
-
-  console.log('✅ Categories created');
 
   console.log('🎉 Seed completed successfully!');
   console.log('📧 Login credentials:');

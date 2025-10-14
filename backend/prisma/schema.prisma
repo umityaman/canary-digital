@@ -50,6 +50,7 @@ model Company {
   serviceAssets ServiceAsset[]
   serviceParts  ServicePart[]
   technicians   Technician[]
+  suppliers     Supplier[]
   booqableConnection BooqableConnection?
 }
 
@@ -199,6 +200,29 @@ model Customer {
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Supplier {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String?
+  phone         String?
+  address       String?
+  contactPerson String?
+  website       String?
+  taxNumber     String?
+  taxOffice     String?
+  notes         String?
+  isActive      Boolean  @default(true)
+  
+  company       Company  @relation(fields: [companyId], references: [id])
+  companyId     Int
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([isActive])
 }
 
 model Order {
