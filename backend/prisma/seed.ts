@@ -143,62 +143,6 @@ async function main() {
 
   console.log('✅ Customers created');
 
-  // Tedarikçiler oluştur
-  const suppliers = await prisma.supplier.createMany({
-    data: [
-      {
-        name: 'Canon Türkiye',
-        email: 'info@canon.com.tr',
-        phone: '+90 212 123 4567',
-        address: 'Maslak, İstanbul',
-        contactPerson: 'Mehmet Yılmaz',
-        website: 'https://www.canon.com.tr',
-        taxNumber: '1234567890',
-        taxOffice: 'Maslak VD',
-        notes: 'Kamera ve lens tedarikçisi. Ana tedarikçimiz.',
-        companyId: company.id
-      },
-      {
-        name: 'Sony Professional',
-        email: 'pro@sony.com.tr',
-        phone: '+90 216 987 6543',
-        address: 'Kadıköy, İstanbul',
-        contactPerson: 'Ayşe Demir',
-        website: 'https://www.sony.com.tr',
-        taxNumber: '0987654321',
-        taxOffice: 'Kadıköy VD',
-        notes: 'Video ekipmanları ve kamera tedarikçisi.',
-        companyId: company.id
-      },
-      {
-        name: 'DJI Authorized Dealer',
-        email: 'sales@dji.com.tr',
-        phone: '+90 212 555 0123',
-        address: 'Beşiktaş, İstanbul',
-        contactPerson: 'Ali Kaya',
-        website: 'https://www.dji.com',
-        taxNumber: '5555555555',
-        taxOffice: 'Beşiktaş VD',
-        notes: 'Drone, gimbal ve aksesuar tedarikçisi.',
-        companyId: company.id
-      },
-      {
-        name: 'Manfrotto Turkey',
-        email: 'info@manfrotto.com.tr',
-        phone: '+90 212 444 5566',
-        address: 'Şişli, İstanbul',
-        contactPerson: 'Zeynep Aydın',
-        website: 'https://www.manfrotto.com',
-        taxNumber: '9876543210',
-        taxOffice: 'Şişli VD',
-        notes: 'Tripod, monopod ve kamera destekleri.',
-        companyId: company.id
-      }
-    ]
-  });
-
-  console.log('✅ Suppliers created');
-
   // Sample sipariş oluştur
   const order = await prisma.order.create({
     data: {
@@ -227,6 +171,59 @@ async function main() {
   });
 
   console.log('✅ Sample order created');
+
+  // Tedarikçiler oluştur
+  await prisma.supplier.createMany({
+    data: [
+      {
+        name: 'Canon Türkiye',
+        email: 'info@canon.com.tr',
+        phone: '+90 212 123 4567',
+        address: 'Maslak, Sarıyer, İstanbul',
+        contactPerson: 'Mehmet Yılmaz',
+        notes: 'Kamera, lens ve fotoğraf ekipmanları tedarikçisi',
+        companyId: company.id
+      },
+      {
+        name: 'Sony Professional',
+        email: 'pro@sony.com.tr',
+        phone: '+90 216 987 6543',
+        address: 'Kadıköy, İstanbul',
+        contactPerson: 'Ayşe Demir',
+        notes: 'Video kamera ve ses kayıt ekipmanları',
+        companyId: company.id
+      },
+      {
+        name: 'DJI Authorized Dealer',
+        email: 'sales@dji.com.tr',
+        phone: '+90 212 555 0123',
+        address: 'Beşiktaş, İstanbul',
+        contactPerson: 'Ali Kaya',
+        notes: 'Drone, gimbal ve hava çekimi ekipmanları',
+        companyId: company.id
+      },
+      {
+        name: 'Manfrotto Türkiye',
+        email: 'info@manfrotto.com.tr',
+        phone: '+90 212 444 5566',
+        address: 'Şişli, İstanbul',
+        contactPerson: 'Zeynep Arslan',
+        notes: 'Tripod, monopod ve destek ekipmanları',
+        companyId: company.id
+      },
+      {
+        name: 'Rode Microphones TR',
+        email: 'sales@rode.com.tr',
+        phone: '+90 216 333 4455',
+        address: 'Ataşehir, İstanbul',
+        contactPerson: 'Can Öztürk',
+        notes: 'Mikrofon ve ses kayıt çözümleri',
+        companyId: company.id
+      }
+    ]
+  });
+
+  console.log('✅ Suppliers created');
 
   console.log('🎉 Seed completed successfully!');
   console.log('📧 Login credentials:');

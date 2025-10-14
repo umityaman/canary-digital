@@ -202,29 +202,6 @@ model Customer {
   updatedAt   DateTime @updatedAt
 }
 
-model Supplier {
-  id            Int      @id @default(autoincrement())
-  name          String
-  email         String?
-  phone         String?
-  address       String?
-  contactPerson String?
-  website       String?
-  taxNumber     String?
-  taxOffice     String?
-  notes         String?
-  isActive      Boolean  @default(true)
-  
-  company       Company  @relation(fields: [companyId], references: [id])
-  companyId     Int
-  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  @@index([companyId])
-  @@index([isActive])
-}
-
 model Order {
   id          Int         @id @default(autoincrement())
   orderNumber String      @unique
@@ -1413,4 +1390,26 @@ model Refund {
   
   @@index([orderId])
   @@index([status])
+}
+
+// Supplier Model
+model Supplier {
+  id              Int      @id @default(autoincrement())
+  name            String
+  email           String?
+  phone           String?
+  address         String?
+  contactPerson   String?
+  notes           String?
+  
+  // Company Relation
+  company         Company  @relation(fields: [companyId], references: [id])
+  companyId       Int
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([name])
 }

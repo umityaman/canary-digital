@@ -14,13 +14,9 @@ interface AuthRequest extends Request {
 router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const companyId = (req as any).companyId || 1;
-    const { isActive } = req.query;
 
     const suppliers = await prisma.supplier.findMany({
-      where: {
-        companyId,
-        ...(isActive !== undefined && { isActive: isActive === 'true' })
-      },
+      where: { companyId },
       orderBy: { name: 'asc' }
     });
 
