@@ -92,6 +92,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   loadUserFromStorage: () => {
+    // DEVELOPMENT: Auto-login bypass for testing
+    const isDev = import.meta.env.DEV || window.location.hostname === 'localhost'
+    if (isDev) {
+      const fakeUser: User = {
+        id: 1,
+        email: 'admin@canary.com',
+        name: 'Admin User',
+        role: 'ADMIN',
+        company: {
+          id: 1,
+          name: 'Canary Camera Rentals'
+        }
+      }
+      set({ 
+        user: fakeUser, 
+        token: 'dev-bypass-token', 
+        isAuthenticated: true 
+      })
+      console.log('🚀 DEV MODE: Auto-logged in as admin')
+      return
+    }
+
     const token = localStorage.getItem('auth_token')
     const userData = localStorage.getItem('user_data')
 
