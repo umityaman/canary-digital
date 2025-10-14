@@ -153,6 +153,7 @@ app.use('/api/inspections', require('./routes/inspections').default);
 app.use('/api/calendar', require('./routes/calendar').default);
 app.use('/api/technical-service', require('./routes/technicalService').default);
 app.use('/api/test', require('./routes/test').default); // Test endpoints
+app.use('/api/test-email', require('./routes/email-test').default); // Email template testing
 app.use('/api/profile', require('./routes/profile').default);
 app.use('/api/dashboard', require('./routes/dashboard').default);
 app.use('/api/booqable', require('./routes/booqable').default); // Booqable integration

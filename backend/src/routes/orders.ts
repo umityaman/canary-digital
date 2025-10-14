@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { authenticateToken } from './auth'
 import { GoogleCalendarService } from '../services/googleCalendar'
+import { sendOrderConfirmation } from '../utils/emailService'
 
 const router = Router()
 const prisma = new PrismaClient()
@@ -386,6 +387,49 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // Sync to Google Calendar (if enabled)
     await syncOrderToCalendar(order, req.userId, 'create');
+
+    // Send order confirmation email
+    try {
+      if (order.customer?.email) {
+        const equipment = order.orderItems.map(item => ({
+          name: item.equipment.name,
+          quantity: item.quantity,
+          price: `${item.totalAmount} TL`
+        }));
+
+        const startDateFormatted = new Date(order.startDate).toLocaleDateString('tr-TR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+
+        const endDateFormatted = new Date(order.endDate).toLocaleDateString('tr-TR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+
+        const duration = Math.ceil((new Date(order.endDate).getTime() - new Date(order.startDate).getTime()) / (1000 * 60 * 60 * 24));
+
+        await sendOrderConfirmation(order.customer.email, {
+          customerName: order.customer.name,
+          orderNumber: order.orderNumber,
+          startDate: startDateFormatted,
+          endDate: endDateFormatted,
+          duration,
+          equipment,
+          totalAmount: `${order.totalAmount} TL`,
+          deliveryMethod: 'Ofisten Teslim', // Bu bilgiyi order'a ekleyebilirsiniz
+          orderUrl: `${process.env.FRONTEND_URL || 'https://frontend-5a3yqvtgp-umityamans-projects.vercel.app'}/orders/${order.id}`,
+          notes: order.notes || undefined
+        });
+
+        console.log(`✅ Order confirmation email sent to ${order.customer.email}`);
+      }
+    } catch (emailError) {
+      console.error('❌ Failed to send order confirmation email:', emailError);
+      // Email hatası olsa bile sipariş başarılı oldu
+    }
 
     res.status(201).json(order)
   } catch (error) {
