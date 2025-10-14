@@ -8,4 +8,6 @@ COPY package.json package-lock.json* ./
 RUN npm install
 COPY . .
 RUN npx prisma generate
-CMD ["npm","run","dev"]
+
+# Run migrations and start server
+CMD npx prisma migrate deploy && npm run dev
