@@ -44,19 +44,19 @@ async function restoreBackup() {
     const backupFile = path.join(BACKUP_DIR, backupFileName);
 
     if (!fs.existsSync(backupFile)) {
-      console.error(`❌ Backup dosyası bulunamadı: ${backupFile}`);
+      console.error(`Backup dosyasi bulunamadi: ${backupFile}`);
       process.exit(1);
     }
 
-    console.log('⚠️  DİKKAT: Bu işlem mevcut database'i tamamen değiştirecek!');
-    console.log(`🔄 Restore başlatılıyor: ${backupFileName}`);
+    console.log('DIKKAT: Bu islem mevcut database tamamen degistirecek!');
+    console.log(`Restore baslatiliyor: ${backupFileName}`);
 
     // psql komutu ile restore
     const command = `psql "${DATABASE_URL}" < "${backupFile}"`;
 
     await execAsync(command);
 
-    console.log('✅ Database başarıyla restore edildi!');
+    console.log('Database basariyla restore edildi!');
 
   } catch (error: any) {
     console.error('❌ Restore hatası:', error.message);

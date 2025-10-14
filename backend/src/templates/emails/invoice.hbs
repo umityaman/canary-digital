@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
+    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%); color: white; padding: 30px; text-align: center; }
+    .content { padding: 30px; }
+    .invoice-box { background: #f9fafb; border: 2px solid #7c3aed; border-radius: 8px; padding: 25px; margin: 20px 0; }
+    .invoice-header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #e5e7eb; }
+    .invoice-number { font-size: 24px; font-weight: 700; color: #7c3aed; }
+    .button { display: inline-block; padding: 14px 35px; background: #7c3aed; color: white !important; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 20px 0; }
+    .footer { background: #f9fafb; padding: 20px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    th { background: #f3f4f6; font-weight: 600; color: #4b5563; }
+    .total-row { background: #7c3aed; color: white; font-weight: 700; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🧾 Faturanız Hazır</h1>
+    </div>
+    <div class="content">
+      <p style="font-size: 16px; color: #4b5563;">Sayın <strong>{{customerName}}</strong>,</p>
+      <p>{{orderNumber}} numaralı siparişiniz için faturanız oluşturulmuştur.</p>
+      
+      <div class="invoice-box">
+        <div class="invoice-header">
+          <div class="invoice-number">Fatura No: {{invoiceNumber}}</div>
+          <div style="color: #6b7280; font-size: 14px; margin-top: 5px;">Tarih: {{invoiceDate}}</div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <strong>Fatura Bilgileri:</strong><br>
+          {{companyName}}<br>
+          {{companyAddress}}<br>
+          Vergi No: {{taxNumber}}
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Hizmet/Ürün</th>
+              <th style="text-align: center;">Adet</th>
+              <th style="text-align: center;">Gün</th>
+              <th style="text-align: right;">Tutar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each items}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td style="text-align: center;">{{this.quantity}}</td>
+              <td style="text-align: center;">{{this.days}}</td>
+              <td style="text-align: right;">{{this.amount}} TL</td>
+            </tr>
+            {{/each}}
+            {{#if deposit}}
+            <tr>
+              <td colspan="3" style="text-align: right; font-weight: 600;">Depozito:</td>
+              <td style="text-align: right;">{{deposit}} TL</td>
+            </tr>
+            {{/if}}
+            {{#if discount}}
+            <tr>
+              <td colspan="3" style="text-align: right; font-weight: 600; color: #059669;">İndirim:</td>
+              <td style="text-align: right; color: #059669;">-{{discount}} TL</td>
+            </tr>
+            {{/if}}
+            <tr>
+              <td colspan="3" style="text-align: right; font-weight: 600;">KDV (%{{taxRate}}):</td>
+              <td style="text-align: right;">{{taxAmount}} TL</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="3" style="text-align: right;">TOPLAM:</td>
+              <td style="text-align: right;">{{totalAmount}} TL</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {{#if paymentStatus}}
+        <div style="margin-top: 20px; padding: 15px; background: {{#if isPaid}}#d1fae5{{else}}#fef3c7{{/if}}; border-radius: 6px; text-align: center;">
+          <strong>Ödeme Durumu:</strong> {{paymentStatus}}
+        </div>
+        {{/if}}
+      </div>
+
+      <div style="text-align: center;">
+        <a href="{{invoicePdfUrl}}" class="button">📄 PDF İndir</a>
+      </div>
+
+      {{#unless isPaid}}
+      <div style="background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0; border-radius: 4px;">
+        <strong>💳 Ödeme Bilgisi:</strong><br>
+        Son ödeme tarihi: <strong>{{dueDate}}</strong><br>
+        {{#if paymentUrl}}
+        <a href="{{paymentUrl}}" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Online Ödeme Yap →</a>
+        {{/if}}
+      </div>
+      {{/unless}}
+    </div>
+    <div class="footer">
+      <p>© 2025 CANARY ERP. Tüm hakları saklıdır.</p>
+    </div>
+  </div>
+</body>
+</html>

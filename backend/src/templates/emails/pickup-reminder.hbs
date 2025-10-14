@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
+    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #1f2937 0%, #374151 100%); color: white; padding: 30px; text-align: center; }
+    .content { padding: 30px; }
+    .reminder-icon { font-size: 48px; text-align: center; margin: 20px 0; }
+    .highlight-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center; }
+    .date-box { font-size: 24px; font-weight: 700; color: #f59e0b; margin: 10px 0; }
+    .button { display: inline-block; padding: 14px 35px; background: #1f2937; color: white !important; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 20px 0; }
+    .footer { background: #f9fafb; padding: 20px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⏰ Teslim Alma Hatırlatması</h1>
+    </div>
+    <div class="content">
+      <div class="reminder-icon">📦</div>
+      <p style="font-size: 16px; color: #4b5563;">Sayın <strong>{{customerName}}</strong>,</p>
+      <p>Kiralama süreniz yarın başlayacak! Ekipmanlarınızı teslim alma zamanı yaklaştı.</p>
+      
+      <div class="highlight-box">
+        <div style="font-size: 16px; color: #92400e; margin-bottom: 10px;">Teslim Alma Tarihi</div>
+        <div class="date-box">{{pickupDate}}</div>
+        <div style="font-size: 14px; color: #78350f; margin-top: 5px;">{{pickupTime}}</div>
+      </div>
+
+      <h3 style="color: #1f2937;">📋 Sipariş Özeti</h3>
+      <div style="background: #f9fafb; padding: 20px; border-radius: 6px; margin: 20px 0;">
+        <p><strong>Sipariş No:</strong> {{orderNumber}}</p>
+        <p><strong>Ekipmanlar:</strong></p>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          {{#each equipment}}
+          <li>{{this.name}} ({{this.quantity}} adet)</li>
+          {{/each}}
+        </ul>
+      </div>
+
+      <div style="background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0; border-radius: 4px;">
+        <strong>ℹ️ Teslim Alma Adresi:</strong><br>
+        {{pickupAddress}}
+      </div>
+
+      <div style="text-align: center;">
+        <a href="{{orderUrl}}" class="button">Sipariş Detayları</a>
+      </div>
+
+      <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+        Yanınızda kimlik belgenizi getirmeyi unutmayın. Sorularınız için bizimle iletişime geçebilirsiniz.
+      </p>
+    </div>
+    <div class="footer">
+      <p>© 2025 CANARY ERP. Tüm hakları saklıdır.</p>
+      <p style="font-size: 11px; color: #9ca3af; margin-top: 10px;">Bu otomatik bir mesajdır, lütfen yanıtlamayın.</p>
+    </div>
+  </div>
+</body>
+</html>

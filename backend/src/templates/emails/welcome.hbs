@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
+    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #1f2937 0%, #374151 100%); color: white; padding: 30px; text-align: center; }
+    .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+    .content { padding: 30px; }
+    .content h2 { color: #1f2937; font-size: 22px; margin-top: 0; }
+    .welcome-text { font-size: 16px; color: #4b5563; margin-bottom: 25px; }
+    .button { display: inline-block; padding: 14px 35px; background: #1f2937; color: white !important; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 20px 0; transition: background 0.3s; }
+    .button:hover { background: #374151; }
+    .info-box { background: #f9fafb; border-left: 4px solid #1f2937; padding: 20px; margin: 20px 0; border-radius: 4px; }
+    .footer { background: #f9fafb; padding: 20px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+    .footer a { color: #1f2937; text-decoration: none; }
+    ul { padding-left: 20px; }
+    ul li { margin-bottom: 8px; color: #4b5563; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎉 CANARY'ye Hoş Geldiniz!</h1>
+    </div>
+    <div class="content">
+      <h2>Merhaba {{name}}!</h2>
+      <p class="welcome-text">
+        CANARY Ekipman Kiralama Yönetim Sistemi'ne kaydınız başarıyla tamamlandı. 
+        Artık ekipman kiralama süreçlerinizi kolayca yönetebilir, siparişlerinizi takip edebilir 
+        ve işletmenizi daha verimli hale getirebilirsiniz.
+      </p>
+      
+      <div class="info-box">
+        <strong>📧 Giriş Bilgileriniz:</strong><br>
+        Email: {{email}}<br>
+        Şirket: {{companyName}}
+      </div>
+
+      <p><strong>Neler yapabilirsiniz?</strong></p>
+      <ul>
+        <li>📦 Ekipman envanterinizi yönetin</li>
+        <li>🛒 Siparişleri takip edin ve faturalayın</li>
+        <li>👥 Müşteri bilgilerini saklayın</li>
+        <li>📅 Takvim ile rezervasyonları planlayın</li>
+        <li>📊 Detaylı raporlar oluşturun</li>
+        <li>✅ Kalite kontrol ve muayene süreçlerini yönetin</li>
+      </ul>
+
+      <div style="text-align: center;">
+        <a href="{{loginUrl}}" class="button">Giriş Yap</a>
+      </div>
+
+      <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+        Herhangi bir sorunuz varsa, bizimle iletişime geçmekten çekinmeyin. 
+        Destek ekibimiz size yardımcı olmaktan mutluluk duyar.
+      </p>
+    </div>
+    <div class="footer">
+      <p>
+        © 2025 CANARY ERP. Tüm hakları saklıdır.<br>
+        <a href="{{supportUrl}}">Destek</a> | <a href="{{websiteUrl}}">Web Sitesi</a>
+      </p>
+      <p style="font-size: 11px; color: #9ca3af; margin-top: 10px;">
+        Bu otomatik bir mesajdır, lütfen yanıtlamayın.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

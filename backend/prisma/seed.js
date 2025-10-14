@@ -162,75 +162,57 @@ async function main() {
         }
     });
     console.log('✅ Sample order created');
-    // Kategoriler oluştur
-    const categories = await prisma.category.createMany({
+    // Tedarikçiler oluştur
+    await prisma.supplier.createMany({
         data: [
             {
-                name: 'Kamera',
-                description: 'Fotoğraf ve video kameraları',
-                icon: 'Camera',
-                color: '#3b82f6',
+                name: 'Canon Türkiye',
+                email: 'info@canon.com.tr',
+                phone: '+90 212 123 4567',
+                address: 'Maslak, Sarıyer, İstanbul',
+                contactPerson: 'Mehmet Yılmaz',
+                notes: 'Kamera, lens ve fotoğraf ekipmanları tedarikçisi',
                 companyId: company.id
             },
             {
-                name: 'Lens',
-                description: 'Kamera lensleri ve optikler',
-                icon: 'Circle',
-                color: '#8b5cf6',
+                name: 'Sony Professional',
+                email: 'pro@sony.com.tr',
+                phone: '+90 216 987 6543',
+                address: 'Kadıköy, İstanbul',
+                contactPerson: 'Ayşe Demir',
+                notes: 'Video kamera ve ses kayıt ekipmanları',
                 companyId: company.id
             },
             {
-                name: 'Aydınlatma',
-                description: 'LED ışıklar, softbox, reflektör',
-                icon: 'Lightbulb',
-                color: '#f59e0b',
+                name: 'DJI Authorized Dealer',
+                email: 'sales@dji.com.tr',
+                phone: '+90 212 555 0123',
+                address: 'Beşiktaş, İstanbul',
+                contactPerson: 'Ali Kaya',
+                notes: 'Drone, gimbal ve hava çekimi ekipmanları',
                 companyId: company.id
             },
             {
-                name: 'Ses',
-                description: 'Mikrofonlar ve ses ekipmanları',
-                icon: 'Mic',
-                color: '#10b981',
+                name: 'Manfrotto Türkiye',
+                email: 'info@manfrotto.com.tr',
+                phone: '+90 212 444 5566',
+                address: 'Şişli, İstanbul',
+                contactPerson: 'Zeynep Arslan',
+                notes: 'Tripod, monopod ve destek ekipmanları',
                 companyId: company.id
             },
             {
-                name: 'Aksesuar',
-                description: 'Kamera aksesuarları',
-                icon: 'Package',
-                color: '#6366f1',
-                companyId: company.id
-            },
-            {
-                name: 'Tripod',
-                description: 'Tripodlar ve montaj ekipmanları',
-                icon: 'Grid2X2',
-                color: '#ec4899',
-                companyId: company.id
-            },
-            {
-                name: 'Gimbal',
-                description: 'Gimbal ve stabilizatörler',
-                icon: 'Move',
-                color: '#14b8a6',
-                companyId: company.id
-            },
-            {
-                name: 'Drone',
-                description: 'Drone ve havadan çekim ekipmanları',
-                icon: 'Plane',
-                color: '#0ea5e9',
-                companyId: company.id
-            },
-            {
-                name: 'Diğer',
-                description: 'Diğer ekipmanlar',
-                icon: 'MoreHorizontal',
-                color: '#64748b',
+                name: 'Rode Microphones TR',
+                email: 'sales@rode.com.tr',
+                phone: '+90 216 333 4455',
+                address: 'Ataşehir, İstanbul',
+                contactPerson: 'Can Öztürk',
+                notes: 'Mikrofon ve ses kayıt çözümleri',
                 companyId: company.id
             }
         ]
     });
-    console.log('✅ Categories created');
+    console.log('✅ Suppliers created');
     console.log('🎉 Seed completed successfully!');
     console.log('📧 Login credentials:');
     console.log('   Admin: admin@canary.com / admin123');

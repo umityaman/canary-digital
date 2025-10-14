@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; color: #333; background: #f4f4f4; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; padding: 30px; text-align: center; }
+    .content { padding: 30px; }
+    .inspection-box { background: #f9fafb; border: 2px solid #8b5cf6; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .status-ok { color: #059669; font-weight: 600; }
+    .status-issue { color: #dc2626; font-weight: 600; }
+    .button { display: inline-block; padding: 14px 35px; background: #8b5cf6; color: white !important; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 20px 0; }
+    .footer { background: #f9fafb; padding: 20px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✅ Kalite Kontrol Raporu</h1>
+    </div>
+    <div class="content">
+      <p>Sayın <strong>{{customerName}}</strong>,</p>
+      <p>{{orderNumber}} numaralı siparişiniz için kalite kontrol muayenesi tamamlanmıştır.</p>
+      
+      <div class="inspection-box">
+        <h3 style="margin-top: 0; color: #1f2937;">📋 Muayene Detayları</h3>
+        <p><strong>Muayene Tarihi:</strong> {{inspectionDate}}</p>
+        <p><strong>Muayene Türü:</strong> {{inspectionType}}</p>
+        <p><strong>Sorumlu:</strong> {{inspectorName}}</p>
+
+        <h4 style="color: #1f2937; margin-top: 20px;">Kontrol Edilen Ekipmanlar:</h4>
+        {{#each equipment}}
+        <div style="padding: 15px; background: white; border-radius: 6px; margin: 10px 0; border-left: 4px solid {{#if this.hasIssues}}#dc2626{{else}}#059669{{/if}};">
+          <strong>{{this.name}}</strong><br>
+          <span style="font-size: 14px; {{#if this.hasIssues}}color: #dc2626{{else}}color: #059669{{/if}};">
+            {{#if this.hasIssues}}⚠️ Sorun Tespit Edildi{{else}}✅ Sorun Yok{{/if}}
+          </span>
+          {{#if this.notes}}
+          <p style="margin: 5px 0; font-size: 14px; color: #6b7280;">Not: {{this.notes}}</p>
+          {{/if}}
+        </div>
+        {{/each}}
+      </div>
+
+      {{#if hasIssues}}
+      <div style="background: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; margin: 20px 0; border-radius: 4px;">
+        <strong>⚠️ Dikkat:</strong><br>
+        Bazı ekipmanlarda hasar veya sorun tespit edilmiştir. {{#if damageCharge}}{{damageCharge}} TL hasar bedeli faturanıza yansıtılacaktır.{{/if}}
+      </div>
+      {{/if}}
+
+      <div style="text-align: center;">
+        <a href="{{inspectionUrl}}" class="button">Tam Raporu Görüntüle</a>
+      </div>
+    </div>
+    <div class="footer">
+      <p>© 2025 CANARY ERP. Tüm hakları saklıdır.</p>
+    </div>
+  </div>
+</body>
+</html>
