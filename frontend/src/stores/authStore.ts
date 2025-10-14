@@ -103,6 +103,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         name: 'Canary Camera Rentals'
       }
     }
+    
+    // Save to localStorage so API interceptor can use it
+    localStorage.setItem('auth_token', 'dev-bypass-token')
+    localStorage.setItem('user_data', JSON.stringify(fakeUser))
+    
     set({ 
       user: fakeUser, 
       token: 'dev-bypass-token', 
