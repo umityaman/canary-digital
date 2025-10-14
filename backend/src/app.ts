@@ -143,6 +143,7 @@ app.use('/api/categories', require('./routes/categories').default); // Category 
 app.use('/api/equipment', require('./routes/equipment').default);
 app.use('/api/orders', require('./routes/orders').default);
 app.use('/api/customers', require('./routes/customers').default);
+app.use('/api/suppliers', require('./routes/suppliers').default);
 app.use('/api/inspections', require('./routes/inspections').default);
 app.use('/api/calendar', require('./routes/calendar').default);
 app.use('/api/technical-service', require('./routes/technicalService').default);

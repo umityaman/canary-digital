@@ -46,7 +46,6 @@ const Sidebar: React.FC = () => {
     { to: '/tech-support', label: 'Teknik Destek', icon: HelpCircle },
     { to: '/technical-service', label: 'Teknik Servis', icon: Wrench },
     { to: '/pricing', label: 'Fiyatlandırma', icon: DollarSign },
-    { to: '/reservations', label: 'Rezervasyonlar', icon: CalendarCheck },
     { to: '/reports', label: 'Raporlar', icon: BarChart3 },
     { to: '/settings', label: 'Ayarlar', icon: Settings },
     { to: '/admin', label: 'Admin Paneli', icon: Shield },

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BarChart3, TrendingUp, Package, Users, PieChart, FileText } from 'lucide-react';
-import Layout from '../components/Layout';
 import DashboardWidget from '../components/reports/DashboardWidget';
 
 type ReportView = 'dashboard' | 'revenue' | 'equipment' | 'customers' | 'categories';
@@ -49,8 +48,8 @@ const Reports: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="p-6 space-y-6 max-w-7xl mx-auto">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-gray-800 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -125,7 +124,7 @@ const Reports: React.FC = () => {
         {/* Content */}
         {renderContent()}
       </div>
-    </Layout>
+    </div>
   );
 };
 
