@@ -39,6 +39,16 @@ const Login: React.FC = () => {
     }))
   }
 
+  const handleQuickLogin = async () => {
+    setError('')
+    try {
+      await login({ email: 'admin@canary.com', password: 'admin123' })
+      navigate('/')
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
@@ -137,7 +147,7 @@ const Login: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2 space-y-3">
             <button
               type="submit"
               disabled={isLoading}
@@ -145,6 +155,18 @@ const Login: React.FC = () => {
             >
               {isLoading ? 'İşlem yapılıyor...' : (isRegister ? 'Kayıt Ol' : 'Giriş Yap')}
             </button>
+            
+            {!isRegister && (
+              <button
+                type="button"
+                onClick={handleQuickLogin}
+                disabled={isLoading}
+                className="w-full flex justify-center items-center gap-2 py-3 px-4 border-2 border-yellow-400 rounded-xl text-sm font-medium text-neutral-900 bg-yellow-50 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 transition-colors"
+              >
+                <LogIn className="w-4 h-4" />
+                🚀 Demo Admin Girişi (Hızlı)
+              </button>
+            )}
           </div>
 
           <div className="text-center">
