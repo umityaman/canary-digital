@@ -96,6 +96,9 @@ export function initializeSentry(app: Express): void {
  * Express middleware to attach Sentry request handler
  */
 export function sentryRequestHandler() {
+  if (!process.env.SENTRY_DSN) {
+    return (req: any, res: any, next: any) => next();
+  }
   return Sentry.Handlers.requestHandler();
 }
 
@@ -103,6 +106,9 @@ export function sentryRequestHandler() {
  * Express middleware to attach Sentry tracing handler
  */
 export function sentryTracingHandler() {
+  if (!process.env.SENTRY_DSN) {
+    return (req: any, res: any, next: any) => next();
+  }
   return Sentry.Handlers.tracingHandler();
 }
 
@@ -111,6 +117,9 @@ export function sentryTracingHandler() {
  * This should be added AFTER all controllers but BEFORE other error handlers
  */
 export function sentryErrorHandler() {
+  if (!process.env.SENTRY_DSN) {
+    return (err: any, req: any, res: any, next: any) => next(err);
+  }
   return Sentry.Handlers.errorHandler({
     shouldHandleError(error) {
       // Capture all 4xx and 5xx errors
