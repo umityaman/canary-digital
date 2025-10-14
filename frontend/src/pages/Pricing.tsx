@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Layout from '../components/Layout';
 import PricingRuleManager from '../components/pricing/PricingRuleManager';
 import DiscountCodeManager from '../components/pricing/DiscountCodeManager';
 import BundleBuilder from '../components/pricing/BundleBuilder';
@@ -16,30 +15,29 @@ const Pricing: React.FC = () => {
   ];
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 shadow-lg">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold mb-2">💰 Akıllı Fiyatlandırma</h1>
-            <p className="text-blue-100">
-              Dinamik fiyat kuralları, indirim kodları ve ekipman paketleri oluşturun
-            </p>
-          </div>
+    <div className="min-h-screen bg-neutral-50">
+      {/* Header */}
+      <div className="bg-white border-b border-neutral-200 p-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-bold text-neutral-900">Akıllı Fiyatlandırma</h1>
+          <p className="text-neutral-600 mt-1">
+            Dinamik fiyat kuralları, indirim kodları ve ekipman paketleri oluşturun
+          </p>
         </div>
+      </div>
 
-        {/* Tabs */}
-        <div className="bg-white border-b shadow-sm sticky top-16 z-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex space-x-1">
+      {/* Tabs */}
+      <div className="bg-white border-b border-neutral-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex space-x-1">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === tab.id
-                      ? 'border-blue-600 text-blue-600'
-                      : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300'
+                      ? 'border-neutral-900 text-neutral-900'
+                      : 'border-transparent text-neutral-600 hover:text-neutral-800 hover:border-neutral-300'
                   }`}
                 >
                   <span className="text-xl">{tab.icon}</span>
@@ -50,14 +48,13 @@ const Pricing: React.FC = () => {
           </div>
         </div>
 
-        {/* Content */}
-        <div className="max-w-7xl mx-auto">
-          {activeTab === 'rules' && <PricingRuleManager />}
-          {activeTab === 'discounts' && <DiscountCodeManager />}
-          {activeTab === 'bundles' && <BundleBuilder />}
-        </div>
+      {/* Content */}
+      <div className="max-w-7xl mx-auto p-6">
+        {activeTab === 'rules' && <PricingRuleManager />}
+        {activeTab === 'discounts' && <DiscountCodeManager />}
+        {activeTab === 'bundles' && <BundleBuilder />}
       </div>
-    </Layout>
+    </div>
   );
 };
 

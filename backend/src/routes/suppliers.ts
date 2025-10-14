@@ -13,14 +13,44 @@ interface AuthRequest extends Request {
 // Get all suppliers
 router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = (req as any).companyId || 1;
-    
-    const suppliers = await prisma.supplier.findMany({
-      where: { companyId },
-      orderBy: { createdAt: 'desc' }
-    });
+    // TEMPORARY: Return mock data since Supplier model doesn't exist yet
+    const mockSuppliers = [
+      {
+        id: 1,
+        name: 'Canon Türkiye',
+        email: 'info@canon.com.tr',
+        phone: '+90 212 123 4567',
+        address: 'Maslak, İstanbul',
+        contactPerson: 'Mehmet Yılmaz',
+        notes: 'Kamera ve lens tedarikçisi',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: 2,
+        name: 'Sony Professional',
+        email: 'pro@sony.com.tr',
+        phone: '+90 216 987 6543',
+        address: 'Kadıköy, İstanbul',
+        contactPerson: 'Ayşe Demir',
+        notes: 'Video ekipmanları',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: 3,
+        name: 'DJI Authorized Dealer',
+        email: 'sales@dji.com.tr',
+        phone: '+90 212 555 0123',
+        address: 'Beşiktaş, İstanbul',
+        contactPerson: 'Ali Kaya',
+        notes: 'Drone ve gimbal',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ];
 
-    res.json(suppliers);
+    res.json(mockSuppliers);
   } catch (error: any) {
     console.error('Error fetching suppliers:', error);
     res.status(500).json({ error: 'Failed to fetch suppliers' });
