@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { NotificationService } from './NotificationService';
-import { PricingService } from './PricingService';
+import { NotificationService } from './notificationService';
+import { PricingService } from './pricingService';
 
 const prisma = new PrismaClient();
 
