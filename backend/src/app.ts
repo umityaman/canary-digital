@@ -56,7 +56,8 @@ const allowedOrigins = [
   'http://localhost:3000', // Alternative frontend port
   'http://localhost:19000', // Expo dev
   'http://localhost:19006', // Expo web
-  process.env.FRONTEND_URL, // Production frontend URL
+  'https://frontend-jecbee0xl-umityamans-projects.vercel.app', // Production Vercel URL
+  process.env.FRONTEND_URL, // Production frontend URL (configurable)
   process.env.MOBILE_APP_URL, // Mobile app URL
 ].filter(Boolean);
 
