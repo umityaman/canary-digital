@@ -9,5 +9,5 @@ RUN npm install
 COPY . .
 RUN npx prisma generate
 
-# Run migrations and start server
-CMD npx prisma migrate deploy && npm run dev
+# Push schema to database (no migrations) and start server
+CMD npx prisma db push --accept-data-loss && npm run dev
