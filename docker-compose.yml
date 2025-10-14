@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: canary-backend
+    command: npm run dev
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+      - backend_db:/usr/src/app/prisma  # Persist SQLite database
+      - backend_uploads:/usr/src/app/uploads  # Persist uploaded files
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATABASE_URL=file:./dev.db
+      - JWT_SECRET=${JWT_SECRET:-development_secret_key_change_in_production}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-refresh_secret_key}
+      - FRONTEND_URL=http://localhost:5173
+      - RATE_LIMIT_WHITELIST=${RATE_LIMIT_WHITELIST:-}
+    ports:
+      - "3000:3000"
+    networks:
+      - canary-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Web Service
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: canary-frontend
+    command: npm run dev -- --host
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - canary-network
+    restart: unless-stopped
+
+  # Mobile Development Service (Expo)
+  mobile:
+    build:
+      context: ./mobile
+      dockerfile: Dockerfile
+    container_name: canary-mobile
+    command: npx expo start --tunnel
+    volumes:
+      - ./mobile:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "19000:19000"  # Expo DevTools
+      - "19001:19001"  # Expo DevTools
+      - "19002:19002"  # Expo Metro Bundler
+    environment:
+      - EXPO_PUBLIC_API_URL=http://localhost:3000/api
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - canary-network
+    restart: unless-stopped
+
+  # Optional: PostgreSQL (for production migration)
+  # Uncomment when ready to migrate from SQLite
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: canary-postgres
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER:-canary}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-canary_password}
+  #     POSTGRES_DB: ${POSTGRES_DB:-canary_db}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - canary-network
+  #   restart: unless-stopped
+
+  # Optional: Redis (for caching and sessions)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: canary-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - canary-network
+  #   restart: unless-stopped
+
+# Networks
+networks:
+  canary-network:
+    driver: bridge
+
+# Persistent Volumes
+volumes:
+  backend_db:
+    driver: local
+  backend_uploads:
+    driver: local
+  # postgres_data:
+  #   driver: local
+  # redis_data:
+  #   driver: local

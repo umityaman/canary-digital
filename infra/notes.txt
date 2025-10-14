@@ -1,0 +1,2 @@
+Infra: docker-compose is at repository root (docker-compose.yml).
+Dockerfiles for frontend and backend should be added when you want production builds.

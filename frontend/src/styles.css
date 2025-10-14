@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🎨 CANARY MINIMAL THEME - Siyah-Beyaz Neutral Palette */
+:root {
+  /* Neutral Colors */
+  --color-neutral-50: #FAFAFA;
+  --color-neutral-100: #F5F5F5;
+  --color-neutral-200: #E5E5E5;
+  --color-neutral-300: #D4D4D4;
+  --color-neutral-400: #A3A3A3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-neutral-950: #0A0A0A;
+  
+  /* Base Colors */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  
+  /* Semantic Colors (Minimal) */
+  --color-bg: var(--color-white);
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-border: var(--color-neutral-200);
+  --color-hover: var(--color-neutral-100);
+}
+
+@layer base {
+  * {
+    @apply border-neutral-200;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight text-neutral-900;
+  }
+  
+  h1 {
+    @apply text-3xl;
+  }
+  
+  h2 {
+    @apply text-2xl;
+  }
+  
+  h3 {
+    @apply text-xl;
+  }
+}
+
+/* Signature Canvas Styles */
+.signature-canvas {
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.signature-canvas:active {
+  cursor: grabbing;
+}
+
+@layer components {
+  /* Buttons - Minimal Black Theme */
+  .btn-primary {
+    @apply bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-2xl font-medium transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-200 px-4 py-2 rounded-2xl font-medium transition-all duration-200;
+  }
+  
+  .btn-ghost {
+    @apply hover:bg-neutral-100 text-neutral-700 px-4 py-2 rounded-2xl font-medium transition-colors;
+  }
+  
+  /* Cards - Clean White */
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-neutral-200 p-6 hover:shadow-md transition-shadow duration-200;
+  }
+  
+  .card-minimal {
+    @apply bg-white rounded-2xl border border-neutral-200 p-6;
+  }
+  
+  /* Widgets */
+  .widget {
+    @apply bg-white rounded-2xl border border-neutral-200 p-4 min-h-[120px] hover:shadow-sm transition-shadow;
+  }
+  
+  /* Input Fields */
+  .input-field {
+    @apply w-full px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all;
+  }
+  
+  /* Stats Cards */
+  .stat-card {
+    @apply bg-white rounded-2xl border border-neutral-200 p-6 hover:shadow-md transition-all duration-200;
+  }
+  
+  /* Badges - Minimal */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .badge-neutral {
+    @apply bg-neutral-100 text-neutral-700;
+  }
+  
+  .badge-success {
+    @apply bg-green-50 text-green-700 border border-green-200;
+  }
+  
+  .badge-warning {
+    @apply bg-amber-50 text-amber-700 border border-amber-200;
+  }
+  
+  .badge-error {
+    @apply bg-red-50 text-red-700 border border-red-200;
+  }
+  
+  /* Tables */
+  .table-minimal {
+    @apply w-full border-collapse;
+  }
+  
+  .table-minimal th {
+    @apply bg-neutral-50 text-neutral-700 text-xs font-semibold uppercase tracking-wider px-6 py-3 text-left border-b border-neutral-200;
+  }
+  
+  .table-minimal td {
+    @apply px-6 py-4 border-b border-neutral-100 text-sm text-neutral-900;
+  }
+  
+  .table-minimal tr:hover {
+    @apply bg-neutral-50;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    @apply bg-neutral-900 text-white h-screen fixed left-0 top-0 overflow-y-auto;
+  }
+  
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 text-neutral-300 hover:bg-neutral-800 hover:text-white rounded-lg transition-all cursor-pointer;
+  }
+  
+  .sidebar-item.active {
+    @apply bg-neutral-800 text-white font-medium;
+  }
+  
+  /* Typography */
+  .text-heading {
+    @apply text-neutral-900 font-bold tracking-tight;
+  }
+  
+  .text-body {
+    @apply text-neutral-700;
+  }
+  
+  .text-muted {
+    @apply text-neutral-500;
+  }
+  
+  .text-label {
+    @apply text-xs font-medium uppercase tracking-wide text-neutral-600;
+  }
+}
+
+/* React DatePicker Custom Styles */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker {
+  font-family: inherit;
+  border: 1px solid #E5E5E5;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.react-datepicker__header {
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #E5E5E5;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.react-datepicker__current-month {
+  color: #171717;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.react-datepicker__day-name {
+  color: #525252;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.react-datepicker__day {
+  color: #171717;
+  border-radius: 0.375rem;
+  margin: 0.125rem;
+}
+
+.react-datepicker__day:hover {
+  background-color: #F5F5F5;
+  border-radius: 0.375rem;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range {
+  background-color: #171717 !important;
+  color: white !important;
+  border-radius: 0.375rem;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #262626;
+  color: white;
+  border-radius: 0.375rem;
+}
+
+.react-datepicker__day--disabled {
+  color: #D4D4D4;
+}
+
+.react-datepicker__day--disabled:hover {
+  background-color: transparent;
+  cursor: default;
+}
+
+.react-datepicker__navigation {
+  top: 0.625rem;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: #525252;
+}
+
+.react-datepicker__navigation:hover *::before {
+  border-color: #171717;
+}
