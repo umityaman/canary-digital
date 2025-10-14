@@ -1,9 +1,43 @@
 import { Router, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticateToken, AuthRequest } from './auth';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const router = Router();
 const prisma = new PrismaClient();
+
+// Multer configuration for photo uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, '../../uploads/inspections');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'inspection-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|webp/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    
+    if (extname && mimetype) {
+      cb(null, true);
+    } else {
+      cb(new Error('Sadece resim dosyaları yüklenebilir (JPEG, PNG, WebP)'));
+    }
+  }
+});
 
 // GET /inspections - List all inspections
 router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
@@ -363,6 +397,100 @@ router.delete('/:id/damages/:damageId', authenticateToken, async (req: AuthReque
     res.json({ message: 'Hasar raporu silindi' });
   } catch (error) {
     console.error('Delete damage error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// POST /inspection-photos - Upload inspection photo (Mobile)
+router.post('/inspection-photos', authenticateToken, upload.single('photo'), async (req: AuthRequest, res: Response) => {
+  try {
+    const { inspectionId, equipmentId, orderId, type } = req.body;
+    const file = req.file;
+    const companyId = req.companyId;
+
+    if (!file) {
+      return res.status(400).json({ error: 'Fotoğraf bulunamadı' });
+    }
+
+    // Verify inspection belongs to company
+    if (inspectionId) {
+      const inspection = await prisma.inspection.findFirst({
+        where: { id: parseInt(inspectionId), order: { companyId } }
+      });
+
+      if (!inspection) {
+        // Delete uploaded file if inspection not found
+        fs.unlinkSync(file.path);
+        return res.status(404).json({ error: 'Kontrol bulunamadı' });
+      }
+    }
+
+    // Create photo record
+    const photo = await prisma.inspectionPhoto.create({
+      data: {
+        url: `/uploads/inspections/${file.filename}`,
+        filename: file.filename,
+        inspectionId: inspectionId ? parseInt(inspectionId) : null,
+        equipmentId: equipmentId ? parseInt(equipmentId) : null,
+        uploadedById: req.userId,
+        notes: type || 'inspection' // pickup, return, damage, inspection
+      }
+    });
+
+    res.status(201).json({
+      message: 'Fotoğraf başarıyla yüklendi',
+      photo: {
+        id: photo.id,
+        url: photo.url,
+        filename: photo.filename,
+        createdAt: photo.createdAt
+      }
+    });
+  } catch (error: any) {
+    console.error('Upload inspection photo error:', error);
+    
+    // Delete uploaded file on error
+    if (req.file) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (unlinkError) {
+        console.error('Failed to delete uploaded file:', unlinkError);
+      }
+    }
+    
+    res.status(500).json({ error: 'Fotoğraf yüklenirken bir hata oluştu' });
+  }
+});
+
+// DELETE /inspection-photos/:id - Delete inspection photo
+router.delete('/inspection-photos/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const companyId = req.companyId;
+
+    const photo = await prisma.inspectionPhoto.findFirst({
+      where: { 
+        id: parseInt(id),
+        inspection: { order: { companyId } }
+      }
+    });
+
+    if (!photo) {
+      return res.status(404).json({ error: 'Fotoğraf bulunamadı' });
+    }
+
+    // Delete file from filesystem
+    const filePath = path.join(__dirname, '../../', photo.url);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    // Delete from database
+    await prisma.inspectionPhoto.delete({ where: { id: parseInt(id) } });
+
+    res.json({ message: 'Fotoğraf silindi' });
+  } catch (error) {
+    console.error('Delete inspection photo error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

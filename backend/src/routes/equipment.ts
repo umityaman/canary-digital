@@ -46,6 +46,72 @@ router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   }
 });
 
+// QR/Barkod ile ekipman ara (scan endpoint)
+router.get('/scan/:code', authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const { code } = req.params;
+    const companyId = req.companyId;
+
+    // QR kodu veya barkod ile ara
+    const equipment = await prisma.equipment.findFirst({
+      where: { 
+        companyId,
+        OR: [
+          { qrCode: code },
+          { barcode: code },
+          { code: code },
+          { serialNumber: code }
+        ]
+      },
+      include: {
+        orderItems: {
+          where: {
+            order: {
+              status: {
+                in: ['PENDING', 'CONFIRMED', 'ACTIVE']
+              }
+            }
+          },
+          include: {
+            order: {
+              include: {
+                customer: {
+                  select: {
+                    name: true,
+                    email: true,
+                    phone: true
+                  }
+                }
+              }
+            }
+          },
+          orderBy: {
+            order: {
+              createdAt: 'desc'
+            }
+          },
+          take: 1
+        }
+      }
+    });
+
+    if (!equipment) {
+      return res.status(404).json({ 
+        error: 'Equipment not found',
+        message: 'Bu QR kodu veya barkod ile eşleşen ekipman bulunamadı.' 
+      });
+    }
+
+    // Log scan event (opsiyonel - daha sonra scan_logs tablosu eklenebilir)
+    console.log(`Equipment scanned: ${equipment.code} (${equipment.name}) by user ${req.userId}`);
+
+    res.json(equipment);
+  } catch (error) {
+    console.error('Equipment scan error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Tekil ekipman getir
 router.get('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {

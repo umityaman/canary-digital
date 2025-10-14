@@ -115,6 +115,24 @@ export const dashboardAPI = {
   getEquipmentUtilization: () => api.get('/dashboard/equipment'),
 }
 
+// Analytics API
+export const analyticsAPI = {
+  // Revenue data for date range
+  getRevenue: (startDate: string, endDate: string) =>
+    api.get('/analytics/revenue', { params: { startDate, endDate } }),
+  
+  // Equipment utilization data for date range
+  getUtilization: (startDate: string, endDate: string) =>
+    api.get('/analytics/utilization', { params: { startDate, endDate } }),
+  
+  // Order status distribution
+  getStatus: () => api.get('/analytics/status'),
+  
+  // Top rented equipment
+  getTopEquipment: (limit: number = 10) =>
+    api.get('/analytics/top-equipment', { params: { limit } }),
+}
+
 // Scan API (QR/Barcode)
 export const scanAPI = {
   // Find equipment by QR code or barcode

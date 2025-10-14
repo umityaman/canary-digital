@@ -16,11 +16,13 @@ import {
   ChevronUp,
   Calendar,
   Plug,
+  FileText,
 } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import api from '../services/api';
 import OrderModal, { OrderFormData } from '../components/modals/OrderModal';
+import { InvoiceGenerator, InvoiceData } from '../components/invoices';
 
 interface Order {
   id: number;
@@ -99,6 +101,10 @@ export default function Orders() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [orderModalMode, setOrderModalMode] = useState<'create' | 'edit'>('create');
+  
+  // Invoice Modal
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
 
   useEffect(() => {
     fetchOrders();
@@ -205,6 +211,68 @@ export default function Orders() {
     }
   };
 
+  const handleGenerateInvoice = (order: Order) => {
+    // Transform order to invoice data
+    const subtotal = order.totalAmount / 1.20; // Assuming 20% tax
+    const taxAmount = order.totalAmount - subtotal;
+
+    const data: InvoiceData = {
+      invoiceNumber: order.orderNumber,
+      invoiceDate: order.createdAt,
+      dueDate: order.endDate,
+      
+      // Company info (default data - should be fetched from settings in production)
+      company: {
+        name: 'Ekipman Kiralama A.Ş.',
+        address: 'Atatürk Bulvarı No:123',
+        city: 'İstanbul',
+        postalCode: '34000',
+        taxNumber: '1234567890',
+        phone: '+90 212 555 0123',
+        email: 'info@ekipman.com.tr',
+        website: 'www.ekipman.com.tr',
+      },
+      
+      // Customer info
+      customer: {
+        name: order.customer.name,
+        address: '-', // Not available in Order interface
+        city: '-',
+        postalCode: '-',
+        phone: '-',
+        email: order.customer.email,
+      },
+      
+      // Items
+      items: order.orderItems.map((item, index) => ({
+        id: (index + 1).toString(),
+        description: `${item.equipment.name} - ${item.equipment.model} (Kiralama)`,
+        quantity: item.quantity,
+        unit: 'Adet',
+        unitPrice: subtotal / order.orderItems.reduce((sum, i) => sum + i.quantity, 0),
+        total: (subtotal / order.orderItems.reduce((sum, i) => sum + i.quantity, 0)) * item.quantity,
+      })),
+      
+      // Totals
+      subtotal: subtotal,
+      taxRate: 20,
+      taxAmount: taxAmount,
+      total: order.totalAmount,
+      
+      // Payment info
+      iban: 'TR00 0001 0000 0000 0000 1234 56',
+      bankAccount: 'Garanti BBVA - Şişli Şubesi',
+      paymentMethod: 'Banka Havalesi',
+      
+      // Notes
+      notes: 'Ödemenizi fatura tarihinden itibaren 30 gün içinde yapmanız rica olunur.',
+      terms: 'Kiralanan ekipmanlar hasarsız olarak iade edilmelidir.',
+    };
+
+    setInvoiceData(data);
+    setShowInvoiceModal(true);
+  };
+
   const handleExportCSV = () => {
     const headers = ['Sipariş No', 'Müşteri', 'Başlangıç', 'Bitiş', 'Tutar', 'Durum'];
     const rows = orders.map(order => [
@@ -274,6 +342,18 @@ export default function Orders() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          {/* Test Invoice Button */}
+          {orders.length > 0 && (
+            <button
+              onClick={() => handleGenerateInvoice(orders[0])}
+              className="flex items-center gap-2 px-4 py-2 border-2 border-indigo-500 text-indigo-600 rounded-xl hover:bg-indigo-50 transition-colors"
+              title="Test Invoice Generator"
+            >
+              <FileText size={18} />
+              Test Fatura
+            </button>
+          )}
+
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-4 py-2 border rounded-xl transition-colors ${
@@ -839,6 +919,18 @@ export default function Orders() {
         onSave={handleSaveOrder}
         mode={orderModalMode}
       />
+
+      {/* Invoice Generator Modal */}
+      {showInvoiceModal && invoiceData && (
+        <InvoiceGenerator
+          invoiceData={invoiceData}
+          onClose={() => setShowInvoiceModal(false)}
+          onEmailSent={() => {
+            console.log('Invoice email sent successfully');
+            setShowInvoiceModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -21,8 +21,11 @@
     "axios": "^1.12.2",
     "chart.js": "^4.5.0",
     "clsx": "^2.0.0",
+    "date-fns": "^4.1.0",
+    "html2canvas": "^1.4.1",
     "html5-qrcode": "^2.3.8",
     "jsbarcode": "^3.12.1",
+    "jspdf": "^3.0.3",
     "lucide-react": "^0.290.0",
     "qrcode": "^1.5.4",
     "react": "^18.2.0",
@@ -32,7 +35,9 @@
     "react-qr-code": "^2.0.18",
     "react-router-dom": "^6.9.0",
     "react-signature-canvas": "^1.1.0-alpha.2",
+    "recharts": "^3.2.1",
     "winston": "^3.18.3",
+    "xlsx": "^0.18.5",
     "zustand": "^4.3.6"
   },
   "devDependencies": {

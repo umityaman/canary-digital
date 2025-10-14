@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import EquipmentListScreen from '../screens/equipment/EquipmentListScreen';
 import EquipmentDetailScreen from '../screens/equipment/EquipmentDetailScreen';
-import QRScannerScreen from '../screens/equipment/QRScannerScreen';
+import ScannerScreen from '../screens/scanner/ScannerScreen';
 import { EquipmentStackParamList } from '../types';
 import { colors } from '../constants/colors';
 
@@ -33,8 +33,11 @@ const EquipmentNavigator = () => {
       />
       <Stack.Screen
         name="QRScanner"
-        component={QRScannerScreen}
-        options={{ title: 'QR Kod Tara' }}
+        component={ScannerScreen}
+        options={{ 
+          title: 'QR Kod Tara',
+          headerShown: false // ScannerScreen kendi header'ını kullanıyor
+        }}
       />
     </Stack.Navigator>
   );

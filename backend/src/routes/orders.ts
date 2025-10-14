@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { authenticateToken } from './auth'
 import { GoogleCalendarService } from '../services/googleCalendar'
 import { sendOrderConfirmation } from '../utils/emailService'
+import { sendOrderConfirmationWhatsApp } from '../services/whatsapp.service'
 
 const router = Router()
 const prisma = new PrismaClient()
@@ -429,6 +430,41 @@ router.post('/', authenticateToken, async (req, res) => {
     } catch (emailError) {
       console.error('❌ Failed to send order confirmation email:', emailError);
       // Email hatası olsa bile sipariş başarılı oldu
+    }
+
+    // Send WhatsApp order confirmation
+    try {
+      if (order.customer?.phone) {
+        const startDateFormatted = new Date(order.startDate).toLocaleDateString('tr-TR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+
+        const endDateFormatted = new Date(order.endDate).toLocaleDateString('tr-TR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+
+        const whatsappResult = await sendOrderConfirmationWhatsApp({
+          customerName: order.customer.name,
+          customerPhone: order.customer.phone,
+          orderNumber: order.orderNumber,
+          totalAmount: order.totalAmount,
+          pickupDate: startDateFormatted,
+          returnDate: endDateFormatted,
+        });
+
+        if (whatsappResult.success) {
+          console.log(`✅ WhatsApp order confirmation sent to ${order.customer.phone}`);
+        } else {
+          console.warn(`⚠️  WhatsApp failed: ${whatsappResult.error}`);
+        }
+      }
+    } catch (whatsappError) {
+      console.error('❌ Failed to send WhatsApp order confirmation:', whatsappError);
+      // WhatsApp hatası olsa bile sipariş başarılı oldu
     }
 
     res.status(201).json(order)

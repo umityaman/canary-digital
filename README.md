@@ -38,15 +38,21 @@ docker-compose up --build
 
 ✅ **Tamamlanan Modüller:**
 - 🔐 Authentication (Login/Register) 
-- 🏠 Dashboard with Charts
+- 🏠 **Advanced Dashboard** (4 Chart Types, Date Range, Export)
 - 📦 Equipment Management
 - 👥 Customer Management  
 - 📋 Order Management
-- 🔍 **Inspection System** (Photos, Signatures, Damage Reports)
+- 🔍 Inspection System (Photos, Signatures, Damage Reports)
+- 📱 **Mobile QR/Barcode Scanner** (Multi-format, Real-time)
+- 📧 **Email Automation System** (11 Templates, Cron Jobs)
+- 💬 **WhatsApp Integration** (Twilio API, Auto-messaging)
+- 🧾 **Invoice Templates** (3 Professional PDF Designs)
+- 🚚 Supplier Management
 
 🔧 **Teknoloji Stack:**
 - Frontend: React 18 + TypeScript + Vite + Tailwind CSS
-- Backend: Node.js + Express + Prisma + SQLite
+- Backend: Node.js + Express + Prisma + PostgreSQL
+- Mobile: React Native + Expo (SDK 49)
 - Charts: Chart.js + react-chartjs-2
 ---
 
@@ -66,6 +72,8 @@ docker-compose up --build
 ## 🌟 Key Highlights
 
 ### Mobile App
+- **QR/Barcode Scanner** with 7 format support (QR, EAN-13/8, Code 128/39, UPC-E, PDF417)
+- **Camera Integration** for inspection photos (max 10, auto-optimized to 1200px)
 - **Offline-first architecture** with sync queue
 - **Push notifications** with Expo
 - **Advanced search & filters** with debouncing
@@ -85,9 +93,11 @@ docker-compose up --build
 ### Backend
 - **RESTful API** with 60+ endpoints
 - **Swagger/OpenAPI docs** at `/api-docs`
-- **Multi-channel notifications** (email, SMS, push, in-app)
+- **Multi-channel notifications** (email, SMS, push, in-app, **WhatsApp**)
+- **WhatsApp Integration** with Twilio (10 message templates, auto-send on orders)
 - **Smart pricing rules** with dynamic calculation
-- **QR/Barcode scanning** integration
+- **QR/Barcode scanning** with 7 format support (QR, EAN-13/8, Code 128/39, UPC-E, PDF417)
+- **Email automation** with 11 Handlebars templates + cron schedulers
 - **Google Calendar** & **Booqable** integrations
 - **Comprehensive logging** & error handling
 
