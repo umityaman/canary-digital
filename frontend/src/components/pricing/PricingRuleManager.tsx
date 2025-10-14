@@ -131,7 +131,7 @@ const PricingRuleManager: React.FC = () => {
             setEditingRule(null);
             setShowModal(true);
           }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
         >
           + Yeni Kural
         </button>
@@ -146,7 +146,7 @@ const PricingRuleManager: React.FC = () => {
           <p className="text-gray-600 mb-4">Henüz fiyatlandırma kuralı eklenmemiş</p>
           <button
             onClick={() => setShowModal(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
           >
             İlk Kuralı Ekle
           </button>
@@ -171,7 +171,7 @@ const PricingRuleManager: React.FC = () => {
                     }`}>
                       {rule.isActive ? 'Aktif' : 'Pasif'}
                     </span>
-                    <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                    <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-700 rounded-full">
                       {getRuleTypeLabel(rule.ruleType)}
                     </span>
                   </div>
@@ -252,13 +252,13 @@ const PricingRuleManager: React.FC = () => {
                 <div className="flex gap-2 ml-4">
                   <button
                     onClick={() => handleEdit(rule)}
-                    className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                    className="px-3 py-1 text-sm bg-neutral-100 text-neutral-700 rounded hover:bg-neutral-200"
                   >
                     Düzenle
                   </button>
                   <button
                     onClick={() => handleDelete(rule.id)}
-                    className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
+                    className="px-3 py-1 text-sm bg-neutral-100 text-neutral-700 rounded hover:bg-neutral-200"
                   >
                     Sil
                   </button>
@@ -507,7 +507,7 @@ const PricingRuleManager: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
                   >
                     {editingRule ? 'Güncelle' : 'Oluştur'}
                   </button>

@@ -198,7 +198,7 @@ const BundleBuilder: React.FC = () => {
             resetForm();
             setShowModal(true);
           }}
-          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center gap-2"
+          className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -219,7 +219,7 @@ const BundleBuilder: React.FC = () => {
           <p className="text-gray-600 mb-4">Henüz paket oluşturulmamış</p>
           <button
             onClick={() => setShowModal(true)}
-            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+            className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
           >
             İlk Paketi Oluştur
           </button>
@@ -229,7 +229,7 @@ const BundleBuilder: React.FC = () => {
           {bundles.map((bundle) => (
             <div
               key={bundle.id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-purple-500"
+              className="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-neutral-300"
             >
               <div className="p-5">
                 <div className="flex justify-between items-start mb-3">
@@ -279,7 +279,7 @@ const BundleBuilder: React.FC = () => {
                     </div>
                   )}
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-purple-600">
+                    <span className="text-lg font-bold text-neutral-900">
                       {bundle.bundlePrice.toFixed(2)} TL/gün
                     </span>
                   </div>
@@ -289,12 +289,12 @@ const BundleBuilder: React.FC = () => {
                 <div className="flex gap-2 mt-4 pt-4 border-t">
                   <button
                     onClick={() => handleDelete(bundle.id)}
-                    className="flex-1 px-3 py-2 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
+                    className="flex-1 px-3 py-2 text-sm bg-neutral-100 text-neutral-700 rounded hover:bg-neutral-200"
                   >
                     Sil
                   </button>
                   <button
-                    className="flex-1 px-3 py-2 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+                    className="flex-1 px-3 py-2 text-sm bg-neutral-100 text-neutral-700 rounded hover:bg-neutral-200"
                   >
                     Düzenle
                   </button>
@@ -368,13 +368,13 @@ const BundleBuilder: React.FC = () => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder="Ekipman ara..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     />
                   </div>
 
                   {/* Selected Equipment */}
                   {selectedEquipment.length > 0 && (
-                    <div className="mb-4 p-4 bg-purple-50 rounded-lg">
+                    <div className="mb-4 p-4 bg-neutral-50 rounded-lg">
                       <p className="text-sm font-medium text-gray-700 mb-3">
                         Seçili Ekipmanlar ({selectedEquipment.length})
                       </p>
@@ -431,7 +431,7 @@ const BundleBuilder: React.FC = () => {
                         <div
                           key={equipment.id}
                           className={`flex items-center justify-between p-3 border-b last:border-b-0 hover:bg-gray-50 ${
-                            isSelected ? 'bg-purple-50' : ''
+                            isSelected ? 'bg-neutral-50' : ''
                           }`}
                         >
                           <div>
@@ -445,7 +445,7 @@ const BundleBuilder: React.FC = () => {
                             className={`px-3 py-1 text-sm rounded ${
                               isSelected
                                 ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                : 'bg-purple-600 text-white hover:bg-purple-700'
+                                : 'bg-neutral-900 text-white hover:bg-neutral-800'
                             }`}
                           >
                             {isSelected ? 'Eklendi' : 'Ekle'}
@@ -461,16 +461,16 @@ const BundleBuilder: React.FC = () => {
                   <div className="border-t pt-4">
                     <h4 className="text-lg font-semibold mb-3">Fiyatlandırma</h4>
                     
-                    <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                    <div className="bg-neutral-50 p-4 rounded-lg mb-4">
                       <div className="flex justify-between text-sm mb-2">
                         <span className="text-gray-700">Toplam Bireysel Fiyat:</span>
                         <span className="font-bold">{totalPrice.toFixed(2)} TL/gün</span>
                       </div>
-                      <div className="flex justify-between text-sm text-green-600">
+                      <div className="flex justify-between text-sm text-neutral-700">
                         <span>Önerilen İndirim (%15):</span>
                         <span className="font-bold">-{suggestedDiscount.toFixed(2)} TL</span>
                       </div>
-                      <div className="flex justify-between text-sm text-purple-600 mt-2 pt-2 border-t border-blue-200">
+                      <div className="flex justify-between text-sm text-neutral-900 mt-2 pt-2 border-t border-neutral-200">
                         <span>Önerilen Paket Fiyatı:</span>
                         <span className="font-bold">{suggestedPrice.toFixed(2)} TL/gün</span>
                       </div>
@@ -539,7 +539,7 @@ const BundleBuilder: React.FC = () => {
                   <button
                     type="submit"
                     disabled={selectedEquipment.length < 2}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
                     Paketi Oluştur
                   </button>

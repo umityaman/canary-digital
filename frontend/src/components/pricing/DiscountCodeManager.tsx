@@ -133,7 +133,7 @@ const DiscountCodeManager: React.FC = () => {
             resetForm();
             setShowModal(true);
           }}
-          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2"
+          className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -148,7 +148,7 @@ const DiscountCodeManager: React.FC = () => {
           onClick={() => setFilter('all')}
           className={`px-4 py-2 rounded-md ${
             filter === 'all'
-              ? 'bg-blue-600 text-white'
+              ? 'bg-neutral-900 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
@@ -158,7 +158,7 @@ const DiscountCodeManager: React.FC = () => {
           onClick={() => setFilter('active')}
           className={`px-4 py-2 rounded-md ${
             filter === 'active'
-              ? 'bg-blue-600 text-white'
+              ? 'bg-neutral-900 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
@@ -168,7 +168,7 @@ const DiscountCodeManager: React.FC = () => {
           onClick={() => setFilter('expired')}
           className={`px-4 py-2 rounded-md ${
             filter === 'expired'
-              ? 'bg-blue-600 text-white'
+              ? 'bg-neutral-900 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
@@ -188,7 +188,7 @@ const DiscountCodeManager: React.FC = () => {
           <p className="text-gray-600 mb-4">Henüz indirim kodu eklenmemiş</p>
           <button
             onClick={() => setShowModal(true)}
-            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
           >
             İlk Kodu Ekle
           </button>
@@ -212,7 +212,7 @@ const DiscountCodeManager: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="flex items-center gap-2">
-                      <code className="text-2xl font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded">
+                      <code className="text-2xl font-bold text-neutral-900 bg-neutral-100 px-3 py-1 rounded">
                         {code.code}
                       </code>
                       <button
@@ -254,9 +254,9 @@ const DiscountCodeManager: React.FC = () => {
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     {/* Discount Value */}
-                    <div className="bg-green-50 p-3 rounded">
+                    <div className="bg-neutral-50 p-3 rounded">
                       <p className="text-xs text-gray-600 mb-1">İndirim</p>
-                      <p className="font-bold text-green-600">
+                      <p className="font-bold text-neutral-900">
                         {code.discountType === 'PERCENTAGE' && `%${code.discountValue}`}
                         {code.discountType === 'FIXED_AMOUNT' && `${code.discountValue} TL`}
                         {code.discountType === 'FREE_DELIVERY' && 'Ücretsiz Teslimat'}
@@ -264,7 +264,7 @@ const DiscountCodeManager: React.FC = () => {
                     </div>
 
                     {/* Valid Period */}
-                    <div className="bg-blue-50 p-3 rounded">
+                    <div className="bg-neutral-50 p-3 rounded">
                       <p className="text-xs text-gray-600 mb-1">Geçerlilik</p>
                       <p className="font-medium text-xs">
                         {new Date(code.validFrom).toLocaleDateString('tr-TR')}
@@ -274,15 +274,15 @@ const DiscountCodeManager: React.FC = () => {
                     </div>
 
                     {/* Usage */}
-                    <div className="bg-purple-50 p-3 rounded">
+                    <div className="bg-neutral-50 p-3 rounded">
                       <p className="text-xs text-gray-600 mb-1">Kullanım</p>
-                      <p className="font-bold text-purple-600">
+                      <p className="font-bold text-neutral-900">
                         {code.currentUsage} / {code.maxUsage || '∞'}
                       </p>
                       {code.maxUsage && (
                         <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
                           <div
-                            className="bg-purple-600 h-1.5 rounded-full"
+                            className="bg-neutral-600 h-1.5 rounded-full"
                             style={{ width: `${getUsageProgress(code)}%` }}
                           />
                         </div>
@@ -290,9 +290,9 @@ const DiscountCodeManager: React.FC = () => {
                     </div>
 
                     {/* Per User Limit */}
-                    <div className="bg-orange-50 p-3 rounded">
+                    <div className="bg-neutral-50 p-3 rounded">
                       <p className="text-xs text-gray-600 mb-1">Kullanıcı Başına</p>
-                      <p className="font-bold text-orange-600">{code.maxUsagePerUser}x</p>
+                      <p className="font-bold text-neutral-900">{code.maxUsagePerUser}x</p>
                     </div>
                   </div>
 
@@ -338,7 +338,7 @@ const DiscountCodeManager: React.FC = () => {
                     type="text"
                     value={formData.code}
                     onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 uppercase"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500 uppercase"
                     placeholder="SUMMER2025"
                     maxLength={20}
                   />
@@ -561,7 +561,7 @@ const DiscountCodeManager: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
                   >
                     Oluştur
                   </button>
