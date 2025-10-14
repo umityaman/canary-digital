@@ -6,8 +6,9 @@ import { PrismaClient } from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient();
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: any;
+  companyId?: number;
 }
 
 // Middleware: JWT token doğrulama

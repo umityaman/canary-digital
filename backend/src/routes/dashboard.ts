@@ -1,9 +1,14 @@
 import { Router, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authenticateToken, AuthRequest } from '../middleware/auth';
+import { authenticateToken } from './auth';
 
 const router = Router();
 const prisma = new PrismaClient();
+
+interface AuthRequest extends Request {
+  user?: any;
+  companyId?: number;
+}
 
 // GET /api/dashboard/test - Test endpoint (no auth)
 router.get('/test', async (req, res) => {

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { PrismaClient } from '@prisma/client'
-import { authenticateToken } from '../middleware/auth'
+import { authenticateToken } from './auth'
 import { GoogleCalendarService } from '../services/googleCalendar'
 
 const router = Router()

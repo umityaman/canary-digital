@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { paymentService } from '../services/payment.service';
-import { authenticateToken } from '../middleware/auth';
+import { authenticateToken } from './auth';
 import { log } from '../config/logger';
 
 const router = express.Router();
