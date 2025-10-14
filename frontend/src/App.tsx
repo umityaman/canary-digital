@@ -32,7 +32,6 @@ import InspectionCreate from './pages/InspectionCreate'
 import InspectionDetail from './pages/InspectionDetail'
 import Settings from './pages/Settings'
 import Pricing from './pages/Pricing'
-import Reports from './pages/Reports'
 
 export default function App(){
   const { isAuthenticated, loadUserFromStorage } = useAuthStore()
@@ -78,7 +77,6 @@ export default function App(){
           <Route path='/inspection/new' element={<InspectionCreate/>} />
           <Route path='/inspection/:id' element={<InspectionDetail/>} />
           <Route path='/pricing' element={<Pricing/>} />
-          <Route path='/reports' element={<Reports/>} />
           <Route path='/settings' element={<Settings/>} />
           <Route path='*' element={<Navigate to="/" replace />} />
         </Routes>
