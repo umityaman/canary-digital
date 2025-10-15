@@ -273,16 +273,23 @@ Total: 1,225+ satır kod
 
 ## 📦 DEPLOYMENT DURUMU
 
-### Backend (Railway)
-- ✅ Deployed
+### Backend (Railway) ✅
+- ✅ Deployed (15 Ekim 2025, 11:10)
+- ✅ Build Time: 56.04 seconds
 - ✅ Email service çalışıyor
-- ✅ WhatsApp service çalışıyor
+- ✅ Analytics routes live
+- ✅ WhatsApp routes ready (credentials needed)
 - ✅ Database connected
-- URL: [Railway Dashboard]
+- URL: https://canary-production.up.railway.app
+- API Docs: https://canary-production.up.railway.app/api-docs
 
-### Frontend
+### Frontend (Vercel) ✅
+- ✅ Deployed (15 Ekim 2025, 11:10)
+- ✅ Build Time: 6 seconds
+- ✅ Invoice Templates live
+- ✅ Dashboard Charts live
 - ✅ Local: http://localhost:5173/
-- ⏳ Production deploy bekleniyor
+- ✅ Production: https://frontend-rmmj9xr6b-umityamans-projects.vercel.app
 
 ### Mobile App
 - ⏳ Expo test edilecek
