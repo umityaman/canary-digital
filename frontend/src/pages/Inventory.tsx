@@ -5,6 +5,7 @@ import EquipmentModal from '../components/modals/EquipmentModal'
 import CategoryModal from '../components/modals/CategoryModal'
 import { QRCodeGenerator } from '../components/QRCodeGenerator'
 import BarcodeScanner from '../components/BarcodeScanner'
+import PDFDownloadButton from '../components/pdf/PDFDownloadButton'
 import api from '../services/api'
 
 interface Equipment {
@@ -49,7 +50,7 @@ const Inventory: React.FC = () => {
   const [categoryModalOpen, setCategoryModalOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
-  const [loadingCategories, setLoadingCategories] = useState(false)
+  const [, setLoadingCategories] = useState(false)
 
   // QR/Barcode states
   const [qrModalOpen, setQrModalOpen] = useState(false)
@@ -120,7 +121,7 @@ const Inventory: React.FC = () => {
     }
   }
 
-  const getEquipmentTypeBadge = (type?: string) => {
+  const _getEquipmentTypeBadge = (type?: string) => {
     if (!type) return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-700 rounded-full">-</span>
     
     switch (type) {
@@ -436,6 +437,18 @@ const Inventory: React.FC = () => {
             />
           </div>
 
+          <PDFDownloadButton 
+            type="equipment"
+            filters={{ 
+              status: filterStatus === 'all' ? '' : filterStatus,
+              category: filterCategory === 'all' ? '' : filterCategory,
+              equipmentType: filterEquipmentType === 'all' ? '' : filterEquipmentType
+            }}
+            variant="secondary"
+            size="md"
+            label="Ekipman Listesi PDF"
+          />
+          
           <button
             onClick={handleAdd}
             className="flex items-center space-x-2 bg-neutral-900 text-white px-6 py-2.5 rounded-lg hover:bg-neutral-800 transition-colors font-medium"
@@ -584,7 +597,7 @@ const Inventory: React.FC = () => {
           setCategoryModalOpen(false)
           setSelectedCategory(null)
         }}
-        onSave={handleCategorySave}
+        onSave={handleCategorySave as any}
         category={selectedCategory}
       />
 

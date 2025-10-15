@@ -5,7 +5,7 @@ import {
   FileText, Truck, Calculator, Share2, Globe, 
   CheckSquare, MessageSquare, Video, Wrench, 
   Headphones, Film, HelpCircle, Settings, Shield,
-  ChevronLeft, ChevronRight, Menu, ClipboardCheck, DollarSign, CalendarCheck, BarChart3
+  ChevronLeft, ChevronRight, ClipboardCheck
 } from 'lucide-react'
 
 const Sidebar: React.FC = () => {

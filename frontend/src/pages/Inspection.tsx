@@ -83,7 +83,8 @@ export default function Inspection() {
       : <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">Teslim Ediş</span>;
   };
 
-  const getConditionBadge = (condition: string) => {
+  const getConditionBadge = (condition?: string) => {
+    if (!condition) return <span className="px-2 py-1 bg-neutral-100 text-neutral-600 rounded-full text-xs">-</span>;
     const badges: Record<string, { label: string; className: string }> = {
       EXCELLENT: { label: 'Mükemmel', className: 'bg-green-100 text-green-800' },
       GOOD: { label: 'İyi', className: 'bg-neutral-100 text-neutral-800' },

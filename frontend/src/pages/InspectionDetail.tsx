@@ -241,11 +241,11 @@ export default function InspectionDetail() {
             <div>
               <p className="text-xs text-neutral-600">Durum</p>
               <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
-                inspection.equipment?.status === 'AVAILABLE' 
+                (inspection.equipment as any)?.status === 'AVAILABLE' 
                   ? 'bg-green-100 text-green-800'
                   : 'bg-yellow-100 text-yellow-800'
               }`}>
-                {inspection.equipment?.status || 'Bilinmiyor'}
+                {(inspection.equipment as any)?.status || 'Bilinmiyor'}
               </span>
             </div>
           </div>

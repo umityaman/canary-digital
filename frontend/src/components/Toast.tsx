@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react'
-import { useEffect } from 'react'
+
 
 type ToastType = 'success' | 'error' | 'warning' | 'info'
 

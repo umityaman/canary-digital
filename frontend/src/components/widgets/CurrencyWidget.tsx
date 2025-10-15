@@ -7,7 +7,7 @@ const CurrencyWidget: React.FC = () => {
   const [toCurrency, setToCurrency] = useState('TRY')
 
   // Mock döviz kurları - gerçek projede API'den gelecek
-  const rates = {
+  const rates: Record<string, Record<string, number>> = {
     USD: { TRY: 28.50, EUR: 0.92, GBP: 0.79 },
     EUR: { TRY: 31.20, USD: 1.09, GBP: 0.86 },
     TRY: { USD: 0.035, EUR: 0.032, GBP: 0.027 },
@@ -15,7 +15,7 @@ const CurrencyWidget: React.FC = () => {
   }
 
   const convert = () => {
-    const rate = rates[fromCurrency]?.[toCurrency] || 1
+    const rate = (rates as any)[fromCurrency]?.[toCurrency] || 1
     return (parseFloat(amount) * rate).toFixed(2)
   }
 

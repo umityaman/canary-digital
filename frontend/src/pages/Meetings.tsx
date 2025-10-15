@@ -1,5 +1,4 @@
-import React from 'react'
-import { Video, Plus, Calendar } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 export default function Meetings(){
   return (

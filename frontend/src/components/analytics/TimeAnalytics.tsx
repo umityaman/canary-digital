@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Calendar, TrendingUp, BarChart3, PieChart, LineChart } from 'lucide-react';
 
 interface TimeAnalyticsProps {
@@ -9,7 +9,7 @@ interface TimeAnalyticsProps {
 type TimePeriod = 'today' | 'week' | 'month' | 'quarter' | 'year';
 type ChartType = 'line' | 'bar' | 'area' | 'pie';
 
-const TimeAnalytics: React.FC<TimeAnalyticsProps> = ({ data, loading = false }) => {
+const TimeAnalytics: React.FC<TimeAnalyticsProps> = ({ data: _data, loading = false }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('month');
   const [selectedChart, setSelectedChart] = useState<ChartType>('line');
 

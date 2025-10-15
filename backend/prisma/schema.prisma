@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Company {
@@ -99,6 +99,17 @@ model User {
   // WhatsApp Integration
   whatsappEnabled       Boolean   @default(false)
   whatsappNumber        String?
+  
+  // Two-Factor Authentication
+  twoFactorEnabled      Boolean   @default(false)
+  twoFactorMethod       String?   // EMAIL, SMS, TOTP
+  twoFactorSecret       String?   // TOTP secret for Google Authenticator
+  twoFactorPhone        String?   // Phone number for SMS 2FA
+  twoFactorBackupCodes  String?   // JSON string of hashed backup codes
+  twoFactorVerifiedAt   DateTime? // Last verification timestamp
+  backupCodes           String?   // Legacy field - JSON string of hashed backup codes
+  tempOTP               String?   // Temporary OTP for email verification
+  tempOTPExpiry         DateTime? // OTP expiry timestamp
   
   // Paraşüt Integration (Accounting)
   parasutContactId String?   @unique  // Paraşüt contact ID

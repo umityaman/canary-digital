@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   List,
   Search,
-  Filter,
   Calendar,
   User,
   Package,
@@ -12,7 +11,6 @@ import {
   XCircle,
   Clock,
   AlertCircle,
-  Download,
   RefreshCw,
 } from 'lucide-react';
 import { reservationAPI } from '../../services/api';

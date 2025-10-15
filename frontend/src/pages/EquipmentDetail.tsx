@@ -411,8 +411,9 @@ const EquipmentDetail: React.FC = () => {
       {/* QR Code Modal */}
       {showQRModal && (
         <QRCodeGenerator
-          equipmentId={equipment.id}
+          equipmentId={parseInt(equipment.id)}
           equipmentName={equipment.name}
+          serialNumber={equipment.serialNumber || 'N/A'}
           onClose={() => setShowQRModal(false)}
         />
       )}

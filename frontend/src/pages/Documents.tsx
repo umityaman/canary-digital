@@ -18,7 +18,7 @@ interface DocumentTemplate {
 }
 
 export default function Documents() {
-  const [selectedDoc, setSelectedDoc] = useState<DocumentType | null>(null)
+  const [, setSelectedDoc] = useState<DocumentType | null>(null)
   const [showEditor, setShowEditor] = useState(false)
 
   const templates: DocumentTemplate[] = [

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { authenticateToken } from './auth'
+import { AuthRequest } from '../middleware/auth'
 import { GoogleCalendarService } from '../services/googleCalendar'
 import { sendOrderConfirmation } from '../utils/emailService'
 import { sendOrderConfirmationWhatsApp } from '../services/whatsapp.service'
@@ -195,7 +196,7 @@ async function syncOrderToCalendar(order: any, userId: number, action: 'create' 
 }
 
 // Tüm siparişleri getir (with advanced filtering & sorting)
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { 
       status, 
@@ -313,7 +314,7 @@ router.get('/', authenticateToken, async (req, res) => {
 })
 
 // Tek sipariş getir
-router.get('/:id', authenticateToken, async (req, res) => {
+router.get('/:id', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { id } = req.params
     const order = await prisma.order.findUnique({
@@ -340,7 +341,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
 })
 
 // Yeni sipariş oluştur
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { customerId, startDate, endDate, items, notes } = req.body
 
@@ -475,7 +476,7 @@ router.post('/', authenticateToken, async (req, res) => {
 })
 
 // Sipariş güncelle
-router.put('/:id', authenticateToken, async (req, res) => {
+router.put('/:id', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { id } = req.params
     const { status, startDate, endDate, notes, totalAmount } = req.body
@@ -513,7 +514,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
 })
 
 // Sipariş sil
-router.delete('/:id', authenticateToken, async (req, res) => {
+router.delete('/:id', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { id } = req.params
 
@@ -549,7 +550,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 })
 
 // Bulk update status
-router.post('/bulk/update-status', authenticateToken, async (req, res) => {
+router.post('/bulk/update-status', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { orderIds, status } = req.body;
 
@@ -580,7 +581,7 @@ router.post('/bulk/update-status', authenticateToken, async (req, res) => {
 });
 
 // Bulk delete
-router.post('/bulk/delete', authenticateToken, async (req, res) => {
+router.post('/bulk/delete', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { orderIds } = req.body;
 

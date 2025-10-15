@@ -157,7 +157,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
         orderId,
         equipmentId,
         customerId,
-        inspectorId: inspectorId || req.userId,
+        inspectorId: inspectorId || req.user?.id,
         checklistData: checklistData ? JSON.stringify(checklistData) : null,
         overallCondition,
         customerSignature,
@@ -428,11 +428,10 @@ router.post('/inspection-photos', authenticateToken, upload.single('photo'), asy
     // Create photo record
     const photo = await prisma.inspectionPhoto.create({
       data: {
-        url: `/uploads/inspections/${file.filename}`,
         filename: file.filename,
         inspectionId: inspectionId ? parseInt(inspectionId) : null,
         equipmentId: equipmentId ? parseInt(equipmentId) : null,
-        uploadedById: req.userId,
+        uploadedById: req.user?.id,
         notes: type || 'inspection' // pickup, return, damage, inspection
       }
     });

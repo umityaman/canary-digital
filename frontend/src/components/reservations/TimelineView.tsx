@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Calendar,
   ChevronLeft,
   ChevronRight,
-  ZoomIn,
-  ZoomOut,
   RotateCcw,
   Filter,
-  Download,
   Package,
   Clock,
   CheckCircle,
@@ -101,7 +97,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
             .map((e: EquipmentTimeline) => e.equipmentCategory)
             .filter((c: string) => c)
         )
-      );
+      ) as string[];
       setCategories(uniqueCategories);
     } catch (error) {
       console.error('Failed to load timeline:', error);

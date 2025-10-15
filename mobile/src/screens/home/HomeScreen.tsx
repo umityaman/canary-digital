@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Package, Calendar, TrendingUp, DollarSign, QrCode, Bell, Users, ShoppingCart } from 'lucide-react-native';
+import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useAuthStore } from '../../stores/authStore';
 import { useNotificationStore } from '../../stores/notificationStore';
 import { useDashboardStore } from '../../stores/dashboardStore';
 import { colors } from '../../constants/colors';
 import { formatCurrency } from '../../utils/formatters';
+import { Card, Button, Badge, Avatar } from '../../components/ui';
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -64,7 +66,7 @@ const HomeScreen = () => {
 
         {/* Stats Cards */}
         <View style={styles.statsContainer}>
-          <View style={[styles.statCard, { backgroundColor: '#dbeafe' }]}>
+          <Card variant="elevated" animationDelay={100} style={[styles.statCard, { backgroundColor: '#dbeafe' }]}>
             <View style={styles.statIconContainer}>
               <DollarSign size={24} color={colors.primary} />
             </View>
@@ -73,17 +75,17 @@ const HomeScreen = () => {
             </Text>
             <Text style={styles.statLabel}>Bu Ay Gelir</Text>
             {stats?.overview.revenueChange !== undefined && (
-              <Text style={[
-                styles.changeText,
-                { color: stats.overview.revenueChange >= 0 ? colors.success : colors.error }
-              ]}>
-                {stats.overview.revenueChange >= 0 ? '+' : ''}
-                {stats.overview.revenueChange.toFixed(1)}%
-              </Text>
+              <Badge 
+                variant={stats.overview.revenueChange >= 0 ? 'success' : 'error'}
+                size="small"
+                animated
+              >
+                {`${stats.overview.revenueChange >= 0 ? '+' : ''}${stats.overview.revenueChange.toFixed(1)}%`}
+              </Badge>
             )}
-          </View>
+          </Card>
 
-          <View style={[styles.statCard, { backgroundColor: '#e0e7ff' }]}>
+          <Card variant="elevated" animationDelay={200} style={[styles.statCard, { backgroundColor: '#e0e7ff' }]}>
             <View style={styles.statIconContainer}>
               <Calendar size={24} color={colors.secondary} />
             </View>
@@ -91,9 +93,9 @@ const HomeScreen = () => {
               {stats?.overview.totalReservations || 0}
             </Text>
             <Text style={styles.statLabel}>Toplam Rezervasyon</Text>
-          </View>
+          </Card>
 
-          <View style={[styles.statCard, { backgroundColor: '#dcfce7' }]}>
+          <Card variant="elevated" animationDelay={300} style={[styles.statCard, { backgroundColor: '#dcfce7' }]}>
             <View style={styles.statIconContainer}>
               <Package size={24} color={colors.success} />
             </View>
@@ -101,9 +103,9 @@ const HomeScreen = () => {
               {stats?.overview.activeReservations || 0}
             </Text>
             <Text style={styles.statLabel}>Aktif Rezervasyon</Text>
-          </View>
+          </Card>
 
-          <View style={[styles.statCard, { backgroundColor: '#fef3c7' }]}>
+          <Card variant="elevated" animationDelay={400} style={[styles.statCard, { backgroundColor: '#fef3c7' }]}>
             <View style={styles.statIconContainer}>
               <ShoppingCart size={24} color={colors.warning} />
             </View>
@@ -111,54 +113,70 @@ const HomeScreen = () => {
               {stats?.overview.totalEquipment || 0}
             </Text>
             <Text style={styles.statLabel}>Ekipman</Text>
-          </View>
+          </Card>
         </View>
 
         {/* Quick Actions */}
-        <View style={styles.section}>
+        <Animated.View entering={FadeInDown.delay(500).springify()} style={styles.section}>
           <Text style={styles.sectionTitle}>Hızlı İşlemler</Text>
           <View style={styles.quickActions}>
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={[styles.actionIcon, { backgroundColor: '#dbeafe' }]}>
-                <Calendar size={24} color={colors.primary} />
-              </View>
-              <Text style={styles.actionText}>Yeni Rezervasyon</Text>
-            </TouchableOpacity>
+            <View style={styles.actionButton}>
+              <Button 
+                variant="secondary" 
+                size="large"
+                icon="calendar"
+                onPress={() => navigation.navigate('NewReservation')}
+              >
+                Yeni Rezervasyon
+              </Button>
+            </View>
 
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={[styles.actionIcon, { backgroundColor: '#e0e7ff' }]}>
-                <QrCode size={24} color={colors.secondary} />
-              </View>
-              <Text style={styles.actionText}>QR Tara</Text>
-            </TouchableOpacity>
+            <View style={styles.actionButton}>
+              <Button 
+                variant="secondary" 
+                size="large"
+                icon="qr-code"
+                onPress={() => navigation.navigate('Scanner')}
+              >
+                QR Tara
+              </Button>
+            </View>
 
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={[styles.actionIcon, { backgroundColor: '#dcfce7' }]}>
-                <Package size={24} color={colors.success} />
-              </View>
-              <Text style={styles.actionText}>Ekipman Ekle</Text>
-            </TouchableOpacity>
+            <View style={styles.actionButton}>
+              <Button 
+                variant="secondary" 
+                size="large"
+                icon="add"
+                onPress={() => navigation.navigate('AddEquipment')}
+              >
+                Ekipman Ekle
+              </Button>
+            </View>
           </View>
-        </View>
+        </Animated.View>
 
         {/* Recent Activity */}
-        <View style={styles.section}>
+        <Animated.View entering={FadeInDown.delay(600).springify()} style={styles.section}>
           <Text style={styles.sectionTitle}>Son Aktiviteler</Text>
-          <View style={styles.activityList}>
-            {[1, 2, 3].map((item) => (
-              <View key={item} style={styles.activityItem}>
-                <View style={styles.activityIcon}>
-                  <Calendar size={20} color={colors.primary} />
+          <Card variant="elevated">
+            {[1, 2, 3].map((item, index) => (
+              <View key={item}>
+                <View style={styles.activityItem}>
+                  <Avatar 
+                    icon="calendar"
+                    size="small"
+                  />
+                  <View style={styles.activityContent}>
+                    <Text style={styles.activityTitle}>Yeni Rezervasyon</Text>
+                    <Text style={styles.activitySubtitle}>RES-2025-00{item} oluşturuldu</Text>
+                  </View>
+                  <Badge variant="info" size="small">2s önce</Badge>
                 </View>
-                <View style={styles.activityContent}>
-                  <Text style={styles.activityTitle}>Yeni Rezervasyon</Text>
-                  <Text style={styles.activitySubtitle}>RES-2025-00{item} oluşturuldu</Text>
-                </View>
-                <Text style={styles.activityTime}>2s önce</Text>
+                {index < 2 && <View style={styles.divider} />}
               </View>
             ))}
-          </View>
-        </View>
+          </Card>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -243,9 +261,8 @@ const styles = StyleSheet.create({
   },
   statCard: {
     width: '47%',
-    margin: '1.5%',
+    margin: 6,
     padding: 16,
-    borderRadius: 12,
     alignItems: 'center',
   },
   statIconContainer: {
@@ -297,29 +314,15 @@ const styles = StyleSheet.create({
     color: colors.text,
     textAlign: 'center',
   },
-  activityList: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 12,
-  },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  activityIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surfaceVariant,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
+    paddingHorizontal: 4,
   },
   activityContent: {
     flex: 1,
+    marginLeft: 12,
   },
   activityTitle: {
     fontSize: 14,
@@ -331,9 +334,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.textSecondary,
   },
-  activityTime: {
-    fontSize: 11,
-    color: colors.textDisabled,
+  divider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginVertical: 4,
   },
 });
 

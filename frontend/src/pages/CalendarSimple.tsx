@@ -114,7 +114,7 @@ const Calendar = () => {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
           }}
-          events={events}
+          events={events.map(e => ({ ...e, id: String(e.id) }))}
           eventClick={handleEventClick}
           selectable={true}
           select={handleDateSelect}

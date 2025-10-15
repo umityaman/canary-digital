@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
   TrendingUp,
-  TrendingDown,
   DollarSign,
   Package,
   Calendar,
-  Users,
   AlertTriangle,
   RefreshCw,
-  Download,
   ArrowUpRight,
   ArrowDownRight,
 } from 'lucide-react';

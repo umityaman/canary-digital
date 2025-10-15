@@ -23,6 +23,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import api from '../services/api';
 import OrderModal, { OrderFormData } from '../components/modals/OrderModal';
 import { InvoiceGenerator, InvoiceData } from '../components/invoices';
+import PDFDownloadButton from '../components/pdf/PDFDownloadButton';
 
 interface Order {
   id: number;
@@ -766,12 +767,21 @@ export default function Orders() {
                               setShowDetailModal(true);
                             }}
                             className="p-1 hover:bg-neutral-100 rounded transition-colors"
+                            title="Detayları Gör"
                           >
                             <Eye size={16} className="text-neutral-600" />
                           </button>
-                          <button className="p-1 hover:bg-neutral-100 rounded transition-colors">
+                          <button className="p-1 hover:bg-neutral-100 rounded transition-colors" title="Düzenle">
                             <Edit size={16} className="text-neutral-600" />
                           </button>
+                          <PDFDownloadButton 
+                            type="order" 
+                            id={order.id}
+                            variant="ghost"
+                            size="sm"
+                            label=""
+                            className="!p-1"
+                          />
                         </div>
                       </td>
                     </tr>

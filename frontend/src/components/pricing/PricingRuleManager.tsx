@@ -112,15 +112,6 @@ const PricingRuleManager: React.FC = () => {
     return labels[type] || type;
   };
 
-  const getDiscountTypeLabel = (type: string) => {
-    const labels: Record<string, string> = {
-      PERCENTAGE: 'Yüzde (%)',
-      FIXED_AMOUNT: 'Sabit Tutar (TL)',
-      SPECIAL_RATE: 'Özel Fiyat'
-    };
-    return labels[type] || type;
-  };
-
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">

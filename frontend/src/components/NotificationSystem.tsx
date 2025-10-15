@@ -95,19 +95,6 @@ export const NotificationPanel = () => {
     }
   };
 
-  const getBgColor = (type: Notification['type']) => {
-    switch (type) {
-      case 'SUCCESS':
-        return 'bg-green-50 border-green-200';
-      case 'ERROR':
-        return 'bg-red-50 border-red-200';
-      case 'WARNING':
-        return 'bg-yellow-50 border-yellow-200';
-      case 'INFO':
-        return 'bg-blue-50 border-blue-200';
-    }
-  };
-
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -226,11 +213,10 @@ export const NotificationBanner = () => {
   useEffect(() => {
     // Subscribe to new notifications
     const unsubscribe = useNotificationStore.subscribe(
-      (state) => state.notifications,
-      (notifications) => {
+      (notifications: Notification[]) => {
         // Show banner only for ERROR and WARNING types
         const urgentNotifications = notifications.filter(
-          (n) => (n.type === 'ERROR' || n.type === 'WARNING') && !n.read
+          (n: Notification) => (n.type === 'ERROR' || n.type === 'WARNING') && !n.read
         );
         setBannerNotifications(urgentNotifications.slice(0, 1)); // Show only one at a time
       }

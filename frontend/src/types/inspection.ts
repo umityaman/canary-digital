@@ -110,9 +110,12 @@ export interface ChecklistTemplateItem {
 export interface InspectionFilters {
   search?: string;
   inspectionType?: 'CHECKOUT' | 'CHECKIN' | 'ALL';
+  type?: string;
   status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'DAMAGE_FOUND' | 'ALL';
   dateFrom?: string;
   dateTo?: string;
+  startDate?: string;
+  endDate?: string;
   equipmentId?: number;
   customerId?: number;
 }

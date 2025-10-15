@@ -66,7 +66,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
   }, [order, mode, isOpen]);
 
   const calculatePrice = () => {
-    const selected = equipment.find(e => e.id === formData.equipmentId);
+    const selected = equipment.find(e => e.id === Number(formData.equipmentId));
     if (!selected || !formData.startDate || !formData.endDate) {
       return 0;
     }
@@ -75,7 +75,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
     const end = new Date(formData.endDate);
     const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     
-    const dailyRate = selected.dailyRate || 0;
+    const dailyRate = (selected as any)?.dailyRate || 0;
     return days * dailyRate;
   };
 
@@ -91,15 +91,15 @@ const OrderModal: React.FC<OrderModalProps> = ({
     setError(null);
 
     if (!formData.customerId) {
-      setError('Müþteri seçimi zorunludur');
+      setError('Mï¿½ï¿½teri seï¿½imi zorunludur');
       return;
     }
     if (!formData.equipmentId) {
-      setError('Ekipman seçimi zorunludur');
+      setError('Ekipman seï¿½imi zorunludur');
       return;
     }
     if (!formData.startDate || !formData.endDate) {
-      setError('Baþlangýç ve bitiþ tarihleri zorunludur');
+      setError('Baï¿½langï¿½ï¿½ ve bitiï¿½ tarihleri zorunludur');
       return;
     }
 
@@ -108,7 +108,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
       await onSave(formData);
       onClose();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Bir hata oluþtu');
+      setError(err.response?.data?.error || 'Bir hata oluï¿½tu');
     } finally {
       setLoading(false);
     }
@@ -121,7 +121,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
       <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-2xl font-bold text-gray-800">
-            {mode === 'create' ? 'Yeni Sipariþ Oluþtur' : 'Sipariþ Düzenle'}
+            {mode === 'create' ? 'Yeni Sipariï¿½ Oluï¿½tur' : 'Sipariï¿½ Dï¿½zenle'}
           </h2>
           <button
             onClick={onClose}
@@ -142,7 +142,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                 <User size={16} />
-                Müþteri *
+                Mï¿½ï¿½teri *
               </label>
               <select
                 required
@@ -150,7 +150,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                 onChange={(e) => setFormData({ ...formData, customerId: Number(e.target.value) })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               >
-                <option value="0">Müþteri Seçin...</option>
+                <option value="0">Mï¿½ï¿½teri Seï¿½in...</option>
                 {customers.map((customer) => (
                   <option key={customer.id} value={customer.id}>
                     {customer.name}
@@ -170,10 +170,10 @@ const OrderModal: React.FC<OrderModalProps> = ({
                 onChange={(e) => setFormData({ ...formData, equipmentId: Number(e.target.value) })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               >
-                <option value="0">Ekipman Seçin...</option>
+                <option value="0">Ekipman SeÃ§in...</option>
                 {equipment.filter(e => e.status === 'AVAILABLE').map((item) => (
                   <option key={item.id} value={item.id}>
-                    {item.name} - {item.dailyRate}?/gün
+                    {item.name} - {(item as any)?.dailyRate || 0}â‚º/gÃ¼n
                   </option>
                 ))}
               </select>
@@ -182,7 +182,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                 <Calendar size={16} />
-                Baþlangýç Tarihi *
+                Baï¿½langï¿½ï¿½ Tarihi *
               </label>
               <input
                 type="date"
@@ -196,7 +196,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                 <Calendar size={16} />
-                Bitiþ Tarihi *
+                Bitiï¿½ Tarihi *
               </label>
               <input
                 type="date"
@@ -229,7 +229,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
-              placeholder="Özel notlar, talepler vb."
+              placeholder="ï¿½zel notlar, talepler vb."
             />
           </div>
 
@@ -240,14 +240,14 @@ const OrderModal: React.FC<OrderModalProps> = ({
               className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               disabled={loading}
             >
-              Ýptal
+              ï¿½ptal
             </button>
             <button
               type="submit"
               className="px-6 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors disabled:opacity-50"
               disabled={loading}
             >
-              {loading ? 'Kaydediliyor...' : mode === 'create' ? 'Sipariþ Oluþtur' : 'Güncelle'}
+              {loading ? 'Kaydediliyor...' : mode === 'create' ? 'Sipariï¿½ Oluï¿½tur' : 'Gï¿½ncelle'}
             </button>
           </div>
         </form>

@@ -26,7 +26,7 @@ interface CustomerState {
   deleteCustomer: (id: number) => Promise<void>;
 }
 
-export const useCustomerStore = create<CustomerState>((set, get) => ({
+export const useCustomerStore = create<CustomerState>((set, _get) => ({
   customers: [],
   loading: false,
   error: null,

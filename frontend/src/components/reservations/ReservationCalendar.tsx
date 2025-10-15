@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, ChevronLeft, ChevronRight, Clock, User, Package, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, Clock, User, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { reservationAPI } from '../../services/api';
 
 interface Reservation {

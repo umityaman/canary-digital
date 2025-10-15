@@ -41,7 +41,7 @@ const Suppliers: React.FC = () => {
     }
   };
 
-  const handleToggleActive = async (supplier: Supplier) => {
+  const _handleToggleActive = async (supplier: Supplier) => {
     try {
       await toggleSupplierActive(supplier.id);
     } catch (err: any) {

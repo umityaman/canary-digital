@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   View,
   Text,
   FlatList,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   RefreshControl,
@@ -13,10 +12,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Search, Filter, QrCode, X } from 'lucide-react-native';
+import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useEquipmentStore } from '../../stores/equipmentStore';
 import EquipmentCard from '../../components/EquipmentCard';
 import { EquipmentStackParamList } from '../../types';
 import { colors } from '../../constants/colors';
+import { Input, Button, Card, Badge, Chip } from '../../components/ui';
+import { theme } from '../../constants/theme';
 
 type NavigationProp = StackNavigationProp<EquipmentStackParamList, 'EquipmentList'>;
 
@@ -26,6 +28,17 @@ const EquipmentListScreen = () => {
   
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // Memoized filtered equipment for performance
+  const filteredEquipment = useMemo(() => {
+    return equipment.filter(item => {
+      const matchesStatus = !selectedStatus || item.status === selectedStatus;
+      const matchesCategory = !selectedCategory || item.category === selectedCategory;
+      return matchesStatus && matchesCategory;
+    });
+  }, [equipment, selectedStatus, selectedCategory]);
 
   useEffect(() => {
     loadEquipment();
@@ -74,50 +87,80 @@ const EquipmentListScreen = () => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
-          <Search size={20} color={colors.textSecondary} />
-          <TextInput
-            style={styles.searchInput}
+      {/* Search Bar with New Input Component */}
+      <Animated.View entering={FadeIn.duration(300)} style={styles.searchContainer}>
+        <View style={{ flex: 1 }}>
+          <Input
             placeholder="Ekipman ara..."
-            placeholderTextColor={colors.textSecondary}
             value={searchQuery}
             onChangeText={handleSearch}
+            icon="search"
+            rightIcon={searchQuery.length > 0 ? "close-circle" : undefined}
+            onRightIconPress={handleClearSearch}
           />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={handleClearSearch}>
-              <X size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
-          )}
         </View>
         
         {/* QR Scan Button */}
-        <TouchableOpacity style={styles.qrButton} onPress={handleQRScan}>
+        <TouchableOpacity style={styles.qrButtonNew} onPress={handleQRScan}>
           <QrCode size={24} color={colors.primary} />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
+
+      {/* Filter Chips */}
+      <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.filterChips}>
+        <Chip
+          label="Hepsi"
+          selected={!selectedStatus}
+          onPress={() => setSelectedStatus(null)}
+          size="small"
+        />
+        <Chip
+          label="Müsait"
+          variant="filled"
+          selected={selectedStatus === 'available'}
+          onPress={() => setSelectedStatus(selectedStatus === 'available' ? null : 'available')}
+          size="small"
+        />
+        <Chip
+          label="Kirada"
+          variant="filled"
+          selected={selectedStatus === 'rented'}
+          onPress={() => setSelectedStatus(selectedStatus === 'rented' ? null : 'rented')}
+          size="small"
+        />
+        <Chip
+          label="Bakımda"
+          variant="filled"
+          selected={selectedStatus === 'maintenance'}
+          onPress={() => setSelectedStatus(selectedStatus === 'maintenance' ? null : 'maintenance')}
+          size="small"
+        />
+      </Animated.View>
 
       {/* Stats */}
-      <View style={styles.stats}>
-        <Text style={styles.statsText}>
-          {equipment.length} ekipman
-          {filters.search && ` · "${filters.search}" için sonuçlar`}
-        </Text>
-      </View>
+      <Animated.View entering={FadeInDown.delay(200).springify()} style={styles.stats}>
+        <Badge variant="info" size="medium">
+          {`${filteredEquipment.length} ekipman`}
+        </Badge>
+        {searchQuery && (
+          <Text style={styles.searchInfo}>"{searchQuery}" için sonuçlar</Text>
+        )}
+      </Animated.View>
     </View>
   );
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <FlatList
-        data={equipment}
+        data={filteredEquipment}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <EquipmentCard
-            equipment={item}
-            onPress={() => handleEquipmentPress(item.id)}
-          />
+        renderItem={({ item, index }) => (
+          <Animated.View entering={FadeInDown.delay(index * 50).springify()}>
+            <EquipmentCard
+              equipment={item}
+              onPress={() => handleEquipmentPress(item.id)}
+            />
+          </Animated.View>
         )}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmpty}
@@ -129,6 +172,11 @@ const EquipmentListScreen = () => {
             colors={[colors.primary]}
           />
         }
+        // Performance optimizations
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews={true}
       />
 
       {/* Loading Overlay */}
@@ -185,13 +233,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
+  qrButtonNew: {
+    width: 52,
+    paddingHorizontal: 0,
+  },
+  filterChips: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 12,
+    flexWrap: 'wrap',
+  },
   stats: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    gap: 12,
   },
   statsText: {
     fontSize: 14,
+    color: colors.textSecondary,
+  },
+  searchInfo: {
+    fontSize: 13,
     color: colors.textSecondary,
   },
   emptyContainer: {

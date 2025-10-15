@@ -37,7 +37,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   companyId,
   onSuccess,
   onCancel,
-  initialData,
+  initialData: _initialData,
 }) => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -73,7 +73,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
   // Pricing
   const [pricing, setPricing] = useState<any>(null);
-  const [availability, setAvailability] = useState<any>(null);
+  const [, setAvailability] = useState<any>(null);
 
   useEffect(() => {
     loadEquipment();

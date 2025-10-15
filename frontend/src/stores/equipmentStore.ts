@@ -29,7 +29,7 @@ interface EquipmentStore {
   clearError: () => void
 }
 
-export const useEquipmentStore = create<EquipmentStore>((set, get) => ({
+export const useEquipmentStore = create<EquipmentStore>((set, _get) => ({
   equipment: [],
   loading: false,
   error: null,

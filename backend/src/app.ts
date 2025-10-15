@@ -167,6 +167,8 @@ app.use('/api/reports', require('./routes/reports').default); // Reporting and a
 app.use('/api/monitoring', require('./routes/monitoring').default); // Performance monitoring
 app.use('/api/invoices', require('./routes/invoice').default); // Invoicing & Paraşüt integration
 app.use('/api/payment', require('./routes/payment').default); // Payment & iyzico integration
+app.use('/api/pdf', require('./routes/pdf').default); // PDF Report Generation
+app.use('/api/2fa', require('./routes/twoFactor').default); // Two-Factor Authentication
 
 // Sentry error handler (must be before other error handlers)
 app.use(sentryErrorHandler());

@@ -4,18 +4,19 @@ import {
   Text,
   ScrollView,
   Image,
-  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, RouteProp } from '@react-navigation/native';
-import { Package, Calendar, DollarSign, Info, Phone, Mail } from 'lucide-react-native';
+import { Package, Calendar, DollarSign, Info } from 'lucide-react-native';
+import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useEquipmentStore } from '../../stores/equipmentStore';
 import { EquipmentStackParamList } from '../../types';
-import { colors, statusColors, categoryColors } from '../../constants/colors';
+import { colors } from '../../constants/colors';
 import { formatCurrency } from '../../utils/formatters';
+import { Card, Badge, Button, Divider, Avatar } from '../../components/ui';
+import { theme } from '../../constants/theme';
 
 type RouteProp = RouteProp<EquipmentStackParamList, 'EquipmentDetail'>;
 
@@ -49,132 +50,164 @@ const EquipmentDetailScreen = () => {
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity style={styles.retryButton} onPress={loadEquipment}>
-            <Text style={styles.retryButtonText}>Tekrar Dene</Text>
-          </TouchableOpacity>
+          <Button variant="primary" onPress={loadEquipment}>
+            Tekrar Dene
+          </Button>
         </View>
       </SafeAreaView>
     );
   }
 
   const equipment = selectedEquipment;
-  const statusColor = statusColors[equipment.status] || colors.textSecondary;
-  const categoryColor = categoryColors[equipment.category] || categoryColors.default;
+
+  const getStatusVariant = (status: string) => {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'success';
+      case 'RENTED':
+        return 'warning';
+      case 'MAINTENANCE':
+        return 'info';
+      default:
+        return 'error';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'Müsait';
+      case 'RENTED':
+        return 'Kiralandı';
+      case 'MAINTENANCE':
+        return 'Bakımda';
+      default:
+        return 'Hizmet Dışı';
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Image */}
-        <View style={styles.imageContainer}>
+        <Animated.View entering={FadeIn.duration(400)} style={styles.imageContainer}>
           {equipment.imageUrl ? (
             <Image source={{ uri: equipment.imageUrl }} style={styles.image} />
           ) : (
-            <View style={[styles.imagePlaceholder, { backgroundColor: categoryColor + '20' }]}>
-              <Package size={64} color={categoryColor} />
+            <View style={styles.imagePlaceholder}>
+              <Avatar icon="cube" size="xlarge" />
             </View>
           )}
           
           {/* Status Badge */}
-          <View style={[styles.statusBadge, { backgroundColor: statusColor }]}>
-            <Text style={styles.statusText}>
-              {equipment.status === 'AVAILABLE' ? 'Müsait' :
-               equipment.status === 'RENTED' ? 'Kiralandı' :
-               equipment.status === 'MAINTENANCE' ? 'Bakımda' : 'Hizmet Dışı'}
-            </Text>
+          <View style={styles.statusBadgeContainer}>
+            <Badge variant={getStatusVariant(equipment.status)} size="medium" animated>
+              {getStatusLabel(equipment.status)}
+            </Badge>
           </View>
-        </View>
+        </Animated.View>
 
         {/* Header Info */}
-        <View style={styles.header}>
+        <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.header}>
           <Text style={styles.name}>{equipment.name}</Text>
           <View style={styles.metaRow}>
-            <View style={[styles.categoryBadge, { backgroundColor: categoryColor + '20' }]}>
-              <Text style={[styles.categoryText, { color: categoryColor }]}>
-                {equipment.category}
-              </Text>
-            </View>
+            <Badge variant="default" size="medium">
+              {equipment.category}
+            </Badge>
             <Text style={styles.code}>{equipment.qrCode}</Text>
           </View>
-        </View>
+        </Animated.View>
 
         {/* Price Card */}
-        <View style={styles.priceCard}>
-          <View style={styles.priceIcon}>
-            <DollarSign size={24} color={colors.primary} />
-          </View>
-          <View style={styles.priceContent}>
-            <Text style={styles.priceLabel}>Günlük Kiralama Fiyatı</Text>
-            <Text style={styles.priceValue}>{formatCurrency(equipment.dailyPrice)}</Text>
-          </View>
-        </View>
+        <Animated.View entering={FadeInDown.delay(200).springify()} style={styles.cardWrapper}>
+          <Card variant="elevated">
+            <View style={styles.priceCard}>
+              <Avatar icon="cash" size="medium" style={{ backgroundColor: theme.colors.primaryLight + '40' }} />
+              <View style={styles.priceContent}>
+                <Text style={styles.priceLabel}>Günlük Kiralama Fiyatı</Text>
+                <Text style={styles.priceValue}>{formatCurrency(equipment.dailyPrice)}</Text>
+              </View>
+            </View>
+          </Card>
+        </Animated.View>
 
         {/* Details Grid */}
-        <View style={styles.detailsGrid}>
-          <View style={styles.detailCard}>
-            <Package size={20} color={colors.success} />
-            <Text style={styles.detailLabel}>Stok</Text>
-            <Text style={[
-              styles.detailValue,
-              equipment.quantity <= 2 && styles.detailValueWarning
-            ]}>
-              {equipment.availableQuantity}/{equipment.quantity}
-            </Text>
-          </View>
+        <Animated.View entering={FadeInDown.delay(300).springify()} style={styles.cardWrapper}>
+          <Card variant="elevated">
+            <View style={styles.detailsGrid}>
+              <View style={styles.detailItem}>
+                <Avatar icon="cube" size="small" />
+                <Text style={styles.detailLabel}>Stok</Text>
+                <Badge 
+                  variant={equipment.quantity <= 2 ? 'warning' : 'success'} 
+                  size="small"
+                >
+                  {`${equipment.availableQuantity}/${equipment.quantity}`}
+                </Badge>
+              </View>
 
-          {equipment.brand && (
-            <View style={styles.detailCard}>
-              <Info size={20} color={colors.info} />
-              <Text style={styles.detailLabel}>Marka</Text>
-              <Text style={styles.detailValue}>{equipment.brand}</Text>
-            </View>
-          )}
+              {equipment.brand && (
+                <View style={styles.detailItem}>
+                  <Avatar icon="information-circle" size="small" />
+                  <Text style={styles.detailLabel}>Marka</Text>
+                  <Text style={styles.detailValue}>{equipment.brand}</Text>
+                </View>
+              )}
 
-          {equipment.model && (
-            <View style={styles.detailCard}>
-              <Info size={20} color={colors.secondary} />
-              <Text style={styles.detailLabel}>Model</Text>
-              <Text style={styles.detailValue}>{equipment.model}</Text>
-            </View>
-          )}
+              {equipment.model && (
+                <View style={styles.detailItem}>
+                  <Avatar icon="information-circle" size="small" />
+                  <Text style={styles.detailLabel}>Model</Text>
+                  <Text style={styles.detailValue}>{equipment.model}</Text>
+                </View>
+              )}
 
-          {equipment.serialNumber && (
-            <View style={styles.detailCard}>
-              <Info size={20} color={colors.warning} />
-              <Text style={styles.detailLabel}>Seri No</Text>
-              <Text style={[styles.detailValue, { fontSize: 11 }]}>{equipment.serialNumber}</Text>
+              {equipment.serialNumber && (
+                <View style={styles.detailItem}>
+                  <Avatar icon="barcode" size="small" />
+                  <Text style={styles.detailLabel}>Seri No</Text>
+                  <Text style={styles.detailValue} numberOfLines={1}>{equipment.serialNumber}</Text>
+                </View>
+              )}
             </View>
-          )}
-        </View>
+          </Card>
+        </Animated.View>
 
         {/* Description */}
         {equipment.description && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Açıklama</Text>
-            <Text style={styles.description}>{equipment.description}</Text>
-          </View>
+          <Animated.View entering={FadeInDown.delay(400).springify()} style={styles.cardWrapper}>
+            <Card variant="elevated">
+              <Text style={styles.sectionTitle}>Açıklama</Text>
+              <Divider spacing={8} />
+              <Text style={styles.description}>{equipment.description}</Text>
+            </Card>
+          </Animated.View>
         )}
 
         {/* Features */}
         {equipment.features && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Özellikler</Text>
-            <Text style={styles.features}>{equipment.features}</Text>
-          </View>
+          <Animated.View entering={FadeInDown.delay(500).springify()} style={styles.cardWrapper}>
+            <Card variant="elevated">
+              <Text style={styles.sectionTitle}>Özellikler</Text>
+              <Divider spacing={8} />
+              <Text style={styles.features}>{equipment.features}</Text>
+            </Card>
+          </Animated.View>
         )}
 
         {/* Action Button */}
-        <TouchableOpacity
-          style={[
-            styles.reserveButton,
-            equipment.status !== 'AVAILABLE' && styles.reserveButtonDisabled
-          ]}
-          disabled={equipment.status !== 'AVAILABLE'}
-        >
-          <Calendar size={20} color={colors.textOnPrimary} />
-          <Text style={styles.reserveButtonText}>
+        <Animated.View entering={FadeInDown.delay(600).springify()} style={styles.actionButton}>
+          <Button
+            variant={equipment.status === 'AVAILABLE' ? 'primary' : 'ghost'}
+            size="large"
+            icon="calendar"
+            onPress={() => {}}
+            disabled={equipment.status !== 'AVAILABLE'}
+            haptic
+          >
             {equipment.status === 'AVAILABLE' ? 'Rezervasyon Yap' : 'Müsait Değil'}
-          </Text>
-        </TouchableOpacity>
+          </Button>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -183,10 +216,10 @@ const EquipmentDetailScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: theme.colors.background,
   },
   scrollContent: {
-    paddingBottom: 24,
+    paddingBottom: theme.spacing.xxl,
   },
   loadingContainer: {
     flex: 1,
@@ -194,37 +227,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: colors.textSecondary,
+    marginTop: theme.spacing.md,
+    ...theme.typography.body1,
+    color: theme.colors.textSecondary,
   },
   errorContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: theme.spacing.xl,
   },
   errorText: {
-    fontSize: 16,
-    color: colors.error,
+    ...theme.typography.body1,
+    color: theme.colors.error,
     textAlign: 'center',
-    marginBottom: 16,
-  },
-  retryButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: colors.textOnPrimary,
-    fontSize: 14,
-    fontWeight: '600',
+    marginBottom: theme.spacing.lg,
   },
   imageContainer: {
     width: '100%',
     height: 300,
     position: 'relative',
+    backgroundColor: theme.colors.gray100,
   },
   image: {
     width: '100%',
@@ -237,148 +260,87 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  statusBadge: {
+  statusBadgeContainer: {
     position: 'absolute',
-    top: 16,
-    right: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-  },
-  statusText: {
-    color: colors.textOnPrimary,
-    fontSize: 12,
-    fontWeight: 'bold',
+    top: theme.spacing.lg,
+    right: theme.spacing.lg,
   },
   header: {
-    padding: 20,
+    padding: theme.spacing.xl,
   },
   name: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: colors.text,
-    marginBottom: 8,
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
   },
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
-  categoryBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  categoryText: {
-    fontSize: 13,
-    fontWeight: '600',
+    gap: theme.spacing.md,
   },
   code: {
-    fontSize: 13,
-    color: colors.textSecondary,
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
     fontFamily: 'monospace',
+  },
+  cardWrapper: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
   },
   priceCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    marginHorizontal: 20,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  priceIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.primary + '20',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
+    gap: theme.spacing.lg,
   },
   priceContent: {
     flex: 1,
   },
   priceLabel: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginBottom: 4,
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.xs,
   },
   priceValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.primary,
+    ...theme.typography.h2,
+    color: theme.colors.primary,
   },
   detailsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 14,
-    marginBottom: 20,
+    gap: theme.spacing.md,
   },
-  detailCard: {
+  detailItem: {
     width: '47%',
-    margin: '1.5%',
-    backgroundColor: colors.surface,
-    padding: 16,
-    borderRadius: 12,
     alignItems: 'center',
+    gap: theme.spacing.xs,
   },
   detailLabel: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: 8,
-    marginBottom: 4,
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
   },
   detailValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.text,
-  },
-  detailValueWarning: {
-    color: colors.warning,
-  },
-  section: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    ...theme.typography.body2,
+    fontWeight: '600',
+    color: theme.colors.text,
+    textAlign: 'center',
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.text,
-    marginBottom: 12,
+    ...theme.typography.h4,
+    color: theme.colors.text,
   },
   description: {
-    fontSize: 14,
-    color: colors.textSecondary,
+    ...theme.typography.body2,
+    color: theme.colors.textSecondary,
     lineHeight: 22,
   },
   features: {
-    fontSize: 14,
-    color: colors.textSecondary,
+    ...theme.typography.body2,
+    color: theme.colors.textSecondary,
     lineHeight: 22,
   },
-  reserveButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.primary,
-    marginHorizontal: 20,
-    paddingVertical: 16,
-    borderRadius: 12,
-  },
-  reserveButtonDisabled: {
-    backgroundColor: colors.textDisabled,
-  },
-  reserveButtonText: {
-    color: colors.textOnPrimary,
-    fontSize: 16,
-    fontWeight: 'bold',
+  actionButton: {
+    marginHorizontal: theme.spacing.lg,
+    marginTop: theme.spacing.lg,
   },
 });
 

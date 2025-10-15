@@ -5,10 +5,10 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from 'recharts';
 
 interface StatusData {
+  [key: string]: string | number;  // Index signature for Recharts compatibility
   status: string;
   count: number;
   color: string;

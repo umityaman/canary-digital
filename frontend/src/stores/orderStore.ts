@@ -45,7 +45,7 @@ interface OrderStore {
   deleteOrder: (id: number) => Promise<void>
 }
 
-export const useOrderStore = create<OrderStore>((set, get) => ({
+export const useOrderStore = create<OrderStore>((set, _get) => ({
   orders: [],
   loading: false,
   error: null,
