@@ -169,6 +169,8 @@ app.use('/api/invoices', require('./routes/invoice').default); // Invoicing & Pa
 app.use('/api/payment', require('./routes/payment').default); // Payment & iyzico integration
 app.use('/api/pdf', require('./routes/pdf').default); // PDF Report Generation
 app.use('/api/2fa', require('./routes/twoFactor').default); // Two-Factor Authentication
+app.use('/api/push', require('./routes/push').default); // Push Notifications (Expo)
+app.use('/api/search', require('./routes/search').default); // Advanced Search & Filters
 
 // Sentry error handler (must be before other error handlers)
 app.use(sentryErrorHandler());

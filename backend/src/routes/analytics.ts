@@ -112,15 +112,16 @@ router.get('/utilization', authenticateToken, async (req: AuthRequest, res: Resp
     const end = new Date(endDate as string);
     const data = [];
 
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const dateKey = d.toISOString().split('T')[0];
+    const currentDate = new Date(start);
+    while (currentDate <= end) {
+      const dateKey = currentDate.toISOString().split('T')[0];
       
       // Count active rentals on this date
       const activeRentals = orders.filter((order) => {
         const orderStart = new Date(order.startDate);
         const orderEnd = new Date(order.endDate);
-        const currentDate = new Date(dateKey);
-        return orderStart <= currentDate && currentDate <= orderEnd;
+        const checkDate = new Date(dateKey);
+        return orderStart <= checkDate && checkDate <= orderEnd;
       }).length;
 
       const utilizationRate = totalEquipment > 0 ? (activeRentals / totalEquipment) * 100 : 0;
@@ -131,6 +132,8 @@ router.get('/utilization', authenticateToken, async (req: AuthRequest, res: Resp
         activeRentals,
         totalEquipment,
       });
+      
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
     res.json(data);

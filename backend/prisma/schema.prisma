@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Company {
@@ -52,6 +52,8 @@ model Company {
   technicians   Technician[]
   suppliers     Supplier[]
   booqableConnection BooqableConnection?
+  savedSearches SavedSearch[]   // Company's shared searches
+  searchHistory SearchHistory[] // Company's search history
 }
 
 model User {
@@ -111,6 +113,11 @@ model User {
   tempOTP               String?   // Temporary OTP for email verification
   tempOTPExpiry         DateTime? // OTP expiry timestamp
   
+  // Push Notifications (Expo)
+  expoPushToken         String?   // Expo push notification token
+  pushTokenUpdatedAt    DateTime? // Last token update timestamp
+  pushNotificationsEnabled Boolean @default(true)
+  
   // Paraşüt Integration (Accounting)
   parasutContactId String?   @unique  // Paraşüt contact ID
   taxOffice        String?            // Tax office name
@@ -126,6 +133,8 @@ model User {
   invoices    Invoice[]  // Invoices issued to this user
   cards       Card[]
   transactions Transaction[]
+  savedSearches SavedSearch[]   // User's saved searches
+  searchHistory SearchHistory[] // User's search history
 }
 
 model Category {
@@ -1423,4 +1432,65 @@ model Supplier {
   
   @@index([companyId])
   @@index([name])
+}
+
+// Saved Search Model
+model SavedSearch {
+  id              Int      @id @default(autoincrement())
+  name            String   // User-defined name for the search
+  description     String?  // Optional description
+  
+  // Search Configuration
+  entity          String   // equipment, customer, order, invoice, etc.
+  filters         String   // JSON string of filter criteria
+  sortBy          String?  // Field to sort by
+  sortOrder       String?  // asc, desc
+  
+  // User & Company
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId       Int
+  
+  // Sharing
+  isShared        Boolean  @default(false) // Shared with company users
+  isPinned        Boolean  @default(false) // Pinned to top
+  
+  // Usage Stats
+  usageCount      Int      @default(0)
+  lastUsedAt      DateTime?
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([companyId])
+  @@index([entity])
+  @@index([lastUsedAt])
+}
+
+// Search History Model
+model SearchHistory {
+  id              Int      @id @default(autoincrement())
+  
+  // Search Details
+  entity          String   // equipment, customer, order, etc.
+  query           String   // Search query text
+  filters         String?  // JSON string of applied filters
+  resultCount     Int      @default(0)
+  
+  // User & Company
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId       Int
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  
+  @@index([userId])
+  @@index([companyId])
+  @@index([entity])
+  @@index([createdAt])
 }
