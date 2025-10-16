@@ -446,7 +446,7 @@ export default function Home() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-neutral-900">
-                    ₺{order.amount.toLocaleString('tr-TR')}
+                    ₺{(order.amount || 0).toLocaleString('tr-TR')}
                   </p>
                   {getStatusBadge(order.status)}
                 </div>
