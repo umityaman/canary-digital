@@ -92,32 +92,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   loadUserFromStorage: () => {
-    // TEMPORARY: Always bypass login for testing
-    const fakeUser: User = {
-      id: 1,
-      email: 'admin@canary.com',
-      name: 'Admin User',
-      role: 'ADMIN',
-      company: {
-        id: 1,
-        name: 'Canary Camera Rentals'
-      }
-    }
-    
-    // Save to localStorage so API interceptor can use it
-    localStorage.setItem('auth_token', 'dev-bypass-token')
-    localStorage.setItem('user_data', JSON.stringify(fakeUser))
-    
-    set({ 
-      user: fakeUser, 
-      token: 'dev-bypass-token', 
-      isAuthenticated: true 
-    })
-    console.log('🚀 AUTO-LOGIN: Bypassed authentication')
-    return
-
-    // Original code (disabled for testing)
-    /*
+    // Load real token from localStorage
     const token = localStorage.getItem('auth_token')
     const userData = localStorage.getItem('user_data')
 
@@ -134,7 +109,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         localStorage.removeItem('user_data')
       }
     }
-    */
   },
 
   setUser: (user) => {
