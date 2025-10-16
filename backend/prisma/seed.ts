@@ -6,62 +6,85 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database...');
 
-  // Şirket oluştur
-  const company = await prisma.company.create({
-    data: {
-      name: 'Canary Camera Rentals',
-      email: 'info@canaryrentals.com',
-      phone: '+90 212 555 0123',
-      address: 'İstanbul, Türkiye'
-    }
+  // Şirket oluştur veya bul
+  let company = await prisma.company.findFirst({
+    where: { email: 'info@canaryrentals.com' }
   });
+  
+  if (!company) {
+    company = await prisma.company.create({
+      data: {
+        name: 'Canary Camera Rentals',
+        email: 'info@canaryrentals.com',
+        phone: '+90 212 555 0123',
+        address: 'İstanbul, Türkiye'
+      }
+    });
+  }
 
-  console.log('✅ Company created');
+  console.log('✅ Company created/found');
 
-  // Admin kullanıcı oluştur
+  // Admin kullanıcı oluştur veya bul
   const hashedPassword = await bcrypt.hash('admin123', 10);
-  const admin = await prisma.user.create({
-    data: {
-      email: 'admin@canary.com',
-      password: hashedPassword,
-      name: 'Admin User',
-      role: 'ADMIN',
-      companyId: company.id
-    }
+  let admin = await prisma.user.findFirst({
+    where: { email: 'admin@canary.com' }
   });
-
-  console.log('✅ Admin user created');
-
-  // Test kullanıcı oluştur
-  const testUserPassword = await bcrypt.hash('test123', 10);
-  const testUser = await prisma.user.create({
-    data: {
-      email: 'test@canary.com',
-      password: testUserPassword,
-      name: 'Test User',
-      role: 'USER',
-      companyId: company.id
-    }
-  });
-
-  console.log('✅ Test user created');
-
-  // Ekipmanlar oluştur
-  const equipment = await prisma.equipment.createMany({
-    data: [
-      {
-        name: 'Sony A7 IV',
-        brand: 'Sony',
-        model: 'A7 IV',
-        category: 'Kamera',
-        serialNumber: 'SN001',
-        qrCode: 'EQ-001',
-        dailyPrice: 450.0,
-        weeklyPrice: 2700.0,
-        monthlyPrice: 9000.0,
-        description: 'Profesyonel aynasız kamera',
+  
+  if (!admin) {
+    admin = await prisma.user.create({
+      data: {
+        email: 'admin@canary.com',
+        password: hashedPassword,
+        name: 'Admin User',
+        role: 'ADMIN',
         companyId: company.id
-      },
+      }
+    });
+  }
+
+  console.log('✅ Admin user created/found');
+
+  // Test kullanıcı oluştur veya bul
+  const testUserPassword = await bcrypt.hash('test123', 10);
+  let testUser = await prisma.user.findFirst({
+    where: { email: 'test@canary.com' }
+  });
+  
+  if (!testUser) {
+    testUser = await prisma.user.create({
+      data: {
+        email: 'test@canary.com',
+        password: testUserPassword,
+        name: 'Test User',
+        role: 'USER',
+        companyId: company.id
+      }
+    });
+  }
+
+  console.log('✅ Test user created/found');
+
+  // Ekipmanlar oluştur (eğer yoksa)
+  const existingEquipment = await prisma.equipment.count({
+    where: { companyId: company.id }
+  });
+  
+  if (existingEquipment === 0) {
+    const equipment = await prisma.equipment.createMany({
+      data: [
+        {
+          name: 'Sony A7 IV',
+          brand: 'Sony',
+          model: 'A7 IV',
+          category: 'Kamera',
+          serialNumber: 'SN001',
+          qrCode: 'EQ-001',
+          dailyPrice: 450.0,
+          weeklyPrice: 2700.0,
+          monthlyPrice: 9000.0,
+          description: 'Profesyonel aynasız kamera',
+          companyId: company.id
+        },
       {
         name: 'Canon EOS R6',
         brand: 'Canon',
@@ -115,9 +138,11 @@ async function main() {
         companyId: company.id
       }
     ]
-  });
-
-  console.log('✅ Equipment created');
+    });
+    console.log('✅ Equipment created');
+  } else {
+    console.log('⏭️  Equipment already exists, skipping');
+  }
 
   // Müşteriler oluştur
   const customers = await prisma.customer.createMany({
@@ -143,34 +168,41 @@ async function main() {
 
   console.log('✅ Customers created');
 
-  // Sample sipariş oluştur
-  const order = await prisma.order.create({
-    data: {
-      orderNumber: 'ORD-001',
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 gün sonra
-      totalAmount: 1350.0,
-      status: 'CONFIRMED',
-      notes: 'Reklam çekimi için ekipman kiralaması',
-      customerId: 1, // İlk müşteri
-      companyId: company.id,
-      orderItems: {
-        create: [
-          {
-            quantity: 1,
-            dailyRate: 450.0,
-            totalAmount: 1350.0,
-            equipmentId: 1 // Sony A7 IV
-          }
-        ]
-      }
-    },
-    include: {
-      orderItems: true
-    }
+  // Sample sipariş oluştur (eğer yoksa)
+  const existingOrder = await prisma.order.findFirst({
+    where: { orderNumber: 'ORD-001' }
   });
-
-  console.log('✅ Sample order created');
+  
+  if (!existingOrder) {
+    const order = await prisma.order.create({
+      data: {
+        orderNumber: 'ORD-001',
+        startDate: new Date(),
+        endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 gün sonra
+        totalAmount: 1350.0,
+        status: 'CONFIRMED',
+        notes: 'Reklam çekimi için ekipman kiralaması',
+        customerId: 1, // İlk müşteri
+        companyId: company.id,
+        orderItems: {
+          create: [
+            {
+              quantity: 1,
+              dailyRate: 450.0,
+              totalAmount: 1350.0,
+              equipmentId: 1 // Sony A7 IV
+            }
+          ]
+        }
+      },
+      include: {
+        orderItems: true
+      }
+    });
+    console.log('✅ Sample order created');
+  } else {
+    console.log('⏭️  Order already exists, skipping');
+  }
 
   // Tedarikçiler oluştur
   await prisma.supplier.createMany({
