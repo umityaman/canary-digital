@@ -215,7 +215,7 @@ router.get('/top-equipment', authenticateToken, async (req: AuthRequest, res: Re
       equipmentStats.set(name, {
         name,
         rentCount: existing.rentCount + item.quantity,
-        revenue: existing.revenue + Number(item.price) * item.quantity,
+        revenue: existing.revenue + Number(item.totalAmount),
       });
     });
 
