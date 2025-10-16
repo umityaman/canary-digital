@@ -103,7 +103,7 @@ router.get('/utilization', authenticateToken, async (req: AuthRequest, res: Resp
         ],
       },
       include: {
-        items: true,
+        orderItems: true,
       },
     });
 
