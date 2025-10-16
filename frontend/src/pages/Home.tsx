@@ -349,30 +349,30 @@ export default function Home() {
       />
 
       {/* Alerts */}
-      {((stats.alerts?.pendingInspections || 0) > 0 || (stats.calendar?.upcomingEvents || 0) > 0) && (
+      {((stats?.alerts?.pendingInspections || 0) > 0 || (stats?.calendar?.upcomingEvents || 0) > 0) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {(stats.alerts?.pendingInspections || 0) > 0 && (
+          {(stats?.alerts?.pendingInspections || 0) > 0 && (
             <div className="bg-neutral-50 border border-neutral-300 rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <AlertCircle className="text-neutral-700 flex-shrink-0 mt-1" size={20} />
                 <div>
                   <h3 className="text-sm font-semibold text-neutral-900 mb-1">Bekleyen Kontroller</h3>
                   <p className="text-sm text-neutral-700">
-                    <strong>{stats.alerts?.pendingInspections || 0}</strong> ekipman kontrol bekliyor
+                    <strong>{stats?.alerts?.pendingInspections || 0}</strong> ekipman kontrol bekliyor
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {(stats.calendar?.upcomingEvents || 0) > 0 && (
+          {(stats?.calendar?.upcomingEvents || 0) > 0 && (
             <div className="bg-neutral-50 border border-neutral-300 rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <Calendar className="text-neutral-700 flex-shrink-0 mt-1" size={20} />
                 <div>
                   <h3 className="text-sm font-semibold text-neutral-900 mb-1">Yaklaşan Etkinlikler</h3>
                   <p className="text-sm text-neutral-700">
-                    Önümüzdeki 7 gün içinde <strong>{stats.calendar?.upcomingEvents || 0}</strong> etkinlik
+                    Önümüzdeki 7 gün içinde <strong>{stats?.calendar?.upcomingEvents || 0}</strong> etkinlik
                   </p>
                 </div>
               </div>
@@ -438,7 +438,7 @@ export default function Home() {
           </div>
 
           <div className="space-y-3">
-            {(stats.recent?.orders || []).map((order: any) => (
+            {(stats?.recent?.orders || []).map((order: any) => (
               <div key={order.id} className="flex items-center justify-between p-3 hover:bg-neutral-50 rounded-xl transition-colors">
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-neutral-900">{order.orderNumber}</p>
@@ -446,14 +446,14 @@ export default function Home() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-neutral-900">
-                    ₺{(order.amount || 0).toLocaleString('tr-TR')}
+                    ₺{(order?.amount || 0).toLocaleString('tr-TR')}
                   </p>
                   {getStatusBadge(order.status)}
                 </div>
               </div>
             ))}
 
-            {((stats.recent?.orders || []).length === 0) && (
+            {((stats?.recent?.orders || []).length === 0) && (
               <p className="text-center text-neutral-600 py-8">Henüz sipariş bulunmuyor</p>
             )}
           </div>
