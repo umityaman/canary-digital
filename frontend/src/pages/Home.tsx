@@ -151,31 +151,19 @@ export default function Home() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // Use mock endpoint for testing (avoiding authentication issues)
-      const statsRes = await api.get('/dashboard/mock');
-      setStats(statsRes.data);
+      // Dashboard stats API çağrısı - şimdilik basit istatistikler gösterelim
+      // Backend'de /dashboard/stats endpoint'i olduğunda burası güncellenecek
       
-      // Mock activities for now (will be implemented later)
-      setActivities([
-        {
-          id: '1',
-          type: 'order',
-          title: 'Yeni Sipariş',
-          description: 'Sipariş #1001 oluşturuldu',
-          status: 'PENDING',
-          date: new Date().toISOString(),
-          icon: 'ShoppingCart',
-        },
-        {
-          id: '2',
-          type: 'inspection',
-          title: 'Kontrol Tamamlandı',
-          description: 'Ekipman #45 kontrolü tamamlandı',
-          status: 'COMPLETED',
-          date: new Date(Date.now() - 3600000).toISOString(),
-          icon: 'CheckSquare',
-        },
-      ]);
+      // Şimdilik stats'i boş bırak, analytics API'lerden veri alacağız
+      setStats({
+        revenue: { total: 0, monthly: 0, change: 0 },
+        reservations: { total: 0, active: 0, completed: 0, change: 0 },
+        equipment: { total: 0, available: 0, inUse: 0, maintenance: 0 },
+        recentReservations: [],
+        upcomingReservations: []
+      });
+      
+      setActivities([]);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
@@ -204,17 +192,12 @@ export default function Home() {
         setStatusData(statusRes.data);
         setTopEquipmentData(topEquipmentRes.data);
       } catch (apiError) {
-        console.warn('API call failed, using mock data:', apiError);
-        // Fallback to mock data
-        const mockRevenueData = generateMockRevenueData(dateRange.startDate, dateRange.endDate);
-        const mockUtilizationData = generateMockUtilizationData(dateRange.startDate, dateRange.endDate);
-        const mockStatusData = generateMockStatusData();
-        const mockTopEquipmentData = generateMockTopEquipmentData();
-        
-        setRevenueData(mockRevenueData);
-        setUtilizationData(mockUtilizationData);
-        setStatusData(mockStatusData);
-        setTopEquipmentData(mockTopEquipmentData);
+        console.error('Analytics API call failed:', apiError);
+        // Boş veri göster, mock data gösterme
+        setRevenueData([]);
+        setUtilizationData([]);
+        setStatusData([]);
+        setTopEquipmentData([]);
       }
       
     } catch (error) {
