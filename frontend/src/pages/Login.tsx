@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { useAuthStore } from '../stores/authStore'
 import { useNavigate } from 'react-router-dom'
 import { LogIn } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const Login: React.FC = () => {
+  const { t } = useTranslation()
   const [isRegister, setIsRegister] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -63,10 +65,10 @@ const Login: React.FC = () => {
               />
             </div>
             <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">
-              {isRegister ? 'Kayıt Ol' : 'Giriş Yap'}
+              {isRegister ? t('auth.register') : t('auth.login')}
             </h2>
             <p className="mt-2 text-neutral-600">
-              Kamera Kiralama Yönetim Sistemi
+              {t('auth.subtitle')}
             </p>
           </div>
 
@@ -82,7 +84,7 @@ const Login: React.FC = () => {
               <>
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Ad Soyad
+                    {t('auth.fullName')}
                   </label>
                   <input
                     id="name"
@@ -92,13 +94,13 @@ const Login: React.FC = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className="mt-1 block w-full px-4 py-3 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-                    placeholder="Adınız ve soyadınız"
+                    placeholder={t('auth.fullNamePlaceholder')}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="companyName" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Şirket Adı
+                    {t('auth.company')}
                   </label>
                   <input
                     id="companyName"
@@ -108,7 +110,7 @@ const Login: React.FC = () => {
                     value={formData.companyName}
                     onChange={handleChange}
                     className="mt-1 block w-full px-4 py-3 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-                    placeholder="Şirket adınız"
+                    placeholder={t('auth.companyPlaceholder')}
                   />
                 </div>
               </>
@@ -116,7 +118,7 @@ const Login: React.FC = () => {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">
-                E-posta
+                {t('auth.email')}
               </label>
               <input
                 id="email"
@@ -126,13 +128,13 @@ const Login: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="mt-1 block w-full px-4 py-3 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-                placeholder="ornek@email.com"
+                placeholder={t('auth.emailPlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">
-                Şifre
+                {t('auth.password')}
               </label>
               <input
                 id="password"
@@ -153,7 +155,7 @@ const Login: React.FC = () => {
               disabled={isLoading}
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 disabled:opacity-50 transition-colors"
             >
-              {isLoading ? 'İşlem yapılıyor...' : (isRegister ? 'Kayıt Ol' : 'Giriş Yap')}
+              {isLoading ? t('common.loading') : (isRegister ? t('auth.register') : t('auth.login'))}
             </button>
             
             {!isRegister && (
@@ -164,7 +166,7 @@ const Login: React.FC = () => {
                 className="w-full flex justify-center items-center gap-2 py-3 px-4 border-2 border-yellow-400 rounded-xl text-sm font-medium text-neutral-900 bg-yellow-50 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 transition-colors"
               >
                 <LogIn className="w-4 h-4" />
-                🚀 Demo Admin Girişi (Hızlı)
+                🚀 {t('auth.quickDemo')}
               </button>
             )}
           </div>
@@ -175,14 +177,14 @@ const Login: React.FC = () => {
               onClick={() => setIsRegister(!isRegister)}
               className="text-neutral-600 hover:text-neutral-900 text-sm font-medium transition-colors"
             >
-              {isRegister ? 'Zaten hesabınız var mı? Giriş yapın' : 'Hesabınız yok mu? Kayıt olun'}
+              {isRegister ? t('auth.alreadyHaveAccount') : t('auth.dontHaveAccount')}
             </button>
           </div>
         </form>
 
         {/* Demo bilgileri */}
         <div className="bg-neutral-100 border border-neutral-200 p-4 rounded-xl">
-          <h3 className="text-sm font-medium text-neutral-900 mb-2">Demo Hesapları:</h3>
+          <h3 className="text-sm font-medium text-neutral-900 mb-2">{t('auth.demoAccounts')}:</h3>
           <div className="text-xs text-neutral-600 space-y-1">
             <div>Admin: admin@canary.com / admin123</div>
             <div>Test: test@canary.com / test123</div>

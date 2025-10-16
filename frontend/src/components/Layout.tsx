@@ -5,6 +5,7 @@ import { usePageInfo } from '../hooks/usePageInfo'
 import { useAuthStore } from '../stores/authStore'
 import { useNavigate } from 'react-router-dom'
 import { NotificationPanel, NotificationBanner } from './NotificationSystem'
+import LanguageSwitcher from './LanguageSwitcher'
 
 const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
   const pageInfo = usePageInfo()
@@ -139,6 +140,9 @@ const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
 
               {/* Notification Bell */}
               <NotificationPanel />
+
+              {/* Language Switcher */}
+              <LanguageSwitcher />
 
               {/* Full Screen Toggle */}
               <button
