@@ -97,3 +97,13 @@ github-actions-key.json
 gcp-postgres-password.txt
 gcp-deploy.ps1
 gcp-deploy.sh
+
+# GCP Service Account Keys (CRITICAL - DO NOT COMMIT!)
+github-actions-key.json
+gcp-postgres-password.txt
+*-key.json
+
+# GCP Deployment Scripts (contains sensitive info)
+gcp-deploy.ps1
+gcp-deploy.sh
+
