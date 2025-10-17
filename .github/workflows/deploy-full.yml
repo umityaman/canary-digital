@@ -106,7 +106,7 @@ jobs:
 
       - name: Build Frontend with VITE_API_URL
         env:
-          VITE_API_URL: ${{ needs.deploy-backend.outputs.backend-url }}
+          VITE_API_URL: ${{ needs.deploy-backend.outputs.backend-url }}/api
         run: |
           cd frontend
           echo "Building with VITE_API_URL=$VITE_API_URL"
