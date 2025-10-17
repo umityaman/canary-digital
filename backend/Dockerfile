@@ -17,8 +17,8 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Expose port
-EXPOSE 4000
+# Cloud Run automatically sets PORT env var
+# Backend uses: const PORT = process.env.PORT || 4000
 
 # Start the app with ts-node (simpler for now)
 CMD ["npx", "ts-node", "--transpile-only", "src/index.ts"]

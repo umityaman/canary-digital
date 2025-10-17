@@ -50,7 +50,7 @@ jobs:
             --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
             --update-secrets=JWT_SECRET=jwt-secret:latest \
             --update-secrets=JWT_REFRESH_SECRET=jwt-secret:latest \
-            --set-env-vars="NODE_ENV=production,PORT=4000,FRONTEND_URL=https://canary-frontend-672344972017.${{ env.REGION }}.run.app"
+            --set-env-vars="NODE_ENV=production,FRONTEND_URL=https://canary-frontend-672344972017.${{ env.REGION }}.run.app"
 
       - name: Get Service URL
         id: get-url
