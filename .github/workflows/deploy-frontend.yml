@@ -56,10 +56,13 @@ jobs:
           echo "Build complete - dist folder ready"
           ls -la dist/
 
-      - name: Create Dockerfile with build args
+      - name: Prepare Frontend for deployment
         run: |
           cd frontend
-          cat > Dockerfile.deploy << 'EOF'
+          # Backup original Dockerfile
+          cp Dockerfile Dockerfile.original
+          # Create simple Dockerfile for pre-built dist
+          cat > Dockerfile << 'EOF'
           FROM nginx:alpine
           COPY dist /usr/share/nginx/html
           COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -79,8 +82,7 @@ jobs:
             --max-instances=10 \
             --memory=256Mi \
             --cpu=1 \
-            --port=8080 \
-            --dockerfile=Dockerfile.deploy
+            --port=8080
 
       - name: Get Service URL
         id: get-url
