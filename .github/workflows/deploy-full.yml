@@ -57,6 +57,7 @@ jobs:
             --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
             --update-secrets=JWT_SECRET=jwt-secret:latest \
             --update-secrets=JWT_REFRESH_SECRET=jwt-secret:latest \
+            --update-secrets=DATABASE_URL=database-url:latest \
             --set-env-vars="NODE_ENV=production"
 
       - name: Get Backend URL
