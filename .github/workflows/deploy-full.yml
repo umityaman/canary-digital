@@ -53,9 +53,10 @@ jobs:
             --memory=512Mi \
             --cpu=1 \
             --port=4000 \
+            --timeout=300 \
             --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
-            --update-secrets=JWT_SECRET=jwt-secret:latest \
-            --set-env-vars="NODE_ENV=production"
+            --update-secrets=JWT_SECRET=jwt-secret:latest,JWT_REFRESH_SECRET=jwt-secret:latest \
+            --set-env-vars="NODE_ENV=production,PORT=4000"
 
       - name: Get Backend URL
         id: get-backend-url

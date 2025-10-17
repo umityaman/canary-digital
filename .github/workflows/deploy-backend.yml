@@ -46,9 +46,10 @@ jobs:
             --memory=512Mi \
             --cpu=1 \
             --port=4000 \
+            --timeout=300 \
             --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
-            --update-secrets=JWT_SECRET=jwt-secret:latest \
-            --set-env-vars="NODE_ENV=production,FRONTEND_URL=https://canary-frontend-672344972017.${{ env.REGION }}.run.app"
+            --update-secrets=JWT_SECRET=jwt-secret:latest,JWT_REFRESH_SECRET=jwt-secret:latest \
+            --set-env-vars="NODE_ENV=production,PORT=4000,FRONTEND_URL=https://canary-frontend-672344972017.${{ env.REGION }}.run.app"
 
       - name: Get Service URL
         id: get-url
