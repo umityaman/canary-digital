@@ -86,7 +86,8 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
         displayColors: false,
         callbacks: {
           label: function(context: any) {
-            return '₺' + context.parsed.y.toLocaleString('tr-TR', {
+            const value = context.parsed?.y ?? 0;
+            return '₺' + value.toLocaleString('tr-TR', {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             });
@@ -185,7 +186,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
             <div>
               <p className="text-sm text-neutral-600">Toplam Gelir</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">
-                ₺{data.total.toLocaleString('tr-TR', {
+                ₺{(data?.total ?? 0).toLocaleString('tr-TR', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
@@ -199,7 +200,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
             <div>
               <p className="text-sm text-neutral-600">Aylık Ortalama</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">
-                ₺{data.average.toLocaleString('tr-TR', {
+                ₺{(data?.average ?? 0).toLocaleString('tr-TR', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}

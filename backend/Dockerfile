@@ -17,5 +17,8 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Run migrations and start with ts-node (development mode for now)
-CMD npx prisma migrate deploy && npx ts-node src/index.ts
+# Expose port
+EXPOSE 4000
+
+# Start the app with ts-node (simpler for now)
+CMD ["npx", "ts-node", "--transpile-only", "src/index.ts"]

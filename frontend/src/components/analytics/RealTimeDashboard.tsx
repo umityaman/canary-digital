@@ -26,62 +26,16 @@ const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
   const [metrics, setMetrics] = useState<RealTimeMetric[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  // Mock real-time data generation
+  // Real-time data - TODO: Connect to WebSocket API
   useEffect(() => {
-    const generateMockMetrics = (): RealTimeMetric[] => [
-      {
-        id: 'active_users',
-        name: 'Aktif Kullanıcılar',
-        value: Math.floor(Math.random() * 50) + 10,
-        unit: 'kullanıcı',
-        change: (Math.random() - 0.5) * 10,
-        status: Math.random() > 0.5 ? 'up' : 'down',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'orders_today',
-        name: 'Bugünkü Siparişler',
-        value: Math.floor(Math.random() * 20) + 5,
-        unit: 'sipariş',
-        change: (Math.random() - 0.3) * 8,
-        status: Math.random() > 0.3 ? 'up' : 'down',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'revenue_hour',
-        name: 'Saatlik Gelir',
-        value: Math.floor(Math.random() * 5000) + 1000,
-        unit: '₺',
-        change: (Math.random() - 0.4) * 15,
-        status: Math.random() > 0.4 ? 'up' : 'down',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'equipment_active',
-        name: 'Aktif Ekipman',
-        value: Math.floor(Math.random() * 100) + 50,
-        unit: 'adet',
-        change: (Math.random() - 0.5) * 5,
-        status: Math.random() > 0.5 ? 'up' : 'stable',
-        lastUpdated: new Date()
-      }
-    ];
-
-    // Initialize metrics
-    setMetrics(generateMockMetrics());
-
-    // Simulate real-time updates
-    let interval: NodeJS.Timeout | null = null;
+    // Initialize with empty metrics
+    setMetrics([]);
     
-    if (isConnected) {
-      interval = setInterval(() => {
-        setMetrics(generateMockMetrics());
-        setLastUpdate(new Date());
-      }, 3000); // Update every 3 seconds
-    }
-
+    // TODO: Implement real-time WebSocket connection
+    // For now, component is disabled until backend supports real-time data
+    
     return () => {
-      if (interval) clearInterval(interval);
+      // Cleanup
     };
   }, [isConnected]);
 

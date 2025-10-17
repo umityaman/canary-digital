@@ -125,6 +125,33 @@ const SettingsScreen = () => {
               thumbColor={notificationsEnabled ? colors.primary : colors.textDisabled}
             />
           </View>
+
+          {notificationsEnabled && (
+            <TouchableOpacity 
+              style={styles.settingItem}
+              onPress={async () => {
+                const success = await notificationService.sendTestNotification();
+                if (success) {
+                  Alert.alert('Başarılı', 'Test bildirimi gönderildi!');
+                } else {
+                  Alert.alert('Hata', 'Bildirim gönderilemedi. Lütfen token kaydınızı kontrol edin.');
+                }
+              }}
+            >
+              <View style={styles.settingLeft}>
+                <View style={[styles.iconContainer, { backgroundColor: colors.success + '20' }]}>
+                  <Bell size={20} color={colors.success} />
+                </View>
+                <View>
+                  <Text style={styles.settingLabel}>Test Bildirimi Gönder</Text>
+                  <Text style={styles.settingDescription}>
+                    Bildirim sistemini test et
+                  </Text>
+                </View>
+              </View>
+              <ChevronRight size={20} color={colors.textSecondary} />
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Appearance */}

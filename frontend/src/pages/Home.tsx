@@ -207,67 +207,6 @@ export default function Home() {
     }
   };
 
-  // Mock data generators
-  const generateMockRevenueData = (start: Date, end: Date) => {
-    const data = [];
-    const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    
-    for (let i = 0; i < days; i++) {
-      const date = new Date(start);
-      date.setDate(date.getDate() + i);
-      data.push({
-        date: date.toISOString().split('T')[0],
-        revenue: Math.floor(Math.random() * 15000) + 5000,
-        orders: Math.floor(Math.random() * 20) + 5,
-      });
-    }
-    return data;
-  };
-
-  const generateMockUtilizationData = (start: Date, end: Date) => {
-    const data = [];
-    const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    
-    for (let i = 0; i < days; i++) {
-      const date = new Date(start);
-      date.setDate(date.getDate() + i);
-      const totalEquipment = 50;
-      const activeRentals = Math.floor(Math.random() * 40) + 10;
-      data.push({
-        date: date.toISOString().split('T')[0],
-        utilizationRate: (activeRentals / totalEquipment) * 100,
-        activeRentals,
-        totalEquipment,
-      });
-    }
-    return data;
-  };
-
-  const generateMockStatusData = () => {
-    return [
-      { status: 'PENDING', count: 12, color: '#f59e0b' },
-      { status: 'APPROVED', count: 8, color: '#10b981' },
-      { status: 'ACTIVE', count: 25, color: '#3b82f6' },
-      { status: 'COMPLETED', count: 45, color: '#6366f1' },
-      { status: 'CANCELLED', count: 5, color: '#ef4444' },
-    ];
-  };
-
-  const generateMockTopEquipmentData = () => {
-    return [
-      { name: 'Hilti TE 3000-AVR', rentCount: 45, revenue: 135000 },
-      { name: 'Bosch GBH 5-40 DCE', rentCount: 38, revenue: 114000 },
-      { name: 'Makita HR4013C', rentCount: 32, revenue: 96000 },
-      { name: 'DeWalt D25901K', rentCount: 28, revenue: 84000 },
-      { name: 'Milwaukee MXF368-2XC', rentCount: 25, revenue: 75000 },
-      { name: 'Metabo KHE 96', rentCount: 22, revenue: 66000 },
-      { name: 'Hitachi DH45ME', rentCount: 18, revenue: 54000 },
-      { name: 'Ryobi RH850V', rentCount: 15, revenue: 45000 },
-      { name: 'Black & Decker BEH850K', rentCount: 12, revenue: 36000 },
-      { name: 'Einhell RT-RH 32', rentCount: 10, revenue: 30000 },
-    ];
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">

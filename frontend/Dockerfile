@@ -1,6 +1,12 @@
-FROM node:18-alpine
-WORKDIR /usr/src/app
-COPY package.json package-lock.json* ./
-RUN npm install
-COPY . .
-CMD ["npm","run","dev","--","--host"]
+# Use pre-built dist folder with nginx
+FROM nginx:alpine
+
+# Copy built files
+COPY dist /usr/share/nginx/html
+
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]

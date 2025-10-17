@@ -72,19 +72,61 @@ export default function App() {
       responseListener.current = notificationService.addNotificationResponseListener(
         (response) => {
           console.log('Notification tapped:', response);
-          
-          // Handle navigation based on notification data
-          const data = response.notification.request.content.data;
-          
-          // TODO: Navigate to appropriate screen based on data
-          // For example:
-          // if (data?.type === 'reservation') {
-          //   navigate to reservation detail
-          // } else if (data?.type === 'equipment') {
-          //   navigate to equipment detail
-          // }
+          handleNotificationNavigation(response.notification.request.content.data);
         }
       );
+    }
+  };
+
+  /**
+   * Handle navigation based on notification data
+   */
+  const handleNotificationNavigation = (data: any) => {
+    if (!data) return;
+
+    switch (data.type) {
+      case 'RESERVATION_REMINDER':
+      case 'RESERVATION_CONFIRMED':
+      case 'RESERVATION_CANCELLED':
+        // Navigate to reservation detail
+        if (data.reservationId) {
+          // navigationRef.navigate('ReservationDetail', { id: data.reservationId });
+          console.log('Navigate to ReservationDetail:', data.reservationId);
+        }
+        break;
+
+      case 'EQUIPMENT_RETURN':
+      case 'MAINTENANCE_ALERT':
+        // Navigate to equipment detail
+        if (data.equipmentId) {
+          // navigationRef.navigate('EquipmentDetail', { id: data.equipmentId });
+          console.log('Navigate to EquipmentDetail:', data.equipmentId);
+        }
+        break;
+
+      case 'PAYMENT_REMINDER':
+        // Navigate to orders
+        if (data.orderId) {
+          // navigationRef.navigate('OrderDetail', { id: data.orderId });
+          console.log('Navigate to OrderDetail:', data.orderId);
+        }
+        break;
+
+      case 'NEW_MESSAGE':
+        // Navigate to messaging
+        // navigationRef.navigate('Messaging');
+        console.log('Navigate to Messaging');
+        break;
+
+      case 'TEST':
+        // Test notification, do nothing
+        console.log('Test notification received');
+        break;
+
+      default:
+        // Unknown type, navigate to notifications screen
+        // navigationRef.navigate('Notifications');
+        console.log('Navigate to Notifications');
     }
   };
 

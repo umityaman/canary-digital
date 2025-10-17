@@ -112,13 +112,11 @@ class NotificationService {
    */
   async registerTokenWithBackend(token: string): Promise<boolean> {
     try {
-      const response = await api.post('/notifications/register', {
-        pushToken: token,
-        platform: Platform.OS,
-        deviceId: Device.modelName,
+      const response = await api.post('/push/register-token', {
+        token: token,
       });
 
-      return response.data.success;
+      return response.status === 200;
     } catch (error) {
       console.error('Error registering token with backend:', error);
       return false;
@@ -133,16 +131,40 @@ class NotificationService {
       const token = await AsyncStorage.getItem(PUSH_TOKEN_KEY);
       if (!token) return true;
 
-      const response = await api.post('/notifications/unregister', {
-        pushToken: token,
-      });
+      await api.delete('/push/token');
 
       await AsyncStorage.removeItem(PUSH_TOKEN_KEY);
       this.expoPushToken = null;
 
-      return response.data.success;
+      return true;
     } catch (error) {
       console.error('Error unregistering token:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Toggle push notifications on/off
+   */
+  async toggleNotifications(enabled: boolean): Promise<boolean> {
+    try {
+      const response = await api.put('/push/toggle', { enabled });
+      return response.status === 200;
+    } catch (error) {
+      console.error('Error toggling notifications:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Send test notification
+   */
+  async sendTestNotification(): Promise<boolean> {
+    try {
+      const response = await api.post('/push/test');
+      return response.status === 200;
+    } catch (error) {
+      console.error('Error sending test notification:', error);
       return false;
     }
   }

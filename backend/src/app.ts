@@ -57,6 +57,7 @@ const allowedOrigins = [
   'http://localhost:19000', // Expo dev
   'http://localhost:19006', // Expo web
   'https://frontend-jecbee0xl-umityamans-projects.vercel.app', // Production Vercel URL
+  'https://canary-frontend-672344972017.europe-west1.run.app', // GCP Cloud Run Frontend
   process.env.FRONTEND_URL, // Production frontend URL (configurable)
   process.env.MOBILE_APP_URL, // Mobile app URL
 ].filter(Boolean);

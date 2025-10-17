@@ -91,3 +91,9 @@ web-build/
 .project
 .settings
 local.properties
+
+# GCP Service Account Keys
+github-actions-key.json
+gcp-postgres-password.txt
+gcp-deploy.ps1
+gcp-deploy.sh

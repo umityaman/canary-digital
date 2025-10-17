@@ -16,16 +16,26 @@ router.get('/revenue', authenticateToken, async (req: AuthRequest, res: Response
     const { startDate, endDate } = req.query;
     const companyId = req.companyId;
 
+    if (!companyId) {
+      return res.status(403).json({ error: 'Company context missing' });
+    }
+
     if (!startDate || !endDate) {
       return res.status(400).json({ error: 'startDate and endDate are required' });
     }
+
+    // Parse and normalize date range (midnight UTC)
+    const start = new Date(startDate as string);
+    const end = new Date(endDate as string);
+    start.setUTCHours(0, 0, 0, 0);
+    end.setUTCHours(23, 59, 59, 999);
 
     const orders = await prisma.order.findMany({
       where: {
         companyId,
         createdAt: {
-          gte: new Date(startDate as string),
-          lte: new Date(endDate as string),
+          gte: start,
+          lte: end,
         },
         status: {
           in: ['APPROVED', 'ACTIVE', 'COMPLETED'],
@@ -108,19 +118,24 @@ router.get('/utilization', authenticateToken, async (req: AuthRequest, res: Resp
     });
 
     // Calculate utilization by date
+    // Parse and normalize date range
     const start = new Date(startDate as string);
     const end = new Date(endDate as string);
-    const data = [];
+    start.setUTCHours(0, 0, 0, 0);
+    end.setUTCHours(23, 59, 59, 999);
 
+    const data = [];
     const currentDate = new Date(start);
     while (currentDate <= end) {
       const dateKey = currentDate.toISOString().split('T')[0];
-      
+
       // Count active rentals on this date
+      const checkDate = new Date(dateKey + 'T00:00:00Z');
       const activeRentals = orders.filter((order) => {
+        // Guard: ensure startDate/endDate exist on the order
+        if (!order.startDate || !order.endDate) return false;
         const orderStart = new Date(order.startDate);
         const orderEnd = new Date(order.endDate);
-        const checkDate = new Date(dateKey);
         return orderStart <= checkDate && checkDate <= orderEnd;
       }).length;
 
@@ -132,8 +147,8 @@ router.get('/utilization', authenticateToken, async (req: AuthRequest, res: Resp
         activeRentals,
         totalEquipment,
       });
-      
-      currentDate.setDate(currentDate.getDate() + 1);
+
+      currentDate.setUTCDate(currentDate.getUTCDate() + 1);
     }
 
     res.json(data);
@@ -181,6 +196,10 @@ router.get('/top-equipment', authenticateToken, async (req: AuthRequest, res: Re
     const companyId = req.companyId;
     const limit = parseInt(req.query.limit as string) || 10;
 
+    if (!companyId) {
+      return res.status(403).json({ error: 'Company context missing' });
+    }
+
     const orderItems = await prisma.orderItem.findMany({
       where: {
         order: {
@@ -199,23 +218,21 @@ router.get('/top-equipment', authenticateToken, async (req: AuthRequest, res: Re
       },
     });
 
-    // Group by equipment and calculate stats
+    // Group by equipmentId (prefer stable id over name)
     const equipmentStats = new Map<
-      string,
-      { name: string; rentCount: number; revenue: number }
+      number | string,
+      { equipmentId?: number; name: string; rentCount: number; revenue: number }
     >();
 
     orderItems.forEach((item) => {
+      const eqId = item.equipmentId ?? 'unknown';
       const name = item.equipment?.name || 'Unknown';
-      const existing = equipmentStats.get(name) || {
+      const existing = equipmentStats.get(eqId) || { equipmentId: typeof eqId === 'number' ? eqId : undefined, name, rentCount: 0, revenue: 0 };
+      equipmentStats.set(eqId, {
+        equipmentId: typeof eqId === 'number' ? eqId : existing.equipmentId,
         name,
-        rentCount: 0,
-        revenue: 0,
-      };
-      equipmentStats.set(name, {
-        name,
-        rentCount: existing.rentCount + item.quantity,
-        revenue: existing.revenue + Number(item.totalAmount),
+        rentCount: existing.rentCount + (item.quantity || 0),
+        revenue: existing.revenue + Number(item.totalAmount || 0),
       });
     });
 

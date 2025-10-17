@@ -29,40 +29,14 @@ const TimeAnalytics: React.FC<TimeAnalyticsProps> = ({ data: _data, loading = fa
   ];
 
   const getPeriodData = (period: TimePeriod) => {
-    // Mock data based on period selection
-    const baseData = {
-      today: {
-        revenue: [120, 150, 180, 200, 175, 190, 220],
-        orders: [5, 8, 12, 15, 10, 14, 18],
-        customers: [2, 3, 5, 4, 6, 7, 8],
-        labels: ['6:00', '9:00', '12:00', '15:00', '18:00', '21:00', '24:00']
-      },
-      week: {
-        revenue: [1200, 1800, 1500, 2200, 1900, 2100, 2400],
-        orders: [25, 35, 28, 42, 38, 45, 52],
-        customers: [8, 12, 10, 15, 13, 16, 18],
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      },
-      month: {
-        revenue: [15000, 18000, 22000, 19000, 25000, 23000, 28000, 26000, 30000, 32000, 29000, 35000],
-        orders: [120, 150, 180, 160, 200, 185, 220, 210, 240, 260, 230, 280],
-        customers: [45, 52, 48, 55, 62, 58, 65, 72, 68, 75, 78, 82],
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4']
-      },
-      quarter: {
-        revenue: [75000, 85000, 95000],
-        orders: [650, 720, 810],
-        customers: [180, 200, 220],
-        labels: ['Q1', 'Q2', 'Q3']
-      },
-      year: {
-        revenue: [120000, 135000, 150000, 145000, 165000, 170000, 180000, 175000, 190000, 195000, 185000, 200000],
-        orders: [1200, 1350, 1500, 1450, 1650, 1700, 1800, 1750, 1900, 1950, 1850, 2000],
-        customers: [350, 380, 420, 450, 480, 510, 540, 570, 600, 630, 660, 690],
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      }
+    // TODO: Fetch real data from API based on period
+    // For now, return empty data structure
+    return {
+      revenue: [],
+      orders: [],
+      customers: [],
+      labels: []
     };
-    return baseData[period];
   };
 
   const currentData = getPeriodData(selectedPeriod);

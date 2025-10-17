@@ -9,3 +9,4 @@ backups/*
 !backups/.gitkeep
 dev.db
 *.db-journal
+.vercel
