@@ -23,11 +23,13 @@ const useToastStore = create<ToastStore>((set) => ({
     set((state) => ({
       toasts: [...state.toasts, { id, message, type }],
     }))
+    // Error messages stay longer (5s) for readability, others 3s
+    const duration = type === 'error' ? 5000 : 3000
     setTimeout(() => {
       set((state) => ({
         toasts: state.toasts.filter((toast) => toast.id !== id),
       }))
-    }, 3000)
+    }, duration)
   },
   removeToast: (id) =>
     set((state) => ({

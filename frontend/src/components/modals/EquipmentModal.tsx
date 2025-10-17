@@ -265,7 +265,11 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
                 min="0"
                 step="0.01"
                 value={formData.dailyPrice}
-                onChange={(e) => handleInputChange('dailyPrice', parseFloat(e.target.value) || 0)}
+                onChange={(e) => {
+                  // Remove leading zeros and convert to number
+                  const value = e.target.value.replace(/^0+(?=\d)/, '');
+                  handleInputChange('dailyPrice', parseFloat(value) || 0);
+                }}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
                   formErrors.dailyPrice ? 'border-red-500' : 'border-gray-300'
                 }`}
