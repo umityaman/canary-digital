@@ -94,15 +94,6 @@ jobs:
           cd frontend
           npm ci
 
-      - name: Build Frontend
-        env:
-          VITE_API_URL: ${{ needs.deploy-backend.outputs.backend-url }}/api
-        run: |
-          cd frontend
-          echo "Building with VITE_API_URL=$VITE_API_URL"
-          npm run build
-          echo "Build complete - dist folder ready"
-
       - name: Google Auth
         uses: google-github-actions/auth@v2
         with:
@@ -113,16 +104,32 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Build and Push Docker Image
+      - name: Build Frontend with VITE_API_URL
+        env:
+          VITE_API_URL: ${{ needs.deploy-backend.outputs.backend-url }}/api
         run: |
           cd frontend
-          docker build -t gcr.io/${{ env.PROJECT_ID }}/canary-frontend:${{ github.sha }} .
-          docker push gcr.io/${{ env.PROJECT_ID }}/canary-frontend:${{ github.sha }}
+          echo "Building with VITE_API_URL=$VITE_API_URL"
+          npm run build
+          echo "Build complete - dist folder ready"
+          ls -la dist/
 
+      - name: Create Dockerfile with build args
+        run: |
+          cd frontend
+          cat > Dockerfile.deploy << 'EOF'
+          FROM nginx:alpine
+          COPY dist /usr/share/nginx/html
+          COPY nginx.conf /etc/nginx/conf.d/default.conf
+          EXPOSE 8080
+          CMD ["nginx", "-g", "daemon off;"]
+          EOF
+          
       - name: Deploy Frontend to Cloud Run
         run: |
+          cd frontend
           gcloud run deploy canary-frontend \
-            --image=gcr.io/${{ env.PROJECT_ID }}/canary-frontend:${{ github.sha }} \
+            --source . \
             --region=${{ env.REGION }} \
             --platform=managed \
             --allow-unauthenticated \
@@ -130,7 +137,8 @@ jobs:
             --max-instances=10 \
             --memory=256Mi \
             --cpu=1 \
-            --port=8080
+            --port=8080 \
+            --dockerfile=Dockerfile.deploy
 
       - name: Get Frontend URL
         id: get-frontend-url
