@@ -33,9 +33,6 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Configure Docker for GCP
-        run: gcloud auth configure-docker
-
       - name: Build and Deploy to Cloud Run
         run: |
           cd backend
