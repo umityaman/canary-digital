@@ -158,14 +158,14 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
   };
 
   const getChangeIcon = (change: number) => {
-    if (change > 0) return <TrendingUp className="w-3 h-3 text-green-600" />;
-    if (change < 0) return <TrendingDown className="w-3 h-3 text-red-600" />;
+    if (change > 0) return <TrendingUp className="w-3 h-3 text-neutral-700" />;
+    if (change < 0) return <TrendingDown className="w-3 h-3 text-neutral-600" />;
     return null;
   };
 
   const getChangeBadge = (change: number) => {
     const isPositive = change >= 0;
-    const colorClass = isPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+    const colorClass = isPositive ? 'bg-neutral-900 text-white' : 'bg-neutral-300 text-neutral-800';
     
     return (
       <Badge className={`${colorClass} flex items-center gap-1 text-xs`}>
@@ -241,7 +241,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
       target: data.revenue.target,
       icon: 'DollarSign',
       description: `Hedef: ${formatValue(data.revenue.target, 'currency')}`,
-      color: 'bg-blue-500'
+      color: 'bg-neutral-900'
     },
     {
       id: 'total-orders',
@@ -253,7 +253,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
       trend: data.orders.growth >= 0 ? 'up' : 'down',
       icon: 'ShoppingCart',
       description: `Ortalama: ${formatValue(data.orders.averageValue, 'currency')}`,
-      color: 'bg-green-500'
+      color: 'bg-neutral-800'
     },
     {
       id: 'equipment-utilization',
@@ -265,7 +265,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
       trend: data.equipment.utilizationRate >= 70 ? 'up' : data.equipment.utilizationRate >= 40 ? 'neutral' : 'down',
       icon: 'Package',
       description: `${data.equipment.rented}/${data.equipment.total} ekipman kiralanmış`,
-      color: 'bg-purple-500'
+      color: 'bg-neutral-700'
     },
     {
       id: 'active-customers',
@@ -277,7 +277,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
       trend: data.customers.growth >= 0 ? 'up' : 'down',
       icon: 'Users',
       description: `Yeni: ${data.customers.new} müşteri`,
-      color: 'bg-orange-500'
+      color: 'bg-neutral-600'
     },
     {
       id: 'profit-margin',
@@ -289,7 +289,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
       trend: data.financial.profitMargin >= 20 ? 'up' : data.financial.profitMargin >= 10 ? 'neutral' : 'down',
       icon: 'TrendingUp',
       description: `Toplam kar: ${formatValue(data.financial.profit, 'currency')}`,
-      color: 'bg-indigo-500'
+      color: 'bg-neutral-500'
     },
     {
       id: 'customer-retention',
@@ -301,7 +301,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
       trend: data.customers.retention >= 80 ? 'up' : data.customers.retention >= 60 ? 'neutral' : 'down',
       icon: 'Activity',
       description: `AOV: ${formatValue(data.customers.averageOrderValue, 'currency')}`,
-      color: 'bg-pink-500'
+      color: 'bg-neutral-400'
     }
   ];
 
@@ -421,15 +421,15 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Tamamlanan</span>
-                <span className="font-medium text-green-600">{data.orders.completed}</span>
+                <span className="font-medium text-neutral-900">{data.orders.completed}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Bekleyen</span>
-                <span className="font-medium text-yellow-600">{data.orders.pending}</span>
+                <span className="font-medium text-neutral-700">{data.orders.pending}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">İptal Edilen</span>
-                <span className="font-medium text-red-600">{data.orders.cancelled}</span>
+                <span className="font-medium text-neutral-500">{data.orders.cancelled}</span>
               </div>
             </CardContent>
           </Card>
@@ -442,15 +442,15 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Müsait</span>
-                <span className="font-medium text-green-600">{data.equipment.available}</span>
+                <span className="font-medium text-neutral-900">{data.equipment.available}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Kiralanmış</span>
-                <span className="font-medium text-blue-600">{data.equipment.rented}</span>
+                <span className="font-medium text-neutral-700">{data.equipment.rented}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Bakımda</span>
-                <span className="font-medium text-yellow-600">{data.equipment.maintenance}</span>
+                <span className="font-medium text-neutral-600">{data.equipment.maintenance}</span>
               </div>
             </CardContent>
           </Card>
@@ -471,7 +471,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Nakit Akışı</span>
-                <span className={`font-medium ${data.financial.cashFlow >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={`font-medium ${data.financial.cashFlow >= 0 ? 'text-neutral-900' : 'text-neutral-600'}`}>
                   {formatValue(data.financial.cashFlow, 'currency')}
                 </span>
               </div>

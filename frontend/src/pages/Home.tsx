@@ -10,9 +10,6 @@ import {
 import { subDays, format } from 'date-fns';
 import api from '../services/api';
 import { analyticsAPI } from '../services/api';
-import ClockWidget from '../components/widgets/ClockWidget';
-import CalculatorWidget from '../components/widgets/CalculatorWidget';
-import CurrencyWidget from '../components/widgets/CurrencyWidget';
 import DateRangeSelector from '../components/charts/DateRangeSelector';
 import RevenueChart from '../components/charts/RevenueChart';
 import UtilizationChart from '../components/charts/UtilizationChart';
@@ -442,16 +439,6 @@ export default function Home() {
               isLoading={chartsLoading}
             />
           </div>
-        </div>
-      </div>
-
-      {/* Widgets */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-        <h2 className="text-lg font-bold text-neutral-900 mb-6">Araçlar & Bilgi Merkezi</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <ClockWidget />
-          <CalculatorWidget />
-          <CurrencyWidget />
         </div>
       </div>
     </div>

@@ -211,13 +211,17 @@ const FloatingChatWidget: React.FC = () => {
     <>
       {/* Floating Chat Button */}
       <Fab
-        color="primary"
         sx={{
           position: 'fixed',
           bottom: 24,
           right: 24,
           zIndex: 1000,
           display: isOpen ? 'none' : 'flex',
+          backgroundColor: '#171717',
+          color: 'white',
+          '&:hover': {
+            backgroundColor: '#262626',
+          },
         }}
         onClick={() => setIsOpen(true)}
       >
