@@ -143,51 +143,69 @@ setupSwagger(app);
 
 app.get('/api/health', (req, res)=> res.json({ok:true, timestamp: new Date().toISOString()}));
 
-// Routes
-app.use('/api/auth', require('./routes/auth').default);
-app.use('/api/auth', require('./routes/googleAuth').default); // Google OAuth routes
-app.use('/api/categories', require('./routes/categories').default); // Category management
-app.use('/api/equipment', require('./routes/equipment').default);
-app.use('/api/orders', require('./routes/orders').default);
-app.use('/api/customers', require('./routes/customers').default);
-app.use('/api/suppliers', require('./routes/suppliers').default);
-app.use('/api/inspections', require('./routes/inspections').default);
-app.use('/api/calendar', require('./routes/calendar').default);
-app.use('/api/technical-service', require('./routes/technicalService').default);
-app.use('/api/test', require('./routes/test').default); // Test endpoints
-app.use('/api/test-email', require('./routes/email-test').default); // Email template testing
-app.use('/api/test-whatsapp', require('./routes/whatsapp-test').default); // WhatsApp testing
-app.use('/api/profile', require('./routes/profile').default);
-app.use('/api/dashboard', require('./routes/dashboard').default);
-app.use('/api/analytics', require('./routes/analytics').default); // Advanced analytics & charts
-app.use('/api/booqable', require('./routes/booqable').default); // Booqable integration
-app.use('/api/scan', require('./routes/scan').default); // QR/Barcode scanning
-app.use('/api/notifications', require('./routes/notifications').default); // Notification system
-app.use('/api/pricing', require('./routes/pricing').default); // Smart pricing system
-app.use('/api/reservations', require('./routes/reservations').default); // Reservation system
-app.use('/api/reports', require('./routes/reports').default); // Reporting and analytics
-app.use('/api/monitoring', require('./routes/monitoring').default); // Performance monitoring
-app.use('/api/invoices', require('./routes/invoice').default); // Invoicing & Paraşüt integration
-app.use('/api/payment', require('./routes/payment').default); // Payment & iyzico integration
-app.use('/api/payments', require('./routes/payments').default); // Enhanced Payment system with Iyzipay
-app.use('/api/pdf', require('./routes/pdf').default); // PDF Report Generation
-app.use('/api/2fa', require('./routes/twoFactor').default); // Two-Factor Authentication
-app.use('/api/push', require('./routes/push').default); // Push Notifications (Expo)
-app.use('/api/search', require('./routes/search').default); // Advanced Search & Filters
-app.use('/api/documents', require('./routes/documents').default); // Document Management
-app.use('/api/parasut', require('./routes/parasut').default); // Parasut Accounting Integration
-app.use('/api/whatsapp', require('./routes/whatsapp').default); // WhatsApp Business API Integration
-app.use('/api/email', require('./routes/email').default); // Email Automation System
-app.use('/api/social-media', require('./routes/social-media').default); // Social Media Integration
+// Helper function to safely load routes
+const safeLoadRoute = (path: string, routeFile: string, description: string) => {
+  try {
+    const route = require(routeFile);
+    if (route && route.default) {
+      app.use(path, route.default);
+      logger.info(`✅ Loaded route: ${path}`);
+    } else {
+      logger.warn(`⚠️  Route ${routeFile} has no default export, skipping`);
+    }
+  } catch (error: any) {
+    logger.error(`❌ Failed to load route ${path}: ${error.message}`);
+    logger.error(error.stack);
+  }
+};
+
+// Routes - Load each with error handling
+safeLoadRoute('/api/auth', './routes/auth', 'Authentication');
+safeLoadRoute('/api/auth', './routes/googleAuth', 'Google OAuth');
+safeLoadRoute('/api/categories', './routes/categories', 'Category management');
+safeLoadRoute('/api/equipment', './routes/equipment', 'Equipment');
+safeLoadRoute('/api/orders', './routes/orders', 'Orders');
+safeLoadRoute('/api/customers', './routes/customers', 'Customers');
+safeLoadRoute('/api/suppliers', './routes/suppliers', 'Suppliers');
+safeLoadRoute('/api/inspections', './routes/inspections', 'Inspections');
+safeLoadRoute('/api/calendar', './routes/calendar', 'Calendar');
+safeLoadRoute('/api/technical-service', './routes/technicalService', 'Technical Service');
+safeLoadRoute('/api/test', './routes/test', 'Test endpoints');
+safeLoadRoute('/api/test-email', './routes/email-test', 'Email testing');
+safeLoadRoute('/api/test-whatsapp', './routes/whatsapp-test', 'WhatsApp testing');
+safeLoadRoute('/api/profile', './routes/profile', 'Profile');
+safeLoadRoute('/api/dashboard', './routes/dashboard', 'Dashboard');
+safeLoadRoute('/api/analytics', './routes/analytics', 'Analytics');
+safeLoadRoute('/api/booqable', './routes/booqable', 'Booqable integration');
+safeLoadRoute('/api/scan', './routes/scan', 'QR/Barcode scanning');
+safeLoadRoute('/api/notifications', './routes/notifications', 'Notifications');
+safeLoadRoute('/api/pricing', './routes/pricing', 'Smart pricing');
+safeLoadRoute('/api/reservations', './routes/reservations', 'Reservations');
+safeLoadRoute('/api/reports', './routes/reports', 'Reports');
+safeLoadRoute('/api/monitoring', './routes/monitoring', 'Monitoring');
+safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
+safeLoadRoute('/api/payment', './routes/payment', 'Payment');
+safeLoadRoute('/api/payments', './routes/payments', 'Iyzipay payments');
+safeLoadRoute('/api/pdf', './routes/pdf', 'PDF generation');
+safeLoadRoute('/api/2fa', './routes/twoFactor', '2FA');
+safeLoadRoute('/api/push', './routes/push', 'Push notifications');
+safeLoadRoute('/api/search', './routes/search', 'Search');
+safeLoadRoute('/api/documents', './routes/documents', 'Documents');
+safeLoadRoute('/api/parasut', './routes/parasut', 'Parasut');
+safeLoadRoute('/api/whatsapp', './routes/whatsapp', 'WhatsApp');
+safeLoadRoute('/api/email', './routes/email', 'Email');
+safeLoadRoute('/api/social-media', './routes/social-media', 'Social Media');
 
 // CMS Module Routes
-app.use('/api/cms/pages', require('./routes/cms-pages').default); // CMS Pages
-app.use('/api/cms/blog', require('./routes/cms-blog').default); // CMS Blog
-app.use('/api/cms/media', require('./routes/cms-media').default); // CMS Media
-app.use('/api/cms/menus', require('./routes/cms-menus').default); // CMS Menus
+safeLoadRoute('/api/cms/pages', './routes/cms-pages', 'CMS Pages');
+safeLoadRoute('/api/cms/blog', './routes/cms-blog', 'CMS Blog');
+safeLoadRoute('/api/cms/media', './routes/cms-media', 'CMS Media');
+safeLoadRoute('/api/cms/menus', './routes/cms-menus', 'CMS Menus');
 
 // AI Chatbot Module Routes
-app.use('/api/chatbot', require('./routes/chatbot').default); // AI Chatbot
+safeLoadRoute('/api/chatbot', './routes/chatbot', 'AI Chatbot');
+
+logger.info('🎯 All routes loaded successfully');
 
 // Sentry error handler (must be before other error handlers) - TEMPORARILY DISABLED
 // app.use(sentryErrorHandler());
