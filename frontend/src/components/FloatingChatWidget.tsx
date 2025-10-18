@@ -307,12 +307,48 @@ const FloatingChatWidget: React.FC = () => {
             {messages.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 4 }}>
                 <BotIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1" color="text.secondary" fontWeight="bold">
                   Merhaba! Size nasıl yardımcı olabilirim?
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  Soru sormak için mesaj yazın
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1, mb: 3 }}>
+                  Soru sormak için mesaj yazın veya hızlı yardım seçin
                 </Typography>
+                
+                {/* Quick Help Buttons */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, maxWidth: 300, mx: 'auto' }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setInputMessage('Kullanım kılavuzunu gösterir misin?')}
+                    sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                  >
+                    📖 Kullanım Kılavuzu
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setInputMessage('Video eğitimlere nasıl ulaşabilirim?')}
+                    sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                  >
+                    🎥 Video Eğitimler
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setInputMessage('Teknik destek ile nasıl iletişime geçebilirim?')}
+                    sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                  >
+                    📞 Teknik Destek
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setInputMessage('En sık sorulan sorular nelerdir?')}
+                    sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                  >
+                    ❓ Sık Sorulan Sorular
+                  </Button>
+                </Box>
               </Box>
             ) : (
               messages.map((message) => (

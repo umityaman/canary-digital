@@ -35,7 +35,6 @@ import Pricing from './pages/Pricing'
 import Analytics from './pages/Analytics'
 import FloatingChatWidget from './components/FloatingChatWidget'
 import FloatingToolsWidget from './components/FloatingToolsWidget'
-import FloatingHelpWidget from './components/FloatingHelpWidget'
 
 export default function App(){
   const { isAuthenticated, loadUserFromStorage } = useAuthStore()
@@ -54,7 +53,6 @@ export default function App(){
       <ToastContainer />
       <FloatingChatWidget />
       <FloatingToolsWidget />
-      <FloatingHelpWidget />
       <Layout>
         <Routes>
           <Route path='/' element={<Home/>} />
