@@ -124,7 +124,7 @@ export default function PaymentForm({
         `/api/payments/installments?price=${amount}&binNumber=${binNumber}`,
         {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
           }
         }
       );
@@ -186,7 +186,7 @@ export default function PaymentForm({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify({
           amount,
