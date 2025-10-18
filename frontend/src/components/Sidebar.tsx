@@ -5,7 +5,8 @@ import {
   FileText, Truck, Calculator, Share2, Globe, 
   CheckSquare, MessageSquare, Video, Wrench, 
   Headphones, Film, HelpCircle, Settings, Shield,
-  ChevronLeft, ChevronRight, ClipboardCheck
+  ChevronLeft, ChevronRight, ClipboardCheck, BarChart3,
+  BookOpen, Image, Menu, Edit, Bot
 } from 'lucide-react'
 
 const Sidebar: React.FC = () => {
@@ -31,12 +32,19 @@ const Sidebar: React.FC = () => {
     { to: '/inventory', label: 'Envanter', icon: Package },
     { to: '/inspection', label: 'Kalite Kontrol', icon: ClipboardCheck },
     { to: '/customers', label: 'Müşteriler', icon: Users },
+    { to: '/analytics', label: 'Analiz & Raporlar', icon: BarChart3 },
     { to: '/calendar', label: 'Takvim', icon: Calendar },
     { to: '/documents', label: 'Dökümanlar', icon: FileText },
     { to: '/suppliers', label: 'Tedarikçiler', icon: Truck },
     { to: '/accounting', label: 'Muhasebe', icon: Calculator },
     { to: '/social', label: 'Sosyal Medya', icon: Share2 },
+    { to: '/social-media', label: 'Sosyal Medya Yönetimi', icon: Share2 },
     { to: '/website', label: 'Web Sitesi', icon: Globe },
+    { to: '/cms/pages', label: 'CMS - Sayfalar', icon: Edit },
+    { to: '/cms/blog', label: 'CMS - Blog', icon: BookOpen },
+    { to: '/cms/media', label: 'CMS - Medya', icon: Image },
+    { to: '/cms/menus', label: 'CMS - Menüler', icon: Menu },
+    { to: '/ai-chatbot', label: 'AI Chatbot', icon: Bot },
     { to: '/todo', label: 'Yapılacaklar', icon: CheckSquare },
     { to: '/messaging', label: 'Mesajlaşma', icon: MessageSquare },
     { to: '/meetings', label: 'Toplantı', icon: Video },

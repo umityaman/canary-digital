@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
+console.log('Loading app...');
 import app from './app';
+console.log('App loaded successfully!');
 import { startAllSchedulers } from './services/scheduler';
 import { initializeTwilio } from './services/whatsapp.service';
 import logger from './config/logger';
@@ -8,7 +10,8 @@ import logger from './config/logger';
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, ()=>{
-  console.log(`Backend listening on port ${PORT}`);
+  console.log(`✅ Backend listening on port ${PORT}`);
+  logger.info(`✅ Backend listening on port ${PORT}`);
   
   // Initialize Twilio WhatsApp
   initializeTwilio();

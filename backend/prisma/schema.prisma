@@ -54,6 +54,33 @@ model Company {
   booqableConnection BooqableConnection?
   savedSearches SavedSearch[]   // Company's shared searches
   searchHistory SearchHistory[] // Company's search history
+  notifications Notification[]  // Company's notifications
+  whatsappMessages WhatsAppMessage[] // WhatsApp messages
+  
+  // Document Relations
+  documents DocumentCategory[]
+  companyDocuments Document[]
+  
+  // Social Media Relations
+  socialMediaAccounts SocialMediaAccount[]
+  socialMediaPosts    SocialMediaPost[]
+  socialMediaSchedules SocialMediaSchedule[]
+  socialMediaAnalytics SocialMediaAnalytics[]
+  
+  // CMS Relations
+  cmsPages        CMSPage[]
+  blogPosts       BlogPost[]
+  blogCategories  BlogCategory[]
+  blogTags        BlogTag[]
+  mediaFiles      MediaFile[]
+  mediaFolders    MediaFolder[]
+  menus           Menu[]
+  cmsSettings     CMSSetting[]
+  
+  // AI Chatbot Relations
+  conversations       Conversation[]
+  chatbotKnowledge    ChatbotKnowledge[]
+  chatbotIntents      ChatbotIntent[]
 }
 
 model User {
@@ -135,6 +162,28 @@ model User {
   transactions Transaction[]
   savedSearches SavedSearch[]   // User's saved searches
   searchHistory SearchHistory[] // User's search history
+  
+  // Social Media Relations
+  socialMediaPosts     SocialMediaPost[]
+  socialMediaSchedules SocialMediaSchedule[]
+  
+  // Notification Relations
+  notifications Notification[]
+  notificationPreference NotificationPreference?
+  
+  // Document Relations
+  uploadedDocuments Document[]
+  sharedWithDocuments DocumentShare[] @relation("SharedWithUser")
+  sharedByDocuments DocumentShare[] @relation("SharedByUser")
+  
+  // CMS Relations
+  cmsPages      CMSPage[]
+  blogPosts     BlogPost[]
+  blogComments  BlogComment[]
+  uploadedMedia MediaFile[]
+  
+  // AI Chatbot Relations
+  conversations Conversation[]
 }
 
 model Category {
@@ -871,6 +920,10 @@ model Notification {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   
+  // Relations
+  user            User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company         Company?  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
   @@index([userId])
   @@index([status])
   @@index([type])
@@ -934,6 +987,9 @@ model NotificationPreference {
   timezone          String?   @default("Europe/Istanbul")
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ============================================
@@ -1493,4 +1549,839 @@ model SearchHistory {
   @@index([companyId])
   @@index([entity])
   @@index([createdAt])
+}
+
+// Document Management Models
+model DocumentCategory {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  icon        String?
+  parentId    Int?
+  
+  // Relations
+  parent      DocumentCategory? @relation("CategoryParent", fields: [parentId], references: [id])
+  children    DocumentCategory[] @relation("CategoryParent")
+  company     Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId   Int
+  documents   Document[]
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([parentId])
+}
+
+model Document {
+  id               Int      @id @default(autoincrement())
+  name             String
+  originalName     String
+  filePath         String
+  fileSize         BigInt
+  mimeType         String
+  description      String?
+  tags             String[]
+  version          Int      @default(1)
+  parentDocumentId Int?
+  isActive         Boolean  @default(true)
+  
+  // Relations
+  parentDocument   Document?         @relation("DocumentVersion", fields: [parentDocumentId], references: [id])
+  versions         Document[]        @relation("DocumentVersion")
+  category         DocumentCategory? @relation(fields: [categoryId], references: [id])
+  categoryId       Int?
+  uploadedBy       User             @relation(fields: [uploadedById], references: [id])
+  uploadedById     Int
+  company          Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId        Int
+  shares           DocumentShare[]
+  
+  // Timestamps
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([categoryId])
+  @@index([uploadedById])
+  @@index([parentDocumentId])
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+model DocumentShare {
+  id             Int       @id @default(autoincrement())
+  permission     String    @default("read") // read, write, admin
+  expiresAt      DateTime?
+  
+  // Relations
+  document       Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId     Int
+  sharedWithUser User      @relation("SharedWithUser", fields: [sharedWithUserId], references: [id])
+  sharedWithUserId Int
+  sharedByUser   User      @relation("SharedByUser", fields: [sharedByUserId], references: [id])
+  sharedByUserId Int
+  
+  // Timestamps
+  createdAt      DateTime  @default(now())
+  
+  @@index([documentId])
+  @@index([sharedWithUserId])
+  @@index([sharedByUserId])
+  @@unique([documentId, sharedWithUserId])
+}
+
+// WhatsApp Business API Integration
+model WhatsAppMessage {
+  id              Int      @id @default(autoincrement())
+  companyId       Int
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  // WhatsApp Message Details
+  messageId       String?  // WhatsApp message ID
+  wamId           String?  // WhatsApp Business API Message ID
+  status          String   @default("pending") // pending, sent, delivered, read, failed
+  
+  // Message Content
+  type            String   // text, template, media, interactive, location, contact
+  content         String?  // Message text content
+  mediaId         String?  // WhatsApp media ID
+  mediaUrl        String?  // Media file URL
+  mediaType       String?  // image, document, audio, video
+  caption         String?  // Media caption
+  
+  // Template Details
+  templateName    String?  // Template name for template messages
+  templateLanguage String? // Template language code
+  templateComponents String? // JSON string of template components
+  
+  // Interactive Details
+  interactiveType String?  // button, list
+  interactiveData String?  // JSON string of interactive components
+  
+  // Recipient/Sender Info
+  from            String?  // Sender phone number
+  to              String   // Recipient phone number
+  direction       String   // inbound, outbound
+  
+  // Business Context
+  contextType     String?  // order, inspection, invoice, payment, etc.
+  contextId       String?  // Related entity ID
+  
+  // Error Details
+  errorCode       String?
+  errorMessage    String?
+  retryCount      Int      @default(0)
+  
+  // Delivery Details
+  sentAt          DateTime?
+  deliveredAt     DateTime?
+  readAt          DateTime?
+  
+  // Automation
+  isAutomated     Boolean  @default(false) // Auto-generated message
+  triggeredBy     String?  // event type that triggered the message
+  
+  // Metadata
+  metadata        String?  // JSON string for additional data
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([messageId])
+  @@index([wamId])
+  @@index([to])
+  @@index([from])
+  @@index([status])
+  @@index([type])
+  @@index([direction])
+  @@index([contextType, contextId])
+  @@index([createdAt])
+}
+
+// ============================================
+// SOCIAL MEDIA MODULE
+// ============================================
+
+model SocialMediaAccount {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  // Platform Info
+  platform    String   // instagram, facebook, twitter, linkedin, tiktok
+  accountName String   // Display name
+  username    String   // Platform username/handle
+  accountId   String   // Platform-specific account ID
+  profileUrl  String?  // Profile URL
+  avatarUrl   String?  // Profile picture URL
+  
+  // Authentication
+  accessToken       String?  // OAuth2 access token
+  refreshToken      String?  // OAuth2 refresh token
+  tokenExpiresAt    DateTime? // Token expiration
+  tokenType         String?  @default("Bearer")
+  
+  // Permissions
+  scopes            String?  // JSON array of granted permissions
+  
+  // Account Status
+  isActive          Boolean  @default(true)
+  isVerified        Boolean  @default(false)
+  lastSyncAt        DateTime?
+  
+  // Statistics
+  followersCount    Int      @default(0)
+  followingCount    Int      @default(0)
+  postsCount        Int      @default(0)
+  
+  // Settings
+  autoPost          Boolean  @default(false)
+  autoReply         Boolean  @default(false)
+  notificationsEnabled Boolean @default(true)
+  
+  // Metadata
+  metadata          String?  // JSON for platform-specific data
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  posts             SocialMediaPost[]
+  schedules         SocialMediaSchedule[]
+  analytics         SocialMediaAnalytics[]
+  
+  @@unique([companyId, platform, accountId])
+  @@index([companyId])
+  @@index([platform])
+  @@index([isActive])
+}
+
+model SocialMediaPost {
+  id                Int      @id @default(autoincrement())
+  companyId         Int
+  company           Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  accountId         Int
+  account           SocialMediaAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  userId            Int?
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Content
+  content           String   // Post text/caption
+  contentType       String   @default("text") // text, image, video, carousel, story, reel
+  
+  // Media
+  mediaUrls         String?  // JSON array of media URLs
+  mediaIds          String?  // JSON array of platform media IDs
+  thumbnailUrl      String?  // Video thumbnail
+  
+  // Platform Details
+  platform          String   // instagram, facebook, twitter, linkedin
+  platformPostId    String?  // ID from social media platform
+  platformUrl       String?  // Direct URL to post
+  
+  // Status
+  status            String   @default("draft") // draft, scheduled, published, failed
+  publishedAt       DateTime?
+  scheduledFor      DateTime?
+  
+  // Engagement Metrics
+  likesCount        Int      @default(0)
+  commentsCount     Int      @default(0)
+  sharesCount       Int      @default(0)
+  viewsCount        Int      @default(0)
+  reachCount        Int      @default(0)
+  impressionsCount  Int      @default(0)
+  
+  // Metadata
+  hashtags          String?  // JSON array of hashtags
+  mentions          String?  // JSON array of mentions
+  location          String?  // Location tag
+  
+  // Error Handling
+  errorMessage      String?
+  retryCount        Int      @default(0)
+  
+  // Automation
+  isAutomated       Boolean  @default(false)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([accountId])
+  @@index([userId])
+  @@index([platform])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([scheduledFor])
+  @@index([platformPostId])
+}
+
+model SocialMediaSchedule {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  accountId   Int
+  account     SocialMediaAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Schedule Details
+  title       String
+  description String?
+  
+  // Content Template
+  contentTemplate String // Template with placeholders
+  mediaUrls       String? // JSON array of media URLs
+  
+  // Recurrence
+  isRecurring Boolean  @default(false)
+  frequency   String?  // daily, weekly, monthly
+  interval    Int?     @default(1) // Every X days/weeks/months
+  daysOfWeek  String?  // JSON array [1,2,3] for Mon,Tue,Wed
+  timeOfDay   String?  // HH:mm format
+  
+  // Date Range
+  startDate   DateTime
+  endDate     DateTime?
+  
+  // Status
+  isActive    Boolean  @default(true)
+  lastRunAt   DateTime?
+  nextRunAt   DateTime?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([accountId])
+  @@index([isActive])
+  @@index([nextRunAt])
+}
+
+model SocialMediaAnalytics {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  accountId   Int
+  account     SocialMediaAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  // Date Range
+  date        DateTime @db.Date
+  period      String   @default("daily") // daily, weekly, monthly
+  
+  // Engagement Metrics
+  likesCount        Int @default(0)
+  commentsCount     Int @default(0)
+  sharesCount       Int @default(0)
+  savesCount        Int @default(0)
+  
+  // Reach Metrics
+  reachCount        Int @default(0)
+  impressionsCount  Int @default(0)
+  
+  // Follower Metrics
+  followersGained   Int @default(0)
+  followersLost     Int @default(0)
+  followersNet      Int @default(0)
+  followersTotal    Int @default(0)
+  
+  // Content Metrics
+  postsCount        Int @default(0)
+  storiesCount      Int @default(0)
+  videosCount       Int @default(0)
+  
+  // Profile Metrics
+  profileViewsCount Int @default(0)
+  websiteClicksCount Int @default(0)
+  
+  // Top Content
+  topPostId         String?
+  topPostEngagement Int @default(0)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@unique([accountId, date, period])
+  @@index([companyId])
+  @@index([accountId])
+  @@index([date])
+  @@index([period])
+}
+
+// ============================================
+// CMS (CONTENT MANAGEMENT SYSTEM) MODULE
+// ============================================
+
+model CMSPage {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  authorId    Int?
+  author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  
+  // Page Info
+  title       String
+  slug        String   // URL-friendly version of title
+  content     String   @db.Text // Rich text HTML content
+  excerpt     String?  // Short description
+  
+  // SEO Metadata
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+  ogTitle         String?  // Open Graph title
+  ogDescription   String?  // Open Graph description
+  ogImage         String?  // Open Graph image URL
+  
+  // Page Settings
+  template    String?  @default("default") // Template name
+  layout      String?  @default("full-width") // Layout type
+  parentId    Int?     // For hierarchical pages
+  parent      CMSPage? @relation("PageHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children    CMSPage[] @relation("PageHierarchy")
+  
+  // Publishing
+  status      String   @default("draft") // draft, published, scheduled, archived
+  publishedAt DateTime?
+  scheduledFor DateTime?
+  
+  // Visibility
+  isPublic    Boolean  @default(true)
+  password    String?  // For password-protected pages
+  
+  // Display Settings
+  showInMenu  Boolean  @default(true)
+  menuOrder   Int?     @default(0)
+  icon        String?  // Icon name or URL
+  
+  // Analytics
+  viewCount   Int      @default(0)
+  
+  // Versions
+  version     Int      @default(1)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([companyId, slug])
+  @@index([companyId])
+  @@index([authorId])
+  @@index([slug])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([parentId])
+}
+
+model BlogPost {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  authorId    Int?
+  author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  
+  // Post Info
+  title       String
+  slug        String
+  content     String   @db.Text // Rich text HTML content
+  excerpt     String?
+  featuredImage String?
+  
+  // SEO Metadata
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+  
+  // Categorization
+  categoryId  Int?
+  category    BlogCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tags        BlogPostTag[]
+  
+  // Publishing
+  status      String   @default("draft") // draft, published, scheduled, archived
+  publishedAt DateTime?
+  scheduledFor DateTime?
+  
+  // Engagement
+  viewCount   Int      @default(0)
+  likeCount   Int      @default(0)
+  commentCount Int     @default(0)
+  shareCount  Int      @default(0)
+  
+  // Settings
+  allowComments Boolean @default(true)
+  isFeatured    Boolean @default(false)
+  isSticky      Boolean @default(false) // Pin to top
+  
+  // Reading Time
+  readingTime Int?     // Estimated reading time in minutes
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  comments    BlogComment[]
+  
+  @@unique([companyId, slug])
+  @@index([companyId])
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([slug])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([isFeatured])
+}
+
+model BlogCategory {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  name        String
+  slug        String
+  description String?
+  parentId    Int?
+  parent      BlogCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children    BlogCategory[] @relation("CategoryHierarchy")
+  
+  // Display
+  color       String?  // Hex color code
+  icon        String?
+  order       Int?     @default(0)
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  posts       BlogPost[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([companyId, slug])
+  @@index([companyId])
+  @@index([slug])
+  @@index([parentId])
+}
+
+model BlogTag {
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  name      String
+  slug      String
+  
+  posts     BlogPostTag[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([companyId, slug])
+  @@index([companyId])
+  @@index([slug])
+}
+
+model BlogPostTag {
+  postId    Int
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tagId     Int
+  tag       BlogTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, tagId])
+  @@index([postId])
+  @@index([tagId])
+}
+
+model BlogComment {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Author Info
+  authorId  Int?
+  author    User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorName  String? // For guest comments
+  authorEmail String? // For guest comments
+  
+  // Comment
+  content   String   @db.Text
+  
+  // Hierarchy (nested comments)
+  parentId  Int?
+  parent    BlogComment?  @relation("CommentHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   BlogComment[] @relation("CommentHierarchy")
+  
+  // Moderation
+  status    String   @default("pending") // pending, approved, spam, trash
+  isApproved Boolean @default(false)
+  
+  // Metadata
+  ipAddress String?
+  userAgent String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([postId])
+  @@index([authorId])
+  @@index([status])
+  @@index([parentId])
+  @@index([createdAt])
+}
+
+model MediaFile {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  uploadedById Int?
+  uploadedBy  User?    @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  
+  // File Info
+  filename    String
+  originalName String
+  mimeType    String
+  fileSize    Int      // in bytes
+  url         String
+  thumbnailUrl String?
+  
+  // Media Type
+  type        String   // image, video, audio, document
+  
+  // Image/Video Metadata
+  width       Int?
+  height      Int?
+  duration    Int?     // For video/audio in seconds
+  
+  // Categorization
+  folderId    Int?
+  folder      MediaFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  tags        String?  // JSON array of tags
+  
+  // SEO
+  altText     String?
+  title       String?
+  caption     String?
+  description String?
+  
+  // Status
+  isPublic    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([uploadedById])
+  @@index([type])
+  @@index([folderId])
+  @@index([createdAt])
+}
+
+model MediaFolder {
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  name      String
+  slug      String
+  parentId  Int?
+  parent    MediaFolder?  @relation("FolderHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children  MediaFolder[] @relation("FolderHierarchy")
+  
+  files     MediaFile[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([companyId, slug])
+  @@index([companyId])
+  @@index([parentId])
+}
+
+model Menu {
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  name      String
+  slug      String
+  location  String   @default("primary") // primary, footer, sidebar, mobile
+  
+  items     MenuItem[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([companyId, slug])
+  @@index([companyId])
+  @@index([location])
+}
+
+model MenuItem {
+  id        Int      @id @default(autoincrement())
+  menuId    Int
+  menu      Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  
+  // Item Info
+  title     String
+  url       String?
+  
+  // Link Type
+  type      String   @default("custom") // custom, page, post, category, external
+  targetId  Int?     // ID of linked content (page, post, etc.)
+  
+  // Display
+  icon      String?
+  cssClass  String?
+  target    String?  @default("_self") // _self, _blank, _parent, _top
+  
+  // Hierarchy
+  parentId  Int?
+  parent    MenuItem?  @relation("MenuHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children  MenuItem[] @relation("MenuHierarchy")
+  
+  // Order
+  order     Int      @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([menuId])
+  @@index([parentId])
+  @@index([order])
+}
+
+model CMSSetting {
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  key       String
+  value     String   @db.Text
+  group     String?  @default("general") // general, seo, appearance, etc.
+  type      String   @default("string") // string, number, boolean, json
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([companyId, key])
+  @@index([companyId])
+  @@index([group])
+}
+
+// ============================================================
+// AI CHATBOT MODULE
+// ============================================================
+
+model Conversation {
+  id          Int       @id @default(autoincrement())
+  companyId   Int
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  userId      Int?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  title       String?   @default("New Conversation")
+  status      String    @default("active") // active, archived, closed
+  context     String?   @db.Text // JSON string for conversation context
+  
+  // AI Settings
+  model       String    @default("gpt-3.5-turbo") // gpt-3.5-turbo, gpt-4, etc.
+  temperature Float     @default(0.7)
+  maxTokens   Int       @default(2000)
+  
+  // Metadata
+  tags        String[]  // For categorization
+  sentiment   String?   // positive, negative, neutral
+  language    String    @default("tr") // tr, en, etc.
+  
+  messages    Message[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([companyId])
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  role           String       // user, assistant, system
+  content        String       @db.Text
+  
+  // AI Metadata
+  tokens         Int?         // Token count
+  model          String?      // Model used for this message
+  finishReason   String?      // stop, length, content_filter
+  
+  // Additional Data
+  metadata       String?      @db.Text // JSON string for extra data
+  intent         String?      // detected intent (e.g., "question", "greeting", "complaint")
+  entities       String[]     // detected entities (e.g., ["order:123", "product:xyz"])
+  
+  // User Info (for user messages)
+  userAgent      String?
+  ipAddress      String?
+  
+  createdAt      DateTime     @default(now())
+  
+  @@index([conversationId])
+  @@index([role])
+  @@index([createdAt])
+}
+
+model ChatbotKnowledge {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  title       String
+  content     String   @db.Text
+  category    String?  // faq, documentation, policy, etc.
+  keywords    String[] // For searching
+  language    String   @default("tr")
+  
+  // Vector embedding for semantic search (optional - for future)
+  embedding   String?  @db.Text // JSON array of floats
+  
+  isActive    Boolean  @default(true)
+  priority    Int      @default(0) // Higher priority = more relevant
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([category])
+  @@index([isActive])
+}
+
+model ChatbotIntent {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  name        String   // greeting, farewell, question, complaint, etc.
+  description String?
+  patterns    String[] // Regex or keywords to match
+  responses   String[] // Predefined responses
+  action      String?  // API endpoint or function to call
+  
+  isActive    Boolean  @default(true)
+  priority    Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([companyId, name])
+  @@index([companyId])
+  @@index([isActive])
 }
