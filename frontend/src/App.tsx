@@ -20,6 +20,11 @@ import Social from './pages/Social'
 import Website from './pages/Website'
 import SiteBuilder from './pages/website/SiteBuilder'
 import ContentManagement from './pages/website/ContentManagement'
+import UserManagement from './pages/website/UserManagement'
+import RentalManagement from './pages/website/RentalManagement'
+import SEOMarketing from './pages/website/SEOMarketing'
+import FinanceReports from './pages/website/FinanceReports'
+import SecuritySettings from './pages/website/SecuritySettings'
 import Todo from './pages/Todo'
 import Messaging from './pages/Messaging'
 import Meetings from './pages/Meetings'
@@ -75,6 +80,11 @@ export default function App(){
           <Route path='/website' element={<Website/>} />
           <Route path='/website/builder' element={<SiteBuilder/>} />
           <Route path='/website/cms' element={<ContentManagement/>} />
+          <Route path='/website/users' element={<UserManagement/>} />
+          <Route path='/website/rental' element={<RentalManagement/>} />
+          <Route path='/website/seo' element={<SEOMarketing/>} />
+          <Route path='/website/finance' element={<FinanceReports/>} />
+          <Route path='/website/security' element={<SecuritySettings/>} />
           <Route path='/todo' element={<Todo/>} />
           <Route path='/messaging' element={<Messaging/>} />
           <Route path='/meetings' element={<Meetings/>} />
