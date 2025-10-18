@@ -33,7 +33,7 @@ import InspectionDetail from './pages/InspectionDetail'
 import Settings from './pages/Settings'
 import Pricing from './pages/Pricing'
 import Analytics from './pages/Analytics'
-import AIChatbot from './pages/AIChatbot'
+import FloatingChatWidget from './components/FloatingChatWidget'
 
 export default function App(){
   const { isAuthenticated, loadUserFromStorage } = useAuthStore()
@@ -50,6 +50,7 @@ export default function App(){
   return (
     <>
       <ToastContainer />
+      <FloatingChatWidget />
       <Layout>
         <Routes>
           <Route path='/' element={<Home/>} />
@@ -81,7 +82,6 @@ export default function App(){
           <Route path='/pricing' element={<Pricing/>} />
           <Route path='/analytics' element={<Analytics/>} />
           <Route path='/settings' element={<Settings/>} />
-          <Route path='/ai-chatbot' element={<AIChatbot/>} />
           <Route path='*' element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

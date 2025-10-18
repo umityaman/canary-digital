@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import NotificationService from '../services/notificationService';
+import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -501,7 +502,7 @@ router.post('/retry-failed', async (req: Request, res: Response) => {
 // ==============================================
 
 // GET /api/notifications - Get current user's notifications (requires auth)
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', authenticateToken, async (req: Request, res: Response) => {
   try {
     // @ts-ignore - userId is set by auth middleware
     const userId = req.user?.id;

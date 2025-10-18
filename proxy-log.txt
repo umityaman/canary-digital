@@ -1,0 +1,8 @@
+2025/10/17 21:19:06 Authorizing with Application Default Credentials
+2025/10/17 21:19:08 [canary-digital-475319:europe-west1:canary-postgres] Listening on 127.0.0.1:5432
+2025/10/17 21:19:08 The proxy has started successfully and is ready for new connections!
+2025/10/17 21:19:33 [canary-digital-475319:europe-west1:canary-postgres] Accepted connection from 127.0.0.1:65453
+2025/10/17 21:19:33 [canary-digital-475319:europe-west1:canary-postgres] client closed the connection
+2025/10/17 21:19:36 [canary-digital-475319:europe-west1:canary-postgres] Accepted connection from 127.0.0.1:65456
+2025/10/17 21:20:28 [canary-digital-475319:europe-west1:canary-postgres] Accepted connection from 127.0.0.1:65470
+2025/10/17 21:20:31 [canary-digital-475319:europe-west1:canary-postgres] client closed the connection

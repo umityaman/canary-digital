@@ -1,245 +1,192 @@
-import { Router, Request, Response } from 'express';
-import { authenticateToken, AuthRequest } from './auth';
-import {
-  testWhatsAppService,
-  sendOrderConfirmationWhatsApp,
-  sendPickupReminderWhatsApp,
-  sendReturnReminderWhatsApp,
-  sendPaymentReminderWhatsApp,
-  sendPaymentConfirmationWhatsApp,
-  messageTemplates,
-} from '../services/whatsapp.service';
+import { Router } from 'express';
+import { authenticate } from '../middleware/auth';
 
 const router = Router();
 
-// Test WhatsApp Connection
-router.post('/test', authenticateToken, async (req: Request, res: Response) => {
+/**
+ * @swagger
+ * /api/whatsapp-test/status:
+ *   get:
+ *     summary: Test WhatsApp service status
+ *     tags: [WhatsApp Test]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: WhatsApp test status
+ */
+router.get('/status', authenticate, async (req: any, res: any) => {
   try {
-    const { phoneNumber } = req.body;
-
-    if (!phoneNumber) {
-      return res.status(400).json({ error: 'Phone number is required' });
-    }
-
-    const result = await testWhatsAppService(phoneNumber);
-
-    if (result.success) {
-      res.json({
-        message: 'WhatsApp test message sent successfully',
-        messageSid: result.messageSid,
-        phoneNumber,
-      });
-    } else {
-      res.status(500).json({
-        error: 'Failed to send WhatsApp message',
-        details: result.error,
-      });
-    }
-  } catch (error: any) {
-    console.error('WhatsApp test error:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Test Order Confirmation Message
-router.post('/test-order-confirmation', authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const { phoneNumber } = req.body;
-
-    if (!phoneNumber) {
-      return res.status(400).json({ error: 'Phone number is required' });
-    }
-
-    const result = await sendOrderConfirmationWhatsApp({
-      customerName: 'Test Müşteri',
-      customerPhone: phoneNumber,
-      orderNumber: 'ORD-2025-001',
-      totalAmount: 5000,
-      pickupDate: '15 Ocak 2025',
-      returnDate: '20 Ocak 2025',
-    });
-
-    if (result.success) {
-      res.json({
-        message: 'Order confirmation sent successfully',
-        messageSid: result.messageSid,
-      });
-    } else {
-      res.status(500).json({
-        error: 'Failed to send message',
-        details: result.error,
-      });
-    }
-  } catch (error: any) {
-    console.error('WhatsApp test error:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Test Pickup Reminder
-router.post('/test-pickup-reminder', authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const { phoneNumber } = req.body;
-
-    if (!phoneNumber) {
-      return res.status(400).json({ error: 'Phone number is required' });
-    }
-
-    const result = await sendPickupReminderWhatsApp({
-      customerName: 'Test Müşteri',
-      customerPhone: phoneNumber,
-      orderNumber: 'ORD-2025-001',
-      pickupDate: 'Bugün',
-      pickupTime: '14:00',
-      equipmentCount: 3,
-    });
-
-    if (result.success) {
-      res.json({
-        message: 'Pickup reminder sent successfully',
-        messageSid: result.messageSid,
-      });
-    } else {
-      res.status(500).json({
-        error: 'Failed to send message',
-        details: result.error,
-      });
-    }
-  } catch (error: any) {
-    console.error('WhatsApp test error:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Test Return Reminder
-router.post('/test-return-reminder', authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const { phoneNumber } = req.body;
-
-    if (!phoneNumber) {
-      return res.status(400).json({ error: 'Phone number is required' });
-    }
-
-    const result = await sendReturnReminderWhatsApp({
-      customerName: 'Test Müşteri',
-      customerPhone: phoneNumber,
-      orderNumber: 'ORD-2025-001',
-      returnDate: 'Bugün',
-      returnTime: '17:00',
-      equipmentCount: 3,
-    });
-
-    if (result.success) {
-      res.json({
-        message: 'Return reminder sent successfully',
-        messageSid: result.messageSid,
-      });
-    } else {
-      res.status(500).json({
-        error: 'Failed to send message',
-        details: result.error,
-      });
-    }
-  } catch (error: any) {
-    console.error('WhatsApp test error:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Test Payment Reminder
-router.post('/test-payment-reminder', authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const { phoneNumber } = req.body;
-
-    if (!phoneNumber) {
-      return res.status(400).json({ error: 'Phone number is required' });
-    }
-
-    const result = await sendPaymentReminderWhatsApp({
-      customerName: 'Test Müşteri',
-      customerPhone: phoneNumber,
-      orderNumber: 'ORD-2025-001',
-      dueAmount: 2500,
-      dueDate: '10 Ocak 2025',
-      daysOverdue: 3,
-    });
-
-    if (result.success) {
-      res.json({
-        message: 'Payment reminder sent successfully',
-        messageSid: result.messageSid,
-      });
-    } else {
-      res.status(500).json({
-        error: 'Failed to send message',
-        details: result.error,
-      });
-    }
-  } catch (error: any) {
-    console.error('WhatsApp test error:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Test Payment Confirmation
-router.post('/test-payment-confirmation', authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const { phoneNumber } = req.body;
-
-    if (!phoneNumber) {
-      return res.status(400).json({ error: 'Phone number is required' });
-    }
-
-    const result = await sendPaymentConfirmationWhatsApp({
-      customerName: 'Test Müşteri',
-      customerPhone: phoneNumber,
-      orderNumber: 'ORD-2025-001',
-      paidAmount: 5000,
-      paymentMethod: 'Kredi Kartı',
-      receiptUrl: 'https://canary.com/receipt/123',
-    });
-
-    if (result.success) {
-      res.json({
-        message: 'Payment confirmation sent successfully',
-        messageSid: result.messageSid,
-      });
-    } else {
-      res.status(500).json({
-        error: 'Failed to send message',
-        details: result.error,
-      });
-    }
-  } catch (error: any) {
-    console.error('WhatsApp test error:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Get All Message Templates
-router.get('/templates', authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const templates = {
-      orderConfirmation: 'Order confirmation with details',
-      pickupReminder: 'Pickup reminder for today',
-      returnReminder: 'Return reminder for today',
-      paymentReminder: 'Payment due reminder',
-      paymentConfirmation: 'Payment received confirmation',
-      invoiceSent: 'Invoice sent notification',
-      latePaymentWarning: 'Late payment warning',
-      orderCancelled: 'Order cancelled notification',
-      welcomeMessage: 'Welcome new customer',
-      equipmentDamageReport: 'Equipment damage report',
+    const config = {
+      accessToken: process.env.WHATSAPP_ACCESS_TOKEN ? '****' : null,
+      phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || null,
+      businessAccountId: process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || null,
+      apiVersion: process.env.WHATSAPP_API_VERSION || 'v18.0',
+      webhookToken: process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN ? '****' : null,
+      appSecret: process.env.WHATSAPP_APP_SECRET ? '****' : null
     };
 
+    const isConfigured = !!(
+      process.env.WHATSAPP_ACCESS_TOKEN && 
+      process.env.WHATSAPP_PHONE_NUMBER_ID
+    );
+
     res.json({
-      message: 'Available WhatsApp message templates',
-      templates,
-      totalCount: Object.keys(templates).length,
+      success: true,
+      message: `WhatsApp API is ${isConfigured ? 'configured' : 'not configured'}`,
+      config,
+      configured: isConfigured,
+      timestamp: new Date().toISOString()
     });
+
   } catch (error: any) {
-    console.error('Get templates error:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
+    console.error('WhatsApp test status error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get WhatsApp status',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/whatsapp-test/send-test:
+ *   post:
+ *     summary: Send test WhatsApp message
+ *     tags: [WhatsApp Test]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - to
+ *               - message
+ *             properties:
+ *               to:
+ *                 type: string
+ *                 description: Recipient phone number (with country code)
+ *                 example: "+905551234567"
+ *               message:
+ *                 type: string
+ *                 description: Test message content
+ *                 example: "Hello! This is a test message from Canary Digital."
+ */
+router.post('/send-test', authenticate, async (req: any, res: any) => {
+  try {
+    const { to, message } = req.body;
+
+    if (!to || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number and message are required'
+      });
+    }
+
+    // Check if WhatsApp is configured
+    if (!process.env.WHATSAPP_ACCESS_TOKEN || !process.env.WHATSAPP_PHONE_NUMBER_ID) {
+      return res.status(400).json({
+        success: false,
+        message: 'WhatsApp API is not configured. Please set environment variables.',
+        required: [
+          'WHATSAPP_ACCESS_TOKEN',
+          'WHATSAPP_PHONE_NUMBER_ID'
+        ]
+      });
+    }
+
+    // For testing, we'll just simulate the response
+    const testResponse = {
+      success: true,
+      message: 'Test message would be sent successfully',
+      data: {
+        messageId: `test_${Date.now()}`,
+        to: to,
+        content: message,
+        status: 'simulated',
+        timestamp: new Date().toISOString()
+      },
+      note: 'This is a simulated response. Real WhatsApp API integration requires valid credentials.'
+    };
+
+    res.json(testResponse);
+
+  } catch (error: any) {
+    console.error('WhatsApp test send error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to send test message',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/whatsapp-test/templates:
+ *   get:
+ *     summary: List available WhatsApp message templates
+ *     tags: [WhatsApp Test]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.get('/templates', authenticate, async (req: any, res: any) => {
+  try {
+    const templates = [
+      {
+        name: 'order_confirmation',
+        language: 'tr',
+        category: 'TRANSACTIONAL',
+        components: [
+          {
+            type: 'HEADER',
+            format: 'TEXT',
+            text: 'Sipariş Onayı'
+          },
+          {
+            type: 'BODY',
+            text: 'Merhaba {{1}}, {{2}} numaralı siparişiniz onaylandı. Teslimat tarihi: {{3}}'
+          }
+        ]
+      },
+      {
+        name: 'inspection_reminder',
+        language: 'tr', 
+        category: 'TRANSACTIONAL',
+        components: [
+          {
+            type: 'HEADER',
+            format: 'TEXT',
+            text: 'Muayene Hatırlatması'
+          },
+          {
+            type: 'BODY',
+            text: 'Sayın {{1}}, {{2}} tarihinde {{3}} ekipmanının muayenesi planlandı.'
+          }
+        ]
+      }
+    ];
+
+    res.json({
+      success: true,
+      templates,
+      count: templates.length,
+      note: 'These are sample templates. In production, templates would be retrieved from WhatsApp Business API.'
+    });
+
+  } catch (error: any) {
+    console.error('Templates error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get templates',
+      error: error.message
+    });
   }
 });
 

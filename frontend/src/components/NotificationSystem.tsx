@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Bell, X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useNotificationAPI, useRealTimeNotifications } from '../hooks/useNotificationAPI';
 
 export interface Notification {
   id: number;
@@ -82,6 +83,48 @@ export const NotificationPanel = () => {
     setOpen,
   } = useNotificationStore();
 
+  const { 
+    markNotificationAsRead, 
+    deleteNotification, 
+    initializeNotifications 
+  } = useNotificationAPI();
+  
+  // Initialize real-time notifications
+  useRealTimeNotifications();
+
+  // Load notifications on component mount
+  useEffect(() => {
+    initializeNotifications();
+  }, [initializeNotifications]);
+
+  const handleMarkAsRead = async (id: number) => {
+    const success = await markNotificationAsRead(id);
+    if (!success) {
+      // Fallback to local state update if API fails
+      markAsRead(id);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const success = await deleteNotification(id);
+    if (!success) {
+      // Fallback to local state update if API fails
+      removeNotification(id);
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    const unreadIds = notifications.filter(n => !n.read).map(n => n.id);
+    if (unreadIds.length > 0) {
+      const { markMultipleAsRead } = useNotificationAPI();
+      const success = await markMultipleAsRead(unreadIds);
+      if (!success) {
+        // Fallback to local state update if API fails
+        markAllAsRead();
+      }
+    }
+  };
+
   const getIcon = (type: Notification['type']) => {
     switch (type) {
       case 'SUCCESS':
@@ -139,7 +182,7 @@ export const NotificationPanel = () => {
               </div>
               {notifications.length > 0 && (
                 <button
-                  onClick={markAllAsRead}
+                  onClick={handleMarkAllAsRead}
                   className="text-sm text-blue-600 hover:text-blue-700"
                 >
                   Tümünü Okundu İşaretle
@@ -162,7 +205,7 @@ export const NotificationPanel = () => {
                       className={`p-4 hover:bg-gray-50 transition-colors ${
                         !notification.read ? 'bg-blue-50/50' : ''
                       }`}
-                      onClick={() => !notification.read && markAsRead(notification.id)}
+                      onClick={() => !notification.read && handleMarkAsRead(notification.id)}
                     >
                       <div className="flex items-start gap-3">
                         <div className="mt-0.5">{getIcon(notification.type)}</div>
@@ -174,7 +217,7 @@ export const NotificationPanel = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                removeNotification(notification.id);
+                                handleDelete(notification.id);
                               }}
                               className="text-gray-400 hover:text-gray-600"
                             >
@@ -213,9 +256,9 @@ export const NotificationBanner = () => {
   useEffect(() => {
     // Subscribe to new notifications
     const unsubscribe = useNotificationStore.subscribe(
-      (notifications: Notification[]) => {
+      (state) => {
         // Show banner only for ERROR and WARNING types
-        const urgentNotifications = notifications.filter(
+        const urgentNotifications = state.notifications.filter(
           (n: Notification) => (n.type === 'ERROR' || n.type === 'WARNING') && !n.read
         );
         setBannerNotifications(urgentNotifications.slice(0, 1)); // Show only one at a time
