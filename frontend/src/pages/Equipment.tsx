@@ -31,6 +31,7 @@ export default function Equipment() {
   const navigate = useNavigate();
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
@@ -42,6 +43,7 @@ export default function Equipment() {
   const fetchEquipment = async () => {
     try {
       setLoading(true);
+      setError('');
       const filters = {
         search: searchTerm || undefined,
         status: statusFilter || undefined,
@@ -49,8 +51,10 @@ export default function Equipment() {
       };
       const response = await equipmentAPI.getAll(filters);
       setEquipment(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to fetch equipment:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Ekipmanlar yüklenirken hata oluştu';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -92,6 +96,20 @@ export default function Equipment() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-900"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 space-y-4">
+        <div className="text-red-600 text-lg">⚠️ {error}</div>
+        <button 
+          onClick={fetchEquipment}
+          className="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800"
+        >
+          Tekrar Dene
+        </button>
       </div>
     );
   }
