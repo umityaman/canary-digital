@@ -14,6 +14,10 @@ import {
   Settings,
   Globe,
   ArrowRight,
+  Plus,
+  TrendingUp,
+  CheckCircle,
+  Clock,
 } from 'lucide-react';
 
 const Production: React.FC = () => {
@@ -132,13 +136,78 @@ const Production: React.FC = () => {
     <div className="p-6 bg-neutral-50 min-h-screen">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-neutral-900 flex items-center gap-3">
-          <Film size={40} className="text-neutral-900" />
-          Yapım & Prodüksiyon
-        </h1>
-        <p className="text-neutral-600 mt-2 text-lg">
-          Film, dizi, reklam ve video prodüksiyon süreçlerinizi yönetin
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-4xl font-bold text-neutral-900 flex items-center gap-3">
+              <Film size={40} className="text-neutral-900" />
+              Yapım & Prodüksiyon
+            </h1>
+            <p className="text-neutral-600 mt-2 text-lg">
+              Film, dizi, reklam ve video prodüksiyon süreçlerinizi yönetin
+            </p>
+          </div>
+          <button className="flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors font-medium shadow-lg">
+            <Plus size={20} />
+            Yeni Proje
+          </button>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <Film className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Aktif</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">12</h3>
+          <p className="text-sm text-neutral-600">Toplam Proje</p>
+          <p className="text-xs text-neutral-500 mt-2">3 aktif, 9 tamamlandı</p>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <DollarSign className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Bu Yıl</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">₺2.5M</h3>
+          <p className="text-sm text-neutral-600">Toplam Bütçe</p>
+          <div className="flex items-center gap-1 text-xs text-green-600 mt-2">
+            <TrendingUp size={14} />
+            <span>+18%</span>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <Users className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Aktif</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">47</h3>
+          <p className="text-sm text-neutral-600">Ekip Üyeleri</p>
+          <p className="text-xs text-neutral-500 mt-2">Çalışanlar</p>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <CheckCircle className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Son 6 Ay</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">95%</h3>
+          <p className="text-sm text-neutral-600">Müşteri Memnuniyeti</p>
+          <div className="flex items-center gap-1 text-xs text-green-600 mt-2">
+            <TrendingUp size={14} />
+            <span>+5%</span>
+          </div>
+        </div>
       </div>
 
       {/* Module Grid */}
@@ -149,7 +218,7 @@ const Production: React.FC = () => {
             <Link
               key={module.id}
               to={module.link}
-              className="group bg-white rounded-xl border border-neutral-200 hover:border-neutral-900 hover:shadow-xl transition-all overflow-hidden"
+              className="group bg-white rounded-2xl shadow-sm border border-neutral-200 hover:border-neutral-900 hover:shadow-xl transition-all overflow-hidden"
             >
               {/* Gradient Header */}
               <div className={`bg-gradient-to-br ${module.color} p-6`}>
@@ -173,30 +242,6 @@ const Production: React.FC = () => {
             </Link>
           );
         })}
-      </div>
-
-      {/* Quick Stats */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-xl border border-neutral-200">
-          <div className="text-sm text-neutral-600 mb-1">Toplam Projeler</div>
-          <div className="text-3xl font-bold text-neutral-900">12</div>
-          <div className="text-xs text-neutral-500 mt-1">3 aktif, 9 tamamlandı</div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-neutral-200">
-          <div className="text-sm text-neutral-600 mb-1">Toplam Bütçe</div>
-          <div className="text-3xl font-bold text-neutral-900">₺2.5M</div>
-          <div className="text-xs text-neutral-500 mt-1">Bu yıl</div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-neutral-200">
-          <div className="text-sm text-neutral-600 mb-1">Ekip Üyeleri</div>
-          <div className="text-3xl font-bold text-neutral-900">47</div>
-          <div className="text-xs text-neutral-500 mt-1">Aktif çalışanlar</div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-neutral-200">
-          <div className="text-sm text-neutral-600 mb-1">Müşteri Memnuniyeti</div>
-          <div className="text-3xl font-bold text-neutral-900">95%</div>
-          <div className="text-xs text-neutral-500 mt-1">Son 6 ay</div>
-        </div>
       </div>
     </div>
   );
