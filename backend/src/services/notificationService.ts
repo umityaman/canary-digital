@@ -488,6 +488,181 @@ export class NotificationService {
       },
     });
   }
+
+  /**
+   * Get user notifications with filters
+   */
+  static async getUserNotifications(userId: number, filters: any = {}) {
+    const where: any = { userId };
+    
+    if (filters.type) where.type = filters.type;
+    if (filters.category) where.category = filters.category;
+    if (filters.status) where.status = filters.status;
+    if (filters.priority) where.priority = filters.priority;
+    if (filters.isRead !== undefined) {
+      where.readAt = filters.isRead ? { not: null } : null;
+    }
+
+    return await prisma.notification.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: filters.limit || 50,
+      skip: filters.offset || 0,
+      include: {
+        user: {
+          select: { id: true, name: true, email: true }
+        }
+      }
+    });
+  }
+
+  /**
+   * Get notification by ID
+   */
+  static async getById(id: number) {
+    return await prisma.notification.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: { id: true, name: true, email: true }
+        }
+      }
+    });
+  }
+
+  /**
+   * Get unread notification count for user
+   */
+  static async getUnreadCount(userId: number) {
+    return await prisma.notification.count({
+      where: {
+        userId,
+        readAt: null,
+        status: { not: 'FAILED' }
+      }
+    });
+  }
+
+  /**
+   * Delete notification
+   */
+  static async delete(id: number) {
+    return await prisma.notification.delete({
+      where: { id }
+    });
+  }
+
+  /**
+   * Mark multiple notifications as read
+   */
+  static async markMultipleAsRead(ids: number[]) {
+    const result = await prisma.notification.updateMany({
+      where: { 
+        id: { in: ids } 
+      },
+      data: {
+        readAt: new Date(),
+        status: 'READ'
+      }
+    });
+    return result.count;
+  }
+
+  /**
+   * Get user notification preferences
+   */
+  static async getUserPreferences(userId: number) {
+    return await prisma.notificationPreference.findUnique({
+      where: { userId }
+    });
+  }
+
+  /**
+   * Update user notification preferences
+   */
+  static async updateUserPreferences(userId: number, preferences: any) {
+    return await prisma.notificationPreference.upsert({
+      where: { userId },
+      update: {
+        ...preferences,
+        updatedAt: new Date()
+      },
+      create: {
+        userId,
+        ...preferences
+      }
+    });
+  }
+
+  /**
+   * Get all notifications (admin)
+   */
+  static async getAll(filters: any = {}) {
+    const where: any = {};
+    
+    if (filters.companyId) where.companyId = filters.companyId;
+    if (filters.type) where.type = filters.type;
+    if (filters.category) where.category = filters.category;
+    if (filters.status) where.status = filters.status;
+    if (filters.priority) where.priority = filters.priority;
+
+    return await prisma.notification.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: filters.limit || 50,
+      skip: filters.offset || 0,
+      include: {
+        user: {
+          select: { id: true, name: true, email: true }
+        }
+      }
+    });
+  }
+
+  /**
+   * Get notification statistics
+   */
+  static async getStats(companyId?: number) {
+    const where: any = {};
+    if (companyId) where.companyId = companyId;
+
+    const [total, unread, byType, byPriority] = await Promise.all([
+      // Total notifications
+      prisma.notification.count({ where }),
+      
+      // Unread notifications
+      prisma.notification.count({ 
+        where: { ...where, readAt: null } 
+      }),
+      
+      // By type
+      prisma.notification.groupBy({
+        by: ['type'],
+        where,
+        _count: { id: true }
+      }),
+      
+      // By priority
+      prisma.notification.groupBy({
+        by: ['priority'],
+        where,
+        _count: { id: true }
+      })
+    ]);
+
+    return {
+      total,
+      unread,
+      byType: byType.reduce((acc, item) => ({
+        ...acc,
+        [item.type]: item._count.id
+      }), {}),
+      byPriority: byPriority.reduce((acc, item) => ({
+        ...acc,
+        [item.priority]: item._count.id
+      }), {})
+    };
+  }
 }
 
 export default NotificationService;
