@@ -5,8 +5,7 @@ import {
   FileText, Truck, Calculator, Share2, Globe, 
   CheckSquare, MessageSquare, Video, Wrench, 
   Headphones, Film, HelpCircle, Settings, Shield,
-  ChevronLeft, ChevronRight, ClipboardCheck, BarChart3,
-  BookOpen, Image, Menu, Edit, Bot
+  ChevronLeft, ChevronRight, ClipboardCheck, BarChart3, Bot
 } from 'lucide-react'
 
 const Sidebar: React.FC = () => {
@@ -38,13 +37,7 @@ const Sidebar: React.FC = () => {
     { to: '/suppliers', label: 'Tedarikçiler', icon: Truck },
     { to: '/accounting', label: 'Muhasebe', icon: Calculator },
     { to: '/social', label: 'Sosyal Medya', icon: Share2 },
-    { to: '/social-media', label: 'Sosyal Medya Yönetimi', icon: Share2 },
     { to: '/website', label: 'Web Sitesi', icon: Globe },
-    { to: '/cms/pages', label: 'CMS - Sayfalar', icon: Edit },
-    { to: '/cms/blog', label: 'CMS - Blog', icon: BookOpen },
-    { to: '/cms/media', label: 'CMS - Medya', icon: Image },
-    { to: '/cms/menus', label: 'CMS - Menüler', icon: Menu },
-    { to: '/ai-chatbot', label: 'AI Chatbot', icon: Bot },
     { to: '/todo', label: 'Yapılacaklar', icon: CheckSquare },
     { to: '/messaging', label: 'Mesajlaşma', icon: MessageSquare },
     { to: '/meetings', label: 'Toplantı', icon: Video },
@@ -55,6 +48,7 @@ const Sidebar: React.FC = () => {
     { to: '/technical-service', label: 'Teknik Servis', icon: Wrench },
     { to: '/settings', label: 'Ayarlar', icon: Settings },
     { to: '/admin', label: 'Admin Paneli', icon: Shield },
+    { to: '/ai-chatbot', label: 'AI Chatbot', icon: Bot },
   ]
 
   return (
