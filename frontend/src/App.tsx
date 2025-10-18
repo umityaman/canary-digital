@@ -17,7 +17,6 @@ import Documents from './pages/Documents'
 import Suppliers from './pages/Suppliers'
 import Accounting from './pages/Accounting'
 import Social from './pages/Social'
-import SocialMedia from './pages/SocialMedia'
 import Website from './pages/Website'
 import Todo from './pages/Todo'
 import Messaging from './pages/Messaging'
@@ -34,10 +33,6 @@ import InspectionDetail from './pages/InspectionDetail'
 import Settings from './pages/Settings'
 import Pricing from './pages/Pricing'
 import Analytics from './pages/Analytics'
-import PagesManagement from './pages/cms/PagesManagement'
-import BlogManagement from './pages/cms/BlogManagement'
-import MediaLibrary from './pages/cms/MediaLibrary'
-import MenuEditor from './pages/cms/MenuEditor'
 import AIChatbot from './pages/AIChatbot'
 
 export default function App(){
@@ -70,7 +65,6 @@ export default function App(){
           <Route path='/suppliers' element={<Suppliers/>} />
           <Route path='/accounting' element={<Accounting/>} />
           <Route path='/social' element={<Social/>} />
-          <Route path='/social-media' element={<SocialMedia/>} />
           <Route path='/website' element={<Website/>} />
           <Route path='/todo' element={<Todo/>} />
           <Route path='/messaging' element={<Messaging/>} />
@@ -87,10 +81,6 @@ export default function App(){
           <Route path='/pricing' element={<Pricing/>} />
           <Route path='/analytics' element={<Analytics/>} />
           <Route path='/settings' element={<Settings/>} />
-          <Route path='/cms/pages' element={<PagesManagement/>} />
-          <Route path='/cms/blog' element={<BlogManagement/>} />
-          <Route path='/cms/media' element={<MediaLibrary/>} />
-          <Route path='/cms/menus' element={<MenuEditor/>} />
           <Route path='/ai-chatbot' element={<AIChatbot/>} />
           <Route path='*' element={<Navigate to="/" replace />} />
         </Routes>
