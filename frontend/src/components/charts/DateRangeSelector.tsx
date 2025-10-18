@@ -76,8 +76,8 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
             onClick={() => handlePresetClick(range)}
             className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
               selectedRange.label === range.label
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-neutral-900 text-white'
+                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             }`}
           >
             {range.label}
@@ -87,8 +87,8 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
           onClick={() => setShowCustom(!showCustom)}
           className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
             showCustom || selectedRange.label === 'Özel Tarih'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ? 'bg-neutral-900 text-white'
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           }`}
         >
           Özel Tarih
@@ -98,31 +98,31 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
       {showCustom && (
         <div className="flex items-end gap-2 p-3 bg-gray-50 rounded-md">
           <div className="flex-1">
-            <label className="block text-xs font-medium text-gray-700 mb-1">
+            <label className="block text-xs font-medium text-neutral-700 mb-1">
               Başlangıç
             </label>
             <input
               type="date"
               value={customStart}
               onChange={(e) => setCustomStart(e.target.value)}
-              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-2 py-1.5 text-xs border border-neutral-300 rounded-md focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
             />
           </div>
           <div className="flex-1">
-            <label className="block text-xs font-medium text-gray-700 mb-1">
+            <label className="block text-xs font-medium text-neutral-700 mb-1">
               Bitiş
             </label>
             <input
               type="date"
               value={customEnd}
               onChange={(e) => setCustomEnd(e.target.value)}
-              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-2 py-1.5 text-xs border border-neutral-300 rounded-md focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
             />
           </div>
           <button
             onClick={handleCustomApply}
             disabled={!customStart || !customEnd}
-            className="px-4 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-1.5 text-xs font-medium text-white bg-neutral-900 rounded-md hover:bg-neutral-800 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
           >
             Uygula
           </button>

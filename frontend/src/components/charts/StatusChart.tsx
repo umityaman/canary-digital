@@ -83,13 +83,13 @@ const StatusChart: React.FC<StatusChartProps> = ({ data, isLoading }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
-          <div className="text-xs text-blue-700 mb-1">Toplam Sipariş</div>
-          <div className="text-3xl font-bold text-blue-600">{total}</div>
+        <div className="bg-gradient-to-br from-neutral-100 to-neutral-200 p-4 rounded-lg">
+          <div className="text-xs text-neutral-700 mb-1">Toplam Sipariş</div>
+          <div className="text-3xl font-bold text-neutral-900">{total}</div>
         </div>
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg">
-          <div className="text-xs text-purple-700 mb-1">Aktif Durum</div>
-          <div className="text-3xl font-bold text-purple-600">{data.length}</div>
+        <div className="bg-gradient-to-br from-neutral-100 to-neutral-200 p-4 rounded-lg">
+          <div className="text-xs text-neutral-700 mb-1">Aktif Durum</div>
+          <div className="text-3xl font-bold text-neutral-900">{data.length}</div>
         </div>
       </div>
 

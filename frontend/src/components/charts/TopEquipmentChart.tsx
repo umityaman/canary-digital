@@ -23,16 +23,16 @@ interface TopEquipmentChartProps {
 }
 
 const COLORS = [
-  '#3b82f6', // blue
-  '#10b981', // green
-  '#f59e0b', // amber
-  '#ef4444', // red
-  '#8b5cf6', // purple
-  '#ec4899', // pink
-  '#06b6d4', // cyan
-  '#f97316', // orange
-  '#14b8a6', // teal
-  '#6366f1', // indigo
+  '#171717', // neutral-900
+  '#262626', // neutral-800
+  '#404040', // neutral-700
+  '#525252', // neutral-600
+  '#737373', // neutral-500
+  '#a3a3a3', // neutral-400
+  '#d4d4d4', // neutral-300
+  '#525252', // neutral-600 (repeat)
+  '#404040', // neutral-700 (repeat)
+  '#262626', // neutral-800 (repeat)
 ];
 
 const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }) => {
@@ -71,7 +71,7 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
             <p className="text-xs">
               📦 Kiralama: <span className="font-semibold">{payload[0].value} kez</span>
             </p>
-            <p className="text-xs text-green-600">
+            <p className="text-xs text-neutral-700">
               💰 Gelir: {formatCurrency(payload[0].payload.revenue)}
             </p>
             <p className="text-xs text-gray-500">
@@ -92,7 +92,7 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
       </div>
 
       {topPerformer && (
-        <div className="mb-6 p-4 bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-300 rounded-lg">
+        <div className="mb-6 p-4 bg-gradient-to-r from-neutral-100 to-neutral-200 border-2 border-neutral-300 rounded-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="text-3xl">🥇</div>
@@ -106,7 +106,7 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
               </div>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-amber-600">
+              <div className="text-2xl font-bold text-neutral-900">
                 {topPerformer.rentCount}
               </div>
               <div className="text-xs text-gray-600">kiralama</div>
@@ -116,13 +116,13 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
       )}
 
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-blue-50 p-3 rounded-lg">
+        <div className="bg-neutral-100 p-3 rounded-lg">
           <div className="text-xs text-gray-600 mb-1">Toplam Kiralama</div>
-          <div className="text-xl font-bold text-blue-600">{totalRents}</div>
+          <div className="text-xl font-bold text-neutral-900">{totalRents}</div>
         </div>
-        <div className="bg-green-50 p-3 rounded-lg">
+        <div className="bg-neutral-100 p-3 rounded-lg">
           <div className="text-xs text-gray-600 mb-1">Toplam Gelir</div>
-          <div className="text-xl font-bold text-green-600">
+          <div className="text-xl font-bold text-neutral-900">
             {formatCurrency(totalRevenue)}
           </div>
         </div>
@@ -157,12 +157,12 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
         </BarChart>
       </ResponsiveContainer>
 
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+      <div className="mt-6 p-4 bg-neutral-100 rounded-lg">
         <div className="flex items-start gap-2">
           <span className="text-lg">💡</span>
           <div>
-            <p className="text-xs font-semibold text-blue-800 mb-1">Strateji Önerisi</p>
-            <p className="text-xs text-blue-700">
+            <p className="text-xs font-semibold text-neutral-900 mb-1">Strateji Önerisi</p>
+            <p className="text-xs text-neutral-700">
               En popüler ekipmanlarınızın stoğunu artırarak daha fazla gelir elde
               edebilirsiniz. Ayrıca benzer ekipman yatırımları düşünülebilir.
             </p>

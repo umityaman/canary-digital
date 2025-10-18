@@ -41,15 +41,15 @@ const UtilizationChart: React.FC<UtilizationChartProps> = ({ data, isLoading }) 
   const currentUtilization = data[data.length - 1]?.utilizationRate || 0;
 
   const getUtilizationColor = (rate: number) => {
-    if (rate >= 80) return 'text-red-600';
-    if (rate >= 60) return 'text-yellow-600';
-    return 'text-green-600';
+    if (rate >= 80) return 'text-neutral-900';
+    if (rate >= 60) return 'text-neutral-700';
+    return 'text-neutral-600';
   };
 
   const getUtilizationBg = (rate: number) => {
-    if (rate >= 80) return 'bg-red-50';
-    if (rate >= 60) return 'bg-yellow-50';
-    return 'bg-green-50';
+    if (rate >= 80) return 'bg-neutral-100';
+    if (rate >= 60) return 'bg-neutral-50';
+    return 'bg-neutral-50';
   };
 
   const CustomTooltip = ({ active, payload }: any) => {
@@ -113,14 +113,14 @@ const UtilizationChart: React.FC<UtilizationChartProps> = ({ data, isLoading }) 
         </div>
       </div>
 
-      <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+      <div className="mb-4 p-3 bg-neutral-100 rounded-lg">
         <div className="flex items-start gap-2">
           <span className="text-lg">💡</span>
           <div>
-            <p className="text-xs font-semibold text-blue-800 mb-1">
+            <p className="text-xs font-semibold text-neutral-900 mb-1">
               Performans İpucu
             </p>
-            <p className="text-xs text-blue-700">
+            <p className="text-xs text-neutral-700">
               {avgUtilization >= 80
                 ? 'Kullanım çok yüksek! Yeni ekipman alımı düşünülebilir.'
                 : avgUtilization >= 60
@@ -155,9 +155,9 @@ const UtilizationChart: React.FC<UtilizationChartProps> = ({ data, isLoading }) 
             type="monotone"
             dataKey="utilizationRate"
             name="Kullanım Oranı (%)"
-            stroke="#10b981"
+            stroke="#171717"
             strokeWidth={3}
-            dot={{ fill: '#10b981', r: 4 }}
+            dot={{ fill: '#171717', r: 4 }}
             activeDot={{ r: 6 }}
             animationDuration={1000}
           />

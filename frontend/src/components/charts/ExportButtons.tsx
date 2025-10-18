@@ -55,7 +55,7 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({
       <button
         onClick={handleExportExcel}
         disabled={exporting}
-        className="px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 rounded-md hover:bg-green-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+        className="px-3 py-1.5 text-xs font-medium text-neutral-700 bg-neutral-100 rounded-md hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
         title="Excel olarak indir"
       >
         📊 Excel
@@ -63,7 +63,7 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({
       <button
         onClick={handleExportPDF}
         disabled={exporting}
-        className="px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 rounded-md hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+        className="px-3 py-1.5 text-xs font-medium text-neutral-700 bg-neutral-100 rounded-md hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
         title="PDF olarak indir"
       >
         📄 PDF
@@ -71,7 +71,7 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({
       <button
         onClick={handlePrint}
         disabled={exporting}
-        className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+        className="px-3 py-1.5 text-xs font-medium text-neutral-700 bg-neutral-100 rounded-md hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
         title="Yazdır"
       >
         🖨️ Yazdır
