@@ -88,7 +88,7 @@ export default function FloatingToolsWidget() {
             </h3>
             <div className="text-center">
               <div className="text-4xl font-bold text-neutral-900 mb-2">
-                {currentTime.split(':').slice(0, 2).join(':'}
+                {currentTime.split(':').slice(0, 2).join(':')}
               </div>
               <div className="text-2xl text-neutral-600">
                 {currentTime.split(':')[2]}
