@@ -2,11 +2,12 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 
-// Debug: Log API URL
+// Debug: Log API URL - Updated Oct 18, 2025
 console.log('🔧 API Configuration:', {
   VITE_API_URL: import.meta.env.VITE_API_URL,
   API_URL,
-  mode: import.meta.env.MODE
+  mode: import.meta.env.MODE,
+  timestamp: new Date().toISOString()
 })
 
 // Axios instance oluştur
