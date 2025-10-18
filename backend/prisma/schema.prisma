@@ -84,6 +84,9 @@ model Company {
 
   // Production & Film Management Relations
   productionProjects ProductionProject[]
+
+  // Website & CMS Relations
+  websiteProjects WebsiteProject[]
 }
 
 model User {
@@ -2839,5 +2842,511 @@ model ProductionCommunication {
 
   @@index([projectId])
   @@index([messageType])
+  @@index([createdAt])
+}
+
+// ============================================
+// 🌐 WEBSITE & CMS BUILDER MODULE
+// ============================================
+
+model WebsiteProject {
+  id        Int     @id @default(autoincrement())
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Site Info
+  name      String
+  domain    String? @unique
+  subdomain String? @unique
+  siteType  String  @default("rental") // rental, corporate, blog, portfolio, ecommerce
+
+  // Template & Theme
+  templateId     String?
+  theme          String  @default("default") // default, modern, classic, minimal
+  primaryColor   String  @default("#171717")
+  secondaryColor String  @default("#ffffff")
+  logoUrl        String?
+  faviconUrl     String?
+
+  // Status
+  status String  @default("draft") // draft, published, maintenance
+  isLive Boolean @default(false)
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  metaKeywords    String[]
+  sitemapUrl      String?
+  robotsTxt       String?  @db.Text
+
+  // Analytics
+  googleAnalyticsId String?
+  facebookPixelId   String?
+
+  // Custom Code
+  customCss  String? @db.Text
+  customJs   String? @db.Text
+  headerCode String? @db.Text
+  footerCode String? @db.Text
+
+  // Relations
+  pages       WebsitePage[]
+  blogPosts   WebsiteBlogPost[]
+  products    WebsiteProduct[]
+  bookings    WebsiteBooking[]
+  users       WebsiteUser[]
+  seoSettings WebsiteSEO[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId])
+  @@index([status])
+  @@index([isLive])
+}
+
+model WebsitePage {
+  id        Int            @id @default(autoincrement())
+  websiteId Int
+  website   WebsiteProject @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  // Page Info
+  title    String
+  slug     String
+  path     String
+  pageType String @default("custom") // home, about, contact, product, blog, custom
+
+  // Content
+  content       String  @db.Text // JSON string for page builder blocks
+  excerpt       String? @db.Text
+  featuredImage String?
+
+  // Layout
+  layout   String  @default("default") // default, fullwidth, sidebar-left, sidebar-right
+  template String?
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  metaKeywords    String[]
+  ogImage         String?
+
+  // Status
+  status       String    @default("draft") // draft, published, scheduled
+  publishedAt  DateTime?
+  scheduledFor DateTime?
+
+  // Hierarchy
+  parentId Int?
+  parent   WebsitePage?  @relation("PageHierarchy", fields: [parentId], references: [id])
+  children WebsitePage[] @relation("PageHierarchy")
+
+  // Settings
+  isHomePage Boolean @default(false)
+  showInMenu Boolean @default(true)
+  menuOrder  Int     @default(0)
+
+  // Author
+  authorId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([websiteId, slug])
+  @@index([websiteId])
+  @@index([status])
+  @@index([pageType])
+}
+
+model WebsiteBlogPost {
+  id        Int            @id @default(autoincrement())
+  websiteId Int
+  website   WebsiteProject @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  // Post Info
+  title   String
+  slug    String
+  content String  @db.Text
+  excerpt String? @db.Text
+
+  // Media
+  featuredImage String?
+  gallery       String[] // Array of image URLs
+
+  // Taxonomy
+  categoryId Int?
+  category   WebsiteBlogCategory? @relation(fields: [categoryId], references: [id])
+  tags       String[]
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  metaKeywords    String[]
+
+  // Author
+  authorId   Int?
+  authorName String?
+
+  // Status
+  status       String    @default("draft") // draft, published, scheduled
+  publishedAt  DateTime?
+  scheduledFor DateTime?
+
+  // Engagement
+  viewCount    Int @default(0)
+  likeCount    Int @default(0)
+  commentCount Int @default(0)
+
+  // Comments
+  comments WebsiteBlogComment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([websiteId, slug])
+  @@index([websiteId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([publishedAt])
+}
+
+model WebsiteBlogCategory {
+  id        Int @id @default(autoincrement())
+  websiteId Int
+
+  name        String
+  slug        String
+  description String? @db.Text
+
+  // Hierarchy
+  parentId Int?
+  parent   WebsiteBlogCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children WebsiteBlogCategory[] @relation("CategoryHierarchy")
+
+  // Relations
+  posts WebsiteBlogPost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([websiteId, slug])
+  @@index([websiteId])
+  @@index([parentId])
+}
+
+model WebsiteBlogComment {
+  id     Int             @id @default(autoincrement())
+  postId Int
+  post   WebsiteBlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // Author
+  authorName  String
+  authorEmail String
+  authorUrl   String?
+
+  // Content
+  content String @db.Text
+
+  // Moderation
+  status    String  @default("pending") // pending, approved, spam, trash
+  ipAddress String?
+  userAgent String?
+
+  // Hierarchy
+  parentId Int?
+  parent   WebsiteBlogComment?  @relation("CommentHierarchy", fields: [parentId], references: [id])
+  replies  WebsiteBlogComment[] @relation("CommentHierarchy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model WebsiteProduct {
+  id        Int            @id @default(autoincrement())
+  websiteId Int
+  website   WebsiteProject @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  // Product Info
+  name             String
+  slug             String
+  description      String  @db.Text
+  shortDescription String? @db.Text
+
+  // Pricing
+  dailyPrice    Float?
+  weeklyPrice   Float?
+  monthlyPrice  Float?
+  depositAmount Float?
+  currency      String @default("TRY")
+
+  // Media
+  images   String[] // Array of image URLs
+  videoUrl String?
+
+  // Inventory
+  sku           String? @unique
+  stockQuantity Int     @default(1)
+
+  // Category
+  category String?
+  tags     String[]
+
+  // Availability
+  isAvailable    Boolean   @default(true)
+  availableFrom  DateTime?
+  availableUntil DateTime?
+
+  // Booking Rules
+  minRentalDays Int  @default(1)
+  maxRentalDays Int?
+
+  // SEO
+  metaTitle       String?
+  metaDescription String? @db.Text
+
+  // Relations
+  bookings WebsiteBooking[]
+
+  // Stats
+  viewCount    Int @default(0)
+  bookingCount Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([websiteId, slug])
+  @@index([websiteId])
+  @@index([isAvailable])
+  @@index([category])
+}
+
+model WebsiteBooking {
+  id        Int            @id @default(autoincrement())
+  websiteId Int
+  website   WebsiteProject @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   WebsiteProduct @relation(fields: [productId], references: [id])
+
+  userId Int?
+  user   WebsiteUser? @relation(fields: [userId], references: [id])
+
+  // Booking Info
+  bookingNumber String   @unique
+  startDate     DateTime
+  endDate       DateTime
+
+  // Customer Info
+  customerName  String
+  customerEmail String
+  customerPhone String?
+
+  // Pricing
+  totalDays     Int
+  dailyRate     Float
+  totalAmount   Float
+  depositAmount Float?
+
+  // Payment
+  paymentStatus String  @default("pending") // pending, paid, refunded
+  paymentMethod String?
+  transactionId String?
+
+  // Status
+  status String @default("pending") // pending, confirmed, cancelled, completed
+
+  // Notes
+  notes String? @db.Text
+
+  // Payment Relations
+  payments WebsitePayment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([websiteId])
+  @@index([productId])
+  @@index([userId])
+  @@index([status])
+  @@index([startDate, endDate])
+}
+
+model WebsitePayment {
+  id        Int            @id @default(autoincrement())
+  bookingId Int
+  booking   WebsiteBooking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  amount   Float
+  currency String @default("TRY")
+
+  paymentMethod String // credit_card, bank_transfer, cash
+
+  status String @default("pending") // pending, completed, failed, refunded
+
+  // Gateway Info
+  gatewayName     String? // iyzico, stripe, paypal
+  transactionId   String?
+  gatewayResponse String? @db.Text // JSON response
+
+  // Card Info (encrypted/tokenized)
+  cardLastFour String?
+  cardType     String?
+
+  paidAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([status])
+  @@index([paidAt])
+}
+
+model WebsiteUser {
+  id        Int            @id @default(autoincrement())
+  websiteId Int
+  website   WebsiteProject @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  // Auth
+  email    String
+  password String
+
+  // Profile
+  firstName String
+  lastName  String
+  phone     String?
+  avatar    String?
+
+  // Role
+  role String @default("customer") // admin, vendor, customer
+
+  // Status
+  isActive          Boolean @default(true)
+  isVerified        Boolean @default(false)
+  verificationToken String?
+
+  // Password Reset
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  // Relations
+  bookings WebsiteBooking[]
+
+  // Activity
+  lastLogin DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([websiteId, email])
+  @@index([websiteId])
+  @@index([email])
+  @@index([role])
+}
+
+model WebsiteSEO {
+  id        Int            @id @default(autoincrement())
+  websiteId Int
+  website   WebsiteProject @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  // Target
+  targetType String // page, post, product
+  targetId   Int
+
+  // SEO Data
+  focusKeyword    String?
+  metaTitle       String?
+  metaDescription String? @db.Text
+
+  // Open Graph
+  ogTitle       String?
+  ogDescription String? @db.Text
+  ogImage       String?
+  ogType        String?
+
+  // Twitter Card
+  twitterTitle       String?
+  twitterDescription String? @db.Text
+  twitterImage       String?
+
+  // Schema.org
+  schemaMarkup String? @db.Text // JSON-LD
+
+  // Analysis
+  seoScore         Int? // 0-100
+  readabilityScore Int? // 0-100
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([websiteId, targetType, targetId])
+  @@index([websiteId])
+  @@index([targetType, targetId])
+}
+
+model WebsiteStats {
+  id        Int @id @default(autoincrement())
+  websiteId Int
+
+  date DateTime
+
+  // Traffic
+  visitors       Int    @default(0)
+  pageViews      Int    @default(0)
+  uniqueVisitors Int    @default(0)
+  bounceRate     Float?
+  avgDuration    Int? // seconds
+
+  // Sources
+  organicSearch Int @default(0)
+  directTraffic Int @default(0)
+  referral      Int @default(0)
+  social        Int @default(0)
+
+  // Engagement
+  newUsers       Int @default(0)
+  returningUsers Int @default(0)
+
+  // Conversions
+  bookings Int   @default(0)
+  revenue  Float @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@unique([websiteId, date])
+  @@index([websiteId])
+  @@index([date])
+}
+
+model WebsiteSecurityLog {
+  id        Int @id @default(autoincrement())
+  websiteId Int
+
+  // Event
+  eventType String // login, logout, failed_login, page_edit, user_created, etc.
+  severity  String @default("info") // info, warning, error, critical
+
+  // User
+  userId    Int?
+  userEmail String?
+  userRole  String?
+
+  // Request
+  ipAddress String?
+  userAgent String?
+
+  // Details
+  description String? @db.Text
+  metadata    String? @db.Text // JSON
+
+  createdAt DateTime @default(now())
+
+  @@index([websiteId])
+  @@index([eventType])
+  @@index([severity])
   @@index([createdAt])
 }

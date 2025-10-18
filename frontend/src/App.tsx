@@ -18,6 +18,8 @@ import Suppliers from './pages/Suppliers'
 import Accounting from './pages/Accounting'
 import Social from './pages/Social'
 import Website from './pages/Website'
+import SiteBuilder from './pages/website/SiteBuilder'
+import ContentManagement from './pages/website/ContentManagement'
 import Todo from './pages/Todo'
 import Messaging from './pages/Messaging'
 import Meetings from './pages/Meetings'
@@ -71,6 +73,8 @@ export default function App(){
           <Route path='/accounting' element={<Accounting/>} />
           <Route path='/social' element={<Social/>} />
           <Route path='/website' element={<Website/>} />
+          <Route path='/website/builder' element={<SiteBuilder/>} />
+          <Route path='/website/cms' element={<ContentManagement/>} />
           <Route path='/todo' element={<Todo/>} />
           <Route path='/messaging' element={<Messaging/>} />
           <Route path='/meetings' element={<Meetings/>} />
