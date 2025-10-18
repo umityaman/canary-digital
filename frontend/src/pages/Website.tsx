@@ -14,6 +14,9 @@ import {
   Eye,
   Clock,
   ArrowRight,
+  Bell,
+  Award,
+  Star,
 } from 'lucide-react';
 
 const Website: React.FC = () => {
@@ -114,46 +117,58 @@ const Website: React.FC = () => {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Toplam Ziyaretçi</span>
-              <Eye size={20} className="text-neutral-700" />
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <Eye className="text-neutral-700" size={24} />
+              </div>
+              <span className="text-xs text-neutral-700 font-medium">Bu Ay</span>
             </div>
-            <div className="text-3xl font-bold text-neutral-900">12.5K</div>
-            <div className="flex items-center gap-1 text-xs text-neutral-600 mt-1">
+            <h3 className="text-2xl font-bold text-neutral-900 mb-1">12.5K</h3>
+            <p className="text-sm text-neutral-600">Toplam Ziyaretçi</p>
+            <div className="flex items-center gap-1 text-xs text-green-600 mt-2">
               <TrendingUp size={14} />
-              <span>+15% bu ay</span>
+              <span>+15%</span>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Aktif Kullanıcılar</span>
-              <Users size={20} className="text-neutral-700" />
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <Users className="text-neutral-700" size={24} />
+              </div>
+              <span className="text-xs text-neutral-700 font-medium">Aktif</span>
             </div>
-            <div className="text-3xl font-bold text-neutral-900">234</div>
-            <div className="flex items-center gap-1 text-xs text-neutral-600 mt-1">
+            <h3 className="text-2xl font-bold text-neutral-900 mb-1">234</h3>
+            <p className="text-sm text-neutral-600">Kullanıcılar</p>
+            <div className="flex items-center gap-1 text-xs text-green-600 mt-2">
               <TrendingUp size={14} />
-              <span>+8% bu hafta</span>
+              <span>+8%</span>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Ortalama Süre</span>
-              <Clock size={20} className="text-neutral-700" />
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <Clock className="text-neutral-700" size={24} />
+              </div>
+              <span className="text-xs text-neutral-700 font-medium">Ortalama</span>
             </div>
-            <div className="text-3xl font-bold text-neutral-900">3:45</div>
-            <div className="text-xs text-neutral-600 mt-1">dakika</div>
+            <h3 className="text-2xl font-bold text-neutral-900 mb-1">3:45</h3>
+            <p className="text-sm text-neutral-600">Oturum Süresi</p>
+            <p className="text-xs text-neutral-500 mt-2">dakika</p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Dönüşüm Oranı</span>
-              <TrendingUp size={20} className="text-neutral-700" />
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <TrendingUp className="text-neutral-700" size={24} />
+              </div>
+              <span className="text-xs text-neutral-700 font-medium">Oran</span>
             </div>
-            <div className="text-3xl font-bold text-neutral-900">4.2%</div>
-            <div className="text-xs text-neutral-600 mt-1">rezervasyon/ziyaret</div>
+            <h3 className="text-2xl font-bold text-neutral-900 mb-1">4.2%</h3>
+            <p className="text-sm text-neutral-600">Dönüşüm</p>
+            <p className="text-xs text-neutral-500 mt-2">rezervasyon/ziyaret</p>
           </div>
         </div>
       </div>
@@ -166,7 +181,7 @@ const Website: React.FC = () => {
             <Link
               key={module.id}
               to={module.link}
-              className="group bg-white rounded-xl border border-neutral-200 hover:border-neutral-900 hover:shadow-xl transition-all overflow-hidden"
+              className="group bg-white rounded-2xl shadow-sm border border-neutral-200 hover:border-neutral-900 hover:shadow-xl transition-all overflow-hidden"
             >
               {/* Gradient Header */}
               <div className={`bg-gradient-to-br ${module.color} p-6`}>
@@ -194,31 +209,37 @@ const Website: React.FC = () => {
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-neutral-200 p-6">
-          <h3 className="text-lg font-bold text-neutral-900 mb-4">Son Aktiviteler</h3>
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <h3 className="text-lg font-bold text-neutral-900 mb-4 flex items-center">
+            <Bell className="mr-2 text-neutral-700" size={20} />
+            Son Aktiviteler
+          </h3>
           <div className="space-y-3">
             {[
-              { action: 'Yeni sayfa oluşturuldu', page: 'Ürünlerimiz', time: '5 dk önce' },
-              { action: 'Blog yazısı yayınlandı', page: 'Kiralama İpuçları', time: '1 saat önce' },
-              { action: 'SEO ayarları güncellendi', page: 'Ana Sayfa', time: '2 saat önce' },
-              { action: 'Yeni rezervasyon', page: 'Sony A7 IV', time: '3 saat önce' },
+              { action: 'Yeni sayfa oluşturuldu', page: 'Ürünlerimiz', time: '5 dk önce', color: 'bg-green-500' },
+              { action: 'Blog yazısı yayınlandı', page: 'Kiralama İpuçları', time: '1 saat önce', color: 'bg-blue-500' },
+              { action: 'SEO ayarları güncellendi', page: 'Ana Sayfa', time: '2 saat önce', color: 'bg-yellow-500' },
+              { action: 'Yeni rezervasyon', page: 'Sony A7 IV', time: '3 saat önce', color: 'bg-green-500' },
             ].map((activity, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors"
+                className="flex items-start"
               >
-                <div>
-                  <div className="text-sm font-medium text-neutral-900">{activity.action}</div>
-                  <div className="text-xs text-neutral-600">{activity.page}</div>
+                <span className={`w-2 h-2 ${activity.color} rounded-full mr-3 mt-2`}></span>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-neutral-900">{activity.action}</p>
+                  <p className="text-xs text-neutral-600">{activity.page} • {activity.time}</p>
                 </div>
-                <div className="text-xs text-neutral-500">{activity.time}</div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-neutral-200 p-6">
-          <h3 className="text-lg font-bold text-neutral-900 mb-4">Popüler Sayfalar</h3>
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <h3 className="text-lg font-bold text-neutral-900 mb-4 flex items-center">
+            <Award className="mr-2 text-neutral-700" size={20} />
+            Popüler Sayfalar
+          </h3>
           <div className="space-y-3">
             {[
               { page: 'Ana Sayfa', views: '3.5K', rate: '+12%' },
@@ -228,15 +249,18 @@ const Website: React.FC = () => {
             ].map((page, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg"
+                className="flex items-center justify-between border-b border-neutral-100 pb-2"
               >
-                <div className="flex items-center gap-3">
-                  <Eye size={16} className="text-neutral-700" />
-                  <div className="text-sm font-medium text-neutral-900">{page.page}</div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg">⭐</span>
+                  <div>
+                    <p className="text-sm font-medium text-neutral-900">{page.page}</p>
+                    <p className="text-xs text-neutral-600">{page.views} görüntülenme</p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-sm font-bold text-neutral-900">{page.views}</div>
-                  <div className="text-xs text-neutral-600">{page.rate}</div>
+                <div className="flex items-center space-x-1">
+                  <Star className="text-yellow-500 fill-yellow-500" size={14} />
+                  <span className="text-sm font-medium text-green-600">{page.rate}</span>
                 </div>
               </div>
             ))}
