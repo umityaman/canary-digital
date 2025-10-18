@@ -24,6 +24,8 @@ import Meetings from './pages/Meetings'
 import Tools from './pages/Tools'
 import CustomerService from './pages/CustomerService'
 import Production from './pages/Production'
+import ProjectManagement from './pages/production/ProjectManagement'
+import BudgetManagement from './pages/production/BudgetManagement'
 import TechSupport from './pages/TechSupport'
 import TechnicalService from './pages/TechnicalService'
 import Admin from './pages/Admin'
@@ -75,6 +77,8 @@ export default function App(){
           <Route path='/tools' element={<Tools/>} />
           <Route path='/customer-service' element={<CustomerService/>} />
           <Route path='/production' element={<Production/>} />
+          <Route path='/production/projects' element={<ProjectManagement/>} />
+          <Route path='/production/budget' element={<BudgetManagement/>} />
           <Route path='/tech-support' element={<TechSupport/>} />
           <Route path='/technical-service' element={<TechnicalService/>} />
           <Route path='/admin' element={<Admin/>} />
