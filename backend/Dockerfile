@@ -8,20 +8,17 @@ WORKDIR /usr/src/app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install ALL dependencies (including dev for build)
+# Install ALL dependencies
 RUN npm ci
 
-# Copy source code and tsconfig
+# Copy source code
 COPY . .
 
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build TypeScript to JavaScript
-RUN npm run build
-
 # Cloud Run automatically sets PORT env var
 # Backend uses: const PORT = process.env.PORT || 4000
 
-# Run database migrations and start the app
-CMD ["sh", "-c", "npx prisma db push --accept-data-loss && node dist/index.js"]
+# Run database migrations and start with ts-node (skip type checking)
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npx ts-node --transpile-only --skip-project src/index.ts"]

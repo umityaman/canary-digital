@@ -520,7 +520,7 @@ class SocialMediaService {
     // If not scheduled, publish immediately
     if (!scheduledFor) {
       try {
-        await this.publishToPlat form(post.id);
+        await this.publishToPlatform(post.id);
       } catch (error: any) {
         await prisma.socialMediaPost.update({
           where: { id: post.id },
