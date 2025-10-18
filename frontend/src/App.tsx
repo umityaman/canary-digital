@@ -33,6 +33,16 @@ import CustomerService from './pages/CustomerService'
 import Production from './pages/Production'
 import ProjectManagement from './pages/production/ProjectManagement'
 import BudgetManagement from './pages/production/BudgetManagement'
+import TeamManagement from './pages/production/TeamManagement'
+import SchedulePlanning from './pages/production/SchedulePlanning'
+import PostProduction from './pages/production/PostProduction'
+import Contracts from './pages/production/Contracts'
+import EquipmentRental from './pages/production/EquipmentRental'
+import Clients from './pages/production/Clients'
+import Reports from './pages/production/Reports'
+import Communications from './pages/production/Communications'
+import Integrations from './pages/production/Integrations'
+import ProductionSettings from './pages/production/ProductionSettings'
 import TechSupport from './pages/TechSupport'
 import TechnicalService from './pages/TechnicalService'
 import Admin from './pages/Admin'
@@ -93,6 +103,16 @@ export default function App(){
           <Route path='/production' element={<Production/>} />
           <Route path='/production/projects' element={<ProjectManagement/>} />
           <Route path='/production/budget' element={<BudgetManagement/>} />
+          <Route path='/production/team' element={<TeamManagement/>} />
+          <Route path='/production/schedule' element={<SchedulePlanning/>} />
+          <Route path='/production/post-production' element={<PostProduction/>} />
+          <Route path='/production/contracts' element={<Contracts/>} />
+          <Route path='/production/equipment' element={<EquipmentRental/>} />
+          <Route path='/production/clients' element={<Clients/>} />
+          <Route path='/production/reports' element={<Reports/>} />
+          <Route path='/production/communications' element={<Communications/>} />
+          <Route path='/production/integrations' element={<Integrations/>} />
+          <Route path='/production/settings' element={<ProductionSettings/>} />
           <Route path='/tech-support' element={<TechSupport/>} />
           <Route path='/technical-service' element={<TechnicalService/>} />
           <Route path='/admin' element={<Admin/>} />
