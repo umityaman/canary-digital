@@ -62,7 +62,7 @@ export default function FloatingToolsWidget() {
   })
 
   return (
-    <div className="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-50">
+    <div className="fixed right-6 top-24 flex flex-col gap-3 z-50">
       {/* Clock Button & Panel */}
       <div className="relative">
         <button

@@ -72,7 +72,7 @@ export default function Dashboard() {
   const formatPercentage = (value: number) => {
     const isPositive = value >= 0;
     return (
-      <span className={`flex items-center ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+      <span className={`flex items-center ${isPositive ? 'text-neutral-700' : 'text-neutral-600'}`}>
         {isPositive ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
         <span className="ml-1">{Math.abs(value).toFixed(1)}%</span>
       </span>
@@ -195,7 +195,7 @@ export default function Dashboard() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                 <div className="flex items-center">
-                  <CheckCircle className="text-green-600 mr-3" size={20} />
+                  <CheckCircle className="text-neutral-900 mr-3" size={20} />
                   <span className="text-neutral-700 font-medium">Uygun</span>
                 </div>
                 <span className="font-bold text-neutral-900">
@@ -204,7 +204,7 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                 <div className="flex items-center">
-                  <Clock className="text-orange-600 mr-3" size={20} />
+                  <Clock className="text-neutral-700 mr-3" size={20} />
                   <span className="text-neutral-700 font-medium">Kullanımda</span>
                 </div>
                 <span className="font-bold text-neutral-900">
@@ -213,7 +213,7 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                 <div className="flex items-center">
-                  <Wrench className="text-red-600 mr-3" size={20} />
+                  <Wrench className="text-neutral-600 mr-3" size={20} />
                   <span className="text-neutral-700 font-medium">Bakımda</span>
                 </div>
                 <span className="font-bold text-neutral-900">
@@ -246,9 +246,9 @@ export default function Dashboard() {
                     <span
                       className={`px-3 py-1 text-xs font-medium rounded-full ${
                         reservation.status === 'CONFIRMED'
-                          ? 'bg-green-100 text-green-800'
+                          ? 'bg-neutral-900 text-white'
                           : reservation.status === 'PENDING'
-                          ? 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-neutral-300 text-neutral-800'
                           : 'bg-neutral-100 text-neutral-800'
                       }`}
                     >
@@ -305,8 +305,8 @@ export default function Dashboard() {
                         <span
                           className={`px-3 py-1 text-xs font-medium rounded-full ${
                             reservation.status === 'CONFIRMED'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-yellow-100 text-yellow-800'
+                              ? 'bg-neutral-900 text-white'
+                              : 'bg-neutral-300 text-neutral-800'
                           }`}
                         >
                           {reservation.status}
