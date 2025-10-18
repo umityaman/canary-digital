@@ -1,5 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Search, Plus, Edit, Trash2, Building2, Mail, Phone, Globe } from 'lucide-react';
+import { 
+  Search, Plus, Edit, Trash2, Building2, Mail, Phone, Globe,
+  Package, FileCheck, Users, DollarSign, Bell, Award, Star
+} from 'lucide-react';
 import { useSupplierStore, Supplier } from '../stores/supplierStore';
 import SupplierModal, { SupplierFormData } from '../components/modals/SupplierModal';
 
@@ -77,6 +80,53 @@ const Suppliers: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <Users className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Aktif</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{suppliers.length}</h3>
+          <p className="text-sm text-neutral-600">Tedarikçi Firma</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <Package className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Müsait</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">342</h3>
+          <p className="text-sm text-neutral-600">Ekipman Havuzu</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <FileCheck className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Bekliyor</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">8</h3>
+          <p className="text-sm text-neutral-600">Talep</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <DollarSign className="text-neutral-700" size={24} />
+            </div>
+            <span className="text-xs text-neutral-700 font-medium">Bu Ay</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">₺185K</h3>
+          <p className="text-sm text-neutral-600">Kiralama</p>
+        </div>
+      </div>
+
       {/* Search and Action Bar */}
       <div className="flex items-center gap-4">
         <div className="flex-1 relative">
