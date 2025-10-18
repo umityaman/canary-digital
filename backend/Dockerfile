@@ -20,5 +20,5 @@ RUN npx prisma generate
 # Cloud Run automatically sets PORT env var
 # Backend uses: const PORT = process.env.PORT || 4000
 
-# TEMPORARY: Use minimal server for debugging
-CMD ["npx", "ts-node", "--transpile-only", "src/minimal-index.ts"]
+# Start full application with all routes
+CMD ["npx", "ts-node", "--transpile-only", "src/index.ts"]
