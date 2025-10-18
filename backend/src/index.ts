@@ -1,8 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-console.log('Loading app...');
 import app from './app';
-console.log('App loaded successfully!');
 import { startAllSchedulers } from './services/scheduler';
 import { initializeTwilio } from './services/whatsapp.service';
 import logger from './config/logger';
