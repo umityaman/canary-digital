@@ -63,9 +63,8 @@ jobs:
       - name: Get Backend URL
         id: get-backend-url
         run: |
-          URL=$(gcloud run services describe canary-backend \
-            --region=${{ env.REGION }} \
-            --format='value(status.url)')
+          # Use hardcoded stable backend URL instead of dynamic retrieval
+          URL="https://canary-backend-672344972017.europe-west1.run.app"
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "Backend URL: $URL"
 
