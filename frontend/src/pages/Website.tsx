@@ -19,6 +19,12 @@ import {
   Palette,
   FileEdit,
   Zap,
+  Check,
+  ExternalLink,
+  Sparkles,
+  Monitor,
+  Smartphone,
+  Settings,
 } from 'lucide-react';
 
 type Tab = 'dashboard' | 'builder' | 'cms' | 'shop' | 'embed' | 'apps' | 'seo' | 'analytics';
@@ -42,7 +48,7 @@ const Website: React.FC = () => {
       case 'dashboard':
         return renderDashboard();
       case 'builder':
-        return renderPlaceholder('Site Oluşturucu', 'Tema seçimi ve özelleştirme özellikleri yakında eklenecek');
+        return renderSiteBuilder();
       case 'cms':
         return renderPlaceholder('İçerik Yönetimi', 'Sayfa, blog ve medya yönetimi özellikleri yakında eklenecek');
       case 'shop':
@@ -74,6 +80,276 @@ const Website: React.FC = () => {
       </div>
     </div>
   );
+
+  const renderSiteBuilder = () => {
+    const themes = [
+      {
+        id: 1,
+        name: 'Modern Dark',
+        category: 'Profesyonel',
+        image: '🎨',
+        color: 'from-neutral-900 to-neutral-800',
+        isActive: true,
+        features: ['Responsive', 'SEO Ready', 'Fast Loading'],
+      },
+      {
+        id: 2,
+        name: 'Minimal White',
+        category: 'Minimalist',
+        image: '✨',
+        color: 'from-neutral-100 to-white',
+        isActive: false,
+        features: ['Clean Design', 'Typography', 'Animations'],
+      },
+      {
+        id: 3,
+        name: 'Creative Studio',
+        category: 'Yaratıcı',
+        image: '🎭',
+        color: 'from-purple-500 to-pink-500',
+        isActive: false,
+        features: ['Portfolio', 'Gallery', 'Video Support'],
+      },
+      {
+        id: 4,
+        name: 'E-commerce Pro',
+        category: 'E-ticaret',
+        image: '🛒',
+        color: 'from-blue-500 to-cyan-500',
+        isActive: false,
+        features: ['Product Grid', 'Cart', 'Checkout'],
+      },
+      {
+        id: 5,
+        name: 'Business Elite',
+        category: 'Kurumsal',
+        image: '💼',
+        color: 'from-neutral-700 to-neutral-600',
+        isActive: false,
+        features: ['Corporate', 'Trust Elements', 'CTA'],
+      },
+      {
+        id: 6,
+        name: 'Rental Focus',
+        category: 'Kiralama',
+        image: '📦',
+        color: 'from-green-500 to-emerald-500',
+        isActive: false,
+        features: ['Booking', 'Availability', 'Calendar'],
+      },
+    ];
+
+    return (
+      <div className="space-y-6">
+        {/* Active Site Info */}
+        <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 p-6 rounded-2xl text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center">
+                <Globe size={32} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-xl font-bold">canary-rental.com</h3>
+                  <span className="px-2 py-1 bg-green-500 text-white text-xs rounded-full flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                    Yayında
+                  </span>
+                </div>
+                <p className="text-sm text-white/70">Modern Dark - Profesyonel Tema</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-colors text-sm font-medium">
+                <Monitor size={16} />
+                Önizle
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-colors text-sm font-medium">
+                <Settings size={16} />
+                Özelleştir
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2.5 bg-white text-neutral-900 hover:bg-white/90 rounded-xl transition-colors text-sm font-medium">
+                <ExternalLink size={16} />
+                Siteyi Aç
+              </button>
+            </div>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="bg-white/5 p-4 rounded-xl">
+              <p className="text-sm text-white/70 mb-1">Sayfa Sayısı</p>
+              <p className="text-2xl font-bold">12</p>
+            </div>
+            <div className="bg-white/5 p-4 rounded-xl">
+              <p className="text-sm text-white/70 mb-1">Son Güncelleme</p>
+              <p className="text-2xl font-bold">2 saat önce</p>
+            </div>
+            <div className="bg-white/5 p-4 rounded-xl">
+              <p className="text-sm text-white/70 mb-1">Performans</p>
+              <p className="text-2xl font-bold text-green-400">98/100</p>
+            </div>
+            <div className="bg-white/5 p-4 rounded-xl">
+              <p className="text-sm text-white/70 mb-1">SEO Skoru</p>
+              <p className="text-2xl font-bold text-blue-400">92/100</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Theme Gallery */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-xl font-bold text-neutral-900">Tema Galerisi</h3>
+              <p className="text-sm text-neutral-600 mt-1">60+ profesyonel tema arasından seçim yapın</p>
+            </div>
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 rounded-xl transition-colors text-sm font-medium text-neutral-900">
+              <Sparkles size={16} />
+              Tüm Temalar
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {themes.map((theme) => (
+              <div
+                key={theme.id}
+                className={`bg-white rounded-2xl shadow-sm border-2 transition-all overflow-hidden ${
+                  theme.isActive 
+                    ? 'border-neutral-900 shadow-xl' 
+                    : 'border-neutral-200 hover:border-neutral-300'
+                }`}
+              >
+                {/* Theme Preview */}
+                <div className={`bg-gradient-to-br ${theme.color} h-40 flex items-center justify-center text-6xl relative`}>
+                  {theme.image}
+                  {theme.isActive && (
+                    <div className="absolute top-3 right-3 bg-neutral-900 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                      <Check size={14} />
+                      Aktif
+                    </div>
+                  )}
+                </div>
+
+                {/* Theme Info */}
+                <div className="p-5">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-bold text-neutral-900">{theme.name}</h4>
+                    <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-700 rounded-full">
+                      {theme.category}
+                    </span>
+                  </div>
+
+                  {/* Features */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {theme.features.map((feature, idx) => (
+                      <span key={idx} className="text-xs px-2 py-1 bg-neutral-50 text-neutral-600 rounded-md">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    {theme.isActive ? (
+                      <button className="flex-1 py-2.5 bg-neutral-900 text-white rounded-xl text-sm font-medium flex items-center justify-center gap-2">
+                        <Settings size={16} />
+                        Özelleştir
+                      </button>
+                    ) : (
+                      <>
+                        <button className="flex-1 py-2.5 bg-neutral-900 text-white hover:bg-neutral-800 rounded-xl text-sm font-medium transition-colors">
+                          Kullan
+                        </button>
+                        <button className="px-4 py-2.5 border border-neutral-300 hover:border-neutral-400 text-neutral-700 rounded-xl text-sm font-medium transition-colors">
+                          <Eye size={16} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Customization Options */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+            <h3 className="text-lg font-bold text-neutral-900 mb-4 flex items-center">
+              <Palette className="mr-2 text-neutral-700" size={20} />
+              Renk & Stil
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-neutral-700 mb-2 block">Ana Renk</label>
+                <div className="flex gap-2">
+                  {['#0f172a', '#7c3aed', '#2563eb', '#059669', '#dc2626', '#ea580c'].map((color, idx) => (
+                    <button
+                      key={idx}
+                      className={`w-10 h-10 rounded-xl border-2 transition-all ${
+                        idx === 0 ? 'border-neutral-900 scale-110' : 'border-neutral-200 hover:scale-105'
+                      }`}
+                      style={{ backgroundColor: color }}
+                    ></button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-neutral-700 mb-2 block">Yazı Tipi</label>
+                <select className="w-full p-3 border border-neutral-300 rounded-xl focus:outline-none focus:border-neutral-900">
+                  <option>Inter (Mevcut)</option>
+                  <option>Roboto</option>
+                  <option>Open Sans</option>
+                  <option>Lato</option>
+                  <option>Montserrat</option>
+                </select>
+              </div>
+              <button className="w-full py-3 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors font-medium">
+                Değişiklikleri Kaydet
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+            <h3 className="text-lg font-bold text-neutral-900 mb-4 flex items-center">
+              <Smartphone className="mr-2 text-neutral-700" size={20} />
+              Cihaz Önizlemesi
+            </h3>
+            <div className="space-y-3">
+              <button className="w-full flex items-center justify-between p-4 bg-neutral-900 text-white rounded-xl">
+                <div className="flex items-center gap-3">
+                  <Monitor size={20} />
+                  <div className="text-left">
+                    <p className="font-medium">Masaüstü</p>
+                    <p className="text-xs text-white/70">1920x1080 ve üzeri</p>
+                  </div>
+                </div>
+                <Check size={20} />
+              </button>
+              <button className="w-full flex items-center justify-between p-4 border border-neutral-300 hover:border-neutral-400 rounded-xl transition-colors">
+                <div className="flex items-center gap-3">
+                  <Monitor size={20} className="text-neutral-700" />
+                  <div className="text-left">
+                    <p className="font-medium text-neutral-900">Tablet</p>
+                    <p className="text-xs text-neutral-600">768x1024</p>
+                  </div>
+                </div>
+              </button>
+              <button className="w-full flex items-center justify-between p-4 border border-neutral-300 hover:border-neutral-400 rounded-xl transition-colors">
+                <div className="flex items-center gap-3">
+                  <Smartphone size={20} className="text-neutral-700" />
+                  <div className="text-left">
+                    <p className="font-medium text-neutral-900">Mobil</p>
+                    <p className="text-xs text-neutral-600">375x667</p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderDashboard = () => (
     <div className="space-y-6">
