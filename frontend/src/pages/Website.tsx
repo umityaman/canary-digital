@@ -42,6 +42,11 @@ import {
   Link2,
   BookOpen,
   Plug,
+  CreditCard,
+  Mail,
+  Share2,
+  PenTool,
+  Download,
 } from 'lucide-react';
 
 type Tab = 'dashboard' | 'builder' | 'cms' | 'shop' | 'embed' | 'apps' | 'seo' | 'analytics';
@@ -73,7 +78,7 @@ const Website: React.FC = () => {
       case 'embed':
         return renderEmbed();
       case 'apps':
-        return renderPlaceholder('Uygulamalar', 'Uygulama marketyeri ve entegrasyonlar yakında eklenecek');
+        return renderApps();
       case 'seo':
         return renderPlaceholder('SEO & Pazarlama', 'SEO araçları ve pazarlama özellikleri yakında eklenecek');
       case 'analytics':
@@ -1055,6 +1060,189 @@ const Website: React.FC = () => {
                 <p className="text-sm text-neutral-600">Entegrasyonu test edin ve canlıya alın</p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderApps = () => {
+    const categories = [
+      { id: 'payments', name: 'Ödeme', icon: <CreditCard size={18} />, count: 8, color: 'bg-green-100 text-green-700' },
+      { id: 'email', name: 'E-posta', icon: <Mail size={18} />, count: 12, color: 'bg-blue-100 text-blue-700' },
+      { id: 'analytics', name: 'Analitik', icon: <BarChart3 size={18} />, count: 6, color: 'bg-purple-100 text-purple-700' },
+      { id: 'design', name: 'Tasarım', icon: <PenTool size={18} />, count: 15, color: 'bg-pink-100 text-pink-700' },
+      { id: 'notifications', name: 'Bildirim', icon: <Bell size={18} />, count: 9, color: 'bg-orange-100 text-orange-700' },
+      { id: 'social', name: 'Sosyal Medya', icon: <Share2 size={18} />, count: 11, color: 'bg-cyan-100 text-cyan-700' },
+    ];
+
+    const apps = [
+      { id: 1, name: 'Stripe', category: 'Ödeme', description: 'Online ödeme altyapısı', icon: '💳', rating: 4.9, reviews: 12500, installed: true, popular: true },
+      { id: 2, name: 'PayPal', category: 'Ödeme', description: 'Güvenli ödeme sistemi', icon: '💰', rating: 4.7, reviews: 8900, installed: true, popular: true },
+      { id: 3, name: 'Google Analytics', category: 'Analitik', description: 'Web analiz araçları', icon: '📊', rating: 4.8, reviews: 15200, installed: true, popular: true },
+      { id: 4, name: 'Mailchimp', category: 'E-posta', description: 'E-posta pazarlama platformu', icon: '📧', rating: 4.6, reviews: 6700, installed: false, popular: true },
+      { id: 5, name: 'Zapier', category: 'Otomasyon', description: 'İş akışı otomasyonu', icon: '⚡', rating: 4.8, reviews: 9300, installed: false, popular: true },
+      { id: 6, name: 'Intercom', category: 'İletişim', description: 'Müşteri destek platformu', icon: '💬', rating: 4.7, reviews: 5400, installed: false, popular: false },
+      { id: 7, name: 'Hotjar', category: 'Analitik', description: 'Kullanıcı davranış analizi', icon: '🔥', rating: 4.5, reviews: 4200, installed: false, popular: false },
+      { id: 8, name: 'Calendly', category: 'Randevu', description: 'Randevu planlama aracı', icon: '📅', rating: 4.9, reviews: 7800, installed: false, popular: false },
+    ];
+
+    return (
+      <div className="space-y-6">
+        {/* App Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"><CheckCircle className="text-green-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Kurulu</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">3</h3>
+            <p className="text-sm text-neutral-600">Uygulama</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><Package className="text-blue-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Mevcut</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">61</h3>
+            <p className="text-sm text-neutral-600">Market'te</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><Star className="text-purple-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Ortalama</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">4.7</h3>
+            <p className="text-sm text-neutral-600">Puan</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"><Download className="text-orange-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Bu Ay</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">+8</h3>
+            <p className="text-sm text-neutral-600">Yeni Kurulum</p>
+          </div>
+        </div>
+
+        {/* Categories */}
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900 mb-4">Kategoriler</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {categories.map((cat) => (
+              <button key={cat.id} className={`p-4 ${cat.color} rounded-xl hover:shadow-md transition-all`}>
+                <div className="flex flex-col items-center text-center">
+                  {cat.icon}
+                  <p className="text-sm font-semibold mt-2">{cat.name}</p>
+                  <p className="text-xs mt-1">{cat.count} uygulama</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Installed Apps */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">Kurulu Uygulamalar</h3>
+              <p className="text-sm text-neutral-600 mt-1">Aktif olarak kullandığınız uygulamalar</p>
+            </div>
+            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">3 Aktif</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {apps.filter(app => app.installed).map((app) => (
+              <div key={app.id} className="p-4 border-2 border-green-500 rounded-xl bg-green-50/50">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-2xl shadow-sm">{app.icon}</div>
+                  <span className="px-2 py-1 bg-green-500 text-white rounded-full text-xs font-medium flex items-center gap-1">
+                    <Check size={12} />
+                    Aktif
+                  </span>
+                </div>
+                <h4 className="font-bold text-neutral-900 mb-1">{app.name}</h4>
+                <p className="text-xs text-neutral-600 mb-3">{app.description}</p>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-1">
+                    <Star className="text-yellow-500 fill-yellow-500" size={12} />
+                    <span className="text-xs font-medium">{app.rating}</span>
+                  </div>
+                  <span className="text-xs text-neutral-500">({app.reviews.toLocaleString()})</span>
+                </div>
+                <div className="flex gap-2">
+                  <button className="flex-1 py-1.5 bg-neutral-900 text-white rounded-lg text-xs font-medium hover:bg-neutral-800">Ayarlar</button>
+                  <button className="px-3 py-1.5 border border-neutral-300 rounded-lg text-xs hover:bg-neutral-50">Kaldır</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* App Marketplace */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200">
+          <div className="p-6 border-b border-neutral-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-neutral-900">Uygulama Marketi</h3>
+                <p className="text-sm text-neutral-600 mt-1">Yeni uygulamalar keşfedin ve kurun</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <input type="text" placeholder="Uygulama ara..." className="pl-4 pr-10 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:border-neutral-900 text-sm" />
+                  <Search className="absolute right-3 top-2.5 text-neutral-400" size={16} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {apps.filter(app => !app.installed).map((app) => (
+                <div key={app.id} className="p-4 border border-neutral-200 rounded-xl hover:border-neutral-300 hover:shadow-md transition-all">
+                  {app.popular && (
+                    <div className="flex items-center gap-1 mb-2">
+                      <Sparkles size={12} className="text-yellow-500" />
+                      <span className="text-xs text-yellow-600 font-medium">Popüler</span>
+                    </div>
+                  )}
+                  <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center text-2xl mb-3">{app.icon}</div>
+                  <h4 className="font-bold text-neutral-900 mb-1">{app.name}</h4>
+                  <p className="text-xs text-neutral-600 mb-2">{app.category}</p>
+                  <p className="text-xs text-neutral-600 mb-3">{app.description}</p>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-1">
+                      <Star className="text-yellow-500 fill-yellow-500" size={12} />
+                      <span className="text-xs font-medium">{app.rating}</span>
+                    </div>
+                    <span className="text-xs text-neutral-500">({app.reviews.toLocaleString()})</span>
+                  </div>
+                  <button className="w-full py-2 bg-neutral-900 text-white rounded-lg text-xs font-medium hover:bg-neutral-800 transition-colors">
+                    Kur
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Featured Apps */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white">
+            <div className="text-4xl mb-3">💳</div>
+            <h3 className="text-lg font-bold mb-2">Stripe Connect</h3>
+            <p className="text-sm text-white/80 mb-4">Küresel ödeme altyapısı - Ücretsiz başlayın</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Şimdi Kur →</button>
+          </div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white">
+            <div className="text-4xl mb-3">📊</div>
+            <h3 className="text-lg font-bold mb-2">Google Analytics 4</h3>
+            <p className="text-sm text-white/80 mb-4">Gelişmiş web analizi - Ücretsiz</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Şimdi Kur →</button>
+          </div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white">
+            <div className="text-4xl mb-3">📧</div>
+            <h3 className="text-lg font-bold mb-2">Mailchimp Pro</h3>
+            <p className="text-sm text-white/80 mb-4">E-posta pazarlama - 14 gün deneme</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Şimdi Kur →</button>
           </div>
         </div>
       </div>
