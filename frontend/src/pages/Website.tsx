@@ -47,6 +47,12 @@ import {
   Share2,
   PenTool,
   Download,
+  Target,
+  Megaphone,
+  Shield,
+  Activity,
+  FileCode,
+  Rocket,
 } from 'lucide-react';
 
 type Tab = 'dashboard' | 'builder' | 'cms' | 'shop' | 'embed' | 'apps' | 'seo' | 'analytics';
@@ -80,7 +86,7 @@ const Website: React.FC = () => {
       case 'apps':
         return renderApps();
       case 'seo':
-        return renderPlaceholder('SEO & Pazarlama', 'SEO araçları ve pazarlama özellikleri yakında eklenecek');
+        return renderSEO();
       case 'analytics':
         return renderPlaceholder('İstatistikler', 'Detaylı analitik raporlar ve grafikler yakında eklenecek');
       default:
@@ -1243,6 +1249,315 @@ const Website: React.FC = () => {
             <h3 className="text-lg font-bold mb-2">Mailchimp Pro</h3>
             <p className="text-sm text-white/80 mb-4">E-posta pazarlama - 14 gün deneme</p>
             <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Şimdi Kur →</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderSEO = () => {
+    return (
+      <div className="space-y-6">
+        {/* SEO Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"><Target className="text-green-600" size={20} /></div>
+              <span className="text-xs text-green-600 font-medium">Mükemmel</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">87/100</h3>
+            <p className="text-sm text-neutral-600">SEO Skoru</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><Activity className="text-blue-600" size={20} /></div>
+              <span className="text-xs text-blue-600 font-medium">+12%</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">95/100</h3>
+            <p className="text-sm text-neutral-600">Sayfa Hızı</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><Shield className="text-purple-600" size={20} /></div>
+              <span className="text-xs text-green-600 font-medium flex items-center gap-1"><Check size={12} />Aktif</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">SSL</h3>
+            <p className="text-sm text-neutral-600">Sertifika</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"><Megaphone className="text-orange-600" size={20} /></div>
+              <span className="text-xs text-orange-600 font-medium">+24%</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">3</h3>
+            <p className="text-sm text-neutral-600">Aktif Kampanya</p>
+          </div>
+        </div>
+
+        {/* SEO Score Breakdown */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">SEO Skor Analizi</h3>
+              <p className="text-sm text-neutral-600 mt-1">Web sitenizin SEO performansı</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="text-right">
+                <div className="text-3xl font-bold text-neutral-900">87</div>
+                <div className="text-xs text-neutral-600">/ 100</div>
+              </div>
+              <div className="w-20 h-20 relative">
+                <svg className="transform -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#22c55e" strokeWidth="3" strokeDasharray={`${87}, 100`} strokeLinecap="round" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-neutral-900">Meta Etiketler</span>
+                <span className="text-sm font-bold text-green-600">95/100</span>
+              </div>
+              <div className="w-full bg-neutral-100 rounded-full h-2">
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: '95%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-neutral-900">İçerik Kalitesi</span>
+                <span className="text-sm font-bold text-green-600">88/100</span>
+              </div>
+              <div className="w-full bg-neutral-100 rounded-full h-2">
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: '88%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-neutral-900">Teknik SEO</span>
+                <span className="text-sm font-bold text-yellow-600">75/100</span>
+              </div>
+              <div className="w-full bg-neutral-100 rounded-full h-2">
+                <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '75%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-neutral-900">Backlink Profili</span>
+                <span className="text-sm font-bold text-green-600">92/100</span>
+              </div>
+              <div className="w-full bg-neutral-100 rounded-full h-2">
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: '92%' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Meta Tags Editor */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                <FileCode className="text-blue-600" size={20} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-neutral-900">Meta Etiketler</h3>
+                <p className="text-xs text-neutral-600">SEO için önemli meta bilgiler</p>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Site Başlığı</label>
+                <input type="text" defaultValue="Canary Rental - Profesyonel Ekipman Kiralama" className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-neutral-900 text-sm" />
+                <p className="text-xs text-neutral-500 mt-1">48/60 karakter</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Meta Açıklama</label>
+                <textarea rows={3} defaultValue="Fotoğraf ve video çekimleriniz için profesyonel ekipman kiralama hizmeti. Kamera, lens, ışık ve ses ekipmanları." className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-neutral-900 text-sm" />
+                <p className="text-xs text-neutral-500 mt-1">142/160 karakter</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Anahtar Kelimeler</label>
+                <input type="text" defaultValue="ekipman kiralama, kamera kiralama, video ekipmanı" className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-neutral-900 text-sm" />
+              </div>
+              <button className="w-full py-2 bg-neutral-900 text-white rounded-lg text-sm font-medium hover:bg-neutral-800 transition-colors">
+                Değişiklikleri Kaydet
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                <FileText className="text-purple-600" size={20} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-neutral-900">Sitemap & Robots</h3>
+                <p className="text-xs text-neutral-600">Arama motorları için yapılandırma</p>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Check className="text-green-600" size={16} />
+                    <span className="text-sm font-medium text-neutral-900">Sitemap.xml</span>
+                  </div>
+                  <span className="text-xs text-green-600">Aktif</span>
+                </div>
+                <p className="text-xs text-neutral-600 mb-3">Son güncelleme: 2 saat önce</p>
+                <div className="flex gap-2">
+                  <button className="flex-1 py-1.5 bg-white border border-neutral-300 rounded-lg text-xs hover:bg-neutral-50">Görüntüle</button>
+                  <button className="flex-1 py-1.5 bg-neutral-900 text-white rounded-lg text-xs hover:bg-neutral-800">Yenile</button>
+                </div>
+              </div>
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Check className="text-blue-600" size={16} />
+                    <span className="text-sm font-medium text-neutral-900">Robots.txt</span>
+                  </div>
+                  <span className="text-xs text-blue-600">Yapılandırıldı</span>
+                </div>
+                <p className="text-xs text-neutral-600 mb-3">Tüm arama motorlarına açık</p>
+                <button className="w-full py-1.5 bg-white border border-neutral-300 rounded-lg text-xs hover:bg-neutral-50">Düzenle</button>
+              </div>
+              <div className="p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Shield className="text-purple-600" size={16} />
+                    <span className="text-sm font-medium text-neutral-900">SSL Sertifikası</span>
+                  </div>
+                  <span className="text-xs text-green-600 flex items-center gap-1"><Check size={12} />Güvenli</span>
+                </div>
+                <p className="text-xs text-neutral-600 mb-1">Sertifika: Let's Encrypt</p>
+                <p className="text-xs text-neutral-500">Geçerlilik: 89 gün</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Marketing Integrations */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200">
+          <div className="p-6 border-b border-neutral-200">
+            <h3 className="text-lg font-bold text-neutral-900">Pazarlama Entegrasyonları</h3>
+            <p className="text-sm text-neutral-600 mt-1">Reklam platformları ve analitik araçları</p>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 border-2 border-blue-500 rounded-xl bg-blue-50/50">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-2xl">📊</div>
+                  <span className="px-2 py-1 bg-blue-500 text-white rounded-full text-xs font-medium flex items-center gap-1">
+                    <Check size={12} />
+                    Aktif
+                  </span>
+                </div>
+                <h4 className="font-bold text-neutral-900 mb-1">Google Analytics</h4>
+                <p className="text-xs text-neutral-600 mb-3">Tracking ID: G-XXXXXXXXXX</p>
+                <div className="flex gap-2">
+                  <button className="flex-1 py-1.5 bg-neutral-900 text-white rounded-lg text-xs font-medium hover:bg-neutral-800">Ayarlar</button>
+                  <button className="px-3 py-1.5 border border-neutral-300 rounded-lg text-xs hover:bg-white">Kaldır</button>
+                </div>
+              </div>
+              <div className="p-4 border border-neutral-200 rounded-xl hover:border-neutral-300">
+                <div className="text-2xl mb-3">📢</div>
+                <h4 className="font-bold text-neutral-900 mb-1">Google Ads</h4>
+                <p className="text-xs text-neutral-600 mb-3">Conversion tracking & remarketing</p>
+                <button className="w-full py-2 bg-neutral-900 text-white rounded-lg text-xs font-medium hover:bg-neutral-800">
+                  Bağla
+                </button>
+              </div>
+              <div className="p-4 border border-neutral-200 rounded-xl hover:border-neutral-300">
+                <div className="text-2xl mb-3">👤</div>
+                <h4 className="font-bold text-neutral-900 mb-1">Facebook Pixel</h4>
+                <p className="text-xs text-neutral-600 mb-3">Retargeting & conversion tracking</p>
+                <button className="w-full py-2 bg-neutral-900 text-white rounded-lg text-xs font-medium hover:bg-neutral-800">
+                  Bağla
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Page Speed Insights */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">Sayfa Hızı Analizi</h3>
+              <p className="text-sm text-neutral-600 mt-1">Core Web Vitals ve performans metrikleri</p>
+            </div>
+            <button className="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-sm font-medium flex items-center gap-2">
+              <Activity size={16} />
+              Yeniden Test Et
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+              <div className="text-xs text-neutral-600 mb-2">First Contentful Paint</div>
+              <div className="text-2xl font-bold text-green-600 mb-1">0.8s</div>
+              <div className="flex items-center gap-1">
+                <div className="w-full bg-green-200 rounded-full h-1.5">
+                  <div className="bg-green-500 h-1.5 rounded-full" style={{ width: '95%' }}></div>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+              <div className="text-xs text-neutral-600 mb-2">Largest Contentful Paint</div>
+              <div className="text-2xl font-bold text-green-600 mb-1">1.2s</div>
+              <div className="flex items-center gap-1">
+                <div className="w-full bg-green-200 rounded-full h-1.5">
+                  <div className="bg-green-500 h-1.5 rounded-full" style={{ width: '92%' }}></div>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+              <div className="text-xs text-neutral-600 mb-2">Cumulative Layout Shift</div>
+              <div className="text-2xl font-bold text-yellow-600 mb-1">0.15</div>
+              <div className="flex items-center gap-1">
+                <div className="w-full bg-yellow-200 rounded-full h-1.5">
+                  <div className="bg-yellow-500 h-1.5 rounded-full" style={{ width: '75%' }}></div>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+              <div className="text-xs text-neutral-600 mb-2">Time to Interactive</div>
+              <div className="text-2xl font-bold text-green-600 mb-1">1.8s</div>
+              <div className="flex items-center gap-1">
+                <div className="w-full bg-green-200 rounded-full h-1.5">
+                  <div className="bg-green-500 h-1.5 rounded-full" style={{ width: '88%' }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+              <Target size={24} />
+            </div>
+            <h3 className="text-lg font-bold mb-2">SEO Optimizasyonu</h3>
+            <p className="text-sm text-white/80 mb-4">Meta etiketlerini ve içeriği optimize edin</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Optimize Et →</button>
+          </div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+              <Megaphone size={24} />
+            </div>
+            <h3 className="text-lg font-bold mb-2">Kampanya Oluştur</h3>
+            <p className="text-sm text-white/80 mb-4">Yeni pazarlama kampanyası başlatın</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Oluştur →</button>
+          </div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+              <BarChart3 size={24} />
+            </div>
+            <h3 className="text-lg font-bold mb-2">Raporları Görüntüle</h3>
+            <p className="text-sm text-white/80 mb-4">Detaylı SEO ve trafik raporları</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Raporlar →</button>
           </div>
         </div>
       </div>
