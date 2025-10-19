@@ -38,6 +38,10 @@ import {
   AlertCircle,
   CheckCircle,
   XCircle,
+  Copy,
+  Link2,
+  BookOpen,
+  Plug,
 } from 'lucide-react';
 
 type Tab = 'dashboard' | 'builder' | 'cms' | 'shop' | 'embed' | 'apps' | 'seo' | 'analytics';
@@ -67,7 +71,7 @@ const Website: React.FC = () => {
       case 'shop':
         return renderShop();
       case 'embed':
-        return renderPlaceholder('Embed & Entegrasyon', 'WordPress, Shopify ve diğer platform entegrasyonları yakında eklenecek');
+        return renderEmbed();
       case 'apps':
         return renderPlaceholder('Uygulamalar', 'Uygulama marketyeri ve entegrasyonlar yakında eklenecek');
       case 'seo':
@@ -825,6 +829,233 @@ const Website: React.FC = () => {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white"><ShoppingBag size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Yeni Ürün</h3><p className="text-sm text-white/80 mb-4">Kiralama ürünü ekle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Ekle →</button></div>
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white"><Box size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Stok Yönetimi</h3><p className="text-sm text-white/80 mb-4">Stok güncelle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Yönet →</button></div>
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-2xl text-white"><Calendar size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Rezervasyonlar</h3><p className="text-sm text-white/80 mb-4">Tüm rezervasyonları gör</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Görüntüle →</button></div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderEmbed = () => {
+    const platforms = [
+      { id: 1, name: 'WordPress', icon: '📝', description: 'Plugin ile tam entegrasyon', status: 'active', color: 'from-blue-500 to-blue-600', users: '2.5M+' },
+      { id: 2, name: 'Shopify', icon: '🛍️', description: 'E-ticaret mağazanıza ekleyin', status: 'inactive', color: 'from-green-500 to-green-600', users: '1.8M+' },
+      { id: 3, name: 'Squarespace', icon: '🎨', description: 'Embed kod ile entegrasyon', status: 'inactive', color: 'from-purple-500 to-purple-600', users: '850K+' },
+      { id: 4, name: 'WooCommerce', icon: '🛒', description: 'WordPress e-ticaret eklentisi', status: 'inactive', color: 'from-indigo-500 to-indigo-600', users: '1.2M+' },
+      { id: 5, name: 'Webflow', icon: '🌊', description: 'Custom kod entegrasyonu', status: 'inactive', color: 'from-cyan-500 to-cyan-600', users: '450K+' },
+      { id: 6, name: 'Custom HTML', icon: '💻', description: 'Kendi sitenize embed edin', status: 'inactive', color: 'from-neutral-700 to-neutral-800', users: 'Sınırsız' },
+    ];
+
+    const embedCode = `<!-- Canary Rental Widget -->
+<script src="https://canary-rental.com/embed.js"></script>
+<div id="canary-widget" 
+     data-site-id="YOUR_SITE_ID"
+     data-theme="modern"
+     data-language="tr">
+</div>
+<style>
+  #canary-widget {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+</style>`;
+
+    return (
+      <div className="space-y-6">
+        {/* Integration Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"><Plug className="text-green-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Aktif</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">1</h3>
+            <p className="text-sm text-neutral-600">Entegrasyon</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><Globe className="text-blue-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Toplam</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">6</h3>
+            <p className="text-sm text-neutral-600">Platform</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><Code className="text-purple-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Kullanım</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">1.2K</h3>
+            <p className="text-sm text-neutral-600">API Çağrısı</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"><TrendingUp className="text-orange-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Haftalık</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">+24%</h3>
+            <p className="text-sm text-neutral-600">Artış</p>
+          </div>
+        </div>
+
+        {/* Platform Cards */}
+        <div>
+          <h3 className="text-xl font-bold text-neutral-900 mb-4">Platform Entegrasyonları</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {platforms.map((platform) => (
+              <div key={platform.id} className={`bg-white rounded-2xl shadow-sm border-2 transition-all ${platform.status === 'active' ? 'border-green-500' : 'border-neutral-200 hover:border-neutral-300'}`}>
+                <div className={`bg-gradient-to-br ${platform.color} p-6 text-white`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-4xl">{platform.icon}</span>
+                    {platform.status === 'active' && (
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium flex items-center gap-1">
+                        <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                        Aktif
+                      </span>
+                    )}
+                  </div>
+                  <h4 className="text-xl font-bold mb-1">{platform.name}</h4>
+                  <p className="text-sm text-white/80">{platform.description}</p>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2 text-sm text-neutral-600">
+                      <Users size={14} />
+                      <span>{platform.users} kullanıcı</span>
+                    </div>
+                    {platform.status === 'active' ? (
+                      <span className="text-green-600 font-medium text-sm flex items-center gap-1">
+                        <CheckCircle size={14} />
+                        Bağlı
+                      </span>
+                    ) : (
+                      <span className="text-neutral-400 text-sm">Bağlı değil</span>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    {platform.status === 'active' ? (
+                      <>
+                        <button className="flex-1 py-2 bg-neutral-900 text-white rounded-lg text-sm font-medium hover:bg-neutral-800 transition-colors">Ayarlar</button>
+                        <button className="px-3 py-2 border border-neutral-300 rounded-lg text-sm hover:bg-neutral-50 transition-colors">Kaldır</button>
+                      </>
+                    ) : (
+                      <>
+                        <button className="flex-1 py-2 bg-neutral-900 text-white rounded-lg text-sm font-medium hover:bg-neutral-800 transition-colors">Bağlan</button>
+                        <button className="px-3 py-2 border border-neutral-300 rounded-lg text-sm hover:bg-neutral-50 transition-colors" title="Dokümantasyon">
+                          <BookOpen size={16} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Embed Code Generator */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200">
+          <div className="p-6 border-b border-neutral-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-neutral-900 flex items-center gap-2"><Code size={20} />Embed Kod Üretici</h3>
+                <p className="text-sm text-neutral-600 mt-1">Sitenize eklemek için hazır kod</p>
+              </div>
+              <button className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm font-medium">
+                <Copy size={16} />
+                Kodu Kopyala
+              </button>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="bg-neutral-900 rounded-xl p-6 text-neutral-100 font-mono text-sm overflow-x-auto">
+              <pre>{embedCode}</pre>
+            </div>
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-neutral-50 rounded-xl">
+                <p className="text-xs text-neutral-600 mb-2">Tema</p>
+                <select className="w-full p-2 border border-neutral-300 rounded-lg text-sm">
+                  <option>Modern</option>
+                  <option>Classic</option>
+                  <option>Minimal</option>
+                </select>
+              </div>
+              <div className="p-4 bg-neutral-50 rounded-xl">
+                <p className="text-xs text-neutral-600 mb-2">Dil</p>
+                <select className="w-full p-2 border border-neutral-300 rounded-lg text-sm">
+                  <option>Türkçe</option>
+                  <option>English</option>
+                  <option>Deutsch</option>
+                </select>
+              </div>
+              <div className="p-4 bg-neutral-50 rounded-xl">
+                <p className="text-xs text-neutral-600 mb-2">Genişlik</p>
+                <select className="w-full p-2 border border-neutral-300 rounded-lg text-sm">
+                  <option>1200px</option>
+                  <option>100%</option>
+                  <option>800px</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Setup Guides */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white">
+            <BookOpen size={32} className="mb-3" />
+            <h3 className="text-lg font-bold mb-2">API Dokümantasyonu</h3>
+            <p className="text-sm text-white/80 mb-4">Detaylı API referansı ve örnekler</p>
+            <button className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">
+              Dokümantasyonu Görüntüle
+              <ExternalLink size={14} />
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white">
+            <Link2 size={32} className="mb-3" />
+            <h3 className="text-lg font-bold mb-2">Webhook Ayarları</h3>
+            <p className="text-sm text-white/80 mb-4">Real-time bildirimler ve senkronizasyon</p>
+            <button className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">
+              Webhook Kurulumu
+              <Settings size={14} />
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Start */}
+        <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
+          <h3 className="text-lg font-bold text-neutral-900 mb-4">🚀 Hızlı Başlangıç</h3>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-neutral-900 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
+              <div>
+                <p className="font-medium text-neutral-900">Platformunuzu Seçin</p>
+                <p className="text-sm text-neutral-600">WordPress, Shopify veya Custom HTML</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-neutral-900 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
+              <div>
+                <p className="font-medium text-neutral-900">Bağlantıyı Kurun</p>
+                <p className="text-sm text-neutral-600">API anahtarınızı oluşturun ve ayarlayın</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-neutral-900 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
+              <div>
+                <p className="font-medium text-neutral-900">Kodu Yerleştirin</p>
+                <p className="text-sm text-neutral-600">Embed kodunu sitenize ekleyin</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
+                <Check size={16} />
+              </div>
+              <div>
+                <p className="font-medium text-neutral-900">Test Edin ve Yayınlayın</p>
+                <p className="text-sm text-neutral-600">Entegrasyonu test edin ve canlıya alın</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
