@@ -53,7 +53,27 @@ import {
   Activity,
   FileCode,
   Rocket,
+  ArrowUpRight,
+  ArrowDownRight,
+  FileDown,
 } from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 
 type Tab = 'dashboard' | 'builder' | 'cms' | 'shop' | 'embed' | 'apps' | 'seo' | 'analytics';
 
@@ -88,7 +108,7 @@ const Website: React.FC = () => {
       case 'seo':
         return renderSEO();
       case 'analytics':
-        return renderPlaceholder('İstatistikler', 'Detaylı analitik raporlar ve grafikler yakında eklenecek');
+        return renderAnalytics();
       default:
         return null;
     }
@@ -1558,6 +1578,288 @@ const Website: React.FC = () => {
             <h3 className="text-lg font-bold mb-2">Raporları Görüntüle</h3>
             <p className="text-sm text-white/80 mb-4">Detaylı SEO ve trafik raporları</p>
             <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Raporlar →</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderAnalytics = () => {
+    // Visitor trend data (30 days)
+    const visitorData = [
+      { date: '1 Eki', visitors: 420, users: 340 },
+      { date: '3 Eki', visitors: 510, users: 410 },
+      { date: '5 Eki', visitors: 680, users: 520 },
+      { date: '7 Eki', visitors: 590, users: 480 },
+      { date: '9 Eki', visitors: 720, users: 580 },
+      { date: '11 Eki', visitors: 650, users: 530 },
+      { date: '13 Eki', visitors: 880, users: 690 },
+      { date: '15 Eki', visitors: 920, users: 740 },
+      { date: '17 Eki', visitors: 1050, users: 850 },
+      { date: '19 Eki', visitors: 980, users: 790 },
+    ];
+
+    // Traffic sources data
+    const trafficData = [
+      { name: 'Direkt', value: 35, color: '#3b82f6' },
+      { name: 'Organik', value: 28, color: '#22c55e' },
+      { name: 'Sosyal Medya', value: 22, color: '#a855f7' },
+      { name: 'Referans', value: 15, color: '#f97316' },
+    ];
+
+    // Popular pages data
+    const pagesData = [
+      { page: 'Ana Sayfa', views: 12500 },
+      { page: 'Ürünler', views: 8900 },
+      { page: 'Hakkımızda', views: 6200 },
+      { page: 'İletişim', views: 4800 },
+      { page: 'Blog', views: 3600 },
+    ];
+
+    // Conversion funnel data
+    const funnelData = [
+      { stage: 'Ziyaret', count: 10000, percentage: 100 },
+      { stage: 'Ürün İnceleme', count: 6500, percentage: 65 },
+      { stage: 'Sepete Ekleme', count: 2800, percentage: 28 },
+      { stage: 'Ödeme', count: 1200, percentage: 12 },
+    ];
+
+    return (
+      <div className="space-y-6">
+        {/* Analytics Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><Users className="text-blue-600" size={20} /></div>
+              <span className="text-xs text-green-600 font-medium flex items-center gap-1"><ArrowUpRight size={12} />+24%</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">42.5K</h3>
+            <p className="text-sm text-neutral-600">Toplam Ziyaretçi</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"><Eye className="text-green-600" size={20} /></div>
+              <span className="text-xs text-green-600 font-medium flex items-center gap-1"><ArrowUpRight size={12} />+18%</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">128K</h3>
+            <p className="text-sm text-neutral-600">Sayfa Görüntüleme</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><Clock className="text-purple-600" size={20} /></div>
+              <span className="text-xs text-red-600 font-medium flex items-center gap-1"><ArrowDownRight size={12} />-5%</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">3:24</h3>
+            <p className="text-sm text-neutral-600">Ort. Oturum Süresi</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"><Target className="text-orange-600" size={20} /></div>
+              <span className="text-xs text-green-600 font-medium flex items-center gap-1"><ArrowUpRight size={12} />+8%</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">12%</h3>
+            <p className="text-sm text-neutral-600">Dönüşüm Oranı</p>
+          </div>
+        </div>
+
+        {/* Real-time Stats */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">Canlı İstatistikler</h3>
+              <p className="text-sm text-neutral-600 mt-1">Son 30 dakika</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-neutral-900">147 Aktif Kullanıcı</span>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-4">
+            <div className="p-4 bg-blue-50 rounded-xl">
+              <div className="text-sm text-neutral-600 mb-1">Sayfa Görüntüleme</div>
+              <div className="text-2xl font-bold text-blue-600">234</div>
+            </div>
+            <div className="p-4 bg-green-50 rounded-xl">
+              <div className="text-sm text-neutral-600 mb-1">Yeni Oturumlar</div>
+              <div className="text-2xl font-bold text-green-600">89</div>
+            </div>
+            <div className="p-4 bg-purple-50 rounded-xl">
+              <div className="text-sm text-neutral-600 mb-1">Dönüşümler</div>
+              <div className="text-2xl font-bold text-purple-600">12</div>
+            </div>
+            <div className="p-4 bg-orange-50 rounded-xl">
+              <div className="text-sm text-neutral-600 mb-1">Ortalama Süre</div>
+              <div className="text-2xl font-bold text-orange-600">2:45</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Visitor Trend Chart */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">Ziyaretçi Trendi</h3>
+              <p className="text-sm text-neutral-600 mt-1">Son 30 günlük ziyaretçi istatistikleri</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button className="px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-sm font-medium">7 Gün</button>
+              <button className="px-3 py-1.5 bg-neutral-900 text-white rounded-lg text-sm font-medium">30 Gün</button>
+              <button className="px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-sm font-medium">90 Gün</button>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={visitorData}>
+              <defs>
+                <linearGradient id="colorVisitors" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: '12px' }} />
+              <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }} />
+              <Legend wrapperStyle={{ fontSize: '14px' }} />
+              <Area type="monotone" dataKey="visitors" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorVisitors)" name="Ziyaretçiler" />
+              <Area type="monotone" dataKey="users" stroke="#22c55e" strokeWidth={2} fillOpacity={1} fill="url(#colorUsers)" name="Kullanıcılar" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Traffic Sources & Popular Pages */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Traffic Sources Pie Chart */}
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-bold text-neutral-900">Trafik Kaynakları</h3>
+              <p className="text-sm text-neutral-600 mt-1">Ziyaretçi dağılımı</p>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={trafficData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {trafficData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              {trafficData.map((item) => (
+                <div key={item.name} className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                  <div>
+                    <div className="text-sm font-medium text-neutral-900">{item.name}</div>
+                    <div className="text-xs text-neutral-600">{item.value}%</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Popular Pages Bar Chart */}
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-bold text-neutral-900">Popüler Sayfalar</h3>
+              <p className="text-sm text-neutral-600 mt-1">En çok görüntülenen sayfalar</p>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={pagesData} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis type="number" stroke="#6b7280" style={{ fontSize: '12px' }} />
+                <YAxis dataKey="page" type="category" stroke="#6b7280" style={{ fontSize: '12px' }} width={100} />
+                <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }} />
+                <Bar dataKey="views" fill="#3b82f6" radius={[0, 8, 8, 0]} name="Görüntülenme" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Conversion Funnel */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">Dönüşüm Hunisi</h3>
+              <p className="text-sm text-neutral-600 mt-1">Kullanıcı yolculuğu analizi</p>
+            </div>
+            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">%12 Dönüşüm</span>
+          </div>
+          <div className="space-y-4">
+            {funnelData.map((stage, index) => (
+              <div key={stage.stage}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                      index === 0 ? 'bg-blue-100 text-blue-600' :
+                      index === 1 ? 'bg-green-100 text-green-600' :
+                      index === 2 ? 'bg-purple-100 text-purple-600' :
+                      'bg-orange-100 text-orange-600'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <span className="text-sm font-medium text-neutral-900">{stage.stage}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm font-bold text-neutral-900">{stage.count.toLocaleString()}</span>
+                    <span className="text-sm text-neutral-600">({stage.percentage}%)</span>
+                  </div>
+                </div>
+                <div className="w-full bg-neutral-100 rounded-full h-3">
+                  <div
+                    className={`h-3 rounded-full ${
+                      index === 0 ? 'bg-blue-500' :
+                      index === 1 ? 'bg-green-500' :
+                      index === 2 ? 'bg-purple-500' :
+                      'bg-orange-500'
+                    }`}
+                    style={{ width: `${stage.percentage}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Export Options */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+              <FileDown size={24} />
+            </div>
+            <h3 className="text-lg font-bold mb-2">PDF Raporu</h3>
+            <p className="text-sm text-white/80 mb-4">Detaylı analitik rapor oluştur ve indir</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">PDF İndir →</button>
+          </div>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+              <FileDown size={24} />
+            </div>
+            <h3 className="text-lg font-bold mb-2">Excel Export</h3>
+            <p className="text-sm text-white/80 mb-4">Ham verileri Excel formatında dışa aktar</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Excel İndir →</button>
+          </div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+              <Mail size={24} />
+            </div>
+            <h3 className="text-lg font-bold mb-2">Otomatik Rapor</h3>
+            <p className="text-sm text-white/80 mb-4">Haftalık raporu e-posta ile al</p>
+            <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Planla →</button>
           </div>
         </div>
       </div>
