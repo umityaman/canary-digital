@@ -25,6 +25,14 @@ import {
   Monitor,
   Smartphone,
   Settings,
+  Image,
+  Video,
+  File,
+  Trash2,
+  Edit,
+  MoreVertical,
+  Calendar,
+  Tag,
 } from 'lucide-react';
 
 type Tab = 'dashboard' | 'builder' | 'cms' | 'shop' | 'embed' | 'apps' | 'seo' | 'analytics';
@@ -50,7 +58,7 @@ const Website: React.FC = () => {
       case 'builder':
         return renderSiteBuilder();
       case 'cms':
-        return renderPlaceholder('İçerik Yönetimi', 'Sayfa, blog ve medya yönetimi özellikleri yakında eklenecek');
+        return renderCMS();
       case 'shop':
         return renderPlaceholder('Online Mağaza', 'Ürün yönetimi ve rezervasyon özellikleri yakında eklenecek');
       case 'embed':
@@ -511,6 +519,147 @@ const Website: React.FC = () => {
       </div>
     </div>
   );
+
+  const renderCMS = () => {
+    const pages = [
+      { id: 1, title: 'Ana Sayfa', slug: '/home', status: 'published', views: 3500, lastUpdated: '2 saat önce', author: 'Admin', type: 'page' },
+      { id: 2, title: 'Hakkımızda', slug: '/about', status: 'published', views: 1200, lastUpdated: '1 gün önce', author: 'Admin', type: 'page' },
+      { id: 3, title: 'Ürünlerimiz', slug: '/products', status: 'published', views: 2100, lastUpdated: '3 saat önce', author: 'Admin', type: 'page' },
+      { id: 4, title: 'İletişim', slug: '/contact', status: 'published', views: 890, lastUpdated: '5 gün önce', author: 'Admin', type: 'page' },
+      { id: 5, title: '10 Kiralama İpucu', slug: '/blog/rental-tips', status: 'draft', views: 0, lastUpdated: '1 saat önce', author: 'Editör', type: 'blog' },
+    ];
+
+    const mediaItems = [
+      { id: 1, name: 'hero-image.jpg', type: 'image', size: '2.4 MB', date: '19 Eki 2025' },
+      { id: 2, name: 'product-demo.mp4', type: 'video', size: '45.2 MB', date: '18 Eki 2025' },
+      { id: 3, name: 'logo-dark.svg', type: 'image', size: '12 KB', date: '17 Eki 2025' },
+      { id: 4, name: 'brochure.pdf', type: 'file', size: '1.8 MB', date: '16 Eki 2025' },
+    ];
+
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><FileText className="text-blue-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Toplam</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">45</h3>
+            <p className="text-sm text-neutral-600">Sayfa</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><FileEdit className="text-purple-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Blog</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">23</h3>
+            <p className="text-sm text-neutral-600">Yazı</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"><Image className="text-green-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Medya</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">156</h3>
+            <p className="text-sm text-neutral-600">Dosya</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"><Clock className="text-orange-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Taslak</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">8</h3>
+            <p className="text-sm text-neutral-600">Bekliyor</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200">
+          <div className="p-6 border-b border-neutral-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-neutral-900">Sayfalar & Blog</h3>
+                <p className="text-sm text-neutral-600 mt-1">İçeriklerinizi yönetin ve düzenleyin</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <input type="text" placeholder="Ara..." className="pl-4 pr-10 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:border-neutral-900 text-sm" />
+                  <Search className="absolute right-3 top-2.5 text-neutral-400" size={16} />
+                </div>
+                <button className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm font-medium"><Plus size={16} />Yeni İçerik</button>
+              </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-neutral-200">
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Başlık</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Tür</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Durum</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Görüntülenme</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Yazar</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Son Güncelleme</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pages.map((page) => (
+                  <tr key={page.id} className="border-b border-neutral-100 hover:bg-neutral-50 transition-colors">
+                    <td className="p-4"><div><p className="font-medium text-neutral-900">{page.title}</p><p className="text-xs text-neutral-500">{page.slug}</p></div></td>
+                    <td className="p-4"><span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${page.type === 'page' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}`}>{page.type === 'page' ? <FileText size={12} /> : <FileEdit size={12} />}{page.type === 'page' ? 'Sayfa' : 'Blog'}</span></td>
+                    <td className="p-4"><span className={`px-3 py-1 rounded-full text-xs font-medium ${page.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{page.status === 'published' ? '✓ Yayında' : '⏳ Taslak'}</span></td>
+                    <td className="p-4"><div className="flex items-center gap-1 text-neutral-700"><Eye size={14} /><span className="text-sm font-medium">{page.views.toLocaleString()}</span></div></td>
+                    <td className="p-4"><span className="text-sm text-neutral-700">{page.author}</span></td>
+                    <td className="p-4"><div className="flex items-center gap-1 text-neutral-600"><Calendar size={14} /><span className="text-sm">{page.lastUpdated}</span></div></td>
+                    <td className="p-4"><div className="flex items-center gap-2"><button className="p-2 hover:bg-neutral-100 rounded-lg transition-colors" title="Düzenle"><Edit size={16} className="text-neutral-700" /></button><button className="p-2 hover:bg-neutral-100 rounded-lg transition-colors" title="Önizle"><Eye size={16} className="text-neutral-700" /></button><button className="p-2 hover:bg-red-50 rounded-lg transition-colors" title="Sil"><Trash2 size={16} className="text-red-600" /></button><button className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"><MoreVertical size={16} className="text-neutral-700" /></button></div></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="p-4 border-t border-neutral-200 flex items-center justify-between">
+            <p className="text-sm text-neutral-600">5 içerikten 1-5 arası gösteriliyor</p>
+            <div className="flex items-center gap-2">
+              <button className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm hover:bg-neutral-50 transition-colors">Önceki</button>
+              <button className="px-3 py-1.5 bg-neutral-900 text-white rounded-lg text-sm">1</button>
+              <button className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm hover:bg-neutral-50 transition-colors">Sonraki</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200">
+          <div className="p-6 border-b border-neutral-200">
+            <div className="flex items-center justify-between">
+              <div><h3 className="text-lg font-bold text-neutral-900 flex items-center gap-2"><Image size={20} />Medya Kütüphanesi</h3><p className="text-sm text-neutral-600 mt-1">Görsel, video ve dosyalarınızı yönetin</p></div>
+              <button className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm font-medium"><Plus size={16} />Dosya Yükle</button>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {mediaItems.map((item) => (
+                <div key={item.id} className="bg-neutral-50 rounded-xl p-4 border border-neutral-200 hover:border-neutral-300 transition-all cursor-pointer group">
+                  <div className="flex items-center justify-center h-32 mb-3 bg-white rounded-lg">
+                    {item.type === 'image' && <Image size={40} className="text-neutral-400" />}
+                    {item.type === 'video' && <Video size={40} className="text-neutral-400" />}
+                    {item.type === 'file' && <File size={40} className="text-neutral-400" />}
+                  </div>
+                  <div className="space-y-1"><p className="text-sm font-medium text-neutral-900 truncate" title={item.name}>{item.name}</p><div className="flex items-center justify-between"><span className="text-xs text-neutral-600">{item.size}</span><span className="text-xs text-neutral-500">{item.date}</span></div></div>
+                  <div className="flex items-center gap-1 mt-3 opacity-0 group-hover:opacity-100 transition-opacity"><button className="flex-1 py-1.5 bg-neutral-900 text-white rounded-lg text-xs hover:bg-neutral-800">Seç</button><button className="p-1.5 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"><Trash2 size={14} /></button></div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 text-center"><button className="px-6 py-2.5 border border-neutral-300 hover:border-neutral-400 rounded-xl text-sm font-medium transition-colors">Daha Fazla Yükle</button></div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white"><FileText size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Yeni Sayfa</h3><p className="text-sm text-white/80 mb-4">Boş sayfa oluştur</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Oluştur →</button></div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white"><FileEdit size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Yeni Blog Yazısı</h3><p className="text-sm text-white/80 mb-4">Blog içeriği ekle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Yaz →</button></div>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white"><Image size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Medya Yükle</h3><p className="text-sm text-white/80 mb-4">Görsel/video ekle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Yükle →</button></div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="flex h-screen bg-neutral-50">
