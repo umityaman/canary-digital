@@ -33,6 +33,11 @@ import {
   MoreVertical,
   Calendar,
   Tag,
+  DollarSign,
+  Box,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
 } from 'lucide-react';
 
 type Tab = 'dashboard' | 'builder' | 'cms' | 'shop' | 'embed' | 'apps' | 'seo' | 'analytics';
@@ -60,7 +65,7 @@ const Website: React.FC = () => {
       case 'cms':
         return renderCMS();
       case 'shop':
-        return renderPlaceholder('Online Mağaza', 'Ürün yönetimi ve rezervasyon özellikleri yakında eklenecek');
+        return renderShop();
       case 'embed':
         return renderPlaceholder('Embed & Entegrasyon', 'WordPress, Shopify ve diğer platform entegrasyonları yakında eklenecek');
       case 'apps':
@@ -656,6 +661,170 @@ const Website: React.FC = () => {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white"><FileText size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Yeni Sayfa</h3><p className="text-sm text-white/80 mb-4">Boş sayfa oluştur</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Oluştur →</button></div>
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white"><FileEdit size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Yeni Blog Yazısı</h3><p className="text-sm text-white/80 mb-4">Blog içeriği ekle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Yaz →</button></div>
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white"><Image size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Medya Yükle</h3><p className="text-sm text-white/80 mb-4">Görsel/video ekle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Yükle →</button></div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderShop = () => {
+    const products = [
+      { id: 1, name: 'Sony A7 IV Kamera', category: 'Kamera', price: 500, stock: 5, status: 'available', sales: 42, image: '📷' },
+      { id: 2, name: 'Canon 24-70mm Lens', category: 'Lens', price: 150, stock: 3, status: 'available', sales: 28, image: '🔭' },
+      { id: 3, name: 'DJI Ronin RS3 Gimbal', category: 'Stabilizasyon', price: 300, stock: 2, status: 'low', sales: 15, image: '🎥' },
+      { id: 4, name: 'Aputure 300D II Işık', category: 'Işık', price: 200, stock: 4, status: 'available', sales: 31, image: '💡' },
+      { id: 5, name: 'Rode Wireless GO II', category: 'Ses', price: 100, stock: 0, status: 'out', sales: 56, image: '🎤' },
+    ];
+
+    return (
+      <div className="space-y-6">
+        {/* Shop Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><ShoppingBag className="text-blue-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Toplam</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">67</h3>
+            <p className="text-sm text-neutral-600">Ürün</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"><CheckCircle className="text-green-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Müsait</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">52</h3>
+            <p className="text-sm text-neutral-600">Stokta</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"><AlertCircle className="text-orange-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Düşük</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">8</h3>
+            <p className="text-sm text-neutral-600">Stok Azaldı</p>
+          </div>
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center"><XCircle className="text-red-600" size={20} /></div>
+              <span className="text-xs text-neutral-600 font-medium">Tükendi</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900">7</h3>
+            <p className="text-sm text-neutral-600">Stok Yok</p>
+          </div>
+        </div>
+
+        {/* Products Table */}
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200">
+          <div className="p-6 border-b border-neutral-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-neutral-900">Ürün Yönetimi</h3>
+                <p className="text-sm text-neutral-600 mt-1">Kiralama ürünlerinizi ve stoklarınızı yönetin</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <input type="text" placeholder="Ürün ara..." className="pl-4 pr-10 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:border-neutral-900 text-sm" />
+                  <Search className="absolute right-3 top-2.5 text-neutral-400" size={16} />
+                </div>
+                <button className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm font-medium"><Plus size={16} />Yeni Ürün</button>
+              </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-neutral-200">
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Ürün</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Kategori</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Fiyat</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Stok</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Durum</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">Satışlar</th>
+                  <th className="text-left p-4 text-sm font-semibold text-neutral-700">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.id} className="border-b border-neutral-100 hover:bg-neutral-50 transition-colors">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center text-2xl">{product.image}</div>
+                        <div><p className="font-medium text-neutral-900">{product.name}</p></div>
+                      </div>
+                    </td>
+                    <td className="p-4"><span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700"><Tag size={12} />{product.category}</span></td>
+                    <td className="p-4"><div className="flex items-center gap-1 text-neutral-900"><DollarSign size={14} /><span className="font-semibold">₺{product.price}</span><span className="text-xs text-neutral-500">/gün</span></div></td>
+                    <td className="p-4"><div className="flex items-center gap-1"><Box size={14} className="text-neutral-600" /><span className="font-medium text-neutral-900">{product.stock}</span></div></td>
+                    <td className="p-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.status === 'available' ? 'bg-green-100 text-green-700' : product.status === 'low' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
+                        {product.status === 'available' ? '✓ Müsait' : product.status === 'low' ? '⚠️ Düşük' : '✕ Tükendi'}
+                      </span>
+                    </td>
+                    <td className="p-4"><span className="text-sm font-medium text-neutral-700">{product.sales} kiralama</span></td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <button className="p-2 hover:bg-neutral-100 rounded-lg transition-colors" title="Düzenle"><Edit size={16} className="text-neutral-700" /></button>
+                        <button className="p-2 hover:bg-neutral-100 rounded-lg transition-colors" title="Önizle"><Eye size={16} className="text-neutral-700" /></button>
+                        <button className="p-2 hover:bg-red-50 rounded-lg transition-colors" title="Sil"><Trash2 size={16} className="text-red-600" /></button>
+                        <button className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"><MoreVertical size={16} className="text-neutral-700" /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="p-4 border-t border-neutral-200 flex items-center justify-between">
+            <p className="text-sm text-neutral-600">5 üründen 1-5 arası gösteriliyor</p>
+            <div className="flex items-center gap-2">
+              <button className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm hover:bg-neutral-50 transition-colors">Önceki</button>
+              <button className="px-3 py-1.5 bg-neutral-900 text-white rounded-lg text-sm">1</button>
+              <button className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm hover:bg-neutral-50 transition-colors">Sonraki</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Revenue & Reservations */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <h3 className="text-lg font-bold text-neutral-900 mb-4 flex items-center"><DollarSign className="mr-2 text-green-600" size={20} />Gelir Özeti</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                <div><p className="text-sm text-neutral-600">Bu Ay</p><p className="text-2xl font-bold text-neutral-900">₺32,450</p></div>
+                <div className="text-right"><span className="text-sm text-green-600 font-medium">+18%</span><p className="text-xs text-neutral-500 mt-1">geçen aya göre</p></div>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl">
+                <div><p className="text-sm text-neutral-600">Geçen Ay</p><p className="text-xl font-bold text-neutral-900">₺27,500</p></div>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl">
+                <div><p className="text-sm text-neutral-600">Toplam (Yıl)</p><p className="text-xl font-bold text-neutral-900">₺285,600</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <h3 className="text-lg font-bold text-neutral-900 mb-4 flex items-center"><Calendar className="mr-2 text-blue-600" size={20} />Rezervasyon Durumu</h3>
+            <div className="space-y-3">
+              {[
+                { title: 'Sony A7 IV - Emirhan Y.', date: '20-22 Eki', status: 'active', color: 'bg-blue-500' },
+                { title: 'DJI Ronin - Zeynep K.', date: '21-25 Eki', status: 'pending', color: 'bg-yellow-500' },
+                { title: 'Canon Lens - Mehmet A.', date: '23-24 Eki', status: 'active', color: 'bg-blue-500' },
+                { title: 'Aputure Işık - Ayşe D.', date: '25-27 Eki', status: 'confirmed', color: 'bg-green-500' },
+              ].map((reservation, idx) => (
+                <div key={idx} className="flex items-start border-l-4 pl-3 py-2" style={{ borderColor: reservation.color.replace('bg-', '#').replace('500', '') }}>
+                  <span className={`w-2 h-2 ${reservation.color} rounded-full mr-3 mt-2`}></span>
+                  <div className="flex-1"><p className="text-sm font-medium text-neutral-900">{reservation.title}</p><p className="text-xs text-neutral-600">{reservation.date}</p></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white"><ShoppingBag size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Yeni Ürün</h3><p className="text-sm text-white/80 mb-4">Kiralama ürünü ekle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Ekle →</button></div>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white"><Box size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Stok Yönetimi</h3><p className="text-sm text-white/80 mb-4">Stok güncelle</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Yönet →</button></div>
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-2xl text-white"><Calendar size={32} className="mb-3" /><h3 className="text-lg font-bold mb-2">Rezervasyonlar</h3><p className="text-sm text-white/80 mb-4">Tüm rezervasyonları gör</p><button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors">Görüntüle →</button></div>
         </div>
       </div>
     );
