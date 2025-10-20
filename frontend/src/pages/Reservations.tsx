@@ -317,50 +317,72 @@ const Reservations: React.FC = () => {
 
     {/* Date Range Calendar Modal */}
     {showDatePicker && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" onClick={() => setShowDatePicker(false)}>
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
-          <div className="flex flex-col md:flex-row h-full">
-            {/* Left Side - Quick Options (Removed per user request) */}
-            {/* This section was removed as requested */}
-
-            {/* Calendar - Full Width Booqable Style */}
-            <div className="flex-1 p-8">
-              {/* Modal Header */}
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">Tarih Aralığı Seç</h2>
-                <button 
-                  onClick={() => setShowDatePicker(false)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5 text-gray-500" />
-                </button>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowDatePicker(false)}>
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+          <div className="flex">
+            {/* Left Side - Quick Select Options */}
+            <div className="w-48 border-r border-gray-200 p-4">
+              <div className="space-y-1">
+                {[
+                  { key: 'all' as const, label: 'All time' },
+                  { key: 'today' as const, label: 'Today' },
+                  { key: 'yesterday' as const, label: 'Yesterday' },
+                  { key: 'tomorrow' as const, label: 'Tomorrow' },
+                  { key: 'this_week' as const, label: 'This week' },
+                  { key: 'last_week' as const, label: 'Last week' },
+                  { key: 'next_week' as const, label: 'Next week' },
+                  { key: 'this_month' as const, label: 'This month' },
+                  { key: 'last_month' as const, label: 'Last month' },
+                  { key: 'next_month' as const, label: 'Next month' },
+                  { key: 'this_year' as const, label: 'This year' },
+                  { key: 'last_year' as const, label: 'Last year' },
+                  { key: 'next_year' as const, label: 'Next year' }
+                ].map(({ key, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setDateRange(key);
+                      setShowDatePicker(false);
+                    }}
+                    className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
+                      dateRange === key 
+                        ? 'bg-blue-50 text-blue-700 font-medium' 
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
+            </div>
 
+            {/* Right Side - Calendar */}
+            <div className="flex-1 p-6">
               {/* Calendar Header */}
-              <div className="flex items-center justify-between mb-6">
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <ChevronDown className="w-5 h-5 rotate-90 text-gray-600" />
+              <div className="flex items-center justify-between mb-4">
+                <button className="p-1 hover:bg-gray-100 rounded">
+                  <ChevronDown className="w-4 h-4 rotate-90 text-gray-600" />
                 </button>
-                <h3 className="text-lg font-semibold text-gray-900">Ekim 2025</h3>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <ChevronDown className="w-5 h-5 -rotate-90 text-gray-600" />
+                <h3 className="text-base font-semibold text-gray-900">October 2025</h3>
+                <button className="p-1 hover:bg-gray-100 rounded">
+                  <ChevronDown className="w-4 h-4 -rotate-90 text-gray-600" />
                 </button>
               </div>
 
               {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-1 mb-8">
-                {['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'].map(day => (
-                  <div key={day} className="text-center text-xs font-semibold text-gray-500 py-3">
+              <div className="grid grid-cols-7 gap-1 mb-4">
+                {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map(day => (
+                  <div key={day} className="text-center text-xs font-medium text-gray-600 py-2">
                     {day}
                   </div>
                 ))}
                 {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
                   <button
                     key={day}
-                    className={`aspect-square flex items-center justify-center text-sm rounded-lg transition-all ${
+                    className={`aspect-square flex items-center justify-center text-sm rounded hover:bg-gray-100 transition-colors ${
                       day === 20 
-                        ? 'bg-blue-600 text-white font-semibold hover:bg-blue-700 shadow-md' 
-                        : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                        ? 'font-bold text-gray-900 underline' 
+                        : 'text-gray-700'
                     }`}
                   >
                     {day}
@@ -369,31 +391,19 @@ const Reservations: React.FC = () => {
               </div>
 
               {/* From/Till Selectors */}
-              <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-200">
+              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Başlangıç</label>
-                  <input
-                    type="date"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">From</label>
+                  <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
+                    <option>Select...</option>
+                  </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Bitiş</label>
-                  <input
-                    type="date"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Till</label>
+                  <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
+                    <option>Select...</option>
+                  </select>
                 </div>
-              </div>
-
-              {/* Apply Button */}
-              <div className="mt-6">
-                <button 
-                  onClick={() => setShowDatePicker(false)}
-                  className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  Uygula
-                </button>
               </div>
             </div>
           </div>
