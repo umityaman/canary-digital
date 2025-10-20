@@ -206,12 +206,9 @@ const Orders: React.FC = () => {
                     ].map(({ key, label }) => (
                       <button
                         key={key}
-                        onClick={() => {
-                          setDateRange(key);
-                          setShowDatePicker(false);
-                        }}
+                        onClick={() => setDateRange(key)}
                         className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
-                          dateRange === key && !showDatePicker ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                          dateRange === key ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
                         }`}
                       >
                         {label}
