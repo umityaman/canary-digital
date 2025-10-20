@@ -197,33 +197,8 @@ const Reservations: React.FC = () => {
                       }}
                       className="text-sm text-gray-700 mb-3 px-3 py-2 hover:bg-blue-50 hover:text-blue-600 cursor-pointer w-full text-left rounded-lg transition-colors font-medium border border-transparent hover:border-blue-200"
                     >
-                      📅 Tüm zamanlar gösteriliyor - Tıkla
+                      📅 Tüm zamanlar gösteriliyor
                     </button>
-                    {[
-                      { key: 'all' as const, label: 'Tüm zamanlar' },
-                      { key: 'today' as const, label: 'Bugün' },
-                      { key: 'yesterday' as const, label: 'Dün' },
-                      { key: 'tomorrow' as const, label: 'Yarın' },
-                      { key: 'this_week' as const, label: 'Bu hafta' },
-                      { key: 'last_week' as const, label: 'Geçen hafta' },
-                      { key: 'next_week' as const, label: 'Gelecek hafta' },
-                      { key: 'this_month' as const, label: 'Bu ay' },
-                      { key: 'last_month' as const, label: 'Geçen ay' },
-                      { key: 'next_month' as const, label: 'Gelecek ay' },
-                      { key: 'this_year' as const, label: 'Bu yıl' },
-                      { key: 'last_year' as const, label: 'Geçen yıl' },
-                      { key: 'next_year' as const, label: 'Gelecek yıl' }
-                    ].map(({ key, label }) => (
-                      <button
-                        key={key}
-                        onClick={() => setDateRange(key)}
-                        className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
-                          dateRange === key ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
                   </div>
                 )}
               </div>
@@ -317,26 +292,26 @@ const Reservations: React.FC = () => {
 
     {/* Date Range Calendar Modal */}
     {showDatePicker && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowDatePicker(false)}>
-        <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-25" onClick={() => setShowDatePicker(false)}>
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
           <div className="flex">
             {/* Left Side - Quick Select Options */}
-            <div className="w-48 border-r border-gray-200 p-4">
-              <div className="space-y-1">
+            <div className="w-40 border-r border-gray-200 p-3">
+              <div className="space-y-0.5">
                 {[
-                  { key: 'all' as const, label: 'All time' },
-                  { key: 'today' as const, label: 'Today' },
-                  { key: 'yesterday' as const, label: 'Yesterday' },
-                  { key: 'tomorrow' as const, label: 'Tomorrow' },
-                  { key: 'this_week' as const, label: 'This week' },
-                  { key: 'last_week' as const, label: 'Last week' },
-                  { key: 'next_week' as const, label: 'Next week' },
-                  { key: 'this_month' as const, label: 'This month' },
-                  { key: 'last_month' as const, label: 'Last month' },
-                  { key: 'next_month' as const, label: 'Next month' },
-                  { key: 'this_year' as const, label: 'This year' },
-                  { key: 'last_year' as const, label: 'Last year' },
-                  { key: 'next_year' as const, label: 'Next year' }
+                  { key: 'all' as const, label: 'Tüm zamanlar' },
+                  { key: 'today' as const, label: 'Bugün' },
+                  { key: 'yesterday' as const, label: 'Dün' },
+                  { key: 'tomorrow' as const, label: 'Yarın' },
+                  { key: 'this_week' as const, label: 'Bu hafta' },
+                  { key: 'last_week' as const, label: 'Geçen hafta' },
+                  { key: 'next_week' as const, label: 'Gelecek hafta' },
+                  { key: 'this_month' as const, label: 'Bu ay' },
+                  { key: 'last_month' as const, label: 'Geçen ay' },
+                  { key: 'next_month' as const, label: 'Gelecek ay' },
+                  { key: 'this_year' as const, label: 'Bu yıl' },
+                  { key: 'last_year' as const, label: 'Geçen yıl' },
+                  { key: 'next_year' as const, label: 'Gelecek yıl' }
                 ].map(({ key, label }) => (
                   <button
                     key={key}
@@ -344,7 +319,7 @@ const Reservations: React.FC = () => {
                       setDateRange(key);
                       setShowDatePicker(false);
                     }}
-                    className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
+                    className={`w-full text-left px-2.5 py-1.5 text-xs rounded transition-colors ${
                       dateRange === key 
                         ? 'bg-blue-50 text-blue-700 font-medium' 
                         : 'text-gray-700 hover:bg-gray-50'
@@ -357,52 +332,87 @@ const Reservations: React.FC = () => {
             </div>
 
             {/* Right Side - Calendar */}
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-4">
               {/* Calendar Header */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <button className="p-1 hover:bg-gray-100 rounded">
                   <ChevronDown className="w-4 h-4 rotate-90 text-gray-600" />
                 </button>
-                <h3 className="text-base font-semibold text-gray-900">October 2025</h3>
+                <h3 className="text-sm font-semibold text-gray-900">Ekim 2025</h3>
                 <button className="p-1 hover:bg-gray-100 rounded">
                   <ChevronDown className="w-4 h-4 -rotate-90 text-gray-600" />
                 </button>
               </div>
 
               {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-1 mb-4">
-                {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map(day => (
-                  <div key={day} className="text-center text-xs font-medium text-gray-600 py-2">
+              <div className="grid grid-cols-7 gap-0.5 mb-3">
+                {['Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct'].map(day => (
+                  <div key={day} className="text-center text-xs font-medium text-gray-600 py-1">
                     {day}
                   </div>
                 ))}
-                {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-                  <button
-                    key={day}
-                    className={`aspect-square flex items-center justify-center text-sm rounded hover:bg-gray-100 transition-colors ${
-                      day === 20 
-                        ? 'font-bold text-gray-900 underline' 
-                        : 'text-gray-700'
-                    }`}
-                  >
-                    {day}
-                  </button>
-                ))}
+                {Array.from({ length: 31 }, (_, i) => i + 1).map(day => {
+                  const isSelected = (customDateFrom && parseInt(customDateFrom.split('-')[2]) === day) || 
+                                    (customDateTo && parseInt(customDateTo.split('-')[2]) === day);
+                  const isInRange = customDateFrom && customDateTo && 
+                                   day >= parseInt(customDateFrom.split('-')[2]) && 
+                                   day <= parseInt(customDateTo.split('-')[2]);
+                  
+                  return (
+                    <button
+                      key={day}
+                      onClick={() => {
+                        const dateStr = `2025-10-${day.toString().padStart(2, '0')}`;
+                        if (!customDateFrom || (customDateFrom && customDateTo)) {
+                          setCustomDateFrom(dateStr);
+                          setCustomDateTo('');
+                        } else {
+                          if (day < parseInt(customDateFrom.split('-')[2])) {
+                            setCustomDateTo(customDateFrom);
+                            setCustomDateFrom(dateStr);
+                          } else {
+                            setCustomDateTo(dateStr);
+                          }
+                          setDateRange('all');
+                        }
+                      }}
+                      className={`aspect-square flex items-center justify-center text-xs rounded transition-colors ${
+                        isSelected
+                          ? 'bg-blue-600 text-white font-bold'
+                          : isInRange
+                          ? 'bg-blue-100 text-blue-900'
+                          : day === 20 
+                          ? 'font-bold text-gray-900' 
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* From/Till Selectors */}
-              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
+              <div className="grid grid-cols-2 gap-2 pt-3 border-t border-gray-200">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">From</label>
-                  <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
-                    <option>Select...</option>
-                  </select>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Başlangıç</label>
+                  <input 
+                    type="text"
+                    value={customDateFrom ? new Date(customDateFrom).toLocaleDateString('tr-TR') : ''}
+                    readOnly
+                    placeholder="Seç..."
+                    className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Till</label>
-                  <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
-                    <option>Select...</option>
-                  </select>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Bitiş</label>
+                  <input 
+                    type="text"
+                    value={customDateTo ? new Date(customDateTo).toLocaleDateString('tr-TR') : ''}
+                    readOnly
+                    placeholder="Seç..."
+                    className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                  />
                 </div>
               </div>
             </div>
