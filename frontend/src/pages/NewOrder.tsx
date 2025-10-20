@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  ArrowLeft, Search, Plus, X, Calendar,
-  User, MapPin, FileText, Mail, Phone, Tag, StickyNote
+  ArrowLeft, Search, Plus, X, Calendar, QrCode, UserPlus,
+  User, MapPin, FileText, Mail, Phone, Tag, StickyNote, CreditCard, Package
 } from 'lucide-react';
 
 const NewOrder: React.FC = () => {
@@ -51,14 +51,30 @@ const NewOrder: React.FC = () => {
             {/* Customer */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-4">Müşteri</h3>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Müşteri ara veya ekle..."
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Müşteri ara..."
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <button
+                  className="px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+                  title="Yeni Müşteri Ekle"
+                >
+                  <UserPlus className="w-5 h-5 text-gray-600" />
+                </button>
               </div>
+            </div>
+
+            {/* Billing Address */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium">
+                <FileText className="w-4 h-4" />
+                Fatura adresi ekle
+              </button>
             </div>
 
             {/* Pickup & Return */}
@@ -117,24 +133,35 @@ const NewOrder: React.FC = () => {
             {/* Products */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-4">Ürünler</h3>
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Ürün ara veya ekle..."
-                  value={searchProducts}
-                  onChange={(e) => setSearchProducts(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div className="flex gap-2 mb-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Ürün ara..."
+                    value={searchProducts}
+                    onChange={(e) => setSearchProducts(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <button
+                  className="px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+                  title="QR Kod ile Ekle"
+                >
+                  <QrCode className="w-5 h-5 text-gray-600" />
+                </button>
               </div>
 
               {/* Empty State */}
               <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-lg">
                 <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FileText className="w-6 h-6 text-gray-400" />
+                  <Package className="w-6 h-6 text-gray-400" />
                 </div>
-                <p className="text-sm text-gray-600 mb-2">Henüz ürün eklenmedi</p>
-                <p className="text-xs text-gray-500">Yukarıdaki arama kutusunu kullanarak ürün ekleyin</p>
+                <p className="text-sm text-gray-600 mb-2">Bu sipariş boş</p>
+                <p className="text-xs text-gray-500 mb-3">Ürün arayarak veya QR kod okutarak ekleyin</p>
+                <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                  + Özel satır ekle
+                </button>
               </div>
             </div>
 
@@ -145,13 +172,27 @@ const NewOrder: React.FC = () => {
                   <span className="text-gray-600">Ara Toplam</span>
                   <span className="font-medium text-gray-900">₺0,00</span>
                 </div>
+                <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                  + İndirim ekle
+                </button>
+                <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                  + Kupon ekle
+                </button>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">KDV (%20)</span>
+                  <span className="text-gray-600">Toplam indirim</span>
                   <span className="font-medium text-gray-900">₺0,00</span>
                 </div>
                 <div className="border-t border-gray-200 pt-3 flex justify-between">
-                  <span className="text-base font-semibold text-gray-900">Toplam</span>
+                  <span className="text-base font-semibold text-gray-900">KDV Dahil Toplam</span>
                   <span className="text-base font-semibold text-gray-900">₺0,00</span>
+                </div>
+                <div className="pt-2 border-t border-gray-200">
+                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+                    <CreditCard className="w-4 h-4" />
+                    Güvenlik depozitosu
+                  </button>
+                  <p className="text-xs text-gray-500 mt-1">Ürün güvenlik depozitosu değerinin %100'ü</p>
+                  <p className="text-sm font-medium text-gray-900 mt-2">₺0,00</p>
                 </div>
               </div>
             </div>
@@ -159,12 +200,37 @@ const NewOrder: React.FC = () => {
 
           {/* Right Sidebar */}
           <div className="space-y-4">
+            {/* Actions Dropdown */}
+            <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <button className="w-full px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium mb-2">
+                Email gönder
+              </button>
+              <button className="w-full px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium mb-2">
+                Taslak olarak kaydet
+              </button>
+              <div className="border-t border-gray-200 pt-2 mt-2 space-y-1">
+                <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Yeni sözleşme
+                </button>
+                <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Yeni teklif
+                </button>
+              </div>
+              <button className="w-full text-sm text-blue-600 hover:text-blue-700 mt-3">
+                Email geçmişini görüntüle (0)
+              </button>
+            </div>
+
             {/* Documents */}
             <div className="bg-white rounded-lg border border-gray-200 p-4">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Dökümanlar</h3>
-              <div className="flex items-center gap-2 text-sm text-gray-600 py-2">
-                <FileText className="w-4 h-4" />
-                <span>İrsaliye</span>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600 py-2 px-3 hover:bg-gray-50 rounded cursor-pointer">
+                  <FileText className="w-4 h-4" />
+                  <span>İrsaliye</span>
+                </div>
               </div>
             </div>
 
