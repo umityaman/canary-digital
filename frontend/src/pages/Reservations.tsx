@@ -204,51 +204,30 @@ const Reservations: React.FC = () => {
 
           {/* Main Content Area */}
           <div className="flex-1">
-              {/* Stats Cards with Toggle */}
-              <div className="mb-6">
-                <div className="flex items-center justify-end mb-3">
-                  <button
-                    onClick={() => setShowMetrics(!showMetrics)}
-                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-                  >
-                    {showMetrics ? (
-                      <>
-                        <EyeOff className="w-4 h-4" />
-                        Metrikleri gizle
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-4 h-4" />
-                        Metrikleri göster
-                      </>
-                    )}
-                  </button>
-                </div>
-                
-                {showMetrics && (
-                  <div className="grid grid-cols-4 gap-4">
-                    <div className="bg-white rounded-lg shadow p-6">
-                      <div className="text-sm text-gray-600 mb-1">Siparişler</div>
-                      <div className="text-3xl font-bold text-gray-900">{stats.orders}</div>
-                    </div>
-                    
-                    <div className="bg-white rounded-lg shadow p-6">
-                      <div className="text-sm text-gray-600 mb-1">Sipariş Edilen Ürünler</div>
-                      <div className="text-3xl font-bold text-gray-900">{stats.itemsOrdered}</div>
-                    </div>
-                    
-                    <div className="bg-white rounded-lg shadow p-6">
-                      <div className="text-sm text-gray-600 mb-1">Gelir</div>
-                      <div className="text-3xl font-bold text-gray-900">₺{stats.revenue.toFixed(2)}</div>
-                    </div>
-                    
-                    <div className="bg-white rounded-lg shadow p-6">
-                      <div className="text-sm text-gray-600 mb-1">Bekleyen</div>
-                      <div className="text-3xl font-bold text-gray-900">₺{stats.due.toFixed(2)}</div>
-                    </div>
+              {/* Stats Cards */}
+              {showMetrics && (
+                <div className="grid grid-cols-4 gap-4 mb-6">
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <div className="text-sm text-gray-600 mb-1">Siparişler</div>
+                    <div className="text-3xl font-bold text-gray-900">{stats.orders}</div>
                   </div>
-                )}
-              </div>
+                  
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <div className="text-sm text-gray-600 mb-1">Sipariş Edilen Ürünler</div>
+                    <div className="text-3xl font-bold text-gray-900">{stats.itemsOrdered}</div>
+                  </div>
+                  
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <div className="text-sm text-gray-600 mb-1">Gelir</div>
+                    <div className="text-3xl font-bold text-gray-900">₺{stats.revenue.toFixed(2)}</div>
+                  </div>
+                  
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <div className="text-sm text-gray-600 mb-1">Bekleyen</div>
+                    <div className="text-3xl font-bold text-gray-900">₺{stats.due.toFixed(2)}</div>
+                  </div>
+                </div>
+              )}
 
               {/* Tabs */}
               <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -273,10 +252,6 @@ const Reservations: React.FC = () => {
                       </button>
                     ))}
                   </div>
-                  
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                    Metrikleri Gizle ⌃
-                  </button>
                 </div>
 
                 {/* Empty State */}
