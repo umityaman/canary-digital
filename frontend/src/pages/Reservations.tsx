@@ -191,10 +191,13 @@ const Reservations: React.FC = () => {
                 {dateRangeOpen && (
                   <div className="space-y-1">
                     <button 
-                      onClick={() => setShowDatePicker(true)}
-                      className="text-xs text-gray-600 mb-2 px-2 hover:text-blue-600 cursor-pointer w-full text-left"
+                      onClick={() => {
+                        console.log('Date picker button clicked!');
+                        setShowDatePicker(true);
+                      }}
+                      className="text-xs text-gray-700 mb-2 px-2 py-1.5 hover:bg-blue-50 hover:text-blue-600 cursor-pointer w-full text-left rounded transition-colors font-medium"
                     >
-                      Tüm zamanlar gösteriliyor
+                      📅 Tüm zamanlar gösteriliyor
                     </button>
                     {[
                       { key: 'all' as const, label: 'Tüm zamanlar' },
