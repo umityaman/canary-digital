@@ -52,37 +52,62 @@ const NewOrder: React.FC = () => {
 
           {/* Main Content */}
           <div className="p-6 space-y-6">
-            {/* Customer & Pickup - Yan Yana */}
+            
+            {/* Row 1: 2 Columns - Customer+Information | Pickup */}
             <div className="grid grid-cols-2 gap-6">
               
-              {/* 1. Customer Section */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Customer</h3>
-                <div className="flex gap-2">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search customer"
-                      className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+              {/* Left Column: Customer + Information (Alt Alta) */}
+              <div className="space-y-6">
+                
+                {/* Customer Section */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <h3 className="text-base font-semibold text-gray-900 mb-4">Customer</h3>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Search customer"
+                        className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <button
+                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      title="Scan QR"
+                    >
+                      <QrCode className="w-4 h-4 text-gray-600" />
+                    </button>
+                    <button
+                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      title="Add customer"
+                    >
+                      <UserPlus className="w-4 h-4 text-gray-600" />
+                    </button>
                   </div>
-                  <button
-                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                    title="Scan QR"
-                  >
-                    <QrCode className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button
-                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                    title="Add customer"
-                  >
-                    <UserPlus className="w-4 h-4 text-gray-600" />
-                  </button>
+                </div>
+
+                {/* Information Section */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-base font-semibold text-gray-900">Information</h3>
+                    <button className="text-sm text-gray-700 hover:text-gray-900 font-medium px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                      Add field
+                    </button>
+                  </div>
+                  
+                  <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                    <p className="text-sm font-medium text-gray-900 mb-2">You haven't set up any custom fields yet.</p>
+                    <p className="text-xs text-gray-600 mb-3 px-4">
+                      Custom fields display extra details like delivery info or notes. Set them to auto-populate on orders or add one-off fields using the button above. You can also configure them to collect data from your online store.
+                    </p>
+                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                      Set up custom fields
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* 2. Pickup Section */}
+              {/* Right Column: Pickup (Tek Başına) */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h3 className="text-base font-semibold text-gray-900 mb-4">Pickup</h3>
                 
@@ -144,8 +169,11 @@ const NewOrder: React.FC = () => {
               </div>
             </div>
 
-            {/* 3. Products Section */}
+            {/* Row 2: Products & Pricing (Tek Section, Full Width) */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              
+              {/* PRODUCTS PART */}
+              <h3 className="text-base font-semibold text-gray-900 mb-4">Products</h3>
               <div className="flex gap-2 mb-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -176,10 +204,12 @@ const NewOrder: React.FC = () => {
                 <Plus className="w-4 h-4" />
                 Add custom line
               </button>
-            </div>
 
-            {/* 4. Pricing Summary */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              {/* Divider */}
+              <hr className="my-6 border-gray-200" />
+
+              {/* PRICING PART */}
+              <h3 className="text-base font-semibold text-gray-900 mb-4">Pricing</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-700">Subtotal</span>
@@ -214,25 +244,6 @@ const NewOrder: React.FC = () => {
               </div>
             </div>
 
-            {/* 5. Information Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-semibold text-gray-900">Information</h3>
-                <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                  Add field
-                </button>
-              </div>
-              
-              <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg">
-                <p className="text-sm font-medium text-gray-900 mb-2">You haven't set up any custom fields yet.</p>
-                <p className="text-xs text-gray-600 mb-3">
-                  Custom fields display extra details like delivery info or notes. Set them to auto-populate on orders or add one-off fields using the button above. You can also configure them to collect data from your online store.
-                </p>
-                <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                  Set up custom fields
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
