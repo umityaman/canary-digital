@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Package, Calendar, TrendingUp, DollarSign, QrCode, Bell, Users, ShoppingCart } from 'lucide-react-native';
-import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useAuthStore } from '../../stores/authStore';
 import { useNotificationStore } from '../../stores/notificationStore';
 import { useDashboardStore } from '../../stores/dashboardStore';
@@ -117,7 +116,7 @@ const HomeScreen = () => {
         </View>
 
         {/* Quick Actions */}
-        <Animated.View entering={FadeInDown.delay(500).springify()} style={styles.section}>
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>Hızlı İşlemler</Text>
           <View style={styles.quickActions}>
             <View style={styles.actionButton}>
@@ -153,10 +152,10 @@ const HomeScreen = () => {
               </Button>
             </View>
           </View>
-        </Animated.View>
+        </View>
 
         {/* Recent Activity */}
-        <Animated.View entering={FadeInDown.delay(600).springify()} style={styles.section}>
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>Son Aktiviteler</Text>
           <Card variant="elevated">
             {[1, 2, 3].map((item, index) => (
@@ -176,7 +175,7 @@ const HomeScreen = () => {
               </View>
             ))}
           </Card>
-        </Animated.View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -342,3 +341,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+

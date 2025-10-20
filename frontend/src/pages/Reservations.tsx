@@ -67,7 +67,8 @@ const Reservations: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <>
+      <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -189,7 +190,12 @@ const Reservations: React.FC = () => {
                 
                 {dateRangeOpen && (
                   <div className="space-y-1">
-                    <div className="text-xs text-gray-600 mb-2 px-2">Tüm zamanlar gösteriliyor</div>
+                    <button 
+                      onClick={() => setShowDatePicker(true)}
+                      className="text-xs text-gray-600 mb-2 px-2 hover:text-blue-600 cursor-pointer w-full text-left"
+                    >
+                      Tüm zamanlar gösteriliyor
+                    </button>
                     {[
                       { key: 'all' as const, label: 'Tüm zamanlar' },
                       { key: 'today' as const, label: 'Bugün' },
@@ -215,64 +221,6 @@ const Reservations: React.FC = () => {
                         {label}
                       </button>
                     ))}
-                    
-                    {/* Custom Date Range Button */}
-                    <button
-                      onClick={() => setShowDatePicker(!showDatePicker)}
-                      className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
-                        showDatePicker ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
-                      }`}
-                    >
-                      Özel aralık seç
-                    </button>
-
-                    {/* Calendar Widget */}
-                    {showDatePicker && (
-                      <div className="mt-3 p-3 bg-white border border-gray-200 rounded-lg">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-sm font-medium text-gray-700">Tarih Seç</span>
-                          <button
-                            onClick={() => setShowDatePicker(false)}
-                            className="text-gray-400 hover:text-gray-600"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <div>
-                            <label className="block text-xs text-gray-600 mb-1">Başlangıç</label>
-                            <input
-                              type="date"
-                              value={customDateFrom}
-                              onChange={(e) => setCustomDateFrom(e.target.value)}
-                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                          </div>
-                          
-                          <div>
-                            <label className="block text-xs text-gray-600 mb-1">Bitiş</label>
-                            <input
-                              type="date"
-                              value={customDateTo}
-                              onChange={(e) => setCustomDateTo(e.target.value)}
-                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                          </div>
-                          
-                          <button
-                            onClick={() => {
-                              if (customDateFrom && customDateTo) {
-                                setShowDatePicker(false);
-                              }
-                            }}
-                            className="w-full px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-                          >
-                            Uygula
-                          </button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
@@ -363,6 +311,104 @@ const Reservations: React.FC = () => {
             </div>
       </div>
     </div>
+
+    {/* Date Range Calendar Modal */}
+    {showDatePicker && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" onClick={() => setShowDatePicker(false)}>
+        <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+          <div className="flex">
+            {/* Left Side - Quick Options */}
+            <div className="w-64 border-r border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-700 mb-4">Quick select</h3>
+              <div className="space-y-1">
+                {[
+                  { key: 'all' as const, label: 'All time' },
+                  { key: 'today' as const, label: 'Today' },
+                  { key: 'yesterday' as const, label: 'Yesterday' },
+                  { key: 'tomorrow' as const, label: 'Tomorrow' },
+                  { key: 'this_week' as const, label: 'This week' },
+                  { key: 'last_week' as const, label: 'Last week' },
+                  { key: 'next_week' as const, label: 'Next week' },
+                  { key: 'this_month' as const, label: 'This month' },
+                  { key: 'last_month' as const, label: 'Last month' },
+                  { key: 'next_month' as const, label: 'Next month' },
+                  { key: 'this_year' as const, label: 'This year' },
+                  { key: 'last_year' as const, label: 'Last year' },
+                  { key: 'next_year' as const, label: 'Next year' }
+                ].map(({ key, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setDateRange(key);
+                      setShowDatePicker(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 text-sm rounded-lg hover:bg-gray-100 transition-colors ${
+                      dateRange === key ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Side - Calendar */}
+            <div className="flex-1 p-6">
+              <div className="mb-6">
+                {/* Calendar Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <button className="p-2 hover:bg-gray-100 rounded-lg">
+                    <ChevronDown className="w-5 h-5 rotate-90 text-gray-600" />
+                  </button>
+                  <h3 className="text-lg font-semibold text-gray-900">October 2025</h3>
+                  <button className="p-2 hover:bg-gray-100 rounded-lg">
+                    <ChevronDown className="w-5 h-5 -rotate-90 text-gray-600" />
+                  </button>
+                </div>
+
+                {/* Calendar Grid */}
+                <div className="grid grid-cols-7 gap-2 mb-6">
+                  {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map(day => (
+                    <div key={day} className="text-center text-xs font-semibold text-gray-600 py-2">
+                      {day}
+                    </div>
+                  ))}
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                    <button
+                      key={day}
+                      className={`aspect-square flex items-center justify-center text-sm rounded-lg transition-colors ${
+                        day === 20 
+                          ? 'bg-blue-600 text-white font-semibold hover:bg-blue-700' 
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  ))}
+                </div>
+
+                {/* From/Till Selectors */}
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
+                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option>Select...</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Till</label>
+                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option>Select...</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
 
