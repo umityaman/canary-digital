@@ -192,12 +192,12 @@ const Reservations: React.FC = () => {
                   <div className="space-y-1">
                     <button 
                       onClick={() => {
-                        console.log('Date picker button clicked!');
+                        console.log('Opening date picker modal');
                         setShowDatePicker(true);
                       }}
-                      className="text-xs text-gray-700 mb-2 px-2 py-1.5 hover:bg-blue-50 hover:text-blue-600 cursor-pointer w-full text-left rounded transition-colors font-medium"
+                      className="text-sm text-gray-700 mb-3 px-3 py-2 hover:bg-blue-50 hover:text-blue-600 cursor-pointer w-full text-left rounded-lg transition-colors font-medium border border-transparent hover:border-blue-200"
                     >
-                      📅 Tüm zamanlar gösteriliyor
+                      📅 Tüm zamanlar gösteriliyor - Tıkla
                     </button>
                     {[
                       { key: 'all' as const, label: 'Tüm zamanlar' },
