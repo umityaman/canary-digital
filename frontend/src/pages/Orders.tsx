@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   Plus, Search, ChevronDown, ChevronUp, Calendar as CalendarIcon,
   Package, DollarSign, AlertCircle, Clock, User, MapPin, FileText,
-  Mail, Phone, Tag, StickyNote
+  Mail, Phone, Tag, StickyNote, X
 } from 'lucide-react';
-import Layout from '../components/Layout';
 
 type TabType = 'all' | 'upcoming' | 'late' | 'shortage';
 type StatusFilter = 'draft' | 'reserved' | 'started' | 'returned' | 'archived' | 'canceled';
@@ -20,6 +19,8 @@ const Orders: React.FC = () => {
   const [paymentFilters, setPaymentFilters] = useState<PaymentFilter[]>([]);
   const [dateRange, setDateRange] = useState<'all' | 'today' | 'yesterday' | 'tomorrow' | 'this_week' | 'last_week' | 'next_week' | 'this_month' | 'last_month' | 'next_month' | 'this_year' | 'last_year' | 'next_year'>('all');
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [customDateFrom, setCustomDateFrom] = useState('');
+  const [customDateTo, setCustomDateTo] = useState('');
   
   // Sections
   const [statusOpen, setStatusOpen] = useState(true);
@@ -65,10 +66,9 @@ const Orders: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <div className="h-screen flex flex-col bg-gray-50">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4";
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Package className="w-8 h-8 text-gray-700" />
@@ -206,14 +206,75 @@ const Orders: React.FC = () => {
                     ].map(({ key, label }) => (
                       <button
                         key={key}
-                        onClick={() => setDateRange(key)}
+                        onClick={() => {
+                          setDateRange(key);
+                          setShowDatePicker(false);
+                        }}
                         className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
-                          dateRange === key ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                          dateRange === key && !showDatePicker ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
                         }`}
                       >
                         {label}
                       </button>
                     ))}
+                    
+                    {/* Custom Date Range Button */}
+                    <button
+                      onClick={() => setShowDatePicker(!showDatePicker)}
+                      className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
+                        showDatePicker ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                      }`}
+                    >
+                      Özel aralık seç
+                    </button>
+
+                    {/* Calendar Widget */}
+                    {showDatePicker && (
+                      <div className="mt-3 p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-sm font-medium text-gray-700">Tarih Seç</span>
+                          <button
+                            onClick={() => setShowDatePicker(false)}
+                            className="text-gray-400 hover:text-gray-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Başlangıç</label>
+                            <input
+                              type="date"
+                              value={customDateFrom}
+                              onChange={(e) => setCustomDateFrom(e.target.value)}
+                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Bitiş</label>
+                            <input
+                              type="date"
+                              value={customDateTo}
+                              onChange={(e) => setCustomDateTo(e.target.value)}
+                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              if (customDateFrom && customDateTo) {
+                                setShowDatePicker(false);
+                              }
+                            }}
+                            className="w-full px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                          >
+                            Uygula
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -308,7 +369,7 @@ const Orders: React.FC = () => {
           )}
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 
