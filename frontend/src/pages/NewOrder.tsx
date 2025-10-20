@@ -173,8 +173,7 @@ const NewOrder: React.FC = () => {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               
               {/* PRODUCTS PART */}
-              <h3 className="text-base font-semibold text-gray-900 mb-4">Products</h3>
-              <div className="flex gap-2 mb-4">
+              <div className="flex gap-2 mb-6">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
@@ -193,53 +192,47 @@ const NewOrder: React.FC = () => {
                 </button>
               </div>
 
-              {/* Empty State */}
-              <div className="text-center py-16 border border-gray-200 rounded-lg bg-gray-50">
-                <p className="text-sm text-gray-900 font-medium mb-1">This order is empty.</p>
-                <p className="text-sm text-gray-600">Get started by adding some products or a custom line.</p>
+              {/* Empty State - Büyük Boş Alan */}
+              <div className="text-center py-20 mb-6">
+                <p className="text-sm text-gray-900 font-medium mb-1">This order is empty. Get started by adding some products or a custom line.</p>
               </div>
-
-              {/* Add custom line button */}
-              <button className="mt-4 text-sm text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1">
-                <Plus className="w-4 h-4" />
-                Add custom line
-              </button>
 
               {/* Divider */}
               <hr className="my-6 border-gray-200" />
 
-              {/* PRICING PART */}
-              <h3 className="text-base font-semibold text-gray-900 mb-4">Pricing</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-700">Subtotal</span>
-                  <span className="font-medium text-gray-900">₺0,00</span>
-                </div>
+              {/* PRICING PART - Sol: Add custom line, Sağ: Pricing bilgileri */}
+              <div className="flex items-start justify-between">
                 
-                <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                  Add a discount
+                {/* Sol Taraf: Add custom line butonu */}
+                <button className="text-sm text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1">
+                  <ChevronDown className="w-4 h-4" />
+                  Add custom line
                 </button>
-                
-                <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                  Add a coupon
-                </button>
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-700">Total discount</span>
-                  <span className="font-medium text-gray-900">₺0,00</span>
-                </div>
-                
-                <div className="border-t border-gray-200 pt-3 flex justify-between">
-                  <span className="text-sm font-semibold text-gray-900">Total incl. taxes</span>
-                  <span className="text-sm font-semibold text-gray-900">₺0,00</span>
-                </div>
-                
-                <div className="pt-3 border-t border-gray-200">
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium mb-1">
-                    Security deposit
+
+                {/* Sağ Taraf: Pricing Bilgileri */}
+                <div className="w-80 space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-700">Subtotal</span>
+                    <span className="font-medium text-gray-900">€0,00</span>
+                  </div>
+                  
+                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium block">
+                    Add a discount
                   </button>
-                  <p className="text-xs text-gray-600 mb-2">100% of product security deposit value</p>
-                  <p className="text-sm font-medium text-gray-900">₺0,00</p>
+                  
+                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium block">
+                    Add a coupon
+                  </button>
+                  
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-700">Total discount</span>
+                    <span className="font-medium text-gray-900">€0,00</span>
+                  </div>
+                  
+                  <div className="border-t border-gray-200 pt-3 flex justify-between">
+                    <span className="text-sm font-semibold text-gray-900">Total incl. taxes</span>
+                    <span className="text-sm font-semibold text-gray-900">€0,00</span>
+                  </div>
                 </div>
               </div>
             </div>
