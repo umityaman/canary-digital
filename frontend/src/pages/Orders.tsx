@@ -716,4 +716,4 @@ const NewOrderForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   );
 };
 
-export default Reservations;
+export default Orders;
