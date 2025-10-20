@@ -24,117 +24,121 @@ const NewOrder: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header - Booqable Style */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-sm text-gray-600">
-              <span className="hover:text-gray-900 cursor-pointer" onClick={() => navigate('/orders')}>Orders</span>
-              <span className="mx-2">›</span>
-              <span className="text-gray-900">New order</span>
-            </div>
-            <span className="px-2.5 py-0.5 bg-gray-200 text-gray-700 text-xs font-medium rounded-full">New</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-              Save as draft
-            </button>
-            <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <MoreHorizontal className="w-5 h-5 text-gray-600" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="flex gap-6">
-          {/* Left Panel - Main Content */}
-          <div className="flex-1 space-y-6">
-            
-            {/* 1. Customer Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-4">Customer</h3>
-              <div className="flex gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search customer"
-                    className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+      <div className="flex">
+        {/* Left Side - Header + Main Content */}
+        <div className="flex-1">
+          {/* Header */}
+          <div className="bg-white border-b border-gray-200 px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="text-sm text-gray-600">
+                  <span className="hover:text-gray-900 cursor-pointer" onClick={() => navigate('/orders')}>Orders</span>
+                  <span className="mx-2">›</span>
+                  <span className="text-gray-900">New order</span>
                 </div>
-                <button
-                  className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                  title="Scan QR"
-                >
-                  <QrCode className="w-4 h-4 text-gray-600" />
-                </button>
-                <button
-                  className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                  title="Add customer"
-                >
-                  <UserPlus className="w-4 h-4 text-gray-600" />
-                </button>
+                <span className="px-2.5 py-0.5 bg-gray-200 text-gray-700 text-xs font-medium rounded-full">New</span>
               </div>
-            </div>
-
-            {/* 2. Pickup Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-4">Pickup</h3>
               
-              {/* Add billing address link */}
-              <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium mb-4">
-                <FileText className="w-4 h-4" />
-                Add billing address
-              </button>
+              <div className="flex items-center gap-2">
+                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+                  Save as draft
+                </button>
+                <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <MoreHorizontal className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+            </div>
+          </div>
 
-              {/* Pick up */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-3">Pick up</h4>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
+          {/* Main Content */}
+          <div className="p-6 space-y-6">
+            {/* Customer & Pickup - Yan Yana */}
+            <div className="grid grid-cols-2 gap-6">
+              
+              {/* 1. Customer Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 className="text-base font-semibold text-gray-900 mb-4">Customer</h3>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
-                      type="date"
-                      value={pickupDate}
-                      onChange={(e) => setPickupDate(e.target.value)}
-                      placeholder="Select date"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      type="text"
+                      placeholder="Search customer"
+                      className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <input
-                      type="time"
-                      value={pickupTime}
-                      onChange={(e) => setPickupTime(e.target.value)}
-                      placeholder="Time"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                  <button
+                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    title="Scan QR"
+                  >
+                    <QrCode className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button
+                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    title="Add customer"
+                  >
+                    <UserPlus className="w-4 h-4 text-gray-600" />
+                  </button>
                 </div>
               </div>
 
-              {/* Return */}
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-3">Return</h4>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <input
-                      type="date"
-                      value={returnDate}
-                      onChange={(e) => setReturnDate(e.target.value)}
-                      placeholder="Select date"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+              {/* 2. Pickup Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 className="text-base font-semibold text-gray-900 mb-4">Pickup</h3>
+                
+                {/* Add billing address link */}
+                <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium mb-4">
+                  <FileText className="w-4 h-4" />
+                  Add billing address
+                </button>
+
+                {/* Pick up */}
+                <div className="mb-6">
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Pick up</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <input
+                        type="date"
+                        value={pickupDate}
+                        onChange={(e) => setPickupDate(e.target.value)}
+                        placeholder="Select date"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="time"
+                        value={pickupTime}
+                        onChange={(e) => setPickupTime(e.target.value)}
+                        placeholder="Time"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <input
-                      type="time"
-                      value={returnTime}
-                      onChange={(e) => setReturnTime(e.target.value)}
-                      placeholder="Time"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                </div>
+
+                {/* Return */}
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Return</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <input
+                        type="date"
+                        value={returnDate}
+                        onChange={(e) => setReturnDate(e.target.value)}
+                        placeholder="Select date"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="time"
+                        value={returnTime}
+                        onChange={(e) => setReturnTime(e.target.value)}
+                        placeholder="Time"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -230,19 +234,21 @@ const NewOrder: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Right Sidebar - Booqable Style */}
-          <div className="w-80 space-y-4">
+        {/* Right Sidebar - En Üstten Başlıyor */}
+        <div className="w-64 border-l border-gray-200 bg-white">
+          <div className="p-4 space-y-4">
             
-            {/* Action Buttons */}
-            <div className="space-y-2">
-              <button className="w-full px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+            {/* Action Buttons - Tek Kart İçinde */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 space-y-2">
+              <button className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
                 Send email
               </button>
-              <button className="w-full px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+              <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
                 New contract
               </button>
-              <button className="w-full px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+              <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
                 New quote
               </button>
             </div>
