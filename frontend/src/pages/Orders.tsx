@@ -1,946 +1,547 @@
-import { useState, useEffect } from 'react';
-import {
-  ShoppingCart,
-  Plus,
-  Search,
-  Filter,
-  Download,
-  Trash2,
-  Edit,
-  Eye,
-  RefreshCw,
-  X,
-  User,
-  Package,
-  ChevronDown,
-  ChevronUp,
-  Calendar,
-  Plug,
-  FileText,
+import React, { useState, useEffect } from 'react';
+import { 
+  Plus, Search, ChevronDown, ChevronUp, Calendar as CalendarIcon,
+  Package, DollarSign, AlertCircle, Clock, User, MapPin, FileText,
+  Mail, Phone, Tag, StickyNote
 } from 'lucide-react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import api from '../services/api';
-import OrderModal, { OrderFormData } from '../components/modals/OrderModal';
-import { InvoiceGenerator, InvoiceData } from '../components/invoices';
-import PDFDownloadButton from '../components/pdf/PDFDownloadButton';
+import Layout from '../components/Layout';
 
-interface Order {
-  id: number;
-  orderNumber: string;
-  startDate: string;
-  endDate: string;
-  totalAmount: number;
-  status: string;
-  customer: {
-    id: number;
-    name: string;
-    email: string;
-  };
-  orderItems: Array<{
-    id: number;
-    quantity: number;
-    equipment: {
-      id: number;
-      name: string;
-      model: string;
-    };
-  }>;
-  createdAt: string;
-  booqableId?: string;
-}
+type TabType = 'all' | 'upcoming' | 'late' | 'shortage';
+type StatusFilter = 'draft' | 'reserved' | 'started' | 'returned' | 'archived' | 'canceled';
+type PaymentFilter = 'payment_due' | 'partially_paid' | 'paid' | 'overpaid' | 'process_deposit';
 
-interface Pagination {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-type SortField = 'orderNumber' | 'customer' | 'startDate' | 'totalAmount' | 'status' | 'createdAt';
-type SortOrder = 'asc' | 'desc';
-
-export default function Orders() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({
-    total: 0,
-    page: 1,
-    limit: 20,
-    totalPages: 0
-  });
-  const [loading, setLoading] = useState(false);
-  const [selectedOrders, setSelectedOrders] = useState<number[]>([]);
+const Orders: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<TabType>('all');
+  const [showForm, setShowForm] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Filters
-  const [showFilters, setShowFilters] = useState(false);
-  const [accordions, setAccordions] = useState({
-    status: false,
-    dateRange: false,
-    amount: false,
-  });
-  const [filters, setFilters] = useState({
-    search: '',
-    status: '',
-    startDate: '',
-    endDate: '',
-    minAmount: '',
-    maxAmount: '',
-  });
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
-  const [startDate, endDate] = dateRange;
-
-  const toggleAccordion = (key: 'status' | 'dateRange' | 'amount') => {
-    setAccordions({ ...accordions, [key]: !accordions[key] });
-  };
-
-  // Sorting
-  const [sortBy, setSortBy] = useState<SortField>('createdAt');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
-
-  // Modals
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [showOrderModal, setShowOrderModal] = useState(false);
-  const [orderModalMode, setOrderModalMode] = useState<'create' | 'edit'>('create');
+  const [statusFilters, setStatusFilters] = useState<StatusFilter[]>([]);
+  const [paymentFilters, setPaymentFilters] = useState<PaymentFilter[]>([]);
+  const [dateRange, setDateRange] = useState<'all' | 'today' | 'yesterday' | 'tomorrow' | 'this_week' | 'last_week' | 'next_week' | 'this_month' | 'last_month' | 'next_month' | 'this_year' | 'last_year' | 'next_year'>('all');
+  const [showDatePicker, setShowDatePicker] = useState(false);
   
-  // Invoice Modal
-  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
-  const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
+  // Sections
+  const [statusOpen, setStatusOpen] = useState(true);
+  const [paymentOpen, setPaymentOpen] = useState(true);
+  const [dateRangeOpen, setDateRangeOpen] = useState(true);
 
-  useEffect(() => {
-    fetchOrders();
-  }, [pagination.page, sortBy, sortOrder]);
-
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: pagination.page.toString(),
-        limit: pagination.limit.toString(),
-        sortBy,
-        sortOrder,
-        ...Object.fromEntries(
-          Object.entries(filters).filter(([_, v]) => v !== '')
-        )
-      });
-
-      const response = await api.get(`/orders?${params.toString()}`);
-      setOrders(response.data.orders);
-      setPagination(response.data.pagination);
-    } catch (error) {
-      console.error('Failed to fetch orders:', error);
-    } finally {
-      setLoading(false);
-    }
+  // Mock stats data
+  const stats = {
+    orders: 12,
+    itemsOrdered: 45,
+    revenue: 15750.00,
+    due: 3250.00
   };
 
-  const handleSort = (field: SortField) => {
-    if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(field);
-      setSortOrder('asc');
-    }
+  // Mock filter counts
+  const statusCounts = {
+    draft: 2,
+    reserved: 5,
+    started: 3,
+    returned: 1,
+    archived: 0,
+    canceled: 1
   };
 
-  const handleSelectAll = () => {
-    if (selectedOrders.length === orders.length) {
-      setSelectedOrders([]);
-    } else {
-      setSelectedOrders(orders.map(o => o.id));
-    }
+  const paymentCounts = {
+    payment_due: 4,
+    partially_paid: 3,
+    paid: 4,
+    overpaid: 0,
+    process_deposit: 1
   };
 
-  const handleSelectOrder = (id: number) => {
-    if (selectedOrders.includes(id)) {
-      setSelectedOrders(selectedOrders.filter(oid => oid !== id));
-    } else {
-      setSelectedOrders([...selectedOrders, id]);
-    }
-  };
-
-  const handleBulkStatusUpdate = async (status: string) => {
-    if (selectedOrders.length === 0) return;
-
-    try {
-      await api.post('/orders/bulk/update-status', {
-        orderIds: selectedOrders,
-        status
-      });
-      setSelectedOrders([]);
-      fetchOrders();
-    } catch (error) {
-      console.error('Bulk update failed:', error);
-    }
-  };
-
-  const handleBulkDelete = async () => {
-    if (selectedOrders.length === 0) return;
-    
-    if (!confirm(`${selectedOrders.length} siparişi silmek istediğinize emin misiniz?`)) {
-      return;
-    }
-
-    try {
-      await api.post('/orders/bulk/delete', {
-        orderIds: selectedOrders
-      });
-      setSelectedOrders([]);
-      fetchOrders();
-    } catch (error) {
-      console.error('Bulk delete failed:', error);
-    }
-  };
-
-  const handleCreateOrder = () => {
-    setOrderModalMode('create');
-    setShowOrderModal(true);
-  };
-
-  const handleSaveOrder = async (data: OrderFormData) => {
-    try {
-      if (orderModalMode === 'create') {
-        await api.post('/orders', data);
-      } else {
-        // Edit mode - implement later
-        await api.put(`/orders/${data.id}`, data);
-      }
-      fetchOrders();
-    } catch (error) {
-      console.error('Save order failed:', error);
-      throw error;
-    }
-  };
-
-  const handleGenerateInvoice = (order: Order) => {
-    // Transform order to invoice data
-    const subtotal = order.totalAmount / 1.20; // Assuming 20% tax
-    const taxAmount = order.totalAmount - subtotal;
-
-    const data: InvoiceData = {
-      invoiceNumber: order.orderNumber,
-      invoiceDate: order.createdAt,
-      dueDate: order.endDate,
-      
-      // Company info (default data - should be fetched from settings in production)
-      company: {
-        name: 'Ekipman Kiralama A.Ş.',
-        address: 'Atatürk Bulvarı No:123',
-        city: 'İstanbul',
-        postalCode: '34000',
-        taxNumber: '1234567890',
-        phone: '+90 212 555 0123',
-        email: 'info@ekipman.com.tr',
-        website: 'www.ekipman.com.tr',
-      },
-      
-      // Customer info
-      customer: {
-        name: order.customer.name,
-        address: '-', // Not available in Order interface
-        city: '-',
-        postalCode: '-',
-        phone: '-',
-        email: order.customer.email,
-      },
-      
-      // Items
-      items: order.orderItems.map((item, index) => ({
-        id: (index + 1).toString(),
-        description: `${item.equipment.name} - ${item.equipment.model} (Kiralama)`,
-        quantity: item.quantity,
-        unit: 'Adet',
-        unitPrice: subtotal / order.orderItems.reduce((sum, i) => sum + i.quantity, 0),
-        total: (subtotal / order.orderItems.reduce((sum, i) => sum + i.quantity, 0)) * item.quantity,
-      })),
-      
-      // Totals
-      subtotal: subtotal,
-      taxRate: 20,
-      taxAmount: taxAmount,
-      total: order.totalAmount,
-      
-      // Payment info
-      iban: 'TR00 0001 0000 0000 0000 1234 56',
-      bankAccount: 'Garanti BBVA - Şişli Şubesi',
-      paymentMethod: 'Banka Havalesi',
-      
-      // Notes
-      notes: 'Ödemenizi fatura tarihinden itibaren 30 gün içinde yapmanız rica olunur.',
-      terms: 'Kiralanan ekipmanlar hasarsız olarak iade edilmelidir.',
-    };
-
-    setInvoiceData(data);
-    setShowInvoiceModal(true);
-  };
-
-  const handleExportCSV = () => {
-    const headers = ['Sipariş No', 'Müşteri', 'Başlangıç', 'Bitiş', 'Tutar', 'Durum'];
-    const rows = orders.map(order => [
-      order.orderNumber,
-      order.customer.name,
-      new Date(order.startDate).toLocaleDateString('tr-TR'),
-      new Date(order.endDate).toLocaleDateString('tr-TR'),
-      order.totalAmount.toLocaleString('tr-TR'),
-      getStatusLabel(order.status)
-    ]);
-
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.join(','))
-    ].join('\n');
-
-    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `siparisler-${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-  };
-
-  const getStatusBadge = (status: string) => {
-    const styles: Record<string, string> = {
-      PENDING: 'bg-neutral-100 text-neutral-700',
-      CONFIRMED: 'bg-neutral-100 text-neutral-700',
-      ACTIVE: 'bg-neutral-900 text-white',
-      COMPLETED: 'bg-neutral-100 text-neutral-700',
-      CANCELLED: 'bg-neutral-100 text-neutral-600',
-    };
-
-    return (
-      <span className={`px-2 py-1 rounded-lg text-xs font-medium ${styles[status] || 'bg-neutral-100 text-neutral-700'}`}>
-        {getStatusLabel(status)}
-      </span>
+  const toggleStatusFilter = (status: StatusFilter) => {
+    setStatusFilters(prev => 
+      prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]
     );
   };
 
-  const getStatusLabel = (status: string) => {
-    const labels: Record<string, string> = {
-      PENDING: 'Bekliyor',
-      CONFIRMED: 'Onaylandı',
-      ACTIVE: 'Aktif',
-      COMPLETED: 'Tamamlandı',
-      CANCELLED: 'İptal',
-    };
-    return labels[status] || status;
-  };
-
-  const SortIcon = ({ field }: { field: SortField }) => {
-    if (sortBy !== field) return <ChevronDown size={14} className="text-neutral-400" />;
-    return sortOrder === 'asc' 
-      ? <ChevronUp size={14} className="text-neutral-900" />
-      : <ChevronDown size={14} className="text-neutral-900" />;
+  const togglePaymentFilter = (payment: PaymentFilter) => {
+    setPaymentFilters(prev =>
+      prev.includes(payment) ? prev.filter(p => p !== payment) : [...prev, payment]
+    );
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header & Actions */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Siparişler</h1>
-          <p className="text-sm text-neutral-600 mt-1">
-            Toplam {pagination.total} sipariş
-          </p>
+    <Layout>
+      <div className="h-screen flex flex-col bg-gray-50">
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Package className="w-8 h-8 text-gray-700" />
+              <h1 className="text-2xl font-semibold text-gray-900">Siparişler</h1>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <button
+                onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm"
+              >
+                <Plus className="w-5 h-5" />
+                Sipariş Ekle
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          {/* Test Invoice Button */}
-          {orders.length > 0 && (
-            <button
-              onClick={() => handleGenerateInvoice(orders[0])}
-              className="flex items-center gap-2 px-4 py-2 border-2 border-indigo-500 text-indigo-600 rounded-xl hover:bg-indigo-50 transition-colors"
-              title="Test Invoice Generator"
-            >
-              <FileText size={18} />
-              Test Fatura
-            </button>
+
+        {/* Main Content */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Sidebar - Filters */}
+          <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
+            <div className="p-4 space-y-4">
+              {/* Status Filter */}
+              <div>
+                <button
+                  onClick={() => setStatusOpen(!statusOpen)}
+                  className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 mb-2"
+                >
+                  <span>Durum</span>
+                  {statusOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+                
+                {statusOpen && (
+                  <div className="space-y-2">
+                    {[
+                      { key: 'draft' as StatusFilter, label: 'Taslak' },
+                      { key: 'reserved' as StatusFilter, label: 'Rezerve' },
+                      { key: 'started' as StatusFilter, label: 'Başladı' },
+                      { key: 'returned' as StatusFilter, label: 'İade Edildi' },
+                      { key: 'archived' as StatusFilter, label: 'Arşivlendi' },
+                      { key: 'canceled' as StatusFilter, label: 'İptal' }
+                    ].map(({ key, label }) => (
+                      <label key={key} className="flex items-center justify-between text-sm cursor-pointer hover:bg-gray-50 px-2 py-1 rounded">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={statusFilters.includes(key)}
+                            onChange={() => toggleStatusFilter(key)}
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span className="text-gray-700">{label}</span>
+                        </div>
+                        <span className="text-gray-400 text-xs">({statusCounts[key]})</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-gray-200 pt-4">
+                {/* Payment Status Filter */}
+                <button
+                  onClick={() => setPaymentOpen(!paymentOpen)}
+                  className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 mb-2"
+                >
+                  <span>Ödeme Durumu</span>
+                  {paymentOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+                
+                {paymentOpen && (
+                  <div className="space-y-2">
+                    {[
+                      { key: 'payment_due' as PaymentFilter, label: 'Ödeme Bekliyor' },
+                      { key: 'partially_paid' as PaymentFilter, label: 'Kısmi Ödendi' },
+                      { key: 'paid' as PaymentFilter, label: 'Ödendi' },
+                      { key: 'overpaid' as PaymentFilter, label: 'Fazla Ödeme' },
+                      { key: 'process_deposit' as PaymentFilter, label: 'Depozito İşlemi' }
+                    ].map(({ key, label }) => (
+                      <label key={key} className="flex items-center justify-between text-sm cursor-pointer hover:bg-gray-50 px-2 py-1 rounded">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={paymentFilters.includes(key)}
+                            onChange={() => togglePaymentFilter(key)}
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span className="text-gray-700">{label}</span>
+                        </div>
+                        <span className="text-gray-400 text-xs">({paymentCounts[key]})</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-gray-200 pt-4">
+                {/* Date Range Filter */}
+                <button
+                  onClick={() => setDateRangeOpen(!dateRangeOpen)}
+                  className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 mb-2"
+                >
+                  <span>Tarih Aralığı</span>
+                  {dateRangeOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+                
+                {dateRangeOpen && (
+                  <div className="space-y-1">
+                    <div className="text-xs text-gray-600 mb-2 px-2">Tüm zamanlar gösteriliyor</div>
+                    {[
+                      { key: 'all' as const, label: 'Tüm zamanlar' },
+                      { key: 'today' as const, label: 'Bugün' },
+                      { key: 'yesterday' as const, label: 'Dün' },
+                      { key: 'tomorrow' as const, label: 'Yarın' },
+                      { key: 'this_week' as const, label: 'Bu hafta' },
+                      { key: 'last_week' as const, label: 'Geçen hafta' },
+                      { key: 'next_week' as const, label: 'Gelecek hafta' },
+                      { key: 'this_month' as const, label: 'Bu ay' },
+                      { key: 'last_month' as const, label: 'Geçen ay' },
+                      { key: 'next_month' as const, label: 'Gelecek ay' },
+                      { key: 'this_year' as const, label: 'Bu yıl' },
+                      { key: 'last_year' as const, label: 'Geçen yıl' },
+                      { key: 'next_year' as const, label: 'Gelecek yıl' }
+                    ].map(({ key, label }) => (
+                      <button
+                        key={key}
+                        onClick={() => setDateRange(key)}
+                        className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
+                          dateRange === key ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Export Button */}
+              <div className="border-t border-gray-200 pt-4">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                  <FileText className="w-4 h-4" />
+                  Dışa Aktar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          {showForm ? (
+            <NewOrderForm onClose={() => setShowForm(false)} />
+          ) : (
+            <div className="flex-1 overflow-y-auto p-6">
+              {/* Stats Cards */}
+              <div className="grid grid-cols-4 gap-4 mb-6">
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="text-sm text-gray-600 mb-1">Siparişler</div>
+                  <div className="text-3xl font-bold text-gray-900">{stats.orders}</div>
+                </div>
+                
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="text-sm text-gray-600 mb-1">Sipariş Edilen Ürünler</div>
+                  <div className="text-3xl font-bold text-gray-900">{stats.itemsOrdered}</div>
+                </div>
+                
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="text-sm text-gray-600 mb-1">Gelir</div>
+                  <div className="text-3xl font-bold text-gray-900">₺{stats.revenue.toFixed(2)}</div>
+                </div>
+                
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="text-sm text-gray-600 mb-1">Bekleyen</div>
+                  <div className="text-3xl font-bold text-gray-900">₺{stats.due.toFixed(2)}</div>
+                </div>
+              </div>
+
+              {/* Tabs */}
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+                  <div className="flex gap-6">
+                    {[
+                      { key: 'all' as TabType, label: 'Tümü' },
+                      { key: 'upcoming' as TabType, label: 'Yaklaşan' },
+                      { key: 'late' as TabType, label: 'Geciken' },
+                      { key: 'shortage' as TabType, label: 'Eksik Stoklu' }
+                    ].map(({ key, label }) => (
+                      <button
+                        key={key}
+                        onClick={() => setActiveTab(key)}
+                        className={`pb-3 border-b-2 font-medium text-sm transition-colors ${
+                          activeTab === key
+                            ? 'border-blue-600 text-blue-600'
+                            : 'border-transparent text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    Metrikleri Gizle ⌃
+                  </button>
+                </div>
+
+                {/* Empty State */}
+                <div className="p-12 text-center">
+                  <div className="flex justify-center mb-4">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Package className="w-8 h-8 text-gray-400" />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">İlk siparişinizi oluşturun</h3>
+                  <p className="text-gray-600 mb-1">Canlı müsaitlik ve otomatik fiyat hesaplamaları ile siparişlerinizi oluşturun ve yönetin.</p>
+                  <p className="text-gray-600 mb-6">Ardından, iş akışına aşina olmak için bir siparişteki öğeleri rezerve etmeyi, almayı ve iade etmeyi deneyin.</p>
+                  <button
+                    onClick={() => setShowForm(true)}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    <Plus className="w-5 h-5" />
+                    Sipariş Ekle
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
+        </div>
+      </div>
+    </Layout>
+  );
+};
 
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-4 py-2 border rounded-xl transition-colors ${
-              showFilters 
-                ? 'bg-neutral-900 text-white border-neutral-900' 
-                : 'border-neutral-300 hover:bg-neutral-50'
-            }`}
-          >
-            <Filter size={18} />
-            Filtreler
-          </button>
-          
-          <button
-            onClick={handleExportCSV}
-            className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors"
-          >
-            <Download size={18} />
-            CSV İndir
-          </button>
+// New Order Form Component
+const NewOrderForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+  const [pickupDate, setPickupDate] = useState('');
+  const [pickupTime, setPickupTime] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [returnTime, setReturnTime] = useState('');
+  const [searchProducts, setSearchProducts] = useState('');
+  const [notes, setNotes] = useState('');
 
-          <button 
-            onClick={handleCreateOrder}
-            className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+  return (
+    <div className="flex-1 overflow-y-auto bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onClose}
+            className="text-gray-600 hover:text-gray-900"
           >
-            <Plus size={18} />
-            Yeni Sipariş
+            ← Siparişler
+          </button>
+          <span className="text-gray-400">›</span>
+          <h2 className="text-xl font-semibold text-gray-900">Yeni sipariş</h2>
+          <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">Yeni</span>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+            Taslak olarak kaydet
+          </button>
+          <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+            •••
+          </button>
+          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+            E-posta gönder
           </button>
         </div>
       </div>
 
-      {/* Filters Panel */}
-      {showFilters && (
-        <div className="bg-white rounded-2xl border border-neutral-200 p-6 space-y-4">
-          {/* Search */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">Arama</label>
-            <div className="relative">
-              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-              <input
-                type="text"
-                value={filters.search}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                placeholder="Sipariş no, notlar..."
-                className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+      {/* Form Content */}
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="grid grid-cols-3 gap-6">
+          {/* Left Column - Main Form */}
+          <div className="col-span-2 space-y-6">
+            {/* Customer Section */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Müşteri</h3>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Müşteri ara"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            {/* Pickup Section */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Teslim Alma</h3>
+              
+              <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-4 text-sm">
+                <MapPin className="w-4 h-4" />
+                Fatura adresi ekle
+              </button>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Teslim alma</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="relative">
+                      <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="date"
+                        value={pickupDate}
+                        onChange={(e) => setPickupDate(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="time"
+                        value={pickupTime}
+                        onChange={(e) => setPickupTime(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">İade</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="relative">
+                      <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="date"
+                        value={returnDate}
+                        onChange={(e) => setReturnDate(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="time"
+                        value={returnTime}
+                        onChange={(e) => setReturnTime(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Products Section */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Ürün eklemek için ara"
+                  value={searchProducts}
+                  onChange={(e) => setSearchProducts(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="py-12 text-center border-2 border-dashed border-gray-300 rounded-lg">
+                <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-600 mb-1">Bu sipariş boş. Bazı ürünler veya özel bir satır ekleyerek başlayın.</p>
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <button className="text-blue-600 hover:text-blue-700 text-sm font-medium mb-4">
+                  + Özel satır ekle
+                </button>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Ara toplam</span>
+                    <span className="font-medium">₺0,00</span>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <button className="text-blue-600 hover:text-blue-700 text-sm">İndirim ekle</button>
+                    <span className="text-gray-400">•</span>
+                    <button className="text-blue-600 hover:text-blue-700 text-sm">Kupon ekle</button>
+                  </div>
+
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Toplam indirim</span>
+                    <span className="font-medium">₺0,00</span>
+                  </div>
+
+                  <div className="flex justify-between text-sm pt-3 border-t border-gray-200">
+                    <span className="text-gray-600">Vergiler dahil toplam</span>
+                    <span className="font-bold text-lg">₺0,00</span>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-3 border-t border-gray-200">
+                    <div>
+                      <div className="text-sm text-gray-600">Güvenlik deposu</div>
+                      <div className="text-xs text-gray-500">%100 ürün güvenlik deposu değeri</div>
+                    </div>
+                    <span className="font-medium">₺0,00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Sidebar */}
+          <div className="space-y-6">
+            {/* Documents */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Belgeler</h3>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <FileText className="w-4 h-4" />
+                <span>Paketleme fişi</span>
+              </div>
+            </div>
+
+            {/* Invoices */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Faturalar</h3>
+              <p className="text-sm text-gray-500">Fatura bulunamadı.</p>
+            </div>
+
+            {/* Payments */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Ödemeler</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Ödenen</span>
+                  <span className="font-medium">₺0,00</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Vadesi gelen</span>
+                  <span className="font-medium">₺0,00</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Etiketler</h3>
+              <button className="text-blue-600 hover:text-blue-700 text-sm">
+                + Etiket ekle
+              </button>
+            </div>
+
+            {/* Notes */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Notlar</h3>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Yeni not ekle"
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
           </div>
-
-          {/* Status Accordion */}
-          <div className="border border-neutral-200 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleAccordion('status')}
-              className="w-full flex items-center justify-between p-4 bg-neutral-50 hover:bg-neutral-100 transition-colors"
-            >
-              <span className="font-medium text-neutral-900">Durum Filtresi</span>
-              {accordions.status ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-            </button>
-            {accordions.status && (
-              <div className="p-4 border-t border-neutral-200">
-                <select
-                  value={filters.status}
-                  onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
-                >
-                  <option value="">Tümü</option>
-                  <option value="PENDING">Bekliyor</option>
-                  <option value="CONFIRMED">Onaylandı</option>
-                  <option value="ACTIVE">Aktif</option>
-                  <option value="COMPLETED">Tamamlandı</option>
-                  <option value="CANCELLED">İptal</option>
-                </select>
-              </div>
-            )}
-          </div>
-
-          {/* Date Range Accordion */}
-          <div className="border border-neutral-200 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleAccordion('dateRange')}
-              className="w-full flex items-center justify-between p-4 bg-neutral-50 hover:bg-neutral-100 transition-colors"
-            >
-              <span className="font-medium text-neutral-900">Tarih Aralığı</span>
-              {accordions.dateRange ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-            </button>
-            {accordions.dateRange && (
-              <div className="p-4 border-t border-neutral-200">
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Tarih Aralığı Seçin
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none z-10" size={18} />
-                  <DatePicker
-                    selectsRange={true}
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={(update) => {
-                      setDateRange(update);
-                      if (update[0]) {
-                        setFilters({ ...filters, startDate: update[0].toISOString().split('T')[0] });
-                      }
-                      if (update[1]) {
-                        setFilters({ ...filters, endDate: update[1].toISOString().split('T')[0] });
-                      }
-                    }}
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="Başlangıç - Bitiş tarihi seçin"
-                    className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
-                    isClearable={true}
-                    monthsShown={2}
-                  />
-                </div>
-                <div className="mt-3 flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      const today = new Date();
-                      setDateRange([today, today]);
-                      setFilters({ ...filters, startDate: today.toISOString().split('T')[0], endDate: today.toISOString().split('T')[0] });
-                    }}
-                    className="px-3 py-1.5 text-xs bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition-colors"
-                  >
-                    Bugün
-                  </button>
-                  <button
-                    onClick={() => {
-                      const today = new Date();
-                      const lastWeek = new Date(today);
-                      lastWeek.setDate(today.getDate() - 7);
-                      setDateRange([lastWeek, today]);
-                      setFilters({ ...filters, startDate: lastWeek.toISOString().split('T')[0], endDate: today.toISOString().split('T')[0] });
-                    }}
-                    className="px-3 py-1.5 text-xs bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition-colors"
-                  >
-                    Son 7 Gün
-                  </button>
-                  <button
-                    onClick={() => {
-                      const today = new Date();
-                      const lastMonth = new Date(today);
-                      lastMonth.setDate(today.getDate() - 30);
-                      setDateRange([lastMonth, today]);
-                      setFilters({ ...filters, startDate: lastMonth.toISOString().split('T')[0], endDate: today.toISOString().split('T')[0] });
-                    }}
-                    className="px-3 py-1.5 text-xs bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition-colors"
-                  >
-                    Son 30 Gün
-                  </button>
-                  <button
-                    onClick={() => {
-                      const today = new Date();
-                      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-                      setDateRange([firstDay, today]);
-                      setFilters({ ...filters, startDate: firstDay.toISOString().split('T')[0], endDate: today.toISOString().split('T')[0] });
-                    }}
-                    className="px-3 py-1.5 text-xs bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition-colors"
-                  >
-                    Bu Ay
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Amount Accordion */}
-          <div className="border border-neutral-200 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleAccordion('amount')}
-              className="w-full flex items-center justify-between p-4 bg-neutral-50 hover:bg-neutral-100 transition-colors"
-            >
-              <span className="font-medium text-neutral-900">Tutar Aralığı</span>
-              {accordions.amount ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-            </button>
-            {accordions.amount && (
-              <div className="p-4 border-t border-neutral-200 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">Min. Tutar</label>
-                  <input
-                    type="number"
-                    value={filters.minAmount}
-                    onChange={(e) => setFilters({ ...filters, minAmount: e.target.value })}
-                    placeholder="0"
-                    className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">Max. Tutar</label>
-                  <input
-                    type="number"
-                    value={filters.maxAmount}
-                    onChange={(e) => setFilters({ ...filters, maxAmount: e.target.value })}
-                    placeholder="999999"
-                    className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-200">
-            <button
-              onClick={() => {
-                setFilters({
-                  search: '',
-                  status: '',
-                  startDate: '',
-                  endDate: '',
-                  minAmount: '',
-                  maxAmount: '',
-                });
-                setDateRange([null, null]);
-              }}
-              className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
-            >
-              Temizle
-            </button>
-            <button
-              onClick={() => {
-                setPagination({ ...pagination, page: 1 });
-                fetchOrders();
-              }}
-              className="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors"
-            >
-              Filtrele
-            </button>
-          </div>
         </div>
-      )}
-
-      {/* Bulk Actions */}
-      {selectedOrders.length > 0 && (
-        <div className="bg-neutral-900 text-white rounded-2xl p-4">
-          <div className="flex items-center justify-between">
-            <span className="font-medium">{selectedOrders.length} sipariş seçildi</span>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => handleBulkStatusUpdate('CONFIRMED')}
-                className="px-4 py-2 bg-white text-neutral-900 rounded-lg hover:bg-neutral-100 transition-colors text-sm font-medium"
-              >
-                Onayla
-              </button>
-              <button
-                onClick={() => handleBulkStatusUpdate('COMPLETED')}
-                className="px-4 py-2 bg-white text-neutral-900 rounded-lg hover:bg-neutral-100 transition-colors text-sm font-medium"
-              >
-                Tamamla
-              </button>
-              <button
-                onClick={() => handleBulkStatusUpdate('CANCELLED')}
-                className="px-4 py-2 bg-white text-neutral-900 rounded-lg hover:bg-neutral-100 transition-colors text-sm font-medium"
-              >
-                İptal Et
-              </button>
-              <button
-                onClick={handleBulkDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
-              >
-                <Trash2 size={16} className="inline mr-2" />
-                Sil
-              </button>
-              <button
-                onClick={() => setSelectedOrders([])}
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-              >
-                <X size={18} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Orders Table */}
-      <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <RefreshCw className="animate-spin text-neutral-400" size={32} />
-          </div>
-        ) : orders.length === 0 ? (
-          <div className="text-center py-12">
-            <ShoppingCart className="mx-auto text-neutral-300 mb-4" size={48} />
-            <p className="text-neutral-600 mb-4">Henüz sipariş bulunmuyor</p>
-            <button className="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors">
-              <Plus size={16} className="inline mr-2" />
-              İlk Siparişi Oluştur
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-neutral-50 border-b border-neutral-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left">
-                      <input
-                        type="checkbox"
-                        checked={selectedOrders.length === orders.length && orders.length > 0}
-                        onChange={handleSelectAll}
-                        className="rounded border-neutral-300"
-                      />
-                    </th>
-                    <th 
-                      onClick={() => handleSort('orderNumber')}
-                      className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase cursor-pointer hover:bg-neutral-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        Sipariş No
-                        <SortIcon field="orderNumber" />
-                      </div>
-                    </th>
-                    <th 
-                      onClick={() => handleSort('customer')}
-                      className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase cursor-pointer hover:bg-neutral-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        Müşteri
-                        <SortIcon field="customer" />
-                      </div>
-                    </th>
-                    <th 
-                      onClick={() => handleSort('startDate')}
-                      className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase cursor-pointer hover:bg-neutral-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        Tarih
-                        <SortIcon field="startDate" />
-                      </div>
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
-                      Ekipman
-                    </th>
-                    <th 
-                      onClick={() => handleSort('totalAmount')}
-                      className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase cursor-pointer hover:bg-neutral-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        Tutar
-                        <SortIcon field="totalAmount" />
-                      </div>
-                    </th>
-                    <th 
-                      onClick={() => handleSort('status')}
-                      className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase cursor-pointer hover:bg-neutral-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        Durum
-                        <SortIcon field="status" />
-                      </div>
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-semibold text-neutral-700 uppercase">
-                      İşlemler
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200">
-                  {orders.map((order) => (
-                    <tr key={order.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <input
-                          type="checkbox"
-                          checked={selectedOrders.includes(order.id)}
-                          onChange={() => handleSelectOrder(order.id)}
-                          className="rounded border-neutral-300"
-                        />
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-neutral-900">{order.orderNumber}</span>
-                          {order.booqableId && (
-                            <div 
-                              className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium"
-                              title={`Booqable ID: ${order.booqableId}`}
-                            >
-                              <Plug size={12} />
-                              <span>Booqable</span>
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <div className="text-sm font-medium text-neutral-900">{order.customer.name}</div>
-                          <div className="text-xs text-neutral-600">{order.customer.email}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-neutral-900">
-                          {new Date(order.startDate).toLocaleDateString('tr-TR')}
-                        </div>
-                        <div className="text-xs text-neutral-600">
-                          {new Date(order.endDate).toLocaleDateString('tr-TR')}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-neutral-900">
-                          {order.orderItems.length} ekipman
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="text-sm font-semibold text-neutral-900">
-                          ₺{order.totalAmount.toLocaleString('tr-TR')}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        {getStatusBadge(order.status)}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-end gap-2">
-                          <button 
-                            onClick={() => {
-                              setSelectedOrder(order);
-                              setShowDetailModal(true);
-                            }}
-                            className="p-1 hover:bg-neutral-100 rounded transition-colors"
-                            title="Detayları Gör"
-                          >
-                            <Eye size={16} className="text-neutral-600" />
-                          </button>
-                          <button className="p-1 hover:bg-neutral-100 rounded transition-colors" title="Düzenle">
-                            <Edit size={16} className="text-neutral-600" />
-                          </button>
-                          <PDFDownloadButton 
-                            type="order" 
-                            id={order.id}
-                            variant="ghost"
-                            size="sm"
-                            label=""
-                            className="!p-1"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination */}
-            <div className="flex items-center justify-between px-6 py-4 border-t border-neutral-200">
-              <div className="text-sm text-neutral-600">
-                {((pagination.page - 1) * pagination.limit) + 1} - {Math.min(pagination.page * pagination.limit, pagination.total)} / {pagination.total}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
-                  disabled={pagination.page === 1}
-                  className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Önceki
-                </button>
-                <span className="px-4 py-2 text-sm font-medium">
-                  {pagination.page} / {pagination.totalPages}
-                </span>
-                <button
-                  onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
-                  disabled={pagination.page === pagination.totalPages}
-                  className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Sonraki
-                </button>
-              </div>
-            </div>
-          </>
-        )}
       </div>
-
-      {/* Detail Modal */}
-      {showDetailModal && selectedOrder && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-neutral-200 p-6 flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-neutral-900">{selectedOrder.orderNumber}</h2>
-                <p className="text-sm text-neutral-600 mt-1">{selectedOrder.customer.name}</p>
-              </div>
-              <button
-                onClick={() => setShowDetailModal(false)}
-                className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="p-6 space-y-6">
-              {/* Status & Dates */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-medium text-neutral-600 uppercase">Durum</label>
-                  <div className="mt-2">{getStatusBadge(selectedOrder.status)}</div>
-                </div>
-                <div>
-                  <label className="text-xs font-medium text-neutral-600 uppercase">Tutar</label>
-                  <div className="mt-2 text-lg font-bold text-neutral-900">
-                    ₺{selectedOrder.totalAmount.toLocaleString('tr-TR')}
-                  </div>
-                </div>
-              </div>
-
-              {/* Date Range */}
-              <div className="bg-neutral-50 rounded-xl p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <label className="text-xs font-medium text-neutral-600 uppercase">Başlangıç</label>
-                    <div className="text-sm font-semibold text-neutral-900 mt-1">
-                      {new Date(selectedOrder.startDate).toLocaleDateString('tr-TR', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                      })}
-                    </div>
-                  </div>
-                  <div className="text-neutral-400">→</div>
-                  <div className="text-right">
-                    <label className="text-xs font-medium text-neutral-600 uppercase">Bitiş</label>
-                    <div className="text-sm font-semibold text-neutral-900 mt-1">
-                      {new Date(selectedOrder.endDate).toLocaleDateString('tr-TR', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Equipment */}
-              <div>
-                <label className="text-xs font-medium text-neutral-600 uppercase mb-3 block">Ekipmanlar</label>
-                <div className="space-y-2">
-                  {selectedOrder.orderItems.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-3 bg-neutral-50 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
-                          <Package size={20} className="text-neutral-700" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-neutral-900">{item.equipment.name}</div>
-                          <div className="text-xs text-neutral-600">{item.equipment.model}</div>
-                        </div>
-                      </div>
-                      <div className="text-sm font-medium text-neutral-700">
-                        {item.quantity}x
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Customer Info */}
-              <div className="bg-neutral-50 rounded-xl p-4">
-                <label className="text-xs font-medium text-neutral-600 uppercase mb-3 block">Müşteri Bilgileri</label>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <User size={16} className="text-neutral-600" />
-                    <span className="text-neutral-900">{selectedOrder.customer.name}</span>
-                  </div>
-                  {selectedOrder.customer.email && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="text-neutral-600">✉️</span>
-                      <span className="text-neutral-900">{selectedOrder.customer.email}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Order Create/Edit Modal */}
-      <OrderModal
-        isOpen={showOrderModal}
-        onClose={() => setShowOrderModal(false)}
-        onSave={handleSaveOrder}
-        mode={orderModalMode}
-      />
-
-      {/* Invoice Generator Modal */}
-      {showInvoiceModal && invoiceData && (
-        <InvoiceGenerator
-          invoiceData={invoiceData}
-          onClose={() => setShowInvoiceModal(false)}
-          onEmailSent={() => {
-            console.log('Invoice email sent successfully');
-            setShowInvoiceModal(false);
-          }}
-        />
-      )}
     </div>
   );
-}
+};
+
+export default Orders;
