@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Plus, Search, ChevronDown, ChevronUp, Calendar as CalendarIcon,
   Package, DollarSign, AlertCircle, Clock, User, MapPin, FileText,
@@ -11,6 +12,7 @@ type StatusFilter = 'draft' | 'reserved' | 'started' | 'returned' | 'archived' |
 type PaymentFilter = 'payment_due' | 'partially_paid' | 'paid' | 'overpaid' | 'process_deposit';
 
 const Reservations: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -88,8 +90,8 @@ const Reservations: React.FC = () => {
               </div>
               
               <button
-                onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm"
+                onClick={() => navigate('/orders/new')}
+                className="flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium shadow-sm"
               >
                 <Plus className="w-5 h-5" />
                 Sipariş Ekle
@@ -296,8 +298,8 @@ const Reservations: React.FC = () => {
                   <p className="text-gray-600 mb-1">Canlı müsaitlik ve otomatik fiyat hesaplamaları ile siparişlerinizi oluşturun ve yönetin.</p>
                   <p className="text-gray-600 mb-6">Ardından, iş akışına aşina olmak için bir siparişteki öğeleri rezerve etmeyi, almayı ve iade etmeyi deneyin.</p>
                   <button
-                    onClick={() => setShowForm(true)}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    onClick={() => navigate('/orders/new')}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
                   >
                     <Plus className="w-5 h-5" />
                     Sipariş Ekle
@@ -345,7 +347,7 @@ const NewOrderForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
             •••
           </button>
-          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+          <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">
             E-posta gönder
           </button>
         </div>
