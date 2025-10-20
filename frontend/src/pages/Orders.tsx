@@ -5,6 +5,7 @@ import {
   Mail, Phone, Tag, StickyNote, X
 } from 'lucide-react';
 
+
 type TabType = 'all' | 'upcoming' | 'late' | 'shortage';
 type StatusFilter = 'draft' | 'reserved' | 'started' | 'returned' | 'archived' | 'canceled';
 type PaymentFilter = 'payment_due' | 'partially_paid' | 'paid' | 'overpaid' | 'process_deposit';
@@ -67,8 +68,8 @@ const Orders: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Package className="w-8 h-8 text-gray-700" />
@@ -135,7 +136,64 @@ const Orders: React.FC = () => {
                         </div>
                         <span className="text-gray-400 text-xs">({statusCounts[key]})</span>
                       </label>
-                    ))}
+                    ))}                    
+                    {/* Custom Date Range Button */}
+                    <button
+                      onClick={() => setShowDatePicker(!showDatePicker)}
+                      className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
+                        showDatePicker ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                      }`}
+                    >
+                      Özel aralık seç
+                    </button>
+
+                    {/* Calendar Widget */}
+                    {showDatePicker && (
+                      <div className="mt-3 p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-sm font-medium text-gray-700">Tarih Seç</span>
+                          <button
+                            onClick={() => setShowDatePicker(false)}
+                            className="text-gray-400 hover:text-gray-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Başlangıç</label>
+                            <input
+                              type="date"
+                              value={customDateFrom}
+                              onChange={(e) => setCustomDateFrom(e.target.value)}
+                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Bitiş</label>
+                            <input
+                              type="date"
+                              value={customDateTo}
+                              onChange={(e) => setCustomDateTo(e.target.value)}
+                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              if (customDateFrom && customDateTo) {
+                                setShowDatePicker(false);
+                              }
+                            }}
+                            className="w-full px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                          >
+                            Uygula
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -171,7 +229,64 @@ const Orders: React.FC = () => {
                         </div>
                         <span className="text-gray-400 text-xs">({paymentCounts[key]})</span>
                       </label>
-                    ))}
+                    ))}                    
+                    {/* Custom Date Range Button */}
+                    <button
+                      onClick={() => setShowDatePicker(!showDatePicker)}
+                      className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
+                        showDatePicker ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                      }`}
+                    >
+                      Özel aralık seç
+                    </button>
+
+                    {/* Calendar Widget */}
+                    {showDatePicker && (
+                      <div className="mt-3 p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-sm font-medium text-gray-700">Tarih Seç</span>
+                          <button
+                            onClick={() => setShowDatePicker(false)}
+                            className="text-gray-400 hover:text-gray-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Başlangıç</label>
+                            <input
+                              type="date"
+                              value={customDateFrom}
+                              onChange={(e) => setCustomDateFrom(e.target.value)}
+                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Bitiş</label>
+                            <input
+                              type="date"
+                              value={customDateTo}
+                              onChange={(e) => setCustomDateTo(e.target.value)}
+                              className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              if (customDateFrom && customDateTo) {
+                                setShowDatePicker(false);
+                              }
+                            }}
+                            className="w-full px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                          >
+                            Uygula
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -213,8 +328,7 @@ const Orders: React.FC = () => {
                       >
                         {label}
                       </button>
-                    ))}
-                    
+                    ))}                    
                     {/* Custom Date Range Button */}
                     <button
                       onClick={() => setShowDatePicker(!showDatePicker)}
@@ -366,7 +480,7 @@ const Orders: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    
   );
 };
 
@@ -602,4 +716,4 @@ const NewOrderForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   );
 };
 
-export default Orders;
+export default Reservations;
