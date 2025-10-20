@@ -7,7 +7,8 @@ import { ToastContainer } from './components/Toast'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
-import Orders from './pages/Orders'
+import Reservations from './pages/Reservations'
+import NewOrder from './pages/NewOrder'
 import Inventory from './pages/Inventory'
 import Equipment from './pages/Equipment'
 import EquipmentDetail from './pages/EquipmentDetail'
@@ -77,7 +78,8 @@ export default function App(){
           <Route path='/' element={<Home/>} />
           <Route path='/dashboard' element={<Dashboard/>} />
           <Route path='/profile' element={<Profile/>} />
-          <Route path='/orders' element={<Orders/>} />
+          <Route path='/orders' element={<Reservations/>} />
+          <Route path='/orders/new' element={<NewOrder/>} />
           <Route path='/inventory' element={<Inventory/>} />
           <Route path='/equipment' element={<Equipment/>} />
           <Route path='/equipment/:id' element={<EquipmentDetail/>} />
