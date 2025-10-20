@@ -68,43 +68,32 @@ const Reservations: React.FC = () => {
 
   return (
     <>
-      <div className="h-screen flex flex-col bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Package className="w-8 h-8 text-gray-700" />
-            <h1 className="text-2xl font-semibold text-gray-900">Siparişler</h1>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-            
-            <button
-              onClick={() => navigate('/orders/new')}
-              className="flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium shadow-sm"
-            >
-              <Plus className="w-5 h-5" />
-              Sipariş Ekle
-            </button>
-          </div>
+      <div className="space-y-6">
+      {/* Search and Action Bar */}
+      <div className="flex items-center gap-4">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder="Sipariş ara..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+          />
         </div>
+        <button
+          onClick={() => navigate('/orders/new')}
+          className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors whitespace-nowrap"
+        >
+          <Plus size={20} />
+          Sipariş Ekle
+        </button>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex gap-6">
         {/* Left Sidebar - Filters */}
-        <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
-          <div className="p-4 space-y-4">
+        <div className="w-64 bg-white rounded-lg shadow p-4 space-y-4">
               {/* Status Filter */}
               <div>
                 <button
@@ -190,15 +179,15 @@ const Reservations: React.FC = () => {
                 
                 {dateRangeOpen && (
                   <div className="space-y-1">
-                    <button 
+                    <div 
                       onClick={() => {
                         console.log('Opening date picker modal');
                         setShowDatePicker(true);
                       }}
-                      className="text-sm text-gray-700 mb-3 px-3 py-2 hover:bg-blue-50 hover:text-blue-600 cursor-pointer w-full text-left rounded-lg transition-colors font-medium border border-transparent hover:border-blue-200"
+                      className="text-sm text-gray-700 px-2 py-1.5 hover:text-blue-600 cursor-pointer transition-colors"
                     >
-                      📅 Tüm zamanlar gösteriliyor
-                    </button>
+                      Tüm zamanlar gösteriliyor
+                    </div>
                   </div>
                 )}
               </div>
@@ -210,36 +199,35 @@ const Reservations: React.FC = () => {
                   Dışa Aktar
                 </button>
               </div>
-            </div>
-          </div>
+        </div>
 
           {/* Main Content Area */}
-            <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1">
               {/* Stats Cards */}
               <div className="grid grid-cols-4 gap-4 mb-6">
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow p-6">
                   <div className="text-sm text-gray-600 mb-1">Siparişler</div>
                   <div className="text-3xl font-bold text-gray-900">{stats.orders}</div>
                 </div>
                 
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow p-6">
                   <div className="text-sm text-gray-600 mb-1">Sipariş Edilen Ürünler</div>
                   <div className="text-3xl font-bold text-gray-900">{stats.itemsOrdered}</div>
                 </div>
                 
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow p-6">
                   <div className="text-sm text-gray-600 mb-1">Gelir</div>
                   <div className="text-3xl font-bold text-gray-900">₺{stats.revenue.toFixed(2)}</div>
                 </div>
                 
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow p-6">
                   <div className="text-sm text-gray-600 mb-1">Bekleyen</div>
                   <div className="text-3xl font-bold text-gray-900">₺{stats.due.toFixed(2)}</div>
                 </div>
               </div>
 
               {/* Tabs */}
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-lg shadow overflow-hidden">
                 <div className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
                   <div className="flex gap-6">
                     {[
