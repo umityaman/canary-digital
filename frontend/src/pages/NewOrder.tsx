@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, Plus, X, Calendar, QrCode, UserPlus, ChevronDown, ChevronUp,
-  User, MapPin, FileText, Mail, Phone, Tag, StickyNote, CreditCard, Package, MoreHorizontal
+  User, MapPin, FileText, Mail, Phone, Tag, StickyNote, CreditCard, Package, MoreHorizontal,
+  Copy, Clock, Grip
 } from 'lucide-react';
 
 const NewOrder: React.FC = () => {
@@ -15,6 +16,15 @@ const NewOrder: React.FC = () => {
   const [searchProducts, setSearchProducts] = useState('');
   const [notes, setNotes] = useState('');
   
+  // Modal states
+  const [showThreeDotsMenu, setShowThreeDotsMenu] = useState(false);
+  const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
+  const [showCustomFieldModal, setShowCustomFieldModal] = useState(false);
+  const [showAddLineMenu, setShowAddLineMenu] = useState(false);
+  
+  // Product lines
+  const [productLines, setProductLines] = useState<any[]>([]);
+  
   // Accordion states
   const [documentsOpen, setDocumentsOpen] = useState(true);
   const [invoicesOpen, setInvoicesOpen] = useState(true);
@@ -24,6 +34,158 @@ const NewOrder: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      
+      {/* Add Customer Modal */}
+      {showAddCustomerModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">New customer</h2>
+              <button 
+                onClick={() => setShowAddCustomerModal(false)}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">First name *</label>
+                  <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Last name</label>
+                  <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <input type="email" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input type="tel" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                <input type="text" placeholder="Street address" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2" />
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" placeholder="City" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="text" placeholder="Postal code" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <input type="text" placeholder="Country" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <textarea rows={3} className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+              </div>
+            </div>
+            
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+              <button 
+                onClick={() => setShowAddCustomerModal(false)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                Add customer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Field Modal */}
+      {showCustomFieldModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">New custom field</h2>
+              <button 
+                onClick={() => setShowCustomFieldModal(false)}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Custom field label</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Data type</label>
+                <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option>Single line text</option>
+                  <option>Multi-line text</option>
+                  <option>Date</option>
+                  <option>Address</option>
+                  <option>Phone</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Show on</label>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                    <span className="text-sm text-gray-700">Quotes</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                    <span className="text-sm text-gray-700">Contracts</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                    <span className="text-sm text-gray-700">Invoices</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                    <span className="text-sm text-gray-700">Packing slip</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+              <button 
+                onClick={() => setShowCustomFieldModal(false)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                Add field
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex">
         {/* Left Side - Header + Main Content */}
         <div className="flex-1">
@@ -43,9 +205,45 @@ const NewOrder: React.FC = () => {
                 <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
                   Save as draft
                 </button>
-                <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                  <MoreHorizontal className="w-5 h-5 text-gray-600" />
-                </button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowThreeDotsMenu(!showThreeDotsMenu)}
+                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    <MoreHorizontal className="w-5 h-5 text-gray-600" />
+                  </button>
+                  
+                  {/* 3-Dot Dropdown Menu */}
+                  {showThreeDotsMenu && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                        <Copy className="w-4 h-4" />
+                        Duplicate order
+                      </button>
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Revert to draft
+                      </button>
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Revert to reserved
+                      </button>
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Revert to picked up
+                      </button>
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Revert to returned
+                      </button>
+                      <hr className="my-1 border-gray-200" />
+                      <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50 flex items-center gap-2">
+                        <X className="w-4 h-4" />
+                        Cancel order
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -78,6 +276,7 @@ const NewOrder: React.FC = () => {
                       <QrCode className="w-4 h-4 text-gray-600" />
                     </button>
                     <button
+                      onClick={() => setShowAddCustomerModal(true)}
                       className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                       title="Add customer"
                     >
@@ -90,7 +289,10 @@ const NewOrder: React.FC = () => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-base font-semibold text-gray-900">Information</h3>
-                    <button className="text-sm text-gray-700 hover:text-gray-900 font-medium px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <button 
+                      onClick={() => setShowCustomFieldModal(true)}
+                      className="text-sm text-gray-700 hover:text-gray-900 font-medium px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
                       Add field
                     </button>
                   </div>
@@ -100,7 +302,13 @@ const NewOrder: React.FC = () => {
                     <p className="text-xs text-gray-600 mb-3 px-4">
                       Custom fields display extra details like delivery info or notes. Set them to auto-populate on orders or add one-off fields using the button above. You can also configure them to collect data from your online store.
                     </p>
-                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    <button 
+                      onClick={() => {
+                        // TODO: Navigate to custom fields settings page when it's created
+                        alert('Custom fields settings page will be created in next phase');
+                      }}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    >
                       Set up custom fields
                     </button>
                   </div>
@@ -110,12 +318,6 @@ const NewOrder: React.FC = () => {
               {/* Right Column: Pickup (Tek Başına) */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h3 className="text-base font-semibold text-gray-900 mb-4">Pickup</h3>
-                
-                {/* Add billing address link */}
-                <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium mb-4">
-                  <FileText className="w-4 h-4" />
-                  Add billing address
-                </button>
 
                 {/* Pick up */}
                 <div className="mb-6">
@@ -203,11 +405,34 @@ const NewOrder: React.FC = () => {
               {/* PRICING PART - Sol: Add custom line, Sağ: Pricing bilgileri */}
               <div className="flex items-start justify-between">
                 
-                {/* Sol Taraf: Add custom line butonu */}
-                <button className="text-sm text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1">
-                  <ChevronDown className="w-4 h-4" />
-                  Add custom line
-                </button>
+                {/* Sol Taraf: Add custom line dropdown */}
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowAddLineMenu(!showAddLineMenu)}
+                    className="text-sm text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1"
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                    Add custom line
+                  </button>
+                  
+                  {/* Add Line Dropdown Menu */}
+                  {showAddLineMenu && (
+                    <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                        <Plus className="w-4 h-4" />
+                        Add custom line
+                      </button>
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                        <CreditCard className="w-4 h-4" />
+                        Charge
+                      </button>
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                        <Package className="w-4 h-4" />
+                        Section
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 {/* Sağ Taraf: Pricing Bilgileri */}
                 <div className="w-80 space-y-3">
