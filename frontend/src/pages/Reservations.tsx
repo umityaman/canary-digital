@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Plus, Search, ChevronDown, ChevronUp, Calendar as CalendarIcon,
   Package, DollarSign, AlertCircle, Clock, User, MapPin, FileText,
-  Mail, Phone, Tag, StickyNote, X
+  Mail, Phone, Tag, StickyNote, X, Eye, EyeOff
 } from 'lucide-react';
 
 type TabType = 'all' | 'upcoming' | 'late' | 'shortage';
@@ -14,6 +14,7 @@ const Reservations: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showMetrics, setShowMetrics] = useState(true);
   
   // Filters
   const [statusFilters, setStatusFilters] = useState<StatusFilter[]>([]);
@@ -203,27 +204,50 @@ const Reservations: React.FC = () => {
 
           {/* Main Content Area */}
           <div className="flex-1">
-              {/* Stats Cards */}
-              <div className="grid grid-cols-4 gap-4 mb-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="text-sm text-gray-600 mb-1">Siparişler</div>
-                  <div className="text-3xl font-bold text-gray-900">{stats.orders}</div>
+              {/* Stats Cards with Toggle */}
+              <div className="mb-6">
+                <div className="flex items-center justify-end mb-3">
+                  <button
+                    onClick={() => setShowMetrics(!showMetrics)}
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    {showMetrics ? (
+                      <>
+                        <EyeOff className="w-4 h-4" />
+                        Metrikleri gizle
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="w-4 h-4" />
+                        Metrikleri göster
+                      </>
+                    )}
+                  </button>
                 </div>
                 
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="text-sm text-gray-600 mb-1">Sipariş Edilen Ürünler</div>
-                  <div className="text-3xl font-bold text-gray-900">{stats.itemsOrdered}</div>
-                </div>
-                
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="text-sm text-gray-600 mb-1">Gelir</div>
-                  <div className="text-3xl font-bold text-gray-900">₺{stats.revenue.toFixed(2)}</div>
-                </div>
-                
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="text-sm text-gray-600 mb-1">Bekleyen</div>
-                  <div className="text-3xl font-bold text-gray-900">₺{stats.due.toFixed(2)}</div>
-                </div>
+                {showMetrics && (
+                  <div className="grid grid-cols-4 gap-4">
+                    <div className="bg-white rounded-lg shadow p-6">
+                      <div className="text-sm text-gray-600 mb-1">Siparişler</div>
+                      <div className="text-3xl font-bold text-gray-900">{stats.orders}</div>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg shadow p-6">
+                      <div className="text-sm text-gray-600 mb-1">Sipariş Edilen Ürünler</div>
+                      <div className="text-3xl font-bold text-gray-900">{stats.itemsOrdered}</div>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg shadow p-6">
+                      <div className="text-sm text-gray-600 mb-1">Gelir</div>
+                      <div className="text-3xl font-bold text-gray-900">₺{stats.revenue.toFixed(2)}</div>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg shadow p-6">
+                      <div className="text-sm text-gray-600 mb-1">Bekleyen</div>
+                      <div className="text-3xl font-bold text-gray-900">₺{stats.due.toFixed(2)}</div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Tabs */}
