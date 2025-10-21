@@ -607,19 +607,48 @@ const NewEquipment: React.FC = () => {
             </div>
           </div>
 
-          {/* Garanti ve Notlar */}
+          {/* 4. Satın Alma Bilgileri */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Garanti ve Notlar</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">4. Satın Alma Bilgileri</h2>
             
-            <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Garanti Bitiş Tarihi
+                  Satın Alma Fiyatı (₺)
+                </label>
+                <input
+                  type="number"
+                  name="purchasePrice"
+                  value={formData.purchasePrice}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Örn: 50000"
+                  step="0.01"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tedarikçi
+                </label>
+                <input
+                  type="text"
+                  name="supplier"
+                  value={formData.supplier}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Tedarikçi firma adı"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Satın Alma Tarihi
                 </label>
                 <input
                   type="date"
-                  name="warranty"
-                  value={formData.warranty}
+                  name="purchaseDate"
+                  value={formData.purchaseDate}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -627,30 +656,43 @@ const NewEquipment: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Notlar
+                  Garanti Bitiş Tarihi
+                </label>
+                <input
+                  type="date"
+                  name="warrantyEndDate"
+                  value={formData.warrantyEndDate}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Not
                 </label>
                 <textarea
                   name="notes"
                   value={formData.notes}
                   onChange={handleInputChange}
-                  rows={4}
+                  rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                  placeholder="Bakım geçmişi, özel notlar vb."
+                  placeholder="Satın alma ile ilgili notlar..."
                 />
               </div>
             </div>
           </div>
 
-          {/* Resimler */}
+          {/* 5. Fotoğraflar */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Resimler</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">5. Fotoğraflar</h2>
             
             <div className="space-y-4">
-              {/* Image Upload Button */}
+              {/* Fotoğraf Upload Button */}
               <div className="flex items-center gap-3">
                 <label className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer text-sm font-medium text-gray-700">
                   <Upload className="w-4 h-4" />
-                  {uploading ? 'Yükleniyor...' : 'Resim Yükle'}
+                  {uploading ? 'Yükleniyor...' : 'Fotoğraf Yükle'}
                   <input
                     type="file"
                     multiple
@@ -661,18 +703,18 @@ const NewEquipment: React.FC = () => {
                   />
                 </label>
                 <span className="text-sm text-gray-500">
-                  Birden fazla resim seçebilirsiniz
+                  Birden fazla fotoğraf seçebilirsiniz
                 </span>
               </div>
 
-              {/* Image Preview Grid */}
+              {/* Fotoğraf Preview Grid */}
               {formData.images.length > 0 && (
                 <div className="grid grid-cols-4 gap-4">
                   {formData.images.map((url, index) => (
                     <div key={index} className="relative group">
                       <img
                         src={url}
-                        alt={`Equipment ${index + 1}`}
+                        alt={`Ekipman fotoğrafı ${index + 1}`}
                         className="w-full h-32 object-cover rounded-lg border border-gray-200"
                       />
                       <button
@@ -683,9 +725,9 @@ const NewEquipment: React.FC = () => {
                             images: prev.images.filter((_, i) => i !== index)
                           }));
                         }}
-                        className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
                       >
-                        <ImageIcon className="w-4 h-4" />
+                        ×
                       </button>
                     </div>
                   ))}
@@ -694,11 +736,18 @@ const NewEquipment: React.FC = () => {
 
               {formData.images.length === 0 && (
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">Henüz resim yüklenmedi</p>
+                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-500">Henüz fotoğraf yüklenmedi</p>
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Info Note */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <p className="text-sm text-amber-800">
+              <span className="font-semibold">📝 Not:</span> Ekipmanı kaydettikten sonra detay sayfasında <strong>Müsaitlik Takvimi</strong> ve <strong>Tarihçe</strong> bilgilerini görüntüleyebilirsiniz.
+            </p>
           </div>
 
         </form>
