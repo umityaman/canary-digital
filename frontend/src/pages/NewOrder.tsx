@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, Plus, X, Calendar, QrCode, UserPlus, ChevronDown, ChevronUp,
@@ -90,6 +90,20 @@ const NewOrder: React.FC = () => {
     }
     return s;
   }, 0);
+  
+  // Click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.dropdown-container')) {
+        setShowThreeDotsMenu(false);
+        setShowAddLineMenu(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   
   // Accordion states
   const [documentsOpen, setDocumentsOpen] = useState(true);
@@ -271,7 +285,7 @@ const NewOrder: React.FC = () => {
                 <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
                   Save as draft
                 </button>
-                <div className="relative">
+                <div className="relative dropdown-container">
                   <button 
                     onClick={() => setShowThreeDotsMenu(!showThreeDotsMenu)}
                     className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -538,7 +552,7 @@ const NewOrder: React.FC = () => {
               <div className="flex items-start justify-between">
                 
                 {/* Sol Taraf: Add custom line dropdown */}
-                <div className="relative">
+                <div className="relative dropdown-container">
                   <button 
                     onClick={() => setShowAddLineMenu(!showAddLineMenu)}
                     className="text-sm text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1"
@@ -550,15 +564,24 @@ const NewOrder: React.FC = () => {
                   {/* Add Line Dropdown Menu */}
                   {showAddLineMenu && (
                     <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                      <button 
+                        onClick={() => addCustomLine('custom')}
+                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      >
                         <Plus className="w-4 h-4" />
                         Add custom line
                       </button>
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                      <button 
+                        onClick={() => addCustomLine('charge')}
+                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      >
                         <CreditCard className="w-4 h-4" />
                         Charge
                       </button>
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                      <button 
+                        onClick={() => addCustomLine('section')}
+                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      >
                         <Package className="w-4 h-4" />
                         Section
                       </button>
