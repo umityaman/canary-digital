@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Search, Plus, Edit, Trash2, Package, Upload, Download, ChevronDown, Plug, Settings, QrCode, ScanLine } from 'lucide-react'
 import { useEquipmentStore } from '../stores/equipmentStore'
 import EquipmentModal from '../components/modals/EquipmentModal'
@@ -33,6 +34,7 @@ interface Category {
 }
 
 const Inventory: React.FC = () => {
+  const navigate = useNavigate()
   const { equipment, loading, error, fetchEquipment, deleteEquipment } = useEquipmentStore()
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
@@ -137,9 +139,7 @@ const Inventory: React.FC = () => {
   }
 
   const handleAdd = () => {
-    setSelectedEquipment(undefined)
-    setModalMode('create')
-    setModalOpen(true)
+    navigate('/inventory/new')
   }
 
   const handleEdit = (equipment: Equipment) => {

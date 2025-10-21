@@ -12,6 +12,7 @@ import Reservations from './pages/Reservations'
 import NewOrder from './pages/NewOrder'
 import OrderDetail from './pages/OrderDetail'
 import Inventory from './pages/Inventory'
+import NewEquipment from './pages/NewEquipment'
 import Equipment from './pages/Equipment'
 import EquipmentDetail from './pages/EquipmentDetail'
 import Customers from './pages/Customers'
@@ -85,6 +86,7 @@ export default function App(){
           <Route path='/orders/new' element={<NewOrder/>} />
           <Route path='/orders/:id' element={<OrderDetail/>} />
           <Route path='/inventory' element={<Inventory/>} />
+          <Route path='/inventory/new' element={<NewEquipment/>} />
           <Route path='/equipment' element={<Equipment/>} />
           <Route path='/equipment/:id' element={<EquipmentDetail/>} />
           <Route path='/customers' element={<Customers/>} />
