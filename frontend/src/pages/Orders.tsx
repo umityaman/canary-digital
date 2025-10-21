@@ -174,6 +174,39 @@ const Reservations: React.FC = () => {
       setBulkActionLoading(false);
     }
   };
+  
+  // Export to CSV Handler
+  const handleExportToCSV = () => {
+    // Prepare CSV data
+    const headers = ['Order #', 'Date', 'Customer', 'Status', 'Payment Status', 'Total Amount'];
+    const csvData = sortedOrders.map(order => [
+      order.orderNumber || `#${order.id}`,
+      new Date(order.createdAt || order.startDate).toLocaleDateString(),
+      order.customer?.name || 'N/A',
+      order.status || 'PENDING',
+      order.paymentStatus || 'payment_due',
+      `£${(order.totalAmount || 0).toFixed(2)}`
+    ]);
+    
+    // Create CSV content
+    const csvContent = [
+      headers.join(','),
+      ...csvData.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+    
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `orders_export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Filter and sort orders
   const filteredOrders = orders.filter(order => {
@@ -374,9 +407,13 @@ const Reservations: React.FC = () => {
 
               {/* Export Button */}
               <div className="border-t border-gray-200 pt-4">
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                <button 
+                  onClick={handleExportToCSV}
+                  disabled={sortedOrders.length === 0 || loading}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <FileText className="w-4 h-4" />
-                  Dışa Aktar
+                  Dışa Aktar ({sortedOrders.length})
                 </button>
               </div>
             </div>
