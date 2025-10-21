@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Package, Upload, QrCode, DollarSign } from 'lucide-react';
 import { useNotification } from '../contexts/NotificationContext';
 import api from '../services/api';
+import QRCodeGenerator from '../components/QRCodeGenerator';
 
 interface Category {
   id: number;
