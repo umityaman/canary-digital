@@ -24,6 +24,72 @@ const NewOrder: React.FC = () => {
   
   // Product lines
   const [productLines, setProductLines] = useState<any[]>([]);
+  // Drag state
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+
+  // Helpers
+  const generateId = () => Math.random().toString(36).slice(2, 9);
+
+  const addCustomLine = (kind: 'custom' | 'charge' | 'section') => {
+    const id = generateId();
+    if (kind === 'charge') {
+      setProductLines(prev => [
+        ...prev,
+        { id, type: 'charge', title: 'Charge', qty: 1, price: 0, tax: 'No tax' }
+      ]);
+    } else if (kind === 'section') {
+      setProductLines(prev => [
+        ...prev,
+        { id, type: 'section', title: 'Section', isSection: true }
+      ]);
+    } else {
+      setProductLines(prev => [
+        ...prev,
+        { id, type: 'custom', title: '', qty: 1, price: 0, tax: 'No tax' }
+      ]);
+    }
+    setShowAddLineMenu(false);
+  };
+
+  const updateLine = (id: string, patch: Partial<any>) => {
+    setProductLines(prev => prev.map(l => l.id === id ? { ...l, ...patch } : l));
+  };
+
+  const removeLine = (id: string) => {
+    setProductLines(prev => prev.filter(l => l.id !== id));
+  };
+
+  // Drag & drop handlers
+  const onDragStart = (e: React.DragEvent, index: number) => {
+    setDragIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const onDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    if (dragIndex === null) return;
+    setProductLines(prev => {
+      const copy = [...prev];
+      const [moved] = copy.splice(dragIndex, 1);
+      copy.splice(dropIndex, 0, moved);
+      return copy;
+    });
+    setDragIndex(null);
+  };
+
+  const subtotal = productLines.reduce((s, l) => {
+    if (l.type === 'charge' || l.type === 'custom') {
+      const qty = Number(l.qty || 0);
+      const price = Number(l.price || 0);
+      return s + qty * price;
+    }
+    return s;
+  }, 0);
   
   // Accordion states
   const [documentsOpen, setDocumentsOpen] = useState(true);
@@ -394,10 +460,76 @@ const NewOrder: React.FC = () => {
                 </button>
               </div>
 
-              {/* Empty State - Büyük Boş Alan */}
-              <div className="text-center py-20 mb-6">
-                <p className="text-sm text-gray-900 font-medium mb-1">This order is empty. Get started by adding some products or a custom line.</p>
-              </div>
+              {/* Product lines list or Empty State */}
+              {productLines.length === 0 ? (
+                <div className="text-center py-20 mb-6">
+                  <p className="text-sm text-gray-900 font-medium mb-1">This order is empty. Get started by adding some products or a custom line.</p>
+                </div>
+              ) : (
+                <div className="space-y-3 mb-6">
+                  {productLines.map((line, idx) => (
+                    <div
+                      key={line.id}
+                      draggable={!line.isSection}
+                      onDragStart={(e) => onDragStart(e, idx)}
+                      onDragOver={onDragOver}
+                      onDrop={(e) => onDrop(e, idx)}
+                      className="flex items-center gap-3 p-3 border border-gray-100 rounded-md hover:bg-gray-50"
+                    >
+                      <div className="w-6 text-gray-400">
+                        <Grip className="w-4 h-4" />
+                      </div>
+
+                      {/* Title / Section */}
+                      <div className="flex-1">
+                        {line.isSection ? (
+                          <div className="text-sm font-semibold text-gray-700">{line.title}</div>
+                        ) : (
+                          <input
+                            type="text"
+                            value={line.title}
+                            onChange={(e) => updateLine(line.id, { title: e.target.value })}
+                            placeholder="Title"
+                            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none"
+                          />
+                        )}
+                      </div>
+
+                      {/* Qty */}
+                      {!line.isSection && (
+                        <div className="w-28 flex items-center gap-2">
+                          <button onClick={() => updateLine(line.id, { qty: Math.max(1, Number(line.qty || 1) - 1) })} className="px-2 py-1 border rounded-md">-</button>
+                          <input type="number" value={line.qty} onChange={(e) => updateLine(line.id, { qty: Number(e.target.value) })} className="w-12 text-center text-sm border rounded-md px-1" />
+                          <button onClick={() => updateLine(line.id, { qty: Number(line.qty || 1) + 1 })} className="px-2 py-1 border rounded-md">+</button>
+                        </div>
+                      )}
+
+                      {/* Price */}
+                      {!line.isSection && (
+                        <div className="w-36">
+                          <input type="number" value={line.price} onChange={(e) => updateLine(line.id, { price: Number(e.target.value) })} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md text-right" />
+                        </div>
+                      )}
+
+                      {/* Tax */}
+                      {!line.isSection && (
+                        <div className="w-40">
+                          <select value={line.tax} onChange={(e) => updateLine(line.id, { tax: e.target.value })} className="w-full px-2 py-2 text-sm border rounded-md">
+                            <option>No tax</option>
+                            <option>20% VAT</option>
+                          </select>
+                        </div>
+                      )}
+
+                      <div className="w-24 text-right font-medium">€{((line.qty || 0) * (line.price || 0)).toFixed(2)}</div>
+
+                      <button onClick={() => removeLine(line.id)} className="p-2 text-red-600">
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Divider */}
               <hr className="my-6 border-gray-200" />
@@ -438,7 +570,7 @@ const NewOrder: React.FC = () => {
                 <div className="w-80 space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-700">Subtotal</span>
-                    <span className="font-medium text-gray-900">€0,00</span>
+                    <span className="font-medium text-gray-900">€{subtotal.toFixed(2)}</span>
                   </div>
                   
                   <button className="text-sm text-blue-600 hover:text-blue-700 font-medium block">
@@ -451,12 +583,12 @@ const NewOrder: React.FC = () => {
                   
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-700">Total discount</span>
-                    <span className="font-medium text-gray-900">€0,00</span>
+                    <span className="font-medium text-gray-900">€0.00</span>
                   </div>
                   
                   <div className="border-t border-gray-200 pt-3 flex justify-between">
                     <span className="text-sm font-semibold text-gray-900">Total incl. taxes</span>
-                    <span className="text-sm font-semibold text-gray-900">€0,00</span>
+                    <span className="text-sm font-semibold text-gray-900">€{(subtotal * 1.2).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
