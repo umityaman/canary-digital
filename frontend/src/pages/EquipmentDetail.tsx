@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import QRCodeGenerator from '../components/QRCodeGenerator';
+import EquipmentAvailabilityCalendar from '../components/EquipmentAvailabilityCalendar';
 
 interface Equipment {
   id: string;
@@ -62,7 +63,7 @@ const EquipmentDetail: React.FC = () => {
   const [equipment, setEquipment] = useState<Equipment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'history' | 'inspections' | 'maintenance'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'history' | 'inspections' | 'maintenance' | 'availability'>('overview');
   const [showQRModal, setShowQRModal] = useState(false);
 
   useEffect(() => {
@@ -366,7 +367,7 @@ const EquipmentDetail: React.FC = () => {
               onClick={() => setShowQRModal(true)}
               className="bg-neutral-900 text-white px-4 py-2 rounded-lg hover:bg-neutral-800"
             >
-              Generate QR Code
+              QR Kod Oluştur
             </button>
             <span className={`px-3 py-2 rounded-lg text-sm font-medium ${getStatusColor(equipment.status)}`}>
               {equipment.status}
@@ -380,10 +381,11 @@ const EquipmentDetail: React.FC = () => {
         <div className="border-b">
           <nav className="flex space-x-8 px-6">
             {[
-              { key: 'overview', label: 'Overview' },
-              { key: 'history', label: 'History' },
-              { key: 'inspections', label: 'Inspections' },
-              { key: 'maintenance', label: 'Maintenance' }
+              { key: 'overview', label: 'Genel Bakış' },
+              { key: 'availability', label: 'Müsaitlik Takvimi' },
+              { key: 'history', label: 'Geçmiş' },
+              { key: 'inspections', label: 'İncelemeler' },
+              { key: 'maintenance', label: 'Bakım' }
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -402,6 +404,12 @@ const EquipmentDetail: React.FC = () => {
 
         <div className="p-6">
           {activeTab === 'overview' && renderOverviewTab()}
+          {activeTab === 'availability' && (
+            <EquipmentAvailabilityCalendar 
+              equipmentId={equipment.id}
+              equipmentName={equipment.name}
+            />
+          )}
           {activeTab === 'history' && renderHistoryTab()}
           {activeTab === 'inspections' && renderInspectionsTab()}
           {activeTab === 'maintenance' && renderMaintenanceTab()}

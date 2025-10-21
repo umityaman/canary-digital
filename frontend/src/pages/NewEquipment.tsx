@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Package, Upload, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Save, Package, Upload, Image as ImageIcon, QrCode } from 'lucide-react';
 import { useNotification } from '../contexts/NotificationContext';
+import QRCodeGenerator from '../components/QRCodeGenerator';
 import api from '../services/api';
 
 interface Category {
@@ -41,6 +42,8 @@ const NewEquipment: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [savedEquipmentId, setSavedEquipmentId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -111,9 +114,18 @@ const NewEquipment: React.FC = () => {
         purchasePrice: formData.purchasePrice ? parseFloat(formData.purchasePrice) : undefined,
       };
 
-      await api.post('/equipment', equipmentData);
+      const response = await api.post('/equipment', equipmentData);
+      const savedEquipment = response.data;
+      
+      setSavedEquipmentId(savedEquipment.id);
       showNotification('success', 'Ekipman başarıyla eklendi');
-      navigate('/inventory');
+      
+      // Show QR modal option
+      if (window.confirm('Ekipman kaydedildi! QR kod oluşturmak ister misiniz?')) {
+        setShowQRModal(true);
+      } else {
+        navigate('/inventory');
+      }
     } catch (error: any) {
       console.error('Save error:', error);
       showNotification('error', error.response?.data?.message || 'Ekipman kaydedilemedi');
@@ -497,6 +509,19 @@ const NewEquipment: React.FC = () => {
 
         </form>
       </div>
+
+      {/* QR Code Modal */}
+      {showQRModal && savedEquipmentId && (
+        <QRCodeGenerator
+          equipmentId={savedEquipmentId}
+          equipmentName={formData.name}
+          serialNumber={formData.serialNumber || 'N/A'}
+          onClose={() => {
+            setShowQRModal(false);
+            navigate('/inventory');
+          }}
+        />
+      )}
     </div>
   );
 };
