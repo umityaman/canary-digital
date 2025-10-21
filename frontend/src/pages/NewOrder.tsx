@@ -23,11 +23,17 @@ const NewOrder: React.FC = () => {
   const [showAddLineMenu, setShowAddLineMenu] = useState(false);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
+  const [showQRScanModal, setShowQRScanModal] = useState(false);
+  const [qrScanType, setQRScanType] = useState<'customer' | 'equipment'>('customer');
   
   // Discount & Coupon
   const [discount, setDiscount] = useState({ type: 'percentage', value: 0, reason: '' });
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  
+  // QR Scanning
+  const [qrManualInput, setQrManualInput] = useState('');
+  const [qrError, setQrError] = useState('');
   
   // Product lines
   const [productLines, setProductLines] = useState<any[]>([]);
@@ -132,6 +138,57 @@ const NewOrder: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+  
+  // QR Scanning Handler
+  const handleManualQRScan = async () => {
+    if (!qrManualInput.trim()) return;
+    
+    setQrError('');
+    
+    try {
+      if (qrScanType === 'customer') {
+        // For customer scanning, we'll use the customer ID directly
+        // In a real app, this would scan QR and get customer from backend
+        const mockCustomer = {
+          id: qrManualInput,
+          name: `Customer ${qrManualInput}`,
+          email: `customer${qrManualInput}@example.com`
+        };
+        setSelectedCustomer(mockCustomer);
+        setShowQRScanModal(false);
+        setQrManualInput('');
+      } else {
+        // For equipment scanning
+        const mockEquipment = {
+          id: qrManualInput,
+          name: `Equipment ${qrManualInput}`,
+          dailyRate: 50,
+          status: 'AVAILABLE'
+        };
+        
+        // Add to product lines
+        const id = generateId();
+        setProductLines(prev => [
+          ...prev,
+          { 
+            id, 
+            type: 'custom', 
+            title: mockEquipment.name,
+            equipmentId: mockEquipment.id,
+            qty: 1, 
+            price: mockEquipment.dailyRate, 
+            tax: 'No tax' 
+          }
+        ]);
+        
+        setShowQRScanModal(false);
+        setQrManualInput('');
+      }
+    } catch (error: any) {
+      console.error('QR scan failed:', error);
+      setQrError('Failed to scan QR code. Please try again.');
+    }
+  };
   
   // Accordion states
   const [documentsOpen, setDocumentsOpen] = useState(true);
@@ -488,6 +545,97 @@ const NewOrder: React.FC = () => {
         </div>
       )}
 
+      {/* QR Scan Modal */}
+      {showQRScanModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Scan QR Code - {qrScanType === 'customer' ? 'Customer' : 'Equipment'}
+              </h2>
+              <button 
+                onClick={() => {
+                  setShowQRScanModal(false);
+                  setQrManualInput('');
+                  setQrError('');
+                }}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              {/* QR Error Message */}
+              {qrError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <p className="text-sm text-red-700">{qrError}</p>
+                </div>
+              )}
+              
+              {/* Manual Input Section */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Enter QR Code or ID manually
+                </label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={qrManualInput}
+                    onChange={(e) => setQrManualInput(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && qrManualInput.trim()) {
+                        handleManualQRScan();
+                      }
+                    }}
+                    className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono" 
+                    placeholder="Paste or type code here"
+                  />
+                  <button
+                    onClick={handleManualQRScan}
+                    disabled={!qrManualInput.trim()}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Scan
+                  </button>
+                </div>
+              </div>
+              
+              {/* Camera Section - Placeholder */}
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+                <QrCode className="w-16 h-16 text-gray-400 mx-auto mb-3" />
+                <p className="text-sm font-medium text-gray-700 mb-1">Camera scanning coming soon</p>
+                <p className="text-xs text-gray-500">
+                  For now, please use manual input above
+                </p>
+              </div>
+              
+              <div className="text-xs text-gray-500">
+                <p className="font-medium mb-1">Tips:</p>
+                <ul className="list-disc list-inside space-y-0.5 text-gray-600">
+                  <li>Paste the QR code value from your scanner</li>
+                  <li>Or type the {qrScanType === 'customer' ? 'customer' : 'equipment'} ID directly</li>
+                  <li>Press Enter to scan quickly</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end">
+              <button 
+                onClick={() => {
+                  setShowQRScanModal(false);
+                  setQrManualInput('');
+                  setQrError('');
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex">
         {/* Left Side - Header + Main Content */}
         <div className="flex-1">
@@ -590,6 +738,10 @@ const NewOrder: React.FC = () => {
                       />
                     </div>
                     <button
+                      onClick={() => {
+                        setQRScanType('customer');
+                        setShowQRScanModal(true);
+                      }}
                       className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                       title="Scan QR"
                     >
@@ -707,6 +859,10 @@ const NewOrder: React.FC = () => {
                   />
                 </div>
                 <button
+                  onClick={() => {
+                    setQRScanType('equipment');
+                    setShowQRScanModal(true);
+                  }}
                   className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   title="Scan QR"
                 >
