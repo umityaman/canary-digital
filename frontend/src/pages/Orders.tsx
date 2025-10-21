@@ -30,35 +30,42 @@ const Reservations: React.FC = () => {
   const [showBulkActions, setShowBulkActions] = useState(false);
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
   
+  // Data Loading
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   // Sections
   const [statusOpen, setStatusOpen] = useState(true);
   const [paymentOpen, setPaymentOpen] = useState(true);
   const [dateRangeOpen, setDateRangeOpen] = useState(true);
 
-  // Mock stats data
+  // Calculate real stats from orders
   const stats = {
-    orders: 12,
-    itemsOrdered: 45,
-    revenue: 15750.00,
-    due: 3250.00
+    orders: orders.length,
+    itemsOrdered: orders.reduce((sum, order) => sum + (order.orderItems?.length || 0), 0),
+    revenue: orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0),
+    due: orders
+      .filter(o => o.paymentStatus?.toLowerCase() === 'payment_due' || o.paymentStatus?.toLowerCase() === 'partially_paid')
+      .reduce((sum, order) => sum + (order.totalAmount || 0), 0)
   };
 
-  // Mock filter counts
+  // Calculate filter counts from real data
   const statusCounts = {
-    draft: 2,
-    reserved: 5,
-    started: 3,
-    returned: 1,
-    archived: 0,
-    canceled: 1
+    draft: orders.filter(o => o.status?.toLowerCase() === 'pending' || o.status?.toLowerCase() === 'draft').length,
+    reserved: orders.filter(o => o.status?.toLowerCase() === 'confirmed' || o.status?.toLowerCase() === 'reserved').length,
+    started: orders.filter(o => o.status?.toLowerCase() === 'active' || o.status?.toLowerCase() === 'started').length,
+    returned: orders.filter(o => o.status?.toLowerCase() === 'completed' || o.status?.toLowerCase() === 'returned').length,
+    archived: orders.filter(o => o.status?.toLowerCase() === 'archived').length,
+    canceled: orders.filter(o => o.status?.toLowerCase() === 'cancelled' || o.status?.toLowerCase() === 'canceled').length
   };
 
   const paymentCounts = {
-    payment_due: 4,
-    partially_paid: 3,
-    paid: 4,
-    overpaid: 0,
-    process_deposit: 1
+    payment_due: orders.filter(o => o.paymentStatus?.toLowerCase() === 'payment_due' || o.paymentStatus?.toLowerCase() === 'pending').length,
+    partially_paid: orders.filter(o => o.paymentStatus?.toLowerCase() === 'partially_paid').length,
+    paid: orders.filter(o => o.paymentStatus?.toLowerCase() === 'paid').length,
+    overpaid: orders.filter(o => o.paymentStatus?.toLowerCase() === 'overpaid').length,
+    process_deposit: orders.filter(o => o.paymentStatus?.toLowerCase() === 'process_deposit').length
   };
 
   const toggleStatusFilter = (status: StatusFilter) => {
@@ -72,6 +79,38 @@ const Reservations: React.FC = () => {
       prev.includes(payment) ? prev.filter(p => p !== payment) : [...prev, payment]
     );
   };
+
+  // Fetch orders from API
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/orders`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch orders');
+        }
+        
+        const data = await response.json();
+        setOrders(data || []);
+      } catch (err: any) {
+        console.error('Fetch orders error:', err);
+        setError(err.message);
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchOrders();
+  }, []);
 
   // Sorting handler
   const handleSort = (field: 'date' | 'customer' | 'total' | 'status') => {
@@ -91,10 +130,10 @@ const Reservations: React.FC = () => {
   };
 
   const toggleSelectAll = () => {
-    if (selectedOrders.length === mockOrders.length) {
+    if (selectedOrders.length === sortedOrders.length && sortedOrders.length > 0) {
       setSelectedOrders([]);
     } else {
-      setSelectedOrders(mockOrders.map(o => o.id));
+      setSelectedOrders(sortedOrders.map(o => o.id));
     }
   };
 
@@ -136,14 +175,48 @@ const Reservations: React.FC = () => {
     }
   };
 
-  // Mock orders data (in production, this would come from API)
-  const mockOrders = [
-    { id: 1, orderNumber: 'ORD-001', customer: 'John Doe', date: '2025-10-21', total: 1250.00, status: 'reserved', payment: 'paid' },
-    { id: 2, orderNumber: 'ORD-002', customer: 'Jane Smith', date: '2025-10-20', total: 850.00, status: 'started', payment: 'partially_paid' },
-    { id: 3, orderNumber: 'ORD-003', customer: 'Bob Johnson', date: '2025-10-19', total: 2100.00, status: 'reserved', payment: 'payment_due' },
-    { id: 4, orderNumber: 'ORD-004', customer: 'Alice Brown', date: '2025-10-18', total: 500.00, status: 'draft', payment: 'payment_due' },
-    { id: 5, orderNumber: 'ORD-005', customer: 'Charlie Wilson', date: '2025-10-17', total: 1800.00, status: 'returned', payment: 'paid' },
-  ];
+  // Filter and sort orders
+  const filteredOrders = orders.filter(order => {
+    // Status filter
+    if (statusFilters.length > 0 && !statusFilters.includes(order.status?.toLowerCase())) {
+      return false;
+    }
+    
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const matchesOrderNumber = order.orderNumber?.toLowerCase().includes(query);
+      const matchesCustomer = order.customer?.name?.toLowerCase().includes(query);
+      if (!matchesOrderNumber && !matchesCustomer) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
+
+  // Sort orders
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
+    let compareValue = 0;
+    
+    switch (sortBy) {
+      case 'date':
+        compareValue = new Date(a.createdAt || a.startDate || 0).getTime() - 
+                      new Date(b.createdAt || b.startDate || 0).getTime();
+        break;
+      case 'customer':
+        compareValue = (a.customer?.name || '').localeCompare(b.customer?.name || '');
+        break;
+      case 'total':
+        compareValue = (a.totalAmount || 0) - (b.totalAmount || 0);
+        break;
+      case 'status':
+        compareValue = (a.status || '').localeCompare(b.status || '');
+        break;
+    }
+    
+    return sortOrder === 'asc' ? compareValue : -compareValue;
+  });
 
   return (
     <Layout>
@@ -436,8 +509,33 @@ const Reservations: React.FC = () => {
                   </div>
                 )}
 
+                {/* Loading State */}
+                {loading && (
+                  <div className="p-12 text-center">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <p className="mt-4 text-gray-600">Loading orders...</p>
+                  </div>
+                )}
+                
+                {/* Error State */}
+                {error && !loading && (
+                  <div className="p-12 text-center">
+                    <div className="text-red-600 mb-4">
+                      <AlertCircle className="w-12 h-12 mx-auto" />
+                    </div>
+                    <p className="text-gray-900 font-medium mb-2">Failed to load orders</p>
+                    <p className="text-gray-600 text-sm">{error}</p>
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
+
                 {/* Orders Table */}
-                {mockOrders.length > 0 ? (
+                {!loading && !error && sortedOrders.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead className="bg-gray-50 border-b border-gray-200">
@@ -445,7 +543,7 @@ const Reservations: React.FC = () => {
                           <th className="px-6 py-3 text-left">
                             <input
                               type="checkbox"
-                              checked={selectedOrders.length === mockOrders.length}
+                              checked={selectedOrders.length === sortedOrders.length && sortedOrders.length > 0}
                               onChange={toggleSelectAll}
                               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
@@ -503,7 +601,7 @@ const Reservations: React.FC = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
-                        {mockOrders.map(order => (
+                        {sortedOrders.map(order => (
                           <tr key={order.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4">
                               <input
@@ -514,43 +612,43 @@ const Reservations: React.FC = () => {
                               />
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-700">
-                              {order.date}
+                              {new Date(order.createdAt || order.startDate).toLocaleDateString()}
                             </td>
                             <td className="px-6 py-4 text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer">
-                              {order.orderNumber}
+                              {order.orderNumber || `#${order.id}`}
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-900">
-                              {order.customer}
+                              {order.customer?.name || 'N/A'}
                             </td>
                             <td className="px-6 py-4">
                               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                order.status === 'reserved' ? 'bg-blue-100 text-blue-800' :
-                                order.status === 'started' ? 'bg-green-100 text-green-800' :
-                                order.status === 'returned' ? 'bg-gray-100 text-gray-800' :
-                                order.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
+                                order.status?.toUpperCase() === 'CONFIRMED' || order.status?.toLowerCase() === 'reserved' ? 'bg-blue-100 text-blue-800' :
+                                order.status?.toUpperCase() === 'ACTIVE' || order.status?.toLowerCase() === 'started' ? 'bg-green-100 text-green-800' :
+                                order.status?.toUpperCase() === 'COMPLETED' || order.status?.toLowerCase() === 'returned' ? 'bg-gray-100 text-gray-800' :
+                                order.status?.toUpperCase() === 'PENDING' || order.status?.toLowerCase() === 'draft' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-red-100 text-red-800'
                               }`}>
-                                {order.status}
+                                {order.status || 'PENDING'}
                               </span>
                             </td>
                             <td className="px-6 py-4">
                               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                order.payment === 'paid' ? 'bg-green-100 text-green-800' :
-                                order.payment === 'partially_paid' ? 'bg-yellow-100 text-yellow-800' :
+                                order.paymentStatus?.toLowerCase() === 'paid' ? 'bg-green-100 text-green-800' :
+                                order.paymentStatus?.toLowerCase() === 'partially_paid' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-red-100 text-red-800'
                               }`}>
-                                {order.payment.replace('_', ' ')}
+                                {order.paymentStatus || 'payment_due'}
                               </span>
                             </td>
                             <td className="px-6 py-4 text-sm text-right font-medium text-gray-900">
-                              £{order.total.toFixed(2)}
+                              £{(order.totalAmount || 0).toFixed(2)}
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                ) : (
+                ) : !loading && !error ? (
                   /* Empty State */
                   <div className="p-12 text-center">
                     <div className="flex justify-center mb-4">
