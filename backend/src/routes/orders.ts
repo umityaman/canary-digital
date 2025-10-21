@@ -617,4 +617,385 @@ router.post('/bulk/delete', authenticateToken, async (req: AuthRequest, res) => 
   }
 });
 
+// Send order email
+router.post('/:id/email', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id } = req.params;
+    const { recipient, subject, body, template } = req.body;
+
+    if (!recipient || !subject || !body) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Recipient, subject, and body are required' 
+      });
+    }
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: parseInt(id),
+        companyId: req.companyId
+      },
+      include: {
+        customer: true,
+        orderItems: {
+          include: {
+            equipment: true
+          }
+        }
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Replace variables in subject and body
+    const replacedSubject = subject
+      .replace(/#{ORDER_ID}/g, order.orderNumber || order.id.toString())
+      .replace(/#{CUSTOMER_NAME}/g, order.customer?.name || 'Customer')
+      .replace(/#{PICKUP_DATE}/g, order.startDate ? new Date(order.startDate).toLocaleDateString() : 'N/A')
+      .replace(/#{RETURN_DATE}/g, order.endDate ? new Date(order.endDate).toLocaleDateString() : 'N/A')
+      .replace(/#{TOTAL_AMOUNT}/g, `£${order.totalAmount?.toFixed(2) || '0.00'}`);
+
+    const replacedBody = body
+      .replace(/#{ORDER_ID}/g, order.orderNumber || order.id.toString())
+      .replace(/#{CUSTOMER_NAME}/g, order.customer?.name || 'Customer')
+      .replace(/#{PICKUP_DATE}/g, order.startDate ? new Date(order.startDate).toLocaleDateString() : 'N/A')
+      .replace(/#{RETURN_DATE}/g, order.endDate ? new Date(order.endDate).toLocaleDateString() : 'N/A')
+      .replace(/#{TOTAL_AMOUNT}/g, `£${order.totalAmount?.toFixed(2) || '0.00'}`);
+
+    // Send email using emailService
+    await sendOrderConfirmation({
+      to: recipient,
+      subject: replacedSubject,
+      html: replacedBody.replace(/\n/g, '<br>')
+    });
+
+    res.json({
+      success: true,
+      message: 'Email sent successfully'
+    });
+  } catch (error: any) {
+    console.error('Send email error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send email', 
+      error: error.message 
+    });
+  }
+});
+
+// Get order tags
+router.get('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: parseInt(id),
+        companyId: req.companyId
+      },
+      select: {
+        tags: true
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Parse tags JSON if stored as JSON
+    const tags = order.tags ? (typeof order.tags === 'string' ? JSON.parse(order.tags) : order.tags) : [];
+
+    res.json({
+      success: true,
+      data: tags
+    });
+  } catch (error: any) {
+    console.error('Get tags error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to get tags', 
+      error: error.message 
+    });
+  }
+});
+
+// Add order tag
+router.post('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id } = req.params;
+    const { name, color } = req.body;
+
+    if (!name || !color) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Tag name and color are required' 
+      });
+    }
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: parseInt(id),
+        companyId: req.companyId
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Get existing tags
+    let existingTags = [];
+    if (order.tags) {
+      existingTags = typeof order.tags === 'string' ? JSON.parse(order.tags) : order.tags;
+    }
+
+    // Add new tag
+    const newTag = {
+      id: Date.now().toString(),
+      name,
+      color,
+      createdAt: new Date().toISOString()
+    };
+
+    existingTags.push(newTag);
+
+    // Update order with new tags
+    await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { 
+        tags: JSON.stringify(existingTags)
+      }
+    });
+
+    res.json({
+      success: true,
+      data: newTag
+    });
+  } catch (error: any) {
+    console.error('Add tag error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to add tag', 
+      error: error.message 
+    });
+  }
+});
+
+// Remove order tag
+router.delete('/:id/tags/:tagId', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id, tagId } = req.params;
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: parseInt(id),
+        companyId: req.companyId
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Get existing tags
+    let existingTags = [];
+    if (order.tags) {
+      existingTags = typeof order.tags === 'string' ? JSON.parse(order.tags) : order.tags;
+    }
+
+    // Remove tag
+    const updatedTags = existingTags.filter((tag: any) => tag.id !== tagId);
+
+    // Update order
+    await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { 
+        tags: JSON.stringify(updatedTags)
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'Tag removed successfully'
+    });
+  } catch (error: any) {
+    console.error('Remove tag error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to remove tag', 
+      error: error.message 
+    });
+  }
+});
+
+// Get order documents
+router.get('/:id/documents', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: parseInt(id),
+        companyId: req.companyId
+      },
+      select: {
+        documents: true
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Parse documents JSON if stored as JSON
+    const documents = order.documents ? (typeof order.documents === 'string' ? JSON.parse(order.documents) : order.documents) : [];
+
+    res.json({
+      success: true,
+      data: documents
+    });
+  } catch (error: any) {
+    console.error('Get documents error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to get documents', 
+      error: error.message 
+    });
+  }
+});
+
+// Upload order document (simulated - in production would handle file upload)
+router.post('/:id/documents', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id } = req.params;
+    const { name, size, type, url } = req.body;
+
+    if (!name || !size || !type) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Document name, size, and type are required' 
+      });
+    }
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: parseInt(id),
+        companyId: req.companyId
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Get existing documents
+    let existingDocuments = [];
+    if (order.documents) {
+      existingDocuments = typeof order.documents === 'string' ? JSON.parse(order.documents) : order.documents;
+    }
+
+    // Add new document
+    const newDocument = {
+      id: Date.now().toString(),
+      name,
+      size,
+      type,
+      url: url || `/uploads/orders/${id}/${name}`,
+      uploadedAt: new Date().toISOString()
+    };
+
+    existingDocuments.push(newDocument);
+
+    // Update order with new documents
+    await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { 
+        documents: JSON.stringify(existingDocuments)
+      }
+    });
+
+    res.json({
+      success: true,
+      data: newDocument
+    });
+  } catch (error: any) {
+    console.error('Upload document error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to upload document', 
+      error: error.message 
+    });
+  }
+});
+
+// Remove order document
+router.delete('/:id/documents/:docId', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id, docId } = req.params;
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: parseInt(id),
+        companyId: req.companyId
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Get existing documents
+    let existingDocuments = [];
+    if (order.documents) {
+      existingDocuments = typeof order.documents === 'string' ? JSON.parse(order.documents) : order.documents;
+    }
+
+    // Remove document
+    const updatedDocuments = existingDocuments.filter((doc: any) => doc.id !== docId);
+
+    // Update order
+    await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { 
+        documents: JSON.stringify(updatedDocuments)
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'Document removed successfully'
+    });
+  } catch (error: any) {
+    console.error('Remove document error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to remove document', 
+      error: error.message 
+    });
+  }
+});
+
 export default router

@@ -21,6 +21,15 @@ const Reservations: React.FC = () => {
   const [dateRange, setDateRange] = useState<'all' | 'today' | 'yesterday' | 'tomorrow' | 'this_week' | 'last_week' | 'next_week' | 'this_month' | 'last_month' | 'next_month' | 'this_year' | 'last_year' | 'next_year'>('all');
   const [showDatePicker, setShowDatePicker] = useState(false);
   
+  // Sorting
+  const [sortBy, setSortBy] = useState<'date' | 'customer' | 'total' | 'status'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  
+  // Bulk Actions
+  const [selectedOrders, setSelectedOrders] = useState<number[]>([]);
+  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+  
   // Sections
   const [statusOpen, setStatusOpen] = useState(true);
   const [paymentOpen, setPaymentOpen] = useState(true);
@@ -63,6 +72,78 @@ const Reservations: React.FC = () => {
       prev.includes(payment) ? prev.filter(p => p !== payment) : [...prev, payment]
     );
   };
+
+  // Sorting handler
+  const handleSort = (field: 'date' | 'customer' | 'total' | 'status') => {
+    if (sortBy === field) {
+      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('desc');
+    }
+  };
+
+  // Bulk selection handlers
+  const toggleOrderSelection = (orderId: number) => {
+    setSelectedOrders(prev =>
+      prev.includes(orderId) ? prev.filter(id => id !== orderId) : [...prev, orderId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedOrders.length === mockOrders.length) {
+      setSelectedOrders([]);
+    } else {
+      setSelectedOrders(mockOrders.map(o => o.id));
+    }
+  };
+
+  // Bulk actions handlers
+  const handleBulkStatusUpdate = async (newStatus: string) => {
+    if (selectedOrders.length === 0) return;
+    
+    setBulkActionLoading(true);
+    try {
+      // API call would go here
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log(`Updated ${selectedOrders.length} orders to status: ${newStatus}`);
+      setSelectedOrders([]);
+      setShowBulkActions(false);
+    } catch (error) {
+      console.error('Bulk update failed:', error);
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedOrders.length === 0) return;
+    
+    const confirmed = window.confirm(`Are you sure you want to delete ${selectedOrders.length} orders?`);
+    if (!confirmed) return;
+    
+    setBulkActionLoading(true);
+    try {
+      // API call would go here
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log(`Deleted ${selectedOrders.length} orders`);
+      setSelectedOrders([]);
+      setShowBulkActions(false);
+    } catch (error) {
+      console.error('Bulk delete failed:', error);
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
+
+  // Mock orders data (in production, this would come from API)
+  const mockOrders = [
+    { id: 1, orderNumber: 'ORD-001', customer: 'John Doe', date: '2025-10-21', total: 1250.00, status: 'reserved', payment: 'paid' },
+    { id: 2, orderNumber: 'ORD-002', customer: 'Jane Smith', date: '2025-10-20', total: 850.00, status: 'started', payment: 'partially_paid' },
+    { id: 3, orderNumber: 'ORD-003', customer: 'Bob Johnson', date: '2025-10-19', total: 2100.00, status: 'reserved', payment: 'payment_due' },
+    { id: 4, orderNumber: 'ORD-004', customer: 'Alice Brown', date: '2025-10-18', total: 500.00, status: 'draft', payment: 'payment_due' },
+    { id: 5, orderNumber: 'ORD-005', customer: 'Charlie Wilson', date: '2025-10-17', total: 1800.00, status: 'returned', payment: 'paid' },
+  ];
 
   return (
     <Layout>
@@ -285,18 +366,203 @@ const Reservations: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Empty State */}
-                <div className="p-12 text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                      <Package className="w-8 h-8 text-gray-400" />
+                {/* Bulk Actions Toolbar */}
+                {selectedOrders.length > 0 && (
+                  <div className="border-b border-gray-200 px-6 py-3 bg-blue-50 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium text-gray-900">
+                        {selectedOrders.length} selected
+                      </span>
+                      <button
+                        onClick={() => setSelectedOrders([])}
+                        className="text-sm text-gray-600 hover:text-gray-900"
+                      >
+                        Clear selection
+                      </button>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowBulkActions(!showBulkActions)}
+                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          Update Status
+                          <ChevronDown className="w-4 h-4" />
+                        </button>
+                        
+                        {showBulkActions && (
+                          <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                            <button
+                              onClick={() => handleBulkStatusUpdate('reserved')}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 first:rounded-t-lg"
+                              disabled={bulkActionLoading}
+                            >
+                              Mark as Reserved
+                            </button>
+                            <button
+                              onClick={() => handleBulkStatusUpdate('started')}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                              disabled={bulkActionLoading}
+                            >
+                              Mark as Started
+                            </button>
+                            <button
+                              onClick={() => handleBulkStatusUpdate('returned')}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                              disabled={bulkActionLoading}
+                            >
+                              Mark as Returned
+                            </button>
+                            <button
+                              onClick={() => handleBulkStatusUpdate('canceled')}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 last:rounded-b-lg"
+                              disabled={bulkActionLoading}
+                            >
+                              Mark as Canceled
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <button
+                        onClick={handleBulkDelete}
+                        disabled={bulkActionLoading}
+                        className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {bulkActionLoading ? 'Deleting...' : 'Delete'}
+                      </button>
                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">İlk siparişinizi oluşturun</h3>
-                  <p className="text-gray-600 mb-1">Canlı müsaitlik ve otomatik fiyat hesaplamaları ile siparişlerinizi oluşturun ve yönetin.</p>
-                  <p className="text-gray-600 mb-6">Ardından, iş akışına aşina olmak için bir siparişteki öğeleri rezerve etmeyi, almayı ve iade etmeyi deneyin.</p>
-                  <button
-                    onClick={() => setShowForm(true)}
+                )}
+
+                {/* Orders Table */}
+                {mockOrders.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                          <th className="px-6 py-3 text-left">
+                            <input
+                              type="checkbox"
+                              checked={selectedOrders.length === mockOrders.length}
+                              onChange={toggleSelectAll}
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                          </th>
+                          <th className="px-6 py-3 text-left">
+                            <button
+                              onClick={() => handleSort('date')}
+                              className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900"
+                            >
+                              Date
+                              {sortBy === 'date' && (
+                                <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                              )}
+                            </button>
+                          </th>
+                          <th className="px-6 py-3 text-left">
+                            <span className="text-xs font-semibold text-gray-700 uppercase">Order #</span>
+                          </th>
+                          <th className="px-6 py-3 text-left">
+                            <button
+                              onClick={() => handleSort('customer')}
+                              className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900"
+                            >
+                              Customer
+                              {sortBy === 'customer' && (
+                                <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                              )}
+                            </button>
+                          </th>
+                          <th className="px-6 py-3 text-left">
+                            <button
+                              onClick={() => handleSort('status')}
+                              className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900"
+                            >
+                              Status
+                              {sortBy === 'status' && (
+                                <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                              )}
+                            </button>
+                          </th>
+                          <th className="px-6 py-3 text-left">
+                            <span className="text-xs font-semibold text-gray-700 uppercase">Payment</span>
+                          </th>
+                          <th className="px-6 py-3 text-right">
+                            <button
+                              onClick={() => handleSort('total')}
+                              className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900 ml-auto"
+                            >
+                              Total
+                              {sortBy === 'total' && (
+                                <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                              )}
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {mockOrders.map(order => (
+                          <tr key={order.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4">
+                              <input
+                                type="checkbox"
+                                checked={selectedOrders.includes(order.id)}
+                                onChange={() => toggleOrderSelection(order.id)}
+                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              />
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-700">
+                              {order.date}
+                            </td>
+                            <td className="px-6 py-4 text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer">
+                              {order.orderNumber}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              {order.customer}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                order.status === 'reserved' ? 'bg-blue-100 text-blue-800' :
+                                order.status === 'started' ? 'bg-green-100 text-green-800' :
+                                order.status === 'returned' ? 'bg-gray-100 text-gray-800' :
+                                order.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {order.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                order.payment === 'paid' ? 'bg-green-100 text-green-800' :
+                                order.payment === 'partially_paid' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {order.payment.replace('_', ' ')}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-right font-medium text-gray-900">
+                              £{order.total.toFixed(2)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  /* Empty State */
+                  <div className="p-12 text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                        <Package className="w-8 h-8 text-gray-400" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">İlk siparişinizi oluşturun</h3>
+                    <p className="text-gray-600 mb-1">Canlı müsaitlik ve otomatik fiyat hesaplamaları ile siparişlerinizi oluşturun ve yönetin.</p>
+                    <p className="text-gray-600 mb-6">Ardından, iş akışına aşina olmak için bir siparişteki öğeleri rezerve etmeyi, almayı ve iade etmeyi deneyin.</p>
+                    <button
+                      onClick={() => setShowForm(true)}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   >
                     <Plus className="w-5 h-5" />

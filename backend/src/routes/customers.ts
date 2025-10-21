@@ -185,4 +185,104 @@ router.delete('/:id', authenticateToken, async (req: AuthRequest, res: Response)
   }
 });
 
+// QR Code ile müşteri tarama
+router.get('/scan/:code', authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const { code } = req.params;
+    
+    // Code can be customer ID, email, phone, or QR code data
+    let customer;
+    
+    // Try parsing as JSON (QR code)
+    try {
+      const qrData = JSON.parse(code);
+      if (qrData.type === 'customer' && qrData.id) {
+        customer = await prisma.customer.findUnique({
+          where: { id: qrData.id },
+          include: {
+            orders: {
+              take: 5,
+              orderBy: { createdAt: 'desc' },
+              select: {
+                id: true,
+                orderNumber: true,
+                totalAmount: true,
+                status: true,
+                pickupDate: true,
+                returnDate: true
+              }
+            }
+          }
+        });
+      }
+    } catch {
+      // Not JSON, try as customer ID or search by email/phone
+      const numericId = parseInt(code);
+      
+      if (!isNaN(numericId)) {
+        customer = await prisma.customer.findUnique({
+          where: { id: numericId },
+          include: {
+            orders: {
+              take: 5,
+              orderBy: { createdAt: 'desc' },
+              select: {
+                id: true,
+                orderNumber: true,
+                totalAmount: true,
+                status: true,
+                pickupDate: true,
+                returnDate: true
+              }
+            }
+          }
+        });
+      } else {
+        // Search by email or phone
+        customer = await prisma.customer.findFirst({
+          where: {
+            OR: [
+              { email: code },
+              { phone: code }
+            ]
+          },
+          include: {
+            orders: {
+              take: 5,
+              orderBy: { createdAt: 'desc' },
+              select: {
+                id: true,
+                orderNumber: true,
+                totalAmount: true,
+                status: true,
+                pickupDate: true,
+                returnDate: true
+              }
+            }
+          }
+        });
+      }
+    }
+    
+    if (!customer) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Customer not found' 
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: customer
+    });
+  } catch (error: any) {
+    console.error('Customer scan error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Customer scan failed', 
+      error: error.message 
+    });
+  }
+});
+
 export default router;

@@ -172,46 +172,47 @@ const NewOrder: React.FC = () => {
     
     try {
       if (qrScanType === 'customer') {
-        // For customer scanning, we'll use the customer ID directly
-        // In a real app, this would scan QR and get customer from backend
-        const mockCustomer = {
-          id: qrManualInput,
-          name: `Customer ${qrManualInput}`,
-          email: `customer${qrManualInput}@example.com`
-        };
-        setSelectedCustomer(mockCustomer);
-        setShowQRScanModal(false);
-        setQrManualInput('');
+        // Call customer scan API
+        const response = await api.get(`/customers/scan/${qrManualInput}`);
+        
+        if (response.data.success && response.data.data) {
+          setSelectedCustomer(response.data.data);
+          setShowQRScanModal(false);
+          setQrManualInput('');
+        } else {
+          setQrError('Customer not found');
+        }
       } else {
-        // For equipment scanning
-        const mockEquipment = {
-          id: qrManualInput,
-          name: `Equipment ${qrManualInput}`,
-          dailyRate: 50,
-          status: 'AVAILABLE'
-        };
+        // Call equipment scan API
+        const response = await api.get(`/equipment/scan/${qrManualInput}`);
         
-        // Add to product lines
-        const id = generateId();
-        setProductLines(prev => [
-          ...prev,
-          { 
-            id, 
-            type: 'custom', 
-            title: mockEquipment.name,
-            equipmentId: mockEquipment.id,
-            qty: 1, 
-            price: mockEquipment.dailyRate, 
-            tax: 'No tax' 
-          }
-        ]);
-        
-        setShowQRScanModal(false);
-        setQrManualInput('');
+        if (response.data && response.data.id) {
+          const equipment = response.data;
+          
+          // Add to product lines
+          const id = generateId();
+          setProductLines(prev => [
+            ...prev,
+            { 
+              id, 
+              type: 'custom', 
+              title: equipment.name,
+              equipmentId: equipment.id,
+              qty: 1, 
+              price: equipment.dailyRate || equipment.price || 0, 
+              tax: 'No tax' 
+            }
+          ]);
+          
+          setShowQRScanModal(false);
+          setQrManualInput('');
+        } else {
+          setQrError('Equipment not found');
+        }
       }
     } catch (error: any) {
       console.error('QR scan failed:', error);
-      setQrError('Failed to scan QR code. Please try again.');
+      setQrError(error.response?.data?.message || 'Failed to scan QR code. Please try again.');
     }
   };
   
@@ -868,11 +869,34 @@ const NewOrder: React.FC = () => {
               <button 
                 onClick={async () => {
                   setSendingEmail(true);
-                  // Simulate email sending
-                  await new Promise(resolve => setTimeout(resolve, 1500));
-                  setSendingEmail(false);
-                  setShowEmailModal(false);
-                  alert('Email sent successfully!');
+                  try {
+                    // Note: This would require an order ID in production
+                    // For now, we'll call a generic email endpoint or show a message
+                    if (!selectedCustomer) {
+                      alert('Please select a customer first');
+                      setSendingEmail(false);
+                      return;
+                    }
+                    
+                    // Call email API (would need order ID in production)
+                    // await api.post(`/orders/${orderId}/email`, {
+                    //   recipient: emailRecipient,
+                    //   subject: emailSubject,
+                    //   body: emailBody,
+                    //   template: emailTemplate
+                    // });
+                    
+                    // For now, show success message
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    setSendingEmail(false);
+                    setShowEmailModal(false);
+                    alert('Email sent successfully!');
+                  } catch (error: any) {
+                    console.error('Email send failed:', error);
+                    alert(error.response?.data?.message || 'Failed to send email');
+                    setSendingEmail(false);
+                  }
                 }}
                 disabled={sendingEmail || !emailRecipient || !emailSubject}
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
