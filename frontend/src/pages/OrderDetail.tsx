@@ -328,6 +328,16 @@ export default function OrderDetail() {
             E-posta Gönder
           </button>
           <button
+            onClick={() => {
+              const token = localStorage.getItem('auth_token');
+              window.open(`${API_URL}/orders/${order.id}/invoice?token=${token}`, '_blank');
+            }}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            Fatura İndir
+          </button>
+          <button
             onClick={() => navigate(`/orders/edit/${order.id}`)}
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 flex items-center gap-2"
           >

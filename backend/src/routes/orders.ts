@@ -4,6 +4,7 @@ import { authenticateToken } from './auth'
 import { AuthRequest } from '../middleware/auth'
 import { GoogleCalendarService } from '../services/googleCalendar'
 import { sendOrderConfirmation } from '../utils/emailService'
+import PDFDocument from 'pdfkit'
 import { sendOrderConfirmationWhatsApp } from '../services/whatsapp.service'
 
 const router = Router()
@@ -1122,6 +1123,191 @@ router.get('/:id/payment/status', authenticateToken, async (req: AuthRequest, re
       message: 'Failed to check payment status', 
       error: error.message 
     });
+  }
+});
+
+// ============================================
+// INVOICE GENERATION ENDPOINT
+// ============================================
+
+// Generate PDF invoice for an order
+router.get('/:id/invoice', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const orderId = parseInt(req.params.id);
+
+    // Get order with all details
+    const order = await prisma.order.findFirst({
+      where: { 
+        id: orderId,
+        userId: req.user?.userId
+      },
+      include: {
+        customer: true,
+        orderItems: {
+          include: {
+            equipment: true
+          }
+        }
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    // Create PDF document
+    const doc = new PDFDocument({ margin: 50, size: 'A4' });
+
+    // Set response headers
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=invoice_${order.orderNumber}.pdf`);
+
+    // Pipe PDF to response
+    doc.pipe(res);
+
+    // Header - Company Info
+    doc.fontSize(20).text('CANARY DIGITAL', 50, 50, { align: 'left' });
+    doc.fontSize(10).text('Equipment Rental Services', 50, 75);
+    doc.text('Address Line 1, City, Country', 50, 90);
+    doc.text('Phone: +123 456 7890', 50, 105);
+    doc.text('Email: info@canarydigital.com', 50, 120);
+
+    // Invoice Title
+    doc.fontSize(24).text('INVOICE', 400, 50, { align: 'right' });
+    doc.fontSize(10);
+    doc.text(`Invoice #: ${order.orderNumber}`, 400, 80, { align: 'right' });
+    doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 400, 95, { align: 'right' });
+    doc.text(`Status: ${order.status}`, 400, 110, { align: 'right' });
+
+    // Line separator
+    doc.moveTo(50, 150).lineTo(550, 150).stroke();
+
+    // Customer Information
+    doc.fontSize(12).text('Bill To:', 50, 170);
+    doc.fontSize(10);
+    doc.text(order.customer.name, 50, 190);
+    if (order.customer.company) {
+      doc.text(order.customer.company, 50, 205);
+    }
+    doc.text(order.customer.email, 50, 220);
+    doc.text(order.customer.phone, 50, 235);
+    if (order.customer.address) {
+      doc.text(order.customer.address, 50, 250);
+    }
+
+    // Rental Period
+    doc.fontSize(12).text('Rental Period:', 350, 170);
+    doc.fontSize(10);
+    doc.text(`From: ${new Date(order.startDate).toLocaleDateString()}`, 350, 190);
+    doc.text(`To: ${new Date(order.endDate).toLocaleDateString()}`, 350, 205);
+    const duration = Math.ceil(
+      (new Date(order.endDate).getTime() - new Date(order.startDate).getTime()) / (1000 * 60 * 60 * 24)
+    );
+    doc.text(`Duration: ${duration} days`, 350, 220);
+
+    // Line separator
+    doc.moveTo(50, 280).lineTo(550, 280).stroke();
+
+    // Table Header
+    let yPosition = 300;
+    doc.fontSize(10).font('Helvetica-Bold');
+    doc.text('Item', 50, yPosition);
+    doc.text('Qty', 300, yPosition, { width: 50, align: 'center' });
+    doc.text('Unit Price', 360, yPosition, { width: 90, align: 'right' });
+    doc.text('Total', 460, yPosition, { width: 90, align: 'right' });
+    
+    // Line under header
+    yPosition += 20;
+    doc.moveTo(50, yPosition).lineTo(550, yPosition).stroke();
+
+    // Table Body
+    doc.font('Helvetica');
+    yPosition += 15;
+
+    for (const item of order.orderItems) {
+      // Check if we need a new page
+      if (yPosition > 700) {
+        doc.addPage();
+        yPosition = 50;
+      }
+
+      const itemName = item.description || (item.equipment?.name) || 'Item';
+      doc.text(itemName, 50, yPosition, { width: 240 });
+      doc.text(item.quantity.toString(), 300, yPosition, { width: 50, align: 'center' });
+      doc.text(`£${item.unitPrice.toFixed(2)}`, 360, yPosition, { width: 90, align: 'right' });
+      doc.text(`£${item.totalPrice.toFixed(2)}`, 460, yPosition, { width: 90, align: 'right' });
+      
+      yPosition += 25;
+    }
+
+    // Line before totals
+    yPosition += 10;
+    doc.moveTo(350, yPosition).lineTo(550, yPosition).stroke();
+
+    // Totals
+    yPosition += 20;
+    doc.font('Helvetica');
+    doc.text('Subtotal:', 350, yPosition);
+    doc.text(`£${order.subtotal.toFixed(2)}`, 460, yPosition, { width: 90, align: 'right' });
+
+    if (order.discountAmount && order.discountAmount > 0) {
+      yPosition += 20;
+      doc.text('Discount:', 350, yPosition);
+      doc.text(`-£${order.discountAmount.toFixed(2)}`, 460, yPosition, { width: 90, align: 'right' });
+    }
+
+    if (order.taxAmount && order.taxAmount > 0) {
+      yPosition += 20;
+      doc.text('Tax (VAT):', 350, yPosition);
+      doc.text(`£${order.taxAmount.toFixed(2)}`, 460, yPosition, { width: 90, align: 'right' });
+    }
+
+    // Bold line before total
+    yPosition += 15;
+    doc.moveTo(350, yPosition).lineTo(550, yPosition).lineWidth(2).stroke();
+    doc.lineWidth(1);
+
+    // Total
+    yPosition += 20;
+    doc.font('Helvetica-Bold').fontSize(12);
+    doc.text('TOTAL:', 350, yPosition);
+    doc.text(`£${order.totalAmount.toFixed(2)}`, 460, yPosition, { width: 90, align: 'right' });
+
+    // Payment Status
+    yPosition += 30;
+    doc.fontSize(10).font('Helvetica');
+    const paymentStatusText = order.paymentStatus === 'paid' ? 'PAID' : 
+                              order.paymentStatus === 'partially_paid' ? 'PARTIALLY PAID' : 
+                              'PAYMENT DUE';
+    const paymentColor = order.paymentStatus === 'paid' ? 'green' : 'red';
+    doc.fillColor(paymentColor);
+    doc.text(`Payment Status: ${paymentStatusText}`, 350, yPosition);
+    doc.fillColor('black');
+
+    // Footer
+    const footerY = 750;
+    doc.fontSize(8).fillColor('gray');
+    doc.text('Thank you for your business!', 50, footerY, { align: 'center', width: 500 });
+    doc.text('For questions about this invoice, please contact info@canarydigital.com', 50, footerY + 15, { 
+      align: 'center', 
+      width: 500 
+    });
+
+    // Finalize PDF
+    doc.end();
+
+  } catch (error: any) {
+    console.error('Invoice generation error:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to generate invoice', 
+        error: error.message 
+      });
+    }
   }
 });
 
