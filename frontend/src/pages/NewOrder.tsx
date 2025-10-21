@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Search, Plus, X, Calendar, QrCode, UserPlus, ChevronDown, ChevronUp,
   User, MapPin, FileText, Mail, Phone, Tag, StickyNote, CreditCard, Package, MoreHorizontal,
-  Copy, Clock, Grip
+  Copy, Clock, Grip, Loader2
 } from 'lucide-react';
 
 const NewOrder: React.FC = () => {
@@ -25,6 +25,7 @@ const NewOrder: React.FC = () => {
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [showQRScanModal, setShowQRScanModal] = useState(false);
   const [qrScanType, setQRScanType] = useState<'customer' | 'equipment'>('customer');
+  const [showEmailModal, setShowEmailModal] = useState(false);
   
   // Discount & Coupon
   const [discount, setDiscount] = useState({ type: 'percentage', value: 0, reason: '' });
@@ -34,6 +35,13 @@ const NewOrder: React.FC = () => {
   // QR Scanning
   const [qrManualInput, setQrManualInput] = useState('');
   const [qrError, setQrError] = useState('');
+  
+  // Email
+  const [emailTemplate, setEmailTemplate] = useState('order_confirmation');
+  const [emailRecipient, setEmailRecipient] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailBody, setEmailBody] = useState('');
+  const [sendingEmail, setSendingEmail] = useState(false);
   
   // Product lines
   const [productLines, setProductLines] = useState<any[]>([]);
@@ -636,6 +644,127 @@ const NewOrder: React.FC = () => {
         </div>
       )}
 
+      {/* Email Modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Send Email</h2>
+              <button 
+                onClick={() => setShowEmailModal(false)}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Email Template</label>
+                <select 
+                  value={emailTemplate}
+                  onChange={(e) => {
+                    setEmailTemplate(e.target.value);
+                    // Update subject and body based on template
+                    const templates: any = {
+                      order_confirmation: {
+                        subject: 'Order Confirmation - #{ORDER_ID}',
+                        body: 'Dear Customer,\n\nYour order has been confirmed.\n\nOrder Details:\n...'
+                      },
+                      payment_reminder: {
+                        subject: 'Payment Reminder - Order #{ORDER_ID}',
+                        body: 'Dear Customer,\n\nThis is a friendly reminder about your pending payment.\n\n...'
+                      },
+                      pickup_reminder: {
+                        subject: 'Pickup Reminder - Order #{ORDER_ID}',
+                        body: 'Dear Customer,\n\nYour equipment is ready for pickup.\n\n...'
+                      },
+                      return_reminder: {
+                        subject: 'Return Reminder - Order #{ORDER_ID}',
+                        body: 'Dear Customer,\n\nPlease remember to return your equipment.\n\n...'
+                      }
+                    };
+                    setEmailSubject(templates[e.target.value]?.subject || '');
+                    setEmailBody(templates[e.target.value]?.body || '');
+                  }}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="order_confirmation">Order Confirmation</option>
+                  <option value="payment_reminder">Payment Reminder</option>
+                  <option value="pickup_reminder">Pickup Reminder</option>
+                  <option value="return_reminder">Return Reminder</option>
+                  <option value="custom">Custom Email</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+                <input 
+                  type="email" 
+                  value={emailRecipient || selectedCustomer?.email || ''}
+                  onChange={(e) => setEmailRecipient(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  placeholder="customer@example.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                <input 
+                  type="text" 
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  placeholder="Email subject"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                <textarea 
+                  rows={8}
+                  value={emailBody}
+                  onChange={(e) => setEmailBody(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono"
+                  placeholder="Email message body..."
+                ></textarea>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs text-blue-700">
+                  <strong>Available variables:</strong> #{'{ORDER_ID}'}, #{'{CUSTOMER_NAME}'}, #{'{PICKUP_DATE}'}, #{'{RETURN_DATE}'}, #{'{TOTAL_AMOUNT}'}
+                </p>
+              </div>
+            </div>
+            
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+              <button 
+                onClick={() => setShowEmailModal(false)}
+                disabled={sendingEmail}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={async () => {
+                  setSendingEmail(true);
+                  // Simulate email sending
+                  await new Promise(resolve => setTimeout(resolve, 1500));
+                  setSendingEmail(false);
+                  setShowEmailModal(false);
+                  alert('Email sent successfully!');
+                }}
+                disabled={sendingEmail || !emailRecipient || !emailSubject}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {sendingEmail && <Loader2 className="w-4 h-4 animate-spin" />}
+                {sendingEmail ? 'Sending...' : 'Send Email'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex">
         {/* Left Side - Header + Main Content */}
         <div className="flex-1">
@@ -1126,7 +1255,11 @@ const NewOrder: React.FC = () => {
             
             {/* Action Buttons - Tek Kart İçinde */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 space-y-2">
-              <button className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+              <button 
+                onClick={() => setShowEmailModal(true)}
+                className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center justify-center gap-2"
+              >
+                <Mail className="w-4 h-4" />
                 Send email
               </button>
               <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
