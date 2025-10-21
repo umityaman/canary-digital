@@ -998,4 +998,131 @@ router.delete('/:id/documents/:docId', authenticateToken, async (req: AuthReques
   }
 });
 
+// ============================================
+// PAYMENT ENDPOINTS
+// ============================================
+
+// Process payment for an order (simplified version - production would use actual Iyzico SDK)
+router.post('/:id/payment', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const orderId = parseInt(req.params.id);
+    const { cardHolderName, cardNumber, expireMonth, expireYear, cvc, amount } = req.body;
+
+    // Validation
+    if (!cardHolderName || !cardNumber || !expireMonth || !expireYear || !cvc) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Missing payment card information' 
+      });
+    }
+
+    // Get order
+    const order = await prisma.order.findFirst({
+      where: { 
+        id: orderId,
+        userId: req.user?.userId
+      },
+      include: {
+        customer: true
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    if (order.paymentStatus === 'paid') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Order is already paid' 
+      });
+    }
+
+    // In production, integrate with Iyzico SDK here
+    // For now, simulate successful payment
+    const paymentAmount = amount || order.totalAmount;
+    
+    // Simulate payment processing delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Update order payment status
+    const updatedOrder = await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        paymentStatus: 'paid',
+        updatedAt: new Date()
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'Payment processed successfully',
+      data: {
+        orderId: updatedOrder.id,
+        orderNumber: updatedOrder.orderNumber,
+        paymentStatus: updatedOrder.paymentStatus,
+        paidAmount: paymentAmount,
+        paymentDate: new Date().toISOString(),
+        transactionId: `TXN_${Date.now()}_${orderId}` // Simulated transaction ID
+      }
+    });
+  } catch (error: any) {
+    console.error('Payment processing error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Payment processing failed', 
+      error: error.message 
+    });
+  }
+});
+
+// Get payment status for an order
+router.get('/:id/payment/status', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const orderId = parseInt(req.params.id);
+
+    const order = await prisma.order.findFirst({
+      where: { 
+        id: orderId,
+        userId: req.user?.userId
+      },
+      select: {
+        id: true,
+        orderNumber: true,
+        totalAmount: true,
+        paymentStatus: true,
+        updatedAt: true
+      }
+    });
+
+    if (!order) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Order not found' 
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+        totalAmount: order.totalAmount,
+        paymentStatus: order.paymentStatus,
+        lastUpdated: order.updatedAt
+      }
+    });
+  } catch (error: any) {
+    console.error('Payment status check error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to check payment status', 
+      error: error.message 
+    });
+  }
+});
+
 export default router

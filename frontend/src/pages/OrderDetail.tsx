@@ -88,8 +88,16 @@ export default function OrderDetail() {
   const [error, setError] = useState<string | null>(null);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [newStatus, setNewStatus] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  
+  // Payment form states
+  const [cardHolderName, setCardHolderName] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [expireMonth, setExpireMonth] = useState('');
+  const [expireYear, setExpireYear] = useState('');
+  const [cvc, setCvc] = useState('');
 
   useEffect(() => {
     fetchOrder();
@@ -204,6 +212,59 @@ export default function OrderDetail() {
     }
   };
 
+  const handlePayment = async () => {
+    if (!order) return;
+
+    // Validation
+    if (!cardHolderName || !cardNumber || !expireMonth || !expireYear || !cvc) {
+      showNotification('error', 'Lütfen tüm kart bilgilerini doldurun');
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(`${API_URL}/orders/${order.id}/payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          cardHolderName,
+          cardNumber: cardNumber.replace(/\s/g, ''),
+          expireMonth,
+          expireYear,
+          cvc,
+          amount: order.totalAmount
+        })
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'Ödeme işlemi başarısız oldu');
+      }
+
+      const data = await response.json();
+      showNotification('success', 'Ödeme başarıyla tamamlandı!');
+      setShowPaymentModal(false);
+      
+      // Reset form
+      setCardHolderName('');
+      setCardNumber('');
+      setExpireMonth('');
+      setExpireYear('');
+      setCvc('');
+      
+      // Refresh order
+      await fetchOrder();
+    } catch (err: any) {
+      showNotification('error', err.message);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -248,6 +309,16 @@ export default function OrderDetail() {
           </div>
         </div>
         <div className="flex gap-2">
+          {order.paymentStatus !== 'paid' && (
+            <button
+              onClick={() => setShowPaymentModal(true)}
+              disabled={actionLoading}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+            >
+              <CreditCard className="w-4 h-4" />
+              Ödeme Al
+            </button>
+          )}
           <button
             onClick={handleSendEmail}
             disabled={actionLoading}
@@ -564,6 +635,143 @@ export default function OrderDetail() {
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
               >
                 {actionLoading ? 'Siliniyor...' : 'Sil'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center gap-2 mb-4">
+              <CreditCard className="w-6 h-6 text-green-600" />
+              <h3 className="text-lg font-semibold">Ödeme Al</h3>
+            </div>
+            
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600">Sipariş No:</span>
+                <span className="font-medium">{order?.orderNumber}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Toplam Tutar:</span>
+                <span className="font-bold text-lg text-green-600">£{order?.totalAmount.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Kart Üzerindeki İsim
+                </label>
+                <input
+                  type="text"
+                  value={cardHolderName}
+                  onChange={(e) => setCardHolderName(e.target.value)}
+                  placeholder="Ad Soyad"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Kart Numarası
+                </label>
+                <input
+                  type="text"
+                  value={cardNumber}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\s/g, '');
+                    if (value.length <= 16) {
+                      setCardNumber(value.replace(/(.{4})/g, '$1 ').trim());
+                    }
+                  }}
+                  placeholder="1234 5678 9012 3456"
+                  maxLength={19}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Ay
+                  </label>
+                  <input
+                    type="text"
+                    value={expireMonth}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 2 && parseInt(value) <= 12) {
+                        setExpireMonth(value);
+                      }
+                    }}
+                    placeholder="MM"
+                    maxLength={2}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Yıl
+                  </label>
+                  <input
+                    type="text"
+                    value={expireYear}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 4) {
+                        setExpireYear(value);
+                      }
+                    }}
+                    placeholder="YYYY"
+                    maxLength={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    CVV
+                  </label>
+                  <input
+                    type="text"
+                    value={cvc}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 4) {
+                        setCvc(value);
+                      }
+                    }}
+                    placeholder="123"
+                    maxLength={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2 justify-end mt-6">
+              <button
+                onClick={() => {
+                  setShowPaymentModal(false);
+                  setCardHolderName('');
+                  setCardNumber('');
+                  setExpireMonth('');
+                  setExpireYear('');
+                  setCvc('');
+                }}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                İptal
+              </button>
+              <button
+                onClick={handlePayment}
+                disabled={actionLoading}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+              >
+                {actionLoading ? 'İşleniyor...' : 'Ödemeyi Tamamla'}
               </button>
             </div>
           </div>
