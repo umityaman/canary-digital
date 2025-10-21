@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './stores/authStore'
+import { NotificationProvider } from './contexts/NotificationContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
 import { ToastContainer } from './components/Toast'
@@ -71,11 +72,12 @@ export default function App(){
 
   return (
     <>
-      <ToastContainer />
-      <FloatingChatWidget />
-      <FloatingToolsWidget />
-      <Layout>
-        <Routes>
+      <NotificationProvider>
+        <ToastContainer />
+        <FloatingChatWidget />
+        <FloatingToolsWidget />
+        <Layout>
+          <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='/dashboard' element={<Dashboard/>} />
           <Route path='/profile' element={<Profile/>} />
@@ -129,6 +131,7 @@ export default function App(){
           <Route path='*' element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
+      </NotificationProvider>
     </>
   )
 }

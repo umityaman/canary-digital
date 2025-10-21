@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useNotification } from '../contexts/NotificationContext';
 import { 
   ArrowLeft, Calendar, User, Package, CreditCard, FileText, 
   Tag, Clock, Edit, Trash2, Send, Download, CheckCircle, XCircle 
@@ -81,6 +82,7 @@ const paymentStatusLabels: Record<string, string> = {
 export default function OrderDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -135,11 +137,12 @@ export default function OrderDetail() {
         throw new Error('Durum güncellenemedi');
       }
       
+      showNotification('success', 'Sipariş durumu başarıyla güncellendi');
       await fetchOrder();
       setShowStatusModal(false);
       setNewStatus('');
     } catch (err: any) {
-      alert(err.message);
+      showNotification('error', err.message);
     } finally {
       setActionLoading(false);
     }
@@ -162,9 +165,10 @@ export default function OrderDetail() {
         throw new Error('Sipariş silinemedi');
       }
       
+      showNotification('success', 'Sipariş başarıyla silindi');
       navigate('/orders');
     } catch (err: any) {
-      alert(err.message);
+      showNotification('error', err.message);
       setActionLoading(false);
     }
   };
@@ -192,9 +196,9 @@ export default function OrderDetail() {
         throw new Error('E-posta gönderilemedi');
       }
       
-      alert('E-posta başarıyla gönderildi');
+      showNotification('success', 'E-posta başarıyla gönderildi');
     } catch (err: any) {
-      alert(err.message);
+      showNotification('error', err.message);
     } finally {
       setActionLoading(false);
     }

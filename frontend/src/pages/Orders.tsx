@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useNotification } from '../contexts/NotificationContext';
 import { 
   Plus, Search, ChevronDown, ChevronUp, Calendar as CalendarIcon,
   Package, DollarSign, AlertCircle, Clock, User, MapPin, FileText,
@@ -11,6 +13,8 @@ type StatusFilter = 'draft' | 'reserved' | 'started' | 'returned' | 'archived' |
 type PaymentFilter = 'payment_due' | 'partially_paid' | 'paid' | 'overpaid' | 'process_deposit';
 
 const Reservations: React.FC = () => {
+  const navigate = useNavigate();
+  const { showNotification } = useNotification();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -161,11 +165,12 @@ const Reservations: React.FC = () => {
     try {
       // API call would go here
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log(`Updated ${selectedOrders.length} orders to status: ${newStatus}`);
+      showNotification('success', `${selectedOrders.length} sipariş başarıyla güncellendi`);
       setSelectedOrders([]);
       setShowBulkActions(false);
     } catch (error) {
       console.error('Bulk update failed:', error);
+      showNotification('error', 'Toplu güncelleme başarısız oldu');
     } finally {
       setBulkActionLoading(false);
     }
@@ -174,18 +179,19 @@ const Reservations: React.FC = () => {
   const handleBulkDelete = async () => {
     if (selectedOrders.length === 0) return;
     
-    const confirmed = window.confirm(`Are you sure you want to delete ${selectedOrders.length} orders?`);
+    const confirmed = window.confirm(`${selectedOrders.length} siparişi silmek istediğinizden emin misiniz?`);
     if (!confirmed) return;
     
     setBulkActionLoading(true);
     try {
       // API call would go here
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log(`Deleted ${selectedOrders.length} orders`);
+      showNotification('success', `${selectedOrders.length} sipariş başarıyla silindi`);
       setSelectedOrders([]);
       setShowBulkActions(false);
     } catch (error) {
       console.error('Bulk delete failed:', error);
+      showNotification('error', 'Toplu silme başarısız oldu');
     } finally {
       setBulkActionLoading(false);
     }

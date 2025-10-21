@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { useNotification } from '../contexts/NotificationContext';
 import { 
   Search, Plus, X, Calendar, QrCode, UserPlus, ChevronDown, ChevronUp,
   User, MapPin, FileText, Mail, Phone, Tag, StickyNote, CreditCard, Package, MoreHorizontal,
@@ -9,6 +10,7 @@ import {
 
 const NewOrder: React.FC = () => {
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [pickupDate, setPickupDate] = useState('');
   const [pickupTime, setPickupTime] = useState('');
@@ -321,17 +323,17 @@ const NewOrder: React.FC = () => {
   const handleSaveAsDraft = async () => {
     // Validation
     if (!selectedCustomer) {
-      alert('Please select a customer');
+      showNotification('error', 'Lütfen bir müşteri seçin');
       return;
     }
     
     if (!pickupDate || !returnDate) {
-      alert('Please select pickup and return dates');
+      showNotification('error', 'Lütfen başlangıç ve bitiş tarihlerini seçin');
       return;
     }
     
     if (productLines.filter(l => l.type !== 'section').length === 0) {
-      alert('Please add at least one product');
+      showNotification('error', 'Lütfen en az bir ürün ekleyin');
       return;
     }
     
@@ -367,7 +369,7 @@ const NewOrder: React.FC = () => {
       const response = await api.post('/orders', orderData);
       
       if (response.data) {
-        alert('Order saved as draft successfully!');
+        showNotification('success', 'Sipariş başarıyla kaydedildi!');
         
         // Save tags if any
         if (orderTags.length > 0) {
@@ -404,7 +406,7 @@ const NewOrder: React.FC = () => {
       }
     } catch (error: any) {
       console.error('Save order error:', error);
-      alert(error.response?.data?.message || 'Failed to save order. Please try again.');
+      showNotification('error', error.response?.data?.message || 'Sipariş kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSavingOrder(false);
     }
