@@ -526,7 +526,7 @@ const Inventory: React.FC = () => {
                   <tr 
                     key={item.id} 
                     className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => navigate(`/equipment/${item.id}`)}
+                    onClick={() => navigate(`/inventory/${item.id}`)}
                   >
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">

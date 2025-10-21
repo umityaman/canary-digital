@@ -127,13 +127,13 @@ const EquipmentDetail: React.FC = () => {
     return (
       <div className="text-center py-12">
         <div className="text-red-600 text-xl mb-4">
-          {error || 'Equipment not found'}
+          {error || 'Ekipman bulunamadı'}
         </div>
         <button
-          onClick={() => navigate('/equipment')}
+          onClick={() => navigate('/inventory')}
           className="bg-neutral-900 text-white px-4 py-2 rounded-lg hover:bg-neutral-800"
         >
-          Back to Equipment List
+          Envantere Dön
         </button>
       </div>
     );
@@ -353,10 +353,10 @@ const EquipmentDetail: React.FC = () => {
           <div>
             <div className="flex items-center space-x-4 mb-2">
               <button
-                onClick={() => navigate('/equipment')}
+                onClick={() => navigate('/inventory')}
                 className="text-neutral-700 hover:text-blue-800"
               >
-                ← Back to Equipment
+                ← Envantere Dön
               </button>
             </div>
             <h1 className="text-2xl font-bold text-gray-900">{equipment.name}</h1>

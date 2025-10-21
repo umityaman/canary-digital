@@ -87,8 +87,7 @@ export default function App(){
           <Route path='/orders/:id' element={<OrderDetail/>} />
           <Route path='/inventory' element={<Inventory/>} />
           <Route path='/inventory/new' element={<NewEquipment/>} />
-          <Route path='/equipment' element={<Equipment/>} />
-          <Route path='/equipment/:id' element={<EquipmentDetail/>} />
+          <Route path='/inventory/:id' element={<EquipmentDetail/>} />
           <Route path='/customers' element={<Customers/>} />
           <Route path='/calendar' element={<Calendar/>} />
           <Route path='/documents' element={<Documents/>} />
