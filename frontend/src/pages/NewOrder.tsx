@@ -1267,14 +1267,14 @@ const NewOrder: React.FC = () => {
                         setShowQRScanModal(true);
                       }}
                       className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                      title="Scan QR"
+                      title="QR Tara"
                     >
                       <QrCode className="w-4 h-4 text-gray-600" />
                     </button>
                     <button
                       onClick={() => setShowAddCustomerModal(true)}
                       className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                      title="Add customer"
+                      title="Müşteri ekle"
                     >
                       <UserPlus className="w-4 h-4 text-gray-600" />
                     </button>
@@ -1284,28 +1284,28 @@ const NewOrder: React.FC = () => {
                 {/* Information Section */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-base font-semibold text-gray-900">Information</h3>
+                    <h3 className="text-base font-semibold text-gray-900">Bilgiler</h3>
                     <button 
                       onClick={() => setShowCustomFieldModal(true)}
                       className="text-sm text-gray-700 hover:text-gray-900 font-medium px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                     >
-                      Add field
+                      Alan ekle
                     </button>
                   </div>
                   
                   <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                    <p className="text-sm font-medium text-gray-900 mb-2">You haven't set up any custom fields yet.</p>
+                    <p className="text-sm font-medium text-gray-900 mb-2">Henüz özel alan oluşturmadınız.</p>
                     <p className="text-xs text-gray-600 mb-3 px-4">
-                      Custom fields display extra details like delivery info or notes. Set them to auto-populate on orders or add one-off fields using the button above. You can also configure them to collect data from your online store.
+                      Özel alanlar, teslimat bilgileri veya notlar gibi ekstra detayları gösterir. Kiralamalar üzerinde otomatik doldurulacak şekilde ayarlayabilir veya yukarıdaki butonu kullanarak tek seferlik alanlar ekleyebilirsiniz.
                     </p>
                     <button 
                       onClick={() => {
                         // TODO: Navigate to custom fields settings page when it's created
-                        alert('Custom fields settings page will be created in next phase');
+                        alert('Özel alanlar ayarları sayfası sonraki aşamada oluşturulacak');
                       }}
                       className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                     >
-                      Set up custom fields
+                      Özel alanları ayarla
                     </button>
                   </div>
                 </div>
@@ -1313,18 +1313,18 @@ const NewOrder: React.FC = () => {
 
               {/* Right Column: Pickup (Tek Başına) */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Pickup</h3>
+                <h3 className="text-base font-semibold text-gray-900 mb-4">Teslim Alma</h3>
 
                 {/* Pick up */}
                 <div className="mb-6">
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Pick up</h4>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Teslim alma</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <input
                         type="date"
                         value={pickupDate}
                         onChange={(e) => setPickupDate(e.target.value)}
-                        placeholder="Select date"
+                        placeholder="Tarih seçin"
                         className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
@@ -1333,7 +1333,7 @@ const NewOrder: React.FC = () => {
                         type="time"
                         value={pickupTime}
                         onChange={(e) => setPickupTime(e.target.value)}
-                        placeholder="Time"
+                        placeholder="Saat"
                         className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
@@ -1342,14 +1342,14 @@ const NewOrder: React.FC = () => {
 
                 {/* Return */}
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Return</h4>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">İade</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <input
                         type="date"
                         value={returnDate}
                         onChange={(e) => setReturnDate(e.target.value)}
-                        placeholder="Select date"
+                        placeholder="Tarih seçin"
                         className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
@@ -1358,7 +1358,7 @@ const NewOrder: React.FC = () => {
                         type="time"
                         value={returnTime}
                         onChange={(e) => setReturnTime(e.target.value)}
-                        placeholder="Time"
+                        placeholder="Saat"
                         className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
@@ -1376,7 +1376,7 @@ const NewOrder: React.FC = () => {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search to add products"
+                    placeholder="Ürün eklemek için ara"
                     value={searchProducts}
                     onChange={(e) => setSearchProducts(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1388,7 +1388,7 @@ const NewOrder: React.FC = () => {
                     setShowQRScanModal(true);
                   }}
                   className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                  title="Scan QR"
+                  title="QR Tara"
                 >
                   <QrCode className="w-4 h-4 text-gray-600" />
                 </button>
@@ -1397,7 +1397,7 @@ const NewOrder: React.FC = () => {
               {/* Product lines list or Empty State */}
               {productLines.length === 0 ? (
                 <div className="text-center py-20 mb-6">
-                  <p className="text-sm text-gray-900 font-medium mb-1">This order is empty. Get started by adding some products or a custom line.</p>
+                  <p className="text-sm text-gray-900 font-medium mb-1">Bu kiralama boş. Ürün veya özel satır ekleyerek başlayın.</p>
                 </div>
               ) : (
                 <div className="space-y-2 mb-6">
@@ -1433,7 +1433,7 @@ const NewOrder: React.FC = () => {
                           type="text"
                           value={line.title}
                           onChange={(e) => updateLine(line.id, { title: e.target.value })}
-                          placeholder={line.isSection ? "Section name" : line.type === 'charge' ? "Title" : "Name"}
+                          placeholder={line.isSection ? "Bölüm adı" : line.type === 'charge' ? "Başlık" : "Ad"}
                           className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                         />
                       </div>
@@ -1478,20 +1478,20 @@ const NewOrder: React.FC = () => {
                       {/* Tax Category - Sadece Charge için */}
                       {line.type === 'charge' && (
                         <select 
-                          value={line.tax || 'No tax'} 
+                          value={line.tax || 'Vergisiz'} 
                           onChange={(e) => updateLine(line.id, { tax: e.target.value })} 
                           className="px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-white"
                         >
-                          <option>No tax category</option>
-                          <option>20% VAT</option>
-                          <option>No tax</option>
+                          <option>Vergi kategorisi yok</option>
+                          <option>%20 KDV</option>
+                          <option>Vergisiz</option>
                         </select>
                       )}
 
                       {/* Total - Sadece Charge için */}
                       {line.type === 'charge' && (
                         <div className="w-24 text-right font-medium text-sm">
-                          £{((Number(line.qty) || 0) * (Number(line.price) || 0)).toFixed(2)}
+                          ₺{((Number(line.qty) || 0) * (Number(line.price) || 0)).toFixed(2)}
                         </div>
                       )}
 
@@ -1520,7 +1520,7 @@ const NewOrder: React.FC = () => {
                     className="text-sm text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1"
                   >
                     <ChevronDown className="w-4 h-4" />
-                    Add custom line
+                    Özel satır ekle
                   </button>
                   
                   {/* Add Line Dropdown Menu */}
@@ -1531,21 +1531,21 @@ const NewOrder: React.FC = () => {
                         className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
                       >
                         <Plus className="w-4 h-4" />
-                        Add custom line
+                        Özel satır ekle
                       </button>
                       <button 
                         onClick={() => addCustomLine('charge')}
                         className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
                       >
                         <CreditCard className="w-4 h-4" />
-                        Charge
+                        Ücret
                       </button>
                       <button 
                         onClick={() => addCustomLine('section')}
                         className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
                       >
                         <Package className="w-4 h-4" />
-                        Section
+                        Bölüm
                       </button>
                     </div>
                   )}
@@ -1554,8 +1554,8 @@ const NewOrder: React.FC = () => {
                 {/* Sağ Taraf: Pricing Bilgileri */}
                 <div className="w-80 space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-700">Subtotal</span>
-                    <span className="font-medium text-gray-900">£{subtotal.toFixed(2)}</span>
+                    <span className="text-gray-700">Ara Toplam</span>
+                    <span className="font-medium text-gray-900">₺{subtotal.toFixed(2)}</span>
                   </div>
                   
                   {/* Discount */}
@@ -1564,14 +1564,14 @@ const NewOrder: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="text-xs font-medium text-blue-700">
-                            Discount {discount.type === 'percentage' ? `(${discount.value}%)` : ''}
+                            İndirim {discount.type === 'percentage' ? `(${discount.value}%)` : ''}
                           </div>
                           {discount.reason && (
                             <div className="text-xs text-blue-600 mt-0.5">{discount.reason}</div>
                           )}
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-blue-700">-£{discountAmount.toFixed(2)}</span>
+                          <span className="text-sm font-medium text-blue-700">-₺{discountAmount.toFixed(2)}</span>
                           <button
                             onClick={() => setDiscount({ type: 'percentage', value: 0, reason: '' })}
                             className="text-blue-400 hover:text-blue-600"
@@ -1586,7 +1586,7 @@ const NewOrder: React.FC = () => {
                       onClick={() => setShowDiscountModal(true)}
                       className="text-sm text-blue-600 hover:text-blue-700 font-medium block"
                     >
-                      Add a discount
+                      İndirim ekle
                     </button>
                   )}
                   
@@ -1599,11 +1599,11 @@ const NewOrder: React.FC = () => {
                             {appliedCoupon.code}
                           </div>
                           <div className="text-xs text-green-600 mt-0.5">
-                            {appliedCoupon.type === 'percentage' ? `${appliedCoupon.value}% off` : `£${appliedCoupon.value} off`}
+                            {appliedCoupon.type === 'percentage' ? `%${appliedCoupon.value} indirim` : `₺${appliedCoupon.value} indirim`}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-green-700">-£{couponDiscount.toFixed(2)}</span>
+                          <span className="text-sm font-medium text-green-700">-₺{couponDiscount.toFixed(2)}</span>
                           <button
                             onClick={() => {
                               setAppliedCoupon(null);
@@ -1621,21 +1621,21 @@ const NewOrder: React.FC = () => {
                       onClick={() => setShowCouponModal(true)}
                       className="text-sm text-blue-600 hover:text-blue-700 font-medium block"
                     >
-                      Add a coupon
+                      Kupon ekle
                     </button>
                   )}
                   
                   {/* Total Discount Display */}
                   {totalDiscount > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-700">Total discount</span>
-                      <span className="font-medium text-green-600">-£{totalDiscount.toFixed(2)}</span>
+                      <span className="text-gray-700">Toplam indirim</span>
+                      <span className="font-medium text-green-600">-₺{totalDiscount.toFixed(2)}</span>
                     </div>
                   )}
                   
                   <div className="border-t border-gray-200 pt-3 flex justify-between">
-                    <span className="text-sm font-semibold text-gray-900">Total incl. taxes</span>
-                    <span className="text-sm font-semibold text-gray-900">£{totalWithTax.toFixed(2)}</span>
+                    <span className="text-sm font-semibold text-gray-900">Vergiler dahil toplam</span>
+                    <span className="text-sm font-semibold text-gray-900">₺{totalWithTax.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -1655,19 +1655,19 @@ const NewOrder: React.FC = () => {
                 className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center justify-center gap-2"
               >
                 <Mail className="w-4 h-4" />
-                Send email
+                E-posta gönder
               </button>
               <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-                New contract
+                Yeni sözleşme
               </button>
               <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-                New quote
+                Yeni teklif
               </button>
             </div>
 
             {/* Email History Link */}
             <button className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium text-left">
-              View email history (0)
+              E-posta geçmişini görüntüle (0)
             </button>
 
             {/* Documents Accordion */}
@@ -1677,7 +1677,7 @@ const NewOrder: React.FC = () => {
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
                 <span className="text-sm font-semibold text-gray-900">
-                  Documents {documents.length > 0 && <span className="text-gray-500">{documents.length}</span>}
+                  Belgeler {documents.length > 0 && <span className="text-gray-500">{documents.length}</span>}
                 </span>
                 {documentsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
@@ -1709,7 +1709,7 @@ const NewOrder: React.FC = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700 flex items-center justify-center gap-2 mt-2"
                   >
                     <Plus className="w-4 h-4" />
-                    Upload document
+                    Belge yükle
                   </button>
                 </div>
               )}
@@ -1721,12 +1721,12 @@ const NewOrder: React.FC = () => {
                 onClick={() => setInvoicesOpen(!invoicesOpen)}
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Invoices</span>
+                <span className="text-sm font-semibold text-gray-900">Faturalar</span>
                 {invoicesOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {invoicesOpen && (
                 <div className="px-4 pb-3">
-                  <p className="text-xs text-gray-500">No invoices found.</p>
+                  <p className="text-xs text-gray-500">Fatura bulunamadı.</p>
                 </div>
               )}
             </div>
@@ -1737,17 +1737,17 @@ const NewOrder: React.FC = () => {
                 onClick={() => setPaymentsOpen(!paymentsOpen)}
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Payments</span>
+                <span className="text-sm font-semibold text-gray-900">Ödemeler</span>
                 {paymentsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {paymentsOpen && (
                 <div className="px-4 pb-3 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Paid</span>
+                    <span className="text-gray-600">Ödendi</span>
                     <span className="font-medium text-gray-900">₺0,00</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Due</span>
+                    <span className="text-gray-600">Vadesi gelecek</span>
                     <span className="font-medium text-gray-900">₺0,00</span>
                   </div>
                 </div>
@@ -1760,7 +1760,7 @@ const NewOrder: React.FC = () => {
                 onClick={() => setTagsOpen(!tagsOpen)}
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Tags</span>
+                <span className="text-sm font-semibold text-gray-900">Etiketler</span>
                 {tagsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {tagsOpen && (
@@ -1790,7 +1790,7 @@ const NewOrder: React.FC = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700 flex items-center justify-center gap-2"
                   >
                     <Plus className="w-4 h-4" />
-                    Add tag
+                    Etiket ekle
                   </button>
                 </div>
               )}
@@ -1803,16 +1803,16 @@ const NewOrder: React.FC = () => {
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-gray-900">Notes</span>
+                  <span className="text-sm font-semibold text-gray-900">Notlar</span>
                   {savingNotes && (
                     <span className="text-xs text-gray-500 flex items-center gap-1">
                       <Loader2 className="w-3 h-3 animate-spin" />
-                      Saving...
+                      Kaydediliyor...
                     </span>
                   )}
                   {notesSaved && (
                     <span className="text-xs text-green-600 flex items-center gap-1">
-                      ✓ Saved
+                      ✓ Kaydedildi
                     </span>
                   )}
                 </div>
@@ -1823,7 +1823,7 @@ const NewOrder: React.FC = () => {
                   <textarea
                     value={notes}
                     onChange={(e) => handleNotesChange(e.target.value)}
-                    placeholder="Add a new note (auto-saves after 2 seconds)"
+                    placeholder="Yeni not ekle (2 saniye sonra otomatik kaydedilir)"
                     rows={3}
                     className="w-full text-sm border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
