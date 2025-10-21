@@ -118,6 +118,15 @@ const NewEquipment: React.FC = () => {
     }));
   };
 
+  const handlePricingTypeChange = (type: string) => {
+    setFormData(prev => ({
+      ...prev,
+      pricingType: type,
+      fixedPrice: '',
+      smartPricingId: ''
+    }));
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -391,79 +400,160 @@ const NewEquipment: React.FC = () => {
             </div>
           </div>
 
-          {/* Fiyatlandırma */}
+          {/* 2. Fiyatlandırma */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Fiyatlandırma</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <DollarSign className="w-5 h-5" />
+              2. Fiyatlandırma
+            </h2>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Günlük Kiralama Ücreti
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₺</span>
-                  <input
-                    type="number"
-                    name="dailyPrice"
-                    value={formData.dailyPrice}
-                    onChange={handleInputChange}
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="0.00"
-                    step="0.01"
-                  />
+            <div className="space-y-4">
+              {/* Seçenek 1: Ücretsiz */}
+              <div 
+                onClick={() => handlePricingTypeChange('NO_CHARGE')}
+                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                  formData.pricingType === 'NO_CHARGE' 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    formData.pricingType === 'NO_CHARGE' ? 'border-blue-500' : 'border-gray-300'
+                  }`}>
+                    {formData.pricingType === 'NO_CHARGE' && (
+                      <div className="w-3 h-3 rounded-full bg-blue-500" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Bu ürün için ücret almıyorum</p>
+                    <p className="text-sm text-gray-600">Ücretsiz kullanım için bu seçeneği seçin</p>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Satın Alma Fiyatı
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₺</span>
-                  <input
-                    type="number"
-                    name="purchasePrice"
-                    value={formData.purchasePrice}
-                    onChange={handleInputChange}
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="0.00"
-                    step="0.01"
-                  />
+              {/* Seçenek 2: Sabit Kiralama Ücreti */}
+              <div 
+                onClick={() => handlePricingTypeChange('FIXED')}
+                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                  formData.pricingType === 'FIXED' 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    formData.pricingType === 'FIXED' ? 'border-blue-500' : 'border-gray-300'
+                  }`}>
+                    {formData.pricingType === 'FIXED' && (
+                      <div className="w-3 h-3 rounded-full bg-blue-500" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Sabit Kiralama Ücreti</p>
+                    <p className="text-sm text-gray-600">Belirli bir ücret belirleyin</p>
+                  </div>
                 </div>
+
+                {formData.pricingType === 'FIXED' && (
+                  <div className="ml-8 space-y-3">
+                    {/* Periyot Seçimi */}
+                    <div className="grid grid-cols-4 gap-2">
+                      {[
+                        { value: 'HOURLY', label: 'Saatlik' },
+                        { value: 'DAILY', label: 'Günlük' },
+                        { value: 'WEEKLY', label: 'Haftalık' },
+                        { value: 'MONTHLY', label: 'Aylık' }
+                      ].map(period => (
+                        <button
+                          key={period.value}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFormData(prev => ({ ...prev, fixedPriceType: period.value }));
+                          }}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            formData.fixedPriceType === period.value
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          {period.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Fiyat Girişi */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Ücret (₺)
+                      </label>
+                      <input
+                        type="number"
+                        name="fixedPrice"
+                        value={formData.fixedPrice}
+                        onChange={handleInputChange}
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Örn: 500"
+                        step="0.01"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Satın Alma Tarihi
-                </label>
-                <input
-                  type="date"
-                  name="purchaseDate"
-                  value={formData.purchaseDate}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+              {/* Seçenek 3: Akıllı Fiyatlandırma */}
+              <div 
+                onClick={() => handlePricingTypeChange('SMART')}
+                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                  formData.pricingType === 'SMART' 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    formData.pricingType === 'SMART' ? 'border-blue-500' : 'border-gray-300'
+                  }`}>
+                    {formData.pricingType === 'SMART' && (
+                      <div className="w-3 h-3 rounded-full bg-blue-500" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Akıllı Fiyatlandırma</p>
+                    <p className="text-sm text-gray-600">Tools sayfasında oluşturulan fiyatlandırmayı kullan</p>
+                  </div>
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tedarikçi
-                </label>
-                <input
-                  type="text"
-                  name="supplier"
-                  value={formData.supplier}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Tedarikçi adı"
-                />
+                {formData.pricingType === 'SMART' && (
+                  <div className="ml-8">
+                    <select
+                      name="smartPricingId"
+                      value={formData.smartPricingId}
+                      onChange={handleInputChange}
+                      onClick={(e) => e.stopPropagation()}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Akıllı fiyatlandırma seçin</option>
+                      {smartPricings.map(sp => (
+                        <option key={sp.id} value={sp.id}>{sp.name}</option>
+                      ))}
+                    </select>
+                    {smartPricings.length === 0 && (
+                      <p className="text-xs text-amber-600 mt-2">
+                        Henüz akıllı fiyatlandırma oluşturulmamış. Tools sayfasından oluşturabilirsiniz.
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Durum ve Tip */}
+          {/* 3. Durum ve Tür */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Durum ve Tür</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">3. Durum ve Tür</h2>
             
             <div className="grid grid-cols-3 gap-4">
               <div>
