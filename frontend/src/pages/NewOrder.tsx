@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 import { 
   Search, Plus, X, Calendar, QrCode, UserPlus, ChevronDown, ChevronUp,
   User, MapPin, FileText, Mail, Phone, Tag, StickyNote, CreditCard, Package, MoreHorizontal,
@@ -59,6 +60,9 @@ const NewOrder: React.FC = () => {
   const [documents, setDocuments] = useState<any[]>([]);
   const [uploadingDocument, setUploadingDocument] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Order Save
+  const [savingOrder, setSavingOrder] = useState(false);
   
   // Product lines
   const [productLines, setProductLines] = useState<any[]>([]);
@@ -311,6 +315,99 @@ const NewOrder: React.FC = () => {
   
   const handleRemoveDocument = (docId: string) => {
     setDocuments(prev => prev.filter(d => d.id !== docId));
+  };
+  
+  // Save Order Handler
+  const handleSaveAsDraft = async () => {
+    // Validation
+    if (!selectedCustomer) {
+      alert('Please select a customer');
+      return;
+    }
+    
+    if (!pickupDate || !returnDate) {
+      alert('Please select pickup and return dates');
+      return;
+    }
+    
+    if (productLines.filter(l => l.type !== 'section').length === 0) {
+      alert('Please add at least one product');
+      return;
+    }
+    
+    setSavingOrder(true);
+    
+    try {
+      // Prepare order data
+      const orderData = {
+        customerId: selectedCustomer.id,
+        startDate: new Date(`${pickupDate}T${pickupTime || '00:00'}`).toISOString(),
+        endDate: new Date(`${returnDate}T${returnTime || '00:00'}`).toISOString(),
+        status: 'PENDING', // Draft status
+        paymentStatus: 'payment_due',
+        totalAmount: totalWithTax,
+        subtotal: subtotal,
+        taxAmount: totalWithTax - subtotalAfterDiscount,
+        discountAmount: totalDiscount,
+        notes: notes,
+        tags: JSON.stringify(orderTags),
+        documents: JSON.stringify(documents),
+        orderItems: productLines
+          .filter(l => l.type !== 'section')
+          .map(line => ({
+            equipmentId: line.equipmentId || null,
+            quantity: parseInt(line.qty) || 1,
+            unitPrice: parseFloat(line.price) || 0,
+            totalPrice: (parseInt(line.qty) || 1) * (parseFloat(line.price) || 0),
+            description: line.title || ''
+          }))
+      };
+      
+      // Save to API
+      const response = await api.post('/orders', orderData);
+      
+      if (response.data) {
+        alert('Order saved as draft successfully!');
+        
+        // Save tags if any
+        if (orderTags.length > 0) {
+          for (const tag of orderTags) {
+            try {
+              await api.post(`/orders/${response.data.id}/tags`, {
+                name: tag.name,
+                color: tag.color
+              });
+            } catch (err) {
+              console.error('Failed to save tag:', err);
+            }
+          }
+        }
+        
+        // Save documents if any
+        if (documents.length > 0) {
+          for (const doc of documents) {
+            try {
+              await api.post(`/orders/${response.data.id}/documents`, {
+                name: doc.name,
+                size: doc.size,
+                type: doc.type,
+                url: doc.url
+              });
+            } catch (err) {
+              console.error('Failed to save document:', err);
+            }
+          }
+        }
+        
+        // Redirect to orders list
+        navigate('/orders');
+      }
+    } catch (error: any) {
+      console.error('Save order error:', error);
+      alert(error.response?.data?.message || 'Failed to save order. Please try again.');
+    } finally {
+      setSavingOrder(false);
+    }
   };
   
   const formatFileSize = (bytes: number) => {
