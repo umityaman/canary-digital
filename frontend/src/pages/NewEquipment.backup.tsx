@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Package, Upload, QrCode, DollarSign } from 'lucide-react';
+import { ArrowLeft, Save, Package, Upload, Image as ImageIcon, QrCode } from 'lucide-react';
 import { useNotification } from '../contexts/NotificationContext';
+import QRCodeGenerator from '../components/QRCodeGenerator';
 import api from '../services/api';
 
 interface Category {
@@ -13,60 +14,41 @@ interface Category {
   isActive: boolean;
 }
 
-interface SmartPricing {
-  id: number;
-  name: string;
-  hourlyRate?: number;
-  dailyRate?: number;
-  weeklyRate?: number;
-  monthlyRate?: number;
-}
-
 const NewEquipment: React.FC = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
   
   // Form states
   const [formData, setFormData] = useState({
-    // 1. Genel Bilgiler
+    name: '',
     brand: '',
     model: '',
-    stockNumber: '',
     category: '',
     serialNumber: '',
-    qrCode: '',
     description: '',
-    
-    // 2. Fiyatlandırma
-    pricingType: 'NO_CHARGE', // NO_CHARGE, FIXED, SMART
-    fixedPriceType: 'DAILY', // HOURLY, DAILY, WEEKLY, MONTHLY
-    fixedPrice: '',
-    smartPricingId: '',
-    
-    // 3. Durum ve Tür
+    dailyPrice: '',
+    purchasePrice: '',
+    purchaseDate: '',
+    supplier: '',
+    warranty: '',
     status: 'AVAILABLE',
     equipmentType: 'RENTAL',
-    
-    // 4. Satın Alma Bilgileri
-    purchasePrice: '',
-    supplier: '',
-    purchaseDate: '',
-    warrantyEndDate: '',
+    location: '',
     notes: '',
-    
-    // 5. Fotoğraflar
     images: [] as string[]
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
-  const [smartPricings, setSmartPricings] = useState<SmartPricing[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [savedEquipmentId, setSavedEquipmentId] = useState<number | null>(null);
   const [nextEquipmentCode, setNextEquipmentCode] = useState<string>('Yükleniyor...');
+  const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   useEffect(() => {
     fetchCategories();
-    fetchSmartPricings();
     fetchNextEquipmentCode();
   }, []);
 
@@ -76,17 +58,6 @@ const NewEquipment: React.FC = () => {
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
-    }
-  };
-
-  const fetchSmartPricings = async () => {
-    try {
-      // Smart pricing endpoint'i eklenecek
-      // const response = await api.get('/smart-pricings');
-      // setSmartPricings(response.data);
-      setSmartPricings([]); // Şimdilik boş
-    } catch (error) {
-      console.error('Error fetching smart pricings:', error);
     }
   };
 
@@ -251,30 +222,39 @@ const NewEquipment: React.FC = () => {
       <div className="max-w-5xl mx-auto p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           
-          {/* 1. Genel Bilgiler */}
+          {/* Temel Bilgiler */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Package className="w-5 h-5" />
-              1. Genel Bilgiler
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Temel Bilgiler</h2>
             
-            <div className="grid grid-cols-2 gap-4">
-              {/* Ekipman ID - Otomatik */}
-              <div className="col-span-2">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-blue-900">Ekipman ID (Otomatik)</p>
-                      <p className="text-xs text-blue-700 mt-1">Sistem tarafından otomatik olarak atanacak</p>
-                    </div>
-                    <div className="text-2xl font-bold text-blue-600 font-mono">
-                      {nextEquipmentCode}
-                    </div>
-                  </div>
+            {/* Otomatik Ekipman Kodu Gösterimi */}
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-blue-900">Otomatik Ekipman Kodu</p>
+                  <p className="text-xs text-blue-700 mt-1">Sistem tarafından otomatik atanacak</p>
+                </div>
+                <div className="text-2xl font-bold text-blue-600 font-mono">
+                  {nextEquipmentCode}
                 </div>
               </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Ekipman Adı <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Örn: Canon EOS R5"
+                  required
+                />
+              </div>
 
-              {/* Marka */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Marka <span className="text-red-500">*</span>
@@ -285,12 +265,11 @@ const NewEquipment: React.FC = () => {
                   value={formData.brand}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Örn: Canon, Sony, Nikon..."
+                  placeholder="Örn: Canon"
                   required
                 />
               </div>
 
-              {/* Model */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Model <span className="text-red-500">*</span>
@@ -301,48 +280,38 @@ const NewEquipment: React.FC = () => {
                   value={formData.model}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Örn: EOS R5, A7III..."
+                  placeholder="Örn: R5"
                   required
                 />
               </div>
 
-              {/* Stok No */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Stok No
-                </label>
-                <input
-                  type="text"
-                  name="stockNumber"
-                  value={formData.stockNumber}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Aynı marka/model ekipmanlar için"
-                />
-                <p className="text-xs text-gray-500 mt-1">Bu numara aynı marka modelde olan ekipmanlar için kullanılacak</p>
-              </div>
-
-              {/* Kategori */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Kategori <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                >
-                  <option value="">Kategori seçin</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.name}>{cat.name}</option>
-                  ))}
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Kategori eklemek için Envanter sayfasını kullanın</p>
+                <div className="flex gap-2">
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Kategori seçin</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.name}>{cat.name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCategoryModal(true)}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
+                  >
+                    + Yeni
+                  </button>
+                </div>
               </div>
 
-              {/* Seri Numarası */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Seri Numarası
@@ -357,37 +326,27 @@ const NewEquipment: React.FC = () => {
                 />
               </div>
 
-              {/* QR Kod */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                  <QrCode className="w-4 h-4" />
-                  QR Kod
-                </label>
-                <input
-                  type="text"
-                  name="qrCode"
-                  value={formData.qrCode}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="/tools sayfasında oluşturulan QR kod"
-                />
-                <p className="text-xs text-gray-500 mt-1">QR kod oluşturmak için Tools sayfasını ziyaret edin</p>
-              </div>
-
-              {/* Belgelerdeki Açıklamalar */}
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Belgelerdeki Açıklamalar
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                  placeholder="Örneğin aksesuarlarınızı buraya listeleyebilirsiniz..."
-                />
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                  <p className="text-xs text-gray-600">
+                    <span className="font-semibold">💡 Not:</span> Envanter ID otomatik olarak <span className="font-mono font-semibold text-blue-600">{nextEquipmentCode}</span> şeklinde atanacaktır.
+                  </p>
+                </div>
               </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Açıklama
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                placeholder="Ekipman hakkında detaylı bilgi..."
+              />
             </div>
           </div>
 
