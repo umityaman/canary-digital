@@ -44,6 +44,8 @@ const NewEquipment: React.FC = () => {
   const [showQRModal, setShowQRModal] = useState(false);
   const [savedEquipmentId, setSavedEquipmentId] = useState<number | null>(null);
   const [nextEquipmentCode, setNextEquipmentCode] = useState<string>('Yükleniyor...');
+  const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   useEffect(() => {
     fetchCategories();
@@ -116,6 +118,30 @@ const NewEquipment: React.FC = () => {
       showNotification('error', 'Resim yüklenirken hata oluştu');
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) {
+      showNotification('error', 'Lütfen kategori adı girin');
+      return;
+    }
+
+    try {
+      const response = await api.post('/categories', {
+        name: newCategoryName.trim(),
+        isActive: true
+      });
+      
+      const newCategory = response.data;
+      setCategories(prev => [...prev, newCategory]);
+      setFormData(prev => ({ ...prev, category: newCategory.name }));
+      setNewCategoryName('');
+      setShowNewCategoryModal(false);
+      showNotification('success', 'Kategori başarıyla eklendi');
+    } catch (error: any) {
+      console.error('Add category error:', error);
+      showNotification('error', error.response?.data?.error || 'Kategori eklenemedi');
     }
   };
 
@@ -263,18 +289,27 @@ const NewEquipment: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Kategori <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                >
-                  <option value="">Kategori seçin</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.name}>{cat.name}</option>
-                  ))}
-                </select>
+                <div className="flex gap-2">
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Kategori seçin</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.name}>{cat.name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCategoryModal(true)}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
+                  >
+                    + Yeni
+                  </button>
+                </div>
               </div>
 
               <div>
@@ -537,6 +572,55 @@ const NewEquipment: React.FC = () => {
 
         </form>
       </div>
+
+      {/* New Category Modal */}
+      {showNewCategoryModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Yeni Kategori Ekle</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Kategori Adı <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddCategory();
+                    }
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Örn: Ses Sistemleri, Aydınlatma, Kamera..."
+                  autoFocus
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowNewCategoryModal(false);
+                  setNewCategoryName('');
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
+              >
+                İptal
+              </button>
+              <button
+                onClick={handleAddCategory}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              >
+                Ekle
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* QR Code Modal */}
       {showQRModal && savedEquipmentId && (
