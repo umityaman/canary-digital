@@ -21,6 +21,13 @@ const NewOrder: React.FC = () => {
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   const [showCustomFieldModal, setShowCustomFieldModal] = useState(false);
   const [showAddLineMenu, setShowAddLineMenu] = useState(false);
+  const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  
+  // Discount & Coupon
+  const [discount, setDiscount] = useState({ type: 'percentage', value: 0, reason: '' });
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
   
   // Product lines
   const [productLines, setProductLines] = useState<any[]>([]);
@@ -90,6 +97,27 @@ const NewOrder: React.FC = () => {
     }
     return s;
   }, 0);
+  
+  // Calculate discount amount
+  const discountAmount = discount.type === 'percentage' 
+    ? (subtotal * discount.value / 100)
+    : discount.value;
+  
+  // Calculate coupon discount
+  const couponDiscount = appliedCoupon 
+    ? (appliedCoupon.type === 'percentage' 
+        ? (subtotal * appliedCoupon.value / 100)
+        : appliedCoupon.value)
+    : 0;
+  
+  // Total discount
+  const totalDiscount = discountAmount + couponDiscount;
+  
+  // Subtotal after discount
+  const subtotalAfterDiscount = Math.max(0, subtotal - totalDiscount);
+  
+  // Total with tax (20% VAT)
+  const totalWithTax = subtotalAfterDiscount * 1.2;
   
   // Click outside to close dropdowns
   useEffect(() => {
@@ -260,6 +288,200 @@ const NewOrder: React.FC = () => {
               </button>
               <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                 Add field
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Discount Modal */}
+      {showDiscountModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Add discount</h2>
+              <button 
+                onClick={() => setShowDiscountModal(false)}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Discount type</label>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setDiscount(prev => ({ ...prev, type: 'percentage' }))}
+                    className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                      discount.type === 'percentage'
+                        ? 'bg-blue-50 border-blue-500 text-blue-700'
+                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Percentage (%)
+                  </button>
+                  <button
+                    onClick={() => setDiscount(prev => ({ ...prev, type: 'fixed' }))}
+                    className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                      discount.type === 'fixed'
+                        ? 'bg-blue-50 border-blue-500 text-blue-700'
+                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Fixed (£)
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {discount.type === 'percentage' ? 'Percentage' : 'Amount (£)'}
+                </label>
+                <input 
+                  type="number" 
+                  min="0"
+                  max={discount.type === 'percentage' ? 100 : undefined}
+                  value={discount.value}
+                  onChange={(e) => setDiscount(prev => ({ ...prev, value: Number(e.target.value) }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  placeholder={discount.type === 'percentage' ? '0-100' : '0.00'}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Reason (optional)</label>
+                <textarea 
+                  rows={2}
+                  value={discount.reason}
+                  onChange={(e) => setDiscount(prev => ({ ...prev, reason: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  placeholder="e.g., Early bird discount, Bulk order..."
+                ></textarea>
+              </div>
+              
+              {discount.value > 0 && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-700">Discount amount:</span>
+                    <span className="font-semibold text-blue-700">
+                      £{discount.type === 'percentage' 
+                        ? (subtotal * discount.value / 100).toFixed(2)
+                        : discount.value.toFixed(2)
+                      }
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+              <button 
+                onClick={() => {
+                  setShowDiscountModal(false);
+                  setDiscount({ type: 'percentage', value: 0, reason: '' });
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => setShowDiscountModal(false)}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Apply discount
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Coupon Modal */}
+      {showCouponModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Add coupon</h2>
+              <button 
+                onClick={() => setShowCouponModal(false)}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Coupon code</label>
+                <input 
+                  type="text" 
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono uppercase" 
+                  placeholder="Enter coupon code"
+                />
+              </div>
+              
+              {appliedCoupon && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="font-semibold text-green-800 text-sm mb-1">
+                        {appliedCoupon.code}
+                      </div>
+                      <div className="text-xs text-green-600">
+                        {appliedCoupon.type === 'percentage' 
+                          ? `${appliedCoupon.value}% off`
+                          : `£${appliedCoupon.value} off`
+                        }
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setAppliedCoupon(null);
+                        setCouponCode('');
+                      }}
+                      className="text-green-600 hover:text-green-800"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              <div className="text-xs text-gray-500">
+                Enter a valid coupon code to apply a discount to your order.
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+              <button 
+                onClick={() => {
+                  setShowCouponModal(false);
+                  if (!appliedCoupon) setCouponCode('');
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  // Simulate coupon validation (in real app, call API)
+                  if (couponCode) {
+                    // Mock coupon data
+                    setAppliedCoupon({
+                      code: couponCode,
+                      type: 'percentage',
+                      value: 10 // 10% off
+                    });
+                  }
+                  setShowCouponModal(false);
+                }}
+                disabled={!couponCode || appliedCoupon !== null}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Apply coupon
               </button>
             </div>
           </div>
@@ -653,25 +875,87 @@ const NewOrder: React.FC = () => {
                 <div className="w-80 space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-700">Subtotal</span>
-                    <span className="font-medium text-gray-900">€{subtotal.toFixed(2)}</span>
+                    <span className="font-medium text-gray-900">£{subtotal.toFixed(2)}</span>
                   </div>
                   
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium block">
-                    Add a discount
-                  </button>
+                  {/* Discount */}
+                  {discount.value > 0 ? (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="text-xs font-medium text-blue-700">
+                            Discount {discount.type === 'percentage' ? `(${discount.value}%)` : ''}
+                          </div>
+                          {discount.reason && (
+                            <div className="text-xs text-blue-600 mt-0.5">{discount.reason}</div>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-blue-700">-£{discountAmount.toFixed(2)}</span>
+                          <button
+                            onClick={() => setDiscount({ type: 'percentage', value: 0, reason: '' })}
+                            className="text-blue-400 hover:text-blue-600"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => setShowDiscountModal(true)}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium block"
+                    >
+                      Add a discount
+                    </button>
+                  )}
                   
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium block">
-                    Add a coupon
-                  </button>
+                  {/* Coupon */}
+                  {appliedCoupon ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="text-xs font-medium text-green-700 font-mono">
+                            {appliedCoupon.code}
+                          </div>
+                          <div className="text-xs text-green-600 mt-0.5">
+                            {appliedCoupon.type === 'percentage' ? `${appliedCoupon.value}% off` : `£${appliedCoupon.value} off`}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-green-700">-£{couponDiscount.toFixed(2)}</span>
+                          <button
+                            onClick={() => {
+                              setAppliedCoupon(null);
+                              setCouponCode('');
+                            }}
+                            className="text-green-400 hover:text-green-600"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => setShowCouponModal(true)}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium block"
+                    >
+                      Add a coupon
+                    </button>
+                  )}
                   
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-700">Total discount</span>
-                    <span className="font-medium text-gray-900">€0.00</span>
-                  </div>
+                  {/* Total Discount Display */}
+                  {totalDiscount > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-700">Total discount</span>
+                      <span className="font-medium text-green-600">-£{totalDiscount.toFixed(2)}</span>
+                    </div>
+                  )}
                   
                   <div className="border-t border-gray-200 pt-3 flex justify-between">
                     <span className="text-sm font-semibold text-gray-900">Total incl. taxes</span>
-                    <span className="text-sm font-semibold text-gray-900">€{(subtotal * 1.2).toFixed(2)}</span>
+                    <span className="text-sm font-semibold text-gray-900">£{totalWithTax.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
