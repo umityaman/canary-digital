@@ -282,8 +282,13 @@ const NewOrder: React.FC = () => {
               </div>
               
               <div className="flex items-center gap-2">
-                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-                  Save as draft
+                <button 
+                  onClick={handleSaveAsDraft}
+                  disabled={savingOrder}
+                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {savingOrder && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {savingOrder ? 'Saving...' : 'Save as draft'}
                 </button>
                 <div className="relative dropdown-container">
                   <button 
@@ -330,6 +335,19 @@ const NewOrder: React.FC = () => {
 
           {/* Main Content */}
           <div className="p-6 space-y-6">
+            
+            {/* Order Error Message */}
+            {orderError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                <X className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-red-800">{orderError}</p>
+                </div>
+                <button onClick={() => setOrderError('')} className="text-red-400 hover:text-red-600">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
             
             {/* Row 1: 2 Columns - Customer+Information | Pickup */}
             <div className="grid grid-cols-2 gap-6">
