@@ -25,7 +25,6 @@ const NewEquipment: React.FC = () => {
     model: '',
     category: '',
     serialNumber: '',
-    inventoryId: '',
     description: '',
     dailyPrice: '',
     purchasePrice: '',
@@ -44,9 +43,11 @@ const NewEquipment: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
   const [savedEquipmentId, setSavedEquipmentId] = useState<number | null>(null);
+  const [nextEquipmentCode, setNextEquipmentCode] = useState<string>('Yükleniyor...');
 
   useEffect(() => {
     fetchCategories();
+    fetchNextEquipmentCode();
   }, []);
 
   const fetchCategories = async () => {
@@ -55,6 +56,26 @@ const NewEquipment: React.FC = () => {
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchNextEquipmentCode = async () => {
+    try {
+      // Son ekipmanı al
+      const response = await api.get('/equipment');
+      const equipment = response.data;
+      
+      if (equipment && equipment.length > 0) {
+        // En yüksek ID'yi bul
+        const maxId = Math.max(...equipment.map((e: any) => e.id || 0));
+        const nextNumber = maxId + 1;
+        setNextEquipmentCode(`EQP-${String(nextNumber).padStart(4, '0')}`);
+      } else {
+        setNextEquipmentCode('EQP-0001');
+      }
+    } catch (error) {
+      console.error('Error fetching next equipment code:', error);
+      setNextEquipmentCode('EQP-0001');
     }
   };
 
@@ -179,6 +200,19 @@ const NewEquipment: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Temel Bilgiler</h2>
             
+            {/* Otomatik Ekipman Kodu Gösterimi */}
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-blue-900">Otomatik Ekipman Kodu</p>
+                  <p className="text-xs text-blue-700 mt-1">Sistem tarafından otomatik atanacak</p>
+                </div>
+                <div className="text-2xl font-bold text-blue-600 font-mono">
+                  {nextEquipmentCode}
+                </div>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -257,18 +291,12 @@ const NewEquipment: React.FC = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Envanter ID
-                </label>
-                <input
-                  type="text"
-                  name="inventoryId"
-                  value={formData.inventoryId}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Örn: EQP-001"
-                />
+              <div className="col-span-2">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                  <p className="text-xs text-gray-600">
+                    <span className="font-semibold">💡 Not:</span> Envanter ID otomatik olarak <span className="font-mono font-semibold text-blue-600">{nextEquipmentCode}</span> şeklinde atanacaktır.
+                  </p>
+                </div>
               </div>
             </div>
 

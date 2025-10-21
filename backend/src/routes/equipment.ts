@@ -195,8 +195,19 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 
     const companyId = req.companyId;
 
-    // QR kod oluştur (basit format)
-    const qrCode = `EQ-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
+    // Son ekipmanın ID'sini bul
+    const lastEquipment = await prisma.equipment.findFirst({
+      where: { companyId },
+      orderBy: { id: 'desc' },
+      select: { id: true }
+    });
+
+    // Sıralı ekipman kodu oluştur (EQP-0001, EQP-0002, vs.)
+    const nextNumber = lastEquipment ? lastEquipment.id + 1 : 1;
+    const equipmentCode = `EQP-${String(nextNumber).padStart(4, '0')}`;
+
+    // QR kod oluştur
+    const qrCode = `${equipmentCode}-${Date.now().toString(36).toUpperCase()}`;
 
     const equipment = await prisma.equipment.create({
       data: {
@@ -205,6 +216,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
         model,
         category,
         serialNumber,
+        code: equipmentCode,  // Otomatik sıralı kod
         qrCode,
         dailyPrice: dailyPrice ? parseFloat(dailyPrice) : null,
         weeklyPrice: weeklyPrice ? parseFloat(weeklyPrice) : null,
@@ -221,7 +233,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   } catch (error) {
     console.error('Create equipment error:', error);
     if (error.code === 'P2002') {
-      res.status(400).json({ error: 'QR code already exists' });
+      res.status(400).json({ error: 'Equipment code already exists' });
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -300,6 +312,115 @@ router.get('/categories/list', authenticateToken, async (req: AuthRequest, res: 
     res.json(categoryList);
   } catch (error) {
     console.error('Get categories error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Ekipman kiralama geçmişi (müsaitlik takvimi için)
+router.get('/:id/rentals', authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { startDate, endDate } = req.query;
+    const companyId = req.companyId;
+
+    // Ekipmanın varlığını kontrol et
+    const equipment = await prisma.equipment.findFirst({
+      where: { id: parseInt(id), companyId }
+    });
+
+    if (!equipment) {
+      return res.status(404).json({ error: 'Equipment not found' });
+    }
+
+    const where: any = {
+      equipmentId: parseInt(id),
+      order: {
+        companyId
+      }
+    };
+
+    // Tarih filtresi varsa ekle
+    if (startDate || endDate) {
+      where.OR = [
+        {
+          order: {
+            pickupDate: {
+              gte: startDate ? new Date(startDate as string) : undefined,
+              lte: endDate ? new Date(endDate as string) : undefined
+            }
+          }
+        },
+        {
+          order: {
+            returnDate: {
+              gte: startDate ? new Date(startDate as string) : undefined,
+              lte: endDate ? new Date(endDate as string) : undefined
+            }
+          }
+        }
+      ];
+    }
+
+    const rentals = await prisma.orderItem.findMany({
+      where,
+      include: {
+        order: {
+          include: {
+            customer: {
+              select: {
+                name: true,
+                email: true,
+                phone: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        order: {
+          pickupDate: 'asc'
+        }
+      }
+    });
+
+    // Frontend için uygun formata dönüştür
+    const formattedRentals = rentals.map(item => ({
+      id: item.id,
+      orderNumber: item.order.orderNumber,
+      customerName: item.order.customer?.name || 'N/A',
+      pickupDate: item.order.pickupDate,
+      returnDate: item.order.returnDate,
+      status: item.order.status
+    }));
+
+    res.json(formattedRentals);
+  } catch (error) {
+    console.error('Get equipment rentals error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Ekipman bakım planı (müsaitlik takvimi için)
+router.get('/:id/maintenance', authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { startDate, endDate } = req.query;
+    const companyId = req.companyId;
+
+    // Ekipmanın varlığını kontrol et
+    const equipment = await prisma.equipment.findFirst({
+      where: { id: parseInt(id), companyId }
+    });
+
+    if (!equipment) {
+      return res.status(404).json({ error: 'Equipment not found' });
+    }
+
+    // Şimdilik boş array döndür - ileride maintenance tablosu eklenebilir
+    // TODO: Maintenance scheduling feature
+    res.json([]);
+  } catch (error) {
+    console.error('Get equipment maintenance error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
