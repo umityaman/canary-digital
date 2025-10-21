@@ -434,7 +434,7 @@ const NewOrder: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">New customer</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Yeni müşteri</h2>
               <button 
                 onClick={() => setShowAddCustomerModal(false)}
                 className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
@@ -446,47 +446,47 @@ const NewOrder: React.FC = () => {
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">First name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ad *</label>
                   <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Last name</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Soyad</label>
                   <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">E-posta *</label>
                 <input type="email" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Telefon</label>
                 <input type="tel" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Şirket</label>
                 <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Numarası</label>
                 <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                <input type="text" placeholder="Street address" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Adres</label>
+                <input type="text" placeholder="Sokak adresi" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2" />
                 <div className="grid grid-cols-2 gap-2">
-                  <input type="text" placeholder="City" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                  <input type="text" placeholder="Postal code" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="text" placeholder="Şehir" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="text" placeholder="Posta kodu" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
-                <input type="text" placeholder="Country" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2" />
+                <input type="text" placeholder="Ülke" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Notlar</label>
                 <textarea rows={3} className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
               </div>
             </div>
@@ -496,7 +496,7 @@ const NewOrder: React.FC = () => {
                 onClick={() => setShowAddCustomerModal(false)}
                 className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                Cancel
+                İptal
               </button>
               <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                 Add customer
@@ -1168,11 +1168,11 @@ const NewOrder: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="text-sm text-gray-600">
-                  <span className="hover:text-gray-900 cursor-pointer" onClick={() => navigate('/orders')}>Orders</span>
+                  <span className="hover:text-gray-900 cursor-pointer" onClick={() => navigate('/orders')}>Kiralamalar</span>
                   <span className="mx-2">›</span>
-                  <span className="text-gray-900">New order</span>
+                  <span className="text-gray-900">Yeni kiralama</span>
                 </div>
-                <span className="px-2.5 py-0.5 bg-gray-200 text-gray-700 text-xs font-medium rounded-full">New</span>
+                <span className="px-2.5 py-0.5 bg-gray-200 text-gray-700 text-xs font-medium rounded-full">Yeni</span>
               </div>
               
               <div className="flex items-center gap-2">
@@ -1182,7 +1182,7 @@ const NewOrder: React.FC = () => {
                   className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {savingOrder && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {savingOrder ? 'Saving...' : 'Save as draft'}
+                  {savingOrder ? 'Kaydediliyor...' : 'Taslak olarak kaydet'}
                 </button>
                 <div className="relative dropdown-container">
                   <button 
@@ -1197,28 +1197,28 @@ const NewOrder: React.FC = () => {
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                       <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                         <Copy className="w-4 h-4" />
-                        Duplicate order
+                        Kiralamayı kopyala
                       </button>
                       <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        Revert to draft
+                        Taslağa geri dön
                       </button>
                       <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        Revert to reserved
+                        Rezerve'ye geri dön
                       </button>
                       <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        Revert to picked up
+                        Teslim alındı'ya geri dön
                       </button>
                       <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        Revert to returned
+                        İade edildi'ye geri dön
                       </button>
                       <hr className="my-1 border-gray-200" />
                       <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50 flex items-center gap-2">
                         <X className="w-4 h-4" />
-                        Cancel order
+                        Kiralamayı iptal et
                       </button>
                     </div>
                   )}
@@ -1251,13 +1251,13 @@ const NewOrder: React.FC = () => {
                 
                 {/* Customer Section */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <h3 className="text-base font-semibold text-gray-900 mb-4">Customer</h3>
+                  <h3 className="text-base font-semibold text-gray-900 mb-4">Müşteri</h3>
                   <div className="flex gap-2">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
-                        placeholder="Search customer"
+                        placeholder="Müşteri ara"
                         className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>

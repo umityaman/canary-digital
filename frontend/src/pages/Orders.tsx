@@ -165,7 +165,7 @@ const Reservations: React.FC = () => {
     try {
       // API call would go here
       await new Promise(resolve => setTimeout(resolve, 1000));
-      showNotification('success', `${selectedOrders.length} sipariş başarıyla güncellendi`);
+      showNotification('success', `${selectedOrders.length} kiralama başarıyla güncellendi`);
       setSelectedOrders([]);
       setShowBulkActions(false);
     } catch (error) {
@@ -179,14 +179,14 @@ const Reservations: React.FC = () => {
   const handleBulkDelete = async () => {
     if (selectedOrders.length === 0) return;
     
-    const confirmed = window.confirm(`${selectedOrders.length} siparişi silmek istediğinizden emin misiniz?`);
+    const confirmed = window.confirm(`${selectedOrders.length} kiralamayı silmek istediğinizden emin misiniz?`);
     if (!confirmed) return;
     
     setBulkActionLoading(true);
     try {
       // API call would go here
       await new Promise(resolve => setTimeout(resolve, 1000));
-      showNotification('success', `${selectedOrders.length} sipariş başarıyla silindi`);
+      showNotification('success', `${selectedOrders.length} kiralama başarıyla silindi`);
       setSelectedOrders([]);
       setShowBulkActions(false);
     } catch (error) {
@@ -200,14 +200,14 @@ const Reservations: React.FC = () => {
   // Export to CSV Handler
   const handleExportToCSV = () => {
     // Prepare CSV data
-    const headers = ['Order #', 'Date', 'Customer', 'Status', 'Payment Status', 'Total Amount'];
+    const headers = ['Kiralama #', 'Tarih', 'Müşteri', 'Durum', 'Ödeme Durumu', 'Toplam Tutar'];
     const csvData = sortedOrders.map(order => [
       order.orderNumber || `#${order.id}`,
       new Date(order.createdAt || order.startDate).toLocaleDateString(),
-      order.customer?.name || 'N/A',
-      order.status || 'PENDING',
-      order.paymentStatus || 'payment_due',
-      `£${(order.totalAmount || 0).toFixed(2)}`
+      order.customer?.name || 'Yok',
+      order.status || 'BEKLEMEDE',
+      order.paymentStatus || 'ödeme_bekleniyor',
+      `₺${(order.totalAmount || 0).toFixed(2)}`
     ]);
     
     // Create CSV content
@@ -328,7 +328,7 @@ const Reservations: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Package className="w-8 h-8 text-gray-700" />
-              <h1 className="text-2xl font-semibold text-gray-900">Siparişler</h1>
+              <h1 className="text-2xl font-semibold text-gray-900">Kiralamalar</h1>
             </div>
             
             <div className="flex items-center gap-3">
@@ -336,7 +336,7 @@ const Reservations: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Ara..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -348,7 +348,7 @@ const Reservations: React.FC = () => {
                 className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm"
               >
                 <Plus className="w-5 h-5" />
-                Sipariş Ekle
+                Yeni Kiralama
               </button>
             </div>
           </div>
@@ -565,12 +565,12 @@ const Reservations: React.FC = () => {
               {/* Stats Cards */}
               <div className="grid grid-cols-4 gap-4 mb-6">
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="text-sm text-gray-600 mb-1">Siparişler</div>
+                  <div className="text-sm text-gray-600 mb-1">Kiralamalar</div>
                   <div className="text-3xl font-bold text-gray-900">{stats.orders}</div>
                 </div>
                 
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="text-sm text-gray-600 mb-1">Sipariş Edilen Ürünler</div>
+                  <div className="text-sm text-gray-600 mb-1">Kiralanan Ürünler</div>
                   <div className="text-3xl font-bold text-gray-900">{stats.itemsOrdered}</div>
                 </div>
                 
@@ -619,13 +619,13 @@ const Reservations: React.FC = () => {
                   <div className="border-b border-gray-200 px-6 py-3 bg-blue-50 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <span className="text-sm font-medium text-gray-900">
-                        {selectedOrders.length} selected
+                        {selectedOrders.length} seçildi
                       </span>
                       <button
                         onClick={() => setSelectedOrders([])}
                         className="text-sm text-gray-600 hover:text-gray-900"
                       >
-                        Clear selection
+                        Seçimi temizle
                       </button>
                     </div>
                     
@@ -635,7 +635,7 @@ const Reservations: React.FC = () => {
                           onClick={() => setShowBulkActions(!showBulkActions)}
                           className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
                         >
-                          Update Status
+                          Durumu Güncelle
                           <ChevronDown className="w-4 h-4" />
                         </button>
                         
@@ -646,28 +646,28 @@ const Reservations: React.FC = () => {
                               className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 first:rounded-t-lg"
                               disabled={bulkActionLoading}
                             >
-                              Mark as Reserved
+                              Rezerve olarak işaretle
                             </button>
                             <button
                               onClick={() => handleBulkStatusUpdate('started')}
                               className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
                               disabled={bulkActionLoading}
                             >
-                              Mark as Started
+                              Başladı olarak işaretle
                             </button>
                             <button
                               onClick={() => handleBulkStatusUpdate('returned')}
                               className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
                               disabled={bulkActionLoading}
                             >
-                              Mark as Returned
+                              İade edildi olarak işaretle
                             </button>
                             <button
                               onClick={() => handleBulkStatusUpdate('canceled')}
                               className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 last:rounded-b-lg"
                               disabled={bulkActionLoading}
                             >
-                              Mark as Canceled
+                              İptal edildi olarak işaretle
                             </button>
                           </div>
                         )}
@@ -678,7 +678,7 @@ const Reservations: React.FC = () => {
                         disabled={bulkActionLoading}
                         className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {bulkActionLoading ? 'Deleting...' : 'Delete'}
+                        {bulkActionLoading ? 'Siliniyor...' : 'Sil'}
                       </button>
                     </div>
                   </div>
@@ -688,7 +688,7 @@ const Reservations: React.FC = () => {
                 {loading && (
                   <div className="p-12 text-center">
                     <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <p className="mt-4 text-gray-600">Loading orders...</p>
+                    <p className="mt-4 text-gray-600">Kiralamalar yükleniyor...</p>
                   </div>
                 )}
                 
@@ -698,13 +698,13 @@ const Reservations: React.FC = () => {
                     <div className="text-red-600 mb-4">
                       <AlertCircle className="w-12 h-12 mx-auto" />
                     </div>
-                    <p className="text-gray-900 font-medium mb-2">Failed to load orders</p>
+                    <p className="text-gray-900 font-medium mb-2">Kiralamalar yüklenemedi</p>
                     <p className="text-gray-600 text-sm">{error}</p>
                     <button
                       onClick={() => window.location.reload()}
                       className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                     >
-                      Retry
+                      Tekrar Dene
                     </button>
                   </div>
                 )}
@@ -728,21 +728,21 @@ const Reservations: React.FC = () => {
                               onClick={() => handleSort('date')}
                               className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900"
                             >
-                              Date
+                              Tarih
                               {sortBy === 'date' && (
                                 <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
                               )}
                             </button>
                           </th>
                           <th className="px-6 py-3 text-left">
-                            <span className="text-xs font-semibold text-gray-700 uppercase">Order #</span>
+                            <span className="text-xs font-semibold text-gray-700 uppercase">Kiralama #</span>
                           </th>
                           <th className="px-6 py-3 text-left">
                             <button
                               onClick={() => handleSort('customer')}
                               className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900"
                             >
-                              Customer
+                              Müşteri
                               {sortBy === 'customer' && (
                                 <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
                               )}
@@ -753,21 +753,21 @@ const Reservations: React.FC = () => {
                               onClick={() => handleSort('status')}
                               className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900"
                             >
-                              Status
+                              Durum
                               {sortBy === 'status' && (
                                 <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
                               )}
                             </button>
                           </th>
                           <th className="px-6 py-3 text-left">
-                            <span className="text-xs font-semibold text-gray-700 uppercase">Payment</span>
+                            <span className="text-xs font-semibold text-gray-700 uppercase">Ödeme</span>
                           </th>
                           <th className="px-6 py-3 text-right">
                             <button
                               onClick={() => handleSort('total')}
                               className="flex items-center gap-1 text-xs font-semibold text-gray-700 uppercase hover:text-gray-900 ml-auto"
                             >
-                              Total
+                              Toplam
                               {sortBy === 'total' && (
                                 <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
                               )}
@@ -787,7 +787,7 @@ const Reservations: React.FC = () => {
                               />
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-700">
-                              {new Date(order.createdAt || order.startDate).toLocaleDateString()}
+                              {new Date(order.createdAt || order.startDate).toLocaleDateString('tr-TR')}
                             </td>
                             <td 
                               className="px-6 py-4 text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
@@ -796,7 +796,7 @@ const Reservations: React.FC = () => {
                               {order.orderNumber || `#${order.id}`}
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-900">
-                              {order.customer?.name || 'N/A'}
+                              {order.customer?.name || 'Yok'}
                             </td>
                             <td className="px-6 py-4">
                               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -806,7 +806,7 @@ const Reservations: React.FC = () => {
                                 order.status?.toUpperCase() === 'PENDING' || order.status?.toLowerCase() === 'draft' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-red-100 text-red-800'
                               }`}>
-                                {order.status || 'PENDING'}
+                                {order.status || 'BEKLEMEDE'}
                               </span>
                             </td>
                             <td className="px-6 py-4">
@@ -815,11 +815,11 @@ const Reservations: React.FC = () => {
                                 order.paymentStatus?.toLowerCase() === 'partially_paid' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-red-100 text-red-800'
                               }`}>
-                                {order.paymentStatus || 'payment_due'}
+                                {order.paymentStatus || 'ödeme_bekleniyor'}
                               </span>
                             </td>
                             <td className="px-6 py-4 text-sm text-right font-medium text-gray-900">
-                              £{(order.totalAmount || 0).toFixed(2)}
+                              ₺{(order.totalAmount || 0).toFixed(2)}
                             </td>
                           </tr>
                         ))}
@@ -834,15 +834,15 @@ const Reservations: React.FC = () => {
                         <Package className="w-8 h-8 text-gray-400" />
                       </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">İlk siparişinizi oluşturun</h3>
-                    <p className="text-gray-600 mb-1">Canlı müsaitlik ve otomatik fiyat hesaplamaları ile siparişlerinizi oluşturun ve yönetin.</p>
-                    <p className="text-gray-600 mb-6">Ardından, iş akışına aşina olmak için bir siparişteki öğeleri rezerve etmeyi, almayı ve iade etmeyi deneyin.</p>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">İlk kiralamanızı oluşturun</h3>
+                    <p className="text-gray-600 mb-1">Canlı müsaitlik ve otomatik fiyat hesaplamaları ile kiralamalarınızı oluşturun ve yönetin.</p>
+                    <p className="text-gray-600 mb-6">Ardından, iş akışına aşina olmak için bir kiralamataki öğeleri rezerve etmeyi, almayı ve iade etmeyi deneyin.</p>
                     <button
                       onClick={() => setShowForm(true)}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   >
                     <Plus className="w-5 h-5" />
-                    Sipariş Ekle
+                    Kiralama Ekle
                   </button>
                 </div>
               </div>
