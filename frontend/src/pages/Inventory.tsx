@@ -523,7 +523,11 @@ const Inventory: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredEquipment.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50">
+                  <tr 
+                    key={item.id} 
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => navigate(`/equipment/${item.id}`)}
+                  >
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
                         <div>
@@ -554,21 +558,30 @@ const Inventory: React.FC = () => {
                     <td className="py-3 px-4">
                       <div className="flex justify-end space-x-1">
                         <button
-                          onClick={() => handleShowQRCode(item)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleShowQRCode(item);
+                          }}
                           className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                           title="QR Kod & Barcode"
                         >
                           <QrCode size={16} />
                         </button>
                         <button
-                          onClick={() => handleEdit(item)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(item);
+                          }}
                           className="p-1.5 text-gray-600 hover:bg-gray-100 rounded transition-colors"
                           title="Düzenle"
                         >
                           <Edit size={16} />
                         </button>
                         <button
-                          onClick={() => handleDelete(item.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.id);
+                          }}
                           className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
                           title="Sil"
                         >
