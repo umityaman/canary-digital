@@ -480,7 +480,7 @@ const NewOrder: React.FC = () => {
                   <p className="text-sm text-gray-900 font-medium mb-1">This order is empty. Get started by adding some products or a custom line.</p>
                 </div>
               ) : (
-                <div className="space-y-3 mb-6">
+                <div className="space-y-2 mb-6">
                   {productLines.map((line, idx) => (
                     <div
                       key={line.id}
@@ -488,56 +488,98 @@ const NewOrder: React.FC = () => {
                       onDragStart={(e) => onDragStart(e, idx)}
                       onDragOver={onDragOver}
                       onDrop={(e) => onDrop(e, idx)}
-                      className="flex items-center gap-3 p-3 border border-gray-100 rounded-md hover:bg-gray-50"
+                      className="flex items-center gap-2 p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-50"
                     >
-                      <div className="w-6 text-gray-400">
-                        <Grip className="w-4 h-4" />
-                      </div>
+                      {/* Drag Handle */}
+                      <button className="p-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="6" cy="4" r="1" fill="currentColor"/>
+                          <circle cx="10" cy="4" r="1" fill="currentColor"/>
+                          <circle cx="6" cy="8" r="1" fill="currentColor"/>
+                          <circle cx="10" cy="8" r="1" fill="currentColor"/>
+                          <circle cx="6" cy="12" r="1" fill="currentColor"/>
+                          <circle cx="10" cy="12" r="1" fill="currentColor"/>
+                        </svg>
+                      </button>
 
-                      {/* Title / Section */}
+                      {/* Menu Button */}
+                      <button className="p-1 text-gray-400 hover:text-gray-600">
+                        <ChevronDown className="w-4 h-4" />
+                      </button>
+
+                      {/* Title Input - Resimdeki gibi */}
                       <div className="flex-1">
-                        {line.isSection ? (
-                          <div className="text-sm font-semibold text-gray-700">{line.title}</div>
-                        ) : (
-                          <input
-                            type="text"
-                            value={line.title}
-                            onChange={(e) => updateLine(line.id, { title: e.target.value })}
-                            placeholder="Title"
-                            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none"
-                          />
-                        )}
+                        <input
+                          type="text"
+                          value={line.title}
+                          onChange={(e) => updateLine(line.id, { title: e.target.value })}
+                          placeholder={line.isSection ? "Section name" : line.type === 'charge' ? "Title" : "Name"}
+                          className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                        />
                       </div>
 
-                      {/* Qty */}
-                      {!line.isSection && (
-                        <div className="w-28 flex items-center gap-2">
-                          <button onClick={() => updateLine(line.id, { qty: Math.max(1, Number(line.qty || 1) - 1) })} className="px-2 py-1 border rounded-md">-</button>
-                          <input type="number" value={line.qty} onChange={(e) => updateLine(line.id, { qty: Number(e.target.value) })} className="w-12 text-center text-sm border rounded-md px-1" />
-                          <button onClick={() => updateLine(line.id, { qty: Number(line.qty || 1) + 1 })} className="px-2 py-1 border rounded-md">+</button>
+                      {/* Quantity - Sadece Charge için */}
+                      {line.type === 'charge' && (
+                        <div className="flex items-center border border-gray-300 rounded">
+                          <button 
+                            onClick={() => updateLine(line.id, { qty: Math.max(1, Number(line.qty || 1) - 1) })} 
+                            className="px-2 py-1 hover:bg-gray-100 text-gray-600"
+                          >
+                            -
+                          </button>
+                          <input 
+                            type="text" 
+                            value={line.qty || 1} 
+                            onChange={(e) => updateLine(line.id, { qty: Number(e.target.value) || 1 })} 
+                            className="w-12 text-center text-sm py-1 border-x border-gray-300"
+                          />
+                          <button 
+                            onClick={() => updateLine(line.id, { qty: Number(line.qty || 1) + 1 })} 
+                            className="px-2 py-1 hover:bg-gray-100 text-gray-600"
+                          >
+                            +
+                          </button>
                         </div>
                       )}
 
-                      {/* Price */}
-                      {!line.isSection && (
-                        <div className="w-36">
-                          <input type="number" value={line.price} onChange={(e) => updateLine(line.id, { price: Number(e.target.value) })} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md text-right" />
+                      {/* Price - Sadece Charge için */}
+                      {line.type === 'charge' && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-gray-600">£</span>
+                          <input 
+                            type="text" 
+                            value={line.price || '0,00'} 
+                            onChange={(e) => updateLine(line.id, { price: e.target.value })} 
+                            className="w-20 px-2 py-1.5 text-sm text-right border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                          />
                         </div>
                       )}
 
-                      {/* Tax */}
-                      {!line.isSection && (
-                        <div className="w-40">
-                          <select value={line.tax} onChange={(e) => updateLine(line.id, { tax: e.target.value })} className="w-full px-2 py-2 text-sm border rounded-md">
-                            <option>No tax</option>
-                            <option>20% VAT</option>
-                          </select>
+                      {/* Tax Category - Sadece Charge için */}
+                      {line.type === 'charge' && (
+                        <select 
+                          value={line.tax || 'No tax'} 
+                          onChange={(e) => updateLine(line.id, { tax: e.target.value })} 
+                          className="px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-white"
+                        >
+                          <option>No tax category</option>
+                          <option>20% VAT</option>
+                          <option>No tax</option>
+                        </select>
+                      )}
+
+                      {/* Total - Sadece Charge için */}
+                      {line.type === 'charge' && (
+                        <div className="w-24 text-right font-medium text-sm">
+                          £{((Number(line.qty) || 0) * (Number(line.price) || 0)).toFixed(2)}
                         </div>
                       )}
 
-                      <div className="w-24 text-right font-medium">€{((line.qty || 0) * (line.price || 0)).toFixed(2)}</div>
-
-                      <button onClick={() => removeLine(line.id)} className="p-2 text-red-600">
+                      {/* Delete Button */}
+                      <button 
+                        onClick={() => removeLine(line.id)} 
+                        className="p-1 text-gray-400 hover:text-red-600"
+                      >
                         <X className="w-4 h-4" />
                       </button>
                     </div>
