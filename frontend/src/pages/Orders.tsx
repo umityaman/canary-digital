@@ -18,8 +18,15 @@ const Reservations: React.FC = () => {
   // Filters
   const [statusFilters, setStatusFilters] = useState<StatusFilter[]>([]);
   const [paymentFilters, setPaymentFilters] = useState<PaymentFilter[]>([]);
-  const [dateRange, setDateRange] = useState<'all' | 'today' | 'yesterday' | 'tomorrow' | 'this_week' | 'last_week' | 'next_week' | 'this_month' | 'last_month' | 'next_month' | 'this_year' | 'last_year' | 'next_year'>('all');
+  const [dateRange, setDateRange] = useState<'all' | 'today' | 'yesterday' | 'tomorrow' | 'this_week' | 'last_week' | 'next_week' | 'this_month' | 'last_month' | 'next_month' | 'this_year' | 'last_year' | 'next_year' | 'custom'>('all');
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
+  
+  // Customer Filter
+  const [selectedCustomerFilter, setSelectedCustomerFilter] = useState<number | null>(null);
+  const [showCustomerFilter, setShowCustomerFilter] = useState(false);
+  const [customerFilterOpen, setCustomerFilterOpen] = useState(true);
   
   // Sorting
   const [sortBy, setSortBy] = useState<'date' | 'customer' | 'total' | 'status'>('date');
@@ -49,6 +56,15 @@ const Reservations: React.FC = () => {
       .filter(o => o.paymentStatus?.toLowerCase() === 'payment_due' || o.paymentStatus?.toLowerCase() === 'partially_paid')
       .reduce((sum, order) => sum + (order.totalAmount || 0), 0)
   };
+  
+  // Get unique customers from orders
+  const uniqueCustomers = Array.from(
+    new Map(
+      orders
+        .filter(o => o.customer)
+        .map(o => [o.customer.id, o.customer])
+    ).values()
+  );
 
   // Calculate filter counts from real data
   const statusCounts = {
@@ -215,6 +231,53 @@ const Reservations: React.FC = () => {
       return false;
     }
     
+    // Customer filter
+    if (selectedCustomerFilter && order.customerId !== selectedCustomerFilter) {
+      return false;
+    }
+    
+    // Date range filter
+    if (dateRange !== 'all') {
+      const orderDate = new Date(order.createdAt || order.startDate);
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      switch (dateRange) {
+        case 'today':
+          if (orderDate < today || orderDate >= new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
+            return false;
+          }
+          break;
+        case 'yesterday':
+          const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+          if (orderDate < yesterday || orderDate >= today) {
+            return false;
+          }
+          break;
+        case 'this_week':
+          const weekStart = new Date(today);
+          weekStart.setDate(today.getDate() - today.getDay());
+          if (orderDate < weekStart) {
+            return false;
+          }
+          break;
+        case 'this_month':
+          const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+          if (orderDate < monthStart) {
+            return false;
+          }
+          break;
+        case 'custom':
+          if (customStartDate && orderDate < new Date(customStartDate)) {
+            return false;
+          }
+          if (customEndDate && orderDate > new Date(customEndDate)) {
+            return false;
+          }
+          break;
+      }
+    }
+    
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -375,25 +438,21 @@ const Reservations: React.FC = () => {
                 
                 {dateRangeOpen && (
                   <div className="space-y-1">
-                    <div className="text-xs text-gray-600 mb-2 px-2">Tüm zamanlar gösteriliyor</div>
                     {[
                       { key: 'all' as const, label: 'Tüm zamanlar' },
                       { key: 'today' as const, label: 'Bugün' },
-                      { key: 'yesterday' as const, label: 'Dün' },
-                      { key: 'tomorrow' as const, label: 'Yarın' },
                       { key: 'this_week' as const, label: 'Bu hafta' },
-                      { key: 'last_week' as const, label: 'Geçen hafta' },
-                      { key: 'next_week' as const, label: 'Gelecek hafta' },
                       { key: 'this_month' as const, label: 'Bu ay' },
-                      { key: 'last_month' as const, label: 'Geçen ay' },
-                      { key: 'next_month' as const, label: 'Gelecek ay' },
-                      { key: 'this_year' as const, label: 'Bu yıl' },
-                      { key: 'last_year' as const, label: 'Geçen yıl' },
-                      { key: 'next_year' as const, label: 'Gelecek yıl' }
+                      { key: 'custom' as const, label: 'Özel tarih aralığı' }
                     ].map(({ key, label }) => (
                       <button
                         key={key}
-                        onClick={() => setDateRange(key)}
+                        onClick={() => {
+                          setDateRange(key);
+                          if (key === 'custom') {
+                            setShowDatePicker(true);
+                          }
+                        }}
                         className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
                           dateRange === key ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
                         }`}
@@ -401,6 +460,79 @@ const Reservations: React.FC = () => {
                         {label}
                       </button>
                     ))}
+                    
+                    {/* Custom Date Picker */}
+                    {dateRange === 'custom' && (
+                      <div className="mt-2 p-2 bg-gray-50 rounded-lg space-y-2">
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Başlangıç</label>
+                          <input
+                            type="date"
+                            value={customStartDate}
+                            onChange={(e) => setCustomStartDate(e.target.value)}
+                            className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Bitiş</label>
+                          <input
+                            type="date"
+                            value={customEndDate}
+                            onChange={(e) => setCustomEndDate(e.target.value)}
+                            className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        </div>
+                        <button
+                          onClick={() => {
+                            setCustomStartDate('');
+                            setCustomEndDate('');
+                            setDateRange('all');
+                          }}
+                          className="w-full px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded"
+                        >
+                          Temizle
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              {/* Customer Filter */}
+              <div className="border-t border-gray-200 pt-4">
+                <button
+                  onClick={() => setCustomerFilterOpen(!customerFilterOpen)}
+                  className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 mb-2"
+                >
+                  <span>Müşteri</span>
+                  {customerFilterOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+                
+                {customerFilterOpen && (
+                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                    <button
+                      onClick={() => setSelectedCustomerFilter(null)}
+                      className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors ${
+                        selectedCustomerFilter === null ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                      }`}
+                    >
+                      Tüm Müşteriler ({orders.length})
+                    </button>
+                    {uniqueCustomers.map(customer => {
+                      const customerOrderCount = orders.filter(o => o.customerId === customer.id).length;
+                      return (
+                        <button
+                          key={customer.id}
+                          onClick={() => setSelectedCustomerFilter(customer.id)}
+                          className={`w-full text-left px-2 py-1.5 text-sm rounded hover:bg-gray-50 transition-colors flex items-center justify-between ${
+                            selectedCustomerFilter === customer.id ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                          }`}
+                        >
+                          <span className="truncate">{customer.name}</span>
+                          <span className="text-xs text-gray-400 ml-2">({customerOrderCount})</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>
