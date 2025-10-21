@@ -65,6 +65,7 @@ const NewOrder: React.FC = () => {
   
   // Order Save
   const [savingOrder, setSavingOrder] = useState(false);
+  const [orderError, setOrderError] = useState('');
   
   // Product lines
   const [productLines, setProductLines] = useState<any[]>([]);
