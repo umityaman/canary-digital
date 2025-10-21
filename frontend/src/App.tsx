@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
 import Reservations from './pages/Reservations'
 import NewOrder from './pages/NewOrder'
+import OrderDetail from './pages/OrderDetail'
 import Inventory from './pages/Inventory'
 import Equipment from './pages/Equipment'
 import EquipmentDetail from './pages/EquipmentDetail'
@@ -80,6 +81,7 @@ export default function App(){
           <Route path='/profile' element={<Profile/>} />
           <Route path='/orders' element={<Reservations/>} />
           <Route path='/orders/new' element={<NewOrder/>} />
+          <Route path='/orders/:id' element={<OrderDetail/>} />
           <Route path='/inventory' element={<Inventory/>} />
           <Route path='/equipment' element={<Equipment/>} />
           <Route path='/equipment/:id' element={<EquipmentDetail/>} />

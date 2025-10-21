@@ -783,7 +783,10 @@ const Reservations: React.FC = () => {
                             <td className="px-6 py-4 text-sm text-gray-700">
                               {new Date(order.createdAt || order.startDate).toLocaleDateString()}
                             </td>
-                            <td className="px-6 py-4 text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer">
+                            <td 
+                              className="px-6 py-4 text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
+                              onClick={() => navigate(`/orders/${order.id}`)}
+                            >
                               {order.orderNumber || `#${order.id}`}
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-900">
