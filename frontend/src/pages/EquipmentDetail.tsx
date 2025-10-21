@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import QRCodeGenerator from '../components/QRCodeGenerator';
 import EquipmentAvailabilityCalendar from '../components/EquipmentAvailabilityCalendar';
+import api from '../services/api';
 
 interface Equipment {
   id: string;
@@ -69,12 +70,8 @@ const EquipmentDetail: React.FC = () => {
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/equipment/${id}`);
-        if (!response.ok) {
-          throw new Error('Equipment not found');
-        }
-        const data = await response.json();
-        setEquipment(data);
+        const response = await api.get(`/equipment/${id}`);
+        setEquipment(response.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch equipment');
       } finally {
