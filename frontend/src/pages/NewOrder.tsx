@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Search, Plus, X, Calendar, QrCode, UserPlus, ChevronDown, ChevronUp,
   User, MapPin, FileText, Mail, Phone, Tag, StickyNote, CreditCard, Package, MoreHorizontal,
-  Copy, Clock, Grip, Loader2
+  Copy, Clock, Grip, Loader2, Upload, Paperclip
 } from 'lucide-react';
 
 const NewOrder: React.FC = () => {
@@ -42,6 +42,23 @@ const NewOrder: React.FC = () => {
   const [emailSubject, setEmailSubject] = useState('');
   const [emailBody, setEmailBody] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
+  
+  // Tags
+  const [showAddTagModal, setShowAddTagModal] = useState(false);
+  const [newTagName, setNewTagName] = useState('');
+  const [newTagColor, setNewTagColor] = useState('#3B82F6');
+  const [orderTags, setOrderTags] = useState<any[]>([]);
+  
+  // Notes Auto-Save
+  const notesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [notesSaved, setNotesSaved] = useState(false);
+  const [savingNotes, setSavingNotes] = useState(false);
+  
+  // Documents
+  const [showAddDocumentModal, setShowAddDocumentModal] = useState(false);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [uploadingDocument, setUploadingDocument] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Product lines
   const [productLines, setProductLines] = useState<any[]>([]);
@@ -196,6 +213,109 @@ const NewOrder: React.FC = () => {
       console.error('QR scan failed:', error);
       setQrError('Failed to scan QR code. Please try again.');
     }
+  };
+  
+  // Tags Handler
+  const tagColors = [
+    { name: 'Blue', value: '#3B82F6' },
+    { name: 'Green', value: '#10B981' },
+    { name: 'Red', value: '#EF4444' },
+    { name: 'Yellow', value: '#F59E0B' },
+    { name: 'Purple', value: '#8B5CF6' },
+    { name: 'Pink', value: '#EC4899' },
+    { name: 'Indigo', value: '#6366F1' },
+    { name: 'Gray', value: '#6B7280' }
+  ];
+  
+  const handleAddTag = () => {
+    if (!newTagName.trim()) return;
+    
+    const newTag = {
+      id: generateId(),
+      name: newTagName.trim(),
+      color: newTagColor
+    };
+    
+    setOrderTags(prev => [...prev, newTag]);
+    setNewTagName('');
+    setNewTagColor('#3B82F6');
+    setShowAddTagModal(false);
+  };
+  
+  const handleRemoveTag = (tagId: string) => {
+    setOrderTags(prev => prev.filter(t => t.id !== tagId));
+  };
+  
+  // Notes Auto-Save Handler
+  const handleNotesChange = (value: string) => {
+    setNotes(value);
+    setNotesSaved(false);
+    
+    // Clear existing timeout
+    if (notesTimeoutRef.current) {
+      clearTimeout(notesTimeoutRef.current);
+    }
+    
+    // Set new timeout for auto-save (2 seconds after user stops typing)
+    notesTimeoutRef.current = setTimeout(async () => {
+      setSavingNotes(true);
+      
+      // Simulate API call to save notes
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setSavingNotes(false);
+      setNotesSaved(true);
+      
+      // Hide saved message after 2 seconds
+      setTimeout(() => setNotesSaved(false), 2000);
+    }, 2000);
+  };
+  
+  // Document Upload Handler
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    
+    handleUploadDocuments(Array.from(files));
+    e.target.value = ''; // Reset input
+  };
+  
+  const handleUploadDocuments = async (files: File[]) => {
+    setUploadingDocument(true);
+    
+    try {
+      // Simulate upload for each file
+      for (const file of files) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const newDoc = {
+          id: generateId(),
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          uploadedAt: new Date().toISOString()
+        };
+        
+        setDocuments(prev => [...prev, newDoc]);
+      }
+      
+      setShowAddDocumentModal(false);
+    } catch (error) {
+      console.error('Document upload failed:', error);
+      alert('Failed to upload document. Please try again.');
+    } finally {
+      setUploadingDocument(false);
+    }
+  };
+  
+  const handleRemoveDocument = (docId: string) => {
+    setDocuments(prev => prev.filter(d => d.id !== docId));
+  };
+  
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
   
   // Accordion states
@@ -764,6 +884,157 @@ const NewOrder: React.FC = () => {
           </div>
         </div>
       )}
+      
+      {/* Add Tag Modal */}
+      {showAddTagModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Add Tag</h2>
+              <button 
+                onClick={() => {
+                  setShowAddTagModal(false);
+                  setNewTagName('');
+                  setNewTagColor('#3B82F6');
+                }}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tag Name</label>
+                <input 
+                  type="text"
+                  value={newTagName}
+                  onChange={(e) => setNewTagName(e.target.value)}
+                  placeholder="e.g., Urgent, VIP Customer, Follow-up"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tag Color</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {tagColors.map(color => (
+                    <button
+                      key={color.value}
+                      onClick={() => setNewTagColor(color.value)}
+                      className={`h-10 rounded-lg border-2 transition-all ${
+                        newTagColor === color.value 
+                          ? 'border-gray-900 scale-105' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                      style={{ backgroundColor: color.value }}
+                      title={color.name}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
+                <div 
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-medium text-white"
+                  style={{ backgroundColor: newTagColor }}
+                >
+                  <Tag className="w-3.5 h-3.5" />
+                  {newTagName || 'Tag Name'}
+                </div>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+              <button 
+                onClick={() => {
+                  setShowAddTagModal(false);
+                  setNewTagName('');
+                  setNewTagColor('#3B82F6');
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleAddTag}
+                disabled={!newTagName.trim()}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add Tag
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Add Document Modal */}
+      {showAddDocumentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Upload Document</h2>
+              <button 
+                onClick={() => setShowAddDocumentModal(false)}
+                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleFileSelect}
+                className="hidden"
+                multiple
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+              />
+              
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingDocument}
+                className="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-blue-500 hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="flex flex-col items-center gap-3">
+                  {uploadingDocument ? (
+                    <>
+                      <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+                      <p className="text-sm text-gray-600">Uploading...</p>
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="w-12 h-12 text-gray-400" />
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-gray-900">Click to upload documents</p>
+                        <p className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX, JPG, PNG, TXT</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </button>
+              
+              <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs text-blue-700">
+                  <strong>Tip:</strong> You can upload multiple files at once. Maximum file size: 10MB per file.
+                </p>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end">
+              <button 
+                onClick={() => setShowAddDocumentModal(false)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex">
         {/* Left Side - Header + Main Content */}
@@ -1281,24 +1552,41 @@ const NewOrder: React.FC = () => {
                 onClick={() => setDocumentsOpen(!documentsOpen)}
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Documents <span className="text-gray-500">1</span></span>
+                <span className="text-sm font-semibold text-gray-900">
+                  Documents {documents.length > 0 && <span className="text-gray-500">{documents.length}</span>}
+                </span>
                 {documentsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {documentsOpen && (
                 <div className="px-4 pb-3 space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-700 py-2 hover:bg-gray-50 rounded px-2 cursor-pointer">
-                    <FileText className="w-4 h-4 text-gray-400" />
-                    <span>Packing slip</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm py-2 hover:bg-gray-50 rounded px-2 cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-yellow-100 rounded flex items-center justify-center">
-                        <FileText className="w-3 h-3 text-yellow-600" />
+                  {documents.map(doc => (
+                    <div 
+                      key={doc.id}
+                      className="flex items-center justify-between text-sm py-2 hover:bg-gray-50 rounded px-2 group"
+                    >
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <FileText className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <span className="text-gray-700 truncate">{doc.name}</span>
+                        <span className="text-gray-400 text-xs flex-shrink-0">
+                          {formatFileSize(doc.size)}
+                        </span>
                       </div>
-                      <span className="text-gray-700">Contract #1</span>
+                      <button
+                        onClick={() => handleRemoveDocument(doc.id)}
+                        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-all"
+                      >
+                        <X className="w-3 h-3 text-gray-500" />
+                      </button>
                     </div>
-                    <span className="text-gray-600">₺0,00</span>
-                  </div>
+                  ))}
+                  
+                  <button 
+                    onClick={() => setShowAddDocumentModal(true)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700 flex items-center justify-center gap-2 mt-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Upload document
+                  </button>
                 </div>
               )}
             </div>
@@ -1352,10 +1640,33 @@ const NewOrder: React.FC = () => {
                 {tagsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {tagsOpen && (
-                <div className="px-4 pb-3">
-                  <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700 flex items-center justify-center gap-2">
+                <div className="px-4 pb-3 space-y-2">
+                  {orderTags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {orderTags.map(tag => (
+                        <div 
+                          key={tag.id}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-white"
+                          style={{ backgroundColor: tag.color }}
+                        >
+                          <Tag className="w-3 h-3" />
+                          {tag.name}
+                          <button
+                            onClick={() => handleRemoveTag(tag.id)}
+                            className="hover:bg-white hover:bg-opacity-20 rounded-full p-0.5 transition-colors"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button 
+                    onClick={() => setShowAddTagModal(true)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700 flex items-center justify-center gap-2"
+                  >
                     <Plus className="w-4 h-4" />
-                    Add tags
+                    Add tag
                   </button>
                 </div>
               )}
@@ -1367,15 +1678,28 @@ const NewOrder: React.FC = () => {
                 onClick={() => setNotesOpen(!notesOpen)}
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Notes</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-gray-900">Notes</span>
+                  {savingNotes && (
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      Saving...
+                    </span>
+                  )}
+                  {notesSaved && (
+                    <span className="text-xs text-green-600 flex items-center gap-1">
+                      ✓ Saved
+                    </span>
+                  )}
+                </div>
                 {notesOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {notesOpen && (
                 <div className="px-4 pb-3">
                   <textarea
                     value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Add a new note"
+                    onChange={(e) => handleNotesChange(e.target.value)}
+                    placeholder="Add a new note (auto-saves after 2 seconds)"
                     rows={3}
                     className="w-full text-sm border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
