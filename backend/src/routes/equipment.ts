@@ -235,12 +235,25 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
       message: 'Equipment created successfully',
       equipment
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Create equipment error:', error);
+    console.error('Error details:', {
+      code: error.code,
+      message: error.message,
+      meta: error.meta
+    });
+    
     if (error.code === 'P2002') {
-      res.status(400).json({ error: 'Equipment code already exists' });
+      res.status(400).json({ 
+        error: 'Equipment code already exists',
+        details: error.meta 
+      });
     } else {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ 
+        error: 'Internal server error',
+        message: error.message,
+        details: error.toString()
+      });
     }
   }
 });

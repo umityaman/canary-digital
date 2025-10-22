@@ -1,14 +1,15 @@
-import express from 'express';
+import express, { Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import logger from '../utils/logger';
+import { authenticateToken, AuthRequest } from '../middleware/auth';
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // GET /api/categories - List all categories for company
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = req.headers['x-company-id'];
+    const companyId = req.companyId;
     
     if (!companyId) {
       return res.status(400).json({ error: 'Company ID is required' });
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 
     const categories = await prisma.category.findMany({
       where: {
-        companyId: parseInt(companyId as string),
+        companyId: companyId,
         isActive: true
       },
       orderBy: {
@@ -33,9 +34,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET /api/categories/all - List all categories including inactive
-router.get('/all', async (req, res) => {
+router.get('/all', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = req.headers['x-company-id'];
+    const companyId = req.companyId;
     
     if (!companyId) {
       return res.status(400).json({ error: 'Company ID is required' });
@@ -43,7 +44,7 @@ router.get('/all', async (req, res) => {
 
     const categories = await prisma.category.findMany({
       where: {
-        companyId: parseInt(companyId as string)
+        companyId: companyId
       },
       orderBy: {
         name: 'asc'
@@ -59,9 +60,9 @@ router.get('/all', async (req, res) => {
 });
 
 // POST /api/categories - Create new category
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = req.headers['x-company-id'];
+    const companyId = req.companyId;
     
     if (!companyId) {
       return res.status(400).json({ error: 'Company ID is required' });
@@ -77,7 +78,7 @@ router.post('/', async (req, res) => {
     // Check for duplicate name
     const existing = await prisma.category.findFirst({
       where: {
-        companyId: parseInt(companyId as string),
+        companyId: companyId,
         name: name.trim()
       }
     });
@@ -93,7 +94,7 @@ router.post('/', async (req, res) => {
         description: description?.trim() || null,
         icon: icon?.trim() || null,
         color: color?.trim() || null,
-        companyId: parseInt(companyId as string),
+        companyId: companyId,
         isActive: true
       }
     });
@@ -113,9 +114,9 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/categories/:id - Update category
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = req.headers['x-company-id'];
+    const companyId = req.companyId;
     const categoryId = parseInt(req.params.id);
     
     if (!companyId) {
@@ -132,7 +133,7 @@ router.put('/:id', async (req, res) => {
     const existing = await prisma.category.findFirst({
       where: {
         id: categoryId,
-        companyId: parseInt(companyId as string)
+        companyId: companyId
       }
     });
 
@@ -149,7 +150,7 @@ router.put('/:id', async (req, res) => {
     if (name && name.trim() !== existing.name) {
       const duplicate = await prisma.category.findFirst({
         where: {
-          companyId: parseInt(companyId as string),
+          companyId: companyId,
           name: name.trim(),
           id: { not: categoryId }
         }
@@ -187,9 +188,9 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE /api/categories/:id - Delete category
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = req.headers['x-company-id'];
+    const companyId = req.companyId;
     const categoryId = parseInt(req.params.id);
     
     if (!companyId) {
@@ -204,7 +205,7 @@ router.delete('/:id', async (req, res) => {
     const existing = await prisma.category.findFirst({
       where: {
         id: categoryId,
-        companyId: parseInt(companyId as string)
+        companyId: companyId
       }
     });
 
@@ -241,9 +242,9 @@ router.delete('/:id', async (req, res) => {
 });
 
 // PATCH /api/categories/:id/toggle - Toggle category active status
-router.patch('/:id/toggle', async (req, res) => {
+router.patch('/:id/toggle', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = req.headers['x-company-id'];
+    const companyId = req.companyId;
     const categoryId = parseInt(req.params.id);
     
     if (!companyId) {
@@ -258,7 +259,7 @@ router.patch('/:id/toggle', async (req, res) => {
     const existing = await prisma.category.findFirst({
       where: {
         id: categoryId,
-        companyId: parseInt(companyId as string)
+        companyId: companyId
       }
     });
 
