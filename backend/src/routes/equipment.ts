@@ -142,11 +142,6 @@ router.get('/:id', authenticateToken, async (req: AuthRequest, res: Response) =>
                 payments: true
               }
             }
-          },
-          orderBy: {
-            order: {
-              createdAt: 'desc'
-            }
           }
         },
         inspections: {
