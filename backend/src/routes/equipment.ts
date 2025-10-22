@@ -190,11 +190,26 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
       status
     } = req.body;
 
+    console.log('🔍 Equipment Create Debug:', {
+      userId: req.userId,
+      companyId: req.companyId,
+      brand,
+      model
+    });
+
     if (!brand || !model) {
       return res.status(400).json({ error: 'Brand and model are required' });
     }
 
     const companyId = req.companyId;
+    
+    if (!companyId) {
+      console.error('❌ Company ID is missing from token!');
+      return res.status(400).json({ 
+        error: 'Company ID is required. Please log in again.',
+        debug: { userId: req.userId, companyId: req.companyId }
+      });
+    }
 
     // Son ekipmanın ID'sini bul
     const lastEquipment = await prisma.equipment.findFirst({

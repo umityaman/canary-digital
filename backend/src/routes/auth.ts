@@ -125,9 +125,41 @@ router.post('/login', async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Account is deactivated' });
     }
 
+    // CompanyId yoksa varsayılan şirketi ata veya oluştur
+    let userCompanyId = user.companyId;
+    
+    if (!userCompanyId) {
+      console.log('⚠️ User has no companyId, assigning default company...');
+      
+      // İlk şirketi bul veya oluştur
+      let defaultCompany = await prisma.company.findFirst();
+      
+      if (!defaultCompany) {
+        // Hiç şirket yoksa varsayılan şirket oluştur
+        defaultCompany = await prisma.company.create({
+          data: {
+            name: 'Canary Dijital',
+            email: 'info@canarydigital.com',
+            phone: '+90 555 123 4567',
+            timezone: 'Europe/Istanbul'
+          }
+        });
+        console.log('✅ Default company created:', defaultCompany.id);
+      }
+      
+      // Kullanıcıyı şirkete bağla
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { companyId: defaultCompany.id }
+      });
+      
+      userCompanyId = defaultCompany.id;
+      console.log(`✅ User ${user.email} assigned to company ${defaultCompany.id}`);
+    }
+
     // JWT token oluştur
     const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role, companyId: user.companyId },
+      { userId: user.id, email: user.email, role: user.role, companyId: userCompanyId },
       process.env.JWT_SECRET!,
       { expiresIn: '24h' }
     );
