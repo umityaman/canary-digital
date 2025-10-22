@@ -143,9 +143,7 @@ const Inventory: React.FC = () => {
   }
 
   const handleEdit = (equipment: Equipment) => {
-    setSelectedEquipment(equipment)
-    setModalMode('edit')
-    setModalOpen(true)
+    navigate(`/inventory/${equipment.id}`)
   }
 
   const handleDelete = async (id: string) => {
