@@ -193,8 +193,8 @@ const NewEquipment: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.brand || !formData.model || !formData.category) {
-      showNotification('error', 'Lütfen zorunlu alanları doldurun (Marka, Model, Kategori)');
+    if (!formData.brand || !formData.model) {
+      showNotification('error', 'Lütfen zorunlu alanları doldurun (Marka, Model)');
       return;
     }
 
@@ -342,7 +342,7 @@ const NewEquipment: React.FC = () => {
               {/* Kategori */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Kategori <span className="text-red-500">*</span>
+                  Kategori
                 </label>
                 <div className="flex gap-2">
                   <select
@@ -350,9 +350,8 @@ const NewEquipment: React.FC = () => {
                     value={formData.category}
                     onChange={handleInputChange}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
                   >
-                    <option value="">Kategori seçin</option>
+                    <option value="">Kategori seçin (opsiyonel)</option>
                     {categories.map(cat => (
                       <option key={cat.id} value={cat.name}>{cat.name}</option>
                     ))}

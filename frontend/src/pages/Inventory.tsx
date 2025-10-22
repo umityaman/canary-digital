@@ -292,22 +292,26 @@ const Inventory: React.FC = () => {
                 />
                 <span className="text-sm text-gray-700">Tümü</span>
               </label>
-              {categories.map(cat => (
-                <label key={cat.id} className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="category"
-                    value={cat.name}
-                    checked={filterCategory === cat.name}
-                    onChange={(e) => setFilterCategory(e.target.value)}
-                    className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
-                  />
-                  <span className="text-sm text-gray-700 flex items-center gap-1">
-                    {cat.icon && <span>{cat.icon}</span>}
-                    {cat.name}
-                  </span>
-                </label>
-              ))}
+              {categories.length === 0 ? (
+                <p className="text-xs text-gray-500 py-2">Henüz kategori eklenmemiş</p>
+              ) : (
+                categories.map(cat => (
+                  <label key={cat.id} className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="category"
+                      value={cat.name}
+                      checked={filterCategory === cat.name}
+                      onChange={(e) => setFilterCategory(e.target.value)}
+                      className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
+                    />
+                    <span className="text-sm text-gray-700 flex items-center gap-1">
+                      {cat.icon && <span>{cat.icon}</span>}
+                      {cat.name}
+                    </span>
+                  </label>
+                ))
+              )}
               
               <button
                 onClick={() => {
