@@ -186,22 +186,22 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
-      include: { company: true },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        company: true,
-        createdAt: true
-      }
+      include: { company: true }
     });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json(user);
+    // Return only safe fields
+    res.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      company: user.company,
+      createdAt: user.createdAt
+    });
   } catch (error) {
     console.error('Get profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
