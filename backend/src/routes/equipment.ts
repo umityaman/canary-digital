@@ -1,19 +1,29 @@
 import {Router, Request, Response} from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authenticateToken } from './auth';
+import { authenticateToken, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-interface AuthRequest extends Request {
-  user?: any;
+// Helper function to get companyId with fallback
+async function getCompanyId(req: AuthRequest): Promise<number | undefined> {
+  let companyId = req.companyId;
+  
+  if (!companyId) {
+    const firstCompany = await prisma.company.findFirst();
+    if (firstCompany) {
+      companyId = firstCompany.id;
+    }
+  }
+  
+  return companyId;
 }
 
 // Tüm ekipmanları listele
 router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { status, category, search } = req.query;
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     const where: any = { companyId };
 
@@ -50,7 +60,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 router.get('/scan/:code', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { code } = req.params;
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     // QR kodu veya barkod ile ara
     const equipment = await prisma.equipment.findFirst({
@@ -116,7 +126,7 @@ router.get('/scan/:code', authenticateToken, async (req: AuthRequest, res: Respo
 router.get('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     const equipment = await prisma.equipment.findFirst({
       where: { 
@@ -201,20 +211,13 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: 'Brand and model are required' });
     }
 
-    // Get companyId from middleware or use first company as fallback
-    let companyId = req.companyId;
+    const companyId = await getCompanyId(req);
     
     if (!companyId) {
-      console.warn('⚠️ No companyId in token, fetching first company...');
-      const firstCompany = await prisma.company.findFirst();
-      if (!firstCompany) {
-        return res.status(400).json({ 
-          error: 'No company found. Please contact support.',
-          debug: { userId: req.userId, companyId: req.companyId }
-        });
-      }
-      companyId = firstCompany.id;
-      console.log(`✅ Using company ${companyId}`);
+      return res.status(400).json({ 
+        error: 'No company found. Please contact support.',
+        debug: { userId: req.userId, companyId: req.companyId }
+      });
     }
 
     // Son ekipmanın ID'sini bul
@@ -283,7 +286,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 router.put('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     // Ekipman var mı ve şirkete ait mi kontrol et
     const existingEquipment = await prisma.equipment.findFirst({
@@ -313,7 +316,7 @@ router.put('/:id', authenticateToken, async (req: AuthRequest, res: Response) =>
 router.delete('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     // Ekipman var mı ve şirkete ait mi kontrol et
     const existingEquipment = await prisma.equipment.findFirst({
@@ -338,7 +341,7 @@ router.delete('/:id', authenticateToken, async (req: AuthRequest, res: Response)
 // Ekipman kategorileri
 router.get('/categories/list', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     const categories = await prisma.equipment.findMany({
       where: { companyId, category: { not: null } },
@@ -360,7 +363,7 @@ router.get('/:id/rentals', authenticateToken, async (req: AuthRequest, res: Resp
   try {
     const { id } = req.params;
     const { startDate, endDate } = req.query;
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     // Ekipmanın varlığını kontrol et
     const equipment = await prisma.equipment.findFirst({
@@ -444,7 +447,7 @@ router.get('/:id/maintenance', authenticateToken, async (req: AuthRequest, res: 
   try {
     const { id } = req.params;
     const { startDate, endDate } = req.query;
-    const companyId = req.companyId;
+    const companyId = await getCompanyId(req);
 
     // Ekipmanın varlığını kontrol et
     const equipment = await prisma.equipment.findFirst({
