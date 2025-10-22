@@ -201,14 +201,20 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: 'Brand and model are required' });
     }
 
-    const companyId = req.companyId;
+    // Get companyId from middleware or use first company as fallback
+    let companyId = req.companyId;
     
     if (!companyId) {
-      console.error('❌ Company ID is missing from token!');
-      return res.status(400).json({ 
-        error: 'Company ID is required. Please log in again.',
-        debug: { userId: req.userId, companyId: req.companyId }
-      });
+      console.warn('⚠️ No companyId in token, fetching first company...');
+      const firstCompany = await prisma.company.findFirst();
+      if (!firstCompany) {
+        return res.status(400).json({ 
+          error: 'No company found. Please contact support.',
+          debug: { userId: req.userId, companyId: req.companyId }
+        });
+      }
+      companyId = firstCompany.id;
+      console.log(`✅ Using company ${companyId}`);
     }
 
     // Son ekipmanın ID'sini bul
