@@ -132,39 +132,6 @@ router.get('/:id', authenticateToken, async (req: AuthRequest, res: Response) =>
       where: { 
         id: parseInt(id),
         companyId 
-      },
-      include: {
-        orderItems: {
-          include: {
-            order: {
-              include: {
-                customer: true,
-                payments: true
-              }
-            }
-          }
-        },
-        inspections: {
-          include: {
-            inspector: {
-              select: {
-                name: true,
-                email: true
-              }
-            },
-            customer: {
-              select: {
-                name: true,
-                email: true
-              }
-            },
-            photos: true,
-            damageReports: true
-          },
-          orderBy: {
-            createdAt: 'desc'
-          }
-        }
       }
     });
 
