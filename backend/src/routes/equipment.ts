@@ -186,11 +186,12 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
       dailyPrice,
       weeklyPrice,
       monthlyPrice,
-      description
+      description,
+      status
     } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: 'Equipment name is required' });
+    if (!brand || !model) {
+      return res.status(400).json({ error: 'Brand and model are required' });
     }
 
     const companyId = req.companyId;
@@ -209,19 +210,23 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
     // QR kod oluştur
     const qrCode = `${equipmentCode}-${Date.now().toString(36).toUpperCase()}`;
 
+    // İsim otomatik oluştur
+    const equipmentName = name || `${brand} ${model}`;
+
     const equipment = await prisma.equipment.create({
       data: {
-        name,
+        name: equipmentName,
         brand,
         model,
-        category,
-        serialNumber,
+        category: category || null,
+        serialNumber: serialNumber || null,
         code: equipmentCode,  // Otomatik sıralı kod
         qrCode,
         dailyPrice: dailyPrice ? parseFloat(dailyPrice) : null,
         weeklyPrice: weeklyPrice ? parseFloat(weeklyPrice) : null,
         monthlyPrice: monthlyPrice ? parseFloat(monthlyPrice) : null,
-        description,
+        description: description || null,
+        status: status || 'AVAILABLE',
         companyId
       }
     });

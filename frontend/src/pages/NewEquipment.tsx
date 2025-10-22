@@ -200,11 +200,25 @@ const NewEquipment: React.FC = () => {
 
     setLoading(true);
     try {
+      // Backend için uygun formatta veri hazırla
       const equipmentData = {
-        ...formData,
-        name: formData.name || `${formData.brand} ${formData.model}`, // Otomatik isim
-        fixedPrice: formData.fixedPrice ? parseFloat(formData.fixedPrice) : undefined,
-        purchasePrice: formData.purchasePrice ? parseFloat(formData.purchasePrice) : undefined,
+        name: formData.name || `${formData.brand} ${formData.model}`,
+        brand: formData.brand,
+        model: formData.model,
+        category: formData.category || null,
+        serialNumber: formData.serialNumber || null,
+        description: formData.description || null,
+        status: formData.status || 'AVAILABLE',
+        // Fiyatlandırma - backend sadece dailyPrice, weeklyPrice, monthlyPrice destekliyor
+        dailyPrice: formData.pricingType === 'FIXED' && formData.fixedPriceType === 'DAILY' && formData.fixedPrice
+          ? parseFloat(formData.fixedPrice)
+          : null,
+        weeklyPrice: formData.pricingType === 'FIXED' && formData.fixedPriceType === 'WEEKLY' && formData.fixedPrice
+          ? parseFloat(formData.fixedPrice)
+          : null,
+        monthlyPrice: formData.pricingType === 'FIXED' && formData.fixedPriceType === 'MONTHLY' && formData.fixedPrice
+          ? parseFloat(formData.fixedPrice)
+          : null,
       };
 
       const response = await api.post('/equipment', equipmentData);
