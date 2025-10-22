@@ -30,6 +30,7 @@ const NewEquipment: React.FC = () => {
   // Form states
   const [formData, setFormData] = useState({
     // 1. Genel Bilgiler
+    name: '',
     brand: '',
     model: '',
     stockNumber: '',
@@ -47,6 +48,7 @@ const NewEquipment: React.FC = () => {
     // 3. Durum ve Tür
     status: 'AVAILABLE',
     equipmentType: 'RENTAL',
+    location: '',
     
     // 4. Satın Alma Bilgileri
     purchasePrice: '',
@@ -64,6 +66,10 @@ const NewEquipment: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [nextEquipmentCode, setNextEquipmentCode] = useState<string>('Yükleniyor...');
+  const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [savedEquipmentId, setSavedEquipmentId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -187,8 +193,8 @@ const NewEquipment: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.brand || !formData.model || !formData.category) {
-      showNotification('error', 'Lütfen zorunlu alanları doldurun');
+    if (!formData.brand || !formData.model || !formData.category) {
+      showNotification('error', 'Lütfen zorunlu alanları doldurun (Marka, Model, Kategori)');
       return;
     }
 
@@ -196,7 +202,8 @@ const NewEquipment: React.FC = () => {
     try {
       const equipmentData = {
         ...formData,
-        dailyPrice: formData.dailyPrice ? parseFloat(formData.dailyPrice) : undefined,
+        name: formData.name || `${formData.brand} ${formData.model}`, // Otomatik isim
+        fixedPrice: formData.fixedPrice ? parseFloat(formData.fixedPrice) : undefined,
         purchasePrice: formData.purchasePrice ? parseFloat(formData.purchasePrice) : undefined,
       };
 
@@ -337,19 +344,27 @@ const NewEquipment: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Kategori <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                >
-                  <option value="">Kategori seçin</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.name}>{cat.name}</option>
-                  ))}
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Kategori eklemek için Envanter sayfasını kullanın</p>
+                <div className="flex gap-2">
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Kategori seçin</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.name}>{cat.name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCategoryModal(true)}
+                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium whitespace-nowrap"
+                  >
+                    + Yeni
+                  </button>
+                </div>
               </div>
 
               {/* Seri Numarası */}
