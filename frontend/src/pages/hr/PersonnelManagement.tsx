@@ -203,10 +203,10 @@ const PersonnelManagement: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6">
-      {/* Filters & Actions */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-        <div className="flex items-center gap-4">
+    <div className="space-y-4">
+      {/* Filters Card - Social Media Style */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
+        <div className="flex items-center gap-3">
           {/* Search */}
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={18} />
@@ -295,60 +295,66 @@ const PersonnelManagement: React.FC = () => {
 
       {/* Employee Grid/List */}
       {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredEmployees.map((employee) => (
             <div
               key={employee.id}
-              className="bg-white rounded-2xl border border-neutral-200 overflow-hidden hover:shadow-lg transition-all group"
+              className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md transition-all cursor-pointer"
             >
-              {/* Card Header */}
-              <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-6 text-white relative">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-3xl">
+              {/* Card Header - Like Social Media Post */}
+              <div className="p-4 border-b border-neutral-100">
+                <div className="flex items-start gap-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xl flex-shrink-0">
                     {employee.avatar}
                   </div>
-                  <button className="p-2 hover:bg-white/20 rounded-lg transition-colors">
-                    <MoreVertical size={18} />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-neutral-900 truncate">{employee.name}</h3>
+                    <p className="text-sm text-neutral-600">{employee.position}</p>
+                    <p className="text-xs text-neutral-500">{employee.employeeId}</p>
+                  </div>
+                  <button className="p-1.5 hover:bg-neutral-100 rounded-full transition-colors flex-shrink-0">
+                    <MoreVertical size={18} className="text-neutral-600" />
                   </button>
                 </div>
-                <h3 className="font-bold text-lg mb-1">{employee.name}</h3>
-                <p className="text-sm text-white/80">{employee.position}</p>
-                <p className="text-xs text-white/60 mt-1">{employee.employeeId}</p>
               </div>
 
-              {/* Card Body */}
-              <div className="p-6 space-y-3">
-                <div className="flex items-center justify-between">
+              {/* Card Body - Content Area */}
+              <div className="p-4 space-y-2">
+                <div className="flex items-center justify-between py-2">
                   <span className="text-sm text-neutral-600">Departman</span>
-                  <span className="text-sm font-medium text-neutral-900">{employee.department}</span>
+                  <span className="text-sm font-semibold text-neutral-900">{employee.department}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between py-2">
                   <span className="text-sm text-neutral-600">Durum</span>
                   {getStatusBadge(employee.status)}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-neutral-600">
-                  <Mail size={16} />
-                  <span className="truncate">{employee.email}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-neutral-600">
-                  <Phone size={16} />
-                  <span>{employee.phone}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-neutral-600">
-                  <Calendar size={16} />
-                  <span>Başlangıç: {new Date(employee.joinDate).toLocaleDateString('tr-TR')}</span>
+                
+                <div className="pt-2 border-t border-neutral-100 space-y-2">
+                  <div className="flex items-center gap-2 text-xs text-neutral-600">
+                    <Mail size={14} />
+                    <span className="truncate">{employee.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-neutral-600">
+                    <Phone size={14} />
+                    <span>{employee.phone}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-neutral-600">
+                    <Calendar size={14} />
+                    <span>{new Date(employee.joinDate).toLocaleDateString('tr-TR')}</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Card Footer */}
-              <div className="border-t border-neutral-100 p-4 flex gap-2">
-                <button className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors">
+              {/* Card Footer - Actions */}
+              <div className="border-t border-neutral-100 px-4 py-2 flex items-center justify-around">
+                <button className="flex items-center gap-2 py-2 px-3 text-sm font-medium text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors">
                   <Eye size={16} />
-                  Görüntüle
+                  <span>Profil</span>
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors">
+                <div className="w-px h-6 bg-neutral-200"></div>
+                <button className="flex items-center gap-2 py-2 px-3 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                   <Edit size={16} />
-                  Düzenle
+                  <span>Düzenle</span>
                 </button>
               </div>
             </div>
