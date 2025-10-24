@@ -6,7 +6,6 @@ import EquipmentModal from '../components/modals/EquipmentModal'
 import CategoryModal from '../components/modals/CategoryModal'
 import { QRCodeGenerator } from '../components/QRCodeGenerator'
 import BarcodeScanner from '../components/BarcodeScanner'
-import PDFDownloadButton from '../components/pdf/PDFDownloadButton'
 import api from '../services/api'
 
 interface Equipment {
@@ -264,8 +263,32 @@ const Inventory: React.FC = () => {
   }
 
   return (
-    <div className="flex gap-6">
-      <div className="w-52 flex-shrink-0 space-y-4">
+    <div className="space-y-4">
+      {/* Arama ve Ekipman Ekle Butonu */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="relative flex-1 max-w-2xl">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder="Ekipman ara..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
+          />
+        </div>
+        
+        <button
+          onClick={handleAdd}
+          className="flex items-center space-x-2 bg-neutral-900 text-white px-6 py-2.5 rounded-lg hover:bg-neutral-800 transition-colors font-medium whitespace-nowrap"
+        >
+          <Plus size={20} />
+          <span>Ekipman Ekle</span>
+        </button>
+      </div>
+
+      {/* Ana İçerik: Sidebar ve Tablo */}
+      <div className="flex gap-6">
+        <div className="w-52 flex-shrink-0 space-y-4">
         <div className="bg-white rounded-lg border border-gray-200">
           <button 
             onClick={() => setCategoryOpen(!categoryOpen)}
@@ -427,39 +450,6 @@ const Inventory: React.FC = () => {
       </div>
 
       <div className="flex-1 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Ekipman ara..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-            />
-          </div>
-
-          <PDFDownloadButton 
-            type="equipment"
-            filters={{ 
-              status: filterStatus === 'all' ? '' : filterStatus,
-              category: filterCategory === 'all' ? '' : filterCategory,
-              equipmentType: filterEquipmentType === 'all' ? '' : filterEquipmentType
-            }}
-            variant="secondary"
-            size="md"
-            label="Ekipman Listesi PDF"
-          />
-          
-          <button
-            onClick={handleAdd}
-            className="flex items-center space-x-2 bg-neutral-900 text-white px-6 py-2.5 rounded-lg hover:bg-neutral-800 transition-colors font-medium"
-          >
-            <Plus size={20} />
-            <span>Ekipman Ekle</span>
-          </button>
-        </div>
-
         <div className="border-b border-gray-200">
           <div className="flex space-x-8">
             <button className="pb-3 border-b-2 border-neutral-900 font-medium text-sm">
@@ -597,6 +587,7 @@ const Inventory: React.FC = () => {
             </table>
           </div>
         )}
+      </div>
       </div>
 
       <EquipmentModal
