@@ -233,13 +233,13 @@ const AIChatbot: React.FC = () => {
   return (
     <Box sx={{ p: 3, height: 'calc(100vh - 100px)' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4">AI Chatbot</Typography>
+        <Typography variant="h4">İnsan Kaynakları</Typography>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Button variant="outlined" startIcon={<SettingsIcon />} onClick={() => setOpenSettings(true)}>
-            Settings
+            Ayarlar
           </Button>
           <Button variant="contained" startIcon={<AddIcon />} onClick={() => setOpenNewConversation(true)}>
-            New Chat
+            Yeni Sohbet
           </Button>
         </Box>
       </Box>
