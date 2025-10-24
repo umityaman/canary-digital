@@ -106,7 +106,7 @@ const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
         <NotificationBanner />
         
         {/* Content */}
-        <div className={isDarkMode ? 'text-white' : ''}>
+        <div className={`p-6 ${isDarkMode ? 'text-white' : ''}`}>
           {children}
         </div>
       </main>
