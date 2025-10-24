@@ -14,6 +14,9 @@ interface Equipment {
   equipmentType?: 'RENTAL' | 'SALE' | 'SERVICE'
   inventoryId?: string
   booqableId?: string
+  qrCode?: string
+  barcode?: string
+  createdAt?: string
 }
 
 interface EquipmentStore {

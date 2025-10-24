@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Plus, Edit, Trash2, Package, Upload, Download, ChevronDown, Plug, Settings, QrCode, ScanLine } from 'lucide-react'
+import { Search, Plus, Edit, Trash2, Package, Upload, Download, ChevronDown, Plug, Settings, QrCode, ScanLine, CheckSquare, Square, ArrowUpDown } from 'lucide-react'
 import { useEquipmentStore } from '../stores/equipmentStore'
 import EquipmentModal from '../components/modals/EquipmentModal'
 import CategoryModal from '../components/modals/CategoryModal'
@@ -21,6 +21,9 @@ interface Equipment {
   equipmentType?: 'RENTAL' | 'SALE' | 'SERVICE'
   inventoryId?: string
   booqableId?: string
+  qrCode?: string
+  barcode?: string
+  createdAt?: string
 }
 
 interface Category {
@@ -39,6 +42,8 @@ const Inventory: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterCategory, setFilterCategory] = useState<string>('all')
   const [filterEquipmentType, setFilterEquipmentType] = useState<string>('all')
+  const [sortBy, setSortBy] = useState<'name' | 'date' | 'price'>('date')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   
   const [categoryOpen, setCategoryOpen] = useState(true)
   const [statusOpen, setStatusOpen] = useState(true)
@@ -59,10 +64,20 @@ const Inventory: React.FC = () => {
   const [scannerOpen, setScannerOpen] = useState(false)
   const [selectedEquipmentForQR, setSelectedEquipmentForQR] = useState<any>(null)
 
+  // Bulk operations states
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
+  const [showBulkToolbar, setShowBulkToolbar] = useState(false)
+  const [bulkLoading, setBulkLoading] = useState(false)
+
   useEffect(() => {
     fetchEquipment()
     fetchCategories()
   }, [])
+
+  // Update bulk toolbar visibility
+  useEffect(() => {
+    setShowBulkToolbar(selectedItems.size > 0)
+  }, [selectedItems])
 
   const fetchCategories = async () => {
     try {
@@ -111,6 +126,21 @@ const Inventory: React.FC = () => {
     const matchesEquipmentType = filterEquipmentType === 'all' || item.equipmentType === filterEquipmentType
     
     return matchesSearch && matchesStatus && matchesCategory && matchesEquipmentType
+  }).sort((a, b) => {
+    // Sorting logic
+    let comparison = 0
+    switch (sortBy) {
+      case 'name':
+        comparison = a.name.localeCompare(b.name)
+        break
+      case 'date':
+        comparison = new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
+        break
+      case 'price':
+        comparison = (a.dailyPrice || 0) - (b.dailyPrice || 0)
+        break
+    }
+    return sortOrder === 'asc' ? comparison : -comparison
   })
 
   const getStatusBadge = (status: string) => {
@@ -129,21 +159,6 @@ const Inventory: React.FC = () => {
         return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-800 rounded-full">Bozuk</span>
       default:
         return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-800 rounded-full">Bilinmiyor</span>
-    }
-  }
-
-  const _getEquipmentTypeBadge = (type?: string) => {
-    if (!type) return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-700 rounded-full">-</span>
-    
-    switch (type) {
-      case 'RENTAL':
-        return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-800 rounded-full">Kiralık</span>
-      case 'SALE':
-        return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-800 rounded-full">Satılık</span>
-      case 'SERVICE':
-        return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-800 rounded-full">Servis</span>
-      default:
-        return <span className="px-2 py-1 text-xs bg-neutral-100 text-neutral-700 rounded-full">-</span>
     }
   }
 
@@ -247,6 +262,87 @@ const Inventory: React.FC = () => {
     }
   }
 
+  // Bulk operations handlers
+  const toggleSelectAll = () => {
+    if (selectedItems.size === filteredEquipment.length) {
+      setSelectedItems(new Set())
+    } else {
+      setSelectedItems(new Set(filteredEquipment.map(e => e.id)))
+    }
+  }
+
+  const toggleSelectItem = (id: string) => {
+    const newSelected = new Set(selectedItems)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedItems(newSelected)
+  }
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`${selectedItems.size} ekipmanı silmek istediğinizden emin misiniz?`)) {
+      return
+    }
+
+    setBulkLoading(true)
+    try {
+      await Promise.all(
+        Array.from(selectedItems).map(id => deleteEquipment(id))
+      )
+      setSelectedItems(new Set())
+      await fetchEquipment()
+    } catch (error) {
+      console.error('Bulk delete error:', error)
+    } finally {
+      setBulkLoading(false)
+    }
+  }
+
+  const handleBulkCategoryChange = async (categoryId: string) => {
+    if (!window.confirm(`${selectedItems.size} ekipmanın kategorisini değiştirmek istediğinizden emin misiniz?`)) {
+      return
+    }
+
+    setBulkLoading(true)
+    try {
+      await Promise.all(
+        Array.from(selectedItems).map(id => 
+          api.put(`/equipment/${id}`, { category: categoryId })
+        )
+      )
+      setSelectedItems(new Set())
+      await fetchEquipment()
+    } catch (error) {
+      console.error('Bulk category change error:', error)
+    } finally {
+      setBulkLoading(false)
+    }
+  }
+
+  const handleBulkQRExport = () => {
+    const selectedEquipments = equipment.filter(e => selectedItems.has(e.id))
+    // Create a simple CSV with QR codes
+    const csv = [
+      ['ID', 'Name', 'QR Code', 'Barcode'],
+      ...selectedEquipments.map(e => [
+        e.id,
+        e.name,
+        e.qrCode || '',
+        e.barcode || ''
+      ])
+    ].map(row => row.join(',')).join('\n')
+
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `equipment-qr-codes-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
   if (loading && equipment.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -274,7 +370,7 @@ const Inventory: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      {/* Arama ve Ekipman Ekle Butonu */}
+      {/* Arama, Sıralama ve Ekipman Ekle Butonu */}
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -286,6 +382,27 @@ const Inventory: React.FC = () => {
             className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
           />
         </div>
+
+        {/* Sort Dropdown */}
+        <div className="relative">
+          <select
+            value={`${sortBy}-${sortOrder}`}
+            onChange={(e) => {
+              const [by, order] = e.target.value.split('-') as ['name' | 'date' | 'price', 'asc' | 'desc']
+              setSortBy(by)
+              setSortOrder(order)
+            }}
+            className="pl-4 pr-10 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent appearance-none bg-white cursor-pointer"
+          >
+            <option value="date-desc">En Yeni</option>
+            <option value="date-asc">En Eski</option>
+            <option value="name-asc">İsim (A-Z)</option>
+            <option value="name-desc">İsim (Z-A)</option>
+            <option value="price-asc">Fiyat (Düşük-Yüksek)</option>
+            <option value="price-desc">Fiyat (Yüksek-Düşük)</option>
+          </select>
+          <ArrowUpDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+        </div>
         
         <button
           onClick={handleAdd}
@@ -295,6 +412,54 @@ const Inventory: React.FC = () => {
           <span>Ekipman Ekle</span>
         </button>
       </div>
+
+      {/* Bulk Operations Toolbar */}
+      {showBulkToolbar && (
+        <div className="bg-neutral-900 text-white rounded-lg px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <span className="font-medium">{selectedItems.size} öğe seçildi</span>
+            <button
+              onClick={() => setSelectedItems(new Set())}
+              className="text-sm text-neutral-300 hover:text-white underline"
+            >
+              Seçimi Temizle
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              onChange={(e) => {
+                if (e.target.value) {
+                  handleBulkCategoryChange(e.target.value)
+                  e.target.value = ''
+                }
+              }}
+              disabled={bulkLoading}
+              className="px-4 py-1.5 bg-neutral-800 border border-neutral-700 rounded text-sm hover:bg-neutral-700 disabled:opacity-50"
+            >
+              <option value="">Kategori Değiştir</option>
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.name}>{cat.name}</option>
+              ))}
+            </select>
+            <button
+              onClick={handleBulkQRExport}
+              disabled={bulkLoading}
+              className="flex items-center gap-2 px-4 py-1.5 bg-neutral-800 border border-neutral-700 rounded text-sm hover:bg-neutral-700 disabled:opacity-50"
+            >
+              <Download size={16} />
+              QR Export
+            </button>
+            <button
+              onClick={handleBulkDelete}
+              disabled={bulkLoading}
+              className="flex items-center gap-2 px-4 py-1.5 bg-red-600 border border-red-700 rounded text-sm hover:bg-red-700 disabled:opacity-50"
+            >
+              <Trash2 size={16} />
+              Toplu Sil
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Ana İçerik: Sidebar ve Tablo */}
       <div className="flex gap-6">
@@ -546,6 +711,21 @@ const Inventory: React.FC = () => {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
+                  <th className="text-left py-3 px-4 w-10">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleSelectAll()
+                      }}
+                      className="p-1 hover:bg-gray-200 rounded transition-colors"
+                    >
+                      {selectedItems.size === filteredEquipment.length && filteredEquipment.length > 0 ? (
+                        <CheckSquare size={18} className="text-neutral-900" />
+                      ) : (
+                        <Square size={18} className="text-gray-400" />
+                      )}
+                    </button>
+                  </th>
                   <th className="text-left py-3 px-4 font-medium text-xs text-gray-700 uppercase tracking-wider">
                     Ekipman
                   </th>
@@ -570,9 +750,21 @@ const Inventory: React.FC = () => {
                 {filteredEquipment.map((item) => (
                   <tr 
                     key={item.id} 
-                    className="hover:bg-gray-50 cursor-pointer"
+                    className={`hover:bg-gray-50 cursor-pointer ${selectedItems.has(item.id) ? 'bg-blue-50' : ''}`}
                     onClick={() => navigate(`/inventory/${item.id}`)}
                   >
+                    <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={() => toggleSelectItem(item.id)}
+                        className="p-1 hover:bg-gray-200 rounded transition-colors"
+                      >
+                        {selectedItems.has(item.id) ? (
+                          <CheckSquare size={18} className="text-neutral-900" />
+                        ) : (
+                          <Square size={18} className="text-gray-400" />
+                        )}
+                      </button>
+                    </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
                         <div>
