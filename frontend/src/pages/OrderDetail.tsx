@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useNotification } from '../contexts/NotificationContext';
 import { 
   ArrowLeft, Calendar, User, Package, CreditCard, FileText, 
-  Tag, Clock, Edit, Trash2, Send, Download, CheckCircle, XCircle 
+  Tag, Clock, Edit, Trash2, Send, Download, CheckCircle, XCircle,
+  Check
 } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -241,11 +242,11 @@ export default function OrderDetail() {
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Ödeme işlemi başarısız oldu');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Ödeme işlemi başarısız oldu');
       }
 
-      const data = await response.json();
+      await response.json();
       showNotification('success', 'Ödeme başarıyla tamamlandı!');
       setShowPaymentModal(false);
       
@@ -291,6 +292,28 @@ export default function OrderDetail() {
 
   const tags = order.tags ? JSON.parse(order.tags) : [];
   const documents = order.documents ? JSON.parse(order.documents) : [];
+
+  // Status timeline steps
+  const statusSteps = [
+    { key: 'PENDING', label: 'Oluşturuldu', icon: FileText },
+    { key: 'CONFIRMED', label: 'Onaylandı', icon: CheckCircle },
+    { key: 'IN_PROGRESS', label: 'Teslim Edildi', icon: Package },
+    { key: 'COMPLETED', label: 'Tamamlandı', icon: Check }
+  ];
+
+  const getStatusIndex = (status: string) => {
+    const index = statusSteps.findIndex(s => s.key === status);
+    return index === -1 ? 0 : index;
+  };
+
+  const currentStatusIndex = getStatusIndex(order.status);
+
+  // Payment calculation
+  const totalAmount = order.totalAmount;
+  const paidAmount = order.paymentStatus === 'paid' ? totalAmount : 
+                     order.paymentStatus === 'partially_paid' ? totalAmount * 0.5 : 0;
+  const remainingAmount = totalAmount - paidAmount;
+  const paymentPercentage = (paidAmount / totalAmount) * 100;
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -371,7 +394,7 @@ export default function OrderDetail() {
                 Durumu Güncelle
               </button>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 mb-6">
               <div className="flex-1">
                 <p className="text-sm text-gray-500 mb-1">Sipariş Durumu</p>
                 <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}>
@@ -385,6 +408,127 @@ export default function OrderDetail() {
                 </span>
               </div>
             </div>
+
+            {/* Status Timeline */}
+            <div className="border-t pt-6">
+              <h3 className="text-sm font-semibold text-gray-700 mb-4">Sipariş Süreci</h3>
+              <div className="relative">
+                {statusSteps.map((step, index) => {
+                  const StepIcon = step.icon;
+                  const isCompleted = index <= currentStatusIndex;
+                  const isCurrent = index === currentStatusIndex;
+                  
+                  return (
+                    <div key={step.key} className="flex items-start mb-4 last:mb-0">
+                      {/* Line connector */}
+                      {index < statusSteps.length - 1 && (
+                        <div 
+                          className={`absolute left-6 top-12 w-0.5 h-16 ${
+                            isCompleted ? 'bg-green-500' : 'bg-gray-300'
+                          }`}
+                          style={{ marginTop: `${index * 80}px` }}
+                        />
+                      )}
+                      
+                      {/* Icon */}
+                      <div className={`relative z-10 flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center border-2 ${
+                        isCompleted 
+                          ? 'bg-green-500 border-green-500 text-white' 
+                          : 'bg-white border-gray-300 text-gray-400'
+                      }`}>
+                        <StepIcon size={20} />
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="ml-4 flex-1">
+                        <p className={`font-medium ${isCurrent ? 'text-green-600' : isCompleted ? 'text-gray-900' : 'text-gray-500'}`}>
+                          {step.label}
+                        </p>
+                        {isCurrent && (
+                          <p className="text-xs text-gray-500 mt-1">Şu anki durum</p>
+                        )}
+                        {isCompleted && !isCurrent && (
+                          <p className="text-xs text-gray-400 mt-1">Tamamlandı</p>
+                        )}
+                      </div>
+                      
+                      {/* Date */}
+                      {isCompleted && (
+                        <div className="text-right">
+                          <p className="text-xs text-gray-500">
+                            {new Date(order.updatedAt).toLocaleDateString('tr-TR')}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Progress Card */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <CreditCard className="w-5 h-5 text-gray-400" />
+              <h2 className="text-lg font-semibold">Ödeme Takibi</h2>
+            </div>
+            
+            {/* Payment Progress Bar */}
+            <div className="mb-6">
+              <div className="flex justify-between text-sm mb-2">
+                <span className="text-gray-600">Ödenen Tutar</span>
+                <span className="font-semibold text-green-600">£{paidAmount.toFixed(2)} / £{totalAmount.toFixed(2)}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div 
+                  className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(paymentPercentage, 100)}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>{paymentPercentage.toFixed(0)}% Tamamlandı</span>
+                {remainingAmount > 0 && <span>Kalan: £{remainingAmount.toFixed(2)}</span>}
+              </div>
+            </div>
+
+            {/* Payment Summary */}
+            <div className="space-y-3 border-t pt-4">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className={`w-3 h-3 rounded-full ${
+                    order.paymentStatus === 'paid' ? 'bg-green-500' : 
+                    order.paymentStatus === 'partially_paid' ? 'bg-yellow-500' : 
+                    'bg-red-500'
+                  }`}></div>
+                  <span className="text-sm text-gray-600">Toplam Tutar</span>
+                </div>
+                <span className="font-bold text-gray-900">£{totalAmount.toFixed(2)}</span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600 ml-5">Ödenen</span>
+                <span className="font-medium text-green-600">£{paidAmount.toFixed(2)}</span>
+              </div>
+              
+              {remainingAmount > 0 && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 ml-5">Kalan Bakiye</span>
+                  <span className="font-medium text-orange-600">£{remainingAmount.toFixed(2)}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Payment Action Button */}
+            {order.paymentStatus !== 'paid' && (
+              <button
+                onClick={() => setShowPaymentModal(true)}
+                className="w-full mt-4 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <CreditCard size={18} />
+                Ödeme Al (£{remainingAmount.toFixed(2)})
+              </button>
+            )}
           </div>
 
           {/* Customer Card */}
