@@ -2,11 +2,12 @@ import { useState } from 'react'
 import {
   FileText, Download, Upload, Edit3, Eye, Plus,
   FileCheck, DollarSign, Truck, Receipt, Wrench,
-  Briefcase, FileSignature, Printer, Save, X, Archive, Settings
+  Briefcase, FileSignature, Printer, Save, X, Archive, Settings, BarChart3
 } from 'lucide-react'
+import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard'
 
 type DocumentType = 'contract' | 'quote' | 'waybill' | 'invoice' | 'proforma' | 'service' | 'letterhead'
-type Tab = 'templates' | 'recent' | 'archived' | 'settings';
+type Tab = 'templates' | 'recent' | 'archived' | 'analytics' | 'settings';
 
 interface DocumentTemplate {
   id: string
@@ -27,6 +28,7 @@ export default function Documents() {
     { id: 'templates' as const, label: 'Şablonlar', icon: <FileText size={18} />, description: 'Döküman şablonları' },
     { id: 'recent' as const, label: 'Son Dökümanlar', icon: <FileCheck size={18} />, description: 'Son oluşturulanlar' },
     { id: 'archived' as const, label: 'Arşiv', icon: <Archive size={18} />, description: 'Arşivlenmiş dökümanlar' },
+    { id: 'analytics' as const, label: 'Analiz', icon: <BarChart3 size={18} />, description: 'Raporlar ve analizler' },
     { id: 'settings' as const, label: 'Ayarlar', icon: <Settings size={18} />, description: 'Döküman ayarları' },
   ];
 
@@ -334,6 +336,13 @@ export default function Documents() {
                   Arşivlenen dökümanlar burada görünecek
                 </p>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'analytics' && (
+            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+              <h2 className="text-xl font-bold text-neutral-900 mb-6">Raporlar ve Analizler</h2>
+              <AnalyticsDashboard />
             </div>
           )}
 
