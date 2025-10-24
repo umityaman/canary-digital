@@ -45,8 +45,8 @@ const Sidebar: React.FC = () => {
     { to: '/production', label: 'Yapım & Prodüksiyon', icon: Film },
     { to: '/tech-support', label: 'Teknik Destek', icon: HelpCircle },
     { to: '/technical-service', label: 'Teknik Servis', icon: Wrench },
+    { to: '/hr', label: 'İnsan Kaynakları', icon: Users },
     { to: '/settings', label: 'Ayarlar', icon: Settings },
-    { to: '/ai-chatbot', label: 'İnsan Kaynakları', icon: Users },
   ]
 
   return (

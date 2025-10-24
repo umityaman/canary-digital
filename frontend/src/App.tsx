@@ -56,6 +56,7 @@ import InspectionDetail from './pages/InspectionDetail'
 import Settings from './pages/Settings'
 import Pricing from './pages/Pricing'
 import Analytics from './pages/Analytics'
+import HumanResources from './pages/HumanResources'
 import FloatingChatWidget from './components/FloatingChatWidget'
 import FloatingToolsWidget from './components/FloatingToolsWidget'
 
@@ -123,6 +124,7 @@ export default function App(){
           <Route path='/production/settings' element={<ProductionSettings/>} />
           <Route path='/tech-support' element={<TechSupport/>} />
           <Route path='/technical-service' element={<TechnicalService/>} />
+          <Route path='/hr' element={<HumanResources/>} />
           <Route path='/admin' element={<Admin/>} />
           <Route path='/inspection' element={<Inspection/>} />
           <Route path='/inspection/new' element={<InspectionCreate/>} />
