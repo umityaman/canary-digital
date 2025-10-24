@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Plus, Edit, Trash2, Users, Mail, Phone, Building, Plug, MapPin, ShoppingBag, Calendar, Star } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, Users, Mail, Phone, Building, Plug } from 'lucide-react';
 import { useCustomerStore } from '../stores/customerStore';
 import CustomerModal, { CustomerFormData } from '../components/modals/CustomerModal';
 
@@ -9,7 +9,6 @@ const Customers: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerFormData | null>(null);
-  const viewMode = 'grid'; // Default view mode (can be extended later)
 
   useEffect(() => {
     fetchCustomers();
@@ -108,132 +107,6 @@ const Customers: React.FC = () => {
             >
               İlk müşterinizi ekleyin
             </button>
-          </div>
-        ) : viewMode === 'grid' ? (
-          /* Grid View - Modern Customer Cards */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {customers.map((customer) => (
-              <div 
-                key={customer.id} 
-                className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:border-neutral-300"
-              >
-                {/* Header with Avatar and Actions */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 h-12 w-12 bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-full flex items-center justify-center ring-2 ring-neutral-100">
-                      <span className="text-neutral-700 font-bold text-lg">
-                        {customer.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{customer.name}</h3>
-                      {customer.company && (
-                        <p className="text-sm text-gray-500 flex items-center gap-1">
-                          <Building size={12} />
-                          {customer.company}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEdit(customer)}
-                      className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-1.5 rounded-lg transition-colors"
-                      title="Düzenle"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(customer.id, customer.name)}
-                      className="text-red-600 hover:text-red-800 hover:bg-red-50 p-1.5 rounded-lg transition-colors"
-                      title="Sil"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Contact Info */}
-                <div className="space-y-2 mb-4">
-                  {customer.email && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Mail size={14} className="text-gray-400 flex-shrink-0" />
-                      <span className="truncate">{customer.email}</span>
-                    </div>
-                  )}
-                  {customer.phone && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Phone size={14} className="text-gray-400 flex-shrink-0" />
-                      <span>{customer.phone}</span>
-                    </div>
-                  )}
-                  {customer.address && (
-                    <div className="flex items-start gap-2 text-sm text-gray-600">
-                      <MapPin size={14} className="text-gray-400 flex-shrink-0 mt-0.5" />
-                      <span className="line-clamp-2">{customer.address}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Stats Row */}
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-gradient-to-br from-neutral-50 to-gray-50 rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-neutral-600 mb-1">
-                      <ShoppingBag size={14} />
-                      <span className="text-xs font-medium">Siparişler</span>
-                    </div>
-                    <p className="text-xl font-bold text-neutral-900">
-                      {customer.orders?.length || 0}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-blue-600 mb-1">
-                      <Star size={14} />
-                      <span className="text-xs font-medium">Puan</span>
-                    </div>
-                    <p className="text-xl font-bold text-blue-700">
-                      5.0
-                    </p>
-                  </div>
-                </div>
-
-                {/* Tags/Badges */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {customer.booqableId && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-                      <Plug size={10} />
-                      Booqable
-                    </span>
-                  )}
-                  {customer.taxNumber && (
-                    <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
-                      VN: {customer.taxNumber}
-                    </span>
-                  )}
-                  {customer.createdAt && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">
-                      <Calendar size={10} />
-                      {new Date(customer.createdAt).toLocaleDateString('tr-TR', { month: 'short', year: 'numeric' })}
-                    </span>
-                  )}
-                </div>
-
-                {/* Quick Actions */}
-                <div className="flex gap-2 pt-3 border-t border-gray-100">
-                  <button 
-                    onClick={() => handleEdit(customer)}
-                    className="flex-1 text-center py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors"
-                  >
-                    Detaylar
-                  </button>
-                  <button 
-                    className="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  >
-                    Sipariş Oluştur
-                  </button>
-                </div>
-              </div>
-            ))}
           </div>
         ) : (
           <div className="overflow-x-auto">
