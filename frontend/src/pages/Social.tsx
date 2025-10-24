@@ -2,15 +2,16 @@ import { useState } from 'react'
 import {
   Calendar, BarChart3, MessageCircle, Megaphone, 
   Ear, Image, Users, Clock, TrendingUp, Target,
-  Send, CheckCircle, Edit3, Zap
+  Send, CheckCircle, Edit3, Zap, Briefcase, Play
 } from 'lucide-react'
 
-type Tab = 'planning' | 'analytics' | 'community' | 'ads' | 'listening' | 'design' | 'team'
+type Tab = 'planning' | 'analytics' | 'community' | 'ads' | 'listening' | 'design' | 'team' | 'accounts'
 
 export default function Social() {
   const [activeTab, setActiveTab] = useState<Tab>('planning')
 
   const tabs = [
+    { id: 'accounts' as const, label: 'Hesaplar', icon: <Users size={18} />, description: 'Sosyal medya hesapları' },
     { id: 'planning' as const, label: 'Planlama ve Otomasyon', icon: <Calendar size={18} />, description: 'Gönderileri planla ve otomatikleştir' },
     { id: 'analytics' as const, label: 'Analiz ve Raporlama', icon: <BarChart3 size={18} />, description: 'Performans ve etkileşim analizi' },
     { id: 'community' as const, label: 'Topluluk Yönetimi', icon: <MessageCircle size={18} />, description: 'Etkileşim ve mesaj yönetimi' },
@@ -97,6 +98,212 @@ export default function Social() {
 
           {/* Content Area */}
           <div className="flex-1 p-6">
+            {/* Accounts Tab */}
+            {activeTab === 'accounts' && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-xl font-semibold text-neutral-900 tracking-tight mb-2">Sosyal Medya Hesapları</h2>
+                  <p className="text-neutral-600 mb-6">
+                    Tüm sosyal medya hesaplarınızı tek yerden yönetin ve bağlantılarını kontrol edin.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Instagram */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-xl flex items-center justify-center">
+                          <Image className="text-white" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-neutral-900">Instagram</h3>
+                          <p className="text-sm text-neutral-600">@canary_digital</p>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-lg">
+                        Bağlı
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
+                      <div className="flex items-center justify-between">
+                        <span>Takipçi:</span>
+                        <span className="font-medium text-neutral-900">24.5K</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Gönderi:</span>
+                        <span className="font-medium text-neutral-900">348</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Etkileşim Oranı:</span>
+                        <span className="font-medium text-neutral-900">4.2%</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
+                        Yönet
+                      </button>
+                      <button className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors text-sm">
+                        Bağlantıyı Kes
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Facebook */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                          <Users className="text-white" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-neutral-900">Facebook</h3>
+                          <p className="text-sm text-neutral-600">Canary Digital</p>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-lg">
+                        Bağlı
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
+                      <div className="flex items-center justify-between">
+                        <span>Beğeni:</span>
+                        <span className="font-medium text-neutral-900">12.8K</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Gönderi:</span>
+                        <span className="font-medium text-neutral-900">521</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Erişim:</span>
+                        <span className="font-medium text-neutral-900">45K/ay</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
+                        Yönet
+                      </button>
+                      <button className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors text-sm">
+                        Bağlantıyı Kes
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Twitter/X */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                          <MessageCircle className="text-white" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-neutral-900">X (Twitter)</h3>
+                          <p className="text-sm text-neutral-600">@canarydigital</p>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-lg">
+                        Bağlı
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
+                      <div className="flex items-center justify-between">
+                        <span>Takipçi:</span>
+                        <span className="font-medium text-neutral-900">8.2K</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Tweet:</span>
+                        <span className="font-medium text-neutral-900">1,245</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Etkileşim:</span>
+                        <span className="font-medium text-neutral-900">3.8K/ay</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
+                        Yönet
+                      </button>
+                      <button className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors text-sm">
+                        Bağlantıyı Kes
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* LinkedIn */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-blue-700 rounded-xl flex items-center justify-center">
+                          <Briefcase className="text-white" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-neutral-900">LinkedIn</h3>
+                          <p className="text-sm text-neutral-600">Canary Digital</p>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-lg">
+                        Bağlı Değil
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
+                      <p>LinkedIn hesabınızı bağlayarak profesyonel ağınıza kolayca içerik paylaşabilirsiniz.</p>
+                    </div>
+                    <button className="w-full px-4 py-2 bg-blue-700 text-white rounded-xl hover:bg-blue-800 transition-colors text-sm">
+                      Hesap Bağla
+                    </button>
+                  </div>
+
+                  {/* TikTok */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                          <Zap className="text-white" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-neutral-900">TikTok</h3>
+                          <p className="text-sm text-neutral-600">@canarydigital</p>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-lg">
+                        Bağlı Değil
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
+                      <p>TikTok hesabınızı bağlayarak video içeriklerinizi kolayca yönetin.</p>
+                    </div>
+                    <button className="w-full px-4 py-2 bg-black text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
+                      Hesap Bağla
+                    </button>
+                  </div>
+
+                  {/* YouTube */}
+                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
+                          <Play className="text-white" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-neutral-900">YouTube</h3>
+                          <p className="text-sm text-neutral-600">Canary Digital</p>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-lg">
+                        Bağlı Değil
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
+                      <p>YouTube kanalınızı bağlayarak video içeriklerinizi paylaşın.</p>
+                    </div>
+                    <button className="w-full px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors text-sm">
+                      Kanal Bağla
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Planning Tab */}
             {activeTab === 'planning' && (
               <div className="space-y-6">
