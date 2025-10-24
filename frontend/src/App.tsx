@@ -13,9 +13,9 @@ import NewOrder from './pages/NewOrder'
 import OrderDetail from './pages/OrderDetail'
 import Inventory from './pages/Inventory'
 import NewEquipment from './pages/NewEquipment'
-import Equipment from './pages/Equipment'
 import EquipmentDetail from './pages/EquipmentDetail'
 import Customers from './pages/Customers'
+import CustomerCreate from './pages/CustomerCreate'
 import Calendar from './pages/Calendar'
 import Documents from './pages/Documents'
 import Suppliers from './pages/Suppliers'
@@ -89,6 +89,7 @@ export default function App(){
           <Route path='/inventory/new' element={<NewEquipment/>} />
           <Route path='/inventory/:id' element={<EquipmentDetail/>} />
           <Route path='/customers' element={<Customers/>} />
+          <Route path='/customers/create' element={<CustomerCreate/>} />
           <Route path='/calendar' element={<Calendar/>} />
           <Route path='/documents' element={<Documents/>} />
           <Route path='/suppliers' element={<Suppliers/>} />

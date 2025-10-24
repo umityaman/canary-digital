@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Edit, Trash2, Users, Mail, Phone, Building, Plug } from 'lucide-react';
 import { useCustomerStore } from '../stores/customerStore';
 import CustomerModal, { CustomerFormData } from '../components/modals/CustomerModal';
 
 const Customers: React.FC = () => {
+  const navigate = useNavigate();
   const { customers, loading, error, fetchCustomers, createCustomer, updateCustomer, deleteCustomer } = useCustomerStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,9 +22,7 @@ const Customers: React.FC = () => {
   };
 
   const handleAdd = () => {
-    setSelectedCustomer(null);
-    setModalMode('create');
-    setModalOpen(true);
+    navigate('/customers/create');
   };
 
   const handleEdit = (customer: any) => {
