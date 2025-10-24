@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   Users, UserPlus, Calendar, DollarSign, 
-  TrendingUp, GraduationCap, FileText, CheckCircle
+  TrendingUp, GraduationCap, FileText, CheckCircle, FolderOpen, Award, BarChart3
 } from 'lucide-react'
 import PersonnelManagement from './hr/PersonnelManagement'
 import RecruitmentManagement from './hr/RecruitmentManagement'
@@ -9,8 +9,11 @@ import LeaveManagement from './hr/LeaveManagement'
 import PayrollManagement from './hr/PayrollManagement'
 import PerformanceManagement from './hr/PerformanceManagement'
 import TrainingManagement from './hr/TrainingManagement'
+import DocumentManagement from './hr/DocumentManagement'
+import CareerManagement from './hr/CareerManagement'
+import HRReports from './hr/HRReports'
 
-type Tab = 'personnel' | 'recruitment' | 'leave' | 'payroll' | 'performance' | 'training' | 'reports'
+type Tab = 'personnel' | 'recruitment' | 'leave' | 'payroll' | 'performance' | 'training' | 'documents' | 'career' | 'reports'
 
 export default function HumanResources() {
   const [activeTab, setActiveTab] = useState<Tab>('personnel')
@@ -22,7 +25,9 @@ export default function HumanResources() {
     { id: 'payroll' as const, label: 'Bordro', icon: <DollarSign size={18} />, description: 'Maaş ve ödemeler' },
     { id: 'performance' as const, label: 'Performans', icon: <TrendingUp size={18} />, description: 'Değerlendirme ve hedefler' },
     { id: 'training' as const, label: 'Eğitim', icon: <GraduationCap size={18} />, description: 'Eğitim programları ve sertifikalar' },
-    { id: 'reports' as const, label: 'Raporlar', icon: <FileText size={18} />, description: 'Analiz ve istatistikler' },
+    { id: 'documents' as const, label: 'Özlük İşleri', icon: <FolderOpen size={18} />, description: 'Sözleşme ve doküman yönetimi' },
+    { id: 'career' as const, label: 'Kariyer', icon: <Award size={18} />, description: 'Terfi ve yedekleme planları' },
+    { id: 'reports' as const, label: 'Raporlar', icon: <BarChart3 size={18} />, description: 'Analiz ve istatistikler' },
   ]
 
   return (
@@ -121,170 +126,11 @@ export default function HumanResources() {
             {activeTab === 'training' && <TrainingManagement />}
 
             {/* Reports Tab */}
-            {activeTab === 'reports' && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-semibold text-neutral-900 tracking-tight mb-2">İK Raporları ve Analizler</h2>
-                  <p className="text-neutral-600 mb-6">
-                    Personel, performans ve bordro raporlarını görüntüleyin ve analiz edin.
-                  </p>
-                </div>
+            {activeTab === 'reports' && <HRReports />}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Personnel Report */}
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                          <Users className="text-blue-700" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-neutral-900">Personel Raporu</h3>
-                          <p className="text-sm text-neutral-600">Çalışan istatistikleri</p>
-                        </div>
-                      </div>
-                      <CheckCircle className="text-green-500" size={20} />
-                    </div>
-                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
-                      <div className="flex items-center justify-between">
-                        <span>Toplam Çalışan:</span>
-                        <span className="font-medium text-neutral-900">248</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Yeni İşe Alımlar:</span>
-                        <span className="font-medium text-neutral-900">12</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Ayrılanlar:</span>
-                        <span className="font-medium text-neutral-900">3</span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
-                        Detaylı Rapor
-                      </button>
-                      <button className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors text-sm">
-                        İndir
-                      </button>
-                    </div>
-                  </div>
+            {activeTab === 'documents' && <DocumentManagement />}
 
-                  {/* Performance Report */}
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                          <TrendingUp className="text-green-700" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-neutral-900">Performans Raporu</h3>
-                          <p className="text-sm text-neutral-600">Değerlendirme sonuçları</p>
-                        </div>
-                      </div>
-                      <CheckCircle className="text-green-500" size={20} />
-                    </div>
-                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
-                      <div className="flex items-center justify-between">
-                        <span>Ortalama Puan:</span>
-                        <span className="font-medium text-neutral-900">4.2/5.0</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Tamamlanan:</span>
-                        <span className="font-medium text-neutral-900">186</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Bekleyen:</span>
-                        <span className="font-medium text-neutral-900">62</span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
-                        Detaylı Rapor
-                      </button>
-                      <button className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors text-sm">
-                        İndir
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Payroll Report */}
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                          <DollarSign className="text-purple-700" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-neutral-900">Bordro Raporu</h3>
-                          <p className="text-sm text-neutral-600">Maaş ödemeleri</p>
-                        </div>
-                      </div>
-                      <CheckCircle className="text-green-500" size={20} />
-                    </div>
-                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
-                      <div className="flex items-center justify-between">
-                        <span>Bu Ay Toplam:</span>
-                        <span className="font-medium text-neutral-900">₺486.250</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Ödenen:</span>
-                        <span className="font-medium text-neutral-900">₺486.250</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Bekleyen:</span>
-                        <span className="font-medium text-neutral-900">₺0</span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
-                        Detaylı Rapor
-                      </button>
-                      <button className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors text-sm">
-                        İndir
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Training Report */}
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                          <GraduationCap className="text-orange-700" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-neutral-900">Eğitim Raporu</h3>
-                          <p className="text-sm text-neutral-600">Tamamlanan eğitimler</p>
-                        </div>
-                      </div>
-                      <CheckCircle className="text-green-500" size={20} />
-                    </div>
-                    <div className="space-y-2 text-sm text-neutral-600 mb-4">
-                      <div className="flex items-center justify-between">
-                        <span>Toplam Eğitim:</span>
-                        <span className="font-medium text-neutral-900">24</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Katılımcı:</span>
-                        <span className="font-medium text-neutral-900">186</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Tamamlanan:</span>
-                        <span className="font-medium text-neutral-900">142</span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
-                        Detaylı Rapor
-                      </button>
-                      <button className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors text-sm">
-                        İndir
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            {activeTab === 'career' && <CareerManagement />}
           </div>
         </div>
       </div>
