@@ -2,10 +2,11 @@ import { useState } from 'react'
 import {
   FileText, Download, Upload, Edit3, Eye, Plus,
   FileCheck, DollarSign, Truck, Receipt, Wrench,
-  Briefcase, FileSignature, Printer, Save, X
+  Briefcase, FileSignature, Printer, Save, X, Archive, Settings
 } from 'lucide-react'
 
 type DocumentType = 'contract' | 'quote' | 'waybill' | 'invoice' | 'proforma' | 'service' | 'letterhead'
+type Tab = 'templates' | 'recent' | 'archived' | 'settings';
 
 interface DocumentTemplate {
   id: string
@@ -20,6 +21,14 @@ interface DocumentTemplate {
 export default function Documents() {
   const [selectedDoc, setSelectedDoc] = useState<DocumentType | null>(null)
   const [showEditor, setShowEditor] = useState(false)
+  const [activeTab, setActiveTab] = useState<Tab>('templates');
+
+  const tabs = [
+    { id: 'templates' as const, label: 'Şablonlar', icon: <FileText size={18} />, description: 'Döküman şablonları' },
+    { id: 'recent' as const, label: 'Son Dökümanlar', icon: <FileCheck size={18} />, description: 'Son oluşturulanlar' },
+    { id: 'archived' as const, label: 'Arşiv', icon: <Archive size={18} />, description: 'Arşivlenmiş dökümanlar' },
+    { id: 'settings' as const, label: 'Ayarlar', icon: <Settings size={18} />, description: 'Döküman ayarları' },
+  ];
 
   const templates: DocumentTemplate[] = [
     {
@@ -145,17 +154,50 @@ export default function Documents() {
         </div>
       </div>
 
-      {/* Document Templates Grid */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-neutral-900 tracking-tight">Döküman Şablonları</h2>
-          <button className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors">
-            <Plus size={18} />
-            <span>Özel Şablon</span>
-          </button>
-        </div>
+      {/* Tab Navigation + Content */}
+      <div className="flex gap-6">
+        {/* Vertical Sidebar */}
+        <nav className="w-64 flex-shrink-0">
+          <div className="bg-white rounded-2xl border border-neutral-200 p-3 space-y-2">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`w-full text-left p-3 rounded-xl transition-all ${
+                  activeTab === tab.id
+                    ? 'bg-neutral-900 text-white'
+                    : 'hover:bg-neutral-50 text-neutral-700'
+                }`}
+              >
+                <div className="flex items-center gap-3 mb-1">
+                  {tab.icon}
+                  <span className="font-medium">{tab.label}</span>
+                </div>
+                <p
+                  className={`text-xs ml-7 ${
+                    activeTab === tab.id ? 'text-neutral-300' : 'text-neutral-500'
+                  }`}
+                >
+                  {tab.description}
+                </p>
+              </button>
+            ))}
+          </div>
+        </nav>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Content Area */}
+        <div className="flex-1">
+          {activeTab === 'templates' && (
+            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-neutral-900 tracking-tight">Döküman Şablonları</h2>
+                <button className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors">
+                  <Plus size={18} />
+                  <span>Özel Şablon</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {templates.map((template) => (
             <div key={template.id} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-4">
@@ -206,20 +248,21 @@ export default function Documents() {
               </div>
             </div>
           ))}
-        </div>
-      </div>
+              </div>
+            </div>
+          )}
 
-      {/* Recent Documents */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-neutral-900 tracking-tight">Son Dökümanlar</h2>
-          <button className="text-neutral-700 hover:text-neutral-900 text-sm font-medium">
-            Tümünü Gör →
-          </button>
-        </div>
+          {activeTab === 'recent' && (
+            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-neutral-900 tracking-tight">Son Dökümanlar</h2>
+                <button className="text-neutral-700 hover:text-neutral-900 text-sm font-medium">
+                  Tümünü Gör →
+                </button>
+              </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
+              <div className="overflow-x-auto">
+                <table className="w-full">
             <thead>
               <tr className="border-b border-neutral-200">
                 <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Döküman</th>
@@ -275,8 +318,84 @@ export default function Documents() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          )}
+
+          {activeTab === 'archived' && (
+            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+              <h2 className="text-xl font-bold text-neutral-900 mb-6">Arşivlenmiş Dökümanlar</h2>
+              <div className="text-center py-12">
+                <Archive className="mx-auto text-neutral-300 mb-4" size={48} />
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">Henüz arşivlenmiş döküman yok</h3>
+                <p className="text-neutral-600">
+                  Arşivlenen dökümanlar burada görünecek
+                </p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+              <h2 className="text-xl font-bold text-neutral-900 mb-6">Döküman Ayarları</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-neutral-900 mb-3">Şirket Bilgileri</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Şirket Adı</label>
+                      <input type="text" className="w-full px-4 py-2 border border-neutral-300 rounded-xl" placeholder="Canary Digital" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Vergi No</label>
+                      <input type="text" className="w-full px-4 py-2 border border-neutral-300 rounded-xl" placeholder="1234567890" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Telefon</label>
+                      <input type="text" className="w-full px-4 py-2 border border-neutral-300 rounded-xl" placeholder="+90 (555) 123 45 67" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">E-posta</label>
+                      <input type="email" className="w-full px-4 py-2 border border-neutral-300 rounded-xl" placeholder="info@canary.com" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Adres</label>
+                      <textarea className="w-full px-4 py-2 border border-neutral-300 rounded-xl" rows={3} placeholder="Şirket adresi..."></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-neutral-200 pt-6">
+                  <h3 className="font-semibold text-neutral-900 mb-3">Logo & Antet Ayarları</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Şirket Logosu</label>
+                      <button className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors">
+                        <Upload size={18} />
+                        <span>Logo Yükle</span>
+                      </button>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">Antet Şablonu</label>
+                      <button className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors">
+                        <Upload size={18} />
+                        <span>Şablon Yükle</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-neutral-200 pt-6">
+                  <button className="px-6 py-3 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors">
+                    <Save className="inline mr-2" size={18} />
+                    Ayarları Kaydet
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
