@@ -275,8 +275,8 @@ const Inventory: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Arama ve Ekipman Ekle Butonu */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-2xl">
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <input
             type="text"
@@ -460,34 +460,48 @@ const Inventory: React.FC = () => {
       </div>
 
       <div className="flex-1 space-y-4">
-        {/* Stats Cards */}
-        {showMetrics && (
-          <div className="grid grid-cols-4 gap-4">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <div className="text-sm text-gray-600 mb-1">Toplam Ekipman</div>
-              <div className="text-3xl font-bold text-gray-900">{stats.total}</div>
-            </div>
-            
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <div className="text-sm text-gray-600 mb-1">Kirada</div>
-              <div className="text-3xl font-bold text-gray-900">{stats.rented}</div>
-            </div>
-            
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <div className="text-sm text-gray-600 mb-1">Kayıp</div>
-              <div className="text-3xl font-bold text-gray-900">{stats.lost}</div>
-            </div>
-            
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <div className="text-sm text-gray-600 mb-1">Bakımda</div>
-              <div className="text-3xl font-bold text-gray-900">{stats.maintenance}</div>
-            </div>
+        {/* Stats Cards with Metrikleri Gizle Button */}
+        <div className="space-y-4">
+          {/* Metrikleri Gizle Button */}
+          <div className="flex justify-end">
+            <button 
+              onClick={() => setShowMetrics(!showMetrics)}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+            >
+              <span>{showMetrics ? 'Metrikleri Gizle' : 'Metrikleri Göster'}</span>
+              <span>{showMetrics ? '⌃' : '⌄'}</span>
+            </button>
           </div>
-        )}
+
+          {/* Stats Cards */}
+          {showMetrics && (
+            <div className="grid grid-cols-4 gap-4">
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="text-sm text-gray-600 mb-1">Toplam Ekipman</div>
+                <div className="text-3xl font-bold text-gray-900">{stats.total}</div>
+              </div>
+              
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="text-sm text-gray-600 mb-1">Kirada</div>
+                <div className="text-3xl font-bold text-gray-900">{stats.rented}</div>
+              </div>
+              
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="text-sm text-gray-600 mb-1">Kayıp</div>
+                <div className="text-3xl font-bold text-gray-900">{stats.lost}</div>
+              </div>
+              
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="text-sm text-gray-600 mb-1">Bakımda</div>
+                <div className="text-3xl font-bold text-gray-900">{stats.maintenance}</div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Tabs */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+          <div className="border-b border-gray-200 px-6 py-3">
             <div className="flex gap-6">
               <button className="pb-3 border-b-2 border-blue-600 text-blue-600 font-medium text-sm">
                 Ekipmanlar
@@ -499,13 +513,6 @@ const Inventory: React.FC = () => {
                 Paketler
               </button>
             </div>
-            
-            <button 
-              onClick={() => setShowMetrics(!showMetrics)}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              Metrikleri {showMetrics ? 'Gizle' : 'Göster'} {showMetrics ? '⌃' : '⌄'}
-            </button>
           </div>
 
         {/* Content Area */}
