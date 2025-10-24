@@ -5,7 +5,7 @@ import {
   FileText, Truck, Calculator, Share2, Globe, 
   CheckSquare, MessageSquare, Video, Wrench, 
   Headphones, Film, HelpCircle, Settings, Shield,
-  ChevronLeft, ChevronRight, ClipboardCheck, BarChart3
+  ChevronLeft, ChevronRight, ClipboardCheck
 } from 'lucide-react'
 
 const Sidebar: React.FC = () => {
@@ -31,7 +31,6 @@ const Sidebar: React.FC = () => {
     { to: '/inventory', label: 'Envanter', icon: Package },
     { to: '/inspection', label: 'Kalite Kontrol', icon: ClipboardCheck },
     { to: '/customers', label: 'Müşteriler', icon: Users },
-    { to: '/analytics', label: 'Analiz & Raporlar', icon: BarChart3 },
     { to: '/calendar', label: 'Takvim', icon: Calendar },
     { to: '/documents', label: 'Dökümanlar', icon: FileText },
     { to: '/suppliers', label: 'Tedarikçiler', icon: Truck },
