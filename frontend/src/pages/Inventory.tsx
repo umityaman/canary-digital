@@ -43,6 +43,7 @@ const Inventory: React.FC = () => {
   const [categoryOpen, setCategoryOpen] = useState(true)
   const [statusOpen, setStatusOpen] = useState(true)
   const [equipmentTypeOpen, setEquipmentTypeOpen] = useState(true)
+  const [showMetrics, setShowMetrics] = useState(true)
   
   const [modalOpen, setModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create')
@@ -89,6 +90,15 @@ const Inventory: React.FC = () => {
     { value: 'SALE', label: 'Satılık' },
     { value: 'SERVICE', label: 'Servis' }
   ]
+
+  // Calculate stats from equipment data
+  const stats = {
+    total: equipment.length,
+    available: equipment.filter(e => e.status === 'AVAILABLE').length,
+    rented: equipment.filter(e => e.status === 'RENTED').length,
+    maintenance: equipment.filter(e => e.status === 'MAINTENANCE').length,
+    lost: equipment.filter(e => e.status === 'LOST').length
+  }
 
   const filteredEquipment = equipment.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -450,20 +460,56 @@ const Inventory: React.FC = () => {
       </div>
 
       <div className="flex-1 space-y-4">
-        <div className="border-b border-gray-200">
-          <div className="flex space-x-8">
-            <button className="pb-3 border-b-2 border-neutral-900 font-medium text-sm">
-              Ekipmanlar
-            </button>
-            <button className="pb-3 border-b-2 border-transparent text-gray-600 hover:text-gray-900 font-medium text-sm">
-              Koleksiyonlar
-            </button>
-            <button className="pb-3 border-b-2 border-transparent text-gray-600 hover:text-gray-900 font-medium text-sm">
-              Paketler
+        {/* Stats Cards */}
+        {showMetrics && (
+          <div className="grid grid-cols-4 gap-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="text-sm text-gray-600 mb-1">Toplam Ekipman</div>
+              <div className="text-3xl font-bold text-gray-900">{stats.total}</div>
+            </div>
+            
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="text-sm text-gray-600 mb-1">Kirada</div>
+              <div className="text-3xl font-bold text-gray-900">{stats.rented}</div>
+            </div>
+            
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="text-sm text-gray-600 mb-1">Kayıp</div>
+              <div className="text-3xl font-bold text-gray-900">{stats.lost}</div>
+            </div>
+            
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="text-sm text-gray-600 mb-1">Bakımda</div>
+              <div className="text-3xl font-bold text-gray-900">{stats.maintenance}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Tabs */}
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+            <div className="flex gap-6">
+              <button className="pb-3 border-b-2 border-blue-600 text-blue-600 font-medium text-sm">
+                Ekipmanlar
+              </button>
+              <button className="pb-3 border-b-2 border-transparent text-gray-600 hover:text-gray-900 font-medium text-sm">
+                Koleksiyonlar
+              </button>
+              <button className="pb-3 border-b-2 border-transparent text-gray-600 hover:text-gray-900 font-medium text-sm">
+                Paketler
+              </button>
+            </div>
+            
+            <button 
+              onClick={() => setShowMetrics(!showMetrics)}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Metrikleri {showMetrics ? 'Gizle' : 'Göster'} {showMetrics ? '⌃' : '⌄'}
             </button>
           </div>
-        </div>
 
+        {/* Content Area */}
+        <div className="p-4">
         {filteredEquipment.length === 0 ? (
           <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
             <div className="flex flex-col items-center">
@@ -587,6 +633,8 @@ const Inventory: React.FC = () => {
             </table>
           </div>
         )}
+        </div>
+      </div>
       </div>
       </div>
 
