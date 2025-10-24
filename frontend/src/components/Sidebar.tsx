@@ -4,7 +4,7 @@ import {
   Home, User, ShoppingCart, Package, Users, Calendar, 
   FileText, Truck, Calculator, Share2, Globe, 
   CheckSquare, MessageSquare, Video, Wrench, 
-  Headphones, Film, HelpCircle, Settings, Shield,
+  Headphones, Film, HelpCircle, Settings,
   ChevronLeft, ChevronRight, ClipboardCheck
 } from 'lucide-react'
 
@@ -46,7 +46,6 @@ const Sidebar: React.FC = () => {
     { to: '/tech-support', label: 'Teknik Destek', icon: HelpCircle },
     { to: '/technical-service', label: 'Teknik Servis', icon: Wrench },
     { to: '/settings', label: 'Ayarlar', icon: Settings },
-    { to: '/admin', label: 'Admin Paneli', icon: Shield },
     { to: '/ai-chatbot', label: 'İnsan Kaynakları', icon: Users },
   ]
 
