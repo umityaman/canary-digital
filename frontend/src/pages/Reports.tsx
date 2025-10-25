@@ -13,6 +13,7 @@ import {
   BarChart3,
   FileCheck
 } from 'lucide-react';
+import Layout from '../components/Layout';
 import api from '../utils/api';
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard';
 
@@ -130,17 +131,20 @@ const Reports = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-indigo-600" />
-          <p className="text-gray-600">Loading report templates...</p>
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-indigo-600" />
+            <p className="text-gray-600">Loading report templates...</p>
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <Layout>
+      <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -349,7 +353,8 @@ const Reports = () => {
       )}
         </>
       )}
-    </div>
+      </div>
+    </Layout>
   );
 };
 
