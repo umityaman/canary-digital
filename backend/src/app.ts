@@ -171,6 +171,7 @@ safeLoadRoute('/api/inspections', './routes/inspections', 'Inspections');
 safeLoadRoute('/api/calendar', './routes/calendar', 'Calendar');
 safeLoadRoute('/api/technical-service', './routes/technicalService', 'Technical Service');
 safeLoadRoute('/api/test', './routes/test', 'Test endpoints');
+safeLoadRoute('/api/test-reports', './routes/test-reports', 'Report testing');
 safeLoadRoute('/api/test-email', './routes/email-test', 'Email testing');
 safeLoadRoute('/api/test-whatsapp', './routes/whatsapp-test', 'WhatsApp testing');
 safeLoadRoute('/api/profile', './routes/profile', 'Profile');
