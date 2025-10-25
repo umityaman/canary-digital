@@ -6,6 +6,125 @@ import { log } from '../config/logger';
 const router = express.Router();
 
 /**
+ * @route   GET /api/invoices
+ * @desc    Tüm faturaları listele (pagination, filtering, search)
+ * @access  Private
+ * @query   status, type, search, page, limit, sortBy, sortOrder
+ */
+router.get('/', authenticateToken, async (req, res) => {
+  try {
+    const {
+      status,
+      type,
+      search,
+      page = '1',
+      limit = '20',
+      sortBy = 'invoiceDate',
+      sortOrder = 'desc',
+    } = req.query;
+
+    // Build where clause
+    const where: any = {};
+
+    if (status) {
+      where.status = status as string;
+    }
+
+    if (type) {
+      where.type = type as string;
+    }
+
+    if (search) {
+      // Search in invoice number or customer name
+      where.OR = [
+        {
+          invoiceNumber: {
+            contains: search as string,
+            mode: 'insensitive',
+          },
+        },
+        {
+          customer: {
+            fullName: {
+              contains: search as string,
+              mode: 'insensitive',
+            },
+          },
+        },
+      ];
+    }
+
+    // Pagination
+    const pageNum = parseInt(page as string);
+    const limitNum = parseInt(limit as string);
+    const skip = (pageNum - 1) * limitNum;
+
+    // Get invoices with pagination
+    const { prisma } = require('../index');
+    const [invoices, total] = await Promise.all([
+      prisma.invoice.findMany({
+        where,
+        include: {
+          customer: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phone: true,
+              taxNumber: true,
+            },
+          },
+          order: {
+            select: {
+              id: true,
+              equipment: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          payments: {
+            select: {
+              id: true,
+              amount: true,
+              paymentDate: true,
+              paymentMethod: true,
+            },
+          },
+        },
+        orderBy: {
+          [sortBy as string]: sortOrder as string,
+        },
+        skip,
+        take: limitNum,
+      }),
+      prisma.invoice.count({ where }),
+    ]);
+
+    const totalPages = Math.ceil(total / limitNum);
+
+    res.json({
+      success: true,
+      data: invoices,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        totalPages,
+        hasMore: pageNum < totalPages,
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to get invoices:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get invoices',
+    });
+  }
+});
+
+/**
  * @route   POST /api/invoices/rental
  * @desc    Kiralama için fatura oluştur
  * @access  Private
