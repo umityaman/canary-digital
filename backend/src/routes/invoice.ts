@@ -77,9 +77,14 @@ router.get('/', authenticateToken, async (req, res) => {
           order: {
             select: {
               id: true,
-              equipment: {
+              orderNumber: true,
+              orderItems: {
                 select: {
-                  name: true,
+                  equipment: {
+                    select: {
+                      name: true,
+                    },
+                  },
                 },
               },
             },

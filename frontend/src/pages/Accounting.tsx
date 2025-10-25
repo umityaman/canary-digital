@@ -43,9 +43,12 @@ interface Invoice {
   }
   order?: {
     id: number
-    equipment: {
-      name: string
-    }
+    orderNumber?: string
+    orderItems?: Array<{
+      equipment: {
+        name: string
+      }
+    }>
   }
   payments: Array<{
     id: number
@@ -125,11 +128,14 @@ export default function Accounting() {
   const loadStats = async () => {
     try {
       setLoading(true)
+      console.log('🔍 Loading accounting stats...')
       const response = await accountingAPI.getStats()
+      console.log('✅ Stats response:', response.data)
       setStats(response.data.data)
     } catch (error: any) {
-      console.error('Failed to load accounting stats:', error)
-      toast.error('İstatistikler yüklenemedi')
+      console.error('❌ Failed to load accounting stats:', error)
+      console.error('Error details:', error.response?.data)
+      toast.error('İstatistikler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setLoading(false)
     }
@@ -138,17 +144,20 @@ export default function Accounting() {
   const loadInvoices = async () => {
     try {
       setInvoicesLoading(true)
+      console.log('🔍 Loading invoices...', { invoiceStatusFilter, invoiceSearch, currentPage })
       const response = await invoiceAPI.getAll({
         status: invoiceStatusFilter || undefined,
         search: invoiceSearch || undefined,
         page: currentPage,
         limit: 10,
       })
+      console.log('✅ Invoices response:', response.data)
       setInvoices(response.data.data)
       setTotalPages(response.data.pagination.totalPages)
     } catch (error: any) {
-      console.error('Failed to load invoices:', error)
-      toast.error('Faturalar yüklenemedi')
+      console.error('❌ Failed to load invoices:', error)
+      console.error('Error details:', error.response?.data)
+      toast.error('Faturalar yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setInvoicesLoading(false)
     }
@@ -162,17 +171,20 @@ export default function Accounting() {
   const loadOffers = async () => {
     try {
       setOffersLoading(true)
+      console.log('🔍 Loading offers...', { offerStatusFilter, offerSearch, offerCurrentPage })
       const response = await offerAPI.getAll({
         status: offerStatusFilter || undefined,
         search: offerSearch || undefined,
         page: offerCurrentPage,
         limit: 10,
       })
+      console.log('✅ Offers response:', response.data)
       setOffers(response.data.data)
       setOfferTotalPages(response.data.pagination.totalPages)
     } catch (error: any) {
-      console.error('Failed to load offers:', error)
-      toast.error('Teklifler yüklenemedi')
+      console.error('❌ Failed to load offers:', error)
+      console.error('Error details:', error.response?.data)
+      toast.error('Teklifler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setOffersLoading(false)
     }
@@ -579,7 +591,7 @@ export default function Accounting() {
                                 </td>
                                 <td className="px-6 py-4">
                                   <div className="text-sm text-neutral-900">
-                                    {invoice.order?.equipment?.name || '-'}
+                                    {invoice.order?.orderItems?.[0]?.equipment?.name || invoice.order?.orderNumber || '-'}
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
