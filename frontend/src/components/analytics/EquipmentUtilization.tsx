@@ -272,11 +272,11 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           {/* Summary metrics */}
           {data && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-              <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
                 <p className="text-sm text-gray-600">Toplam Ekipman</p>
                 <p className="text-lg font-semibold">{data.totalEquipment || 0}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
                 <p className="text-sm text-gray-600">Ortalama Kullanım</p>
                 <div className="flex items-center gap-2">
                   <p className="text-lg font-semibold">{(data.averageUtilization || 0).toFixed(1)}%</p>
@@ -288,14 +288,16 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   </Badge>
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
                 <p className="text-sm text-gray-600">En Çok Kullanılan</p>
-                <p className="text-lg font-semibold">{data.topPerformers?.[0]?.name || 'N/A'}</p>
+                <p className="text-lg font-semibold truncate" title={data.topPerformers?.[0]?.name || 'N/A'}>
+                  {data.topPerformers?.[0]?.name || 'N/A'}
+                </p>
                 {data.topPerformers?.[0] && (
                   <p className="text-sm text-gray-500">%{(data.topPerformers[0].utilizationRate || 0).toFixed(1)}</p>
                 )}
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
                 <p className="text-sm text-gray-600">Az Kullanılan</p>
                 <p className="text-sm font-semibold text-orange-600">
                   {data.underutilized?.length || 0} Ekipman

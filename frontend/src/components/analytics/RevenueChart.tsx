@@ -337,23 +337,23 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
         {/* Summary metrics */}
         {data && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
               <p className="text-sm text-gray-600">Toplam Gelir</p>
-              <p className="text-lg font-semibold">{formatCurrency(data.totalRevenue)}</p>
+              <p className="text-lg font-semibold truncate">{formatCurrency(data.totalRevenue)}</p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
               <p className="text-sm text-gray-600">Günlük Büyüme</p>
               <div className="flex items-center gap-2">
                 {getGrowthBadge(data.growth.daily)}
               </div>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
               <p className="text-sm text-gray-600">Haftalık Büyüme</p>
               <div className="flex items-center gap-2">
                 {getGrowthBadge(data.growth.weekly)}
               </div>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
               <p className="text-sm text-gray-600">Aylık Büyüme</p>
               <div className="flex items-center gap-2">
                 {getGrowthBadge(data.growth.monthly)}
@@ -364,10 +364,12 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
       </CardHeader>
 
       <CardContent>
-        <div style={{ height }}>
-          <ResponsiveContainer width="100%" height="100%">
-            {renderChart()}
-          </ResponsiveContainer>
+        <div className="overflow-x-auto">
+          <div style={{ minWidth: 600, height }}>
+            <ResponsiveContainer width="100%" height="100%">
+              {renderChart()}
+            </ResponsiveContainer>
+          </div>
         </div>
 
         {/* Category breakdown */}
