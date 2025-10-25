@@ -5,7 +5,7 @@ import {
   FileText, Truck, Calculator, Share2, Globe, 
   CheckSquare, MessageSquare, Video, Wrench, 
   Headphones, Film, HelpCircle, Settings,
-  ChevronLeft, ChevronRight, ClipboardCheck
+  ChevronLeft, ChevronRight, ClipboardCheck, TrendingUp
 } from 'lucide-react'
 
 const Sidebar: React.FC = () => {
@@ -27,6 +27,7 @@ const Sidebar: React.FC = () => {
   const menuItems = [
     { to: '/', label: 'Anasayfa', icon: Home },
     { to: '/profile', label: 'Profil', icon: User },
+    { to: '/reports', label: 'Raporlar & Analiz', icon: TrendingUp },
     { to: '/orders', label: 'Siparişler', icon: ShoppingCart },
     { to: '/inventory', label: 'Envanter', icon: Package },
     { to: '/inspection', label: 'Kalite Kontrol', icon: ClipboardCheck },
@@ -45,8 +46,8 @@ const Sidebar: React.FC = () => {
     { to: '/production', label: 'Yapım & Prodüksiyon', icon: Film },
     { to: '/tech-support', label: 'Teknik Destek', icon: HelpCircle },
     { to: '/technical-service', label: 'Teknik Servis', icon: Wrench },
-    { to: '/hr', label: 'İnsan Kaynakları', icon: Users },
     { to: '/settings', label: 'Ayarlar', icon: Settings },
+    { to: '/ai-chatbot', label: 'İnsan Kaynakları', icon: Users },
   ]
 
   return (
