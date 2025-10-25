@@ -22,6 +22,14 @@ export class AccountingService {
         endDate: end,
       });
 
+      // Debug: Check prisma object
+      log.info('Prisma object check:', {
+        hasPrisma: !!prisma,
+        prismaKeys: prisma ? Object.keys(prisma).slice(0, 10) : [],
+        hasInvoice: prisma ? typeof prisma.invoice : 'undefined',
+        hasPayment: prisma ? typeof prisma.payment : 'undefined',
+      });
+
       // 1. BU AY GELİR - Ödenen faturalar toplamı
       const paidInvoices = await prisma.invoice.findMany({
         where: {
