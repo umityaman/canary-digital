@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Debug - Canary</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        pre {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        button.danger {
+            background: #ef4444;
+        }
+        button.danger:hover {
+            background: #dc2626;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔐 Canary Auth Debug Tool</h1>
+        <p>localStorage durumunu kontrol edin ve yönetin</p>
+    </div>
+
+    <div class="card">
+        <h2>Auth Status</h2>
+        <div id="status"></div>
+    </div>
+
+    <div class="card">
+        <h2>localStorage İçeriği</h2>
+        <pre id="localStorage"></pre>
+    </div>
+
+    <div class="card">
+        <h2>İşlemler</h2>
+        <button onclick="refreshStatus()">🔄 Yenile</button>
+        <button onclick="setAdminAuth()">✅ Admin Token Ekle</button>
+        <button onclick="clearAuth()" class="danger">🗑️ Token'ları Temizle</button>
+        <button onclick="testAPI()">🧪 API Test</button>
+    </div>
+
+    <div class="card" id="apiResult" style="display: none;">
+        <h2>API Test Sonucu</h2>
+        <pre id="apiOutput"></pre>
+    </div>
+
+    <script>
+        const API_URL = 'https://canary-backend-672344972017.europe-west1.run.app';
+        // const API_URL = 'http://localhost:4000'; // Local test için
+
+        function refreshStatus() {
+            const token = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+
+            const statusDiv = document.getElementById('status');
+            const localStorageDiv = document.getElementById('localStorage');
+
+            if (token && userData) {
+                statusDiv.innerHTML = `
+                    <span class="status success">✓ Authenticated</span>
+                    <p style="margin-top: 10px;">Token bulundu: ${token.substring(0, 30)}...</p>
+                    <p>User: ${JSON.parse(userData).email}</p>
+                `;
+            } else {
+                statusDiv.innerHTML = `
+                    <span class="status error">✗ Not Authenticated</span>
+                    <p style="margin-top: 10px;">Token veya user data bulunamadı</p>
+                `;
+            }
+
+            localStorageDiv.textContent = JSON.stringify({
+                auth_token: token ? token.substring(0, 50) + '...' : null,
+                user_data: userData ? JSON.parse(userData) : null
+            }, null, 2);
+        }
+
+        async function setAdminAuth() {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@canary.com',
+                        password: 'admin123'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.token) {
+                    localStorage.setItem('auth_token', data.token);
+                    localStorage.setItem('user_data', JSON.stringify(data.user));
+                    alert('✅ Admin token başarıyla eklendi! Sayfayı yenileyin.');
+                    refreshStatus();
+                } else {
+                    alert('❌ Login başarısız: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('❌ API hatası: ' + error.message);
+            }
+        }
+
+        function clearAuth() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            alert('🗑️ Token\'lar temizlendi');
+            refreshStatus();
+        }
+
+        async function testAPI() {
+            const token = localStorage.getItem('auth_token');
+            const resultDiv = document.getElementById('apiResult');
+            const outputDiv = document.getElementById('apiOutput');
+
+            if (!token) {
+                alert('❌ Token bulunamadı! Önce "Admin Token Ekle" yapın.');
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            outputDiv.textContent = 'Loading...';
+
+            try {
+                const response = await fetch(`${API_URL}/api/accounting/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                outputDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                outputDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        // Sayfa yüklendiğinde durumu göster
+        refreshStatus();
+    </script>
+</body>
+</html>
