@@ -108,6 +108,7 @@ jobs:
         run: |
           echo "✅ Frontend deployment successful!"
           echo "URL: ${{ steps.get-url.outputs.url }}"
+          echo "Deployment timestamp: $(date)"
 
       - name: Deployment Failure Notification
         if: failure()
