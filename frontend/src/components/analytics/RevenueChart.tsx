@@ -30,6 +30,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { getApiUrl, getAuthHeaders } from '@/config/api';
 
 interface RevenueData {
   date: string;
@@ -82,12 +83,8 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/analytics/revenue?period=${selectedPeriod}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(getApiUrl(`analytics/revenue?period=${selectedPeriod}`), {
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -101,6 +98,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
         throw new Error(result.message || 'Failed to fetch revenue data');
       }
     } catch (err) {
+      console.error('Revenue fetch error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

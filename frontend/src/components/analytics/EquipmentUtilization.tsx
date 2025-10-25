@@ -30,6 +30,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { getApiUrl, getAuthHeaders } from '@/config/api';
 
 interface EquipmentUtilizationData {
   equipmentId: number;
@@ -105,12 +106,8 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/analytics/equipment?period=${selectedPeriod}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(getApiUrl(`analytics/equipment?period=${selectedPeriod}`), {
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -124,6 +121,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
         throw new Error(result.message || 'Failed to fetch equipment data');
       }
     } catch (err) {
+      console.error('Equipment fetch error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

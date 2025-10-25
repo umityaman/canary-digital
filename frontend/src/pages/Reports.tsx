@@ -13,10 +13,8 @@ import {
   BarChart3,
   FileCheck
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 interface ReportTemplate {
   id: number;
@@ -46,12 +44,15 @@ const Reports = () => {
   const fetchTemplates = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/api/test-reports/templates`);
+      const response = await api.get('/test-reports/templates');
       if (response.data.success) {
         setTemplates(response.data.data);
       }
     } catch (error) {
       console.error('Error fetching templates:', error);
+      if (error instanceof Error) {
+        console.error('Full error:', error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -61,8 +62,8 @@ const Reports = () => {
     try {
       setGeneratingId(templateId);
       
-      const response = await axios.get(
-        `${API_URL}/api/test-reports/generate/${templateId}?format=${format}`,
+      const response = await api.get(
+        `/test-reports/generate/${templateId}?format=${format}`,
         {
           responseType: format === 'json' ? 'json' : 'blob',
         }

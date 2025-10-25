@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { getApiUrl, getAuthHeaders } from '@/config/api';
 
 interface KPIData {
   id: string;
@@ -97,12 +98,8 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/analytics/kpis?period=${selectedPeriod}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(getApiUrl(`analytics/kpis?period=${selectedPeriod}`), {
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -116,6 +113,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
         throw new Error(result.message || 'Failed to fetch KPI data');
       }
     } catch (err) {
+      console.error('KPI fetch error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

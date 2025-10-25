@@ -13,6 +13,7 @@ import {
   Eye,
   Settings
 } from 'lucide-react';
+import { getApiUrl, getAuthHeaders } from '@/config/api';
 
 // Import analytics components
 import RevenueChart from './RevenueChart';
@@ -47,13 +48,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   // Export data function
   const exportData = async (format: 'pdf' | 'excel' | 'csv') => {
     try {
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/analytics/export?period=${period}&format=${format}`, {
+      const response = await fetch(getApiUrl(`analytics/export?period=${period}&format=${format}`), {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           period,
           format,
