@@ -426,7 +426,7 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
                 <p className="text-sm text-gray-600">Toplam Sipariş</p>
                 <p className="text-lg font-semibold">{data.totalOrders.toLocaleString()}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  {getGrowthBadge(data.orderTrends.ordersGrowth)}
+                  {getGrowthBadge(data.orderTrends?.ordersGrowth || 0)}
                 </div>
               </div>
               <div className="bg-gray-50 p-3 rounded-lg">
@@ -438,7 +438,7 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
                 <p className="text-sm text-gray-600">Ortalama Sipariş Değeri</p>
                 <p className="text-lg font-semibold">{formatCurrency(data.averageOrderValue)}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  {getGrowthBadge(data.orderTrends.averageOrderValueGrowth)}
+                  {getGrowthBadge(data.orderTrends?.averageOrderValueGrowth || 0)}
                 </div>
               </div>
               <div className="bg-gray-50 p-3 rounded-lg">
