@@ -47,11 +47,10 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
 
       - name: Build Frontend with VITE_API_URL
-        env:
-          VITE_API_URL: https://canary-backend-672344972017.europe-west1.run.app
         run: |
           cd frontend
           echo "🔥 FORCING FRESH BUILD - NO CACHE"
+          export VITE_API_URL="https://canary-backend-672344972017.europe-west1.run.app"
           echo "VITE_API_URL=$VITE_API_URL"
           rm -rf dist node_modules/.vite .vite
           npm run build
