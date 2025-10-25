@@ -23,7 +23,7 @@ import KPIDashboard from './KPIDashboard';
 
 interface AnalyticsDashboardProps {
   companyId?: number;
-  defaultPeriod?: '7d' | '30d' | '90d' | '1y';
+  defaultPeriod?: '1d' | '7d' | '30d' | '90d' | '1y';
   compact?: boolean;
 }
 
@@ -81,6 +81,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
   const getPeriodLabel = (period: string) => {
     switch (period) {
+      case '1d': return 'Bugün';
       case '7d': return 'Son 7 Gün';
       case '30d': return 'Son 30 Gün';
       case '90d': return 'Son 90 Gün';
@@ -101,6 +102,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               onChange={(e) => setPeriod(e.target.value as any)}
               className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
+              <option value="1d">Bugün</option>
               <option value="7d">7 Gün</option>
               <option value="30d">30 Gün</option>
               <option value="90d">90 Gün</option>
@@ -153,6 +155,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   onChange={(e) => setPeriod(e.target.value as any)}
                   className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                  <option value="1d">Bugün</option>
                   <option value="7d">Son 7 Gün</option>
                   <option value="30d">Son 30 Gün</option>
                   <option value="90d">Son 90 Gün</option>

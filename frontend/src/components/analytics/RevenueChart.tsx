@@ -54,7 +54,7 @@ interface RevenueMetrics {
 
 interface RevenueChartProps {
   companyId?: number;
-  period?: '7d' | '30d' | '90d' | '1y';
+  period?: '1d' | '7d' | '30d' | '90d' | '1y';
   type?: 'line' | 'area' | 'bar';
   showComparison?: boolean;
   height?: number;

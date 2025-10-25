@@ -76,7 +76,7 @@ interface DashboardKPIs {
 
 interface KPIDashboardProps {
   companyId?: number;
-  period?: '7d' | '30d' | '90d' | '1y';
+  period?: '1d' | '7d' | '30d' | '90d' | '1y';
   compact?: boolean;
 }
 

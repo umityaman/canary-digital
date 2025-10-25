@@ -50,8 +50,17 @@ router.get('/revenue', authenticateToken, async (req: AuthRequest, res: Response
       },
       select: {
         createdAt: true,
-        totalPrice: true,
-        category: true,
+        totalAmount: true,
+        status: true,
+        orderItems: {
+          include: {
+            equipment: {
+              select: {
+                category: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -62,7 +71,7 @@ router.get('/revenue', authenticateToken, async (req: AuthRequest, res: Response
       const dateKey = format(order.createdAt, 'yyyy-MM-dd');
       const existing = revenueByDate.get(dateKey) || { revenue: 0, orders: 0 };
       revenueByDate.set(dateKey, {
-        revenue: existing.revenue + Number(order.totalPrice || 0),
+        revenue: existing.revenue + Number(order.totalAmount || 0),
         orders: existing.orders + 1,
       });
     });
@@ -77,17 +86,36 @@ router.get('/revenue', authenticateToken, async (req: AuthRequest, res: Response
     // Sort by date
     dailyRevenue.sort((a, b) => a.date.localeCompare(b.date));
 
-    // Group by category
+    // Group by category (from equipment)
     const revenueByCategory = orders.reduce((acc, order) => {
-      const category = order.category || 'Uncategorized';
-      if (!acc[category]) {
-        acc[category] = { category, revenue: 0, percentage: 0 };
+      // Get all unique categories from order items
+      const categories = new Set(
+        order.orderItems
+          .map((item) => item.equipment?.category)
+          .filter(Boolean)
+      );
+      
+      // If no categories, assign to 'Uncategorized'
+      if (categories.size === 0) {
+        const category = 'Uncategorized';
+        if (!acc[category]) {
+          acc[category] = { category, revenue: 0, percentage: 0 };
+        }
+        acc[category].revenue += order.totalAmount || 0;
+      } else {
+        // Distribute revenue among categories
+        const revenuePerCategory = (order.totalAmount || 0) / categories.size;
+        categories.forEach((category) => {
+          if (!acc[category]) {
+            acc[category] = { category, revenue: 0, percentage: 0 };
+          }
+          acc[category].revenue += revenuePerCategory;
+        });
       }
-      acc[category].revenue += order.totalPrice || 0;
       return acc;
     }, {} as Record<string, any>);
 
-    const totalRevenue = orders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
+    const totalRevenue = orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
 
     // Calculate percentages
     Object.values(revenueByCategory).forEach((item: any) => {
@@ -299,6 +327,10 @@ function getDateRange(period: string) {
   let startDate: Date;
 
   switch (period) {
+    case '1d': // Bugün (Today)
+    case 'today':
+      startDate = startOfDay(now);
+      break;
     case '7d':
       startDate = subDays(now, 7);
       break;
@@ -335,12 +367,12 @@ router.get('/kpis', authenticateToken, async (req: AuthRequest, res: Response) =
         createdAt: { gte: startDate, lte: endDate },
       },
       select: {
-        totalPrice: true,
+        totalAmount: true,
         status: true,
       },
     });
 
-    const totalRevenue = orders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
+    const totalRevenue = orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
     const completedOrders = orders.filter(o => o.status === 'COMPLETED');
     const pendingOrders = orders.filter(o => o.status === 'PENDING');
     const cancelledOrders = orders.filter(o => o.status === 'CANCELLED');
@@ -348,17 +380,17 @@ router.get('/kpis', authenticateToken, async (req: AuthRequest, res: Response) =
     // Equipment metrics
     const equipment = await prisma.equipment.findMany({
       where: { companyId },
-      select: { status: true, rentalPrice: true },
+      select: { status: true, dailyPrice: true },
     });
 
     const totalEquipment = equipment.length;
     const rentedEquipment = equipment.filter(e => e.status === 'RENTED').length;
     const utilizationRate = totalEquipment > 0 ? (rentedEquipment / totalEquipment) * 100 : 0;
 
-    // Customer metrics
-    const totalCustomers = await prisma.customer.count({ where: { companyId } });
+    // Customer metrics - Customer model doesn't have companyId, skip for now
+    const totalCustomers = await prisma.customer.count();
     const newCustomers = await prisma.customer.count({
-      where: { companyId, createdAt: { gte: startDate, lte: endDate } },
+      where: { createdAt: { gte: startDate, lte: endDate } },
     });
 
     res.json({
@@ -424,7 +456,7 @@ router.get('/equipment', authenticateToken, async (req: AuthRequest, res: Respon
         name: true,
         status: true,
         category: true,
-        rentalPrice: true,
+        dailyPrice: true,
       },
     });
 
@@ -450,7 +482,7 @@ router.get('/equipment', authenticateToken, async (req: AuthRequest, res: Respon
         acc[category] = { category, count: 0, totalValue: 0 };
       }
       acc[category].count += 1;
-      acc[category].totalValue += eq.rentalPrice || 0;
+      acc[category].totalValue += eq.dailyPrice || 0;
       return acc;
     }, {} as Record<string, any>);
 
@@ -477,9 +509,9 @@ router.get('/equipment', authenticateToken, async (req: AuthRequest, res: Respon
         byStatus: Object.values(byStatus),
         byCategory: Object.values(byCategory),
         topPerformers: equipment
-          .sort((a, b) => (b.rentalPrice || 0) - (a.rentalPrice || 0))
+          .sort((a, b) => (b.dailyPrice || 0) - (a.dailyPrice || 0))
           .slice(0, 5)
-          .map(e => ({ name: e.name, revenue: e.rentalPrice || 0, utilization: 85.5 })),
+          .map(e => ({ name: e.name, revenue: e.dailyPrice || 0, utilization: 85.5 })),
       },
     });
   } catch (error) {
@@ -503,7 +535,7 @@ router.get('/orders', authenticateToken, async (req: AuthRequest, res: Response)
       select: {
         id: true,
         status: true,
-        totalPrice: true,
+        totalAmount: true,
         createdAt: true,
         customer: { select: { name: true } },
       },
@@ -517,7 +549,7 @@ router.get('/orders', authenticateToken, async (req: AuthRequest, res: Response)
         acc[status] = { status, count: 0, percentage: 0, revenue: 0 };
       }
       acc[status].count += 1;
-      acc[status].revenue += order.totalPrice || 0;
+      acc[status].revenue += order.totalAmount || 0;
       return acc;
     }, {} as Record<string, any>);
 
@@ -533,11 +565,11 @@ router.get('/orders', authenticateToken, async (req: AuthRequest, res: Response)
         acc[date] = { date, orders: 0, revenue: 0 };
       }
       acc[date].orders += 1;
-      acc[date].revenue += order.totalPrice || 0;
+      acc[date].revenue += order.totalAmount || 0;
       return acc;
     }, {} as Record<string, any>);
 
-    const totalRevenue = orders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
+    const totalRevenue = orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
 
     res.json({
       success: true,
