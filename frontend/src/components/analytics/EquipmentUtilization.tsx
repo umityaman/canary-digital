@@ -274,17 +274,17 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <div className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-sm text-gray-600">Toplam Ekipman</p>
-                <p className="text-lg font-semibold">{data.totalEquipment}</p>
+                <p className="text-lg font-semibold">{data.totalEquipment || 0}</p>
               </div>
               <div className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-sm text-gray-600">Ortalama Kullanım</p>
                 <div className="flex items-center gap-2">
-                  <p className="text-lg font-semibold">{data.averageUtilization.toFixed(1)}%</p>
+                  <p className="text-lg font-semibold">{(data.averageUtilization || 0).toFixed(1)}%</p>
                   <Badge 
                     className={`text-xs px-2 py-1`}
-                    style={{ backgroundColor: getUtilizationColor(data.averageUtilization) }}
+                    style={{ backgroundColor: getUtilizationColor(data.averageUtilization || 0) }}
                   >
-                    {getUtilizationLabel(data.averageUtilization)}
+                    {getUtilizationLabel(data.averageUtilization || 0)}
                   </Badge>
                 </div>
               </div>
@@ -292,7 +292,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                 <p className="text-sm text-gray-600">En Çok Kullanılan</p>
                 <p className="text-lg font-semibold">{data.topPerformers?.[0]?.name || 'N/A'}</p>
                 {data.topPerformers?.[0] && (
-                  <p className="text-sm text-gray-500">%{data.topPerformers[0].utilizationRate.toFixed(1)}</p>
+                  <p className="text-sm text-gray-500">%{(data.topPerformers[0].utilizationRate || 0).toFixed(1)}</p>
                 )}
               </div>
               <div className="bg-gray-50 p-3 rounded-lg">
@@ -432,11 +432,11 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <p className="font-medium">{equipment.utilizationRate.toFixed(1)}%</p>
-                      <p className="text-sm text-gray-600">{formatCurrency(equipment.revenue)}</p>
+                      <p className="font-medium">{(equipment.utilizationRate || 0).toFixed(1)}%</p>
+                      <p className="text-sm text-gray-600">{formatCurrency(equipment.revenue || 0)}</p>
                     </div>
                     <div className="w-24">
-                      <Progress value={equipment.utilizationRate} className="h-2" />
+                      <Progress value={equipment.utilizationRate || 0} className="h-2" />
                     </div>
                   </div>
                 </div>
@@ -473,12 +473,12 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <p className="font-medium text-orange-600">{equipment.utilizationRate.toFixed(1)}%</p>
-                      <p className="text-sm text-gray-600">{formatCurrency(equipment.revenue)}</p>
+                      <p className="font-medium text-orange-600">{(equipment.utilizationRate || 0).toFixed(1)}%</p>
+                      <p className="text-sm text-gray-600">{formatCurrency(equipment.revenue || 0)}</p>
                     </div>
                     <div className="w-24">
                       <Progress 
-                        value={equipment.utilizationRate} 
+                        value={equipment.utilizationRate || 0} 
                         className="h-2"
                         style={{ backgroundColor: '#FED7AA' }}
                       />
