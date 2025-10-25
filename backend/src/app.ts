@@ -182,6 +182,8 @@ safeLoadRoute('/api/notifications', './routes/notifications', 'Notifications');
 safeLoadRoute('/api/pricing', './routes/pricing', 'Smart pricing');
 safeLoadRoute('/api/reservations', './routes/reservations', 'Reservations');
 safeLoadRoute('/api/reports', './routes/reports', 'Reports');
+safeLoadRoute('/api/report-templates', './routes/reportTemplates', 'Report Templates');
+safeLoadRoute('/api/generated-reports', './routes/generatedReports', 'Generated Reports');
 safeLoadRoute('/api/monitoring', './routes/monitoring', 'Monitoring');
 safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');

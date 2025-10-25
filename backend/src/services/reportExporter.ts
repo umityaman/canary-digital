@@ -4,6 +4,7 @@ import { Readable } from 'stream';
 
 export interface ExportOptions {
   title?: string;
+  filename?: string;
   author?: string;
   subject?: string;
   includeTimestamp?: boolean;

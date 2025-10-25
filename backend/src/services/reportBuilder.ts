@@ -1,7 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
-
 export interface ReportConfig {
   dataSource: string; // 'orders', 'equipment', 'customers', 'payments'
   fields: string[]; // Column names to include
@@ -19,17 +17,19 @@ export interface QueryResult {
 }
 
 export class ReportBuilder {
+  constructor(private prisma: PrismaClient) {}
+
   /**
    * Main entry point for generating a report
    */
-  async generateReport(config: ReportConfig): Promise<QueryResult> {
+  async generateReport(config: ReportConfig, companyId: number): Promise<QueryResult> {
     // Validate configuration
     if (!this.validateConfig(config)) {
       throw new Error('Invalid report configuration');
     }
 
     // Build and execute query
-    const data = await this.executeQuery(config);
+    const data = await this.executeQuery(config, companyId);
     
     return {
       data,
@@ -59,11 +59,14 @@ export class ReportBuilder {
   /**
    * Execute query based on configuration
    */
-  private async executeQuery(config: ReportConfig): Promise<any[]> {
+  private async executeQuery(config: ReportConfig, companyId: number): Promise<any[]> {
     const { dataSource, filters, orderBy, limit } = config;
 
+    // Add companyId to filters
+    const filtersWithCompany = { ...filters, companyId };
+
     // Build where clause from filters
-    const whereClause = this.buildWhereClause(filters);
+    const whereClause = this.buildWhereClause(filtersWithCompany);
 
     // Build order by clause
     const orderByClause = this.buildOrderByClause(orderBy);
@@ -139,7 +142,7 @@ export class ReportBuilder {
    * Query Orders
    */
   private async queryOrders(where: any, orderBy: any, limit?: number): Promise<any[]> {
-    return await prisma.order.findMany({
+    return await this.prisma.order.findMany({
       where,
       orderBy,
       take: limit,
@@ -171,7 +174,7 @@ export class ReportBuilder {
    * Query Equipment
    */
   private async queryEquipment(where: any, orderBy: any, limit?: number): Promise<any[]> {
-    return await prisma.equipment.findMany({
+    return await this.prisma.equipment.findMany({
       where,
       orderBy,
       take: limit,
@@ -182,7 +185,7 @@ export class ReportBuilder {
    * Query Customers
    */
   private async queryCustomers(where: any, orderBy: any, limit?: number): Promise<any[]> {
-    return await prisma.customer.findMany({
+    return await this.prisma.customer.findMany({
       where,
       orderBy,
       take: limit,
@@ -203,15 +206,21 @@ export class ReportBuilder {
    * Query Payments
    */
   private async queryPayments(where: any, orderBy: any, limit?: number): Promise<any[]> {
-    return await prisma.payment.findMany({
+    return await this.prisma.payment.findMany({
       where,
       orderBy,
       take: limit,
       include: {
-        customer: {
+        invoice: {
           select: {
             id: true,
-            name: true,
+            invoiceNumber: true,
+            customer: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -222,17 +231,14 @@ export class ReportBuilder {
    * Query Reservations
    */
   private async queryReservations(where: any, orderBy: any, limit?: number): Promise<any[]> {
-    return await prisma.reservation.findMany({
+    return await this.prisma.reservation.findMany({
       where,
       orderBy,
       take: limit,
       include: {
-        equipment: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+        items: true, // Reservation items
+        payments: true, // Reservation payments
+        statusHistory: true, // Status history
       },
     });
   }
@@ -300,5 +306,3 @@ export class ReportBuilder {
     return result;
   }
 }
-
-export default new ReportBuilder();
