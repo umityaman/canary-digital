@@ -79,12 +79,19 @@ jobs:
           CMD ["nginx", "-g", "daemon off;"]
           EOF
 
-      - name: Deploy to Cloud Run
+      - name: Build and Push Docker Image
         run: |
           cd frontend
-          echo "🚀 Deploying to Cloud Run with NO CACHE..."
+          echo "� Building Docker image with NO CACHE..."
+          IMAGE_NAME="gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
+          gcloud builds submit --no-cache --tag=$IMAGE_NAME .
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
+      - name: Deploy to Cloud Run
+        run: |
+          echo "🚀 Deploying $IMAGE_NAME to Cloud Run..."
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --source . \
+            --image=$IMAGE_NAME \
             --region=${{ env.REGION }} \
             --platform=managed \
             --allow-unauthenticated \
@@ -92,8 +99,7 @@ jobs:
             --max-instances=10 \
             --memory=256Mi \
             --cpu=1 \
-            --port=8080 \
-            --no-cache
+            --port=8080
 
       - name: Get Service URL
         id: get-url
