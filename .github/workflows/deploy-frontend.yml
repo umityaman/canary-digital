@@ -46,19 +46,20 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Build Frontend with VITE_API_URL
+      - name: Build Frontend with correct API URL
         run: |
           cd frontend
-          echo "Unsetting VITE_API_URL environment variable..."
-          unset VITE_API_URL
-          echo "Creating .env.production file..."
+          rm -rf dist node_modules/.vite .vite .env .env.production
           echo "VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app" > .env.production
+          echo "Created .env.production:"
           cat .env.production
-          echo "Building frontend..."
-          rm -rf dist node_modules/.vite .vite
-          npm run build
-          echo "Build complete"
-          ls -la dist/
+          (
+            unset VITE_API_URL
+            export NODE_ENV=production
+            npm run build
+          )
+          echo "Verifying built files:"
+          grep -o "https://canary-backend[^\"']*" dist/assets/*.js | head -3
 
       - name: Prepare Frontend for deployment
         run: |
