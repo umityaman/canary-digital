@@ -49,6 +49,8 @@ jobs:
       - name: Build Frontend with VITE_API_URL
         run: |
           cd frontend
+          echo "Unsetting VITE_API_URL environment variable..."
+          unset VITE_API_URL
           echo "Creating .env.production file..."
           echo "VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app" > .env.production
           cat .env.production
