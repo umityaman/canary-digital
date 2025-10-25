@@ -53,8 +53,8 @@ jobs:
           cd frontend
           echo "🔥 FORCING FRESH BUILD - NO CACHE"
           echo "VITE_API_URL=$VITE_API_URL"
-          rm -rf dist node_modules/.vite
-          npm run build -- --force
+          rm -rf dist node_modules/.vite .vite
+          npm run build
           echo "✅ Build complete - dist folder ready"
           ls -la dist/
           echo "📦 Checking built files for API URL..."
