@@ -397,6 +397,7 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
                 onChange={(e) => setSelectedPeriod(e.target.value as any)}
                 className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
+                <option value="1d">Bugün</option>
                 <option value="7d">Son 7 Gün</option>
                 <option value="30d">Son 30 Gün</option>
                 <option value="90d">Son 90 Gün</option>

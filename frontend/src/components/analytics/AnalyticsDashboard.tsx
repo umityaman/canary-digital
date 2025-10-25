@@ -231,8 +231,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           {/* KPI Dashboard */}
           <KPIDashboard period={period} />
           
-          {/* Overview charts grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Overview charts - Alt Alta */}
+          <div className="space-y-6">
             <RevenueChart 
               period={period} 
               type="area" 
