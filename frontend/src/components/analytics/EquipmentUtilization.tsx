@@ -309,50 +309,53 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           {/* Status distribution pie chart */}
           {data && data.statusDistribution && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              <div>
+              <div className="overflow-hidden">
                 <h4 className="text-sm font-medium text-gray-900 mb-3">Durum Dağılımı</h4>
-                <div style={{ height: 250 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={data.statusDistribution}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percentage }) => `${getStatusLabel(name)} (${percentage.toFixed(1)}%)`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="count"
-                      >
-                        {data.statusDistribution.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[entry.status as keyof typeof COLORS] || '#8884d8'} />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(value, name) => [value, getStatusLabel(name as string)]} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                <div className="overflow-x-auto">
+                  <div style={{ minWidth: 300, height: 250 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={data.statusDistribution}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percentage }) => `${getStatusLabel(name)} (${(percentage || 0).toFixed(1)}%)`}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="count"
+                        >
+                          {data.statusDistribution.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[entry.status as keyof typeof COLORS] || '#8884d8'} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value, name) => [value, getStatusLabel(name as string)]} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </div>
 
               {/* Category performance */}
-              <div>
+              <div className="overflow-hidden">
                 <h4 className="text-sm font-medium text-gray-900 mb-3">Kategoriye Göre Performans</h4>
-                <div style={{ height: 250 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data.byCategory}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
-                        dataKey="category" 
-                        tick={{ fontSize: 12 }}
-                        angle={-45}
-                        textAnchor="end"
-                        height={60}
-                      />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip 
-                        formatter={(value: number, name: string) => [
-                          name === 'avgUtilization' ? `${value.toFixed(1)}%` : value,
-                          name === 'avgUtilization' ? 'Ortalama Kullanım' : 'Ekipman Sayısı'
+                <div className="overflow-x-auto">
+                  <div style={{ minWidth: 400, height: 250 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={data.byCategory}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="category" 
+                          tick={{ fontSize: 12 }}
+                          angle={-45}
+                          textAnchor="end"
+                          height={60}
+                        />
+                        <YAxis tick={{ fontSize: 12 }} />
+                        <Tooltip 
+                          formatter={(value: number, name: string) => [
+                            name === 'avgUtilization' ? `${(value || 0).toFixed(1)}%` : value,
+                            name === 'avgUtilization' ? 'Ortalama Kullanım' : 'Ekipman Sayısı'
                         ]}
                       />
                       <Legend />
@@ -362,6 +365,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   </ResponsiveContainer>
                 </div>
               </div>
+              </div>
             </div>
           )}
 
@@ -369,19 +373,20 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           {showTrend && data && data.utilizationTrend && data.utilizationTrend.length > 0 && (
             <div className="mb-6">
               <h4 className="text-sm font-medium text-gray-900 mb-3">Kullanım Trendi</h4>
-              <div style={{ height: 200 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={data.utilizationTrend}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="date" 
+              <div className="overflow-x-auto">
+                <div style={{ minWidth: 600, height: 200 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={data.utilizationTrend}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis 
+                        dataKey="date" 
                       tick={{ fontSize: 12 }}
                       tickFormatter={(value) => format(parseISO(value), 'dd MMM', { locale: tr })}
                     />
                     <YAxis tick={{ fontSize: 12 }} />
                     <Tooltip 
                       formatter={(value: number, name: string) => [
-                        name === 'utilization' ? `${value.toFixed(1)}%` : formatCurrency(value),
+                        name === 'utilization' ? `${(value || 0).toFixed(1)}%` : formatCurrency(value || 0),
                         name === 'utilization' ? 'Kullanım Oranı' : 'Gelir'
                       ]}
                       labelFormatter={(label) => format(parseISO(label), 'dd MMMM yyyy', { locale: tr })}
@@ -405,6 +410,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   </LineChart>
                 </ResponsiveContainer>
               </div>
+            </div>
             </div>
           )}
         </CardContent>

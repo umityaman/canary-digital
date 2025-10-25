@@ -374,18 +374,20 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
         {data && data.revenueByCategory && data.revenueByCategory.length > 0 && (
           <div className="mt-6">
             <h4 className="text-sm font-medium text-gray-900 mb-3">Kategoriye Göre Gelir</h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-              {data.revenueByCategory.map((category, index) => (
-                <div key={category.category} className="bg-gray-50 p-2 rounded text-center">
-                  <div 
-                    className="w-4 h-4 rounded-full mx-auto mb-1"
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  />
-                  <p className="text-xs font-medium">{category.category}</p>
-                  <p className="text-xs text-gray-600">{formatCurrency(category.revenue)}</p>
-                  <p className="text-xs text-gray-500">%{category.percentage.toFixed(1)}</p>
-                </div>
-              ))}
+            <div className="overflow-x-auto">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 min-w-max lg:min-w-0">
+                {data.revenueByCategory.map((category, index) => (
+                  <div key={category.category} className="bg-gray-50 p-2 rounded text-center min-w-[120px]">
+                    <div 
+                      className="w-4 h-4 rounded-full mx-auto mb-1"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <p className="text-xs font-medium truncate">{category.category}</p>
+                    <p className="text-xs text-gray-600">{formatCurrency(category.revenue)}</p>
+                    <p className="text-xs text-gray-500">%{(category.percentage || 0).toFixed(1)}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
