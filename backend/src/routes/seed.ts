@@ -1,9 +1,9 @@
 import express from 'express';
-import { authenticateToken } from './auth';
+import { authenticateToken } from '../middleware/auth';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { prisma } from '../index';
-import { log } from '../config/logger';
+import log from '../utils/logger';
 
 const execPromise = promisify(exec);
 const router = express.Router();
