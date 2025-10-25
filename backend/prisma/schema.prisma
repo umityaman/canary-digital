@@ -46,12 +46,17 @@ model Company {
   companyDocuments     Document[]
   documents            DocumentCategory[]
   equipment            Equipment[]
+  expenses             Expense[]
+  generatedReports     GeneratedReport[]      @relation("CompanyGeneratedReports")
+  invoices             Invoice[]
   mediaFiles           MediaFile[]
   mediaFolders         MediaFolder[]
   menus                Menu[]
   notifications        Notification[]
   orders               Order[]
   productionProjects   ProductionProject[]
+  reportSchedules      ReportSchedule[]       @relation("CompanyReportSchedules")
+  reportTemplates      ReportTemplate[]       @relation("CompanyReportTemplates")
   savedSearches        SavedSearch[]
   searchHistory        SearchHistory[]
   serviceAssets        ServiceAsset[]
@@ -66,13 +71,6 @@ model Company {
   websiteProjects      WebsiteProject[]
   whatsappMessages     WhatsAppMessage[]
   workOrders           WorkOrder[]
-  // Reporting Relations
-  reportTemplates      ReportTemplate[]   @relation("CompanyReportTemplates")
-  generatedReports     GeneratedReport[]  @relation("CompanyGeneratedReports")
-  reportSchedules      ReportSchedule[]   @relation("CompanyReportSchedules")
-  // Accounting Relations
-  invoices             Invoice[]
-  expenses             Expense[]
 }
 
 model User {
@@ -134,12 +132,15 @@ model User {
   uploadedDocuments        Document[]
   sharedByDocuments        DocumentShare[]         @relation("SharedByUser")
   sharedWithDocuments      DocumentShare[]         @relation("SharedWithUser")
+  generatedReports         GeneratedReport[]       @relation("GeneratedReportCreator")
   inspections              Inspection[]
   invoices                 Invoice[]
-  offers                   Offer[]
   uploadedMedia            MediaFile[]
   notifications            Notification[]
   notificationPreference   NotificationPreference?
+  offers                   Offer[]
+  reportSchedules          ReportSchedule[]        @relation("ReportScheduleCreator")
+  reportTemplates          ReportTemplate[]        @relation("ReportTemplateCreator")
   savedSearches            SavedSearch[]
   searchHistory            SearchHistory[]
   socialMediaPosts         SocialMediaPost[]
@@ -148,10 +149,6 @@ model User {
   transactions             Transaction[]
   company                  Company?                @relation(fields: [companyId], references: [id])
   workOrders               WorkOrder[]
-  // Reporting Relations
-  reportTemplates          ReportTemplate[]        @relation("ReportTemplateCreator")
-  generatedReports         GeneratedReport[]       @relation("GeneratedReportCreator")
-  reportSchedules          ReportSchedule[]        @relation("ReportScheduleCreator")
 }
 
 model Category {
@@ -1013,28 +1010,28 @@ model Invoice {
   id               Int           @id @default(autoincrement())
   orderId          Int
   customerId       Int
-  companyId        Int?
   parasutInvoiceId String?       @unique
   invoiceNumber    String?
-  invoiceType      String        @default("rental") // rental, sales, service
   invoiceDate      DateTime
   dueDate          DateTime
-  items            Json?         // [{description, quantity, unitPrice, amount}]
-  subtotal         Float?        // Before VAT
-  vatRate          Float?        // VAT percentage (e.g., 0.20 for 20%)
-  totalAmount      Float         // Subtotal (backward compatibility)
+  totalAmount      Float
   vatAmount        Float
-  grandTotal       Float         // Total with VAT
-  total            Float?        // Alias for grandTotal
+  grandTotal       Float
   paidAmount       Float         @default(0)
   status           String        @default("draft")
   type             String        @default("rental")
-  notes            String?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
+  companyId        Int?
+  invoiceType      String        @default("rental")
+  items            Json?
+  notes            String?
+  subtotal         Float?
+  total            Float?
+  vatRate          Float?
+  company          Company?      @relation(fields: [companyId], references: [id])
   customer         User          @relation(fields: [customerId], references: [id])
   order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  company          Company?      @relation(fields: [companyId], references: [id])
   payments         Payment[]
   transactions     Transaction[]
 
@@ -1053,7 +1050,7 @@ model Offer {
   totalAmount Float
   vatAmount   Float
   grandTotal  Float
-  status      String   @default("draft") // draft, sent, accepted, rejected, converted, expired
+  status      String   @default("draft")
   notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -1069,10 +1066,10 @@ model Expense {
   companyId     Int
   description   String
   amount        Float
-  category      String   // Rent, Utilities, Maintenance, Insurance, Marketing, etc.
+  category      String
   date          DateTime
-  status        String   @default("pending") // pending, paid
-  paymentMethod String?  // bank_transfer, credit_card, cash, etc.
+  status        String   @default("pending")
+  paymentMethod String?
   notes         String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -1089,12 +1086,12 @@ model Payment {
   amount           Float
   paymentDate      DateTime
   paymentMethod    String
-  status           String   @default("completed") // pending, completed, failed
-  notes            String?
   transactionId    String?
   parasutPaymentId String?  @unique
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  notes            String?
+  status           String   @default("completed")
   invoice          Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
   @@index([invoiceId])
@@ -2455,26 +2452,22 @@ model WebsiteSecurityLog {
   @@index([createdAt])
 }
 
-// ===================================
-// REPORTING & ANALYTICS MODELS
-// ===================================
-
 model ReportTemplate {
   id               Int               @id @default(autoincrement())
   name             String
-  description      String?           @db.Text
-  dataSource       String            // 'orders', 'equipment', 'customers', 'payments', 'reservations'
-  config           Json              // Full report configuration
+  description      String?
+  dataSource       String
+  config           Json
   isDefault        Boolean           @default(false)
   isActive         Boolean           @default(true)
   createdBy        Int
-  user             User              @relation("ReportTemplateCreator", fields: [createdBy], references: [id])
   companyId        Int
-  company          Company           @relation("CompanyReportTemplates", fields: [companyId], references: [id])
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   generatedReports GeneratedReport[]
   schedules        ReportSchedule[]
+  company          Company           @relation("CompanyReportTemplates", fields: [companyId], references: [id])
+  user             User              @relation("ReportTemplateCreator", fields: [createdBy], references: [id])
 
   @@index([companyId])
   @@index([createdBy])
@@ -2486,18 +2479,18 @@ model ReportTemplate {
 model GeneratedReport {
   id         Int             @id @default(autoincrement())
   templateId Int?
-  template   ReportTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
   name       String
-  format     String          // 'excel', 'pdf', 'csv'
+  format     String
   fileUrl    String?
   fileSize   Int?
   metadata   Json?
   createdBy  Int
-  user       User            @relation("GeneratedReportCreator", fields: [createdBy], references: [id])
   companyId  Int
-  company    Company         @relation("CompanyGeneratedReports", fields: [companyId], references: [id])
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
+  company    Company         @relation("CompanyGeneratedReports", fields: [companyId], references: [id])
+  user       User            @relation("GeneratedReportCreator", fields: [createdBy], references: [id])
+  template   ReportTemplate? @relation(fields: [templateId], references: [id])
 
   @@index([companyId])
   @@index([createdBy])
@@ -2509,22 +2502,22 @@ model GeneratedReport {
 model ReportSchedule {
   id             Int            @id @default(autoincrement())
   templateId     Int
-  template       ReportTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  cronExpression String         // "0 9 * * 1" (Every Monday at 9 AM)
-  recipients     String[]       // Email addresses
-  format         String         // 'excel', 'pdf', 'csv'
+  cronExpression String
+  recipients     String[]
+  format         String
   isActive       Boolean        @default(true)
   lastRun        DateTime?
   nextRun        DateTime?
   runCount       Int            @default(0)
   emailSubject   String?
-  emailBody      String?        @db.Text
+  emailBody      String?
   createdBy      Int
-  user           User           @relation("ReportScheduleCreator", fields: [createdBy], references: [id])
   companyId      Int
-  company        Company        @relation("CompanyReportSchedules", fields: [companyId], references: [id])
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+  company        Company        @relation("CompanyReportSchedules", fields: [companyId], references: [id])
+  user           User           @relation("ReportScheduleCreator", fields: [createdBy], references: [id])
+  template       ReportTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
   @@index([companyId])
   @@index([createdBy])
