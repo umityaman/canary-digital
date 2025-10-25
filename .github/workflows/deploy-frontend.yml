@@ -51,10 +51,14 @@ jobs:
           VITE_API_URL: https://canary-backend-672344972017.europe-west1.run.app
         run: |
           cd frontend
-          echo "Building with VITE_API_URL=$VITE_API_URL"
-          npm run build
-          echo "Build complete - dist folder ready"
+          echo "🔥 FORCING FRESH BUILD - NO CACHE"
+          echo "VITE_API_URL=$VITE_API_URL"
+          rm -rf dist node_modules/.vite
+          npm run build -- --force
+          echo "✅ Build complete - dist folder ready"
           ls -la dist/
+          echo "📦 Checking built files for API URL..."
+          grep -r "canary-backend" dist/ | head -5 || true
 
       - name: Prepare Frontend for deployment
         run: |
@@ -73,6 +77,9 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           cd frontend
+          # Force new revision with timestamp tag
+          TIMESTAMP=$(date +%s)
+          echo "🚀 Deploying revision: v$TIMESTAMP"
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --source . \
             --region=${{ env.REGION }} \
@@ -82,7 +89,16 @@ jobs:
             --max-instances=10 \
             --memory=256Mi \
             --cpu=1 \
-            --port=8080
+            --port=8080 \
+            --tag="v$TIMESTAMP" \
+            --no-traffic \
+            --set-env-vars="DEPLOY_TIME=$TIMESTAMP"
+          
+          # Switch 100% traffic to new revision
+          echo "🔄 Switching traffic to new revision..."
+          gcloud run services update-traffic ${{ env.SERVICE_NAME }} \
+            --region=${{ env.REGION }} \
+            --to-latest
 
       - name: Get Service URL
         id: get-url
