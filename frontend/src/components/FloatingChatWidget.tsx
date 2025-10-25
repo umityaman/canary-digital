@@ -80,7 +80,7 @@ const FloatingChatWidget: React.FC = () => {
 
   const fetchConversations = async () => {
     try {
-      const response = await api.get('/api/chatbot/conversations', {
+  const response = await api.get('/chatbot/conversations', {
         params: { limit: 10, status: 'active' },
       });
       const convs = response.data.data || [];
@@ -101,7 +101,7 @@ const FloatingChatWidget: React.FC = () => {
 
   const fetchMessages = async (conversationId: number) => {
     try {
-      const response = await api.get(`/api/chatbot/conversations/${conversationId}/messages`);
+  const response = await api.get(`/chatbot/conversations/${conversationId}/messages`);
       setMessages(response.data.data || []);
     } catch (error: any) {
       setError('Mesajlar yüklenemedi');
@@ -110,7 +110,7 @@ const FloatingChatWidget: React.FC = () => {
 
   const handleCreateConversation = async () => {
     try {
-      const response = await api.post('/api/chatbot/conversations', {
+  const response = await api.post('/chatbot/conversations', {
         title: `Chat ${new Date().toLocaleDateString('tr-TR')}`,
         model: 'gpt-3.5-turbo',
         language: 'tr',
@@ -155,7 +155,7 @@ const FloatingChatWidget: React.FC = () => {
 
     try {
       const response = await api.post(
-        `/api/chatbot/conversations/${selectedConversation!.id}/messages`,
+  `/chatbot/conversations/${selectedConversation!.id}/messages`,
         { message: userMessage }
       );
 
@@ -179,7 +179,7 @@ const FloatingChatWidget: React.FC = () => {
     if (!selectedConversation) return;
     
     try {
-      await api.delete(`/api/chatbot/conversations/${selectedConversation.id}`);
+  await api.delete(`/chatbot/conversations/${selectedConversation.id}`);
       const remaining = conversations.filter(c => c.id !== selectedConversation.id);
       setConversations(remaining);
       

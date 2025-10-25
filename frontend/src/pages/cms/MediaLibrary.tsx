@@ -126,7 +126,7 @@ const MediaLibrary: React.FC = () => {
         params.search = searchQuery;
       }
 
-      const response = await api.get('/api/cms/media', { params });
+  const response = await api.get('/cms/media', { params });
       setFiles(response.data.data.files || []);
     } catch (error: any) {
       showSnackbar(error.response?.data?.message || 'Failed to fetch files', 'error');
@@ -137,7 +137,7 @@ const MediaLibrary: React.FC = () => {
 
   const fetchFolders = async () => {
     try {
-      const response = await api.get('/api/cms/media/folders');
+  const response = await api.get('/cms/media/folders');
       setFolders(response.data.data.folders || []);
     } catch (error) {
       console.error('Failed to fetch folders', error);
@@ -155,7 +155,7 @@ const MediaLibrary: React.FC = () => {
       }
 
       try {
-        await api.post('/api/cms/media/upload', formData, {
+        await api.post('/cms/media/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         showSnackbar('File uploaded successfully', 'success');
@@ -170,7 +170,7 @@ const MediaLibrary: React.FC = () => {
       }
 
       try {
-        await api.post('/api/cms/media/upload/multiple', formData, {
+        await api.post('/cms/media/upload/multiple', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         showSnackbar(`${acceptedFiles.length} files uploaded successfully`, 'success');
@@ -219,7 +219,7 @@ const MediaLibrary: React.FC = () => {
         tags: fileFormData.tags.split(',').map(t => t.trim()).filter(Boolean),
       };
 
-      await api.put(`/api/cms/media/${editingFile.id}`, payload);
+      await api.put(`/cms/media/${editingFile.id}`, payload);
       showSnackbar('File updated successfully', 'success');
       setOpenEditDialog(false);
       fetchFiles();
@@ -235,7 +235,7 @@ const MediaLibrary: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete(`/api/cms/media/${id}`);
+      await api.delete(`/cms/media/${id}`);
       showSnackbar('File deleted successfully', 'success');
       fetchFiles();
     } catch (error: any) {
@@ -251,7 +251,7 @@ const MediaLibrary: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete('/api/cms/media/bulk', {
+      await api.delete('/cms/media/bulk', {
         data: { mediaIds: selectedFiles },
       });
       showSnackbar('Files deleted successfully', 'success');
@@ -289,10 +289,10 @@ const MediaLibrary: React.FC = () => {
 
       setLoading(true);
       if (editingFolder) {
-        await api.put(`/api/cms/media/folders/${editingFolder.id}`, folderFormData);
+        await api.put(`/cms/media/folders/${editingFolder.id}`, folderFormData);
         showSnackbar('Folder updated successfully', 'success');
       } else {
-        await api.post('/api/cms/media/folders', folderFormData);
+        await api.post('/cms/media/folders', folderFormData);
         showSnackbar('Folder created successfully', 'success');
       }
 
@@ -310,7 +310,7 @@ const MediaLibrary: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete(`/api/cms/media/folders/${id}`);
+      await api.delete(`/cms/media/folders/${id}`);
       showSnackbar('Folder deleted successfully', 'success');
       fetchFolders();
       if (currentFolder === id) setCurrentFolder(null);

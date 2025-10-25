@@ -1,19 +1,10 @@
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
-// Base URL without /api suffix - routes will add it
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-
+// Use normalized API base URL from config
 const api = axios.create({
-  baseURL: `${BASE_URL}/api`,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-console.log('🔧 API Configuration:', {
-  VITE_API_URL: import.meta.env.VITE_API_URL,
-  BASE_URL,
-  FULL_API_URL: `${BASE_URL}/api`,
+  baseURL: API_BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
 });
 
 // Request interceptor - add auth token

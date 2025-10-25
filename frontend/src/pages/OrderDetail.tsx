@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 import { useNotification } from '../contexts/NotificationContext';
 import { 
   ArrowLeft, Calendar, User, Package, CreditCard, FileText, 
@@ -7,8 +8,8 @@ import {
   Check
 } from 'lucide-react';
 
-const BASE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const API_URL = `${BASE_API_URL}/api`;
+// Use normalized API_BASE_URL (always ends with /api)
+const API_URL = API_BASE_URL;
 
 interface OrderItem {
   id: number;
@@ -109,7 +110,7 @@ export default function OrderDetail() {
     try {
       setLoading(true);
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${API_URL}/orders/${id}`, {
+  const response = await fetch(`${API_URL}/orders/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -134,7 +135,7 @@ export default function OrderDetail() {
     try {
       setActionLoading(true);
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${API_URL}/orders/${order.id}`, {
+  const response = await fetch(`${API_URL}/orders/${order.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -164,7 +165,7 @@ export default function OrderDetail() {
     try {
       setActionLoading(true);
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${API_URL}/orders/${order.id}`, {
+  const response = await fetch(`${API_URL}/orders/${order.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

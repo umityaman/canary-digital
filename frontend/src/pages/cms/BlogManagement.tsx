@@ -159,7 +159,7 @@ const BlogManagement: React.FC = () => {
       const params: any = { page: 1, limit: 100 };
       if (statusFilter !== 'all') params.status = statusFilter;
       if (categoryFilter !== 'all') params.categoryId = categoryFilter;
-      const response = await api.get('/api/cms/blog/posts', { params });
+  const response = await api.get('/cms/blog/posts', { params });
       setPosts(response.data.data.posts || []);
     } catch (error: any) {
       showSnackbar(error.response?.data?.message || 'Failed to fetch posts', 'error');
@@ -170,7 +170,7 @@ const BlogManagement: React.FC = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get('/api/cms/blog/categories');
+  const response = await api.get('/cms/blog/categories');
       setCategories(response.data.data.categories || []);
     } catch (error) {
       console.error('Failed to fetch categories', error);
@@ -179,7 +179,7 @@ const BlogManagement: React.FC = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await api.get('/api/cms/blog/tags');
+  const response = await api.get('/cms/blog/tags');
       setTags(response.data.data.tags || []);
     } catch (error) {
       console.error('Failed to fetch tags', error);
@@ -189,7 +189,7 @@ const BlogManagement: React.FC = () => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/cms/blog/posts', { params: { page: 1, limit: 1000 } });
+  const response = await api.get('/cms/blog/posts', { params: { page: 1, limit: 1000 } });
       const allPosts = response.data.data.posts || [];
       const allComments: Comment[] = [];
       // In a real app, you'd have a dedicated comments endpoint
@@ -251,10 +251,10 @@ const BlogManagement: React.FC = () => {
       };
 
       if (editingPost) {
-        await api.put(`/api/cms/blog/posts/${editingPost.id}`, payload);
+        await api.put(`/cms/blog/posts/${editingPost.id}`, payload);
         showSnackbar('Post updated successfully', 'success');
       } else {
-        await api.post('/api/cms/blog/posts', payload);
+        await api.post('/cms/blog/posts', payload);
         showSnackbar('Post created successfully', 'success');
       }
 
@@ -272,7 +272,7 @@ const BlogManagement: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete(`/api/cms/blog/posts/${id}`);
+      await api.delete(`/cms/blog/posts/${id}`);
       showSnackbar('Post deleted successfully', 'success');
       fetchPosts();
     } catch (error: any) {
@@ -307,10 +307,10 @@ const BlogManagement: React.FC = () => {
 
       setLoading(true);
       if (editingCategory) {
-        await api.put(`/api/cms/blog/categories/${editingCategory.id}`, categoryFormData);
+        await api.put(`/cms/blog/categories/${editingCategory.id}`, categoryFormData);
         showSnackbar('Category updated successfully', 'success');
       } else {
-        await api.post('/api/cms/blog/categories', categoryFormData);
+        await api.post('/cms/blog/categories', categoryFormData);
         showSnackbar('Category created successfully', 'success');
       }
 
@@ -328,7 +328,7 @@ const BlogManagement: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete(`/api/cms/blog/categories/${id}`);
+      await api.delete(`/cms/blog/categories/${id}`);
       showSnackbar('Category deleted successfully', 'success');
       fetchCategories();
     } catch (error: any) {
@@ -340,7 +340,7 @@ const BlogManagement: React.FC = () => {
 
   const handleApproveComment = async (id: number) => {
     try {
-      await api.post(`/api/cms/blog/comments/${id}/approve`);
+      await api.post(`/cms/blog/comments/${id}/approve`);
       showSnackbar('Comment approved', 'success');
       fetchComments();
     } catch (error: any) {
@@ -352,7 +352,7 @@ const BlogManagement: React.FC = () => {
     if (!window.confirm('Delete this comment?')) return;
 
     try {
-      await api.delete(`/api/cms/blog/comments/${id}`);
+      await api.delete(`/cms/blog/comments/${id}`);
       showSnackbar('Comment deleted', 'success');
       fetchComments();
     } catch (error: any) {

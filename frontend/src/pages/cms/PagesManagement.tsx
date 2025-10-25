@@ -142,7 +142,7 @@ const PagesManagement: React.FC = () => {
       if (searchQuery) {
         params.search = searchQuery;
       }
-      const response = await api.get('/api/cms/pages', { params });
+  const response = await api.get('/cms/pages', { params });
       setPages(response.data.data.pages || []);
     } catch (error: any) {
       showSnackbar(error.response?.data?.message || 'Failed to fetch pages', 'error');
@@ -210,10 +210,10 @@ const PagesManagement: React.FC = () => {
       };
 
       if (editingPage) {
-        await api.put(`/api/cms/pages/${editingPage.id}`, payload);
+  await api.put(`/cms/pages/${editingPage.id}`, payload);
         showSnackbar('Page updated successfully', 'success');
       } else {
-        await api.post('/api/cms/pages', payload);
+  await api.post('/cms/pages', payload);
         showSnackbar('Page created successfully', 'success');
       }
 
@@ -231,7 +231,7 @@ const PagesManagement: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete(`/api/cms/pages/${id}`);
+  await api.delete(`/cms/pages/${id}`);
       showSnackbar('Page deleted successfully', 'success');
       fetchPages();
     } catch (error: any) {
@@ -244,7 +244,7 @@ const PagesManagement: React.FC = () => {
   const handlePublishPage = async (id: number) => {
     try {
       setLoading(true);
-      await api.post(`/api/cms/pages/${id}/publish`);
+  await api.post(`/cms/pages/${id}/publish`);
       showSnackbar('Page published successfully', 'success');
       fetchPages();
     } catch (error: any) {
@@ -257,7 +257,7 @@ const PagesManagement: React.FC = () => {
   const handleUnpublishPage = async (id: number) => {
     try {
       setLoading(true);
-      await api.post(`/api/cms/pages/${id}/unpublish`);
+  await api.post(`/cms/pages/${id}/unpublish`);
       showSnackbar('Page unpublished successfully', 'success');
       fetchPages();
     } catch (error: any) {
@@ -270,7 +270,7 @@ const PagesManagement: React.FC = () => {
   const handleDuplicatePage = async (id: number) => {
     try {
       setLoading(true);
-      await api.post(`/api/cms/pages/${id}/duplicate`);
+  await api.post(`/cms/pages/${id}/duplicate`);
       showSnackbar('Page duplicated successfully', 'success');
       fetchPages();
     } catch (error: any) {

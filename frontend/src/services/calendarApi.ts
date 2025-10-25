@@ -1,22 +1,4 @@
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-
-const api = axios.create({
-  baseURL: `${API_URL}/api`,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add auth token to requests
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+import api from './api';
 
 export interface GoogleAuthStatus {
   connected: boolean;
@@ -50,7 +32,7 @@ const calendarApi = {
    * Get Google OAuth authorization URL
    */
   getAuthUrl: async (): Promise<{ authUrl: string; state: string }> => {
-    const response = await api.get('/api/auth/google');
+    const response = await api.get('/auth/google');
     return response.data;
   },
 
@@ -58,7 +40,7 @@ const calendarApi = {
    * Check Google Calendar connection status
    */
   getStatus: async (): Promise<GoogleAuthStatus> => {
-    const response = await api.get('/api/auth/google/status');
+    const response = await api.get('/auth/google/status');
     return response.data;
   },
 
@@ -66,7 +48,7 @@ const calendarApi = {
    * Disconnect Google Calendar
    */
   disconnect: async (): Promise<void> => {
-    await api.post('/api/auth/google/disconnect');
+    await api.post('/auth/google/disconnect');
   },
 
   /**
@@ -74,7 +56,7 @@ const calendarApi = {
    * This would require an additional backend endpoint
    */
   getEvents: async (startDate: Date, endDate: Date): Promise<CalendarEvent[]> => {
-    const response = await api.get('/api/calendar/events', {
+    const response = await api.get('/calendar/events', {
       params: {
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),

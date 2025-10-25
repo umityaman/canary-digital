@@ -1,18 +1,9 @@
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
-
-// Debug: Log API URL - Updated Oct 25, 2025 - FIXED double /api
-console.log('🔧 API Configuration:', {
-  VITE_API_URL: import.meta.env.VITE_API_URL,
-  API_URL: `${API_URL}/api`,
-  mode: import.meta.env.MODE,
-  timestamp: new Date().toISOString()
-})
-
-// Axios instance oluştur - add /api suffix
+// Create axios instance with normalized API base URL (always ends with /api)
 const api = axios.create({
-  baseURL: `${API_URL}/api`,
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

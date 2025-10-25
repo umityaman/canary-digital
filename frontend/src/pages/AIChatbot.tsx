@@ -1,44 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  TextField,
-  Typography,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Avatar,
-  Paper,
-  Divider,
-  CircularProgress,
-  Chip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Grid,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Alert,
-  Snackbar,
-} from '@mui/material';
-import {
-  Send as SendIcon,
-  Add as AddIcon,
-  Delete as DeleteIcon,
-  Archive as ArchiveIcon,
-  SmartToy as BotIcon,
-  Person as PersonIcon,
-  MoreVert as MoreVertIcon,
-  Settings as SettingsIcon,
-} from '@mui/icons-material';
-import Markdown from 'markdown-to-jsx';
-import api from '../services/api';
+  Users, UserPlus, Briefcase, FileText, Calendar, Clock,
+  TrendingUp, GraduationCap, Award, DollarSign, Shield,
+  CheckCircle, AlertCircle, BarChart3, Target, MapPin,
+  Mail, Phone, Download, Upload, Filter, Search, Plus, Edit, Trash2
+} from 'lucide-react';
 
 interface Conversation {
   id: number;
@@ -98,7 +64,7 @@ const AIChatbot: React.FC = () => {
   const fetchConversations = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/chatbot/conversations', {
+  const response = await api.get('/chatbot/conversations', {
         params: { limit: 50 },
       });
       setConversations(response.data.data || []);
@@ -115,7 +81,7 @@ const AIChatbot: React.FC = () => {
 
   const fetchMessages = async (conversationId: number) => {
     try {
-      const response = await api.get(`/api/chatbot/conversations/${conversationId}/messages`);
+  const response = await api.get(`/chatbot/conversations/${conversationId}/messages`);
       setMessages(response.data.data || []);
     } catch (error: any) {
       showSnackbar('Failed to fetch messages', 'error');
@@ -125,7 +91,7 @@ const AIChatbot: React.FC = () => {
   const handleCreateConversation = async () => {
     try {
       setLoading(true);
-      const response = await api.post('/api/chatbot/conversations', newConvSettings);
+  const response = await api.post('/chatbot/conversations', newConvSettings);
       const newConv = response.data.data;
       
       setConversations([newConv, ...conversations]);
@@ -160,7 +126,7 @@ const AIChatbot: React.FC = () => {
 
     try {
       const response = await api.post(
-        `/api/chatbot/conversations/${selectedConversation.id}/messages`,
+  `/chatbot/conversations/${selectedConversation.id}/messages`,
         { message: userMessage }
       );
 
@@ -187,7 +153,7 @@ const AIChatbot: React.FC = () => {
     if (!window.confirm('Are you sure you want to delete this conversation?')) return;
 
     try {
-      await api.delete(`/api/chatbot/conversations/${id}`);
+  await api.delete(`/chatbot/conversations/${id}`);
       setConversations(conversations.filter(c => c.id !== id));
       
       if (selectedConversation?.id === id) {
@@ -203,7 +169,7 @@ const AIChatbot: React.FC = () => {
 
   const handleArchiveConversation = async (id: number) => {
     try {
-      await api.post(`/api/chatbot/conversations/${id}/archive`);
+  await api.post(`/chatbot/conversations/${id}/archive`);
       fetchConversations();
       showSnackbar('Conversation archived successfully', 'success');
     } catch (error: any) {

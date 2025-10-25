@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config/api';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../contexts/NotificationContext';
 import { 
@@ -107,8 +108,7 @@ const Reservations: React.FC = () => {
       setError(null);
       
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-        const response = await fetch(`${apiUrl}/api/orders`, {
+  const response = await fetch(`${API_BASE_URL}/orders`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
             'Content-Type': 'application/json'

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Plus, Edit, Trash2, Package, Upload, Download, ChevronDown, Plug, Settings, QrCode, ScanLine, CheckSquare, Square } from 'lucide-react'
+import { Search, Plus, Edit, Trash2, Package, Upload, Download, ChevronDown, Plug, Settings, QrCode, ScanLine, CheckSquare, Square, ArrowUpDown } from 'lucide-react'
 import { useEquipmentStore } from '../stores/equipmentStore'
 import EquipmentModal from '../components/modals/EquipmentModal'
 import CategoryModal from '../components/modals/CategoryModal'
 import { QRCodeGenerator } from '../components/QRCodeGenerator'
 import BarcodeScanner from '../components/BarcodeScanner'
 import api from '../services/api'
+import { API_BASE_URL } from '../config/api'
 
 interface Equipment {
   id: string
@@ -42,8 +43,8 @@ const Inventory: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterCategory, setFilterCategory] = useState<string>('all')
   const [filterEquipmentType, setFilterEquipmentType] = useState<string>('all')
-  const [sortBy] = useState<'name' | 'date' | 'price'>('date')
-  const [sortOrder] = useState<'asc' | 'desc'>('desc')
+  const [sortBy, setSortBy] = useState<'name' | 'date' | 'price'>('date')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   
   const [categoryOpen, setCategoryOpen] = useState(true)
   const [statusOpen, setStatusOpen] = useState(true)
@@ -214,7 +215,7 @@ const Inventory: React.FC = () => {
     
     try {
       // Backend'den equipment bilgisini al
-      const response = await fetch(`http://localhost:4000/api/scan/${encodeURIComponent(code)}`, {
+      const response = await fetch(`${API_BASE_URL}/scan/${encodeURIComponent(code)}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
@@ -370,7 +371,7 @@ const Inventory: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      {/* Arama ve Ekipman Ekle Butonu */}
+      {/* Arama, Sıralama ve Ekipman Ekle Butonu */}
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -381,6 +382,27 @@ const Inventory: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
           />
+        </div>
+
+        {/* Sort Dropdown */}
+        <div className="relative">
+          <select
+            value={`${sortBy}-${sortOrder}`}
+            onChange={(e) => {
+              const [by, order] = e.target.value.split('-') as ['name' | 'date' | 'price', 'asc' | 'desc']
+              setSortBy(by)
+              setSortOrder(order)
+            }}
+            className="pl-4 pr-10 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent appearance-none bg-white cursor-pointer"
+          >
+            <option value="date-desc">En Yeni</option>
+            <option value="date-asc">En Eski</option>
+            <option value="name-asc">İsim (A-Z)</option>
+            <option value="name-desc">İsim (Z-A)</option>
+            <option value="price-asc">Fiyat (Düşük-Yüksek)</option>
+            <option value="price-desc">Fiyat (Yüksek-Düşük)</option>
+          </select>
+          <ArrowUpDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
         </div>
         
         <button

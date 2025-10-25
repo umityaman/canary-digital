@@ -110,7 +110,7 @@ const MenuEditor: React.FC = () => {
   const fetchMenus = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/cms/menus');
+  const response = await api.get('/cms/menus');
       setMenus(response.data.data.menus || []);
       if (response.data.data.menus.length > 0 && !selectedMenu) {
         setSelectedMenu(response.data.data.menus[0]);
@@ -124,7 +124,7 @@ const MenuEditor: React.FC = () => {
 
   const fetchMenuDetails = async (id: number) => {
     try {
-      const response = await api.get(`/api/cms/menus/${id}`);
+      const response = await api.get(`/cms/menus/${id}`);
       setSelectedMenu(response.data.data);
     } catch (error: any) {
       showSnackbar('Failed to fetch menu details', 'error');
@@ -133,7 +133,7 @@ const MenuEditor: React.FC = () => {
 
   const fetchPages = async () => {
     try {
-      const response = await api.get('/api/cms/pages', { params: { status: 'published', limit: 100 } });
+  const response = await api.get('/cms/pages', { params: { status: 'published', limit: 100 } });
       setPages(response.data.data.pages || []);
     } catch (error) {
       console.error('Failed to fetch pages', error);
@@ -164,10 +164,10 @@ const MenuEditor: React.FC = () => {
 
       setLoading(true);
       if (editingMenu) {
-        await api.put(`/api/cms/menus/${editingMenu.id}`, menuFormData);
+        await api.put(`/cms/menus/${editingMenu.id}`, menuFormData);
         showSnackbar('Menu updated successfully', 'success');
       } else {
-        const response = await api.post('/api/cms/menus', menuFormData);
+        const response = await api.post('/cms/menus', menuFormData);
         showSnackbar('Menu created successfully', 'success');
         setSelectedMenu(response.data.data);
       }
@@ -186,7 +186,7 @@ const MenuEditor: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete(`/api/cms/menus/${id}`);
+      await api.delete(`/cms/menus/${id}`);
       showSnackbar('Menu deleted successfully', 'success');
       setSelectedMenu(null);
       fetchMenus();
@@ -200,7 +200,7 @@ const MenuEditor: React.FC = () => {
   const handleDuplicateMenu = async (id: number) => {
     try {
       setLoading(true);
-      const response = await api.post(`/api/cms/menus/${id}/duplicate`);
+      const response = await api.post(`/cms/menus/${id}/duplicate`);
       showSnackbar('Menu duplicated successfully', 'success');
       setSelectedMenu(response.data.data);
       fetchMenus();
@@ -258,10 +258,10 @@ const MenuEditor: React.FC = () => {
       };
 
       if (editingItem) {
-        await api.put(`/api/cms/menus/items/${editingItem.id}`, payload);
+        await api.put(`/cms/menus/items/${editingItem.id}`, payload);
         showSnackbar('Menu item updated successfully', 'success');
       } else {
-        await api.post(`/api/cms/menus/${selectedMenu.id}/items`, payload);
+        await api.post(`/cms/menus/${selectedMenu.id}/items`, payload);
         showSnackbar('Menu item added successfully', 'success');
       }
 
@@ -280,7 +280,7 @@ const MenuEditor: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.delete(`/api/cms/menus/items/${itemId}`);
+      await api.delete(`/cms/menus/items/${itemId}`);
       showSnackbar('Menu item deleted successfully', 'success');
       fetchMenuDetails(selectedMenu.id);
     } catch (error: any) {
@@ -296,7 +296,7 @@ const MenuEditor: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.post(`/api/cms/menus/${selectedMenu.id}/items/bulk-add-pages`, {
+      await api.post(`/cms/menus/${selectedMenu.id}/items/bulk-add-pages`, {
         pageIds: selectedPageIds,
       });
       showSnackbar('Pages added to menu successfully', 'success');
@@ -330,7 +330,7 @@ const MenuEditor: React.FC = () => {
 
     try {
       setLoading(true);
-      await api.post(`/api/cms/menus/${selectedMenu.id}/reorder`, { itemOrders });
+      await api.post(`/cms/menus/${selectedMenu.id}/reorder`, { itemOrders });
       showSnackbar('Menu reordered successfully', 'success');
       fetchMenuDetails(selectedMenu.id);
     } catch (error: any) {
