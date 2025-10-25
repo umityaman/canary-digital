@@ -62,6 +62,12 @@ jobs:
       - name: Prepare Frontend for deployment
         run: |
           cd frontend
+          # Create .dockerignore to exclude everything except dist
+          cat > .dockerignore << 'EOF'
+          *
+          !dist
+          !nginx.conf
+          EOF
           # Backup original Dockerfile
           cp Dockerfile Dockerfile.original
           # Create simple Dockerfile for pre-built dist
@@ -76,7 +82,7 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           cd frontend
-          echo "🚀 Deploying to Cloud Run..."
+          echo "🚀 Deploying to Cloud Run with NO CACHE..."
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --source . \
             --region=${{ env.REGION }} \
@@ -86,7 +92,8 @@ jobs:
             --max-instances=10 \
             --memory=256Mi \
             --cpu=1 \
-            --port=8080
+            --port=8080 \
+            --no-cache
 
       - name: Get Service URL
         id: get-url
