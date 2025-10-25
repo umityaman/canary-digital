@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   FileText, Download, Upload, Edit3, Eye, Plus,
   FileCheck, DollarSign, Truck, Receipt, Wrench,
@@ -20,9 +21,18 @@ interface DocumentTemplate {
 }
 
 export default function Documents() {
+  const [searchParams] = useSearchParams();
   const [selectedDoc, setSelectedDoc] = useState<DocumentType | null>(null)
   const [showEditor, setShowEditor] = useState(false)
   const [activeTab, setActiveTab] = useState<Tab>('templates');
+
+  // Set active tab from URL query parameter
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['templates', 'recent', 'archived', 'analytics', 'settings'].includes(tabParam)) {
+      setActiveTab(tabParam as Tab);
+    }
+  }, [searchParams]);
 
   const tabs = [
     { id: 'templates' as const, label: 'Şablonlar', icon: <FileText size={18} />, description: 'Döküman şablonları' },

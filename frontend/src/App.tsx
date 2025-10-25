@@ -56,7 +56,6 @@ import InspectionDetail from './pages/InspectionDetail'
 import Settings from './pages/Settings'
 import Pricing from './pages/Pricing'
 import Analytics from './pages/Analytics'
-import ReportsPage from './pages/Reports'
 import FloatingChatWidget from './components/FloatingChatWidget'
 import FloatingToolsWidget from './components/FloatingToolsWidget'
 
@@ -83,7 +82,6 @@ export default function App(){
           <Route path='/' element={<Home/>} />
           <Route path='/dashboard' element={<Dashboard/>} />
           <Route path='/profile' element={<Profile/>} />
-          <Route path='/reports' element={<ReportsPage/>} />
           <Route path='/orders' element={<Reservations/>} />
           <Route path='/orders/new' element={<NewOrder/>} />
           <Route path='/orders/:id' element={<OrderDetail/>} />

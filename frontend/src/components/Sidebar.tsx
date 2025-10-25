@@ -27,7 +27,7 @@ const Sidebar: React.FC = () => {
   const menuItems = [
     { to: '/', label: 'Anasayfa', icon: Home },
     { to: '/profile', label: 'Profil', icon: User },
-    { to: '/reports', label: 'Raporlar & Analiz', icon: TrendingUp },
+    { to: '/documents?tab=analytics', label: 'Raporlar & Analiz', icon: TrendingUp },
     { to: '/orders', label: 'Siparişler', icon: ShoppingCart },
     { to: '/inventory', label: 'Envanter', icon: Package },
     { to: '/inspection', label: 'Kalite Kontrol', icon: ClipboardCheck },
