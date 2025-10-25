@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
   FileText, Download, Upload, Edit3, Eye, Plus,
@@ -6,6 +6,59 @@ import {
   Briefcase, FileSignature, Printer, Save, X, Archive, Settings, BarChart3
 } from 'lucide-react'
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard'
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Analytics Dashboard Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 bg-red-50 rounded-xl border border-red-200">
+          <div className="text-center">
+            <div className="text-red-500 mb-4">
+              <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Analytics Yüklenemedi</h3>
+            <p className="text-gray-600 mb-4">
+              {this.state.error?.message || 'Bilinmeyen bir hata oluştu'}
+            </p>
+            <details className="text-left mt-4 p-4 bg-white rounded border border-red-200">
+              <summary className="cursor-pointer font-medium text-red-700 mb-2">Teknik Detaylar</summary>
+              <pre className="text-xs text-gray-600 overflow-auto">
+                {this.state.error?.stack}
+              </pre>
+            </details>
+            <button
+              onClick={() => this.setState({ hasError: false, error: null })}
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              Tekrar Dene
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 type DocumentType = 'contract' | 'quote' | 'waybill' | 'invoice' | 'proforma' | 'service' | 'letterhead'
 type Tab = 'templates' | 'recent' | 'archived' | 'analytics' | 'settings';
@@ -352,18 +405,9 @@ export default function Documents() {
           {activeTab === 'analytics' && (
             <div className="bg-white rounded-2xl border border-neutral-200 p-6">
               <h2 className="text-xl font-bold text-neutral-900 mb-6">Raporlar ve Analizler</h2>
-              <div className="p-8 bg-blue-50 rounded-xl border border-blue-200">
-                <div className="text-center">
-                  <BarChart3 className="w-16 h-16 mx-auto mb-4 text-blue-600" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Analytics Dashboard Yükleniyor</h3>
-                  <p className="text-gray-600 mb-4">
-                    Analytics özelliği geliştirme aşamasında...
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Şu anda: Documents sayfası başarıyla yüklendi ✅
-                  </p>
-                </div>
-              </div>
+              <ErrorBoundary>
+                <AnalyticsDashboard />
+              </ErrorBoundary>
             </div>
           )}
 
