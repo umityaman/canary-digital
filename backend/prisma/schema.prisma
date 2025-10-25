@@ -48,7 +48,6 @@ model Company {
   equipment            Equipment[]
   expenses             Expense[]
   generatedReports     GeneratedReport[]      @relation("CompanyGeneratedReports")
-  invoices             Invoice[]
   mediaFiles           MediaFile[]
   mediaFolders         MediaFolder[]
   menus                Menu[]
@@ -1022,14 +1021,6 @@ model Invoice {
   type             String        @default("rental")
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  companyId        Int?
-  invoiceType      String        @default("rental")
-  items            Json?
-  notes            String?
-  subtotal         Float?
-  total            Float?
-  vatRate          Float?
-  company          Company?      @relation(fields: [companyId], references: [id])
   customer         User          @relation(fields: [customerId], references: [id])
   order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   payments         Payment[]
@@ -1037,7 +1028,6 @@ model Invoice {
 
   @@index([orderId])
   @@index([customerId])
-  @@index([companyId])
 }
 
 model Offer {
