@@ -272,32 +272,32 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           {/* Summary metrics */}
           {data && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
                 <p className="text-sm text-gray-600">Toplam Ekipman</p>
                 <p className="text-lg font-semibold">{data.totalEquipment || 0}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
                 <p className="text-sm text-gray-600">Ortalama Kullanım</p>
                 <div className="flex items-center gap-2">
                   <p className="text-lg font-semibold">{(data.averageUtilization || 0).toFixed(1)}%</p>
                   <Badge 
-                    className={`text-xs px-2 py-1`}
+                    className={`text-xs px-2 py-1 flex-shrink-0`}
                     style={{ backgroundColor: getUtilizationColor(data.averageUtilization || 0) }}
                   >
                     {getUtilizationLabel(data.averageUtilization || 0)}
                   </Badge>
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
                 <p className="text-sm text-gray-600">En Çok Kullanılan</p>
-                <p className="text-lg font-semibold truncate" title={data.topPerformers?.[0]?.name || 'N/A'}>
+                <p className="text-lg font-semibold truncate overflow-hidden text-ellipsis whitespace-nowrap" title={data.topPerformers?.[0]?.name || 'N/A'}>
                   {data.topPerformers?.[0]?.name || 'N/A'}
                 </p>
                 {data.topPerformers?.[0] && (
                   <p className="text-sm text-gray-500">%{(data.topPerformers[0].utilizationRate || 0).toFixed(1)}</p>
                 )}
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
                 <p className="text-sm text-gray-600">Az Kullanılan</p>
                 <p className="text-sm font-semibold text-orange-600">
                   {data.underutilized?.length || 0} Ekipman

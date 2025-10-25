@@ -337,25 +337,25 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
         {/* Summary metrics */}
         {data && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
               <p className="text-sm text-gray-600">Toplam Gelir</p>
-              <p className="text-lg font-semibold truncate">{formatCurrency(data.totalRevenue)}</p>
+              <p className="text-lg font-semibold truncate overflow-hidden text-ellipsis whitespace-nowrap">{formatCurrency(data.totalRevenue)}</p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
               <p className="text-sm text-gray-600">Günlük Büyüme</p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 {getGrowthBadge(data.growth.daily)}
               </div>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
               <p className="text-sm text-gray-600">Haftalık Büyüme</p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 {getGrowthBadge(data.growth.weekly)}
               </div>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
               <p className="text-sm text-gray-600">Aylık Büyüme</p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 {getGrowthBadge(data.growth.monthly)}
               </div>
             </div>
