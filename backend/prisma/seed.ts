@@ -171,40 +171,37 @@ async function main() {
   // Sample siparişler oluştur (eğer yoksa)
   const existingOrders = await prisma.order.count();
   
-  if (existingOrders === 0) {
-    // 5 farklı statüde sipariş oluştur
-    const orderStatuses = ['CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'COMPLETED', 'CONFIRMED'];
-    const orderData = [];
+  console.log(`Found ${existingOrders} existing orders`);
+  
+  // Always ensure we have at least 5 orders for accounting data
+  if (existingOrders < 5) {
+    const neededOrders = 5 - existingOrders;
+    console.log(`Creating ${neededOrders} more orders...`);
     
-    for (let i = 0; i < 5; i++) {
+    const orderStatuses = ['CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'COMPLETED', 'CONFIRMED'];
+    
+    for (let i = existingOrders; i < 5; i++) {
       const startDate = new Date(2025, 9, 10 + i); // October 10-14, 2025
       const endDate = new Date(2025, 9, 13 + i); // 3 days rental
       const days = 3;
       const dailyRate = 450.0;
       
-      orderData.push({
-        orderNumber: `ORD-2025${String(i + 1).padStart(3, '0')}`,
-        startDate,
-        endDate,
-        totalAmount: dailyRate * days,
-        status: orderStatuses[i],
-        notes: `Ekipman kiralaması - ${i + 1}`,
-        customerId: (i % 2) + 1, // Rotate between 2 customers
-        companyId: company.id,
-        userId: admin.id
-      });
-    }
-    
-    for (const data of orderData) {
       await prisma.order.create({
         data: {
-          ...data,
+          orderNumber: `ORD-2025${String(i + 1).padStart(3, '0')}`,
+          startDate,
+          endDate,
+          totalAmount: dailyRate * days,
+          status: orderStatuses[i],
+          notes: `Ekipman kiralaması - ${i + 1}`,
+          customerId: (i % 2) + 1, // Rotate between 2 customers
+          companyId: company.id,
           orderItems: {
             create: [
               {
                 quantity: 1,
-                dailyRate: 450.0,
-                totalAmount: data.totalAmount,
+                dailyRate: dailyRate,
+                totalAmount: dailyRate * days,
                 equipmentId: 1 // Sony A7 IV
               }
             ]
@@ -212,15 +209,22 @@ async function main() {
         }
       });
     }
-    console.log('✅ Sample orders created');
+    console.log('✅ Sample orders created/completed');
   } else {
-    console.log('⏭️  Orders already exist, skipping');
+    console.log('✅ Already have enough orders');
   }
 
   // Faturalar oluştur
   const existingInvoices = await prisma.invoice.count();
-  if (existingInvoices === 0) {
-    const orders = await prisma.order.findMany({ take: 5 });
+  console.log(`Found ${existingInvoices} existing invoices`);
+  
+  if (existingInvoices < 5) {
+    const orders = await prisma.order.findMany({ 
+      take: 5,
+      orderBy: { id: 'asc' }
+    });
+    
+    console.log(`Creating invoices for ${orders.length} orders...`);
     
     for (let i = 0; i < orders.length; i++) {
       const order = orders[i];
@@ -233,7 +237,7 @@ async function main() {
         data: {
           invoiceNumber: `INV-2025${String(i + 1).padStart(4, '0')}`,
           orderId: order.id,
-          customerId: order.customerId,
+          customerId: order.customerId || 1,
           companyId: company.id,
           invoiceType: 'rental',
           invoiceDate: new Date(2025, 9, 15 + i),
@@ -259,22 +263,27 @@ async function main() {
     }
     console.log('✅ Invoices created');
   } else {
-    console.log('⏭️  Invoices already exist, skipping');
+    console.log('✅ Already have enough invoices');
   }
 
   // Ödemeler oluştur (ilk 2 fatura için)
   const existingPayments = await prisma.payment.count();
-  if (existingPayments === 0) {
+  console.log(`Found ${existingPayments} existing payments`);
+  
+  if (existingPayments < 2) {
     const paidInvoices = await prisma.invoice.findMany({
       where: { status: 'paid' },
-      take: 2
+      take: 2,
+      orderBy: { id: 'asc' }
     });
+    
+    console.log(`Creating payments for ${paidInvoices.length} paid invoices...`);
     
     for (let i = 0; i < paidInvoices.length; i++) {
       await prisma.payment.create({
         data: {
           invoiceId: paidInvoices[i].id,
-          amount: paidInvoices[i].total,
+          amount: paidInvoices[i].total || paidInvoices[i].grandTotal,
           paymentDate: new Date(2025, 9, 20 + i),
           paymentMethod: i === 0 ? 'bank_transfer' : 'credit_card',
           status: 'completed',
@@ -284,15 +293,19 @@ async function main() {
     }
     console.log('✅ Payments created');
   } else {
-    console.log('⏭️  Payments already exist, skipping');
+    console.log('✅ Already have enough payments');
   }
 
   // Teklifler oluştur
   const existingOffers = await prisma.offer.count();
-  if (existingOffers === 0) {
+  console.log(`Found ${existingOffers} existing offers`);
+  
+  if (existingOffers < 5) {
     const offerStatuses = ['sent', 'draft', 'accepted', 'rejected', 'expired'];
     
-    for (let i = 0; i < 5; i++) {
+    console.log(`Creating ${5 - existingOffers} offers...`);
+    
+    for (let i = existingOffers; i < 5; i++) {
       const customerId = (i % 2) + 1;
       const days = 5;
       const subtotal = 450.0 * days;
@@ -324,16 +337,20 @@ async function main() {
     }
     console.log('✅ Offers created');
   } else {
-    console.log('⏭️  Offers already exist, skipping');
+    console.log('✅ Already have enough offers');
   }
 
   // Giderler oluştur
   const existingExpenses = await prisma.expense.count();
-  if (existingExpenses === 0) {
+  console.log(`Found ${existingExpenses} existing expenses`);
+  
+  if (existingExpenses < 5) {
     const expenseCategories = ['Rent', 'Utilities', 'Maintenance', 'Insurance', 'Marketing'];
     const expenseAmounts = [15000, 2500, 3000, 5000, 4000];
     
-    for (let i = 0; i < 5; i++) {
+    console.log(`Creating ${5 - existingExpenses} expenses...`);
+    
+    for (let i = existingExpenses; i < 5; i++) {
       await prisma.expense.create({
         data: {
           description: expenseCategories[i],
@@ -348,7 +365,7 @@ async function main() {
     }
     console.log('✅ Expenses created');
   } else {
-    console.log('⏭️  Expenses already exist, skipping');
+    console.log('✅ Already have enough expenses');
   }
 
   // Tedarikçiler oluştur
