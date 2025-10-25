@@ -45,7 +45,7 @@ router.get('/', authenticateToken, async (req, res) => {
         },
         {
           customer: {
-            fullName: {
+            name: {
               contains: search as string,
               mode: 'insensitive',
             },
@@ -68,7 +68,7 @@ router.get('/', authenticateToken, async (req, res) => {
           customer: {
             select: {
               id: true,
-              fullName: true,
+              name: true,
               email: true,
               phone: true,
               taxNumber: true,

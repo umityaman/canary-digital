@@ -100,7 +100,7 @@ export class OfferService {
           customer: {
             select: {
               id: true,
-              fullName: true,
+              name: true,
               email: true,
               phone: true,
               company: true,
@@ -161,7 +161,7 @@ export class OfferService {
           },
           {
             customer: {
-              fullName: {
+              name: {
                 contains: search,
                 mode: 'insensitive',
               },
@@ -189,7 +189,7 @@ export class OfferService {
             customer: {
               select: {
                 id: true,
-                fullName: true,
+                name: true,
                 email: true,
                 phone: true,
                 company: true,
@@ -237,7 +237,7 @@ export class OfferService {
           customer: {
             select: {
               id: true,
-              fullName: true,
+              name: true,
               email: true,
               phone: true,
               company: true,

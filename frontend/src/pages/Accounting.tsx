@@ -36,7 +36,7 @@ interface Invoice {
   type: string
   customer: {
     id: number
-    fullName: string
+    name: string
     email: string
     phone: string
     taxNumber?: string
@@ -67,7 +67,7 @@ interface Offer {
   notes?: string
   customer: {
     id: number
-    fullName: string
+    name: string
     email: string
     phone: string
     company?: string
@@ -573,7 +573,7 @@ export default function Accounting() {
                                 </td>
                                 <td className="px-6 py-4">
                                   <div className="text-sm font-medium text-neutral-900">
-                                    {invoice.customer.fullName}
+                                    {invoice.customer.name}
                                   </div>
                                   <div className="text-xs text-neutral-500">{invoice.customer.email}</div>
                                 </td>
@@ -760,7 +760,7 @@ export default function Accounting() {
                                 </td>
                                 <td className="px-6 py-4">
                                   <div className="text-sm font-medium text-neutral-900">
-                                    {offer.customer.fullName}
+                                    {offer.customer.name}
                                   </div>
                                   <div className="text-xs text-neutral-500">
                                     {offer.customer.email}
