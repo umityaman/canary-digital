@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Plus, Calendar, Clock, History, Users, Video, MapPin, CalendarDays } from 'lucide-react';
+import { Plus, Calendar, Clock, History, Users, Video, MapPin } from 'lucide-react';
 
-type Tab = 'upcoming' | 'today' | 'history' | 'rooms' | 'calendar';
+type Tab = 'upcoming' | 'today' | 'history' | 'rooms';
 
 export default function Meetings(){
   const [activeTab, setActiveTab] = useState<Tab>('upcoming');
@@ -11,7 +11,6 @@ export default function Meetings(){
     { id: 'today' as const, label: 'Bugün', icon: <Clock size={18} />, description: 'Bugünkü toplantılar' },
     { id: 'history' as const, label: 'Geçmiş', icon: <History size={18} />, description: 'Tamamlanan toplantılar' },
     { id: 'rooms' as const, label: 'Toplantı Odaları', icon: <MapPin size={18} />, description: 'Oda durumu ve rezervasyon' },
-    { id: 'calendar' as const, label: 'Takvim', icon: <CalendarDays size={18} />, description: 'Aylık takvim görünümü' },
   ];
 
   return (
@@ -319,79 +318,6 @@ export default function Meetings(){
                   <button className="w-full mt-4 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors text-sm">
                     Link Oluştur
                   </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'calendar' && (
-            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-neutral-900">Takvim Görünümü</h2>
-                <div className="flex items-center gap-2">
-                  <button className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-                    ← Önceki Ay
-                  </button>
-                  <span className="px-4 py-2 font-medium text-neutral-900">Ekim 2025</span>
-                  <button className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-                    Sonraki Ay →
-                  </button>
-                </div>
-              </div>
-
-              {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-2">
-                {/* Header - Days */}
-                {['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'].map((day) => (
-                  <div key={day} className="text-center font-semibold text-neutral-600 text-sm py-2">
-                    {day}
-                  </div>
-                ))}
-
-                {/* Calendar Days */}
-                {Array.from({ length: 35 }, (_, i) => {
-                  const dayNum = i - 1; // Starting from day 1
-                  const isToday = dayNum === 14;
-                  const hasMeeting = [5, 8, 14, 19, 22, 28].includes(dayNum);
-                  
-                  return (
-                    <div
-                      key={i}
-                      className={`
-                        aspect-square border border-neutral-200 rounded-lg p-2 text-sm
-                        ${dayNum < 1 || dayNum > 31 ? 'bg-neutral-50 text-neutral-300' : 'bg-white hover:bg-neutral-50 cursor-pointer'}
-                        ${isToday ? 'border-2 border-neutral-900 bg-neutral-50' : ''}
-                        ${hasMeeting ? 'border-blue-500' : ''}
-                      `}
-                    >
-                      {dayNum > 0 && dayNum <= 31 && (
-                        <>
-                          <div className={`font-semibold ${isToday ? 'text-neutral-900' : 'text-neutral-600'}`}>
-                            {dayNum}
-                          </div>
-                          {hasMeeting && (
-                            <div className="mt-1 space-y-1">
-                              <div className="text-xs bg-blue-100 text-blue-800 px-1 py-0.5 rounded truncate">
-                                Toplantı
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Legend */}
-              <div className="mt-6 flex items-center gap-6 text-sm text-neutral-600">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-neutral-900 rounded"></div>
-                  <span>Bugün</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border border-blue-500 bg-blue-50 rounded"></div>
-                  <span>Toplantı Var</span>
                 </div>
               </div>
             </div>

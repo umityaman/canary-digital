@@ -3,22 +3,13 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-// Force rebuild with correct VITE_API_URL - Oct 25, 2025 - NUCLEAR FIX
+// Force rebuild with correct VITE_API_URL - Oct 18, 2025
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [
     react(),
   ],
-  
-  // FORCE PRODUCTION API URL - OVERRIDE ALL ENVIRONMENT VARIABLES
-  define: {
-    'import.meta.env.VITE_API_URL': JSON.stringify(
-      process.env.NODE_ENV === 'production' 
-        ? 'https://canary-backend-672344972017.europe-west1.run.app'
-        : process.env.VITE_API_URL || 'http://localhost:4000'
-    ),
-  },
   
   resolve: {
     alias: {
