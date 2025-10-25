@@ -49,15 +49,14 @@ jobs:
       - name: Build Frontend with VITE_API_URL
         run: |
           cd frontend
-          echo "🔥 FORCING FRESH BUILD - NO CACHE"
-          export VITE_API_URL="https://canary-backend-672344972017.europe-west1.run.app"
-          echo "VITE_API_URL=$VITE_API_URL"
+          echo "Creating .env.production file..."
+          echo "VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app" > .env.production
+          cat .env.production
+          echo "Building frontend..."
           rm -rf dist node_modules/.vite .vite
           npm run build
-          echo "✅ Build complete - dist folder ready"
+          echo "Build complete"
           ls -la dist/
-          echo "📦 Checking built files for API URL..."
-          grep -r "canary-backend" dist/ | head -5 || true
 
       - name: Prepare Frontend for deployment
         run: |
