@@ -3,9 +3,9 @@ import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
-  Search, Filter, ChevronLeft, ChevronRight
+  Search, Filter, ChevronLeft, ChevronRight, Check, X
 } from 'lucide-react'
-import { accountingAPI, invoiceAPI } from '../services/api'
+import { accountingAPI, invoiceAPI, offerAPI } from '../services/api'
 import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
@@ -55,6 +55,33 @@ interface Invoice {
   }>
 }
 
+interface Offer {
+  id: number
+  offerNumber: string
+  offerDate: string
+  validUntil: string
+  totalAmount: number
+  vatAmount: number
+  grandTotal: number
+  status: string
+  notes?: string
+  customer: {
+    id: number
+    fullName: string
+    email: string
+    phone: string
+    company?: string
+  }
+  items: Array<{
+    equipmentId: number
+    description: string
+    quantity: number
+    unitPrice: number
+    days: number
+    discountPercentage?: number
+  }>
+}
+
 export default function Accounting() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
   const [stats, setStats] = useState<AccountingStats | null>(null)
@@ -68,6 +95,14 @@ export default function Accounting() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
+  // Offer list state
+  const [offers, setOffers] = useState<Offer[]>([])
+  const [offersLoading, setOffersLoading] = useState(false)
+  const [offerSearch, setOfferSearch] = useState('')
+  const [offerStatusFilter, setOfferStatusFilter] = useState<string>('')
+  const [offerCurrentPage, setOfferCurrentPage] = useState(1)
+  const [offerTotalPages, setOfferTotalPages] = useState(1)
+
   // Load accounting stats on mount
   useEffect(() => {
     loadStats()
@@ -79,6 +114,13 @@ export default function Accounting() {
       loadInvoices()
     }
   }, [activeTab, currentPage, invoiceStatusFilter])
+
+  // Load offers when offer tab is active
+  useEffect(() => {
+    if (activeTab === 'offer') {
+      loadOffers()
+    }
+  }, [activeTab, offerCurrentPage, offerStatusFilter])
 
   const loadStats = async () => {
     try {
@@ -117,6 +159,41 @@ export default function Accounting() {
     loadInvoices()
   }
 
+  const loadOffers = async () => {
+    try {
+      setOffersLoading(true)
+      const response = await offerAPI.getAll({
+        status: offerStatusFilter || undefined,
+        search: offerSearch || undefined,
+        page: offerCurrentPage,
+        limit: 10,
+      })
+      setOffers(response.data.data)
+      setOfferTotalPages(response.data.pagination.totalPages)
+    } catch (error: any) {
+      console.error('Failed to load offers:', error)
+      toast.error('Teklifler yüklenemedi')
+    } finally {
+      setOffersLoading(false)
+    }
+  }
+
+  const handleSearchOffers = () => {
+    setOfferCurrentPage(1)
+    loadOffers()
+  }
+
+  const handleOfferStatusUpdate = async (offerId: number, status: string) => {
+    try {
+      await offerAPI.updateStatus(offerId, status)
+      toast.success('Teklif durumu güncellendi')
+      loadOffers()
+    } catch (error: any) {
+      console.error('Failed to update offer status:', error)
+      toast.error('Durum güncellenemedi')
+    }
+  }
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('tr-TR', {
       style: 'currency',
@@ -142,6 +219,23 @@ export default function Accounting() {
       partial_paid: { label: 'Kısmi Ödeme', color: 'bg-yellow-100 text-yellow-700' },
       cancelled: { label: 'İptal', color: 'bg-red-100 text-red-700' },
       overdue: { label: 'Vadesi Geçmiş', color: 'bg-orange-100 text-orange-700' },
+    }
+    const badge = badges[status] || { label: status, color: 'bg-gray-100 text-gray-700' }
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
+        {badge.label}
+      </span>
+    )
+  }
+
+  const getOfferStatusBadge = (status: string) => {
+    const badges: Record<string, { label: string; color: string }> = {
+      draft: { label: 'Taslak', color: 'bg-gray-100 text-gray-700' },
+      sent: { label: 'Gönderildi', color: 'bg-blue-100 text-blue-700' },
+      accepted: { label: 'Kabul Edildi', color: 'bg-green-100 text-green-700' },
+      rejected: { label: 'Reddedildi', color: 'bg-red-100 text-red-700' },
+      converted: { label: 'Faturaya Dönüştü', color: 'bg-purple-100 text-purple-700' },
+      expired: { label: 'Süresi Doldu', color: 'bg-orange-100 text-orange-700' },
     }
     const badge = badges[status] || { label: status, color: 'bg-gray-100 text-gray-700' }
     return (
@@ -556,41 +650,216 @@ export default function Accounting() {
             {/* Offer Tab */}
             {activeTab === 'offer' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Teklif Yönetimi</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center mb-4">
-                      <FileText className="text-white" size={24} />
-                    </div>
-                    <h3 className="font-semibold mb-2">Hızlı Teklif Oluştur</h3>
-                    <p className="text-sm text-neutral-600 mb-4">Profesyonel teklifler hazırla</p>
-                    <button className="w-full bg-neutral-900 text-white py-2 rounded-xl hover:bg-neutral-800 transition-colors">
-                      Teklif Oluştur
-                    </button>
-                  </div>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-neutral-900">Teklif Listesi</h2>
+                  <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2">
+                    <Receipt size={18} />
+                    Yeni Teklif
+                  </button>
+                </div>
 
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center mb-4">
-                      <Receipt className="text-white" size={24} />
+                {/* Filters */}
+                <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Search */}
+                    <div className="relative">
+                      <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
+                      <input
+                        type="text"
+                        placeholder="Teklif no veya müşteri ara..."
+                        value={offerSearch}
+                        onChange={(e) => setOfferSearch(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSearchOffers()}
+                        className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                      />
                     </div>
-                    <h3 className="font-semibold mb-2">Faturaya Dönüştür</h3>
-                    <p className="text-sm text-neutral-600 mb-4">Onaylanan teklifleri faturala</p>
-                    <button className="w-full bg-neutral-900 text-white py-2 rounded-xl hover:bg-neutral-800 transition-colors">
-                      Dönüştür
-                    </button>
-                  </div>
 
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center mb-4">
-                      <BarChart3 className="text-white" size={24} />
+                    {/* Status Filter */}
+                    <div className="relative">
+                      <Filter className="absolute left-3 top-3 text-neutral-400" size={18} />
+                      <select
+                        value={offerStatusFilter}
+                        onChange={(e) => {
+                          setOfferStatusFilter(e.target.value)
+                          setOfferCurrentPage(1)
+                        }}
+                        className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 appearance-none"
+                      >
+                        <option value="">Tüm Durumlar</option>
+                        <option value="draft">Taslak</option>
+                        <option value="sent">Gönderildi</option>
+                        <option value="accepted">Kabul Edildi</option>
+                        <option value="rejected">Reddedildi</option>
+                        <option value="converted">Faturaya Dönüştü</option>
+                        <option value="expired">Süresi Doldu</option>
+                      </select>
                     </div>
-                    <h3 className="font-semibold mb-2">Teklifleri İncele</h3>
-                    <p className="text-sm text-neutral-600 mb-4">Filtreleyerek görüntüle</p>
-                    <button className="w-full bg-neutral-900 text-white py-2 rounded-xl hover:bg-neutral-800 transition-colors">
-                      Listele
+
+                    {/* Search Button */}
+                    <button
+                      onClick={handleSearchOffers}
+                      className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+                    >
+                      Ara
                     </button>
                   </div>
+                </div>
+
+                {/* Offer Table */}
+                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                  {offersLoading ? (
+                    <div className="p-12 text-center text-neutral-600">
+                      <RefreshCw className="animate-spin mx-auto mb-4" size={32} />
+                      Teklifler yükleniyor...
+                    </div>
+                  ) : offers.length === 0 ? (
+                    <div className="p-12 text-center text-neutral-600">
+                      <Receipt className="mx-auto mb-4 text-neutral-400" size={48} />
+                      <p className="text-lg font-medium">Teklif bulunamadı</p>
+                      <p className="text-sm mt-2">Yeni teklif oluşturarak başlayın</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-neutral-50 border-b border-neutral-200">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                Teklif No
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                Müşteri
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                Tarih
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                Geçerlilik
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                Tutar
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                Durum
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                İşlemler
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-neutral-200">
+                            {offers.map((offer) => (
+                              <tr key={offer.id} className="hover:bg-neutral-50 transition-colors">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm font-medium text-neutral-900">
+                                    {offer.offerNumber}
+                                  </div>
+                                  <div className="text-xs text-neutral-500">
+                                    {offer.items?.length || 0} kalem
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="text-sm font-medium text-neutral-900">
+                                    {offer.customer.fullName}
+                                  </div>
+                                  <div className="text-xs text-neutral-500">
+                                    {offer.customer.email}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm text-neutral-900">
+                                    {formatDate(offer.offerDate)}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className={`text-sm ${
+                                    new Date(offer.validUntil) < new Date() 
+                                      ? 'text-red-600 font-medium' 
+                                      : 'text-neutral-900'
+                                  }`}>
+                                    {formatDate(offer.validUntil)}
+                                  </div>
+                                  {new Date(offer.validUntil) < new Date() && (
+                                    <div className="text-xs text-red-500">Süresi doldu</div>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm font-medium text-neutral-900">
+                                    {formatCurrency(offer.grandTotal)}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {getOfferStatusBadge(offer.status)}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="flex items-center gap-2">
+                                    {offer.status === 'draft' && (
+                                      <button
+                                        onClick={() => handleOfferStatusUpdate(offer.id, 'sent')}
+                                        className="text-blue-600 hover:text-blue-800"
+                                        title="Gönder"
+                                      >
+                                        <Upload size={16} />
+                                      </button>
+                                    )}
+                                    {offer.status === 'sent' && (
+                                      <>
+                                        <button
+                                          onClick={() => handleOfferStatusUpdate(offer.id, 'accepted')}
+                                          className="text-green-600 hover:text-green-800"
+                                          title="Kabul Et"
+                                        >
+                                          <Check size={16} />
+                                        </button>
+                                        <button
+                                          onClick={() => handleOfferStatusUpdate(offer.id, 'rejected')}
+                                          className="text-red-600 hover:text-red-800"
+                                          title="Reddet"
+                                        >
+                                          <X size={16} />
+                                        </button>
+                                      </>
+                                    )}
+                                    {(offer.status === 'accepted' || offer.status === 'sent') && (
+                                      <button
+                                        className="text-neutral-900 hover:text-neutral-700 font-medium text-sm"
+                                        title="Faturaya Dönüştür"
+                                      >
+                                        Faturala
+                                      </button>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Pagination */}
+                      <div className="bg-neutral-50 px-6 py-4 flex items-center justify-between border-t border-neutral-200">
+                        <div className="text-sm text-neutral-600">
+                          Sayfa {offerCurrentPage} / {offerTotalPages}
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setOfferCurrentPage(p => Math.max(1, p - 1))}
+                            disabled={offerCurrentPage === 1}
+                            className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <ChevronLeft size={18} />
+                          </button>
+                          <button
+                            onClick={() => setOfferCurrentPage(p => Math.min(offerTotalPages, p + 1))}
+                            disabled={offerCurrentPage === offerTotalPages}
+                            className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <ChevronRight size={18} />
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}

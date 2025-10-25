@@ -655,4 +655,70 @@ export const invoiceAPI = {
   }) => api.post('/invoices/payment-plan', data),
 };
 
+// Offer API
+export const offerAPI = {
+  // List all offers
+  getAll: (params?: {
+    status?: string;
+    customerId?: number;
+    search?: string;
+    startDate?: string;
+    endDate?: string;
+    page?: number;
+    limit?: number;
+  }) => api.get('/offers', { params }),
+  
+  // Get offer by ID
+  getById: (id: number) => api.get(`/offers/${id}`),
+  
+  // Get offer stats
+  getStats: (params?: { startDate?: string; endDate?: string }) =>
+    api.get('/offers/stats', { params }),
+  
+  // Create offer
+  create: (data: {
+    customerId: number;
+    items: Array<{
+      equipmentId: number;
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      days: number;
+      discountPercentage?: number;
+    }>;
+    validityDays?: number;
+    notes?: string;
+  }) => api.post('/offers', data),
+  
+  // Update offer
+  update: (id: number, data: {
+    items?: Array<{
+      equipmentId: number;
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      days: number;
+      discountPercentage?: number;
+    }>;
+    validUntil?: string;
+    status?: string;
+    notes?: string;
+  }) => api.put(`/offers/${id}`, data),
+  
+  // Delete offer
+  delete: (id: number) => api.delete(`/offers/${id}`),
+  
+  // Convert offer to invoice
+  convertToInvoice: (id: number, data: {
+    orderId: number;
+    startDate: string;
+    endDate: string;
+    notes?: string;
+  }) => api.post(`/offers/${id}/convert-to-invoice`, data),
+  
+  // Update offer status
+  updateStatus: (id: number, status: string) =>
+    api.patch(`/offers/${id}/status`, { status }),
+};
+
 export default api

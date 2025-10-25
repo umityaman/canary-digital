@@ -187,6 +187,7 @@ safeLoadRoute('/api/report-templates', './routes/reportTemplates', 'Report Templ
 safeLoadRoute('/api/generated-reports', './routes/generatedReports', 'Generated Reports');
 safeLoadRoute('/api/monitoring', './routes/monitoring', 'Monitoring');
 safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
+safeLoadRoute('/api/offers', './routes/offer', 'Offers & Quotes');
 safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');
 safeLoadRoute('/api/payments', './routes/payments', 'Iyzipay payments');
