@@ -53,13 +53,16 @@ jobs:
           echo "VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app" > .env.production
           echo "Created .env.production:"
           cat .env.production
+          echo "Starting build..."
           (
             unset VITE_API_URL
             export NODE_ENV=production
-            npm run build
+            npm run build 2>&1 | tee build.log || (echo "Build failed!" && cat build.log && exit 1)
           )
+          echo "Build completed successfully"
           echo "Verifying built files:"
-          grep -o "https://canary-backend[^\"']*" dist/assets/*.js | head -3
+          ls -lh dist/ || echo "No dist folder"
+          grep -o "https://canary-backend[^\"']*" dist/assets/*.js 2>/dev/null | head -3 || echo "No URLs found"
 
       - name: Prepare Frontend for deployment
         run: |
@@ -99,9 +102,10 @@ jobs:
             --allow-unauthenticated \
             --min-instances=0 \
             --max-instances=10 \
-            --memory=256Mi \
+            --memory=512Mi \
             --cpu=1 \
-            --port=8080
+            --port=8080 \
+            --timeout=900
 
       - name: Get Service URL
         id: get-url
