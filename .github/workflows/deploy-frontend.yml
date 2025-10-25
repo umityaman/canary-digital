@@ -48,7 +48,7 @@ jobs:
 
       - name: Build Frontend with VITE_API_URL
         env:
-          VITE_API_URL: ${{ env.BACKEND_URL }}
+          VITE_API_URL: https://canary-backend-672344972017.europe-west1.run.app
         run: |
           cd frontend
           echo "Building with VITE_API_URL=$VITE_API_URL"
