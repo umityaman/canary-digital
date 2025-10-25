@@ -1,14 +1,58 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe
 } from 'lucide-react'
+import { accountingAPI } from '../services/api'
+import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
 
+interface AccountingStats {
+  totalRevenue: number
+  totalExpenses: number
+  netProfit: number
+  totalCollections: number
+  totalOverdue: number
+  invoiceCount: number
+  period: {
+    start: string
+    end: string
+  }
+}
+
 export default function Accounting() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
+  const [stats, setStats] = useState<AccountingStats | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  // Load accounting stats on mount
+  useEffect(() => {
+    loadStats()
+  }, [])
+
+  const loadStats = async () => {
+    try {
+      setLoading(true)
+      const response = await accountingAPI.getStats()
+      setStats(response.data.data)
+    } catch (error: any) {
+      console.error('Failed to load accounting stats:', error)
+      toast.error('İstatistikler yüklenemedi')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('tr-TR', {
+      style: 'currency',
+      currency: 'TRY',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount)
+  }
 
   const tabs = [
     { id: 'dashboard' as const, label: 'Ana Sayfa', icon: <BarChart3 size={18} /> },
@@ -27,28 +71,38 @@ export default function Accounting() {
     <div className="space-y-6">
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Bu Ay Gelir */}
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
               <TrendingUp className="text-neutral-700" size={24} />
             </div>
-            <span className="text-xs text-neutral-700 font-medium">+12.5%</span>
+            {stats && stats.invoiceCount > 0 && (
+              <span className="text-xs text-neutral-700 font-medium">
+                {stats.invoiceCount} fatura
+              </span>
+            )}
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">₺45,230</h3>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+            {loading ? '...' : stats ? formatCurrency(stats.totalRevenue) : '₺0'}
+          </h3>
           <p className="text-sm text-neutral-600">Bu Ay Gelir</p>
         </div>
 
+        {/* Bu Ay Gider */}
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
               <TrendingDown className="text-neutral-700" size={24} />
             </div>
-            <span className="text-xs text-neutral-700 font-medium">+8.2%</span>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">₺28,450</h3>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+            {loading ? '...' : stats ? formatCurrency(stats.totalExpenses) : '₺0'}
+          </h3>
           <p className="text-sm text-neutral-600">Bu Ay Gider</p>
         </div>
 
+        {/* Net Kâr */}
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
@@ -56,10 +110,15 @@ export default function Accounting() {
             </div>
             <span className="text-xs text-neutral-700 font-medium">Net</span>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">₺16,780</h3>
+          <h3 className={`text-2xl font-bold mb-1 ${
+            stats && stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {loading ? '...' : stats ? formatCurrency(stats.netProfit) : '₺0'}
+          </h3>
           <p className="text-sm text-neutral-600">Net Kâr</p>
         </div>
 
+        {/* Tahsilat / Bekleyen */}
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
@@ -67,8 +126,15 @@ export default function Accounting() {
             </div>
             <span className="text-xs text-neutral-700 font-medium">Bekleyen</span>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">₺12,340</h3>
-          <p className="text-sm text-neutral-600">Tahsilat</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+            {loading ? '...' : stats ? formatCurrency(stats.totalOverdue) : '₺0'}
+          </h3>
+          <p className="text-sm text-neutral-600">Vade Geçmiş</p>
+          {stats && stats.totalCollections > 0 && (
+            <p className="text-xs text-green-600 mt-2">
+              Bu ay: {formatCurrency(stats.totalCollections)}
+            </p>
+          )}
         </div>
       </div>
 

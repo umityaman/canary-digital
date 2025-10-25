@@ -549,4 +549,110 @@ export const reportAPI = {
   },
 };
 
+// Accounting API
+export const accountingAPI = {
+  // Dashboard Quick Stats
+  getStats: (params?: { startDate?: string; endDate?: string }) => 
+    api.get('/accounting/stats', { params }),
+  
+  // Income-Expense Analysis
+  getIncomeExpenseAnalysis: (params: { 
+    startDate: string; 
+    endDate: string; 
+    groupBy?: 'day' | 'week' | 'month' 
+  }) => api.get('/accounting/income-expense', { params }),
+  
+  // Cari Account Summary
+  getCariSummary: () => api.get('/accounting/cari'),
+  
+  // Cash Management
+  getCashSummary: () => api.get('/accounting/cash'),
+  
+  // VAT Report
+  getVATReport: (params: { startDate: string; endDate: string }) => 
+    api.get('/accounting/vat-report', { params }),
+  
+  // Income Recording (TODO: Requires Expense model)
+  recordIncome: (data: any) => api.post('/accounting/income', data),
+  
+  // Expense Recording (TODO: Requires Expense model)
+  recordExpense: (data: any) => api.post('/accounting/expense', data),
+};
+
+// Invoice API
+export const invoiceAPI = {
+  // List all invoices (TODO: Will be implemented in Phase 2)
+  getAll: (params?: { 
+    status?: string; 
+    type?: string; 
+    search?: string;
+    page?: number;
+    limit?: number;
+  }) => api.get('/invoices', { params }),
+  
+  // Get invoice by ID
+  getById: (id: number) => api.get(`/invoices/${id}`),
+  
+  // Get customer invoices
+  getCustomerInvoices: (customerId: number, params?: {
+    status?: string;
+    type?: string;
+    startDate?: string;
+    endDate?: string;
+  }) => api.get(`/invoices/customer/${customerId}`, { params }),
+  
+  // Create rental invoice
+  createRental: (data: {
+    orderId: number;
+    customerId: number;
+    items: Array<{
+      equipmentId: number;
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      days: number;
+      discountPercentage?: number;
+    }>;
+    startDate: string;
+    endDate: string;
+    notes?: string;
+  }) => api.post('/invoices/rental', data),
+  
+  // Record payment
+  recordPayment: (invoiceId: number, data: {
+    amount: number;
+    paymentDate: string;
+    paymentMethod: string;
+    transactionId?: string;
+    notes?: string;
+  }) => api.post(`/invoices/${invoiceId}/payment`, data),
+  
+  // Create late fee invoice
+  createLateFee: (data: {
+    orderId: number;
+    lateDays: number;
+    dailyFee: number;
+    notes?: string;
+  }) => api.post('/invoices/late-fee', data),
+  
+  // Create deposit refund
+  createDepositRefund: (data: {
+    orderId: number;
+    depositAmount: number;
+    notes?: string;
+  }) => api.post('/invoices/deposit-refund', data),
+  
+  // Cancel invoice
+  cancel: (id: number, reason: string) => 
+    api.delete(`/invoices/${id}`, { data: { reason } }),
+  
+  // Create payment plan
+  createPaymentPlan: (data: {
+    orderId: number;
+    totalAmount: number;
+    installments: number;
+    startDate: string;
+  }) => api.post('/invoices/payment-plan', data),
+};
+
 export default api
