@@ -1,18 +1,18 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
-// Debug: Log API URL - Updated Oct 18, 2025
+// Debug: Log API URL - Updated Oct 25, 2025 - FIXED double /api
 console.log('🔧 API Configuration:', {
   VITE_API_URL: import.meta.env.VITE_API_URL,
-  API_URL,
+  API_URL: `${API_URL}/api`,
   mode: import.meta.env.MODE,
   timestamp: new Date().toISOString()
 })
 
-// Axios instance oluştur
+// Axios instance oluştur - add /api suffix
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: `${API_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
