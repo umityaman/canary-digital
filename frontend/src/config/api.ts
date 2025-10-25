@@ -55,3 +55,5 @@ export function getAuthHeaders(): HeadersInit {
   if (token) headers['Authorization'] = `Bearer ${token}`;
   return headers;
 }
+
+// Build version: 2025-10-25
