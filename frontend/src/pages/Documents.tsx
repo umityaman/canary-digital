@@ -352,7 +352,18 @@ export default function Documents() {
           {activeTab === 'analytics' && (
             <div className="bg-white rounded-2xl border border-neutral-200 p-6">
               <h2 className="text-xl font-bold text-neutral-900 mb-6">Raporlar ve Analizler</h2>
-              <AnalyticsDashboard />
+              <div className="p-8 bg-blue-50 rounded-xl border border-blue-200">
+                <div className="text-center">
+                  <BarChart3 className="w-16 h-16 mx-auto mb-4 text-blue-600" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Analytics Dashboard Yükleniyor</h3>
+                  <p className="text-gray-600 mb-4">
+                    Analytics özelliği geliştirme aşamasında...
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Şu anda: Documents sayfası başarıyla yüklendi ✅
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 
