@@ -39,8 +39,13 @@ const Reports = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchTemplates();
-  }, []);
+    // Only fetch templates when templates tab is active
+    if (activeTab === 'templates') {
+      fetchTemplates();
+    } else {
+      setLoading(false);
+    }
+  }, [activeTab]);
 
   const fetchTemplates = async () => {
     try {
@@ -52,7 +57,10 @@ const Reports = () => {
       }
     } catch (error) {
       console.error('Error fetching templates:', error);
-      setError(error instanceof Error ? error.message : 'Failed to load templates');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load templates';
+      setError(errorMessage);
+      // Don't show error for templates - just log it
+      console.warn('Templates endpoint not available:', errorMessage);
     } finally {
       setLoading(false);
     }
@@ -128,41 +136,8 @@ const Reports = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="text-center">
-          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-indigo-600" />
-          <p className="text-gray-600">Raporlar yükleniyor...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-lg">
-          <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Hata Oluştu</h3>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={() => {
-              setError(null);
-              fetchTemplates();
-            }}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-          >
-            Tekrar Dene
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Don't show loading or error states globally - handle per tab
+  // This allows Analytics tab to load even if Templates fail
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -214,6 +189,37 @@ const Reports = () => {
         </div>
       ) : (
         <>
+          {/* Loading State for Templates */}
+          {loading ? (
+            <div className="flex items-center justify-center py-12 bg-white rounded-lg shadow">
+              <div className="text-center">
+                <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-indigo-600" />
+                <p className="text-gray-600">Şablonlar yükleniyor...</p>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="flex items-center justify-center py-12 bg-white rounded-lg shadow">
+              <div className="text-center max-w-md p-6">
+                <div className="text-yellow-500 mb-4">
+                  <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Şablonlar Yüklenemedi</h3>
+                <p className="text-gray-600 mb-4 text-sm">{error}</p>
+                <button
+                  onClick={() => {
+                    setError(null);
+                    fetchTemplates();
+                  }}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
+                >
+                  Tekrar Dene
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-lg shadow p-4">
@@ -374,6 +380,8 @@ const Reports = () => {
           <p className="text-gray-600">Başlamak için ilk rapor şablonunuzu oluşturun</p>
         </div>
       )}
+            </>
+          )}
         </>
       )}
     </div>
