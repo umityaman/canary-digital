@@ -3,18 +3,19 @@
  * Centralized API URL configuration for the entire application
  */
 
-// Get base URL from environment variable
+// Get base URL from environment variable (without /api suffix)
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
-// Export full API URL with /api suffix
+// Add /api suffix to get full API base URL
 export const API_BASE_URL = `${BASE_URL}/api`;
 
 // Log configuration in development
 if (import.meta.env.DEV) {
   console.log('🔧 API Configuration:', {
     VITE_API_URL: import.meta.env.VITE_API_URL,
-    BASE_URL,
     API_BASE_URL,
+    mode: import.meta.env.MODE,
+    timestamp: new Date().toISOString(),
   });
 }
 

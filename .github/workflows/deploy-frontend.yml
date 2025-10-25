@@ -13,7 +13,7 @@ env:
   PROJECT_ID: canary-digital-475319
   REGION: europe-west1
   SERVICE_NAME: canary-frontend
-  BACKEND_URL: https://canary-backend-672344972017.europe-west1.run.app/api
+  BACKEND_URL: https://canary-backend-672344972017.europe-west1.run.app
 
 jobs:
   deploy:
