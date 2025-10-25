@@ -9,6 +9,11 @@ on:
       - '.github/workflows/deploy-frontend.yml'
   workflow_dispatch: # Manuel trigger için
 
+# Prevent concurrent deployments
+concurrency:
+  group: deploy-frontend-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   PROJECT_ID: canary-digital-475319
   REGION: europe-west1
