@@ -9,6 +9,15 @@ const execPromise = promisify(exec);
 const router = express.Router();
 
 /**
+ * @route   GET /api/seed/health
+ * @desc    Test if seed route is loaded
+ * @access  Public
+ */
+router.get('/health', (req, res) => {
+  res.json({ ok: true, message: 'Seed route loaded successfully' });
+});
+
+/**
  * @route   POST /api/seed/migrate
  * @desc    Run database migrations (ADMIN ONLY)
  * @access  Private (Admin)
