@@ -168,40 +168,187 @@ async function main() {
 
   console.log('✅ Customers created');
 
-  // Sample sipariş oluştur (eğer yoksa)
-  const existingOrder = await prisma.order.findFirst({
-    where: { orderNumber: 'ORD-001' }
-  });
+  // Sample siparişler oluştur (eğer yoksa)
+  const existingOrders = await prisma.order.count();
   
-  if (!existingOrder) {
-    const order = await prisma.order.create({
-      data: {
-        orderNumber: 'ORD-001',
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 gün sonra
-        totalAmount: 1350.0,
-        status: 'CONFIRMED',
-        notes: 'Reklam çekimi için ekipman kiralaması',
-        customerId: 1, // İlk müşteri
+  if (existingOrders === 0) {
+    // 5 farklı statüde sipariş oluştur
+    const orderStatuses = ['CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'COMPLETED', 'CONFIRMED'];
+    const orderData = [];
+    
+    for (let i = 0; i < 5; i++) {
+      const startDate = new Date(2025, 9, 10 + i); // October 10-14, 2025
+      const endDate = new Date(2025, 9, 13 + i); // 3 days rental
+      const days = 3;
+      const dailyRate = 450.0;
+      
+      orderData.push({
+        orderNumber: `ORD-2025${String(i + 1).padStart(3, '0')}`,
+        startDate,
+        endDate,
+        totalAmount: dailyRate * days,
+        status: orderStatuses[i],
+        notes: `Ekipman kiralaması - ${i + 1}`,
+        customerId: (i % 2) + 1, // Rotate between 2 customers
         companyId: company.id,
-        orderItems: {
-          create: [
-            {
-              quantity: 1,
-              dailyRate: 450.0,
-              totalAmount: 1350.0,
-              equipmentId: 1 // Sony A7 IV
-            }
-          ]
+        userId: admin.id
+      });
+    }
+    
+    for (const data of orderData) {
+      await prisma.order.create({
+        data: {
+          ...data,
+          orderItems: {
+            create: [
+              {
+                quantity: 1,
+                dailyRate: 450.0,
+                totalAmount: data.totalAmount,
+                equipmentId: 1 // Sony A7 IV
+              }
+            ]
+          }
         }
-      },
-      include: {
-        orderItems: true
-      }
-    });
-    console.log('✅ Sample order created');
+      });
+    }
+    console.log('✅ Sample orders created');
   } else {
-    console.log('⏭️  Order already exists, skipping');
+    console.log('⏭️  Orders already exist, skipping');
+  }
+
+  // Faturalar oluştur
+  const existingInvoices = await prisma.invoice.count();
+  if (existingInvoices === 0) {
+    const orders = await prisma.order.findMany({ take: 5 });
+    
+    for (let i = 0; i < orders.length; i++) {
+      const order = orders[i];
+      const subtotal = order.totalAmount;
+      const vatRate = 0.20; // %20 KDV
+      const vatAmount = subtotal * vatRate;
+      const total = subtotal + vatAmount;
+      
+      await prisma.invoice.create({
+        data: {
+          invoiceNumber: `INV-2025${String(i + 1).padStart(4, '0')}`,
+          orderId: order.id,
+          customerId: order.customerId,
+          companyId: company.id,
+          invoiceType: 'rental',
+          invoiceDate: new Date(2025, 9, 15 + i),
+          dueDate: new Date(2025, 10, 15 + i), // 30 days payment term
+          items: [
+            {
+              description: `Sony A7 IV - 3 Gün Kiralama`,
+              quantity: 3,
+              unitPrice: 450.0,
+              amount: subtotal,
+            },
+          ],
+          subtotal,
+          vatRate,
+          vatAmount,
+          totalAmount: subtotal, // For backward compatibility
+          grandTotal: total,
+          total, // Alias
+          status: i < 2 ? 'paid' : 'pending',
+          notes: `Fatura - ${order.orderNumber}`,
+        },
+      });
+    }
+    console.log('✅ Invoices created');
+  } else {
+    console.log('⏭️  Invoices already exist, skipping');
+  }
+
+  // Ödemeler oluştur (ilk 2 fatura için)
+  const existingPayments = await prisma.payment.count();
+  if (existingPayments === 0) {
+    const paidInvoices = await prisma.invoice.findMany({
+      where: { status: 'paid' },
+      take: 2
+    });
+    
+    for (let i = 0; i < paidInvoices.length; i++) {
+      await prisma.payment.create({
+        data: {
+          invoiceId: paidInvoices[i].id,
+          amount: paidInvoices[i].total,
+          paymentDate: new Date(2025, 9, 20 + i),
+          paymentMethod: i === 0 ? 'bank_transfer' : 'credit_card',
+          status: 'completed',
+          notes: `Ödeme - ${paidInvoices[i].invoiceNumber}`,
+        },
+      });
+    }
+    console.log('✅ Payments created');
+  } else {
+    console.log('⏭️  Payments already exist, skipping');
+  }
+
+  // Teklifler oluştur
+  const existingOffers = await prisma.offer.count();
+  if (existingOffers === 0) {
+    const offerStatuses = ['sent', 'draft', 'accepted', 'rejected', 'expired'];
+    
+    for (let i = 0; i < 5; i++) {
+      const customerId = (i % 2) + 1;
+      const days = 5;
+      const subtotal = 450.0 * days;
+      const vatRate = 0.20;
+      const vatAmount = subtotal * vatRate;
+      const total = subtotal + vatAmount;
+      
+      await prisma.offer.create({
+        data: {
+          offerNumber: `OF-20251025-${String(i + 1).padStart(3, '0')}`,
+          customerId,
+          offerDate: new Date(2025, 9, 20 + i),
+          validUntil: new Date(2025, 10, 20 + i), // 30 days validity
+          items: [
+            {
+              description: `Sony A7 IV - 5 Gün Kiralama`,
+              quantity: 5,
+              unitPrice: 450.0,
+              amount: subtotal,
+            },
+          ],
+          totalAmount: subtotal,
+          vatAmount,
+          grandTotal: total,
+          status: offerStatuses[i],
+          notes: `Teklif - Ekipman kirası ${i + 1}`,
+        },
+      });
+    }
+    console.log('✅ Offers created');
+  } else {
+    console.log('⏭️  Offers already exist, skipping');
+  }
+
+  // Giderler oluştur
+  const existingExpenses = await prisma.expense.count();
+  if (existingExpenses === 0) {
+    const expenseCategories = ['Rent', 'Utilities', 'Maintenance', 'Insurance', 'Marketing'];
+    const expenseAmounts = [15000, 2500, 3000, 5000, 4000];
+    
+    for (let i = 0; i < 5; i++) {
+      await prisma.expense.create({
+        data: {
+          description: expenseCategories[i],
+          amount: expenseAmounts[i],
+          category: expenseCategories[i],
+          date: new Date(2025, 9, 5 + i),
+          companyId: company.id,
+          status: 'paid',
+          paymentMethod: 'bank_transfer',
+        },
+      });
+    }
+    console.log('✅ Expenses created');
+  } else {
+    console.log('⏭️  Expenses already exist, skipping');
   }
 
   // Tedarikçiler oluştur
@@ -258,6 +405,18 @@ async function main() {
   console.log('✅ Suppliers created');
 
   console.log('🎉 Seed completed successfully!');
+  console.log('📊 Summary:');
+  console.log('   - 1 Company');
+  console.log('   - 2 Users (Admin + Test)');
+  console.log('   - 5 Equipment items');
+  console.log('   - 2 Customers');
+  console.log('   - 5 Orders (various statuses)');
+  console.log('   - 5 Invoices (2 paid, 3 pending)');
+  console.log('   - 2 Payments');
+  console.log('   - 5 Offers (various statuses)');
+  console.log('   - 5 Expenses');
+  console.log('   - 5 Suppliers');
+  console.log('');
   console.log('📧 Login credentials:');
   console.log('   Admin: admin@canary.com / admin123');
   console.log('   Test:  test@canary.com / test123');

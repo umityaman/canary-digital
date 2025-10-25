@@ -70,6 +70,9 @@ model Company {
   reportTemplates      ReportTemplate[]   @relation("CompanyReportTemplates")
   generatedReports     GeneratedReport[]  @relation("CompanyGeneratedReports")
   reportSchedules      ReportSchedule[]   @relation("CompanyReportSchedules")
+  // Accounting Relations
+  invoices             Invoice[]
+  expenses             Expense[]
 }
 
 model User {
@@ -1010,25 +1013,34 @@ model Invoice {
   id               Int           @id @default(autoincrement())
   orderId          Int
   customerId       Int
+  companyId        Int?
   parasutInvoiceId String?       @unique
   invoiceNumber    String?
+  invoiceType      String        @default("rental") // rental, sales, service
   invoiceDate      DateTime
   dueDate          DateTime
-  totalAmount      Float
+  items            Json?         // [{description, quantity, unitPrice, amount}]
+  subtotal         Float?        // Before VAT
+  vatRate          Float?        // VAT percentage (e.g., 0.20 for 20%)
+  totalAmount      Float         // Subtotal (backward compatibility)
   vatAmount        Float
-  grandTotal       Float
+  grandTotal       Float         // Total with VAT
+  total            Float?        // Alias for grandTotal
   paidAmount       Float         @default(0)
   status           String        @default("draft")
   type             String        @default("rental")
+  notes            String?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
   customer         User          @relation(fields: [customerId], references: [id])
   order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  company          Company?      @relation(fields: [companyId], references: [id])
   payments         Payment[]
   transactions     Transaction[]
 
   @@index([orderId])
   @@index([customerId])
+  @@index([companyId])
 }
 
 model Offer {
@@ -1052,12 +1064,33 @@ model Offer {
   @@index([offerDate])
 }
 
+model Expense {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  description   String
+  amount        Float
+  category      String   // Rent, Utilities, Maintenance, Insurance, Marketing, etc.
+  date          DateTime
+  status        String   @default("pending") // pending, paid
+  paymentMethod String?  // bank_transfer, credit_card, cash, etc.
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  company       Company  @relation(fields: [companyId], references: [id])
+
+  @@index([companyId])
+  @@index([category])
+  @@index([date])
+}
+
 model Payment {
   id               Int      @id @default(autoincrement())
   invoiceId        Int
   amount           Float
   paymentDate      DateTime
   paymentMethod    String
+  status           String   @default("completed") // pending, completed, failed
+  notes            String?
   transactionId    String?
   parasutPaymentId String?  @unique
   createdAt        DateTime @default(now())
