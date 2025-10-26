@@ -571,39 +571,83 @@ export const accountingAPI = {
   // VAT Report
   getVATReport: (params: { startDate: string; endDate: string }) => 
     api.get('/accounting/vat-report', { params }),
-  
-  // Income CRUD
-  getIncomes: (params?: { 
-    category?: string; 
-    status?: string; 
-    search?: string;
+
+  // ========== INCOME CRUD ==========
+  // Get all incomes with pagination and filters
+  getIncomes: (params?: {
     page?: number;
     limit?: number;
+    category?: string;
+    status?: string;
     startDate?: string;
     endDate?: string;
+    search?: string;
   }) => api.get('/accounting/incomes', { params }),
-  
-  recordIncome: (data: any) => api.post('/accounting/income', data),
-  
-  updateIncome: (id: number, data: any) => api.put(`/accounting/income/${id}`, data),
-  
+
+  // Create new income
+  createIncome: (data: {
+    description: string;
+    amount: number;
+    category: string;
+    date: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    invoiceId?: number;
+  }) => api.post('/accounting/income', data),
+
+  // Update existing income
+  updateIncome: (id: number, data: {
+    description?: string;
+    amount?: number;
+    category?: string;
+    date?: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    invoiceId?: number;
+  }) => api.put(`/accounting/income/${id}`, data),
+
+  // Delete income
   deleteIncome: (id: number) => api.delete(`/accounting/income/${id}`),
-  
-  // Expense CRUD
-  getExpenses: (params?: { 
-    category?: string; 
-    status?: string; 
-    search?: string;
+
+  // ========== EXPENSE CRUD ==========
+  // Get all expenses with pagination and filters
+  getExpenses: (params?: {
     page?: number;
     limit?: number;
+    category?: string;
+    status?: string;
     startDate?: string;
     endDate?: string;
+    search?: string;
   }) => api.get('/accounting/expenses', { params }),
-  
-  recordExpense: (data: any) => api.post('/accounting/expense', data),
-  
-  updateExpense: (id: number, data: any) => api.put(`/accounting/expense/${id}`, data),
-  
+
+  // Create new expense
+  createExpense: (data: {
+    description: string;
+    amount: number;
+    category: string;
+    date: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    invoiceId?: number;
+  }) => api.post('/accounting/expense', data),
+
+  // Update existing expense
+  updateExpense: (id: number, data: {
+    description?: string;
+    amount?: number;
+    category?: string;
+    date?: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    invoiceId?: number;
+  }) => api.put(`/accounting/expense/${id}`, data),
+
+  // Delete expense
   deleteExpense: (id: number) => api.delete(`/accounting/expense/${id}`),
 };
 
