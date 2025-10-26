@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import path from 'path';
 import morgan from 'morgan';
 import logger, { stream } from './config/logger';
+import { initializeScheduler } from './utils/scheduler';
 // Temporarily disable Sentry due to TypeScript errors
 // import { 
 //   initializeSentry, 
@@ -15,6 +16,9 @@ import logger, { stream } from './config/logger';
 import { setupSwagger } from './config/swagger';
 
 const app = express();
+
+// Initialize reminder scheduler
+initializeScheduler();
 
 // Initialize Sentry (must be first!) - TEMPORARILY DISABLED
 // initializeSentry(app);
@@ -191,6 +195,7 @@ safeLoadRoute('/api/offers', './routes/offer', 'Offers & Quotes');
 safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
 safeLoadRoute('/api/checks', './routes/checks', 'Check Management');
 safeLoadRoute('/api/promissory-notes', './routes/promissory-notes', 'Promissory Notes');
+safeLoadRoute('/api/reminders', './routes/reminders', 'Email Reminders');
 safeLoadRoute('/api/migration', './routes/migration', 'Database Migration (Temporary)');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');
