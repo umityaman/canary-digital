@@ -2,6 +2,7 @@ import express from 'express';
 import { accountingService } from '../services/accounting.service';
 import { authenticateToken } from './auth';
 import { log } from '../config/logger';
+import { prisma } from '../index';
 
 const router = express.Router();
 
@@ -151,42 +152,370 @@ router.get('/vat-report', authenticateToken, async (req, res) => {
 
 /**
  * @route   POST /api/accounting/income
- * @desc    Gelir kaydı ekle (TODO)
+ * @desc    Gelir kaydı ekle
  * @access  Private
  */
 router.post('/income', authenticateToken, async (req, res) => {
   try {
-    // TODO: Expense model oluşturulunca implement edilecek
-    res.status(501).json({
-      success: false,
-      message: 'Income recording endpoint - Coming soon (Expense model required)',
+    const { description, amount, category, date, paymentMethod, notes, status, invoiceId } = req.body;
+    const companyId = req.user?.companyId || 1;
+
+    if (!description || !amount || !category || !date) {
+      return res.status(400).json({
+        success: false,
+        message: 'description, amount, category, date are required',
+      });
+    }
+
+    const income = await prisma.income.create({
+      data: {
+        description,
+        amount: parseFloat(amount),
+        category,
+        date: new Date(date),
+        companyId,
+        paymentMethod,
+        notes,
+        status: status || 'received',
+        invoiceId: invoiceId ? parseInt(invoiceId) : undefined,
+      },
+    });
+
+    res.json({
+      success: true,
+      data: income,
     });
   } catch (error: any) {
-    log.error('Failed to record income:', error);
+    log.error('Failed to create income:', error);
     res.status(500).json({
       success: false,
-      message: error.message || 'Failed to record income',
+      message: error.message || 'Failed to create income',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/incomes
+ * @desc    Gelirleri listele
+ * @access  Private
+ */
+router.get('/incomes', authenticateToken, async (req, res) => {
+  try {
+    const companyId = req.user?.companyId || 1;
+    const { category, startDate, endDate, limit = '50', offset = '0' } = req.query;
+
+    const where: any = { companyId };
+    
+    if (category) {
+      where.category = category as string;
+    }
+    
+    if (startDate || endDate) {
+      where.date = {};
+      if (startDate) where.date.gte = new Date(startDate as string);
+      if (endDate) where.date.lte = new Date(endDate as string);
+    }
+
+    const incomes = await prisma.income.findMany({
+      where,
+      orderBy: { date: 'desc' },
+      take: parseInt(limit as string),
+      skip: parseInt(offset as string),
+      include: {
+        invoice: {
+          select: {
+            id: true,
+            invoiceNumber: true,
+          },
+        },
+      },
+    });
+
+    const total = await prisma.income.count({ where });
+
+    res.json({
+      success: true,
+      data: incomes,
+      pagination: {
+        total,
+        limit: parseInt(limit as string),
+        offset: parseInt(offset as string),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to fetch incomes:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to fetch incomes',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/expenses
+ * @desc    Giderleri listele
+ * @access  Private
+ */
+router.get('/expenses', authenticateToken, async (req, res) => {
+  try {
+    const companyId = req.user?.companyId || 1;
+    const { category, startDate, endDate, limit = '50', offset = '0' } = req.query;
+
+    const where: any = { companyId };
+    
+    if (category) {
+      where.category = category as string;
+    }
+    
+    if (startDate || endDate) {
+      where.date = {};
+      if (startDate) where.date.gte = new Date(startDate as string);
+      if (endDate) where.date.lte = new Date(endDate as string);
+    }
+
+    const expenses = await prisma.expense.findMany({
+      where,
+      orderBy: { date: 'desc' },
+      take: parseInt(limit as string),
+      skip: parseInt(offset as string),
+    });
+
+    const total = await prisma.expense.count({ where });
+
+    res.json({
+      success: true,
+      data: expenses,
+      pagination: {
+        total,
+        limit: parseInt(limit as string),
+        offset: parseInt(offset as string),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to fetch expenses:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to fetch expenses',
+    });
+  }
+});
+
+/**
+ * @route   PUT /api/accounting/income/:id
+ * @desc    Gelir kaydını güncelle
+ * @access  Private
+ */
+router.put('/income/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description, amount, category, date, paymentMethod, notes, status, invoiceId } = req.body;
+    const companyId = req.user?.companyId || 1;
+
+    // Check if income exists and belongs to user's company
+    const existing = await prisma.income.findFirst({
+      where: { id: parseInt(id), companyId },
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        success: false,
+        message: 'Income not found',
+      });
+    }
+
+    const income = await prisma.income.update({
+      where: { id: parseInt(id) },
+      data: {
+        description,
+        amount: amount ? parseFloat(amount) : undefined,
+        category,
+        date: date ? new Date(date) : undefined,
+        paymentMethod,
+        notes,
+        status,
+        invoiceId: invoiceId ? parseInt(invoiceId) : null,
+      },
+    });
+
+    res.json({
+      success: true,
+      data: income,
+    });
+  } catch (error: any) {
+    log.error('Failed to update income:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update income',
+    });
+  }
+});
+
+/**
+ * @route   PUT /api/accounting/expense/:id
+ * @desc    Gider kaydını güncelle
+ * @access  Private
+ */
+router.put('/expense/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description, amount, category, date, paymentMethod, notes, status } = req.body;
+    const companyId = req.user?.companyId || 1;
+
+    // Check if expense exists and belongs to user's company
+    const existing = await prisma.expense.findFirst({
+      where: { id: parseInt(id), companyId },
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        success: false,
+        message: 'Expense not found',
+      });
+    }
+
+    const expense = await prisma.expense.update({
+      where: { id: parseInt(id) },
+      data: {
+        description,
+        amount: amount ? parseFloat(amount) : undefined,
+        category,
+        date: date ? new Date(date) : undefined,
+        paymentMethod,
+        notes,
+        status,
+      },
+    });
+
+    res.json({
+      success: true,
+      data: expense,
+    });
+  } catch (error: any) {
+    log.error('Failed to update expense:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update expense',
+    });
+  }
+});
+
+/**
+ * @route   DELETE /api/accounting/income/:id
+ * @desc    Gelir kaydını sil
+ * @access  Private
+ */
+router.delete('/income/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const companyId = req.user?.companyId || 1;
+
+    // Check if income exists and belongs to user's company
+    const existing = await prisma.income.findFirst({
+      where: { id: parseInt(id), companyId },
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        success: false,
+        message: 'Income not found',
+      });
+    }
+
+    await prisma.income.delete({
+      where: { id: parseInt(id) },
+    });
+
+    res.json({
+      success: true,
+      message: 'Income deleted successfully',
+    });
+  } catch (error: any) {
+    log.error('Failed to delete income:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to delete income',
+    });
+  }
+});
+
+/**
+ * @route   DELETE /api/accounting/expense/:id
+ * @desc    Gider kaydını sil
+ * @access  Private
+ */
+router.delete('/expense/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const companyId = req.user?.companyId || 1;
+
+    // Check if expense exists and belongs to user's company
+    const existing = await prisma.expense.findFirst({
+      where: { id: parseInt(id), companyId },
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        success: false,
+        message: 'Expense not found',
+      });
+    }
+
+    await prisma.expense.delete({
+      where: { id: parseInt(id) },
+    });
+
+    res.json({
+      success: true,
+      message: 'Expense deleted successfully',
+    });
+  } catch (error: any) {
+    log.error('Failed to delete expense:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to delete expense',
     });
   }
 });
 
 /**
  * @route   POST /api/accounting/expense
- * @desc    Gider kaydı ekle (TODO)
+ * @desc    Gider kaydı ekle
  * @access  Private
  */
 router.post('/expense', authenticateToken, async (req, res) => {
   try {
-    // TODO: Expense model oluşturulunca implement edilecek
-    res.status(501).json({
-      success: false,
-      message: 'Expense recording endpoint - Coming soon (Expense model required)',
+    const { description, amount, category, date, paymentMethod, notes, status } = req.body;
+    const companyId = req.user?.companyId || 1;
+
+    if (!description || !amount || !category || !date) {
+      return res.status(400).json({
+        success: false,
+        message: 'description, amount, category, date are required',
+      });
+    }
+
+    const expense = await prisma.expense.create({
+      data: {
+        description,
+        amount: parseFloat(amount),
+        category,
+        date: new Date(date),
+        companyId,
+        paymentMethod,
+        notes,
+        status: status || 'pending',
+      },
+    });
+
+    res.json({
+      success: true,
+      data: expense,
     });
   } catch (error: any) {
-    log.error('Failed to record expense:', error);
+    log.error('Failed to create expense:', error);
     res.status(500).json({
       success: false,
-      message: error.message || 'Failed to record expense',
+      message: error.message || 'Failed to create expense',
     });
   }
 });

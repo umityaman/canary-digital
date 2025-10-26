@@ -47,6 +47,7 @@ model Company {
   documents            DocumentCategory[]
   equipment            Equipment[]
   expenses             Expense[]
+  incomes              Income[]
   generatedReports     GeneratedReport[]      @relation("CompanyGeneratedReports")
   mediaFiles           MediaFile[]
   mediaFolders         MediaFolder[]
@@ -1025,6 +1026,7 @@ model Invoice {
   order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   payments         Payment[]
   transactions     Transaction[]
+  incomes          Income[]
 
   @@index([orderId])
   @@index([customerId])
@@ -1068,6 +1070,28 @@ model Expense {
   @@index([companyId])
   @@index([category])
   @@index([date])
+}
+
+model Income {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  description   String
+  amount        Float
+  category      String
+  date          DateTime
+  status        String   @default("received")
+  paymentMethod String?
+  notes         String?
+  invoiceId     Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  company       Company  @relation(fields: [companyId], references: [id])
+  invoice       Invoice? @relation(fields: [invoiceId], references: [id])
+
+  @@index([companyId])
+  @@index([category])
+  @@index([date])
+  @@index([invoiceId])
 }
 
 model Payment {

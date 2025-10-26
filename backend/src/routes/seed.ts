@@ -74,6 +74,29 @@ router.get('/test', async (req, res) => {
         created.push('Expense_ERROR: ' + e.message);
       }
       
+      // Create Income
+      try {
+        await prisma.$executeRawUnsafe(`
+          CREATE TABLE IF NOT EXISTS "Income" (
+            "id" SERIAL PRIMARY KEY,
+            "companyId" INTEGER NOT NULL,
+            "description" TEXT NOT NULL,
+            "amount" DOUBLE PRECISION NOT NULL,
+            "category" TEXT NOT NULL,
+            "date" TIMESTAMP(3) NOT NULL,
+            "status" TEXT NOT NULL DEFAULT 'received',
+            "paymentMethod" TEXT,
+            "notes" TEXT,
+            "invoiceId" INTEGER,
+            "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
+        created.push('Income');
+      } catch (e: any) {
+        created.push('Income_ERROR: ' + e.message);
+      }
+      
       return res.json({ tablesCreated: created, success: true });
     }
     
@@ -139,6 +162,30 @@ router.get('/test', async (req, res) => {
         results.push(`Created ${5 - expenseCount} expenses`);
       } else {
         results.push('Expenses already exist');
+      }
+      
+      // Create 5 incomes
+      const incomeCount = await prisma.income.count();
+      if (incomeCount < 5) {
+        const categories = ['Equipment Rental', 'Service Fee', 'Product Sale', 'Consulting', 'Training'];
+        const amounts = [25000, 12000, 18000, 8000, 6000];
+        for (let i = incomeCount; i < 5; i++) {
+          await prisma.income.create({
+            data: {
+              description: categories[i],
+              amount: amounts[i],
+              category: categories[i],
+              date: new Date(2025, 9, 10 + i),
+              companyId: company.id,
+              status: 'received',
+              paymentMethod: i % 2 === 0 ? 'bank_transfer' : 'credit_card',
+              notes: `${categories[i]} - October 2025`,
+            },
+          });
+        }
+        results.push(`Created ${5 - incomeCount} incomes`);
+      } else {
+        results.push('Incomes already exist');
       }
       
       return res.json({ success: true, seeded: results });
