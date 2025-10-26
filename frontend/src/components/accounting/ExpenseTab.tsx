@@ -217,28 +217,28 @@ export default function ExpenseTab({
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[900px]">
                 <thead className="bg-neutral-50 border-b border-neutral-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-28">
                       Tarih
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
                       Açıklama
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-36">
                       Kategori
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-32">
                       Tutar
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-36">
                       Ödeme Yöntemi
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-32">
                       Durum
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-24">
                       İşlemler
                     </th>
                   </tr>
@@ -246,49 +246,49 @@ export default function ExpenseTab({
                 <tbody className="bg-white divide-y divide-neutral-200">
                   {expenses.map((expense) => (
                     <tr key={expense.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="text-sm text-neutral-900">
                           {formatDate(expense.date)}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-neutral-900">
+                      <td className="px-4 py-4">
+                        <div className="text-sm font-medium text-neutral-900 max-w-xs truncate">
                           {expense.description}
                         </div>
                         {expense.notes && (
-                          <div className="text-xs text-neutral-500 mt-1">
+                          <div className="text-xs text-neutral-500 mt-1 max-w-xs truncate">
                             {expense.notes}
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="text-sm text-neutral-900">{expense.category}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="text-sm font-bold text-red-600">
                           {formatCurrency(expense.amount)}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="text-sm text-neutral-900">
                           {getPaymentMethodLabel(expense.paymentMethod)}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         {getStatusBadge(expense.status)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => onEdit(expense)}
-                            className="text-blue-600 hover:text-blue-800"
+                            className="text-blue-600 hover:text-blue-800 p-1"
                             title="Düzenle"
                           >
                             <Edit2 size={16} />
                           </button>
                           <button
                             onClick={() => onDelete(expense.id)}
-                            className="text-red-600 hover:text-red-800"
+                            className="text-red-600 hover:text-red-800 p-1"
                             title="Sil"
                           >
                             <Trash2 size={16} />
