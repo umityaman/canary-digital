@@ -35,7 +35,7 @@ router.post('/migrate', authenticateToken, async (req, res) => {
     log.info('Starting database migration with raw SQL...');
     
     // Create Offer table
-    await prisma.$executeRaw`
+    await prisma.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS "Offer" (
         "id" SERIAL PRIMARY KEY,
         "customerId" INTEGER NOT NULL,
@@ -52,13 +52,15 @@ router.post('/migrate', authenticateToken, async (req, res) => {
         "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "Offer_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE
       )
-    `;
-    await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS "Offer_customerId_idx" ON "Offer"("customerId")`;
-    await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS "Offer_status_idx" ON "Offer"("status")`;
-    await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS "Offer_offerDate_idx" ON "Offer"("offerDate")`;
+    `);
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "Offer_customerId_idx" ON "Offer"("customerId")`);
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "Offer_status_idx" ON "Offer"("status")`);
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "Offer_offerDate_idx" ON "Offer"("offerDate")`);
+    
+    log.info('Offer table created');
     
     // Create Expense table
-    await prisma.$executeRaw`
+    await prisma.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS "Expense" (
         "id" SERIAL PRIMARY KEY,
         "companyId" INTEGER NOT NULL,
@@ -73,10 +75,12 @@ router.post('/migrate', authenticateToken, async (req, res) => {
         "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "Expense_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE
       )
-    `;
-    await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS "Expense_companyId_idx" ON "Expense"("companyId")`;
-    await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS "Expense_category_idx" ON "Expense"("category")`;
-    await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS "Expense_date_idx" ON "Expense"("date")`;
+    `);
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "Expense_companyId_idx" ON "Expense"("companyId")`);
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "Expense_category_idx" ON "Expense"("category")`);
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "Expense_date_idx" ON "Expense"("date")`);
+
+    log.info('Expense table created');
 
     log.info('Migration completed successfully');
 
