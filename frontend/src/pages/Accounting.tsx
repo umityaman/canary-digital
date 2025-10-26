@@ -14,6 +14,7 @@ import ExpenseModal from '../components/accounting/ExpenseModal'
 import ChecksTab from '../components/accounting/ChecksTab'
 import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
 import AgingAnalysis from '../components/AgingAnalysis'
+import AccountCards from '../components/AccountCards'
 import AdvancedFilter, { FilterState } from '../components/AdvancedFilter'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
@@ -22,7 +23,7 @@ import { exportFinancialSummaryToPDF } from '../utils/exportUtils'
 import type { Income } from '../components/accounting/IncomeTab'
 import type { Expense } from '../components/accounting/ExpenseTab'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'checks' | 'promissory-notes' | 'aging' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
+type Tab = 'dashboard' | 'income' | 'expense' | 'checks' | 'promissory-notes' | 'aging' | 'account-cards' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
 
 interface AccountingStats {
   totalRevenue: number
@@ -537,6 +538,7 @@ export default function Accounting() {
     { id: 'checks' as const, label: 'Çekler', icon: <Banknote size={18} /> },
     { id: 'promissory-notes' as const, label: 'Senetler', icon: <FileText size={18} /> },
     { id: 'aging' as const, label: 'Yaşlandırma Raporu', icon: <Clock size={18} /> },
+    { id: 'account-cards' as const, label: 'Cari Hesap', icon: <Users size={18} /> },
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <Receipt size={18} /> },
@@ -955,6 +957,11 @@ export default function Accounting() {
 
                 <AgingAnalysis type={agingType} />
               </div>
+            )}
+
+            {/* Account Cards Tab */}
+            {activeTab === 'account-cards' && (
+              <AccountCards />
             )}
 
             {/* Invoice Tab */}
