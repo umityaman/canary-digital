@@ -77,6 +77,73 @@ router.get('/test', async (req, res) => {
       return res.json({ tablesCreated: created, success: true });
     }
     
+    // Seed data
+    if (req.query.seedData === 'true') {
+      const results = [];
+      
+      // Get company
+      const company = await prisma.company.findFirst();
+      if (!company) {
+        return res.status(400).json({ error: 'Company not found' });
+      }
+      
+      // Get test user
+      const user = await prisma.user.findFirst({ where: { email: 'admin@canary.com' } });
+      if (!user) {
+        return res.status(400).json({ error: 'Admin user not found' });
+      }
+      
+      // Create 5 offers
+      const offerCount = await prisma.offer.count();
+      if (offerCount < 5) {
+        const statuses = ['sent', 'draft', 'accepted', 'rejected', 'expired'];
+        for (let i = offerCount; i < 5; i++) {
+          await prisma.offer.create({
+            data: {
+              offerNumber: `OF-20251026-${String(i + 1).padStart(3, '0')}`,
+              customerId: user.id,
+              offerDate: new Date(2025, 9, 20 + i),
+              validUntil: new Date(2025, 10, 20 + i),
+              items: [{ description: `Sony A7 IV - 5 Gün`, quantity: 5, unitPrice: 450, amount: 2250 }],
+              totalAmount: 2250,
+              vatAmount: 450,
+              grandTotal: 2700,
+              status: statuses[i],
+              notes: `Teklif ${i + 1}`,
+            },
+          });
+        }
+        results.push(`Created ${5 - offerCount} offers`);
+      } else {
+        results.push('Offers already exist');
+      }
+      
+      // Create 5 expenses
+      const expenseCount = await prisma.expense.count();
+      if (expenseCount < 5) {
+        const categories = ['Rent', 'Utilities', 'Maintenance', 'Insurance', 'Marketing'];
+        const amounts = [15000, 2500, 3000, 5000, 4000];
+        for (let i = expenseCount; i < 5; i++) {
+          await prisma.expense.create({
+            data: {
+              description: categories[i],
+              amount: amounts[i],
+              category: categories[i],
+              date: new Date(2025, 9, 5 + i),
+              companyId: company.id,
+              status: 'paid',
+              paymentMethod: 'bank_transfer',
+            },
+          });
+        }
+        results.push(`Created ${5 - expenseCount} expenses`);
+      } else {
+        results.push('Expenses already exist');
+      }
+      
+      return res.json({ success: true, seeded: results });
+    }
+    
     // Normal test (original functionality)
     // Test 1: Simple query
     const result1 = await prisma.$queryRaw`SELECT current_database(), version()`;
