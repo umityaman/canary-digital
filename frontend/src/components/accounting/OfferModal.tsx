@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, FileText } from 'lucide-react';
+import { X, Plus, Trash2, FileText, FileDown } from 'lucide-react';
 import { offerAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
+import { generateOfferPDF } from '../../utils/pdfGenerator';
 
 interface OfferItem {
   equipmentId?: number;
@@ -155,6 +156,59 @@ const OfferModal: React.FC<OfferModalProps> = ({
     const grandTotal = subtotal + vatAmount;
     
     return { subtotal, vatAmount, grandTotal };
+  };
+
+  const handleDownloadPDF = () => {
+    // Validation
+    if (!formData.customerName.trim()) {
+      toast.error('Müşteri adı gerekli');
+      return;
+    }
+
+    if (!formData.customerEmail.trim()) {
+      toast.error('Müşteri e-postası gerekli');
+      return;
+    }
+
+    if (items.some((item) => !item.description.trim() || item.quantity <= 0 || item.unitPrice < 0)) {
+      toast.error('Tüm kalem bilgilerini eksiksiz doldurun');
+      return;
+    }
+
+    // Check valid until date is after offer date
+    if (new Date(formData.validUntil) <= new Date(formData.offerDate)) {
+      toast.error('Geçerlilik tarihi teklif tarihinden sonra olmalı');
+      return;
+    }
+
+    try {
+      const pdfData = {
+        offerNumber: formData.offerNumber || 'DRAFT',
+        offerDate: formData.offerDate,
+        validityDate: formData.validUntil,
+        customerName: formData.customerName,
+        customerEmail: formData.customerEmail,
+        customerPhone: formData.customerPhone,
+        customerCompany: formData.customerCompany,
+        customerTaxNumber: formData.customerTaxNumber,
+        items: items.map((item) => ({
+          description: item.description,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          days: item.days,
+          discount: item.discountPercentage,
+          vatRate: formData.vatRate,
+        })),
+        notes: formData.notes,
+        vatRate: formData.vatRate,
+      };
+
+      generateOfferPDF(pdfData);
+      toast.success('PDF indirildi');
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      toast.error('PDF oluşturulamadı');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -524,7 +578,17 @@ const OfferModal: React.FC<OfferModalProps> = ({
 
         {/* Footer */}
         <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-          <div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleDownloadPDF}
+              className="flex items-center gap-2 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+              disabled={loading}
+            >
+              <FileDown size={18} />
+              PDF İndir
+            </button>
+            
             {canConvertToInvoice && (
               <button
                 type="button"

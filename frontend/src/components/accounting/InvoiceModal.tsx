@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, Search } from 'lucide-react';
+import { X, Plus, Trash2, Search, FileDown } from 'lucide-react';
 import { invoiceAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
+import { generateInvoicePDF } from '../../utils/pdfGenerator';
 
 interface InvoiceItem {
   id?: number;
@@ -224,6 +225,48 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({
     const grandTotal = subtotal + vatAmount;
     
     return { subtotal, vatAmount, grandTotal };
+  };
+
+  const handleDownloadPDF = () => {
+    // Validation
+    if (!formData.customerName.trim()) {
+      toast.error('Müşteri adı gerekli');
+      return;
+    }
+
+    if (items.some((item) => !item.description.trim() || item.quantity <= 0 || item.unitPrice < 0)) {
+      toast.error('Tüm kalem bilgilerini eksiksiz doldurun');
+      return;
+    }
+
+    try {
+      const pdfData = {
+        invoiceNumber: formData.invoiceNumber || 'DRAFT',
+        invoiceDate: formData.invoiceDate,
+        dueDate: formData.dueDate,
+        customerName: formData.customerName,
+        customerEmail: formData.customerEmail,
+        customerPhone: formData.customerPhone,
+        customerCompany: formData.customerCompany,
+        customerTaxNumber: formData.customerTaxNumber,
+        items: items.map((item) => ({
+          description: item.description,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          days: item.days,
+          discount: item.discountPercentage,
+          vatRate: formData.vatRate,
+        })),
+        notes: formData.notes,
+        vatRate: formData.vatRate,
+      };
+
+      generateInvoicePDF(pdfData);
+      toast.success('PDF indirildi');
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      toast.error('PDF oluşturulamadı');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -610,23 +653,35 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({
         </form>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
           <button
             type="button"
-            onClick={onClose}
-            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+            onClick={handleDownloadPDF}
+            className="flex items-center gap-2 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
             disabled={loading}
           >
-            İptal
+            <FileDown size={18} />
+            PDF İndir
           </button>
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            disabled={loading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Kaydediliyor...' : editingInvoice ? 'Güncelle' : 'Oluştur'}
-          </button>
+          
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+              disabled={loading}
+            >
+              İptal
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={loading}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Kaydediliyor...' : editingInvoice ? 'Güncelle' : 'Oluştur'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
