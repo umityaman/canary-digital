@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "strict": false,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": [
+    "src/index.ts",
+    "src/routes/accounting.ts",
+    "src/routes/auth.ts",
+    "src/routes/analytics.ts",
+    "src/routes/offers.ts",
+    "src/routes/seed.ts",
+    "src/services/accounting.service.ts",
+    "src/services/offer.service.ts",
+    "src/middleware/auth.ts",
+    "src/config/logger.ts",
+    "src/types/**/*",
+    "src/utils/**/*"
+  ],
+  "exclude": ["node_modules", "dist", "scripts", "tests", "prisma"]
+}

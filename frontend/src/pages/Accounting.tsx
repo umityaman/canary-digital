@@ -3,12 +3,13 @@ import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
-  Search, Filter, ChevronLeft, ChevronRight, Check, X
+  Search, Filter, ChevronLeft, ChevronRight, Check, X, Plus, Edit, Trash2
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI } from '../services/api'
 import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
+type PreAccountingTab = 'income' | 'expense'
 
 interface AccountingStats {
   totalRevenue: number
@@ -85,8 +86,40 @@ interface Offer {
   }>
 }
 
+interface Income {
+  id: number
+  companyId: number
+  description: string
+  amount: number
+  category: string
+  date: string
+  status: string
+  paymentMethod?: string
+  notes?: string
+  invoiceId?: number
+  createdAt: string
+  updatedAt: string
+}
+
+interface Expense {
+  id: number
+  companyId: number
+  description: string
+  amount: number
+  category: string
+  date: string
+  status: string
+  paymentMethod?: string
+  vendor?: string
+  notes?: string
+  invoiceId?: number
+  createdAt: string
+  updatedAt: string
+}
+
 export default function Accounting() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
+  const [preAccountingTab, setPreAccountingTab] = useState<PreAccountingTab>('income')
   const [stats, setStats] = useState<AccountingStats | null>(null)
   const [loading, setLoading] = useState(true)
   
@@ -106,6 +139,24 @@ export default function Accounting() {
   const [offerCurrentPage, setOfferCurrentPage] = useState(1)
   const [offerTotalPages, setOfferTotalPages] = useState(1)
 
+  // Income state
+  const [incomes, setIncomes] = useState<Income[]>([])
+  const [incomesLoading, setIncomesLoading] = useState(false)
+  const [incomeSearch, setIncomeSearch] = useState('')
+  const [incomeCategoryFilter, setIncomeCategoryFilter] = useState<string>('')
+  const [incomeStatusFilter, setIncomeStatusFilter] = useState<string>('')
+  const [incomeCurrentPage, setIncomeCurrentPage] = useState(1)
+  const [incomeTotalPages, setIncomeTotalPages] = useState(1)
+
+  // Expense state
+  const [expenses, setExpenses] = useState<Expense[]>([])
+  const [expensesLoading, setExpensesLoading] = useState(false)
+  const [expenseSearch, setExpenseSearch] = useState('')
+  const [expenseCategoryFilter, setExpenseCategoryFilter] = useState<string>('')
+  const [expenseStatusFilter, setExpenseStatusFilter] = useState<string>('')
+  const [expenseCurrentPage, setExpenseCurrentPage] = useState(1)
+  const [expenseTotalPages, setExpenseTotalPages] = useState(1)
+
   // Load accounting stats on mount
   useEffect(() => {
     loadStats()
@@ -124,6 +175,20 @@ export default function Accounting() {
       loadOffers()
     }
   }, [activeTab, offerCurrentPage, offerStatusFilter])
+
+  // Load incomes when preaccounting tab is active and income subtab is selected
+  useEffect(() => {
+    if (activeTab === 'preaccounting' && preAccountingTab === 'income') {
+      loadIncomes()
+    }
+  }, [activeTab, preAccountingTab, incomeCurrentPage, incomeCategoryFilter, incomeStatusFilter])
+
+  // Load expenses when preaccounting tab is active and expense subtab is selected
+  useEffect(() => {
+    if (activeTab === 'preaccounting' && preAccountingTab === 'expense') {
+      loadExpenses()
+    }
+  }, [activeTab, preAccountingTab, expenseCurrentPage, expenseCategoryFilter, expenseStatusFilter])
 
   const loadStats = async () => {
     try {
@@ -203,6 +268,88 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('Failed to update offer status:', error)
       toast.error('Durum güncellenemedi')
+    }
+  }
+
+  const loadIncomes = async () => {
+    try {
+      setIncomesLoading(true)
+      console.log('🔍 Loading incomes...', { incomeCategoryFilter, incomeStatusFilter, incomeSearch, incomeCurrentPage })
+      const response = await accountingAPI.getIncomes({
+        category: incomeCategoryFilter || undefined,
+        status: incomeStatusFilter || undefined,
+        search: incomeSearch || undefined,
+        page: incomeCurrentPage,
+        limit: 10,
+      })
+      console.log('✅ Incomes response:', response.data)
+      setIncomes(response.data.data)
+      setIncomeTotalPages(response.data.pagination.totalPages)
+    } catch (error: any) {
+      console.error('❌ Failed to load incomes:', error)
+      console.error('Error details:', error.response?.data)
+      toast.error('Gelirler yüklenemedi: ' + (error.response?.data?.message || error.message))
+    } finally {
+      setIncomesLoading(false)
+    }
+  }
+
+  const handleSearchIncomes = () => {
+    setIncomeCurrentPage(1)
+    loadIncomes()
+  }
+
+  const handleDeleteIncome = async (id: number) => {
+    if (!confirm('Bu gelir kaydını silmek istediğinizden emin misiniz?')) return
+    
+    try {
+      await accountingAPI.deleteIncome(id)
+      toast.success('Gelir kaydı silindi')
+      loadIncomes()
+    } catch (error: any) {
+      console.error('Failed to delete income:', error)
+      toast.error('Silme işlemi başarısız')
+    }
+  }
+
+  const loadExpenses = async () => {
+    try {
+      setExpensesLoading(true)
+      console.log('🔍 Loading expenses...', { expenseCategoryFilter, expenseStatusFilter, expenseSearch, expenseCurrentPage })
+      const response = await accountingAPI.getExpenses({
+        category: expenseCategoryFilter || undefined,
+        status: expenseStatusFilter || undefined,
+        search: expenseSearch || undefined,
+        page: expenseCurrentPage,
+        limit: 10,
+      })
+      console.log('✅ Expenses response:', response.data)
+      setExpenses(response.data.data)
+      setExpenseTotalPages(response.data.pagination.totalPages)
+    } catch (error: any) {
+      console.error('❌ Failed to load expenses:', error)
+      console.error('Error details:', error.response?.data)
+      toast.error('Giderler yüklenemedi: ' + (error.response?.data?.message || error.message))
+    } finally {
+      setExpensesLoading(false)
+    }
+  }
+
+  const handleSearchExpenses = () => {
+    setExpenseCurrentPage(1)
+    loadExpenses()
+  }
+
+  const handleDeleteExpense = async (id: number) => {
+    if (!confirm('Bu gider kaydını silmek istediğinizden emin misiniz?')) return
+    
+    try {
+      await accountingAPI.deleteExpense(id)
+      toast.success('Gider kaydı silindi')
+      loadExpenses()
+    } catch (error: any) {
+      console.error('Failed to delete expense:', error)
+      toast.error('Silme işlemi başarısız')
     }
   }
 
@@ -400,46 +547,476 @@ export default function Accounting() {
             {/* Pre-Accounting Tab */}
             {activeTab === 'preaccounting' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Ön Muhasebe Yönetimi</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <TrendingUp className="mr-2 text-neutral-700" size={20} />
-                      Gelir-Gider Takibi
-                    </h3>
-                    <ul className="space-y-2 text-sm text-neutral-600">
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Gelir Takibi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Gider Takibi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Gider Kategorileri</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Banka Mutabakatı</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <Users className="mr-2 text-neutral-700" size={20} />
-                      Cari Hesap Takibi
-                    </h3>
-                    <ul className="space-y-2 text-sm text-neutral-600">
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Cari Hesap Ekstresi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>İşlem Geçmişi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Çek/Nakit Girişi</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <Banknote className="mr-2 text-neutral-700" size={20} />
-                      Nakit Yönetimi
-                    </h3>
-                    <ul className="space-y-2 text-sm text-neutral-600">
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Kasa ve Banka</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Ödeme Hatırlatma</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Çek Takibi</li>
-                    </ul>
-                  </div>
+                {/* Sub-tabs */}
+                <div className="flex items-center gap-2 border-b border-neutral-200">
+                  <button
+                    onClick={() => setPreAccountingTab('income')}
+                    className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+                      preAccountingTab === 'income'
+                        ? 'border-neutral-900 text-neutral-900'
+                        : 'border-transparent text-neutral-600 hover:text-neutral-900'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <TrendingUp size={18} />
+                      Gelirler
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setPreAccountingTab('expense')}
+                    className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+                      preAccountingTab === 'expense'
+                        ? 'border-neutral-900 text-neutral-900'
+                        : 'border-transparent text-neutral-600 hover:text-neutral-900'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <TrendingDown size={18} />
+                      Giderler
+                    </div>
+                  </button>
                 </div>
+
+                {/* Income Table */}
+                {preAccountingTab === 'income' && (
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-semibold text-neutral-900">Gelir Listesi</h2>
+                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2">
+                        <Plus size={18} />
+                        Yeni Gelir
+                      </button>
+                    </div>
+
+                    {/* Filters */}
+                    <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        {/* Search */}
+                        <div className="relative">
+                          <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
+                          <input
+                            type="text"
+                            placeholder="Açıklama ara..."
+                            value={incomeSearch}
+                            onChange={(e) => setIncomeSearch(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSearchIncomes()}
+                            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          />
+                        </div>
+
+                        {/* Category Filter */}
+                        <div className="relative">
+                          <Filter className="absolute left-3 top-3 text-neutral-400" size={18} />
+                          <select
+                            value={incomeCategoryFilter}
+                            onChange={(e) => {
+                              setIncomeCategoryFilter(e.target.value)
+                              setIncomeCurrentPage(1)
+                            }}
+                            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 appearance-none"
+                          >
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="Equipment Rental">Ekipman Kiralama</option>
+                            <option value="Service Fee">Hizmet Ücreti</option>
+                            <option value="Product Sale">Ürün Satışı</option>
+                            <option value="Consulting">Danışmanlık</option>
+                            <option value="Training">Eğitim</option>
+                            <option value="Other">Diğer</option>
+                          </select>
+                        </div>
+
+                        {/* Status Filter */}
+                        <div className="relative">
+                          <Filter className="absolute left-3 top-3 text-neutral-400" size={18} />
+                          <select
+                            value={incomeStatusFilter}
+                            onChange={(e) => {
+                              setIncomeStatusFilter(e.target.value)
+                              setIncomeCurrentPage(1)
+                            }}
+                            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 appearance-none"
+                          >
+                            <option value="">Tüm Durumlar</option>
+                            <option value="received">Tahsil Edildi</option>
+                            <option value="pending">Beklemede</option>
+                            <option value="cancelled">İptal</option>
+                          </select>
+                        </div>
+
+                        {/* Search Button */}
+                        <button
+                          onClick={handleSearchIncomes}
+                          className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+                        >
+                          Ara
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Income Table */}
+                    <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                      {incomesLoading ? (
+                        <div className="p-12 text-center text-neutral-600">
+                          <RefreshCw className="animate-spin mx-auto mb-4" size={32} />
+                          Gelirler yükleniyor...
+                        </div>
+                      ) : incomes.length === 0 ? (
+                        <div className="p-12 text-center text-neutral-600">
+                          <TrendingUp className="mx-auto mb-4 text-neutral-400" size={48} />
+                          <p className="text-lg font-medium">Gelir kaydı bulunamadı</p>
+                          <p className="text-sm mt-2">Yeni gelir kaydı oluşturarak başlayın</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead className="bg-neutral-50 border-b border-neutral-200">
+                                <tr>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Tarih
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Açıklama
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Kategori
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Tutar
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Ödeme Yöntemi
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Durum
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    İşlemler
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white divide-y divide-neutral-200">
+                                {incomes.map((income) => (
+                                  <tr key={income.id} className="hover:bg-neutral-50 transition-colors">
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm text-neutral-900">
+                                        {formatDate(income.date)}
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                      <div className="text-sm font-medium text-neutral-900">
+                                        {income.description}
+                                      </div>
+                                      {income.notes && (
+                                        <div className="text-xs text-neutral-500 mt-1">{income.notes}</div>
+                                      )}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm text-neutral-900">{income.category}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm font-medium text-green-600">
+                                        {formatCurrency(income.amount)}
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm text-neutral-900">
+                                        {income.paymentMethod || '-'}
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      {income.status === 'received' && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                          Tahsil Edildi
+                                        </span>
+                                      )}
+                                      {income.status === 'pending' && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                                          Beklemede
+                                        </span>
+                                      )}
+                                      {income.status === 'cancelled' && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                                          İptal
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="flex items-center gap-2">
+                                        <button 
+                                          className="text-neutral-600 hover:text-neutral-900"
+                                          title="Düzenle"
+                                        >
+                                          <Edit size={16} />
+                                        </button>
+                                        <button 
+                                          onClick={() => handleDeleteIncome(income.id)}
+                                          className="text-red-600 hover:text-red-800"
+                                          title="Sil"
+                                        >
+                                          <Trash2 size={16} />
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* Pagination */}
+                          <div className="bg-neutral-50 px-6 py-4 flex items-center justify-between border-t border-neutral-200">
+                            <div className="text-sm text-neutral-600">
+                              Sayfa {incomeCurrentPage} / {incomeTotalPages}
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => setIncomeCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={incomeCurrentPage === 1}
+                                className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              >
+                                <ChevronLeft size={18} />
+                              </button>
+                              <button
+                                onClick={() => setIncomeCurrentPage(p => Math.min(incomeTotalPages, p + 1))}
+                                disabled={incomeCurrentPage === incomeTotalPages}
+                                className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              >
+                                <ChevronRight size={18} />
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Expense Table */}
+                {preAccountingTab === 'expense' && (
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-semibold text-neutral-900">Gider Listesi</h2>
+                      <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2">
+                        <Plus size={18} />
+                        Yeni Gider
+                      </button>
+                    </div>
+
+                    {/* Filters */}
+                    <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        {/* Search */}
+                        <div className="relative">
+                          <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
+                          <input
+                            type="text"
+                            placeholder="Açıklama ara..."
+                            value={expenseSearch}
+                            onChange={(e) => setExpenseSearch(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSearchExpenses()}
+                            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          />
+                        </div>
+
+                        {/* Category Filter */}
+                        <div className="relative">
+                          <Filter className="absolute left-3 top-3 text-neutral-400" size={18} />
+                          <select
+                            value={expenseCategoryFilter}
+                            onChange={(e) => {
+                              setExpenseCategoryFilter(e.target.value)
+                              setExpenseCurrentPage(1)
+                            }}
+                            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 appearance-none"
+                          >
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="Rent">Kira</option>
+                            <option value="Salary">Maaş</option>
+                            <option value="Utilities">Faturalar</option>
+                            <option value="Supplies">Malzeme</option>
+                            <option value="Maintenance">Bakım</option>
+                            <option value="Marketing">Pazarlama</option>
+                            <option value="Insurance">Sigorta</option>
+                            <option value="Tax">Vergi</option>
+                            <option value="Other">Diğer</option>
+                          </select>
+                        </div>
+
+                        {/* Status Filter */}
+                        <div className="relative">
+                          <Filter className="absolute left-3 top-3 text-neutral-400" size={18} />
+                          <select
+                            value={expenseStatusFilter}
+                            onChange={(e) => {
+                              setExpenseStatusFilter(e.target.value)
+                              setExpenseCurrentPage(1)
+                            }}
+                            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 appearance-none"
+                          >
+                            <option value="">Tüm Durumlar</option>
+                            <option value="paid">Ödendi</option>
+                            <option value="pending">Beklemede</option>
+                            <option value="cancelled">İptal</option>
+                          </select>
+                        </div>
+
+                        {/* Search Button */}
+                        <button
+                          onClick={handleSearchExpenses}
+                          className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+                        >
+                          Ara
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Expense Table */}
+                    <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                      {expensesLoading ? (
+                        <div className="p-12 text-center text-neutral-600">
+                          <RefreshCw className="animate-spin mx-auto mb-4" size={32} />
+                          Giderler yükleniyor...
+                        </div>
+                      ) : expenses.length === 0 ? (
+                        <div className="p-12 text-center text-neutral-600">
+                          <TrendingDown className="mx-auto mb-4 text-neutral-400" size={48} />
+                          <p className="text-lg font-medium">Gider kaydı bulunamadı</p>
+                          <p className="text-sm mt-2">Yeni gider kaydı oluşturarak başlayın</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead className="bg-neutral-50 border-b border-neutral-200">
+                                <tr>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Tarih
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Açıklama
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Kategori
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Tedarikçi
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Tutar
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Ödeme Yöntemi
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    Durum
+                                  </th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                                    İşlemler
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white divide-y divide-neutral-200">
+                                {expenses.map((expense) => (
+                                  <tr key={expense.id} className="hover:bg-neutral-50 transition-colors">
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm text-neutral-900">
+                                        {formatDate(expense.date)}
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                      <div className="text-sm font-medium text-neutral-900">
+                                        {expense.description}
+                                      </div>
+                                      {expense.notes && (
+                                        <div className="text-xs text-neutral-500 mt-1">{expense.notes}</div>
+                                      )}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm text-neutral-900">{expense.category}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm text-neutral-900">
+                                        {expense.vendor || '-'}
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm font-medium text-red-600">
+                                        {formatCurrency(expense.amount)}
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="text-sm text-neutral-900">
+                                        {expense.paymentMethod || '-'}
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      {expense.status === 'paid' && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                          Ödendi
+                                        </span>
+                                      )}
+                                      {expense.status === 'pending' && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                                          Beklemede
+                                        </span>
+                                      )}
+                                      {expense.status === 'cancelled' && (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                                          İptal
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                      <div className="flex items-center gap-2">
+                                        <button 
+                                          className="text-neutral-600 hover:text-neutral-900"
+                                          title="Düzenle"
+                                        >
+                                          <Edit size={16} />
+                                        </button>
+                                        <button 
+                                          onClick={() => handleDeleteExpense(expense.id)}
+                                          className="text-red-600 hover:text-red-800"
+                                          title="Sil"
+                                        >
+                                          <Trash2 size={16} />
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* Pagination */}
+                          <div className="bg-neutral-50 px-6 py-4 flex items-center justify-between border-t border-neutral-200">
+                            <div className="text-sm text-neutral-600">
+                              Sayfa {expenseCurrentPage} / {expenseTotalPages}
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => setExpenseCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={expenseCurrentPage === 1}
+                                className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              >
+                                <ChevronLeft size={18} />
+                              </button>
+                              <button
+                                onClick={() => setExpenseCurrentPage(p => Math.min(expenseTotalPages, p + 1))}
+                                disabled={expenseCurrentPage === expenseTotalPages}
+                                className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              >
+                                <ChevronRight size={18} />
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

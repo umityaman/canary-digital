@@ -11,9 +11,13 @@ import {
   TrendingUp,
   RefreshCw,
   Eye,
-  Settings
+  Settings,
+  DollarSign,
+  CreditCard,
+  FileText,
+  Percent
 } from 'lucide-react';
-import { getApiUrl, getAuthHeaders } from '@/config/api';
+import api from '../../utils/api';
 
 // Import analytics components
 import RevenueChart from './RevenueChart';
@@ -35,48 +39,55 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  
+  // Analytics data states
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [revenueData, setRevenueData] = useState<any>(null);
+  const [expenseData, setExpenseData] = useState<any>(null);
+  const [profitLossData, setProfitLossData] = useState<any>(null);
+  const [offersData, setOffersData] = useState<any>(null);
+
+  // Load analytics data
+  useEffect(() => {
+    loadAnalyticsData();
+  }, [period]);
+
+  const loadAnalyticsData = async () => {
+    setLoading(true);
+    try {
+      const params = period === '1y' ? 'period=ytd' : `period=${period}`;
+      
+      // Load all analytics endpoints
+      const [dashboard, revenue, expenses, profitLoss, offers] = await Promise.all([
+        api.get(`/analytics/dashboard?${params}`),
+        api.get(`/analytics/revenue?${params}`),
+        api.get(`/analytics/expenses?${params}`),
+        api.get(`/analytics/profit-loss?${params}`),
+        api.get(`/analytics/offers-conversion?${params}`)
+      ]);
+
+      setDashboardData(dashboard.data.data);
+      setRevenueData(revenue.data.data);
+      setExpenseData(expenses.data.data);
+      setProfitLossData(profitLoss.data.data);
+      setOffersData(offers.data.data);
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.error('Analytics data loading error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Refresh all data
   const refreshAllData = () => {
-    setLoading(true);
-    setLastUpdated(new Date());
-    // This will trigger useEffect in child components through period change
-    setPeriod(prev => prev); // Force re-render
-    setTimeout(() => setLoading(false), 1000);
+    loadAnalyticsData();
   };
 
   // Export data function
   const exportData = async (format: 'pdf' | 'excel' | 'csv') => {
-    try {
-      const response = await fetch(getApiUrl(`analytics/export?period=${period}&format=${format}`), {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          period,
-          format,
-          sections: ['kpis', 'revenue', 'equipment', 'orders'],
-          timestamp: new Date().toISOString()
-        })
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = `canary-analytics-${period}-${format}-${new Date().toISOString().split('T')[0]}.${format}`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      } else {
-        throw new Error('Export failed');
-      }
-    } catch (error) {
-      console.error('Export error:', error);
-      alert('Rapor dışa aktarılırken hata oluştu. Lütfen tekrar deneyin.');
-    }
+    alert(`${format.toUpperCase()} export özelliği yakında eklenecek!`);
+    // TODO: Implement export functionality
   };
 
   const getPeriodLabel = (period: string) => {
@@ -114,8 +125,66 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
         </div>
 
-        {/* Compact KPI Dashboard */}
-        <KPIDashboard period={period} compact={true} />
+        {/* KPI Cards from real data */}
+        {dashboardData && (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Gelir</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mt-1">
+                      ₺{dashboardData.revenue?.totalRevenue?.toLocaleString() || 0}
+                    </h3>
+                  </div>
+                  <DollarSign className="w-8 h-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Gider</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mt-1">
+                      ₺{dashboardData.expenses?.totalExpenses?.toLocaleString() || 0}
+                    </h3>
+                  </div>
+                  <CreditCard className="w-8 h-8 text-red-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Net Kar</p>
+                    <h3 className={`text-2xl font-bold mt-1 ${dashboardData.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      ₺{dashboardData.profit?.toLocaleString() || 0}
+                    </h3>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Kar Marjı</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mt-1">
+                      %{dashboardData.profitMargin?.toFixed(1) || 0}
+                    </h3>
+                  </div>
+                  <Percent className="w-8 h-8 text-purple-600" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
         
         {/* Compact charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -228,8 +297,94 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          {/* KPI Dashboard */}
-          <KPIDashboard period={period} />
+          {/* KPI Cards from real analytics data */}
+          {dashboardData && (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Toplam Gelir</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        ₺{dashboardData.revenue?.totalRevenue?.toLocaleString() || 0}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {dashboardData.revenue?.invoiceCount || 0} fatura
+                      </p>
+                    </div>
+                    <div className="p-3 bg-green-100 rounded-full">
+                      <DollarSign className="w-6 h-6 text-green-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Toplam Gider</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        ₺{dashboardData.expenses?.totalExpenses?.toLocaleString() || 0}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {dashboardData.expenses?.expenseCount || 0} gider
+                      </p>
+                    </div>
+                    <div className="p-3 bg-red-100 rounded-full">
+                      <CreditCard className="w-6 h-6 text-red-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Net Kar/Zarar</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className={`text-2xl font-bold ${dashboardData.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        ₺{dashboardData.profit?.toLocaleString() || 0}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Kar marjı: %{dashboardData.profitMargin?.toFixed(1) || 0}
+                      </p>
+                    </div>
+                    <div className={`p-3 ${dashboardData.profit >= 0 ? 'bg-blue-100' : 'bg-orange-100'} rounded-full`}>
+                      <TrendingUp className={`w-6 h-6 ${dashboardData.profit >= 0 ? 'text-blue-600' : 'text-orange-600'}`} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Teklif Dönüşümü</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        %{dashboardData.offers?.conversionRate?.toFixed(1) || 0}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {dashboardData.offers?.convertedOffers || 0}/{dashboardData.offers?.totalOffers || 0} teklif
+                      </p>
+                    </div>
+                    <div className="p-3 bg-purple-100 rounded-full">
+                      <FileText className="w-6 h-6 text-purple-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
           
           {/* Overview charts - Alt Alta */}
           <div className="space-y-6">

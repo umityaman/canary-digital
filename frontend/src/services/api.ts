@@ -572,11 +572,39 @@ export const accountingAPI = {
   getVATReport: (params: { startDate: string; endDate: string }) => 
     api.get('/accounting/vat-report', { params }),
   
-  // Income Recording (TODO: Requires Expense model)
+  // Income CRUD
+  getIncomes: (params?: { 
+    category?: string; 
+    status?: string; 
+    search?: string;
+    page?: number;
+    limit?: number;
+    startDate?: string;
+    endDate?: string;
+  }) => api.get('/accounting/incomes', { params }),
+  
   recordIncome: (data: any) => api.post('/accounting/income', data),
   
-  // Expense Recording (TODO: Requires Expense model)
+  updateIncome: (id: number, data: any) => api.put(`/accounting/income/${id}`, data),
+  
+  deleteIncome: (id: number) => api.delete(`/accounting/income/${id}`),
+  
+  // Expense CRUD
+  getExpenses: (params?: { 
+    category?: string; 
+    status?: string; 
+    search?: string;
+    page?: number;
+    limit?: number;
+    startDate?: string;
+    endDate?: string;
+  }) => api.get('/accounting/expenses', { params }),
+  
   recordExpense: (data: any) => api.post('/accounting/expense', data),
+  
+  updateExpense: (id: number, data: any) => api.put(`/accounting/expense/${id}`, data),
+  
+  deleteExpense: (id: number) => api.delete(`/accounting/expense/${id}`),
 };
 
 // Invoice API
