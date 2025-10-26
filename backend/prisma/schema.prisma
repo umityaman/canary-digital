@@ -1061,26 +1061,7 @@ model Expense {
   amount        Float
   category      String
   date          DateTime
-  status        String   @default("pending")
-  paymentMethod String?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  company       Company  @relation(fields: [companyId], references: [id])
-
-  @@index([companyId])
-  @@index([category])
-  @@index([date])
-}
-
-model Income {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  description   String
-  amount        Float
-  category      String
-  date          DateTime
-  status        String   @default("received")
+  status        String   @default("paid")
   paymentMethod String?
   notes         String?
   invoiceId     Int?
@@ -1095,14 +1076,14 @@ model Income {
   @@index([invoiceId])
 }
 
-model Expense {
+model Income {
   id            Int      @id @default(autoincrement())
   companyId     Int
   description   String
   amount        Float
   category      String
   date          DateTime
-  status        String   @default("paid")
+  status        String   @default("received")
   paymentMethod String?
   notes         String?
   invoiceId     Int?
