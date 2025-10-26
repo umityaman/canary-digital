@@ -797,4 +797,159 @@ export const offerAPI = {
     api.patch(`/offers/${id}/status`, { status }),
 };
 
+// Check API
+export const checkAPI = {
+  // List all checks
+  getAll: (params?: {
+    type?: 'received' | 'issued';
+    status?: 'portfolio' | 'deposited' | 'bounced' | 'cashed' | 'endorsed';
+    startDate?: string;
+    endDate?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }) => api.get('/checks', { params }),
+
+  // Get check statistics
+  getStats: () => api.get('/checks/stats'),
+
+  // Create new check
+  create: (data: {
+    checkNumber: string;
+    serialNumber?: string;
+    amount: number;
+    currency?: string;
+    issueDate: string;
+    dueDate: string;
+    type: 'received' | 'issued';
+    status?: 'portfolio' | 'deposited' | 'bounced' | 'cashed' | 'endorsed';
+    drawerName: string;
+    drawerTaxNumber?: string;
+    payeeName?: string;
+    bankName?: string;
+    bankBranch?: string;
+    bankAccount?: string;
+    location?: string;
+    customerId?: number;
+    supplierId?: number;
+    invoiceId?: number;
+    notes?: string;
+  }) => api.post('/checks', data),
+
+  // Update check
+  update: (id: number, data: {
+    checkNumber?: string;
+    serialNumber?: string;
+    amount?: number;
+    currency?: string;
+    issueDate?: string;
+    dueDate?: string;
+    type?: 'received' | 'issued';
+    status?: 'portfolio' | 'deposited' | 'bounced' | 'cashed' | 'endorsed';
+    drawerName?: string;
+    drawerTaxNumber?: string;
+    payeeName?: string;
+    bankName?: string;
+    bankBranch?: string;
+    bankAccount?: string;
+    location?: string;
+    customerId?: number;
+    supplierId?: number;
+    invoiceId?: number;
+    notes?: string;
+  }) => api.put(`/checks/${id}`, data),
+
+  // Delete check
+  delete: (id: number) => api.delete(`/checks/${id}`),
+
+  // Endorse check (Ciro)
+  endorse: (id: number, endorsedTo: string) => 
+    api.post(`/checks/${id}/endorse`, { endorsedTo }),
+
+  // Deposit check to bank
+  deposit: (id: number) => api.post(`/checks/${id}/deposit`),
+
+  // Cash check
+  cash: (id: number) => api.post(`/checks/${id}/cash`),
+
+  // Bounce check (Karşılıksız)
+  bounce: (id: number, bouncedReason?: string) =>
+    api.post(`/checks/${id}/bounce`, { bouncedReason }),
+};
+
+// Promissory Note API
+export const promissoryNoteAPI = {
+  // List all promissory notes
+  getAll: (params?: {
+    type?: 'receivable' | 'payable';
+    status?: 'portfolio' | 'collected' | 'defaulted' | 'endorsed';
+    startDate?: string;
+    endDate?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }) => api.get('/promissory-notes', { params }),
+
+  // Get promissory note statistics
+  getStats: () => api.get('/promissory-notes/stats'),
+
+  // Create new promissory note
+  create: (data: {
+    noteNumber: string;
+    serialNumber?: string;
+    amount: number;
+    currency?: string;
+    issueDate: string;
+    dueDate: string;
+    type: 'receivable' | 'payable';
+    status?: 'portfolio' | 'collected' | 'defaulted' | 'endorsed';
+    drawerName: string;
+    drawerTaxNumber?: string;
+    payeeName?: string;
+    guarantorName?: string;
+    guarantorTaxNo?: string;
+    location?: string;
+    customerId?: number;
+    supplierId?: number;
+    invoiceId?: number;
+    notes?: string;
+  }) => api.post('/promissory-notes', data),
+
+  // Update promissory note
+  update: (id: number, data: {
+    noteNumber?: string;
+    serialNumber?: string;
+    amount?: number;
+    currency?: string;
+    issueDate?: string;
+    dueDate?: string;
+    type?: 'receivable' | 'payable';
+    status?: 'portfolio' | 'collected' | 'defaulted' | 'endorsed';
+    drawerName?: string;
+    drawerTaxNumber?: string;
+    payeeName?: string;
+    guarantorName?: string;
+    guarantorTaxNo?: string;
+    location?: string;
+    customerId?: number;
+    supplierId?: number;
+    invoiceId?: number;
+    notes?: string;
+  }) => api.put(`/promissory-notes/${id}`, data),
+
+  // Delete promissory note
+  delete: (id: number) => api.delete(`/promissory-notes/${id}`),
+
+  // Endorse promissory note (Ciro)
+  endorse: (id: number, endorsedTo: string) =>
+    api.post(`/promissory-notes/${id}/endorse`, { endorsedTo }),
+
+  // Collect promissory note (Tahsil)
+  collect: (id: number) => api.post(`/promissory-notes/${id}/collect`),
+
+  // Default promissory note (Protestolu)
+  default: (id: number, defaultReason?: string) =>
+    api.post(`/promissory-notes/${id}/default`, { defaultReason }),
+};
+
 export default api

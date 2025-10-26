@@ -11,13 +11,14 @@ import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
 import IncomeModal from '../components/accounting/IncomeModal'
 import ExpenseModal from '../components/accounting/ExpenseModal'
+import ChecksTab from '../components/accounting/ChecksTab'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
 import { DateRangePicker } from '../components/common/DateRangePicker'
 import type { Income } from '../components/accounting/IncomeTab'
 import type { Expense } from '../components/accounting/ExpenseTab'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
+type Tab = 'dashboard' | 'income' | 'expense' | 'checks' | 'promissory-notes' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
 
 interface AccountingStats {
   totalRevenue: number
@@ -445,11 +446,13 @@ export default function Accounting() {
     { id: 'dashboard' as const, label: 'Ana Sayfa', icon: <BarChart3 size={18} /> },
     { id: 'income' as const, label: 'Gelirler', icon: <TrendingUp size={18} /> },
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
+    { id: 'checks' as const, label: 'Çekler', icon: <Banknote size={18} /> },
+    { id: 'promissory-notes' as const, label: 'Senetler', icon: <FileText size={18} /> },
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
-    { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
-    { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
-    { id: 'ebelge' as const, label: 'e-Belge', icon: <CreditCard size={18} /> },
+    { id: 'invoice' as const, label: 'Fatura Takibi', icon: <Receipt size={18} /> },
+    { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <CreditCard size={18} /> },
+    { id: 'ebelge' as const, label: 'e-Belge', icon: <Building2 size={18} /> },
     { id: 'integration' as const, label: 'Entegrasyonlar', icon: <RefreshCw size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
@@ -742,6 +745,18 @@ export default function Accounting() {
                 onDelete={handleDeleteExpense}
                 onCreate={handleCreateExpense}
               />
+            )}
+
+            {/* Checks Tab */}
+            {activeTab === 'checks' && (
+              <ChecksTab />
+            )}
+
+            {/* Promissory Notes Tab - TODO */}
+            {activeTab === 'promissory-notes' && (
+              <div className="bg-white rounded-lg shadow p-8 text-center">
+                <p className="text-gray-500">Senet Yönetimi yakında eklenecek...</p>
+              </div>
             )}
 
             {/* Invoice Tab */}
