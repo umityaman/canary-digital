@@ -196,6 +196,7 @@ safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
 safeLoadRoute('/api/checks', './routes/checks', 'Check Management');
 safeLoadRoute('/api/promissory-notes', './routes/promissory-notes', 'Promissory Notes');
 safeLoadRoute('/api/reminders', './routes/reminders', 'Email Reminders');
+safeLoadRoute('/api/aging', './routes/aging', 'Aging Analysis');
 safeLoadRoute('/api/migration', './routes/migration', 'Database Migration (Temporary)');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');

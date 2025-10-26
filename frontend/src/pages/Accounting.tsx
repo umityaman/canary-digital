@@ -13,6 +13,7 @@ import IncomeModal from '../components/accounting/IncomeModal'
 import ExpenseModal from '../components/accounting/ExpenseModal'
 import ChecksTab from '../components/accounting/ChecksTab'
 import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
+import AgingAnalysis from '../components/AgingAnalysis'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
 import { DateRangePicker } from '../components/common/DateRangePicker'
@@ -20,7 +21,7 @@ import { exportFinancialSummaryToPDF } from '../utils/exportUtils'
 import type { Income } from '../components/accounting/IncomeTab'
 import type { Expense } from '../components/accounting/ExpenseTab'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'checks' | 'promissory-notes' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
+type Tab = 'dashboard' | 'income' | 'expense' | 'checks' | 'promissory-notes' | 'aging' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
 
 interface AccountingStats {
   totalRevenue: number
@@ -99,6 +100,7 @@ interface Offer {
 
 export default function Accounting() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
+  const [agingType, setAgingType] = useState<'checks' | 'promissory-notes' | 'combined'>('combined')
   const [stats, setStats] = useState<AccountingStats | null>(null)
   const [loading, setLoading] = useState(true)
   
@@ -450,6 +452,7 @@ export default function Accounting() {
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'checks' as const, label: 'Çekler', icon: <Banknote size={18} /> },
     { id: 'promissory-notes' as const, label: 'Senetler', icon: <FileText size={18} /> },
+    { id: 'aging' as const, label: 'Yaşlandırma Raporu', icon: <Clock size={18} /> },
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <Receipt size={18} /> },
@@ -771,6 +774,56 @@ export default function Accounting() {
             {/* Promissory Notes Tab */}
             {activeTab === 'promissory-notes' && (
               <PromissoryNotesTab />
+            )}
+
+            {/* Aging Analysis Tab */}
+            {activeTab === 'aging' && (
+              <div className="space-y-6">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">Yaşlandırma Raporu</h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Çek ve senetlerinizin vade durumunu analiz edin
+                  </p>
+                </div>
+
+                {/* Sub-tabs for different analysis types */}
+                <div className="bg-white rounded-lg shadow p-4 mb-6">
+                  <div className="flex gap-4">
+                    <button
+                      className={`px-4 py-2 rounded-lg transition-colors ${
+                        agingType === 'checks'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                      onClick={() => setAgingType('checks')}
+                    >
+                      Çekler
+                    </button>
+                    <button
+                      className={`px-4 py-2 rounded-lg transition-colors ${
+                        agingType === 'promissory-notes'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                      onClick={() => setAgingType('promissory-notes')}
+                    >
+                      Senetler
+                    </button>
+                    <button
+                      className={`px-4 py-2 rounded-lg transition-colors ${
+                        agingType === 'combined'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                      onClick={() => setAgingType('combined')}
+                    >
+                      Tümü
+                    </button>
+                  </div>
+                </div>
+
+                <AgingAnalysis type={agingType} />
+              </div>
             )}
 
             {/* Invoice Tab */}

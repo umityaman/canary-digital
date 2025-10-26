@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import { emailService } from './emailService';
+import { emailService } from './EmailService';
 import logger from '../utils/logger';
 
 const prisma = new PrismaClient();
 
 interface ReminderSettings {
   enabled: boolean;
-  daysBefore: number[]; // e.g., [7, 3, 1] for 7 days, 3 days, 1 day before
+  daysBefore: number[];
   emailEnabled: boolean;
 }
 
@@ -27,23 +27,16 @@ export const sendCheckReminders = async (companyId: number) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Get company with user email
+    // Get company email
     const company = await prisma.company.findUnique({
       where: { id: companyId },
-      include: {
-        users: {
-          where: { role: 'ADMIN' },
-          select: { email: true, firstName: true, lastName: true },
-        },
-      },
+      select: { email: true, name: true },
     });
 
-    if (!company || company.users.length === 0) {
-      logger.warn(`No admin users found for company ${companyId}`);
+    if (!company || !company.email) {
+      logger.warn(`No email found for company ${companyId}`);
       return;
     }
-
-    const adminUser = company.users[0];
 
     // Check for each reminder day
     for (const daysBefore of settings.daysBefore) {
@@ -77,40 +70,38 @@ export const sendCheckReminders = async (companyId: number) => {
         const checkList = upcomingChecks
           .map(
             (check) =>
-              `- Çek No: ${check.checkNumber}, Tutar: ${formatCurrency(check.amount)} ${check.currency}, ` +
-              `Keşideci: ${check.drawerName}, Vade: ${formatDate(check.dueDate)}`
+              `- Çek No: ${check.checkNumber}, Tutar: ${formatCurrency(check.amount)}, Keşideci: ${
+                check.drawerName
+              }, Vade: ${formatDate(check.dueDate)}`
           )
           .join('\n');
 
         const subject = `Vade Hatırlatma: ${daysBefore} Gün İçinde ${upcomingChecks.length} Çek Vadesi Dolacak`;
-        const message = `
-Sayın ${adminUser.firstName} ${adminUser.lastName},
+        const body = `
+Sayın ${company.name},
 
-${daysBefore} gün içinde vadesi dolacak ${upcomingChecks.length} adet çek bulunmaktadır.
+${daysBefore} gün içinde vadesi dolacak ${upcomingChecks.length} adet çek bulunmaktadır:
 
-Toplam Tutar: ${formatCurrency(totalAmount)} TL
-
-Çek Listesi:
 ${checkList}
 
-Lütfen gerekli işlemleri zamanında yapınız.
+Toplam Tutar: ${formatCurrency(totalAmount)}
 
----
-Bu otomatik bir hatırlatma mesajıdır.
+Bu çeklerin vadesinde tahsil edilmesi için gerekli hazırlıkları yapmanızı rica ederiz.
+
 Canary Digital - Muhasebe Sistemi
-        `.trim();
+        `;
 
         await emailService.sendEmail({
-          to: adminUser.email,
+          to: company.email,
           subject,
-          text: message,
+          text: body,
         });
 
-        logger.info(`Check reminder sent to ${adminUser.email} for ${upcomingChecks.length} checks (${daysBefore} days before)`);
+        logger.info(`Sent ${daysBefore}-day check reminder to ${company.email} for ${upcomingChecks.length} checks`);
       }
     }
-  } catch (error) {
-    logger.error('Error sending check reminders:', error);
+  } catch (error: any) {
+    logger.error(`Error sending check reminders for company ${companyId}:`, error);
     throw error;
   }
 };
@@ -126,23 +117,16 @@ export const sendPromissoryNoteReminders = async (companyId: number) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Get company with user email
+    // Get company email
     const company = await prisma.company.findUnique({
       where: { id: companyId },
-      include: {
-        users: {
-          where: { role: 'ADMIN' },
-          select: { email: true, firstName: true, lastName: true },
-        },
-      },
+      select: { email: true, name: true },
     });
 
-    if (!company || company.users.length === 0) {
-      logger.warn(`No admin users found for company ${companyId}`);
+    if (!company || !company.email) {
+      logger.warn(`No email found for company ${companyId}`);
       return;
     }
-
-    const adminUser = company.users[0];
 
     // Check for each reminder day
     for (const daysBefore of settings.daysBefore) {
@@ -158,7 +142,7 @@ export const sendPromissoryNoteReminders = async (companyId: number) => {
       const upcomingNotes = await prisma.promissoryNote.findMany({
         where: {
           companyId,
-          status: { in: ['portfolio'] },
+          status: 'portfolio',
           dueDate: {
             gte: targetDate,
             lt: nextDay,
@@ -176,66 +160,60 @@ export const sendPromissoryNoteReminders = async (companyId: number) => {
         const noteList = upcomingNotes
           .map(
             (note) =>
-              `- Senet No: ${note.noteNumber}, Tutar: ${formatCurrency(note.amount)} ${note.currency}, ` +
-              `Borçlu: ${note.drawerName}, Vade: ${formatDate(note.dueDate)}`
+              `- Senet No: ${note.noteNumber}, Tutar: ${formatCurrency(note.amount)}, Keşideci: ${
+                note.drawerName
+              }, Vade: ${formatDate(note.dueDate)}`
           )
           .join('\n');
 
         const subject = `Vade Hatırlatma: ${daysBefore} Gün İçinde ${upcomingNotes.length} Senet Vadesi Dolacak`;
-        const message = `
-Sayın ${adminUser.firstName} ${adminUser.lastName},
+        const body = `
+Sayın ${company.name},
 
-${daysBefore} gün içinde vadesi dolacak ${upcomingNotes.length} adet senet bulunmaktadır.
+${daysBefore} gün içinde vadesi dolacak ${upcomingNotes.length} adet senet bulunmaktadır:
 
-Toplam Tutar: ${formatCurrency(totalAmount)} TL
-
-Senet Listesi:
 ${noteList}
 
-Lütfen gerekli işlemleri zamanında yapınız.
+Toplam Tutar: ${formatCurrency(totalAmount)}
 
----
-Bu otomatik bir hatırlatma mesajıdır.
+Bu senetlerin vadesinde tahsil edilmesi için gerekli hazırlıkları yapmanızı rica ederiz.
+
 Canary Digital - Muhasebe Sistemi
-        `.trim();
+        `;
 
         await emailService.sendEmail({
-          to: adminUser.email,
+          to: company.email,
           subject,
-          text: message,
+          text: body,
         });
 
-        logger.info(`Promissory note reminder sent to ${adminUser.email} for ${upcomingNotes.length} notes (${daysBefore} days before)`);
+        logger.info(`Sent ${daysBefore}-day promissory note reminder to ${company.email} for ${upcomingNotes.length} notes`);
       }
     }
-  } catch (error) {
-    logger.error('Error sending promissory note reminders:', error);
+  } catch (error: any) {
+    logger.error(`Error sending promissory note reminders for company ${companyId}:`, error);
     throw error;
   }
 };
 
 /**
- * Check for overdue items and send alerts
+ * Check for overdue checks and promissory notes
  */
 export const sendOverdueAlerts = async (companyId: number) => {
   try {
+    const settings = DEFAULT_SETTINGS;
+    if (!settings.enabled || !settings.emailEnabled) return;
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Get company with user email
+    // Get company email
     const company = await prisma.company.findUnique({
       where: { id: companyId },
-      include: {
-        users: {
-          where: { role: 'ADMIN' },
-          select: { email: true, firstName: true, lastName: true },
-        },
-      },
+      select: { email: true, name: true },
     });
 
-    if (!company || company.users.length === 0) return;
-
-    const adminUser = company.users[0];
+    if (!company || !company.email) return;
 
     // Find overdue checks
     const overdueChecks = await prisma.check.findMany({
@@ -254,7 +232,7 @@ export const sendOverdueAlerts = async (companyId: number) => {
     const overdueNotes = await prisma.promissoryNote.findMany({
       where: {
         companyId,
-        status: { in: ['portfolio'] },
+        status: 'portfolio',
         dueDate: { lt: today },
       },
       include: {
@@ -263,106 +241,132 @@ export const sendOverdueAlerts = async (companyId: number) => {
       },
     });
 
-    if (overdueChecks.length > 0 || overdueNotes.length > 0) {
-      let message = `Sayın ${adminUser.firstName} ${adminUser.lastName},\n\nVadesi geçmiş belgeler bulunmaktadır:\n\n`;
-
-      if (overdueChecks.length > 0) {
-        const checkTotal = overdueChecks.reduce((sum, check) => sum + check.amount, 0);
-        message += `VADESİ GEÇMİŞ ÇEKLER (${overdueChecks.length} adet):\n`;
-        message += `Toplam: ${formatCurrency(checkTotal)} TL\n\n`;
-        overdueChecks.forEach((check) => {
-          const daysPast = Math.floor((today.getTime() - new Date(check.dueDate).getTime()) / (1000 * 60 * 60 * 24));
-          message += `- Çek No: ${check.checkNumber}, Tutar: ${formatCurrency(check.amount)} ${check.currency}, `;
-          message += `Keşideci: ${check.drawerName}, Vade: ${formatDate(check.dueDate)} (${daysPast} gün geçti)\n`;
-        });
-        message += '\n';
-      }
-
-      if (overdueNotes.length > 0) {
-        const noteTotal = overdueNotes.reduce((sum, note) => sum + note.amount, 0);
-        message += `VADESİ GEÇMİŞ SENETLER (${overdueNotes.length} adet):\n`;
-        message += `Toplam: ${formatCurrency(noteTotal)} TL\n\n`;
-        overdueNotes.forEach((note) => {
-          const daysPast = Math.floor((today.getTime() - new Date(note.dueDate).getTime()) / (1000 * 60 * 60 * 24));
-          message += `- Senet No: ${note.noteNumber}, Tutar: ${formatCurrency(note.amount)} ${note.currency}, `;
-          message += `Borçlu: ${note.drawerName}, Vade: ${formatDate(note.dueDate)} (${daysPast} gün geçti)\n`;
-        });
-      }
-
-      message += '\nLütfen vadesi geçmiş belgeleri kontrol ediniz.\n\n---\nCanary Digital - Muhasebe Sistemi';
-
-      await emailService.sendEmail({
-        to: adminUser.email,
-        subject: `⚠️ Vadesi Geçmiş Belgeler: ${overdueChecks.length} Çek + ${overdueNotes.length} Senet`,
-        text: message,
-      });
-
-      logger.info(`Overdue alert sent to ${adminUser.email}: ${overdueChecks.length} checks, ${overdueNotes.length} notes`);
+    if (overdueChecks.length === 0 && overdueNotes.length === 0) {
+      return;
     }
-  } catch (error) {
-    logger.error('Error sending overdue alerts:', error);
+
+    let body = `Sayın ${company.name},\n\n`;
+    let totalOverdueAmount = 0;
+
+    if (overdueChecks.length > 0) {
+      const checkAmount = overdueChecks.reduce((sum, check) => sum + check.amount, 0);
+      totalOverdueAmount += checkAmount;
+
+      body += `Vadesi Geçmiş ${overdueChecks.length} Çek:\n`;
+      overdueChecks.forEach((check) => {
+        const daysOverdue = Math.floor((today.getTime() - new Date(check.dueDate).getTime()) / (1000 * 60 * 60 * 24));
+        body += `- Çek No: ${check.checkNumber}, Tutar: ${formatCurrency(check.amount)}, Vade: ${formatDate(
+          check.dueDate
+        )}, ${daysOverdue} gün gecikmiş\n`;
+      });
+      body += `\nToplam Gecikmiş Çek Tutarı: ${formatCurrency(checkAmount)}\n\n`;
+    }
+
+    if (overdueNotes.length > 0) {
+      const noteAmount = overdueNotes.reduce((sum, note) => sum + note.amount, 0);
+      totalOverdueAmount += noteAmount;
+
+      body += `Vadesi Geçmiş ${overdueNotes.length} Senet:\n`;
+      overdueNotes.forEach((note) => {
+        const daysOverdue = Math.floor((today.getTime() - new Date(note.dueDate).getTime()) / (1000 * 60 * 60 * 24));
+        body += `- Senet No: ${note.noteNumber}, Tutar: ${formatCurrency(note.amount)}, Vade: ${formatDate(
+          note.dueDate
+        )}, ${daysOverdue} gün gecikmiş\n`;
+      });
+      body += `\nToplam Gecikmiş Senet Tutarı: ${formatCurrency(noteAmount)}\n\n`;
+    }
+
+    body += `\nGenel Toplam Vadesi Geçmiş Tutar: ${formatCurrency(totalOverdueAmount)}\n\n`;
+    body += `Bu belgeler için acil işlem yapılması gerekmektedir.\n\n`;
+    body += `Canary Digital - Muhasebe Sistemi`;
+
+    const subject = `⚠️ Vadesi Geçmiş Belgeler: ${overdueChecks.length} Çek + ${overdueNotes.length} Senet`;
+
+    await emailService.sendEmail({
+      to: company.email,
+      subject,
+      text: body,
+    });
+
+    logger.info(`Sent overdue alert to ${company.email} for ${overdueChecks.length} checks and ${overdueNotes.length} notes`);
+  } catch (error: any) {
+    logger.error(`Error sending overdue alerts for company ${companyId}:`, error);
     throw error;
   }
 };
 
 /**
- * Run all reminders for a company
+ * Run all reminder checks for a company
  */
 export const runAllReminders = async (companyId: number) => {
+  logger.info(`Running all reminders for company ${companyId}`);
+
   try {
-    logger.info(`Running all reminders for company ${companyId}`);
     await sendCheckReminders(companyId);
-    await sendPromissoryNoteReminders(companyId);
-    await sendOverdueAlerts(companyId);
-    logger.info(`All reminders completed for company ${companyId}`);
-  } catch (error) {
-    logger.error('Error running all reminders:', error);
-    throw error;
+  } catch (error: any) {
+    logger.error(`Error sending check reminders:`, error);
   }
+
+  try {
+    await sendPromissoryNoteReminders(companyId);
+  } catch (error: any) {
+    logger.error(`Error sending promissory note reminders:`, error);
+  }
+
+  try {
+    await sendOverdueAlerts(companyId);
+  } catch (error: any) {
+    logger.error(`Error sending overdue alerts:`, error);
+  }
+
+  logger.info(`Completed all reminders for company ${companyId}`);
 };
 
 /**
- * Schedule daily reminder check (to be called by cron job)
+ * Run reminders for all active companies
  */
 export const scheduleDailyReminders = async () => {
+  logger.info('Starting daily reminder scheduler for all companies');
+
   try {
-    logger.info('Starting daily reminder check for all companies');
-    
-    // Get all active companies
+    // Get all companies
     const companies = await prisma.company.findMany({
-      where: { active: true },
       select: { id: true, name: true },
     });
+
+    logger.info(`Found ${companies.length} companies to process`);
 
     for (const company of companies) {
       try {
         await runAllReminders(company.id);
-      } catch (error) {
-        logger.error(`Failed to run reminders for company ${company.id}:`, error);
-        // Continue with next company
+      } catch (error: any) {
+        logger.error(`Error processing reminders for company ${company.id} (${company.name}):`, error);
+        // Continue with other companies
       }
     }
 
-    logger.info(`Daily reminder check completed for ${companies.length} companies`);
-  } catch (error) {
+    logger.info('Completed daily reminder scheduler for all companies');
+  } catch (error: any) {
     logger.error('Error in daily reminder scheduler:', error);
     throw error;
   }
 };
 
-// Helper functions
-const formatCurrency = (amount: number): string => {
+/**
+ * Helper functions
+ */
+function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('tr-TR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    style: 'currency',
+    currency: 'TRY',
   }).format(amount);
-};
+}
 
-const formatDate = (date: Date | string): string => {
+function formatDate(date: Date): string {
   return new Date(date).toLocaleDateString('tr-TR');
-};
+}
 
-export const reminderService = {
+export default {
   sendCheckReminders,
   sendPromissoryNoteReminders,
   sendOverdueAlerts,
