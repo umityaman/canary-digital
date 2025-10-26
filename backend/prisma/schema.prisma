@@ -1027,6 +1027,7 @@ model Invoice {
   payments         Payment[]
   transactions     Transaction[]
   incomes          Income[]
+  expenses         Expense[]
 
   @@index([orderId])
   @@index([customerId])
@@ -1080,6 +1081,28 @@ model Income {
   category      String
   date          DateTime
   status        String   @default("received")
+  paymentMethod String?
+  notes         String?
+  invoiceId     Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  company       Company  @relation(fields: [companyId], references: [id])
+  invoice       Invoice? @relation(fields: [invoiceId], references: [id])
+
+  @@index([companyId])
+  @@index([category])
+  @@index([date])
+  @@index([invoiceId])
+}
+
+model Expense {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  description   String
+  amount        Float
+  category      String
+  date          DateTime
+  status        String   @default("paid")
   paymentMethod String?
   notes         String?
   invoiceId     Int?

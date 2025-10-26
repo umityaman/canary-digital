@@ -188,6 +188,30 @@ router.get('/test', async (req, res) => {
         results.push('Incomes already exist');
       }
       
+      // Create 5 expenses
+      const expenseCount = await prisma.expense.count();
+      if (expenseCount < 5) {
+        const expenseCategories = ['Kira', 'Elektrik', 'Personel Maaşı', 'Bakım Onarım', 'Malzeme Alımı'];
+        const expenseAmounts = [15000, 3500, 45000, 8000, 12000];
+        for (let i = expenseCount; i < 5; i++) {
+          await prisma.expense.create({
+            data: {
+              description: expenseCategories[i],
+              amount: expenseAmounts[i],
+              category: expenseCategories[i],
+              date: new Date(2025, 9, 5 + i),
+              companyId: company.id,
+              status: 'paid',
+              paymentMethod: i % 2 === 0 ? 'bank_transfer' : 'cash',
+              notes: `${expenseCategories[i]} - October 2025`,
+            },
+          });
+        }
+        results.push(`Created ${5 - expenseCount} expenses`);
+      } else {
+        results.push('Expenses already exist');
+      }
+      
       return res.json({ success: true, seeded: results });
     }
     
