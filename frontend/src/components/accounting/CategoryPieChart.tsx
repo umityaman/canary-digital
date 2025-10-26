@@ -5,7 +5,6 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from 'recharts';
 
 interface CategoryData {
@@ -17,7 +16,7 @@ interface CategoryData {
 interface CategoryPieChartProps {
   data: CategoryData[];
   title: string;
-  type: 'income' | 'expense';
+  type?: 'income' | 'expense';
 }
 
 const COLORS = [
@@ -97,7 +96,7 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
                 fill="#8884d8"
                 dataKey="value"
               >
-                {data.map((entry, index) => (
+                {data.map((_entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

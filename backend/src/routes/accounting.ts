@@ -35,6 +35,126 @@ router.get('/stats', authenticateToken, async (req, res) => {
 });
 
 /**
+ * @route   GET /api/accounting/chart-data
+ * @desc    Dashboard chart data (trend + category distribution)
+ * @access  Private
+ * @query   months (default: 12)
+ */
+router.get('/chart-data', authenticateToken, async (req, res) => {
+  try {
+    const months = req.query.months ? parseInt(req.query.months as string) : 12;
+
+    // Get last N months data
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - months);
+
+    // Trend data - group by month
+    const trendData = [];
+    for (let i = months - 1; i >= 0; i--) {
+      const monthStart = new Date();
+      monthStart.setMonth(monthStart.getMonth() - i);
+      monthStart.setDate(1);
+      monthStart.setHours(0, 0, 0, 0);
+
+      const monthEnd = new Date(monthStart);
+      monthEnd.setMonth(monthEnd.getMonth() + 1);
+      monthEnd.setDate(0);
+      monthEnd.setHours(23, 59, 59, 999);
+
+      const [incomes, expenses] = await Promise.all([
+        prisma.income.findMany({
+          where: {
+            date: { gte: monthStart, lte: monthEnd },
+            status: 'received',
+          },
+          select: { amount: true },
+        }),
+        prisma.expense.findMany({
+          where: {
+            date: { gte: monthStart, lte: monthEnd },
+            status: 'paid',
+          },
+          select: { amount: true },
+        }),
+      ]);
+
+      const incomeTotal = incomes.reduce((sum, i) => sum + i.amount, 0);
+      const expenseTotal = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+      trendData.push({
+        month: monthStart.toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' }),
+        income: incomeTotal,
+        expense: expenseTotal,
+        profit: incomeTotal - expenseTotal,
+      });
+    }
+
+    // Category distribution - last 3 months
+    const last3MonthsStart = new Date();
+    last3MonthsStart.setMonth(last3MonthsStart.getMonth() - 3);
+
+    const [incomesByCategory, expensesByCategory] = await Promise.all([
+      prisma.income.groupBy({
+        by: ['category'],
+        where: {
+          date: { gte: last3MonthsStart },
+          status: 'received',
+        },
+        _sum: { amount: true },
+      }),
+      prisma.expense.groupBy({
+        by: ['category'],
+        where: {
+          date: { gte: last3MonthsStart },
+          status: 'paid',
+        },
+        _sum: { amount: true },
+      }),
+    ]);
+
+    const incomeCategoryData = incomesByCategory.map(item => ({
+      name: item.category,
+      value: item._sum.amount || 0,
+      percentage: 0, // Will be calculated
+    }));
+
+    const expenseCategoryData = expensesByCategory.map(item => ({
+      name: item.category,
+      value: item._sum.amount || 0,
+      percentage: 0,
+    }));
+
+    // Calculate percentages
+    const incomeTotal = incomeCategoryData.reduce((sum, item) => sum + item.value, 0);
+    const expenseTotal = expenseCategoryData.reduce((sum, item) => sum + item.value, 0);
+
+    incomeCategoryData.forEach(item => {
+      item.percentage = incomeTotal > 0 ? (item.value / incomeTotal) * 100 : 0;
+    });
+
+    expenseCategoryData.forEach(item => {
+      item.percentage = expenseTotal > 0 ? (item.value / expenseTotal) * 100 : 0;
+    });
+
+    res.json({
+      success: true,
+      data: {
+        trend: trendData,
+        incomeCategories: incomeCategoryData.sort((a, b) => b.value - a.value),
+        expenseCategories: expenseCategoryData.sort((a, b) => b.value - a.value),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to get chart data:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get chart data',
+    });
+  }
+});
+
+/**
  * @route   GET /api/accounting/income-expense
  * @desc    Gelir-gider detaylı analiz
  * @access  Private
