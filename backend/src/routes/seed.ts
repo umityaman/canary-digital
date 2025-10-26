@@ -95,6 +95,9 @@ router.post('/migrate', authenticateToken, async (req, res) => {
       success: false,
       message: 'Failed to run migration',
       error: error.message,
+      stack: error.stack,
+      code: error.code,
+      meta: error.meta,
     });
   }
 });
