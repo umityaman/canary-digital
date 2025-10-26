@@ -256,14 +256,15 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
       </div>
 
       {/* Chart */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">Yaşlandırma Dağılımı</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
+      <div className="bg-white p-4 sm:p-6 rounded-lg shadow">
+        <h3 className="text-base sm:text-lg font-semibold mb-4">Yaşlandırma Dağılımı</h3>
+        <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
+          <BarChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis dataKey="name" style={{ fontSize: '10px' }} className="sm:text-xs" />
+            <YAxis style={{ fontSize: '10px' }} className="sm:text-xs" width={50} />
             <Tooltip
+              contentStyle={{ fontSize: '11px' }}
               formatter={(value: any, name: string) => {
                 if (name === 'tutar') return formatCurrency(value);
                 return value;
@@ -271,6 +272,8 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
               labelFormatter={(label) => `Dönem: ${label}`}
             />
             <Legend
+              wrapperStyle={{ fontSize: '11px' }}
+              className="sm:text-sm"
               formatter={(value) => {
                 if (value === 'tutar') return 'Tutar (₺)';
                 if (value === 'adet') return 'Adet';
@@ -287,18 +290,18 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {data.buckets.map((bucket, index) => (
           <div
             key={index}
-            className="bg-white p-4 rounded-lg shadow"
+            className="bg-white p-3 sm:p-4 rounded-lg shadow"
             style={{ borderLeft: `4px solid ${getBarColor(bucket.label)}` }}
           >
-            <div className="text-sm font-medium text-gray-600">{bucket.label}</div>
-            <div className="mt-2 text-2xl font-bold text-gray-900">
+            <div className="text-xs sm:text-sm font-medium text-gray-600 truncate">{bucket.label}</div>
+            <div className="mt-2 text-lg sm:text-2xl font-bold text-gray-900">
               {bucket.count}
             </div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-xs sm:text-sm text-gray-500 mt-1 truncate">
               {formatCurrency(bucket.amount)}
             </div>
           </div>
@@ -307,34 +310,35 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
 
       {/* Detailed Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold">Detaylı Liste</h3>
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
+          <h3 className="text-base sm:text-lg font-semibold">Detaylı Liste</h3>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <div className="inline-block min-w-full align-middle">
           {data.buckets.map((bucket, bucketIndex) => (
             bucket.items.length > 0 && (
               <div key={bucketIndex} className="border-b border-gray-200">
-                <div className="px-6 py-3 bg-gray-50">
-                  <h4 className="font-medium text-gray-900">
+                <div className="px-4 sm:px-6 py-3 bg-gray-50">
+                  <h4 className="font-medium text-gray-900 text-sm sm:text-base">
                     {bucket.label} ({bucket.count} belge - {formatCurrency(bucket.amount)})
                   </h4>
                 </div>
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         No
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Tutar
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Vade Tarihi
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Kalan/Geçen Gün
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Durum
                       </th>
                       {type === 'combined' && (
@@ -347,16 +351,16 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {bucket.items.map((item: any, itemIndex: number) => (
                       <tr key={itemIndex} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {item.checkNumber || item.noteNumber || item.number}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {formatCurrency(item.amount)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {new Date(item.dueDate).toLocaleDateString('tr-TR')}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
                           <span
                             className={`${
                               item.daysUntilDue < 0
@@ -369,7 +373,7 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
                               : `${item.daysUntilDue} gün kaldı`}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium ${
                               item.status === 'portfolio'
@@ -383,7 +387,7 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
                           </span>
                         </td>
                         {type === 'combined' && (
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             <span
                               className={`px-2 py-1 rounded-full text-xs font-medium ${
                                 item.type === 'check'
@@ -402,6 +406,7 @@ const AgingAnalysis: React.FC<AgingAnalysisProps> = ({ type }) => {
               </div>
             )
           ))}
+          </div>
         </div>
       </div>
     </div>

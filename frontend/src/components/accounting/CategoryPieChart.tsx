@@ -75,16 +75,16 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-neutral-800 mb-4">{title}</h3>
+    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+      <h3 className="text-base sm:text-lg font-semibold text-neutral-800 mb-4">{title}</h3>
       
       {data.length === 0 ? (
-        <div className="flex items-center justify-center h-[400px] text-neutral-500">
+        <div className="flex items-center justify-center h-[250px] sm:h-[400px] text-neutral-500 text-sm">
           Veri bulunamadı
         </div>
       ) : (
         <>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
             <PieChart>
               <Pie
                 data={data}
@@ -92,7 +92,8 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
                 cy="50%"
                 labelLine={false}
                 label={renderCustomLabel}
-                outerRadius={100}
+                outerRadius={80}
+                className="sm:outerRadius-[100px]"
                 fill="#8884d8"
                 dataKey="value"
               >
@@ -108,7 +109,7 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
                   backgroundColor: '#ffffff',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  fontSize: '12px',
+                  fontSize: '11px',
                 }}
                 formatter={(value: number) => formatCurrency(value)}
               />
@@ -116,17 +117,17 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
           </ResponsiveContainer>
 
           {/* Legend */}
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
             {data.map((entry, index) => (
-              <div key={index} className="flex items-center gap-2 text-sm">
+              <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
                 <div
-                  className="w-3 h-3 rounded-full"
+                  className="w-3 h-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: COLORS[index % COLORS.length] }}
                 />
                 <span className="text-neutral-700 truncate flex-1">
                   {entry.name}
                 </span>
-                <span className="font-semibold text-neutral-900">
+                <span className="font-semibold text-neutral-900 flex-shrink-0">
                   {entry.percentage.toFixed(1)}%
                 </span>
               </div>

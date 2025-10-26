@@ -551,14 +551,14 @@ export default function Accounting() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-2 sm:px-0">
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Bu Ay Gelir */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
-              <TrendingUp className="text-neutral-700" size={24} />
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <TrendingUp className="text-neutral-700" size={20} />
             </div>
             {stats && stats.invoiceCount > 0 && (
               <span className="text-xs text-neutral-700 font-medium">
@@ -566,34 +566,34 @@ export default function Accounting() {
               </span>
             )}
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+          <h3 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-1">
             {loading ? '...' : stats ? formatCurrency(stats.totalRevenue) : '₺0'}
           </h3>
-          <p className="text-sm text-neutral-600">Bu Ay Gelir</p>
+          <p className="text-xs sm:text-sm text-neutral-600">Bu Ay Gelir</p>
         </div>
 
         {/* Bu Ay Gider */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
-              <TrendingDown className="text-neutral-700" size={24} />
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <TrendingDown className="text-neutral-700" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+          <h3 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-1">
             {loading ? '...' : stats ? formatCurrency(stats.totalExpenses) : '₺0'}
           </h3>
-          <p className="text-sm text-neutral-600">Bu Ay Gider</p>
+          <p className="text-xs sm:text-sm text-neutral-600">Bu Ay Gider</p>
         </div>
 
         {/* Net Kâr */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
-              <DollarSign className="text-neutral-700" size={24} />
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <DollarSign className="text-neutral-700" size={20} />
             </div>
             <span className="text-xs text-neutral-700 font-medium">Net</span>
           </div>
-          <h3 className={`text-2xl font-bold mb-1 ${
+          <h3 className={`text-xl sm:text-2xl font-bold mb-1 ${
             stats && stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
           }`}>
             {loading ? '...' : stats ? formatCurrency(stats.netProfit) : '₺0'}
@@ -623,27 +623,29 @@ export default function Accounting() {
 
       {/* Tabs - Vertical Layout */}
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-        <div className="flex">
-          {/* Sidebar Tabs */}
-          <nav className="w-64 border-r border-neutral-200 flex-shrink-0">
+        <div className="flex flex-col lg:flex-row">
+          {/* Sidebar Tabs - Horizontal scroll on mobile, vertical on desktop */}
+          <nav className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-neutral-200 flex-shrink-0 overflow-x-auto lg:overflow-x-visible">
+            <div className="flex lg:flex-col min-w-max lg:min-w-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-colors ${
+                className={`w-auto lg:w-full flex items-center space-x-2 lg:space-x-3 px-3 lg:px-4 py-3 text-xs lg:text-sm font-medium transition-colors whitespace-nowrap touch-manipulation ${
                   activeTab === tab.id
                     ? 'bg-neutral-900 text-white'
-                    : 'text-neutral-700 hover:bg-neutral-50'
+                    : 'text-neutral-700 hover:bg-neutral-50 active:bg-neutral-100'
                 }`}
               >
                 {tab.icon}
-                <span>{tab.label}</span>
+                <span className="hidden sm:inline">{tab.label}</span>
               </button>
             ))}
+            </div>
           </nav>
 
           {/* Content Area */}
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-4 sm:p-6">
             {/* Dashboard Tab */}
             {activeTab === 'dashboard' && (
               <div className="space-y-6">
