@@ -12,6 +12,7 @@ import ExpenseTab from '../components/accounting/ExpenseTab'
 import IncomeModal from '../components/accounting/IncomeModal'
 import ExpenseModal from '../components/accounting/ExpenseModal'
 import ChecksTab from '../components/accounting/ChecksTab'
+import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
 import { DateRangePicker } from '../components/common/DateRangePicker'
@@ -752,11 +753,9 @@ export default function Accounting() {
               <ChecksTab />
             )}
 
-            {/* Promissory Notes Tab - TODO */}
+            {/* Promissory Notes Tab */}
             {activeTab === 'promissory-notes' && (
-              <div className="bg-white rounded-lg shadow p-8 text-center">
-                <p className="text-gray-500">Senet Yönetimi yakında eklenecek...</p>
-              </div>
+              <PromissoryNotesTab />
             )}
 
             {/* Invoice Tab */}
