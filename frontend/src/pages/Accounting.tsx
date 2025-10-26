@@ -14,6 +14,7 @@ import ExpenseModal from '../components/accounting/ExpenseModal'
 import ChecksTab from '../components/accounting/ChecksTab'
 import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
 import AgingAnalysis from '../components/AgingAnalysis'
+import AdvancedFilter, { FilterState } from '../components/AdvancedFilter'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
 import { DateRangePicker } from '../components/common/DateRangePicker'
@@ -147,6 +148,10 @@ export default function Accounting() {
   const [expenseTotalPages, setExpenseTotalPages] = useState(1)
   const [expenseTotal, setExpenseTotal] = useState(0)
 
+  // Advanced filter state
+  const [incomeAdvancedFilters, setIncomeAdvancedFilters] = useState<FilterState>({})
+  const [expenseAdvancedFilters, setExpenseAdvancedFilters] = useState<FilterState>({})
+
   // Modal state
   const [showIncomeModal, setShowIncomeModal] = useState(false)
   const [showExpenseModal, setShowExpenseModal] = useState(false)
@@ -178,14 +183,14 @@ export default function Accounting() {
     if (activeTab === 'income') {
       loadIncomes()
     }
-  }, [activeTab, incomeCurrentPage, incomeCategoryFilter, incomeStatusFilter])
+  }, [activeTab, incomeCurrentPage, incomeCategoryFilter, incomeStatusFilter, incomeAdvancedFilters])
 
   // Load expenses when expense tab is active
   useEffect(() => {
     if (activeTab === 'expense') {
       loadExpenses()
     }
-  }, [activeTab, expenseCurrentPage, expenseCategoryFilter, expenseStatusFilter])
+  }, [activeTab, expenseCurrentPage, expenseCategoryFilter, expenseStatusFilter, expenseAdvancedFilters])
 
   const loadStats = async () => {
     try {
@@ -294,14 +299,43 @@ export default function Accounting() {
   const loadIncomes = async () => {
     try {
       setIncomesLoading(true)
-      console.log('🔍 Loading incomes...', { incomeCategoryFilter, incomeStatusFilter, incomeSearch, incomeCurrentPage })
-      const response = await accountingAPI.getIncomes({
-        category: incomeCategoryFilter || undefined,
-        status: incomeStatusFilter || undefined,
-        search: incomeSearch || undefined,
+      console.log('🔍 Loading incomes...', { incomeCategoryFilter, incomeStatusFilter, incomeSearch, incomeCurrentPage, incomeAdvancedFilters })
+      
+      // Build query params from both simple and advanced filters
+      const queryParams: any = {
         page: incomeCurrentPage,
         limit: 10,
-      })
+      };
+
+      // Simple filters (for backward compatibility)
+      if (incomeCategoryFilter) queryParams.category = incomeCategoryFilter;
+      if (incomeStatusFilter) queryParams.status = incomeStatusFilter;
+      if (incomeSearch) queryParams.search = incomeSearch;
+
+      // Advanced filters override
+      if (incomeAdvancedFilters.categories && incomeAdvancedFilters.categories.length > 0) {
+        queryParams.category = incomeAdvancedFilters.categories.join(',');
+      }
+      if (incomeAdvancedFilters.status && incomeAdvancedFilters.status.length > 0) {
+        queryParams.status = incomeAdvancedFilters.status.join(',');
+      }
+      if (incomeAdvancedFilters.searchTerm) {
+        queryParams.search = incomeAdvancedFilters.searchTerm;
+      }
+      if (incomeAdvancedFilters.amountMin !== undefined) {
+        queryParams.minAmount = incomeAdvancedFilters.amountMin;
+      }
+      if (incomeAdvancedFilters.amountMax !== undefined) {
+        queryParams.maxAmount = incomeAdvancedFilters.amountMax;
+      }
+      if (incomeAdvancedFilters.dateRange?.start) {
+        queryParams.startDate = incomeAdvancedFilters.dateRange.start;
+      }
+      if (incomeAdvancedFilters.dateRange?.end) {
+        queryParams.endDate = incomeAdvancedFilters.dateRange.end;
+      }
+      
+      const response = await accountingAPI.getIncomes(queryParams)
       console.log('✅ Incomes response:', response.data)
       setIncomes(response.data.data)
       setIncomeTotalPages(response.data.pagination?.totalPages || 1)
@@ -346,14 +380,43 @@ export default function Accounting() {
   const loadExpenses = async () => {
     try {
       setExpensesLoading(true)
-      console.log('🔍 Loading expenses...', { expenseCategoryFilter, expenseStatusFilter, expenseSearch, expenseCurrentPage })
-      const response = await accountingAPI.getExpenses({
-        category: expenseCategoryFilter || undefined,
-        status: expenseStatusFilter || undefined,
-        search: expenseSearch || undefined,
+      console.log('🔍 Loading expenses...', { expenseCategoryFilter, expenseStatusFilter, expenseSearch, expenseCurrentPage, expenseAdvancedFilters })
+      
+      // Build query params from both simple and advanced filters
+      const queryParams: any = {
         page: expenseCurrentPage,
         limit: 10,
-      })
+      };
+
+      // Simple filters (for backward compatibility)
+      if (expenseCategoryFilter) queryParams.category = expenseCategoryFilter;
+      if (expenseStatusFilter) queryParams.status = expenseStatusFilter;
+      if (expenseSearch) queryParams.search = expenseSearch;
+
+      // Advanced filters override
+      if (expenseAdvancedFilters.categories && expenseAdvancedFilters.categories.length > 0) {
+        queryParams.category = expenseAdvancedFilters.categories.join(',');
+      }
+      if (expenseAdvancedFilters.status && expenseAdvancedFilters.status.length > 0) {
+        queryParams.status = expenseAdvancedFilters.status.join(',');
+      }
+      if (expenseAdvancedFilters.searchTerm) {
+        queryParams.search = expenseAdvancedFilters.searchTerm;
+      }
+      if (expenseAdvancedFilters.amountMin !== undefined) {
+        queryParams.minAmount = expenseAdvancedFilters.amountMin;
+      }
+      if (expenseAdvancedFilters.amountMax !== undefined) {
+        queryParams.maxAmount = expenseAdvancedFilters.amountMax;
+      }
+      if (expenseAdvancedFilters.dateRange?.start) {
+        queryParams.startDate = expenseAdvancedFilters.dateRange.start;
+      }
+      if (expenseAdvancedFilters.dateRange?.end) {
+        queryParams.endDate = expenseAdvancedFilters.dateRange.end;
+      }
+      
+      const response = await accountingAPI.getExpenses(queryParams)
       console.log('✅ Expenses response:', response.data)
       setExpenses(response.data.data)
       setExpenseTotalPages(response.data.pagination?.totalPages || 1)
@@ -393,6 +456,27 @@ export default function Accounting() {
       console.error('Failed to delete expense:', error)
       toast.error('Silme işlemi başarısız')
     }
+  }
+
+  // Advanced filter handlers
+  const handleApplyIncomeFilter = (filters: FilterState) => {
+    setIncomeAdvancedFilters(filters)
+    setIncomeCurrentPage(1)
+  }
+
+  const handleClearIncomeFilter = () => {
+    setIncomeAdvancedFilters({})
+    setIncomeCurrentPage(1)
+  }
+
+  const handleApplyExpenseFilter = (filters: FilterState) => {
+    setExpenseAdvancedFilters(filters)
+    setExpenseCurrentPage(1)
+  }
+
+  const handleClearExpenseFilter = () => {
+    setExpenseAdvancedFilters({})
+    setExpenseCurrentPage(1)
   }
 
   const formatCurrency = (amount: number) => {
@@ -724,46 +808,93 @@ export default function Accounting() {
 
             {/* Income Tab */}
             {activeTab === 'income' && (
-              <IncomeTab
-                incomes={incomes}
-                loading={incomesLoading}
-                search={incomeSearch}
-                categoryFilter={incomeCategoryFilter}
-                statusFilter={incomeStatusFilter}
-                currentPage={incomeCurrentPage}
-                totalPages={incomeTotalPages}
-                total={incomeTotal}
-                onSearchChange={setIncomeSearch}
-                onCategoryChange={setIncomeCategoryFilter}
-                onStatusChange={setIncomeStatusFilter}
-                onSearch={handleSearchIncomes}
-                onPageChange={setIncomeCurrentPage}
-                onEdit={handleEditIncome}
-                onDelete={handleDeleteIncome}
-                onCreate={handleCreateIncome}
-              />
+              <div className="space-y-4">
+                <div className="flex justify-end">
+                  <AdvancedFilter
+                    onApplyFilter={handleApplyIncomeFilter}
+                    onClearFilter={handleClearIncomeFilter}
+                    availableCategories={[
+                      'Ürün Satışı',
+                      'Hizmet Bedeli',
+                      'Ekipman Kiralama',
+                      'Danışmanlık',
+                      'Eğitim',
+                      'Komisyon',
+                      'Faiz Geliri',
+                      'Diğer Gelir',
+                    ]}
+                    availableStatuses={['paid', 'pending', 'cancelled']}
+                    availablePaymentMethods={['Nakit', 'Kredi Kartı', 'Banka Transferi', 'Çek', 'Senet']}
+                  />
+                </div>
+                <IncomeTab
+                  incomes={incomes}
+                  loading={incomesLoading}
+                  search={incomeSearch}
+                  categoryFilter={incomeCategoryFilter}
+                  statusFilter={incomeStatusFilter}
+                  currentPage={incomeCurrentPage}
+                  totalPages={incomeTotalPages}
+                  total={incomeTotal}
+                  onSearchChange={setIncomeSearch}
+                  onCategoryChange={setIncomeCategoryFilter}
+                  onStatusChange={setIncomeStatusFilter}
+                  onSearch={handleSearchIncomes}
+                  onPageChange={setIncomeCurrentPage}
+                  onEdit={handleEditIncome}
+                  onDelete={handleDeleteIncome}
+                  onCreate={handleCreateIncome}
+                />
+              </div>
             )}
 
             {/* Expense Tab */}
             {activeTab === 'expense' && (
-              <ExpenseTab
-                expenses={expenses}
-                loading={expensesLoading}
-                search={expenseSearch}
-                categoryFilter={expenseCategoryFilter}
-                statusFilter={expenseStatusFilter}
-                currentPage={expenseCurrentPage}
-                totalPages={expenseTotalPages}
-                total={expenseTotal}
-                onSearchChange={setExpenseSearch}
-                onCategoryChange={setExpenseCategoryFilter}
-                onStatusChange={setExpenseStatusFilter}
-                onSearch={handleSearchExpenses}
-                onPageChange={setExpenseCurrentPage}
-                onEdit={handleEditExpense}
-                onDelete={handleDeleteExpense}
-                onCreate={handleCreateExpense}
-              />
+              <div className="space-y-4">
+                <div className="flex justify-end">
+                  <AdvancedFilter
+                    onApplyFilter={handleApplyExpenseFilter}
+                    onClearFilter={handleClearExpenseFilter}
+                    availableCategories={[
+                      'Maaşlar',
+                      'Kira',
+                      'Elektrik',
+                      'Su',
+                      'İnternet',
+                      'Telefon',
+                      'Ofis Malzemeleri',
+                      'Yemek',
+                      'Ulaşım',
+                      'Pazarlama',
+                      'Muhasebe',
+                      'Vergi',
+                      'Sigorta',
+                      'Bakım Onarım',
+                      'Diğer Gider',
+                    ]}
+                    availableStatuses={['paid', 'pending', 'cancelled']}
+                    availablePaymentMethods={['Nakit', 'Kredi Kartı', 'Banka Transferi', 'Çek', 'Senet']}
+                  />
+                </div>
+                <ExpenseTab
+                  expenses={expenses}
+                  loading={expensesLoading}
+                  search={expenseSearch}
+                  categoryFilter={expenseCategoryFilter}
+                  statusFilter={expenseStatusFilter}
+                  currentPage={expenseCurrentPage}
+                  totalPages={expenseTotalPages}
+                  total={expenseTotal}
+                  onSearchChange={setExpenseSearch}
+                  onCategoryChange={setExpenseCategoryFilter}
+                  onStatusChange={setExpenseStatusFilter}
+                  onSearch={handleSearchExpenses}
+                  onPageChange={setExpenseCurrentPage}
+                  onEdit={handleEditExpense}
+                  onDelete={handleDeleteExpense}
+                  onCreate={handleCreateExpense}
+                />
+              </div>
             )}
 
             {/* Checks Tab */}
