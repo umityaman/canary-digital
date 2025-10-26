@@ -51,6 +51,68 @@ router.get('/test', async (req, res) => {
 });
 
 /**
+ * @route   POST /api/seed/create-tables-noauth
+ * @desc    Create tables WITHOUT authentication (TEMPORARY DEBUG)
+ * @access  Public (DEBUG ONLY - REMOVE IN PRODUCTION)
+ */
+router.post('/create-tables-noauth', async (req, res) => {
+  try {
+    console.log('[DEBUG] Creating tables without auth...');
+    const results = [];
+
+    // Offer table
+    try {
+      await prisma.$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "Offer" (
+          "id" SERIAL PRIMARY KEY,
+          "customerId" INTEGER NOT NULL,
+          "offerNumber" TEXT UNIQUE NOT NULL,
+          "offerDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "validUntil" TIMESTAMP(3) NOT NULL,
+          "items" JSONB NOT NULL,
+          "totalAmount" DOUBLE PRECISION NOT NULL,
+          "vatAmount" DOUBLE PRECISION NOT NULL,
+          "grandTotal" DOUBLE PRECISION NOT NULL,
+          "status" TEXT NOT NULL DEFAULT 'draft',
+          "notes" TEXT,
+          "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      results.push('Offer table created');
+    } catch (e: any) {
+      results.push('Offer error: ' + e.message);
+    }
+
+    // Expense table
+    try {
+      await prisma.$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "Expense" (
+          "id" SERIAL PRIMARY KEY,
+          "companyId" INTEGER NOT NULL,
+          "description" TEXT NOT NULL,
+          "amount" DOUBLE PRECISION NOT NULL,
+          "category" TEXT NOT NULL,
+          "date" TIMESTAMP(3) NOT NULL,
+          "status" TEXT NOT NULL DEFAULT 'pending',
+          "paymentMethod" TEXT,
+          "notes" TEXT,
+          "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      results.push('Expense table created');
+    } catch (e: any) {
+      results.push('Expense error: ' + e.message);
+    }
+
+    res.json({ success: true, results });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
  * @route   POST /api/seed/migrate-simple
  * @desc    Simple migration with step-by-step logging
  * @access  Private (Admin)
