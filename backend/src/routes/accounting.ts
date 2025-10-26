@@ -38,16 +38,31 @@ router.get('/stats', authenticateToken, async (req, res) => {
  * @route   GET /api/accounting/chart-data
  * @desc    Dashboard chart data (trend + category distribution)
  * @access  Private
- * @query   months (default: 12)
+ * @query   months (default: 12) OR startDate + endDate for custom range
  */
 router.get('/chart-data', authenticateToken, async (req, res) => {
   try {
-    const months = req.query.months ? parseInt(req.query.months as string) : 12;
+    const { startDate: startParam, endDate: endParam } = req.query;
+    
+    let startDate: Date;
+    let endDate: Date;
+    let months = 12;
 
-    // Get last N months data
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - months);
+    // Custom date range or default to last N months
+    if (startParam && endParam) {
+      startDate = new Date(startParam as string);
+      endDate = new Date(endParam as string);
+      endDate.setHours(23, 59, 59, 999);
+      
+      // Calculate months between dates for trend data
+      months = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
+      months = Math.max(1, Math.min(months, 24)); // Between 1-24 months
+    } else {
+      months = req.query.months ? parseInt(req.query.months as string) : 12;
+      endDate = new Date();
+      startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - months);
+    }
 
     // Trend data - group by month
     const trendData = [];
@@ -90,15 +105,15 @@ router.get('/chart-data', authenticateToken, async (req, res) => {
       });
     }
 
-    // Category distribution - last 3 months
-    const last3MonthsStart = new Date();
-    last3MonthsStart.setMonth(last3MonthsStart.getMonth() - 3);
+    // Category distribution - use same date range as trend
+    const categoryStartDate = startDate;
+    const categoryEndDate = endDate;
 
     const [incomesByCategory, expensesByCategory] = await Promise.all([
       prisma.income.groupBy({
         by: ['category'],
         where: {
-          date: { gte: last3MonthsStart },
+          date: { gte: categoryStartDate, lte: categoryEndDate },
           status: 'received',
         },
         _sum: { amount: true },
@@ -106,7 +121,7 @@ router.get('/chart-data', authenticateToken, async (req, res) => {
       prisma.expense.groupBy({
         by: ['category'],
         where: {
-          date: { gte: last3MonthsStart },
+          date: { gte: categoryStartDate, lte: categoryEndDate },
           status: 'paid',
         },
         _sum: { amount: true },

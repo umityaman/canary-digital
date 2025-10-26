@@ -13,6 +13,7 @@ import IncomeModal from '../components/accounting/IncomeModal'
 import ExpenseModal from '../components/accounting/ExpenseModal'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
+import { DateRangePicker } from '../components/common/DateRangePicker'
 import type { Income } from '../components/accounting/IncomeTab'
 import type { Expense } from '../components/accounting/ExpenseTab'
 
@@ -102,6 +103,9 @@ export default function Accounting() {
   const [chartData, setChartData] = useState<any>(null)
   const [chartLoading, setChartLoading] = useState(false)
   
+  // Date range filter state
+  const [dateRange, setDateRange] = useState<{ startDate: string; endDate: string } | null>(null)
+  
   // Invoice list state
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [invoicesLoading, setInvoicesLoading] = useState(false)
@@ -144,11 +148,11 @@ export default function Accounting() {
   const [editingIncome, setEditingIncome] = useState<Income | null>(null)
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
 
-  // Load accounting stats on mount
+  // Load accounting stats on mount and when date range changes
   useEffect(() => {
     loadStats()
     loadChartData()
-  }, [])
+  }, [dateRange])
 
   // Load invoices when invoice tab is active
   useEffect(() => {
@@ -181,8 +185,12 @@ export default function Accounting() {
   const loadStats = async () => {
     try {
       setLoading(true)
-      console.log('🔍 Loading accounting stats...')
-      const response = await accountingAPI.getStats()
+      console.log('🔍 Loading accounting stats...', dateRange ? 'with date range' : 'all time')
+      const params = dateRange ? { 
+        startDate: dateRange.startDate, 
+        endDate: dateRange.endDate 
+      } : undefined
+      const response = await accountingAPI.getStats(params)
       console.log('✅ Stats response:', response.data)
       setStats(response.data.data)
     } catch (error: any) {
@@ -197,8 +205,12 @@ export default function Accounting() {
   const loadChartData = async () => {
     try {
       setChartLoading(true)
-      console.log('📊 Loading chart data...')
-      const response = await accountingAPI.getChartData({ months: 12 })
+      console.log('📊 Loading chart data...', dateRange ? 'with date range' : '12 months')
+      const params = dateRange ? {
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate
+      } : { months: 12 }
+      const response = await accountingAPI.getChartData(params)
       console.log('✅ Chart data response:', response.data)
       setChartData(response.data.data)
     } catch (error: any) {
@@ -541,7 +553,17 @@ export default function Accounting() {
             {/* Dashboard Tab */}
             {activeTab === 'dashboard' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Hızlı İşlemler</h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-neutral-900">Genel Bakış</h2>
+                  
+                  {/* Date Range Filter */}
+                  <DateRangePicker
+                    value={dateRange || undefined}
+                    onChange={(range) => setDateRange(range)}
+                  />
+                </div>
+
+                <h3 className="text-lg font-medium text-neutral-700 mb-3">Hızlı İşlemler</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <button className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-all text-left">

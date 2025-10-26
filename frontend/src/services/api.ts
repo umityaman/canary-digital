@@ -556,7 +556,7 @@ export const accountingAPI = {
     api.get('/accounting/stats', { params }),
   
   // Dashboard Chart Data
-  getChartData: (params?: { months?: number }) =>
+  getChartData: (params?: { months?: number; startDate?: string; endDate?: string }) =>
     api.get('/accounting/chart-data', { params }),
   
   // Income-Expense Analysis
