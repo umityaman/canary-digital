@@ -4,6 +4,7 @@ import { invoiceAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
 import { generateInvoicePDF } from '../../utils/pdfGenerator';
 import EmailModal from './EmailModal';
+import EmailModal from './EmailModal';
 
 interface InvoiceItem {
   id?: number;

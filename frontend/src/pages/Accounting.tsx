@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
@@ -104,6 +105,7 @@ interface Offer {
 }
 
 export default function Accounting() {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
   const [agingType, setAgingType] = useState<'checks' | 'promissory-notes' | 'combined'>('combined')
   const [stats, setStats] = useState<AccountingStats | null>(null)
@@ -1134,10 +1136,7 @@ export default function Accounting() {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                                   <button 
-                                    onClick={() => {
-                                      setEditingInvoice(invoice);
-                                      setShowInvoiceModal(true);
-                                    }}
+                                    onClick={() => navigate(`/invoices/${invoice.id}`)}
                                     className="text-neutral-900 hover:text-neutral-700 font-medium"
                                   >
                                     Detay

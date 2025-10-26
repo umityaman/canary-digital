@@ -20,6 +20,7 @@ import Calendar from './pages/Calendar'
 import Documents from './pages/Documents'
 import Suppliers from './pages/Suppliers'
 import Accounting from './pages/Accounting'
+import InvoiceDetail from './pages/InvoiceDetail'
 import Social from './pages/Social'
 import Website from './pages/Website'
 import SiteBuilder from './pages/website/SiteBuilder'
@@ -94,6 +95,7 @@ export default function App(){
           <Route path='/documents' element={<Documents/>} />
           <Route path='/suppliers' element={<Suppliers/>} />
           <Route path='/accounting' element={<Accounting/>} />
+          <Route path='/invoices/:id' element={<InvoiceDetail/>} />
           <Route path='/social' element={<Social/>} />
           <Route path='/website' element={<Website/>} />
           <Route path='/website/builder' element={<SiteBuilder/>} />
