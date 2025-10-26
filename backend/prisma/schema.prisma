@@ -48,6 +48,8 @@ model Company {
   equipment            Equipment[]
   expenses             Expense[]
   incomes              Income[]
+  checks               Check[]
+  promissoryNotes      PromissoryNote[]
   generatedReports     GeneratedReport[]      @relation("CompanyGeneratedReports")
   mediaFiles           MediaFile[]
   mediaFolders         MediaFolder[]
@@ -149,6 +151,8 @@ model User {
   transactions             Transaction[]
   company                  Company?                @relation(fields: [companyId], references: [id])
   workOrders               WorkOrder[]
+  createdChecks            Check[]
+  createdPromissoryNotes   PromissoryNote[]
 }
 
 model Category {
@@ -223,6 +227,8 @@ model Customer {
   inspections       Inspection[]
   orders            Order[]
   workOrders        WorkOrder[]
+  checks            Check[]
+  promissoryNotes   PromissoryNote[]
 }
 
 model Order {
@@ -1028,6 +1034,8 @@ model Invoice {
   transactions     Transaction[]
   incomes          Income[]
   expenses         Expense[]
+  checks           Check[]
+  promissoryNotes  PromissoryNote[]
 
   @@index([orderId])
   @@index([customerId])
@@ -1098,6 +1106,96 @@ model Income {
   @@index([invoiceId])
 }
 
+model Check {
+  id              Int      @id @default(autoincrement())
+  companyId       Int
+  checkNumber     String
+  serialNumber    String?
+  amount          Float
+  currency        String   @default("TRY")
+  issueDate       DateTime
+  dueDate         DateTime
+  type            String   // 'received' (müşteriden alınan) or 'issued' (müşteriye verilen)
+  status          String   @default("portfolio") // portfolio, deposited, bounced, cashed, endorsed
+  drawerName      String   // Keşideci (çeki kesen)
+  drawerTaxNumber String?
+  payeeName       String?  // Lehtar (çeki alan)
+  bankName        String
+  bankBranch      String?
+  bankAccount     String?
+  customerId      Int?
+  supplierId      Int?
+  invoiceId       Int?
+  notes           String?
+  location        String?  // Çek nerede: Portföy, Bankada, Cirodaydı
+  endorsedTo      String?  // Ciro edildi ise kime
+  endorsedDate    DateTime?
+  depositedDate   DateTime?
+  cashedDate      DateTime?
+  bouncedDate     DateTime?
+  bouncedReason   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdBy       Int?
+  company         Company  @relation(fields: [companyId], references: [id])
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  supplier        Supplier? @relation(fields: [supplierId], references: [id])
+  invoice         Invoice? @relation(fields: [invoiceId], references: [id])
+  user            User?    @relation(fields: [createdBy], references: [id])
+
+  @@index([companyId])
+  @@index([checkNumber])
+  @@index([dueDate])
+  @@index([status])
+  @@index([type])
+  @@index([customerId])
+  @@index([supplierId])
+}
+
+model PromissoryNote {
+  id              Int      @id @default(autoincrement())
+  companyId       Int
+  noteNumber      String
+  serialNumber    String?
+  amount          Float
+  currency        String   @default("TRY")
+  issueDate       DateTime
+  dueDate         DateTime
+  type            String   // 'receivable' (alacak senedi) or 'payable' (borç senedi)
+  status          String   @default("portfolio") // portfolio, collected, defaulted, endorsed
+  drawerName      String   // Borçlu (senedi düzenleyen)
+  drawerTaxNumber String?
+  payeeName       String?  // Alacaklı (senedi alan)
+  guarantorName   String?  // Kefil
+  guarantorTaxNo  String?
+  customerId      Int?
+  supplierId      Int?
+  invoiceId       Int?
+  notes           String?
+  location        String?  // Senet nerede: Portföy, Tahsil Edildi, Ciroda
+  endorsedTo      String?  // Ciro edildi ise kime
+  endorsedDate    DateTime?
+  collectedDate   DateTime?
+  defaultedDate   DateTime?
+  defaultReason   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdBy       Int?
+  company         Company  @relation(fields: [companyId], references: [id])
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  supplier        Supplier? @relation(fields: [supplierId], references: [id])
+  invoice         Invoice? @relation(fields: [invoiceId], references: [id])
+  user            User?    @relation(fields: [createdBy], references: [id])
+
+  @@index([companyId])
+  @@index([noteNumber])
+  @@index([dueDate])
+  @@index([status])
+  @@index([type])
+  @@index([customerId])
+  @@index([supplierId])
+}
+
 model Payment {
   id               Int      @id @default(autoincrement())
   invoiceId        Int
@@ -1144,6 +1242,8 @@ model Supplier {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   company       Company  @relation(fields: [companyId], references: [id])
+  checks        Check[]
+  promissoryNotes PromissoryNote[]
 
   @@index([companyId])
   @@index([name])
