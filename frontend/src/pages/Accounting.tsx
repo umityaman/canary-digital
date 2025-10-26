@@ -11,6 +11,7 @@ import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
 import IncomeModal from '../components/accounting/IncomeModal'
 import ExpenseModal from '../components/accounting/ExpenseModal'
+import InvoiceModal from '../components/accounting/InvoiceModal'
 import ChecksTab from '../components/accounting/ChecksTab'
 import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
 import AgingAnalysis from '../components/AgingAnalysis'
@@ -157,8 +158,10 @@ export default function Accounting() {
   // Modal state
   const [showIncomeModal, setShowIncomeModal] = useState(false)
   const [showExpenseModal, setShowExpenseModal] = useState(false)
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false)
   const [editingIncome, setEditingIncome] = useState<Income | null>(null)
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
 
   // Load accounting stats on mount and when date range changes
   useEffect(() => {
@@ -677,7 +680,10 @@ export default function Accounting() {
                 <h3 className="text-lg font-medium text-neutral-700 mb-3">Hızlı İşlemler</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <button className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-all text-left">
+                  <button 
+                    onClick={() => setShowInvoiceModal(true)}
+                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-all text-left"
+                  >
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-semibold text-neutral-900">Hızlı Fatura Kes</h3>
                       <FileText className="text-neutral-700" size={24} />
@@ -972,7 +978,13 @@ export default function Accounting() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-neutral-900">Fatura Listesi</h2>
-                  <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2">
+                  <button 
+                    onClick={() => {
+                      setEditingInvoice(null);
+                      setShowInvoiceModal(true);
+                    }}
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                  >
                     <FileText size={18} />
                     Yeni Fatura
                   </button>
@@ -1118,7 +1130,13 @@ export default function Accounting() {
                                   {getStatusBadge(invoice.status)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                  <button className="text-neutral-900 hover:text-neutral-700 font-medium">
+                                  <button 
+                                    onClick={() => {
+                                      setEditingInvoice(invoice);
+                                      setShowInvoiceModal(true);
+                                    }}
+                                    className="text-neutral-900 hover:text-neutral-700 font-medium"
+                                  >
                                     Detay
                                   </button>
                                 </td>
@@ -1509,6 +1527,19 @@ export default function Accounting() {
           loadStats()
         }}
         editingExpense={editingExpense}
+      />
+
+      <InvoiceModal
+        isOpen={showInvoiceModal}
+        onClose={() => {
+          setShowInvoiceModal(false)
+          setEditingInvoice(null)
+        }}
+        onSuccess={() => {
+          loadInvoices()
+          loadStats()
+        }}
+        editingInvoice={editingInvoice}
       />
     </div>
   )
