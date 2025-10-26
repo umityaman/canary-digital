@@ -12,6 +12,7 @@ import ExpenseTab from '../components/accounting/ExpenseTab'
 import IncomeModal from '../components/accounting/IncomeModal'
 import ExpenseModal from '../components/accounting/ExpenseModal'
 import InvoiceModal from '../components/accounting/InvoiceModal'
+import OfferModal from '../components/accounting/OfferModal'
 import ChecksTab from '../components/accounting/ChecksTab'
 import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
 import AgingAnalysis from '../components/AgingAnalysis'
@@ -159,9 +160,11 @@ export default function Accounting() {
   const [showIncomeModal, setShowIncomeModal] = useState(false)
   const [showExpenseModal, setShowExpenseModal] = useState(false)
   const [showInvoiceModal, setShowInvoiceModal] = useState(false)
+  const [showOfferModal, setShowOfferModal] = useState(false)
   const [editingIncome, setEditingIncome] = useState<Income | null>(null)
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
+  const [editingOffer, setEditingOffer] = useState<Offer | null>(null)
 
   // Load accounting stats on mount and when date range changes
   useEffect(() => {
@@ -1179,7 +1182,13 @@ export default function Accounting() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-neutral-900">Teklif Listesi</h2>
-                  <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2">
+                  <button 
+                    onClick={() => {
+                      setEditingOffer(null);
+                      setShowOfferModal(true);
+                    }}
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                  >
                     <Receipt size={18} />
                     Yeni Teklif
                   </button>
@@ -1320,6 +1329,16 @@ export default function Accounting() {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="flex items-center gap-2">
+                                    <button
+                                      onClick={() => {
+                                        setEditingOffer(offer);
+                                        setShowOfferModal(true);
+                                      }}
+                                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                      title="Düzenle"
+                                    >
+                                      Düzenle
+                                    </button>
                                     {offer.status === 'draft' && (
                                       <button
                                         onClick={() => handleOfferStatusUpdate(offer.id, 'sent')}
@@ -1346,14 +1365,6 @@ export default function Accounting() {
                                           <X size={16} />
                                         </button>
                                       </>
-                                    )}
-                                    {(offer.status === 'accepted' || offer.status === 'sent') && (
-                                      <button
-                                        className="text-neutral-900 hover:text-neutral-700 font-medium text-sm"
-                                        title="Faturaya Dönüştür"
-                                      >
-                                        Faturala
-                                      </button>
                                     )}
                                   </div>
                                 </td>
@@ -1540,6 +1551,19 @@ export default function Accounting() {
           loadStats()
         }}
         editingInvoice={editingInvoice}
+      />
+
+      <OfferModal
+        isOpen={showOfferModal}
+        onClose={() => {
+          setShowOfferModal(false)
+          setEditingOffer(null)
+        }}
+        onSuccess={() => {
+          loadOffers()
+          loadStats()
+        }}
+        editingOffer={editingOffer}
       />
     </div>
   )
