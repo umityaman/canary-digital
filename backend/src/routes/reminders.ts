@@ -1,7 +1,7 @@
 import express from 'express';
-import { reminderService } from '../services/reminderService';
+import reminderService from '../services/reminderService';
 import { authenticateToken } from '../middleware/auth';
-import logger from '../utils/logger';
+import logger from '../config/logger';
 
 const router = express.Router();
 

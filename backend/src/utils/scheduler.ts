@@ -1,6 +1,6 @@
 import cron from 'node-cron';
-import { reminderService } from '../services/reminderService';
-import logger from '../utils/logger';
+import reminderService from '../services/reminderService';
+import logger from '../config/logger';
 
 /**
  * Schedule daily reminders

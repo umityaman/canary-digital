@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { emailService } from './EmailService';
-import logger from '../utils/logger';
+import logger from '../config/logger';
 
 const prisma = new PrismaClient();
 
