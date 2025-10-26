@@ -729,6 +729,13 @@ export const invoiceAPI = {
     installments: number;
     startDate: string;
   }) => api.post('/invoices/payment-plan', data),
+  
+  // Send invoice via email
+  sendEmail: (id: number, data: {
+    recipientEmail?: string;
+    message?: string;
+    pdfBuffer?: string;
+  }) => api.post(`/invoices/${id}/send-email`, data),
 };
 
 // Offer API
@@ -795,6 +802,13 @@ export const offerAPI = {
   // Update offer status
   updateStatus: (id: number, status: string) =>
     api.patch(`/offers/${id}/status`, { status }),
+  
+  // Send offer via email
+  sendEmail: (id: number, data: {
+    recipientEmail?: string;
+    message?: string;
+    pdfBuffer?: string;
+  }) => api.post(`/offers/${id}/send-email`, data),
 };
 
 // Check API

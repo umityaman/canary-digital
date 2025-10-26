@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, FileText, FileDown } from 'lucide-react';
+import { X, Plus, Trash2, FileText, FileDown, Mail } from 'lucide-react';
 import { offerAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
 import { generateOfferPDF } from '../../utils/pdfGenerator';
+import EmailModal from './EmailModal';
 
 interface OfferItem {
   equipmentId?: number;
@@ -36,6 +37,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
   editingOffer 
 }) => {
   const [loading, setLoading] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   
   const [formData, setFormData] = useState({
     customerId: 0,
@@ -43,6 +45,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
     customerEmail: '',
     customerPhone: '',
     customerCompany: '',
+    customerTaxNumber: '',
     offerNumber: '',
     offerDate: new Date().toISOString().split('T')[0],
     validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -589,6 +592,18 @@ const OfferModal: React.FC<OfferModalProps> = ({
               PDF İndir
             </button>
             
+            {editingOffer && (
+              <button
+                type="button"
+                onClick={() => setShowEmailModal(true)}
+                className="flex items-center gap-2 px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                disabled={loading}
+              >
+                <Mail size={18} />
+                E-posta Gönder
+              </button>
+            )}
+            
             {canConvertToInvoice && (
               <button
                 type="button"
@@ -621,6 +636,39 @@ const OfferModal: React.FC<OfferModalProps> = ({
           </div>
         </div>
       </div>
+      
+      {/* Email Modal */}
+      {showEmailModal && editingOffer && (
+        <EmailModal
+          isOpen={showEmailModal}
+          onClose={() => setShowEmailModal(false)}
+          onSuccess={() => {
+            setShowEmailModal(false);
+            toast.success('E-posta başarıyla gönderildi');
+          }}
+          type="offer"
+          data={{
+            id: editingOffer.id,
+            number: formData.offerNumber || editingOffer.offerNumber,
+            customerName: formData.customerName,
+            customerEmail: formData.customerEmail,
+            customerPhone: formData.customerPhone,
+            customerCompany: formData.customerCompany,
+            customerTaxNumber: formData.customerTaxNumber,
+            date: formData.offerDate,
+            validityDate: formData.validUntil,
+            items: items.map((item) => ({
+              description: item.description,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              days: item.days,
+              discount: item.discountPercentage,
+            })),
+            notes: formData.notes,
+            vatRate: formData.vatRate,
+          }}
+        />
+      )}
     </div>
   );
 };

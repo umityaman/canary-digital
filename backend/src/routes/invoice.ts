@@ -2,6 +2,7 @@ import express from 'express';
 import { invoiceService } from '../services/invoice.service';
 import { authenticateToken } from './auth';
 import { log } from '../config/logger';
+import { emailService } from '../services/EmailService';
 
 const router = express.Router();
 
@@ -445,6 +446,95 @@ router.post('/payment-plan', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to create payment plan',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/invoices/:id/send-email
+ * @desc    Faturayı e-posta ile gönder
+ * @access  Private
+ */
+router.post('/:id/send-email', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { recipientEmail, message, pdfBuffer } = req.body;
+
+    // Get invoice details
+    const invoice = await invoiceService.getInvoiceDetails(parseInt(id));
+
+    if (!invoice) {
+      return res.status(404).json({
+        success: false,
+        message: 'Invoice not found',
+      });
+    }
+
+    // Prepare email
+    const to = recipientEmail || invoice.customer?.email;
+    
+    if (!to) {
+      return res.status(400).json({
+        success: false,
+        message: 'Recipient email is required',
+      });
+    }
+
+    const subject = `Fatura #${invoice.invoiceNumber} - Canary Digital`;
+    
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2563eb;">Fatura Gönderimi</h2>
+        <p>Sayın ${invoice.customerName},</p>
+        <p>Faturanız ektedir. Detaylar aşağıdaki gibidir:</p>
+        
+        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p><strong>Fatura No:</strong> ${invoice.invoiceNumber}</p>
+          <p><strong>Fatura Tarihi:</strong> ${new Date(invoice.invoiceDate).toLocaleDateString('tr-TR')}</p>
+          <p><strong>Vade Tarihi:</strong> ${new Date(invoice.dueDate).toLocaleDateString('tr-TR')}</p>
+          <p><strong>Toplam Tutar:</strong> ${invoice.grandTotal.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+          <p><strong>Durum:</strong> ${invoice.status === 'paid' ? 'Ödendi' : invoice.status === 'pending' ? 'Beklemede' : 'Gecikmiş'}</p>
+        </div>
+        
+        ${message ? `<p><strong>Not:</strong> ${message}</p>` : ''}
+        
+        <p>İyi günler dileriz.</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Bu e-posta otomatik olarak gönderilmiştir.<br>
+          Canary Digital © ${new Date().getFullYear()}
+        </p>
+      </div>
+    `;
+
+    // Prepare attachments
+    const attachments = [];
+    if (pdfBuffer) {
+      attachments.push({
+        filename: `Fatura-${invoice.invoiceNumber}.pdf`,
+        content: Buffer.from(pdfBuffer, 'base64'),
+        contentType: 'application/pdf',
+      });
+    }
+
+    // Send email
+    await emailService.sendEmail({
+      to,
+      subject,
+      html,
+      attachments,
+    });
+
+    log.info('Invoice email sent:', { invoiceId: id, to });
+
+    res.json({
+      success: true,
+      message: 'Invoice email sent successfully',
+    });
+  } catch (error: any) {
+    log.error('Failed to send invoice email:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to send invoice email',
     });
   }
 });

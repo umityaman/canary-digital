@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, Search, FileDown } from 'lucide-react';
+import { X, Plus, Trash2, Search, FileDown, Mail } from 'lucide-react';
 import { invoiceAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
 import { generateInvoicePDF } from '../../utils/pdfGenerator';
+import EmailModal from './EmailModal';
 
 interface InvoiceItem {
   id?: number;
@@ -60,6 +61,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({
   const [searchingOrder, setSearchingOrder] = useState(false);
   const [orderSearch, setOrderSearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   
   const [formData, setFormData] = useState({
     orderId: orderId || 0,
@@ -654,15 +656,29 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({
 
         {/* Footer */}
         <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-          <button
-            type="button"
-            onClick={handleDownloadPDF}
-            className="flex items-center gap-2 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
-            disabled={loading}
-          >
-            <FileDown size={18} />
-            PDF İndir
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleDownloadPDF}
+              className="flex items-center gap-2 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+              disabled={loading}
+            >
+              <FileDown size={18} />
+              PDF İndir
+            </button>
+            
+            {editingInvoice && (
+              <button
+                type="button"
+                onClick={() => setShowEmailModal(true)}
+                className="flex items-center gap-2 px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                disabled={loading}
+              >
+                <Mail size={18} />
+                E-posta Gönder
+              </button>
+            )}
+          </div>
           
           <div className="flex items-center gap-3">
             <button
@@ -684,6 +700,39 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({
           </div>
         </div>
       </div>
+      
+      {/* Email Modal */}
+      {showEmailModal && editingInvoice && (
+        <EmailModal
+          isOpen={showEmailModal}
+          onClose={() => setShowEmailModal(false)}
+          onSuccess={() => {
+            setShowEmailModal(false);
+            toast.success('E-posta başarıyla gönderildi');
+          }}
+          type="invoice"
+          data={{
+            id: editingInvoice.id,
+            number: formData.invoiceNumber || editingInvoice.invoiceNumber,
+            customerName: formData.customerName,
+            customerEmail: formData.customerEmail,
+            customerPhone: formData.customerPhone,
+            customerCompany: formData.customerCompany,
+            customerTaxNumber: formData.customerTaxNumber,
+            date: formData.invoiceDate,
+            dueDate: formData.dueDate,
+            items: items.map((item) => ({
+              description: item.description,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              days: item.days,
+              discount: item.discountPercentage,
+            })),
+            notes: formData.notes,
+            vatRate: formData.vatRate,
+          }}
+        />
+      )}
     </div>
   );
 };

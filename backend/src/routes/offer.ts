@@ -2,6 +2,7 @@ import express from 'express';
 import { offerService } from '../services/offer.service';
 import { authenticateToken } from './auth';
 import { log } from '../config/logger';
+import { emailService } from '../services/EmailService';
 
 const router = express.Router();
 
@@ -312,6 +313,103 @@ router.patch('/:id/status', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to update offer status',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/offers/:id/send-email
+ * @desc    Teklifi e-posta ile gönder
+ * @access  Private
+ */
+router.post('/:id/send-email', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { recipientEmail, message, pdfBuffer } = req.body;
+
+    // Get offer details
+    const offer = await offerService.getOfferById(parseInt(id));
+
+    if (!offer) {
+      return res.status(404).json({
+        success: false,
+        message: 'Offer not found',
+      });
+    }
+
+    // Prepare email
+    const to = recipientEmail || offer.customer?.email;
+    
+    if (!to) {
+      return res.status(400).json({
+        success: false,
+        message: 'Recipient email is required',
+      });
+    }
+
+    const subject = `Teklif #${offer.offerNumber} - Canary Digital`;
+    
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #3b82f6;">Teklif Gönderimi</h2>
+        <p>Sayın ${offer.customer?.name},</p>
+        <p>Teklifimiz ektedir. Detaylar aşağıdaki gibidir:</p>
+        
+        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p><strong>Teklif No:</strong> ${offer.offerNumber}</p>
+          <p><strong>Teklif Tarihi:</strong> ${new Date(offer.offerDate).toLocaleDateString('tr-TR')}</p>
+          <p><strong>Geçerlilik Tarihi:</strong> ${new Date(offer.validUntil).toLocaleDateString('tr-TR')}</p>
+          <p><strong>Toplam Tutar:</strong> ${offer.grandTotal.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+          <p><strong>Durum:</strong> ${offer.status === 'sent' ? 'Gönderildi' : offer.status === 'accepted' ? 'Kabul Edildi' : offer.status === 'rejected' ? 'Reddedildi' : 'Taslak'}</p>
+        </div>
+        
+        ${message ? `<p><strong>Not:</strong> ${message}</p>` : ''}
+        
+        <p>Teklifimizi değerlendirmenizi rica ederiz.</p>
+        <p>Sorularınız için bizimle iletişime geçebilirsiniz.</p>
+        
+        <p>İyi günler dileriz.</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Bu e-posta otomatik olarak gönderilmiştir.<br>
+          Canary Digital © ${new Date().getFullYear()}
+        </p>
+      </div>
+    `;
+
+    // Prepare attachments
+    const attachments = [];
+    if (pdfBuffer) {
+      attachments.push({
+        filename: `Teklif-${offer.offerNumber}.pdf`,
+        content: Buffer.from(pdfBuffer, 'base64'),
+        contentType: 'application/pdf',
+      });
+    }
+
+    // Send email
+    await emailService.sendEmail({
+      to,
+      subject,
+      html,
+      attachments,
+    });
+
+    // Update offer status to 'sent' if it was 'draft'
+    if (offer.status === 'draft') {
+      await offerService.updateOffer(parseInt(id), { status: 'sent' });
+    }
+
+    log.info('Offer email sent:', { offerId: id, to });
+
+    res.json({
+      success: true,
+      message: 'Offer email sent successfully',
+    });
+  } catch (error: any) {
+    log.error('Failed to send offer email:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to send offer email',
     });
   }
 });
