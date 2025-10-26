@@ -210,74 +210,66 @@ export default function IncomeTab({
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[900px]">
+              <table className="w-full">
                 <thead className="bg-neutral-50 border-b border-neutral-200">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-28">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase w-24">
                       Tarih
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase w-40">
                       Açıklama
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-36">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase w-28">
                       Kategori
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-32">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase w-24">
                       Tutar
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-36">
-                      Ödeme Yöntemi
+                    <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase w-28">
+                      Ödeme
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-32">
+                    <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase w-24">
                       Durum
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider w-24">
-                      İşlemler
+                    <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase w-20">
+                      İşlem
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-neutral-200">
                   {incomes.map((income) => (
                     <tr key={income.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="text-sm text-neutral-900">
-                          {formatDate(income.date)}
-                        </div>
+                      <td className="px-2 py-2 whitespace-nowrap text-xs">
+                        {formatDate(income.date)}
                       </td>
-                      <td className="px-4 py-4">
-                        <div className="text-sm font-medium text-neutral-900 max-w-xs truncate">
+                      <td className="px-2 py-2">
+                        <div className="text-xs font-medium text-neutral-900 truncate max-w-[160px]" title={income.description}>
                           {income.description}
                         </div>
                         {income.notes && (
-                          <div className="text-xs text-neutral-500 mt-1 max-w-xs truncate">
+                          <div className="text-xs text-neutral-500 truncate max-w-[160px]" title={income.notes}>
                             {income.notes}
                           </div>
                         )}
                       </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="text-sm text-neutral-900">{income.category}</div>
+                      <td className="px-2 py-2 whitespace-nowrap text-xs">{income.category}</td>
+                      <td className="px-2 py-2 whitespace-nowrap text-xs font-bold text-green-600">
+                        {formatCurrency(income.amount)}
                       </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="text-sm font-bold text-green-600">
-                          {formatCurrency(income.amount)}
-                        </div>
+                      <td className="px-2 py-2 whitespace-nowrap text-xs">
+                        {getPaymentMethodLabel(income.paymentMethod)}
                       </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="text-sm text-neutral-900">
-                          {getPaymentMethodLabel(income.paymentMethod)}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
+                      <td className="px-2 py-2 whitespace-nowrap text-xs">
                         {getStatusBadge(income.status)}
                       </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
+                      <td className="px-2 py-2 whitespace-nowrap">
+                        <div className="flex items-center gap-1">
                           <button
                             onClick={() => onEdit(income)}
                             className="text-blue-600 hover:text-blue-800 p-1"
                             title="Düzenle"
                           >
-                            <Edit2 size={16} />
+                            <Edit2 size={14} />
                           </button>
                           <button
                             onClick={() => onDelete(income.id)}
