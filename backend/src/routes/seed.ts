@@ -18,6 +18,39 @@ router.get('/health', (req, res) => {
 });
 
 /**
+ * @route   GET /api/seed/test
+ * @desc    Test database connection and raw SQL
+ * @access  Public (for debugging)
+ */
+router.get('/test', async (req, res) => {
+  try {
+    // Test 1: Simple query
+    const result1 = await prisma.$queryRaw`SELECT current_database(), version()`;
+    
+    // Test 2: Check if tables exist
+    const tables = await prisma.$queryRaw`
+      SELECT table_name 
+      FROM information_schema.tables 
+      WHERE table_schema = 'public' 
+      ORDER BY table_name
+    `;
+    
+    res.json({
+      success: true,
+      database: result1,
+      tables: tables,
+      prismaWorks: true,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code,
+    });
+  }
+});
+
+/**
  * @route   POST /api/seed/migrate
  * @desc    Run database migrations (ADMIN ONLY)
  * @access  Private (Admin)
