@@ -24,6 +24,60 @@ router.get('/health', (req, res) => {
  */
 router.get('/test', async (req, res) => {
   try {
+    // Check if we should create tables (query param)
+    if (req.query.createTables === 'true') {
+      const created = [];
+      
+      // Create Offer
+      try {
+        await prisma.$executeRawUnsafe(`
+          CREATE TABLE IF NOT EXISTS "Offer" (
+            "id" SERIAL PRIMARY KEY,
+            "customerId" INTEGER NOT NULL,
+            "offerNumber" TEXT UNIQUE NOT NULL,
+            "offerDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "validUntil" TIMESTAMP(3) NOT NULL,
+            "items" JSONB NOT NULL,
+            "totalAmount" DOUBLE PRECISION NOT NULL,
+            "vatAmount" DOUBLE PRECISION NOT NULL,
+            "grandTotal" DOUBLE PRECISION NOT NULL,
+            "status" TEXT NOT NULL DEFAULT 'draft',
+            "notes" TEXT,
+            "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
+        created.push('Offer');
+      } catch (e: any) {
+        created.push('Offer_ERROR: ' + e.message);
+      }
+      
+      // Create Expense
+      try {
+        await prisma.$executeRawUnsafe(`
+          CREATE TABLE IF NOT EXISTS "Expense" (
+            "id" SERIAL PRIMARY KEY,
+            "companyId" INTEGER NOT NULL,
+            "description" TEXT NOT NULL,
+            "amount" DOUBLE PRECISION NOT NULL,
+            "category" TEXT NOT NULL,
+            "date" TIMESTAMP(3) NOT NULL,
+            "status" TEXT NOT NULL DEFAULT 'pending',
+            "paymentMethod" TEXT,
+            "notes" TEXT,
+            "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
+        created.push('Expense');
+      } catch (e: any) {
+        created.push('Expense_ERROR: ' + e.message);
+      }
+      
+      return res.json({ tablesCreated: created, success: true });
+    }
+    
+    // Normal test (original functionality)
     // Test 1: Simple query
     const result1 = await prisma.$queryRaw`SELECT current_database(), version()`;
     
