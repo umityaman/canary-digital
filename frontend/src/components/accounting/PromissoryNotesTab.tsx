@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, TrendingUp, TrendingDown, FileCheck, AlertCircle, ChevronDown } from 'lucide-react';
+import { Plus, Edit, Trash2, TrendingUp, TrendingDown, FileCheck, AlertCircle, ChevronDown, Download, FileText } from 'lucide-react';
 import { promissoryNoteAPI } from '../../services/api';
 import PromissoryNoteModal from './PromissoryNoteModal';
 import { toast } from 'react-hot-toast';
+import { exportPromissoryNotesToExcel, exportPromissoryNotesToPDF } from '../../utils/exportUtils';
 
 interface PromissoryNote {
   id: number;
@@ -296,16 +297,39 @@ const PromissoryNotesTab: React.FC = () => {
             />
           </div>
 
-          <button
-            onClick={() => {
-              setEditingNote(null);
-              setIsModalOpen(true);
-            }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Yeni Senet
-          </button>
+          <div className="flex gap-2">
+            {/* Export Buttons */}
+            {notes.length > 0 && (
+              <>
+                <button
+                  onClick={() => exportPromissoryNotesToExcel(notes)}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                  title="Excel'e Aktar"
+                >
+                  <Download className="w-4 h-4" />
+                  Excel
+                </button>
+                <button
+                  onClick={() => exportPromissoryNotesToPDF(notes)}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                  title="PDF'e Aktar"
+                >
+                  <FileText className="w-4 h-4" />
+                  PDF
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => {
+                setEditingNote(null);
+                setIsModalOpen(true);
+              }}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Yeni Senet
+            </button>
+          </div>
         </div>
       </div>
 

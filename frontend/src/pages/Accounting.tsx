@@ -16,6 +16,7 @@ import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
 import { DateRangePicker } from '../components/common/DateRangePicker'
+import { exportFinancialSummaryToPDF } from '../utils/exportUtils'
 import type { Income } from '../components/accounting/IncomeTab'
 import type { Expense } from '../components/accounting/ExpenseTab'
 
@@ -560,11 +561,25 @@ export default function Accounting() {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-neutral-900">Genel Bakış</h2>
                   
-                  {/* Date Range Filter */}
-                  <DateRangePicker
-                    value={dateRange || undefined}
-                    onChange={(range) => setDateRange(range)}
-                  />
+                  <div className="flex gap-2 items-center">
+                    {/* Export Financial Summary */}
+                    {incomes.length > 0 && expenses.length > 0 && (
+                      <button
+                        onClick={() => exportFinancialSummaryToPDF(incomes, expenses)}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-2"
+                        title="Mali Özet PDF"
+                      >
+                        <Download size={18} />
+                        Mali Özet PDF
+                      </button>
+                    )}
+                    
+                    {/* Date Range Filter */}
+                    <DateRangePicker
+                      value={dateRange || undefined}
+                      onChange={(range) => setDateRange(range)}
+                    />
+                  </div>
                 </div>
 
                 <h3 className="text-lg font-medium text-neutral-700 mb-3">Hızlı İşlemler</h3>

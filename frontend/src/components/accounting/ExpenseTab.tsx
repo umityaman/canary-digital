@@ -1,7 +1,8 @@
 import { 
   TrendingDown, Search, Filter, RefreshCw, ChevronLeft, ChevronRight,
-  Edit2, Trash2, Plus
+  Edit2, Trash2, Plus, Download, FileText
 } from 'lucide-react'
+import { exportExpenseToExcel, exportExpenseToPDF } from '../../utils/exportUtils'
 
 interface Expense {
   id: number
@@ -136,13 +137,36 @@ export default function ExpenseTab({
             </p>
           )}
         </div>
-        <button
-          onClick={onCreate}
-          className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
-        >
-          <Plus size={18} />
-          Yeni Gider Ekle
-        </button>
+        <div className="flex gap-2">
+          {/* Export Buttons */}
+          {expenses.length > 0 && (
+            <>
+              <button
+                onClick={() => exportExpenseToExcel(expenses)}
+                className="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2"
+                title="Excel'e Aktar"
+              >
+                <Download size={18} />
+                Excel
+              </button>
+              <button
+                onClick={() => exportExpenseToPDF(expenses)}
+                className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors flex items-center gap-2"
+                title="PDF'e Aktar"
+              >
+                <FileText size={18} />
+                PDF
+              </button>
+            </>
+          )}
+          <button
+            onClick={onCreate}
+            className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+          >
+            <Plus size={18} />
+            Yeni Gider Ekle
+          </button>
+        </div>
       </div>
 
       {/* Filters */}

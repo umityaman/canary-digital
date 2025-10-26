@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, TrendingUp, TrendingDown, FileCheck, AlertCircle, ChevronDown } from 'lucide-react';
+import { Plus, Edit, Trash2, TrendingUp, TrendingDown, FileCheck, AlertCircle, ChevronDown, Download, FileText } from 'lucide-react';
 import { checkAPI } from '../../services/api';
 import CheckModal from './CheckModal';
 import { toast } from 'react-hot-toast';
+import { exportChecksToExcel, exportChecksToPDF } from '../../utils/exportUtils';
 
 interface Check {
   id: number;
@@ -313,16 +314,39 @@ const ChecksTab: React.FC = () => {
             />
           </div>
 
-          <button
-            onClick={() => {
-              setEditingCheck(null);
-              setIsModalOpen(true);
-            }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Yeni Çek
-          </button>
+          <div className="flex gap-2">
+            {/* Export Buttons */}
+            {checks.length > 0 && (
+              <>
+                <button
+                  onClick={() => exportChecksToExcel(checks)}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                  title="Excel'e Aktar"
+                >
+                  <Download className="w-4 h-4" />
+                  Excel
+                </button>
+                <button
+                  onClick={() => exportChecksToPDF(checks)}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                  title="PDF'e Aktar"
+                >
+                  <FileText className="w-4 h-4" />
+                  PDF
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => {
+                setEditingCheck(null);
+                setIsModalOpen(true);
+              }}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Yeni Çek
+            </button>
+          </div>
         </div>
       </div>
 

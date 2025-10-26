@@ -43,6 +43,7 @@
     "iyzipay": "^2.0.64",
     "jsbarcode": "^3.12.1",
     "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
     "lodash": "^4.17.21",
     "lucide-react": "^0.290.0",
     "markdown-to-jsx": "^7.7.15",
