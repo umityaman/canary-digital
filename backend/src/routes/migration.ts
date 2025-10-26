@@ -57,7 +57,7 @@ router.post('/run-income-migration', async (req, res) => {
     res.json({
       success: true,
       message: 'Income table created successfully',
-      incomeCount: count[0].count
+      incomeCount: Number(count[0].count)
     });
   } catch (error: any) {
     console.error('Migration error:', error);
