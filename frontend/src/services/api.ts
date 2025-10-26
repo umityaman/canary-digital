@@ -555,6 +555,10 @@ export const accountingAPI = {
   getStats: (params?: { startDate?: string; endDate?: string }) => 
     api.get('/accounting/stats', { params }),
   
+  // Dashboard Chart Data
+  getChartData: (params?: { months?: number }) =>
+    api.get('/accounting/chart-data', { params }),
+  
   // Income-Expense Analysis
   getIncomeExpenseAnalysis: (params: { 
     startDate: string; 
@@ -577,7 +581,7 @@ export const accountingAPI = {
   getIncomes: (params?: {
     page?: number;
     limit?: number;
-    category?: string;
+    category?: string; 
     status?: string;
     startDate?: string;
     endDate?: string;

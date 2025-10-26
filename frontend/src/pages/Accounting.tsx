@@ -11,6 +11,8 @@ import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
 import IncomeModal from '../components/accounting/IncomeModal'
 import ExpenseModal from '../components/accounting/ExpenseModal'
+import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
+import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
 import type { Income } from '../components/accounting/IncomeTab'
 import type { Expense } from '../components/accounting/ExpenseTab'
 
@@ -96,6 +98,10 @@ export default function Accounting() {
   const [stats, setStats] = useState<AccountingStats | null>(null)
   const [loading, setLoading] = useState(true)
   
+  // Chart data state
+  const [chartData, setChartData] = useState<any>(null)
+  const [chartLoading, setChartLoading] = useState(false)
+  
   // Invoice list state
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [invoicesLoading, setInvoicesLoading] = useState(false)
@@ -141,6 +147,7 @@ export default function Accounting() {
   // Load accounting stats on mount
   useEffect(() => {
     loadStats()
+    loadChartData()
   }, [])
 
   // Load invoices when invoice tab is active
@@ -184,6 +191,21 @@ export default function Accounting() {
       toast.error('İstatistikler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadChartData = async () => {
+    try {
+      setChartLoading(true)
+      console.log('📊 Loading chart data...')
+      const response = await accountingAPI.getChartData({ months: 12 })
+      console.log('✅ Chart data response:', response.data)
+      setChartData(response.data.data)
+    } catch (error: any) {
+      console.error('❌ Failed to load chart data:', error)
+      toast.error('Grafik verileri yüklenemedi')
+    } finally {
+      setChartLoading(false)
     }
   }
 
@@ -552,6 +574,34 @@ export default function Accounting() {
                     <p className="text-sm text-neutral-600">Yeni gider kaydı</p>
                   </button>
                 </div>
+
+                {/* Charts Section */}
+                {chartLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <RefreshCw className="animate-spin text-neutral-400" size={32} />
+                  </div>
+                ) : chartData ? (
+                  <>
+                    {/* Trend Chart */}
+                    <div className="mt-8">
+                      <IncomeExpenseChart data={chartData.trend} />
+                    </div>
+
+                    {/* Category Charts */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                      <CategoryPieChart
+                        data={chartData.incomeCategories}
+                        title="Gelir Kategorileri (Son 3 Ay)"
+                        type="income"
+                      />
+                      <CategoryPieChart
+                        data={chartData.expenseCategories}
+                        title="Gider Kategorileri (Son 3 Ay)"
+                        type="expense"
+                      />
+                    </div>
+                  </>
+                ) : null}
               </div>
             )}
 
