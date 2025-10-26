@@ -19,6 +19,7 @@ import { invoiceAPI } from '../services/api';
 import { toast } from 'react-hot-toast';
 import { generateInvoicePDF } from '../utils/pdfGenerator';
 import EmailModal from '../components/accounting/EmailModal';
+import PaymentModal from '../components/accounting/PaymentModal';
 
 interface InvoiceDetail {
   id: number;
@@ -600,20 +601,23 @@ const InvoiceDetail: React.FC = () => {
         />
       )}
 
-      {/* Payment Modal - Will be implemented next */}
+      {/* Payment Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold mb-4">Ödeme Kaydet</h3>
-            <p className="text-gray-600">Ödeme modal'ı yakında eklenecek...</p>
-            <button
-              onClick={() => setShowPaymentModal(false)}
-              className="mt-4 w-full px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-            >
-              Kapat
-            </button>
-          </div>
-        </div>
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          onSuccess={() => {
+            setShowPaymentModal(false);
+            loadInvoiceDetails(); // Reload to get updated payment info
+          }}
+          invoice={{
+            id: invoice.id,
+            invoiceNumber: invoice.invoiceNumber,
+            grandTotal: invoice.grandTotal,
+            paidAmount: invoice.paidAmount,
+            remainingAmount: invoice.remainingAmount,
+          }}
+        />
       )}
     </div>
   );
