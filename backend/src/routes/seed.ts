@@ -61,10 +61,12 @@ router.post('/migrate-simple', authenticateToken, async (req, res) => {
       return res.status(403).json({ success: false, message: 'Admin only' });
     }
 
+    console.log('[MIGRATION] Starting simple migration...');
     const steps = [];
 
     // Step 1: Create Offer table
     try {
+      console.log('[MIGRATION] Creating Offer table...');
       const sql1 = `CREATE TABLE IF NOT EXISTS "Offer" (
         "id" SERIAL PRIMARY KEY,
         "customerId" INTEGER NOT NULL,
@@ -82,12 +84,16 @@ router.post('/migrate-simple', authenticateToken, async (req, res) => {
       )`;
       await prisma.$executeRawUnsafe(sql1);
       steps.push('✅ Offer table created');
+      console.log('[MIGRATION] Offer table created successfully');
     } catch (e: any) {
-      steps.push(`❌ Offer table: ${e.message}`);
+      const msg = `❌ Offer table: ${e.message}`;
+      steps.push(msg);
+      console.error('[MIGRATION] Offer table error:', e.message);
     }
 
     // Step 2: Create Expense table
     try {
+      console.log('[MIGRATION] Creating Expense table...');
       const sql2 = `CREATE TABLE IF NOT EXISTS "Expense" (
         "id" SERIAL PRIMARY KEY,
         "companyId" INTEGER NOT NULL,
@@ -103,12 +109,17 @@ router.post('/migrate-simple', authenticateToken, async (req, res) => {
       )`;
       await prisma.$executeRawUnsafe(sql2);
       steps.push('✅ Expense table created');
+      console.log('[MIGRATION] Expense table created successfully');
     } catch (e: any) {
-      steps.push(`❌ Expense table: ${e.message}`);
+      const msg = `❌ Expense table: ${e.message}`;
+      steps.push(msg);
+      console.error('[MIGRATION] Expense table error:', e.message);
     }
 
+    console.log('[MIGRATION] Migration completed with', steps.length, 'steps');
     res.json({ success: true, steps });
   } catch (error: any) {
+    console.error('[MIGRATION] Fatal error:', error);
     res.status(500).json({ success: false, error: error.message, stack: error.stack?.substring(0, 500) });
   }
 });
