@@ -3,7 +3,7 @@ import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
-  Search, Filter, ChevronLeft, ChevronRight, Check, X
+  Search, Filter, ChevronLeft, ChevronRight, Check, X, Plug
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI } from '../services/api'
 import { toast } from 'react-hot-toast'
@@ -15,6 +15,7 @@ import ChecksTab from '../components/accounting/ChecksTab'
 import PromissoryNotesTab from '../components/accounting/PromissoryNotesTab'
 import AgingAnalysis from '../components/AgingAnalysis'
 import AccountCards from '../components/AccountCards'
+import Integrations from './Integrations'
 import AdvancedFilter, { FilterState } from '../components/AdvancedFilter'
 import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
@@ -544,7 +545,7 @@ export default function Accounting() {
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <Receipt size={18} /> },
     { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <CreditCard size={18} /> },
     { id: 'ebelge' as const, label: 'e-Belge', icon: <Building2 size={18} /> },
-    { id: 'integration' as const, label: 'Entegrasyonlar', icon: <RefreshCw size={18} /> },
+    { id: 'integration' as const, label: 'Entegrasyonlar', icon: <Plug size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
     { id: 'support' as const, label: 'Yardım & Araçlar', icon: <Globe size={18} /> },
@@ -1398,29 +1399,7 @@ export default function Accounting() {
 
             {/* Integration Tab */}
             {activeTab === 'integration' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Entegrasyonlar</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {[
-                    { name: 'Banka Entegrasyonu', desc: 'Hesap hareketlerini otomatik aktar', icon: <Building2 size={24} /> },
-                    { name: 'Online Tahsilat', desc: 'Müşterilerden online ödeme al', icon: <CreditCard size={24} /> },
-                    { name: 'Stok Yönetimi', desc: 'Ürün hareketlerini izle', icon: <Package size={24} /> },
-                  ].map((item) => (
-                    <div key={item.name} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-lg transition-all">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <div className="text-neutral-700">{item.icon}</div>
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-neutral-900 mb-1">{item.name}</h3>
-                          <p className="text-sm text-neutral-600">{item.desc}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <Integrations />
             )}
 
             {/* Tools Tab */}
