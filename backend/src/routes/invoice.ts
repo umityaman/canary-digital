@@ -197,10 +197,13 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     // 2. Create dummy order
+    const userCompanyId = (req as any).user?.companyId || 1;
+    
     const order = await prisma.order.create({
       data: {
         orderNumber: `MAN-${Date.now()}`,
         customerId: customer.id,
+        companyId: userCompanyId, // Add company relation
         startDate: new Date(invoiceDate),
         endDate: new Date(dueDate),
         status: 'completed',
