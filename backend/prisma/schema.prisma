@@ -1023,7 +1023,7 @@ model Invoice {
   id               Int           @id @default(autoincrement())
   orderId          Int
   customerId       Int
-  accountCardId    Int?          // Optional: Cari hesap kartı referansı
+  // accountCardId    Int?          // TEMPORARILY DISABLED: Cari hesap kartı referansı (production DB'de kolon yok)
   parasutInvoiceId String?       @unique
   invoiceNumber    String?
   invoiceDate      DateTime
@@ -1038,7 +1038,7 @@ model Invoice {
   updatedAt        DateTime      @updatedAt
   customer         User          @relation(fields: [customerId], references: [id])
   order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  accountCard      AccountCard?  @relation("AccountCardInvoices", fields: [accountCardId], references: [id])
+  // accountCard      AccountCard?  @relation("AccountCardInvoices", fields: [accountCardId], references: [id])
   payments         Payment[]
   transactions     Transaction[]
   incomes          Income[]
@@ -1051,7 +1051,7 @@ model Invoice {
 
   @@index([orderId])
   @@index([customerId])
-  @@index([accountCardId])
+  // @@index([accountCardId])
 }
 
 model Offer {
@@ -2776,7 +2776,7 @@ model AccountCard {
   company         Company                   @relation("CompanyAccountCards", fields: [companyId], references: [id])
   user            User                      @relation("AccountCardCreator", fields: [createdBy], references: [id])
   transactions    AccountCardTransaction[]
-  invoices        Invoice[]                 @relation("AccountCardInvoices")
+  // invoices        Invoice[]                 @relation("AccountCardInvoices")  // TEMPORARILY DISABLED
   expenses        Expense[]                 @relation("AccountCardExpenses")
 
   @@index([companyId])
