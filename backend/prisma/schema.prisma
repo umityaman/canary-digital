@@ -73,6 +73,7 @@ model Company {
   websiteProjects      WebsiteProject[]
   whatsappMessages     WhatsAppMessage[]
   workOrders           WorkOrder[]
+  deliveryNotes        DeliveryNote[]
 }
 
 model User {
@@ -153,6 +154,7 @@ model User {
   workOrders               WorkOrder[]
   createdChecks            Check[]
   createdPromissoryNotes   PromissoryNote[]
+  createdDeliveryNotes     DeliveryNote[]          @relation("createdDeliveryNotes")
 }
 
 model Category {
@@ -208,6 +210,7 @@ model Equipment {
   scanLogs          ScanLog[]
   serviceAssets     ServiceAsset[]
   workOrders        WorkOrder[]
+  deliveryNoteItems DeliveryNoteItem[]
 }
 
 model Customer {
@@ -229,6 +232,7 @@ model Customer {
   workOrders        WorkOrder[]
   checks            Check[]
   promissoryNotes   PromissoryNote[]
+  deliveryNotes     DeliveryNote[]
 }
 
 model Order {
@@ -1036,6 +1040,9 @@ model Invoice {
   expenses         Expense[]
   checks           Check[]
   promissoryNotes  PromissoryNote[]
+  eInvoice         EInvoice?
+  eArchiveInvoice  EArchiveInvoice?
+  deliveryNote     DeliveryNote?
 
   @@index([orderId])
   @@index([customerId])
@@ -2642,4 +2649,83 @@ model ReportSchedule {
   @@index([templateId])
   @@index([isActive])
   @@index([nextRun])
+}
+
+// E-Invoice (E-Fatura) Models
+model EInvoice {
+  id            Int       @id @default(autoincrement())
+  invoiceId     Int       @unique
+  uuid          String    @unique @db.VarChar(36)
+  ettn          String?   @db.VarChar(36) // GİB'den dönen ETTN (Elektronik Fatura Tanımlama Numarası)
+  gibStatus     String    @default("draft") @db.VarChar(50) // draft, sent, accepted, rejected, cancelled
+  xmlContent    String    @db.Text // UBL-TR 1.2 XML içeriği
+  xmlHash       String?   @db.VarChar(64) // XML hash değeri
+  sentDate      DateTime? // GİB'e gönderilme tarihi
+  responseDate  DateTime? // GİB'den yanıt alma tarihi
+  errorMessage  String?   @db.Text // Hata mesajı (varsa)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  invoice       Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@index([gibStatus])
+  @@index([sentDate])
+}
+
+model EArchiveInvoice {
+  id            Int       @id @default(autoincrement())
+  invoiceId     Int       @unique
+  archiveId     String    @unique @db.VarChar(36) // Portal'dan dönen arşiv ID
+  portalStatus  String    @default("pending") @db.VarChar(50) // pending, sent, archived, failed
+  htmlContent   String    @db.Text // HTML şablon içeriği
+  pdfUrl        String?   @db.VarChar(500) // PDF/A dosya URL'si
+  sentDate      DateTime? // Portal'a gönderilme tarihi
+  archivedDate  DateTime? // Arşivlenme tarihi
+  errorMessage  String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  invoice       Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@index([portalStatus])
+}
+
+model DeliveryNote {
+  id              Int                 @id @default(autoincrement())
+  deliveryNumber  String              @unique @db.VarChar(50)
+  deliveryDate    DateTime
+  customerId      Int
+  description     String?             @db.Text
+  status          String              @default("pending") @db.VarChar(50) // pending, delivered, invoiced, cancelled
+  invoiceId       Int?                @unique // Faturaya dönüştürüldüyse
+  createdBy       Int
+  companyId       Int
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  customer        Customer            @relation(fields: [customerId], references: [id])
+  invoice         Invoice?            @relation(fields: [invoiceId], references: [id])
+  company         Company             @relation(fields: [companyId], references: [id])
+  user            User                @relation("createdDeliveryNotes", fields: [createdBy], references: [id])
+  items           DeliveryNoteItem[]
+
+  @@index([customerId])
+  @@index([deliveryDate])
+  @@index([status])
+  @@index([companyId])
+}
+
+model DeliveryNoteItem {
+  id             Int          @id @default(autoincrement())
+  deliveryNoteId Int
+  equipmentId    Int?
+  description    String       @db.VarChar(500)
+  quantity       Float
+  unitPrice      Float
+  taxRate        Float        @default(20.0)
+  total          Float
+  deliveryNote   DeliveryNote @relation(fields: [deliveryNoteId], references: [id], onDelete: Cascade)
+  equipment      Equipment?   @relation(fields: [equipmentId], references: [id])
+
+  @@index([deliveryNoteId])
+  @@index([equipmentId])
 }

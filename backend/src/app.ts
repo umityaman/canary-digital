@@ -198,6 +198,7 @@ safeLoadRoute('/api/promissory-notes', './routes/promissory-notes', 'Promissory 
 safeLoadRoute('/api/reminders', './routes/reminders', 'Email Reminders');
 safeLoadRoute('/api/aging', './routes/aging', 'Aging Analysis');
 safeLoadRoute('/api/account-cards', './routes/account-cards', 'Account Cards (Cari Hesap)');
+safeLoadRoute('/api/einvoice', './routes/einvoice', 'E-Invoice (E-Fatura GİB)');
 safeLoadRoute('/api/migration', './routes/migration', 'Database Migration (Temporary)');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');
