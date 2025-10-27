@@ -1329,6 +1329,13 @@ export default function Accounting() {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="flex items-center gap-2">
                                     <button
+                                      onClick={() => navigate(`/offers/${offer.id}`)}
+                                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                      title="Detay"
+                                    >
+                                      Detay
+                                    </button>
+                                    <button
                                       onClick={() => {
                                         setEditingOffer(offer);
                                         setShowOfferModal(true);
