@@ -208,7 +208,7 @@ router.post('/', authenticateToken, async (req, res) => {
         endDate: new Date(dueDate),
         status: 'completed',
         totalAmount: grandTotal,
-        orderType: 'manual_invoice',
+        notes: 'Manual invoice', // Use notes instead of orderType
       },
     });
 
