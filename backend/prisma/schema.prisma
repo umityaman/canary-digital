@@ -1021,8 +1021,8 @@ model DeviceToken {
 
 model Invoice {
   id               Int           @id @default(autoincrement())
-  orderId          Int
-  customerId       Int
+  orderId          Int?          // Optional: Manuel faturalar için sipariş olmayabilir
+  customerId       Int?          // Optional: Manuel faturalar için müşteri ID olmayabilir
   // accountCardId    Int?          // TEMPORARILY DISABLED: Cari hesap kartı referansı (production DB'de kolon yok)
   parasutInvoiceId String?       @unique
   invoiceNumber    String?
@@ -1034,10 +1034,20 @@ model Invoice {
   paidAmount       Float         @default(0)
   status           String        @default("draft")
   type             String        @default("rental")
+  
+  // Manuel fatura için müşteri bilgileri (customerId yoksa bu alanlar kullanılır)
+  customerName     String?
+  customerEmail    String?
+  customerPhone    String?
+  customerCompany  String?
+  customerTaxNumber String?
+  description      String?       // Invoice items as JSON
+  notes            String?
+  
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  customer         User          @relation(fields: [customerId], references: [id])
-  order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  customer         User?         @relation(fields: [customerId], references: [id])
+  order            Order?        @relation(fields: [orderId], references: [id], onDelete: Cascade)
   // accountCard      AccountCard?  @relation("AccountCardInvoices", fields: [accountCardId], references: [id])
   payments         Payment[]
   transactions     Transaction[]
