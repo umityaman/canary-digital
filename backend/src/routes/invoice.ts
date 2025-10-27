@@ -25,8 +25,11 @@ router.get('/', authenticateToken, async (req, res) => {
     } = req.query;
 
     // Build where clause
+    // Note: Invoice table doesn't have companyId, filter via order.companyId
     const where: any = {
-      companyId: (req as any).user.companyId, // Filter by user's company
+      order: {
+        companyId: (req as any).user.companyId,
+      },
     };
 
     if (status) {
