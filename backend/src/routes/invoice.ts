@@ -168,13 +168,50 @@ router.post('/', authenticateToken, async (req, res) => {
       });
     }
 
+    // WORKAROUND: Production DB requires orderId and customerId (NOT NULL)
+    // Create dummy customer and order for manual invoices
+    
+    // 1. Create dummy customer (or find existing)
+    let customer = await prisma.user.findFirst({
+      where: {
+        email: customerEmail || `manual-${Date.now()}@invoice.local`,
+        role: 'customer',
+      },
+    });
+
+    if (!customer) {
+      customer = await prisma.user.create({
+        data: {
+          email: customerEmail || `manual-${Date.now()}@invoice.local`,
+          name: customerName,
+          password: 'dummy', // Won't be used
+          role: 'customer',
+          phone: customerPhone || '',
+          company: customerCompany || '',
+          taxNumber: customerTaxNumber || '',
+        },
+      });
+    }
+
+    // 2. Create dummy order
+    const order = await prisma.order.create({
+      data: {
+        orderNumber: `MAN-${Date.now()}`,
+        customerId: customer.id,
+        startDate: new Date(invoiceDate),
+        endDate: new Date(dueDate),
+        status: 'completed',
+        totalAmount: grandTotal,
+        orderType: 'manual_invoice',
+      },
+    });
+
     // Generate invoice number if not provided
     let finalInvoiceNumber = invoiceNumber;
     if (!finalInvoiceNumber) {
       const year = new Date().getFullYear();
       const count = await prisma.invoice.count({
         where: {
-          companyId,
           invoiceNumber: {
             startsWith: `INV-${year}-`,
           },
@@ -183,38 +220,21 @@ router.post('/', authenticateToken, async (req, res) => {
       finalInvoiceNumber = `INV-${year}-${String(count + 1).padStart(4, '0')}`;
     }
 
-    // Create invoice
+    // Create invoice - Use only existing columns in production DB
     const invoiceData: any = {
-      companyId,
-      invoiceNumber: finalInvoiceNumber,
+      // Required fields that definitely exist
+      orderId: order.id,
+      customerId: customer.id,
       invoiceDate: new Date(invoiceDate),
       dueDate: new Date(dueDate),
-      type: type || 'SALES',
-      status: 'PENDING',
-      
-      // Customer info (stored directly if no customerId)
-      customerName,
-      customerEmail: customerEmail || null,
-      customerPhone: customerPhone || null,
-      customerCompany: customerCompany || null,
-      customerTaxNumber: customerTaxNumber || null,
-      
-      // Amounts
-      subtotal: totalAmount,
-      taxAmount: vatAmount,
+      invoiceNumber: finalInvoiceNumber,
+      totalAmount: totalAmount,
+      vatAmount: vatAmount,
       grandTotal: grandTotal,
       paidAmount: 0,
-      
-      notes: notes || null,
-      
-      // Invoice items (store as JSON in description field)
-      description: JSON.stringify(items),
+      status: 'PENDING',
+      type: type || 'SALES',
     };
-
-    // Add createdBy only if the field exists in schema
-    if (userId) {
-      invoiceData.createdBy = userId;
-    }
 
     const invoice = await prisma.invoice.create({
       data: invoiceData,
