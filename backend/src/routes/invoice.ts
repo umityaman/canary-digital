@@ -207,9 +207,11 @@ router.post('/', authenticateToken, async (req, res) => {
     const order = await prisma.order.create({
       data: {
         orderNumber: `MAN-${Date.now()}`,
-        customerId: customer.id,
+        customer: {
+          connect: { id: customer.id }, // Use connect for customer relation
+        },
         company: {
-          connect: { id: userCompanyId }, // Use connect for relation
+          connect: { id: userCompanyId }, // Use connect for company relation
         },
         startDate: new Date(invoiceDate),
         endDate: new Date(dueDate),
