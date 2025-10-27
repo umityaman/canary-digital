@@ -107,7 +107,7 @@ router.post('/login', async (req: Request, res: Response) => {
     // Kullanıcıyı bul
     const user = await prisma.user.findUnique({
       where: { email },
-      include: { company: true }
+      include: { Company: true }
     });
 
     if (!user) {
@@ -186,7 +186,7 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
-      include: { company: true }
+      include: { Company: true }
     });
 
     if (!user) {
