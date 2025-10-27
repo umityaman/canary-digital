@@ -180,6 +180,9 @@ router.post('/', authenticateToken, async (req, res) => {
     });
 
     if (!customer) {
+      // Get user's companyId for the customer
+      const userCompanyId = (req as any).user?.companyId || 1; // Fallback to 1 if not available
+      
       customer = await prisma.user.create({
         data: {
           email: customerEmail || `manual-${Date.now()}@invoice.local`,
@@ -187,8 +190,8 @@ router.post('/', authenticateToken, async (req, res) => {
           password: 'dummy', // Won't be used
           role: 'customer',
           phone: customerPhone || '',
-          company: customerCompany || '',
           taxNumber: customerTaxNumber || '',
+          companyId: userCompanyId, // Use relation, not string
         },
       });
     }
