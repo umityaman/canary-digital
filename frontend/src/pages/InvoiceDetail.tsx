@@ -6,7 +6,6 @@ import {
   Mail,
   Download,
   CreditCard,
-  Calendar,
   User,
   Phone,
   Building2,
@@ -141,7 +140,7 @@ const InvoiceDetail: React.FC = () => {
 
       if (!response.ok) throw new Error('E-Fatura oluşturulamadı');
 
-      const data = await response.json();
+      await response.json();
       toast.success('E-Fatura XML başarıyla oluşturuldu');
       setEInvoiceStatus('draft');
     } catch (error: any) {
@@ -167,7 +166,7 @@ const InvoiceDetail: React.FC = () => {
 
       if (!response.ok) throw new Error('E-Fatura gönderilemedi');
 
-      const data = await response.json();
+      await response.json();
       toast.success('E-Fatura GİB\'e gönderildi (MOCK)');
       setEInvoiceStatus('sent');
     } catch (error: any) {
