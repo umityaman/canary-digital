@@ -21,6 +21,7 @@ import { toast } from 'react-hot-toast';
 import { generateInvoicePDF } from '../utils/pdfGenerator';
 import EmailModal from '../components/accounting/EmailModal';
 import PaymentModal from '../components/accounting/PaymentModal';
+import XMLPreviewModal from '../components/accounting/XMLPreviewModal';
 
 interface InvoiceDetail {
   id: number;
@@ -76,6 +77,8 @@ const InvoiceDetail: React.FC = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [eInvoiceLoading, setEInvoiceLoading] = useState(false);
   const [eInvoiceStatus, setEInvoiceStatus] = useState<string | null>(null);
+  const [showXMLModal, setShowXMLModal] = useState(false);
+  const [xmlContent, setXmlContent] = useState<string>('');
 
   useEffect(() => {
     if (id) {
@@ -198,6 +201,31 @@ const InvoiceDetail: React.FC = () => {
     } catch (error: any) {
       console.error('E-Fatura durum sorgulama hatası:', error);
       toast.error(error.message || 'Durum sorgulanırken hata oluştu');
+    } finally {
+      setEInvoiceLoading(false);
+    }
+  };
+
+  const handleViewXML = async () => {
+    if (!invoice) return;
+
+    try {
+      setEInvoiceLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/einvoice/xml/${invoice.id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('XML alınamadı');
+
+      const xml = await response.text();
+      setXmlContent(xml);
+      setShowXMLModal(true);
+    } catch (error: any) {
+      console.error('XML görüntüleme hatası:', error);
+      toast.error(error.message || 'XML görüntülenirken hata oluştu');
     } finally {
       setEInvoiceLoading(false);
     }
@@ -399,6 +427,16 @@ const InvoiceDetail: React.FC = () => {
                 >
                   <FileCheck size={18} />
                   {eInvoiceLoading ? 'Sorgulanıyor...' : 'Durum Sorgula'}
+                </button>
+              )}
+              {eInvoiceStatus && (
+                <button
+                  onClick={handleViewXML}
+                  disabled={eInvoiceLoading}
+                  className="flex items-center gap-2 px-4 py-2 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50"
+                >
+                  <FileText size={18} />
+                  XML Görüntüle
                 </button>
               )}
 
@@ -791,6 +829,14 @@ const InvoiceDetail: React.FC = () => {
           }}
         />
       )}
+
+      {/* XML Preview Modal */}
+      <XMLPreviewModal
+        isOpen={showXMLModal}
+        onClose={() => setShowXMLModal(false)}
+        xmlContent={xmlContent}
+        invoiceNumber={invoice?.invoiceNumber || ''}
+      />
     </div>
   );
 };
