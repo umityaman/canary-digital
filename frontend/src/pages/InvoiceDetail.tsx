@@ -15,6 +15,7 @@ import {
   XCircle,
   Send,
   FileCheck,
+  Archive,
 } from 'lucide-react';
 import { invoiceAPI } from '../services/api';
 import { toast } from 'react-hot-toast';
@@ -79,6 +80,8 @@ const InvoiceDetail: React.FC = () => {
   const [eInvoiceStatus, setEInvoiceStatus] = useState<string | null>(null);
   const [showXMLModal, setShowXMLModal] = useState(false);
   const [xmlContent, setXmlContent] = useState<string>('');
+  const [eArchiveLoading, setEArchiveLoading] = useState(false);
+  const [eArchiveStatus, setEArchiveStatus] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -228,6 +231,113 @@ const InvoiceDetail: React.FC = () => {
       toast.error(error.message || 'XML görüntülenirken hata oluştu');
     } finally {
       setEInvoiceLoading(false);
+    }
+  };
+
+  const handleGenerateEArchive = async () => {
+    if (!invoice) return;
+
+    try {
+      setEArchiveLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/earchive/generate/${invoice.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('E-Arşiv Fatura oluşturulamadı');
+
+      await response.json();
+      toast.success('E-Arşiv Fatura HTML başarıyla oluşturuldu');
+      setEArchiveStatus('pending');
+    } catch (error: any) {
+      console.error('E-Arşiv oluşturma hatası:', error);
+      toast.error(error.message || 'E-Arşiv Fatura oluşturulurken hata oluştu');
+    } finally {
+      setEArchiveLoading(false);
+    }
+  };
+
+  const handleSendEArchiveToPortal = async () => {
+    if (!invoice) return;
+
+    try {
+      setEArchiveLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/earchive/send/${invoice.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('E-Arşiv gönderilemedi');
+
+      await response.json();
+      toast.success('E-Arşiv Fatura portala gönderildi (MOCK)');
+      setEArchiveStatus('sent');
+    } catch (error: any) {
+      console.error('E-Arşiv gönderme hatası:', error);
+      toast.error(error.message || 'E-Arşiv gönderilirken hata oluştu');
+    } finally {
+      setEArchiveLoading(false);
+    }
+  };
+
+  const handleCheckEArchiveStatus = async () => {
+    if (!invoice) return;
+
+    try {
+      setEArchiveLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/earchive/status/${invoice.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('E-Arşiv durumu sorgulanamadı');
+
+      const data = await response.json();
+      setEArchiveStatus(data.data.status);
+      toast.success(`E-Arşiv Durumu: ${data.data.status}`);
+    } catch (error: any) {
+      console.error('E-Arşiv durum sorgulama hatası:', error);
+      toast.error(error.message || 'Durum sorgulanırken hata oluştu');
+    } finally {
+      setEArchiveLoading(false);
+    }
+  };
+
+  const handleViewEArchiveHTML = async () => {
+    if (!invoice) return;
+
+    try {
+      setEArchiveLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/earchive/html/${invoice.id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('HTML alınamadı');
+
+      const html = await response.text();
+      // Yeni pencerede aç
+      const newWindow = window.open();
+      if (newWindow) {
+        newWindow.document.write(html);
+        newWindow.document.close();
+      }
+    } catch (error: any) {
+      console.error('HTML görüntüleme hatası:', error);
+      toast.error(error.message || 'HTML görüntülenirken hata oluştu');
+    } finally {
+      setEArchiveLoading(false);
     }
   };
 
@@ -437,6 +547,48 @@ const InvoiceDetail: React.FC = () => {
                 >
                   <FileText size={18} />
                   XML Görüntüle
+                </button>
+              )}
+
+              {/* E-Archive Butonları */}
+              {!eArchiveStatus && (
+                <button
+                  onClick={handleGenerateEArchive}
+                  disabled={eArchiveLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
+                >
+                  <Archive size={18} />
+                  {eArchiveLoading ? 'Oluşturuluyor...' : 'E-Arşiv Oluştur'}
+                </button>
+              )}
+              {eArchiveStatus === 'pending' && (
+                <button
+                  onClick={handleSendEArchiveToPortal}
+                  disabled={eArchiveLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
+                >
+                  <Send size={18} />
+                  {eArchiveLoading ? 'Gönderiliyor...' : 'Portala Gönder'}
+                </button>
+              )}
+              {eArchiveStatus && eArchiveStatus !== 'pending' && (
+                <button
+                  onClick={handleCheckEArchiveStatus}
+                  disabled={eArchiveLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors disabled:opacity-50"
+                >
+                  <FileCheck size={18} />
+                  {eArchiveLoading ? 'Sorgulanıyor...' : 'Arşiv Durumu'}
+                </button>
+              )}
+              {eArchiveStatus && (
+                <button
+                  onClick={handleViewEArchiveHTML}
+                  disabled={eArchiveLoading}
+                  className="flex items-center gap-2 px-4 py-2 border border-orange-600 text-orange-600 rounded-lg hover:bg-orange-50 transition-colors disabled:opacity-50"
+                >
+                  <FileText size={18} />
+                  HTML Görüntüle
                 </button>
               )}
 
