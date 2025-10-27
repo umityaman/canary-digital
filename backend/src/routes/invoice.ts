@@ -164,12 +164,13 @@ router.post('/', authenticateToken, async (req, res) => {
     } = req.body;
 
     // Validation
-    if (!customerName || !invoiceDate || !dueDate || !items || items.length === 0) {
+    if (!customerName || !invoiceDate || !dueDate) {
       return res.status(400).json({
         success: false,
-        message: 'Müşteri adı, fatura tarihi, vade tarihi ve kalemler gerekli',
+        message: 'Müşteri adı, fatura tarihi ve vade tarihi gerekli',
       });
     }
+    // items zorunlu değil, ama varsa ekleyeceğiz
 
     // WORKAROUND: Schema inconsistency - Invoice.customerId→User, Order.customerId→Customer
     // Solution: Create both User (for Invoice) and Customer (for Order), link via email
@@ -222,7 +223,7 @@ router.post('/', authenticateToken, async (req, res) => {
         startDate: new Date(invoiceDate),
         endDate: new Date(dueDate),
         status: 'completed',
-        totalAmount: grandTotal,
+        totalAmount: grandTotal ?? 0,
         notes: 'Manual invoice',
       },
     });
@@ -243,36 +244,57 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // Create invoice - Use User.id for customerId (Invoice→User relation)
     const invoiceData: any = {
-      // Required fields that definitely exist
       orderId: order.id,
-      customerId: user.id, // Invoice → User (not Customer!)
+      customerId: user.id,
       invoiceDate: new Date(invoiceDate),
       dueDate: new Date(dueDate),
       invoiceNumber: finalInvoiceNumber,
-      totalAmount: totalAmount,
-      vatAmount: vatAmount,
-      grandTotal: grandTotal,
+      totalAmount: totalAmount ?? 0,
+      vatAmount: vatAmount ?? 0,
+      grandTotal: grandTotal ?? 0,
       paidAmount: 0,
       status: 'PENDING',
-      type: type || 'SALES',
+      type: type || 'rental',
     };
 
     const invoice = await prisma.invoice.create({
       data: invoiceData,
     });
 
-    log.info(`Invoice created: ${finalInvoiceNumber}`);
+    // OrderItem ekle (items varsa)
+    let orderItems = [];
+    if (Array.isArray(items) && items.length > 0) {
+      for (const item of items) {
+        try {
+          const orderItem = await prisma.orderItem.create({
+            data: {
+              orderId: order.id,
+              description: item.description || '',
+              quantity: item.quantity ?? 1,
+              unitPrice: item.unitPrice ?? 0,
+              vatRate: item.vatRate ?? 0,
+            },
+          });
+          orderItems.push(orderItem);
+        } catch (err) {
+          console.error('OrderItem create error:', err);
+        }
+      }
+    }
+
+    console.info(`Invoice created: ${finalInvoiceNumber}`);
 
     res.status(201).json({
       success: true,
-      data: invoice,
+      data: { invoice, orderItems },
       message: 'Fatura başarıyla oluşturuldu',
     });
   } catch (error: any) {
-    log.error('Failed to create invoice:', error);
+    console.error('Failed to create invoice:', error);
     res.status(500).json({
       success: false,
       message: error.message || 'Fatura oluşturulamadı',
+      error: error,
     });
   }
 });
