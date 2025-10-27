@@ -171,48 +171,54 @@ router.post('/', authenticateToken, async (req, res) => {
       });
     }
 
-    // WORKAROUND: Production DB requires orderId and customerId (NOT NULL)
-    // Create dummy customer and order for manual invoices
+    // WORKAROUND: Schema inconsistency - Invoice.customerId→User, Order.customerId→Customer
+    // Solution: Create both User (for Invoice) and Customer (for Order), link via email
     
-    // 1. Create dummy customer (or find existing)
-    let customer = await prisma.user.findFirst({
-      where: {
-        email: customerEmail || `manual-${Date.now()}@invoice.local`,
-        role: 'customer',
-      },
+    const userCompanyId = (req as any).user?.companyId || 1;
+    const email = customerEmail || `manual-${Date.now()}@invoice.local`;
+    
+    // 1. Create User with role=customer for Invoice.customerId
+    let user = await prisma.user.findFirst({
+      where: { email, role: 'customer' },
     });
 
-    if (!customer) {
-      // Get user's companyId for the customer
-      const userCompanyId = (req as any).user?.companyId || 1; // Fallback to 1 if not available
-      
-      customer = await prisma.user.create({
+    if (!user) {
+      user = await prisma.user.create({
         data: {
-          email: customerEmail || `manual-${Date.now()}@invoice.local`,
           name: customerName,
-          password: 'dummy', // Won't be used
+          email,
+          password: 'dummy-password-not-used',
           role: 'customer',
-          phone: customerPhone || '',
-          taxNumber: customerTaxNumber || '',
-          Company: {
-            connect: { id: userCompanyId }, // Use connect for relation
-          },
+          phone: customerPhone || null,
+          taxNumber: customerTaxNumber || null,
+          Company: { connect: { id: userCompanyId } },
         },
       });
     }
 
-    // 2. Create dummy order
-    const userCompanyId = (req as any).user?.companyId || 1;
-    
+    // 2. Create Customer for Order.customerId
+    let customer = await prisma.customer.findFirst({
+      where: { email },
+    });
+
+    if (!customer) {
+      customer = await prisma.customer.create({
+        data: {
+          name: customerName,
+          email,
+          phone: customerPhone || '',
+          company: customerCompany || '',
+          taxNumber: customerTaxNumber || '',
+        },
+      });
+    }
+
+    // 3. Create Order (uses Customer.id)
     const order = await prisma.order.create({
       data: {
         orderNumber: `MAN-${Date.now()}`,
-        Customer: {
-          connect: { id: customer.id }, // Use connect for customer relation
-        },
-        Company: {
-          connect: { id: userCompanyId }, // Use connect for company relation
-        },
+        Customer: { connect: { id: customer.id } }, // Order → Customer
+        Company: { connect: { id: userCompanyId } },
         startDate: new Date(invoiceDate),
         endDate: new Date(dueDate),
         status: 'completed',
@@ -235,11 +241,11 @@ router.post('/', authenticateToken, async (req, res) => {
       finalInvoiceNumber = `INV-${year}-${String(count + 1).padStart(4, '0')}`;
     }
 
-    // Create invoice - Use only existing columns in production DB
+    // Create invoice - Use User.id for customerId (Invoice→User relation)
     const invoiceData: any = {
       // Required fields that definitely exist
       orderId: order.id,
-      customerId: customer.id,
+      customerId: user.id, // Invoice → User (not Customer!)
       invoiceDate: new Date(invoiceDate),
       dueDate: new Date(dueDate),
       invoiceNumber: finalInvoiceNumber,
