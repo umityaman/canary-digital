@@ -191,7 +191,9 @@ router.post('/', authenticateToken, async (req, res) => {
           role: 'customer',
           phone: customerPhone || '',
           taxNumber: customerTaxNumber || '',
-          companyId: userCompanyId, // Use relation, not string
+          company: {
+            connect: { id: userCompanyId }, // Use connect for relation
+          },
         },
       });
     }
@@ -203,12 +205,14 @@ router.post('/', authenticateToken, async (req, res) => {
       data: {
         orderNumber: `MAN-${Date.now()}`,
         customerId: customer.id,
-        companyId: userCompanyId, // Add company relation
+        company: {
+          connect: { id: userCompanyId }, // Use connect for relation
+        },
         startDate: new Date(invoiceDate),
         endDate: new Date(dueDate),
         status: 'completed',
         totalAmount: grandTotal,
-        notes: 'Manual invoice', // Use notes instead of orderType
+        notes: 'Manual invoice',
       },
     });
 
