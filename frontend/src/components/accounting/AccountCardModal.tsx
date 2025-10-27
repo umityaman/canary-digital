@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, User, Building2, Phone, Mail, MapPin, CreditCard, FileText } from 'lucide-react';
 import api from '../../services/api';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuthStore } from '../../stores/authStore';
 
 interface AccountCardModalProps {
   isOpen: boolean;
@@ -11,7 +11,7 @@ interface AccountCardModalProps {
 }
 
 export default function AccountCardModal({ isOpen, onClose, onSuccess, accountCard }: AccountCardModalProps) {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'general' | 'contact' | 'bank' | 'other'>('general');
   

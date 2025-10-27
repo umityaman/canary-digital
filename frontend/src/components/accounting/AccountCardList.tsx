@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Plus, Edit2, Trash2, Eye, Users, Building2, DollarSign, TrendingUp } from 'lucide-react';
 import api from '../../services/api';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuthStore } from '../../stores/authStore';
 import AccountCardModal from './AccountCardModal';
 
 interface AccountCard {
@@ -26,7 +26,7 @@ interface AccountCardListProps {
 }
 
 export default function AccountCardList({ onSelectCard }: AccountCardListProps) {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const [accountCards, setAccountCards] = useState<AccountCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
