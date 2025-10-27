@@ -12,7 +12,7 @@ import {
   Download,
   BarChart3,
 } from 'lucide-react';
-import api from '../../lib/api';
+import api from '../../services/api';
 import AccountCardModal from './AccountCardModal';
 import TransactionModal from './TransactionModal';
 import { Bar } from 'react-chartjs-2';

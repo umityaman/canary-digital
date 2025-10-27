@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Plus, Edit2, Trash2, Eye, Users, Building2, DollarSign, TrendingUp } from 'lucide-react';
-import api from '../../lib/api';
+import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import AccountCardModal from './AccountCardModal';
 

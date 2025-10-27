@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, User, Building2, Phone, Mail, MapPin, CreditCard, FileText } from 'lucide-react';
-import api from '../../lib/api';
+import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface AccountCardModalProps {

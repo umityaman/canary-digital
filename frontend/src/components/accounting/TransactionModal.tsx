@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, DollarSign, Calendar } from 'lucide-react';
-import api from '../../lib/api';
+import api from '../../services/api';
 
 interface TransactionModalProps {
   isOpen: boolean;
