@@ -686,7 +686,7 @@ export default function Accounting() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <button 
-                    onClick={() => setShowInvoiceModal(true)}
+                    onClick={() => navigate('/invoices/create')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-all text-left"
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -984,10 +984,7 @@ export default function Accounting() {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-neutral-900">Fatura Listesi</h2>
                   <button 
-                    onClick={() => {
-                      setEditingInvoice(null);
-                      setShowInvoiceModal(true);
-                    }}
+                    onClick={() => navigate('/invoices/create')}
                     className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
                   >
                     <FileText size={18} />
@@ -1135,12 +1132,20 @@ export default function Accounting() {
                                   {getStatusBadge(invoice.status)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                  <button 
-                                    onClick={() => navigate(`/invoices/${invoice.id}`)}
-                                    className="text-neutral-900 hover:text-neutral-700 font-medium"
-                                  >
-                                    Detay
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    <button 
+                                      onClick={() => navigate(`/invoices/${invoice.id}`)}
+                                      className="text-blue-600 hover:text-blue-800 font-medium"
+                                    >
+                                      Detay
+                                    </button>
+                                    <button 
+                                      onClick={() => navigate(`/invoices/${invoice.id}/edit`)}
+                                      className="text-blue-600 hover:text-blue-800 font-medium"
+                                    >
+                                      Düzenle
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             ))}
@@ -1182,10 +1187,7 @@ export default function Accounting() {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-neutral-900">Teklif Listesi</h2>
                   <button 
-                    onClick={() => {
-                      setEditingOffer(null);
-                      setShowOfferModal(true);
-                    }}
+                    onClick={() => navigate('/offers/create')}
                     className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
                   >
                     <Receipt size={18} />
@@ -1256,28 +1258,28 @@ export default function Accounting() {
                   ) : (
                     <>
                       <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-max">
                           <thead className="bg-neutral-50 border-b border-neutral-200">
                             <tr>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider whitespace-nowrap">
                                 Teklif No
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider whitespace-nowrap">
                                 Müşteri
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider whitespace-nowrap">
                                 Tarih
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider whitespace-nowrap">
                                 Geçerlilik
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider whitespace-nowrap">
                                 Tutar
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider whitespace-nowrap">
                                 Durum
                               </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider whitespace-nowrap">
                                 İşlemler
                               </th>
                             </tr>
@@ -1285,7 +1287,7 @@ export default function Accounting() {
                           <tbody className="bg-white divide-y divide-neutral-200">
                             {offers.map((offer) => (
                               <tr key={offer.id} className="hover:bg-neutral-50 transition-colors">
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.offerNumber}
                                   </div>
@@ -1293,20 +1295,17 @@ export default function Accounting() {
                                     {offer.items?.length || 0} kalem
                                   </div>
                                 </td>
-                                <td className="px-6 py-4">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.customer.name}
                                   </div>
-                                  <div className="text-xs text-neutral-500">
-                                    {offer.customer.email}
-                                  </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <div className="text-sm text-neutral-900">
                                     {formatDate(offer.offerDate)}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <div className={`text-sm ${
                                     new Date(offer.validUntil) < new Date() 
                                       ? 'text-red-600 font-medium' 
@@ -1318,16 +1317,16 @@ export default function Accounting() {
                                     <div className="text-xs text-red-500">Süresi doldu</div>
                                   )}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {formatCurrency(offer.grandTotal)}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   {getOfferStatusBadge(offer.status)}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="flex items-center gap-2">
+                                <td className="px-4 py-4 whitespace-nowrap">
+                                  <div className="flex items-center gap-1">
                                     <button
                                       onClick={() => navigate(`/offers/${offer.id}`)}
                                       className="text-blue-600 hover:text-blue-800 text-sm font-medium"
@@ -1336,10 +1335,7 @@ export default function Accounting() {
                                       Detay
                                     </button>
                                     <button
-                                      onClick={() => {
-                                        setEditingOffer(offer);
-                                        setShowOfferModal(true);
-                                      }}
+                                      onClick={() => navigate(`/offers/${offer.id}/edit`)}
                                       className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                                       title="Düzenle"
                                     >
