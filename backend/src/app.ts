@@ -200,6 +200,7 @@ safeLoadRoute('/api/aging', './routes/aging', 'Aging Analysis');
 safeLoadRoute('/api/account-cards', './routes/account-cards', 'Account Cards (Cari Hesap)');
 safeLoadRoute('/api/einvoice', './routes/einvoice', 'E-Invoice (E-Fatura GİB)');
 safeLoadRoute('/api/earchive', './routes/earchive', 'E-Archive Invoice (E-Arşiv Fatura)');
+safeLoadRoute('/api/delivery-notes', './routes/delivery-notes', 'Delivery Notes (İrsaliye)');
 safeLoadRoute('/api/migration', './routes/migration', 'Database Migration (Temporary)');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');

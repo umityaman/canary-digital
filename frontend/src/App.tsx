@@ -26,6 +26,7 @@ import CreateInvoice from './pages/CreateInvoice'
 import CreateOffer from './pages/CreateOffer'
 import EditInvoice from './pages/EditInvoice'
 import EditOffer from './pages/EditOffer'
+import DeliveryNotes from './pages/DeliveryNotes'
 import Social from './pages/Social'
 import Website from './pages/Website'
 import SiteBuilder from './pages/website/SiteBuilder'
@@ -106,6 +107,7 @@ export default function App(){
           <Route path='/offers/create' element={<CreateOffer/>} />
           <Route path='/offers/:id/edit' element={<EditOffer/>} />
           <Route path='/offers/:id' element={<OfferDetail/>} />
+          <Route path='/delivery-notes' element={<DeliveryNotes/>} />
           <Route path='/social' element={<Social/>} />
           <Route path='/website' element={<Website/>} />
           <Route path='/website/builder' element={<SiteBuilder/>} />
