@@ -193,6 +193,7 @@ router.post('/', authenticateToken, async (req, res) => {
           phone: customerPhone || null,
           taxNumber: customerTaxNumber || null,
           Company: { connect: { id: userCompanyId } },
+          updatedAt: new Date(),
         },
       });
     }
