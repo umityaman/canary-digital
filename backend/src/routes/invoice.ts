@@ -184,34 +184,40 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     // Create invoice
+    const invoiceData: any = {
+      companyId,
+      invoiceNumber: finalInvoiceNumber,
+      invoiceDate: new Date(invoiceDate),
+      dueDate: new Date(dueDate),
+      type: type || 'SALES',
+      status: 'PENDING',
+      
+      // Customer info (stored directly if no customerId)
+      customerName,
+      customerEmail: customerEmail || null,
+      customerPhone: customerPhone || null,
+      customerCompany: customerCompany || null,
+      customerTaxNumber: customerTaxNumber || null,
+      
+      // Amounts
+      subtotal: totalAmount,
+      taxAmount: vatAmount,
+      grandTotal: grandTotal,
+      paidAmount: 0,
+      
+      notes: notes || null,
+      
+      // Invoice items (store as JSON in description field)
+      description: JSON.stringify(items),
+    };
+
+    // Add createdBy only if the field exists in schema
+    if (userId) {
+      invoiceData.createdBy = userId;
+    }
+
     const invoice = await prisma.invoice.create({
-      data: {
-        companyId,
-        invoiceNumber: finalInvoiceNumber,
-        invoiceDate: new Date(invoiceDate),
-        dueDate: new Date(dueDate),
-        type: type || 'SALES',
-        status: 'PENDING',
-        
-        // Customer info (stored directly if no customerId)
-        customerName,
-        customerEmail: customerEmail || null,
-        customerPhone: customerPhone || null,
-        customerCompany: customerCompany || null,
-        customerTaxNumber: customerTaxNumber || null,
-        
-        // Amounts
-        subtotal: totalAmount,
-        taxAmount: vatAmount,
-        grandTotal: grandTotal,
-        paidAmount: 0,
-        
-        notes: notes || null,
-        createdBy: userId,
-        
-        // Invoice items (store as JSON in notes for now, or create InvoiceItem model)
-        description: JSON.stringify(items),
-      },
+      data: invoiceData,
     });
 
     log.info(`Invoice created: ${finalInvoiceNumber}`);
