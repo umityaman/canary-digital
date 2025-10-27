@@ -372,15 +372,15 @@ Frontend:
 | Prisma Generate | ✅ Tamam | 15 dk |
 | **BACKEND TOPLAM** | **✅ TAMAM** | **2 saat** |
 | | | |
-| AccountCardModal | ⏳ Bekliyor | 2 saat |
-| AccountCardList | ⏳ Bekliyor | 2 saat |
-| AccountCardDetail | ⏳ Bekliyor | 3 saat |
+| AccountCardModal | ✅ Tamam | 2 saat |
+| AccountCardList | ✅ Tamam | 2 saat |
+| AccountCardDetail | ✅ Tamam | 3 saat |
 | TransactionModal | ⏳ Bekliyor | 1 saat |
 | Testing | ⏳ Bekliyor | 1.5 saat |
 | Documentation | ⏳ Bekliyor | 30 dk |
-| **FRONTEND TOPLAM** | **⏳ BEKLIYOR** | **10 saat** |
+| **FRONTEND TOPLAM** | **%70 TAMAM** | **7/10 saat** |
 | | | |
-| **GENEL TOPLAM** | **%17 Tamamlandı** | **12/72 saat** |
+| **GENEL TOPLAM** | **%75 Tamamlandı** | **9/12 saat** |
 
 ---
 

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import api from '../../lib/api';
 import AccountCardModal from './AccountCardModal';
+import TransactionModal from './TransactionModal';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -580,6 +581,20 @@ export default function AccountCardDetail({ accountCardId, onBack }: AccountCard
             setShowEditModal(false);
           }}
           accountCard={accountCard}
+        />
+      )}
+
+      {/* Transaction Modal */}
+      {showTransactionModal && (
+        <TransactionModal
+          isOpen={showTransactionModal}
+          onClose={() => setShowTransactionModal(false)}
+          onSuccess={() => {
+            fetchAccountCard();
+            setShowTransactionModal(false);
+          }}
+          accountCardId={accountCardId}
+          accountCardName={accountCard.name}
         />
       )}
     </div>
