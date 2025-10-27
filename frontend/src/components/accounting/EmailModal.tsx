@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { X, Mail, Send } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { invoiceAPI, offerAPI } from '../../services/api';

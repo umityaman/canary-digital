@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { X, CreditCard, DollarSign, Calendar, FileText } from 'lucide-react';
 import { invoiceAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
@@ -85,25 +85,41 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
-  const handleAmountChange = (value: string) => {
+  const handleAmountChange = useCallback((value: string) => {
     const numValue = parseFloat(value);
     if (!isNaN(numValue)) {
-      setFormData({ ...formData, amount: numValue });
+      setFormData(prev => ({ ...prev, amount: numValue }));
     } else if (value === '') {
-      setFormData({ ...formData, amount: 0 });
+      setFormData(prev => ({ ...prev, amount: 0 }));
     }
-  };
+  }, []);
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = useCallback((amount: number) => {
     return new Intl.NumberFormat('tr-TR', {
       style: 'currency',
       currency: 'TRY',
     }).format(amount);
-  };
+  }, []);
+
+  // Memoize calculations
+  const paymentPreview = useMemo(() => {
+    const newPaidAmount = invoice.paidAmount + formData.amount;
+    const newRemainingAmount = invoice.grandTotal - newPaidAmount;
+    const isFullPayment = newRemainingAmount <= 0;
+
+    return {
+      newPaidAmount,
+      newRemainingAmount: Math.max(0, newRemainingAmount),
+      isFullPayment,
+    };
+  }, [invoice.paidAmount, invoice.grandTotal, formData.amount]);
+
+  const selectedMethod = useMemo(
+    () => paymentMethods.find((m) => m.value === formData.paymentMethod),
+    [formData.paymentMethod]
+  );
 
   if (!isOpen) return null;
-
-  const selectedMethod = paymentMethods.find((m) => m.value === formData.paymentMethod);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -300,17 +316,17 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                 <div>
                   <p className="text-gray-600 mb-1">Toplam Ödenen</p>
                   <p className="font-semibold text-green-600">
-                    {formatCurrency(invoice.paidAmount + formData.amount)}
+                    {formatCurrency(paymentPreview.newPaidAmount)}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-600 mb-1">Kalan Borç</p>
                   <p className="font-semibold text-red-600">
-                    {formatCurrency(invoice.remainingAmount - formData.amount)}
+                    {formatCurrency(paymentPreview.newRemainingAmount)}
                   </p>
                 </div>
               </div>
-              {invoice.remainingAmount - formData.amount === 0 && (
+              {paymentPreview.isFullPayment && (
                 <div className="mt-3 flex items-center gap-2 text-green-600">
                   <svg
                     className="w-5 h-5"
