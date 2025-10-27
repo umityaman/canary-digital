@@ -211,6 +211,7 @@ router.post('/', authenticateToken, async (req, res) => {
           phone: customerPhone || '',
           company: customerCompany || '',
           taxNumber: customerTaxNumber || '',
+          updatedAt: new Date(),
         },
       });
     }
