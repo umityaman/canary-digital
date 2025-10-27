@@ -25,7 +25,9 @@ router.get('/', authenticateToken, async (req, res) => {
     } = req.query;
 
     // Build where clause
-    const where: any = {};
+    const where: any = {
+      companyId: (req as any).user.companyId, // Filter by user's company
+    };
 
     if (status) {
       where.status = status as string;
@@ -126,6 +128,104 @@ router.get('/', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to get invoices',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/invoices
+ * @desc    Genel fatura oluştur (Manuel giriş)
+ * @access  Private
+ */
+router.post('/', authenticateToken, async (req, res) => {
+  try {
+    const { prisma } = require('../index');
+    const userId = (req as any).user.id;
+    const companyId = (req as any).user.companyId;
+
+    const {
+      customerName,
+      customerEmail,
+      customerPhone,
+      customerCompany,
+      customerTaxNumber,
+      invoiceNumber,
+      invoiceDate,
+      dueDate,
+      type,
+      items,
+      totalAmount,
+      vatAmount,
+      grandTotal,
+      notes,
+    } = req.body;
+
+    // Validation
+    if (!customerName || !invoiceDate || !dueDate || !items || items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Müşteri adı, fatura tarihi, vade tarihi ve kalemler gerekli',
+      });
+    }
+
+    // Generate invoice number if not provided
+    let finalInvoiceNumber = invoiceNumber;
+    if (!finalInvoiceNumber) {
+      const year = new Date().getFullYear();
+      const count = await prisma.invoice.count({
+        where: {
+          companyId,
+          invoiceNumber: {
+            startsWith: `INV-${year}-`,
+          },
+        },
+      });
+      finalInvoiceNumber = `INV-${year}-${String(count + 1).padStart(4, '0')}`;
+    }
+
+    // Create invoice
+    const invoice = await prisma.invoice.create({
+      data: {
+        companyId,
+        invoiceNumber: finalInvoiceNumber,
+        invoiceDate: new Date(invoiceDate),
+        dueDate: new Date(dueDate),
+        type: type || 'SALES',
+        status: 'PENDING',
+        
+        // Customer info (stored directly if no customerId)
+        customerName,
+        customerEmail: customerEmail || null,
+        customerPhone: customerPhone || null,
+        customerCompany: customerCompany || null,
+        customerTaxNumber: customerTaxNumber || null,
+        
+        // Amounts
+        subtotal: totalAmount,
+        taxAmount: vatAmount,
+        grandTotal: grandTotal,
+        paidAmount: 0,
+        
+        notes: notes || null,
+        createdBy: userId,
+        
+        // Invoice items (store as JSON in notes for now, or create InvoiceItem model)
+        description: JSON.stringify(items),
+      },
+    });
+
+    log.info(`Invoice created: ${finalInvoiceNumber}`);
+
+    res.status(201).json({
+      success: true,
+      data: invoice,
+      message: 'Fatura başarıyla oluşturuldu',
+    });
+  } catch (error: any) {
+    log.error('Failed to create invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Fatura oluşturulamadı',
     });
   }
 });
@@ -365,6 +465,88 @@ router.get('/customer/:customerId', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to get customer invoices',
+    });
+  }
+});
+
+/**
+ * @route   PUT /api/invoices/:id
+ * @desc    Faturayı güncelle
+ * @access  Private
+ */
+router.put('/:id', authenticateToken, async (req, res) => {
+  try {
+    const { prisma } = require('../index');
+    const { id } = req.params;
+    const userId = (req as any).user.id;
+
+    const {
+      customerName,
+      customerEmail,
+      customerPhone,
+      customerCompany,
+      customerTaxNumber,
+      invoiceDate,
+      dueDate,
+      type,
+      items,
+      totalAmount,
+      vatAmount,
+      grandTotal,
+      notes,
+    } = req.body;
+
+    // Check if invoice exists
+    const existingInvoice = await prisma.invoice.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!existingInvoice) {
+      return res.status(404).json({
+        success: false,
+        message: 'Fatura bulunamadı',
+      });
+    }
+
+    // Update invoice
+    const invoice = await prisma.invoice.update({
+      where: { id: parseInt(id) },
+      data: {
+        invoiceDate: invoiceDate ? new Date(invoiceDate) : undefined,
+        dueDate: dueDate ? new Date(dueDate) : undefined,
+        type: type || undefined,
+        
+        // Customer info
+        customerName: customerName || undefined,
+        customerEmail: customerEmail || undefined,
+        customerPhone: customerPhone || undefined,
+        customerCompany: customerCompany || undefined,
+        customerTaxNumber: customerTaxNumber || undefined,
+        
+        // Amounts
+        subtotal: totalAmount || undefined,
+        taxAmount: vatAmount || undefined,
+        grandTotal: grandTotal || undefined,
+        
+        notes: notes || undefined,
+        
+        // Items (store as JSON)
+        description: items ? JSON.stringify(items) : undefined,
+      },
+    });
+
+    log.info(`Invoice updated: ${invoice.invoiceNumber}`);
+
+    res.json({
+      success: true,
+      data: invoice,
+      message: 'Fatura başarıyla güncellendi',
+    });
+  } catch (error: any) {
+    log.error('Failed to update invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Fatura güncellenemedi',
     });
   }
 });

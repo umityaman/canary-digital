@@ -548,7 +548,7 @@ export default function Accounting() {
     { id: 'checks' as const, label: 'Çekler', icon: <Banknote size={18} /> },
     { id: 'promissory-notes' as const, label: 'Senetler', icon: <FileText size={18} /> },
     { id: 'aging' as const, label: 'Yaşlandırma Raporu', icon: <Clock size={18} /> },
-    { id: 'account-cards' as const, label: 'Cari Hesap', icon: <Users size={18} /> },
+    // { id: 'account-cards' as const, label: 'Cari Hesap', icon: <Users size={18} /> }, // TEMPORARILY HIDDEN: DB migration needed
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <Receipt size={18} /> },

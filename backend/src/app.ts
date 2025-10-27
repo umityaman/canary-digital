@@ -94,9 +94,19 @@ app.use(cors({
 import performanceMiddleware from './config/performance';
 app.use(performanceMiddleware);
 
-// Body Parsing
+// Body Parsing with UTF-8 charset
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Set UTF-8 charset for all JSON responses
+app.use((req, res, next) => {
+  const originalJson = res.json;
+  res.json = function(data) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return originalJson.call(this, data);
+  };
+  next();
+});
 
 // Rate Limiting - Tiered Approach
 const createRateLimiter = (windowMs: number, max: number, message: string) => 

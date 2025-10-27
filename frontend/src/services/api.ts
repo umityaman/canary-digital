@@ -677,6 +677,12 @@ export const invoiceAPI = {
     endDate?: string;
   }) => api.get(`/invoices/customer/${customerId}`, { params }),
   
+  // Create generic invoice (manual entry)
+  create: (data: any) => api.post('/invoices', data),
+  
+  // Update invoice
+  update: (id: number, data: any) => api.put(`/invoices/${id}`, data),
+  
   // Create rental invoice
   createRental: (data: {
     orderId: number;
