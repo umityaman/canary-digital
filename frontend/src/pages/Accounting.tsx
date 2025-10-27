@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
-  CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
+  CreditCard, Banknote, Building2, Receipt, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
   Search, Filter, ChevronLeft, ChevronRight, Check, X, Plug
 } from 'lucide-react'
@@ -24,6 +24,7 @@ import { IncomeExpenseChart } from '../components/accounting/IncomeExpenseChart'
 import { CategoryPieChart } from '../components/accounting/CategoryPieChart'
 import { DateRangePicker } from '../components/common/DateRangePicker'
 import { exportFinancialSummaryToPDF } from '../utils/exportUtils'
+import FinancialReports from '../components/accounting/FinancialReports'
 import type { Income } from '../components/accounting/IncomeTab'
 import type { Expense } from '../components/accounting/ExpenseTab'
 
@@ -797,29 +798,7 @@ export default function Accounting() {
 
             {/* Reports Tab */}
             {activeTab === 'reports' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Muhasebe Raporları</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {[
-                    { name: 'Tahsilat Raporları', icon: <Download size={20} />, color: 'blue' },
-                    { name: 'Nakit Akışı', icon: <TrendingUp size={20} />, color: 'green' },
-                    { name: 'Gelir-Gider', icon: <BarChart3 size={20} />, color: 'purple' },
-                    { name: 'Kasa Banka', icon: <Building2 size={20} />, color: 'indigo' },
-                    { name: 'Satışlar', icon: <Package size={20} />, color: 'pink' },
-                    { name: 'KDV Raporu', icon: <FileText size={20} />, color: 'orange' },
-                    { name: 'Giderler', icon: <TrendingDown size={20} />, color: 'red' },
-                    { name: 'Ödemeler', icon: <CreditCard size={20} />, color: 'cyan' },
-                  ].map((report) => (
-                    <button key={report.name} className="bg-white rounded-2xl p-4 border border-neutral-200 hover:shadow-md transition-all text-left">
-                      <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center mb-3">
-                        <div className="text-neutral-700">{report.icon}</div>
-                      </div>
-                      <h3 className="font-medium text-neutral-900 text-sm">{report.name}</h3>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <FinancialReports invoices={invoices} offers={offers} />
             )}
 
             {/* Income Tab */}

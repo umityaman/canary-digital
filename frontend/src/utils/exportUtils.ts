@@ -10,7 +10,7 @@ interface Income {
   category: string;
   date: string;
   status: string;
-  paymentMethod: string;
+  paymentMethod?: string;
   notes?: string;
 }
 
@@ -22,7 +22,7 @@ interface Expense {
   category: string;
   date: string;
   status: string;
-  paymentMethod: string;
+  paymentMethod?: string;
   notes?: string;
 }
 
@@ -283,7 +283,7 @@ export const exportIncomeToPDF = (incomes: Income[], companyName: string = 'Cana
     income.description,
     income.category,
     formatCurrency(income.amount),
-    income.paymentMethod,
+    income.paymentMethod || '-',
     income.status,
   ]);
 
@@ -323,7 +323,7 @@ export const exportExpenseToPDF = (expenses: Expense[], companyName: string = 'C
     expense.description,
     expense.category,
     formatCurrency(expense.amount),
-    expense.paymentMethod,
+    expense.paymentMethod || '-',
     expense.status,
   ]);
 
