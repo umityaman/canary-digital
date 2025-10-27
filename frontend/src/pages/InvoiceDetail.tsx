@@ -14,6 +14,8 @@ import {
   Clock,
   AlertCircle,
   XCircle,
+  Send,
+  FileCheck,
 } from 'lucide-react';
 import { invoiceAPI } from '../services/api';
 import { toast } from 'react-hot-toast';
@@ -73,6 +75,8 @@ const InvoiceDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [eInvoiceLoading, setEInvoiceLoading] = useState(false);
+  const [eInvoiceStatus, setEInvoiceStatus] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -120,6 +124,84 @@ const InvoiceDetail: React.FC = () => {
 
     generateInvoicePDF(pdfData);
     toast.success('PDF indirildi');
+  };
+
+  const handleGenerateEInvoice = async () => {
+    if (!invoice) return;
+
+    try {
+      setEInvoiceLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/einvoice/generate/${invoice.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('E-Fatura oluşturulamadı');
+
+      const data = await response.json();
+      toast.success('E-Fatura XML başarıyla oluşturuldu');
+      setEInvoiceStatus('draft');
+    } catch (error: any) {
+      console.error('E-Fatura oluşturma hatası:', error);
+      toast.error(error.message || 'E-Fatura oluşturulurken hata oluştu');
+    } finally {
+      setEInvoiceLoading(false);
+    }
+  };
+
+  const handleSendToGIB = async () => {
+    if (!invoice) return;
+
+    try {
+      setEInvoiceLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/einvoice/send/${invoice.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('E-Fatura gönderilemedi');
+
+      const data = await response.json();
+      toast.success('E-Fatura GİB\'e gönderildi (MOCK)');
+      setEInvoiceStatus('sent');
+    } catch (error: any) {
+      console.error('E-Fatura gönderme hatası:', error);
+      toast.error(error.message || 'E-Fatura gönderilirken hata oluştu');
+    } finally {
+      setEInvoiceLoading(false);
+    }
+  };
+
+  const handleCheckEInvoiceStatus = async () => {
+    if (!invoice) return;
+
+    try {
+      setEInvoiceLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/einvoice/status/${invoice.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('E-Fatura durumu sorgulanamadı');
+
+      const data = await response.json();
+      setEInvoiceStatus(data.data.status);
+      toast.success(`E-Fatura Durumu: ${data.data.status}`);
+    } catch (error: any) {
+      console.error('E-Fatura durum sorgulama hatası:', error);
+      toast.error(error.message || 'Durum sorgulanırken hata oluştu');
+    } finally {
+      setEInvoiceLoading(false);
+    }
   };
 
   const getStatusInfo = (status: string) => {
@@ -289,6 +371,38 @@ const InvoiceDetail: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3">
+              {/* E-Invoice Butonları */}
+              {!eInvoiceStatus && (
+                <button
+                  onClick={handleGenerateEInvoice}
+                  disabled={eInvoiceLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+                >
+                  <FileCheck size={18} />
+                  {eInvoiceLoading ? 'Oluşturuluyor...' : 'E-Fatura Oluştur'}
+                </button>
+              )}
+              {eInvoiceStatus === 'draft' && (
+                <button
+                  onClick={handleSendToGIB}
+                  disabled={eInvoiceLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                >
+                  <Send size={18} />
+                  {eInvoiceLoading ? 'Gönderiliyor...' : 'GİB\'e Gönder'}
+                </button>
+              )}
+              {eInvoiceStatus && eInvoiceStatus !== 'draft' && (
+                <button
+                  onClick={handleCheckEInvoiceStatus}
+                  disabled={eInvoiceLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                >
+                  <FileCheck size={18} />
+                  {eInvoiceLoading ? 'Sorgulanıyor...' : 'Durum Sorgula'}
+                </button>
+              )}
+
               <button
                 onClick={handleDownloadPDF}
                 className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
