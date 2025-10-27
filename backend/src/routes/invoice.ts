@@ -25,9 +25,9 @@ router.get('/', authenticateToken, async (req, res) => {
     } = req.query;
 
     // Build where clause
-    // Note: Invoice table doesn't have companyId, filter via order.companyId
+    // Note: Invoice table doesn't have companyId, filter via Order.companyId
     const where: any = {
-      order: {
+      Order: {
         companyId: (req as any).user.companyId,
       },
     };
@@ -50,7 +50,7 @@ router.get('/', authenticateToken, async (req, res) => {
           },
         },
         {
-          customer: {
+          User: {
             name: {
               contains: search as string,
               mode: 'insensitive',
@@ -71,7 +71,7 @@ router.get('/', authenticateToken, async (req, res) => {
       prisma.invoice.findMany({
         where,
         include: {
-          customer: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -80,13 +80,13 @@ router.get('/', authenticateToken, async (req, res) => {
               taxNumber: true,
             },
           },
-          order: {
+          Order: {
             select: {
               id: true,
               orderNumber: true,
-              orderItems: {
+              OrderItem: {
                 select: {
-                  equipment: {
+                  Equipment: {
                     select: {
                       name: true,
                     },
@@ -95,7 +95,7 @@ router.get('/', authenticateToken, async (req, res) => {
               },
             },
           },
-          payments: {
+          Payment: {
             select: {
               id: true,
               amount: true,
@@ -194,7 +194,7 @@ router.post('/', authenticateToken, async (req, res) => {
           role: 'customer',
           phone: customerPhone || '',
           taxNumber: customerTaxNumber || '',
-          company: {
+          Company: {
             connect: { id: userCompanyId }, // Use connect for relation
           },
         },
@@ -207,10 +207,10 @@ router.post('/', authenticateToken, async (req, res) => {
     const order = await prisma.order.create({
       data: {
         orderNumber: `MAN-${Date.now()}`,
-        customer: {
+        Customer: {
           connect: { id: customer.id }, // Use connect for customer relation
         },
-        company: {
+        Company: {
           connect: { id: userCompanyId }, // Use connect for company relation
         },
         startDate: new Date(invoiceDate),
