@@ -98,6 +98,15 @@ const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
               >
                 {isFullScreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
               </button>
+
+              {/* Logout Button */}
+              <button
+                onClick={() => { localStorage.clear(); navigate('/login'); }}
+                className={`p-2 rounded-lg transition-colors bg-red-100 text-red-600 hover:bg-red-200 ml-2`}
+                title="Çıkış Yap"
+              >
+                Çıkış
+              </button>
             </div>
           </div>
         </header>
