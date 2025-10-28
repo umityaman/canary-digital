@@ -45,11 +45,34 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install backend dependencies and generate Prisma client
+      - name: Install backend dependencies (debug)
         run: |
           cd backend
-          npm ci
-          npx prisma generate
+          echo "PWD: $(pwd)"
+          echo "node version:"; node -v || true
+          echo "npm version:"; npm -v || true
+          echo "Listing backend directory:";
+          ls -la || true
+          echo "package.json (head):";
+          sed -n '1,200p' package.json || true
+          echo "package-lock.json (head):";
+          head -n 50 package-lock.json || true
+          echo "Running npm ci...";
+          npm ci --no-audit --prefer-offline
+
+      - name: Generate Prisma client (debug)
+        run: |
+          cd backend
+          echo "Prisma schema path: prisma/schema.prisma"
+          if [ -f prisma/schema.prisma ]; then
+            echo "schema.prisma exists; showing head..."
+            sed -n '1,200p' prisma/schema.prisma || true
+          else
+            echo "schema.prisma not found, listing prisma directory:";
+            ls -la prisma || true
+          fi
+          echo "Running npx prisma generate..."
+          npx prisma generate --schema=prisma/schema.prisma
 
       - name: Deploy Backend to Cloud Run
         run: |
@@ -61,7 +84,7 @@ jobs:
             --allow-unauthenticated \
             --min-instances=0 \
             --max-instances=10 \
-            --memory=512Mi \
+            --memory=1Gi \
             --cpu=1 \
             --port=4000 \
             --timeout=300 \
@@ -88,6 +111,9 @@ jobs:
     name: Deploy Frontend
     runs-on: ubuntu-latest
     needs: deploy-backend
+    defaults:
+      run:
+        working-directory: frontend
     
     steps:
       - name: Checkout Code
@@ -119,8 +145,8 @@ jobs:
         env:
           VITE_API_URL: ${{ needs.deploy-backend.outputs.backend-url }}/api
         run: |
-          cd frontend
           echo "Building with VITE_API_URL=$VITE_API_URL"
+          npm ci
           npm run build
           echo "Build complete - dist folder ready"
           ls -la dist/
