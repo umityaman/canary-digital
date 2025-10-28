@@ -656,7 +656,8 @@ export default function Accounting() {
 
           {/* Content Area */}
           <div className="flex-1 p-4 sm:p-6">
-            {/* Dashboard Tab */}
+            <div className="max-w-5xl mx-auto w-full">
+              {/* Dashboard Tab */}
             {activeTab === 'dashboard' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-4">
@@ -1382,6 +1383,8 @@ export default function Accounting() {
                 </div>
               </div>
             )}
+            {/* Kapanış div'i */}
+            </div>
 
             {/* e-Belge Tab */}
             {activeTab === 'ebelge' && (
