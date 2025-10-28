@@ -310,6 +310,28 @@
 
 ---
 
+# Gün Sonu Raporu - 27 Ekim 2025
+
+## Yapılanlar
+- Invoice POST endpointinde bugfix: eksik alanlar için default değerler, OrderItem ekleme, error handling iyileştirmesi
+- `updatedAt` zorunluluğu için hem User hem Customer create işlemlerine ekleme
+- Her değişiklik commit + push + deploy ile prod ortamda test edildi
+- Token/localStorage sorunu çözüldü, frontend doğru anahtarı kullanıyor
+- Hatalar artık backend response'da açıkça dönüyor
+
+## Kalan Sorunlar
+- Invoice endpointi test edilmeye devam edilecek, yeni hata olursa response'dan hızlıca düzeltilecek
+- Analytics endpointlerinde 500 hatası var (backend logları incelenecek)
+- Notification endpointleri frontendde hata veriyor (backendde yok, mock veya disable yapılacak)
+- AccountCard otomasyon özelliği için planlama yapılacak
+
+## Notlar
+- Deploy süresi her seferinde 5-6 dakika
+- Her hata response'u mutlaka Network tabından kopyalanmalı
+- Yarın için detaylı TODO listesi hazırlanacak
+
+---
+
 **Rapor Tarihi:** 27 Ekim 2025, Pazar
 **Rapor Saati:** 18:30
 **Toplam Çalışma Süresi:** ~9 saat (net kodlama)
