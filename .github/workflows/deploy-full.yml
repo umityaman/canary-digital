@@ -45,17 +45,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install backend dependencies (debug)
+      - name: Install workspace dependencies (root, debug)
         run: |
-          cd backend
-          echo "PWD: $(pwd)"
+          echo "Running npm ci at repository root to install workspaces"
+          echo "Repo root: $(pwd)"
           echo "node version:"; node -v || true
           echo "npm version:"; npm -v || true
-          echo "Listing backend directory:";
+          echo "Listing repo root (head):";
           ls -la || true
-          echo "package.json (head):";
+          echo "package.json (root - head):";
           sed -n '1,200p' package.json || true
-          echo "package-lock.json (head):";
+          echo "package-lock.json (root - head):";
           head -n 50 package-lock.json || true
           echo "Running npm ci...";
           npm ci --no-audit --prefer-offline
@@ -63,6 +63,7 @@ jobs:
       - name: Generate Prisma client (debug)
         run: |
           cd backend
+          echo "Working dir: $(pwd)"
           echo "Prisma schema path: prisma/schema.prisma"
           if [ -f prisma/schema.prisma ]; then
             echo "schema.prisma exists; showing head..."
@@ -71,6 +72,8 @@ jobs:
             echo "schema.prisma not found, listing prisma directory:";
             ls -la prisma || true
           fi
+          echo "Listing backend node_modules (partial) if exists..."
+          ls -la node_modules | head -n 50 || true
           echo "Running npx prisma generate..."
           npx prisma generate --schema=prisma/schema.prisma
 
