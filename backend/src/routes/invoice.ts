@@ -257,6 +257,7 @@ router.post('/', authenticateToken, async (req, res) => {
       paidAmount: 0,
       status: 'PENDING',
       type: type || 'rental',
+      updatedAt: new Date(),
     };
 
     const invoice = await prisma.invoice.create({
