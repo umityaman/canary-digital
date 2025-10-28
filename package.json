@@ -1,0 +1,8 @@
+{
+  "name": "canary-digital",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
