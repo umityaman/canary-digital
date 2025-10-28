@@ -960,11 +960,11 @@ export default function Accounting() {
             {/* Invoice Tab */}
             {activeTab === 'invoice' && (
               <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
                   <h2 className="text-xl font-semibold text-neutral-900">Fatura Listesi</h2>
                   <button 
                     onClick={() => navigate('/invoices/create')}
-                    className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2 w-full sm:w-auto"
                   >
                     <FileText size={18} />
                     Yeni Fatura
@@ -972,8 +972,8 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className="bg-white rounded-2xl p-4 border border-neutral-200">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white rounded-2xl p-4 border border-neutral-200 max-w-full sm:max-w-3xl mx-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {/* Search */}
                     <div className="relative">
                       <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
@@ -1010,7 +1010,7 @@ export default function Accounting() {
                     {/* Search Button */}
                     <button
                       onClick={handleSearchInvoices}
-                      className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+                      className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors w-full sm:w-auto"
                     >
                       Ara
                     </button>
@@ -1018,7 +1018,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Invoice Table */}
-                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-neutral-200 overflow-x-auto max-w-full sm:max-w-5xl mx-auto">
                   {invoicesLoading ? (
                     <div className="p-12 text-center text-neutral-600">
                       <RefreshCw className="animate-spin mx-auto mb-4" size={32} />
@@ -1033,7 +1033,7 @@ export default function Accounting() {
                   ) : (
                     <>
                       <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="min-w-[700px] w-full">
                           <thead className="bg-neutral-50 border-b border-neutral-200">
                             <tr>
                               <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
