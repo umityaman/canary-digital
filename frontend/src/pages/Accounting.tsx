@@ -1075,9 +1075,9 @@ export default function Accounting() {
                                 </td>
                                 <td className="px-6 py-4">
                                   <div className="text-sm font-medium text-neutral-900">
-                                    {invoice.customer.name}
+                                    {invoice.customer?.name || '-'}
                                   </div>
-                                  <div className="text-xs text-neutral-500">{invoice.customer.email}</div>
+                                  <div className="text-xs text-neutral-500">{invoice.customer?.email || '-'}</div>
                                 </td>
                                 <td className="px-6 py-4">
                                   <div className="text-sm text-neutral-900">
