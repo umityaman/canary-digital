@@ -14,7 +14,7 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Generate Prisma Client with Income model (updated schema)
+# Generate Prisma Client
 RUN npx prisma generate
 
 # Cloud Run automatically sets PORT env var

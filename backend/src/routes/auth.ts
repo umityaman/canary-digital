@@ -107,7 +107,7 @@ router.post('/login', async (req: Request, res: Response) => {
     // Kullanıcıyı bul
     const user = await prisma.user.findUnique({
       where: { email },
-      include: { Company: true }
+      include: { company: true }
     });
 
     if (!user) {
@@ -175,9 +175,9 @@ router.post('/login', async (req: Request, res: Response) => {
       },
       token
     });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  } catch (error: any) {
+    console.error('Login error:', error?.message, error?.stack, error);
+    res.status(500).json({ error: error?.message || 'Internal server error' });
   }
 });
 
@@ -186,7 +186,7 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
-      include: { Company: true }
+      include: { company: true }
     });
 
     if (!user) {

@@ -1,0 +1,6 @@
+﻿Monitor report generated: 2025-10-28T23:00:01Z
+Files processed: 2
+Total log entries: 0
+
+Top error groups:
+

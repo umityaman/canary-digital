@@ -2,7 +2,6 @@ import express from 'express';
 import { invoiceService } from '../services/invoice.service';
 import { authenticateToken } from './auth';
 import { log } from '../config/logger';
-import { emailService } from '../services/EmailService';
 
 const router = express.Router();
 
@@ -25,12 +24,7 @@ router.get('/', authenticateToken, async (req, res) => {
     } = req.query;
 
     // Build where clause
-    // Note: Invoice table doesn't have companyId, filter via Order.companyId
-    const where: any = {
-      Order: {
-        companyId: (req as any).user.companyId,
-      },
-    };
+    const where: any = {};
 
     if (status) {
       where.status = status as string;
@@ -50,7 +44,7 @@ router.get('/', authenticateToken, async (req, res) => {
           },
         },
         {
-          User: {
+          customer: {
             name: {
               contains: search as string,
               mode: 'insensitive',
@@ -71,7 +65,7 @@ router.get('/', authenticateToken, async (req, res) => {
       prisma.invoice.findMany({
         where,
         include: {
-          User: {
+          customer: {
             select: {
               id: true,
               name: true,
@@ -80,13 +74,13 @@ router.get('/', authenticateToken, async (req, res) => {
               taxNumber: true,
             },
           },
-          Order: {
+          order: {
             select: {
               id: true,
               orderNumber: true,
-              OrderItem: {
+              orderItems: {
                 select: {
-                  Equipment: {
+                  equipment: {
                     select: {
                       name: true,
                     },
@@ -95,7 +89,7 @@ router.get('/', authenticateToken, async (req, res) => {
               },
             },
           },
-          Payment: {
+          payments: {
             select: {
               id: true,
               amount: true,
@@ -131,173 +125,6 @@ router.get('/', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to get invoices',
-    });
-  }
-});
-
-/**
- * @route   POST /api/invoices
- * @desc    Genel fatura oluştur (Manuel giriş)
- * @access  Private
- */
-router.post('/', authenticateToken, async (req, res) => {
-  try {
-    const { prisma } = require('../index');
-    const userId = (req as any).user.id;
-    const companyId = (req as any).user.companyId;
-
-    const {
-      customerName,
-      customerEmail,
-      customerPhone,
-      customerCompany,
-      customerTaxNumber,
-      invoiceNumber,
-      invoiceDate,
-      dueDate,
-      type,
-      items,
-      totalAmount,
-      vatAmount,
-      grandTotal,
-      notes,
-    } = req.body;
-
-    // Validation
-    if (!customerName || !invoiceDate || !dueDate) {
-      return res.status(400).json({
-        success: false,
-        message: 'Müşteri adı, fatura tarihi ve vade tarihi gerekli',
-      });
-    }
-    // items zorunlu değil, ama varsa ekleyeceğiz
-
-    // WORKAROUND: Schema inconsistency - Invoice.customerId→User, Order.customerId→Customer
-    // Solution: Create both User (for Invoice) and Customer (for Order), link via email
-    
-    const userCompanyId = (req as any).user?.companyId || 1;
-    const email = customerEmail || `manual-${Date.now()}@invoice.local`;
-    
-    // 1. Create User with role=customer for Invoice.customerId
-    let user = await prisma.user.findFirst({
-      where: { email, role: 'customer' },
-    });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          name: customerName,
-          email,
-          password: 'dummy-password-not-used',
-          role: 'customer',
-          phone: customerPhone || null,
-          taxNumber: customerTaxNumber || null,
-          Company: { connect: { id: userCompanyId } },
-          updatedAt: new Date(),
-        },
-      });
-    }
-
-    // 2. Create Customer for Order.customerId
-    let customer = await prisma.customer.findFirst({
-      where: { email },
-    });
-
-    if (!customer) {
-      customer = await prisma.customer.create({
-        data: {
-          name: customerName,
-          email,
-          phone: customerPhone || '',
-          company: customerCompany || '',
-          taxNumber: customerTaxNumber || '',
-          updatedAt: new Date(),
-        },
-      });
-    }
-
-    // 3. Create Order (uses Customer.id)
-    const order = await prisma.order.create({
-      data: {
-        orderNumber: `MAN-${Date.now()}`,
-        Customer: { connect: { id: customer.id } }, // Order → Customer
-        Company: { connect: { id: userCompanyId } },
-        startDate: new Date(invoiceDate),
-        endDate: new Date(dueDate),
-        status: 'completed',
-        totalAmount: grandTotal ?? 0,
-        notes: 'Manual invoice',
-      },
-    });
-
-    // Generate invoice number if not provided
-    let finalInvoiceNumber = invoiceNumber;
-    if (!finalInvoiceNumber) {
-      const year = new Date().getFullYear();
-      const count = await prisma.invoice.count({
-        where: {
-          invoiceNumber: {
-            startsWith: `INV-${year}-`,
-          },
-        },
-      });
-      finalInvoiceNumber = `INV-${year}-${String(count + 1).padStart(4, '0')}`;
-    }
-
-    // Create invoice - Use User.id for customerId (Invoice→User relation)
-    const invoiceData: any = {
-      orderId: order.id,
-      customerId: user.id,
-      invoiceDate: new Date(invoiceDate),
-      dueDate: new Date(dueDate),
-      invoiceNumber: finalInvoiceNumber,
-      totalAmount: totalAmount ?? 0,
-      vatAmount: vatAmount ?? 0,
-      grandTotal: grandTotal ?? 0,
-      paidAmount: 0,
-      status: 'PENDING',
-      type: type || 'rental',
-      updatedAt: new Date(),
-    };
-
-    const invoice = await prisma.invoice.create({
-      data: invoiceData,
-    });
-
-    // OrderItem ekle (items varsa)
-    let orderItems = [];
-    if (Array.isArray(items) && items.length > 0) {
-      for (const item of items) {
-        try {
-          const orderItem = await prisma.orderItem.create({
-            data: {
-              orderId: order.id,
-              description: item.description || '',
-              quantity: item.quantity ?? 1,
-              unitPrice: item.unitPrice ?? 0,
-              vatRate: item.vatRate ?? 0,
-            },
-          });
-          orderItems.push(orderItem);
-        } catch (err) {
-          console.error('OrderItem create error:', err);
-        }
-      }
-    }
-
-    console.info(`Invoice created: ${finalInvoiceNumber}`);
-
-    res.status(201).json({
-      success: true,
-      data: { invoice, orderItems },
-      message: 'Fatura başarıyla oluşturuldu',
-    });
-  } catch (error: any) {
-    console.error('Failed to create invoice:', error);
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Fatura oluşturulamadı',
-      error: error,
     });
   }
 });
@@ -542,88 +369,6 @@ router.get('/customer/:customerId', authenticateToken, async (req, res) => {
 });
 
 /**
- * @route   PUT /api/invoices/:id
- * @desc    Faturayı güncelle
- * @access  Private
- */
-router.put('/:id', authenticateToken, async (req, res) => {
-  try {
-    const { prisma } = require('../index');
-    const { id } = req.params;
-    const userId = (req as any).user.id;
-
-    const {
-      customerName,
-      customerEmail,
-      customerPhone,
-      customerCompany,
-      customerTaxNumber,
-      invoiceDate,
-      dueDate,
-      type,
-      items,
-      totalAmount,
-      vatAmount,
-      grandTotal,
-      notes,
-    } = req.body;
-
-    // Check if invoice exists
-    const existingInvoice = await prisma.invoice.findUnique({
-      where: { id: parseInt(id) },
-    });
-
-    if (!existingInvoice) {
-      return res.status(404).json({
-        success: false,
-        message: 'Fatura bulunamadı',
-      });
-    }
-
-    // Update invoice
-    const invoice = await prisma.invoice.update({
-      where: { id: parseInt(id) },
-      data: {
-        invoiceDate: invoiceDate ? new Date(invoiceDate) : undefined,
-        dueDate: dueDate ? new Date(dueDate) : undefined,
-        type: type || undefined,
-        
-        // Customer info
-        customerName: customerName || undefined,
-        customerEmail: customerEmail || undefined,
-        customerPhone: customerPhone || undefined,
-        customerCompany: customerCompany || undefined,
-        customerTaxNumber: customerTaxNumber || undefined,
-        
-        // Amounts
-        subtotal: totalAmount || undefined,
-        taxAmount: vatAmount || undefined,
-        grandTotal: grandTotal || undefined,
-        
-        notes: notes || undefined,
-        
-        // Items (store as JSON)
-        description: items ? JSON.stringify(items) : undefined,
-      },
-    });
-
-    log.info(`Invoice updated: ${invoice.invoiceNumber}`);
-
-    res.json({
-      success: true,
-      data: invoice,
-      message: 'Fatura başarıyla güncellendi',
-    });
-  } catch (error: any) {
-    log.error('Failed to update invoice:', error);
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Fatura güncellenemedi',
-    });
-  }
-});
-
-/**
  * @route   DELETE /api/invoices/:id
  * @desc    Faturayı iptal et
  * @access  Private
@@ -700,95 +445,6 @@ router.post('/payment-plan', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to create payment plan',
-    });
-  }
-});
-
-/**
- * @route   POST /api/invoices/:id/send-email
- * @desc    Faturayı e-posta ile gönder
- * @access  Private
- */
-router.post('/:id/send-email', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { recipientEmail, message, pdfBuffer } = req.body;
-
-    // Get invoice details
-    const invoice = await invoiceService.getInvoiceDetails(parseInt(id));
-
-    if (!invoice) {
-      return res.status(404).json({
-        success: false,
-        message: 'Invoice not found',
-      });
-    }
-
-    // Prepare email
-    const to = recipientEmail || invoice.customer?.email;
-    
-    if (!to) {
-      return res.status(400).json({
-        success: false,
-        message: 'Recipient email is required',
-      });
-    }
-
-    const subject = `Fatura #${invoice.invoiceNumber} - Canary Digital`;
-    
-    const html = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2563eb;">Fatura Gönderimi</h2>
-        <p>Sayın ${invoice.customerName},</p>
-        <p>Faturanız ektedir. Detaylar aşağıdaki gibidir:</p>
-        
-        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p><strong>Fatura No:</strong> ${invoice.invoiceNumber}</p>
-          <p><strong>Fatura Tarihi:</strong> ${new Date(invoice.invoiceDate).toLocaleDateString('tr-TR')}</p>
-          <p><strong>Vade Tarihi:</strong> ${new Date(invoice.dueDate).toLocaleDateString('tr-TR')}</p>
-          <p><strong>Toplam Tutar:</strong> ${invoice.grandTotal.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
-          <p><strong>Durum:</strong> ${invoice.status === 'paid' ? 'Ödendi' : invoice.status === 'pending' ? 'Beklemede' : 'Gecikmiş'}</p>
-        </div>
-        
-        ${message ? `<p><strong>Not:</strong> ${message}</p>` : ''}
-        
-        <p>İyi günler dileriz.</p>
-        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
-          Bu e-posta otomatik olarak gönderilmiştir.<br>
-          Canary Digital © ${new Date().getFullYear()}
-        </p>
-      </div>
-    `;
-
-    // Prepare attachments
-    const attachments = [];
-    if (pdfBuffer) {
-      attachments.push({
-        filename: `Fatura-${invoice.invoiceNumber}.pdf`,
-        content: Buffer.from(pdfBuffer, 'base64'),
-        contentType: 'application/pdf',
-      });
-    }
-
-    // Send email
-    await emailService.sendEmail({
-      to,
-      subject,
-      html,
-      attachments,
-    });
-
-    log.info('Invoice email sent:', { invoiceId: id, to });
-
-    res.json({
-      success: true,
-      message: 'Invoice email sent successfully',
-    });
-  } catch (error: any) {
-    log.error('Failed to send invoice email:', error);
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Failed to send invoice email',
     });
   }
 });

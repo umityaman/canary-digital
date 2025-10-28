@@ -16,23 +16,35 @@ router.post('/invoice/:id', authenticateToken, async (req: AuthRequest, res: Res
   try {
     const { id } = req.params;
     
-    // Fetch invoice data (you'll need to adjust based on your schema)
+    // Fetch order data. Use select to avoid Prisma `include` validation errors
     const order = await prisma.order.findUnique({
       where: { id: parseInt(id) },
-      include: {
-        customer: true,
-        orderItems: {
-          include: {
-            equipment: true
-          }
-        }
+      select: {
+        id: true,
+        orderNumber: true,
+        startDate: true,
+        endDate: true,
+        createdAt: true,
+        totalAmount: true,
+        status: true,
+        notes: true,
+        customerId: true
       }
     });
-    
+
     if (!order) {
       return res.status(404).json({ error: 'Sipariş bulunamadı' });
     }
-    
+
+    // Fetch customer separately to avoid runtime include issues
+    const customer = await prisma.user.findUnique({ where: { id: order.customerId } });
+
+    // Fetch order items separately (and include equipment)
+    const orderItems = await (prisma as any).orderItem.findMany({
+      where: { orderId: order.id },
+      include: { equipment: true }
+    });
+
     // Prepare invoice data
     const invoiceData = {
       invoiceNumber: `INV-${order.orderNumber}`,
@@ -45,17 +57,17 @@ router.post('/invoice/:id', authenticateToken, async (req: AuthRequest, res: Res
       companyEmail: 'info@canary.com',
       companyTaxNo: '1234567890',
       
-      customerName: order.customer.name,
-      customerPhone: order.customer.phone || undefined,
-      customerEmail: order.customer.email || undefined,
-      customerAddress: order.customer.address || undefined,
-      customerTaxNo: order.customer.taxNumber || undefined,
+  customerName: customer?.name || undefined,
+  customerPhone: customer?.phone || undefined,
+  customerEmail: customer?.email || undefined,
+  customerAddress: customer?.address || undefined,
+  customerTaxNo: customer?.taxNumber || undefined,
       
-      items: order.orderItems.map((item: any) => ({
-        description: item.equipment.name,
+      items: orderItems.map((item: any) => ({
+        description: item.equipment?.name || item.equipmentId,
         quantity: item.quantity,
-        unitPrice: item.pricePerDay,
-        totalPrice: item.totalPrice
+        unitPrice: item.dailyRate || undefined,
+        totalPrice: item.totalAmount
       })),
       
       subtotal: order.totalAmount,
@@ -92,25 +104,37 @@ router.post('/order/:id', authenticateToken, async (req: AuthRequest, res: Respo
     
     const order = await prisma.order.findUnique({
       where: { id: parseInt(id) },
-      include: {
-        customer: true,
-        orderItems: {
-          include: {
-            equipment: true
-          }
-        }
+      select: {
+        id: true,
+        orderNumber: true,
+        startDate: true,
+        endDate: true,
+        createdAt: true,
+        totalAmount: true,
+        status: true,
+        notes: true,
+        customerId: true
       }
     });
-    
+
     if (!order) {
       return res.status(404).json({ error: 'Sipariş bulunamadı' });
     }
-    
+
     // Calculate duration
     const duration = Math.ceil(
       (order.endDate.getTime() - order.startDate.getTime()) / (1000 * 60 * 60 * 24)
     );
-    
+
+    // Fetch customer separately
+    const customer = await prisma.user.findUnique({ where: { id: order.customerId } });
+
+    // Fetch order items separately (and include equipment)
+    const orderItems = await (prisma as any).orderItem.findMany({
+      where: { orderId: order.id },
+      include: { equipment: true }
+    });
+
     // Prepare order data
     const orderData = {
       orderNumber: order.orderNumber,
@@ -118,26 +142,26 @@ router.post('/order/:id', authenticateToken, async (req: AuthRequest, res: Respo
       startDate: order.startDate,
       endDate: order.endDate,
       status: order.status,
-      
-      customerName: order.customer.name,
-      customerPhone: order.customer.phone || undefined,
-      customerEmail: order.customer.email || undefined,
-      customerAddress: order.customer.address || undefined,
-      
-      equipment: order.orderItems.map((item: any) => ({
-        name: item.equipment.name,
+
+      customerName: customer?.name || undefined,
+      customerPhone: customer?.phone || undefined,
+      customerEmail: customer?.email || undefined,
+      customerAddress: customer?.address || undefined,
+
+      equipment: orderItems.map((item: any) => ({
+        name: item.equipment?.name || item.equipmentId,
         quantity: item.quantity,
-        dailyRate: item.pricePerDay,
+        dailyRate: item.dailyRate || item.pricePerDay,
         duration: duration,
-        totalPrice: item.totalPrice
+        totalPrice: item.totalAmount
       })),
-      
-      subtotal: order.totalAmount,
+
+  subtotal: order.totalAmount,
       taxAmount: order.totalAmount * 0.18,
       discountAmount: 0,
       total: order.totalAmount * 1.18,
       paidAmount: 0,
-      
+
       notes: order.notes || undefined
     };
     

@@ -40,6 +40,17 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install backend dependencies and generate Prisma client
+        run: |
+          cd backend
+          npm ci
+          npx prisma generate
+
       - name: Deploy Backend to Cloud Run
         run: |
           cd backend

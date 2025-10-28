@@ -5,7 +5,6 @@ import helmet from 'helmet';
 import path from 'path';
 import morgan from 'morgan';
 import logger, { stream } from './config/logger';
-import { initializeScheduler } from './utils/scheduler';
 // Temporarily disable Sentry due to TypeScript errors
 // import { 
 //   initializeSentry, 
@@ -16,9 +15,6 @@ import { initializeScheduler } from './utils/scheduler';
 import { setupSwagger } from './config/swagger';
 
 const app = express();
-
-// Initialize reminder scheduler
-initializeScheduler();
 
 // Initialize Sentry (must be first!) - TEMPORARILY DISABLED
 // initializeSentry(app);
@@ -94,19 +90,9 @@ app.use(cors({
 import performanceMiddleware from './config/performance';
 app.use(performanceMiddleware);
 
-// Body Parsing with UTF-8 charset
+// Body Parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Set UTF-8 charset for all JSON responses
-app.use((req, res, next) => {
-  const originalJson = res.json;
-  res.json = function(data) {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    return originalJson.call(this, data);
-  };
-  next();
-});
 
 // Rate Limiting - Tiered Approach
 const createRateLimiter = (windowMs: number, max: number, message: string) => 
@@ -203,15 +189,6 @@ safeLoadRoute('/api/monitoring', './routes/monitoring', 'Monitoring');
 safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
 safeLoadRoute('/api/offers', './routes/offer', 'Offers & Quotes');
 safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
-safeLoadRoute('/api/checks', './routes/checks', 'Check Management');
-safeLoadRoute('/api/promissory-notes', './routes/promissory-notes', 'Promissory Notes');
-safeLoadRoute('/api/reminders', './routes/reminders', 'Email Reminders');
-safeLoadRoute('/api/aging', './routes/aging', 'Aging Analysis');
-safeLoadRoute('/api/account-cards', './routes/account-cards', 'Account Cards (Cari Hesap)');
-safeLoadRoute('/api/einvoice', './routes/einvoice', 'E-Invoice (E-Fatura GİB)');
-safeLoadRoute('/api/earchive', './routes/earchive', 'E-Archive Invoice (E-Arşiv Fatura)');
-safeLoadRoute('/api/delivery-notes', './routes/delivery-notes', 'Delivery Notes (İrsaliye)');
-safeLoadRoute('/api/migration', './routes/migration', 'Database Migration (Temporary)');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');
 safeLoadRoute('/api/payments', './routes/payments', 'Iyzipay payments');

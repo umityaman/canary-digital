@@ -20,13 +20,6 @@ import Calendar from './pages/Calendar'
 import Documents from './pages/Documents'
 import Suppliers from './pages/Suppliers'
 import Accounting from './pages/Accounting'
-import InvoiceDetail from './pages/InvoiceDetail'
-import OfferDetail from './pages/OfferDetail'
-import CreateInvoice from './pages/CreateInvoice'
-import CreateOffer from './pages/CreateOffer'
-import EditInvoice from './pages/EditInvoice'
-import EditOffer from './pages/EditOffer'
-import DeliveryNotes from './pages/DeliveryNotes'
 import Social from './pages/Social'
 import Website from './pages/Website'
 import SiteBuilder from './pages/website/SiteBuilder'
@@ -101,13 +94,6 @@ export default function App(){
           <Route path='/documents' element={<Documents/>} />
           <Route path='/suppliers' element={<Suppliers/>} />
           <Route path='/accounting' element={<Accounting/>} />
-          <Route path='/invoices/create' element={<CreateInvoice/>} />
-          <Route path='/invoices/:id/edit' element={<EditInvoice/>} />
-          <Route path='/invoices/:id' element={<InvoiceDetail/>} />
-          <Route path='/offers/create' element={<CreateOffer/>} />
-          <Route path='/offers/:id/edit' element={<EditOffer/>} />
-          <Route path='/offers/:id' element={<OfferDetail/>} />
-          <Route path='/delivery-notes' element={<DeliveryNotes/>} />
           <Route path='/social' element={<Social/>} />
           <Route path='/website' element={<Website/>} />
           <Route path='/website/builder' element={<SiteBuilder/>} />

@@ -1,15 +1,24 @@
 import React, { useState } from 'react'
-import { Search, Home, Moon, Sun, Maximize2, Minimize2 } from 'lucide-react'
+import { Search, Home, Moon, Sun, Maximize2, Minimize2, LogOut, User } from 'lucide-react'
 import Sidebar from './Sidebar'
 import { useNavigate } from 'react-router-dom'
 import { NotificationPanel, NotificationBanner } from './NotificationSystem'
 import LanguageSwitcher from './LanguageSwitcher'
+import { useAuthStore } from '../stores/authStore'
 
 const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
   const navigate = useNavigate()
+  const { user, logout } = useAuthStore()
   const [searchQuery, setSearchQuery] = useState('')
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
+
+  const handleLogout = () => {
+    if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+      logout()
+      navigate('/login')
+    }
+  }
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -65,8 +74,29 @@ const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
               </div>
             </div>
             
-            {/* Sağ: Dil, Bildirimler, Dark Mode, Tam Ekran */}
+            {/* Sağ: Kullanıcı, Dil, Bildirimler, Dark Mode, Tam Ekran, Logout */}
             <div className="flex items-center gap-2">
+              {/* User Info */}
+              {user && (
+                <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
+                  isDarkMode 
+                    ? 'bg-neutral-800 text-neutral-300' 
+                    : 'bg-neutral-100 text-neutral-600'
+                }`}>
+                  <User size={16} />
+                  <span className="text-sm font-medium">{user.name || user.email}</span>
+                  {user.role && (
+                    <span className={`text-xs px-2 py-0.5 rounded ${
+                      user.role === 'ADMIN' 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'bg-neutral-200 text-neutral-700'
+                    }`}>
+                      {user.role}
+                    </span>
+                  )}
+                </div>
+              )}
+
               {/* Language Switcher */}
               <LanguageSwitcher />
 
@@ -101,11 +131,15 @@ const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
 
               {/* Logout Button */}
               <button
-                onClick={() => { localStorage.clear(); navigate('/login'); }}
-                className={`p-2 rounded-lg transition-colors bg-red-100 text-red-600 hover:bg-red-200 ml-2`}
+                onClick={handleLogout}
+                className={`p-2 rounded-lg transition-colors ${
+                  isDarkMode 
+                    ? 'bg-red-900/20 text-red-400 hover:bg-red-900/30' 
+                    : 'bg-red-50 text-red-600 hover:bg-red-100'
+                }`}
                 title="Çıkış Yap"
               >
-                Çıkış
+                <LogOut size={18} />
               </button>
             </div>
           </div>
@@ -115,10 +149,8 @@ const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
         <NotificationBanner />
         
         {/* Content */}
-        <div className="flex justify-center w-full">
-          <div className="max-w-5xl w-full p-6">
-            {children}
-          </div>
+        <div className={`p-6 ${isDarkMode ? 'text-white' : ''}`}>
+          {children}
         </div>
       </main>
     </div>

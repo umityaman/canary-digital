@@ -14,7 +14,6 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
     "seed": "ts-node prisma/seed.ts",
-    "migrate:checks": "npx prisma db push && ts-node scripts/run-check-migration.ts",
     "backup": "ts-node scripts/backup-database.ts",
     "restore": "ts-node scripts/restore-database.ts"
   },

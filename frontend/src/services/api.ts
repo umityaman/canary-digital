@@ -172,133 +172,57 @@ export const scanAPI = {
 // Notification API
 export const notificationAPI = {
   // Create and send a notification
-  create: async (data: any) => {
-    try {
-      return await api.post('/notifications', data);
-    } catch (e) {
-      return { data: { success: true, message: 'Mock: Bildirim gönderildi.' } };
-    }
-  },
+  create: (data: any) => api.post('/notifications', data),
+  
   // Create from template
-  createFromTemplate: async (templateCode: string, variables: any, recipient: any, sendNow?: boolean) => {
-    try {
-      return await api.post('/notifications/template', { templateCode, variables, recipient, sendNow });
-    } catch (e) {
-      return { data: { success: true, message: 'Mock: Template bildirim gönderildi.' } };
-    }
-  },
+  createFromTemplate: (templateCode: string, variables: any, recipient: any, sendNow?: boolean) =>
+    api.post('/notifications/template', { templateCode, variables, recipient, sendNow }),
+  
   // Send a specific notification
-  send: async (notificationId: number) => {
-    try {
-      return await api.post(`/notifications/${notificationId}/send`);
-    } catch (e) {
-      return { data: { success: true, message: 'Mock: Bildirim gönderildi.' } };
-    }
-  },
+  send: (notificationId: number) => api.post(`/notifications/${notificationId}/send`),
+  
   // Get user notifications
-  getUserNotifications: async (userId: number, params?: { limit?: number; offset?: number; unreadOnly?: boolean }) => {
-    try {
-      return await api.get(`/notifications/user/${userId}`, { params });
-    } catch (e) {
-      return { data: { notifications: [] } };
-    }
-  },
+  getUserNotifications: (userId: number, params?: { limit?: number; offset?: number; unreadOnly?: boolean }) =>
+    api.get(`/notifications/user/${userId}`, { params }),
+  
   // Get unread count
-  getUnread: async (userId: number) => {
-    try {
-      return await api.get(`/notifications/unread/${userId}`);
-    } catch (e) {
-      return { data: { count: 0 } };
-    }
-  },
+  getUnread: (userId: number) => api.get(`/notifications/unread/${userId}`),
+  
   // Mark as read
-  markAsRead: async (notificationId: number) => {
-    try {
-      return await api.put(`/notifications/${notificationId}/read`);
-    } catch (e) {
-      return { data: { success: true } };
-    }
-  },
+  markAsRead: (notificationId: number) => api.put(`/notifications/${notificationId}/read`),
+  
   // Mark all as read
-  markAllAsRead: async (userId: number) => {
-    try {
-      return await api.put(`/notifications/user/${userId}/read-all`);
-    } catch (e) {
-      return { data: { success: true } };
-    }
-  },
+  markAllAsRead: (userId: number) => api.put(`/notifications/user/${userId}/read-all`),
+  
   // Get notification history
-  getHistory: async (params?: any) => {
-    try {
-      return await api.get('/notifications/history', { params });
-    } catch (e) {
-      return { data: { history: [] } };
-    }
-  },
+  getHistory: (params?: any) => api.get('/notifications/history', { params }),
+  
   // Get templates
-  getTemplates: async (params?: { category?: string; type?: string; isActive?: boolean }) => {
-    try {
-      return await api.get('/notifications/templates', { params });
-    } catch (e) {
-      return { data: { templates: [] } };
-    }
-  },
+  getTemplates: (params?: { category?: string; type?: string; isActive?: boolean }) =>
+    api.get('/notifications/templates', { params }),
+  
   // Create template
-  createTemplate: async (data: any) => {
-    try {
-      return await api.post('/notifications/templates', data);
-    } catch (e) {
-      return { data: { success: true } };
-    }
-  },
+  createTemplate: (data: any) => api.post('/notifications/templates', data),
+  
   // Update template
-  updateTemplate: async (templateId: number, data: any) => {
-    try {
-      return await api.put(`/notifications/templates/${templateId}`, data);
-    } catch (e) {
-      return { data: { success: true } };
-    }
-  },
+  updateTemplate: (templateId: number, data: any) =>
+    api.put(`/notifications/templates/${templateId}`, data),
+  
   // Get user preferences
-  getPreferences: async (userId: number) => {
-    try {
-      return await api.get(`/notifications/preferences/${userId}`);
-    } catch (e) {
-      return { data: { preferences: {} } };
-    }
-  },
+  getPreferences: (userId: number) => api.get(`/notifications/preferences/${userId}`),
+  
   // Update user preferences
-  updatePreferences: async (userId: number, data: any) => {
-    try {
-      return await api.put(`/notifications/preferences/${userId}`, data);
-    } catch (e) {
-      return { data: { success: true } };
-    }
-  },
+  updatePreferences: (userId: number, data: any) =>
+    api.put(`/notifications/preferences/${userId}`, data),
+  
   // Get statistics
-  getStats: async (params?: any) => {
-    try {
-      return await api.get('/notifications/stats', { params });
-    } catch (e) {
-      return { data: { stats: {} } };
-    }
-  },
+  getStats: (params?: any) => api.get('/notifications/stats', { params }),
+  
   // Process scheduled notifications
-  processScheduled: async () => {
-    try {
-      return await api.post('/notifications/process-scheduled');
-    } catch (e) {
-      return { data: { success: true } };
-    }
-  },
+  processScheduled: () => api.post('/notifications/process-scheduled'),
+  
   // Retry failed notifications
-  retryFailed: async () => {
-    try {
-      return await api.post('/notifications/retry-failed');
-    } catch (e) {
-      return { data: { success: true } };
-    }
-  },
+  retryFailed: () => api.post('/notifications/retry-failed'),
 }
 
 // Health check
@@ -631,10 +555,6 @@ export const accountingAPI = {
   getStats: (params?: { startDate?: string; endDate?: string }) => 
     api.get('/accounting/stats', { params }),
   
-  // Dashboard Chart Data
-  getChartData: (params?: { months?: number; startDate?: string; endDate?: string }) =>
-    api.get('/accounting/chart-data', { params }),
-  
   // Income-Expense Analysis
   getIncomeExpenseAnalysis: (params: { 
     startDate: string; 
@@ -651,84 +571,12 @@ export const accountingAPI = {
   // VAT Report
   getVATReport: (params: { startDate: string; endDate: string }) => 
     api.get('/accounting/vat-report', { params }),
-
-  // ========== INCOME CRUD ==========
-  // Get all incomes with pagination and filters
-  getIncomes: (params?: {
-    page?: number;
-    limit?: number;
-    category?: string; 
-    status?: string;
-    startDate?: string;
-    endDate?: string;
-    search?: string;
-  }) => api.get('/accounting/incomes', { params }),
-
-  // Create new income
-  createIncome: (data: {
-    description: string;
-    amount: number;
-    category: string;
-    date: string;
-    status?: string;
-    paymentMethod?: string;
-    notes?: string;
-    invoiceId?: number;
-  }) => api.post('/accounting/income', data),
-
-  // Update existing income
-  updateIncome: (id: number, data: {
-    description?: string;
-    amount?: number;
-    category?: string;
-    date?: string;
-    status?: string;
-    paymentMethod?: string;
-    notes?: string;
-    invoiceId?: number;
-  }) => api.put(`/accounting/income/${id}`, data),
-
-  // Delete income
-  deleteIncome: (id: number) => api.delete(`/accounting/income/${id}`),
-
-  // ========== EXPENSE CRUD ==========
-  // Get all expenses with pagination and filters
-  getExpenses: (params?: {
-    page?: number;
-    limit?: number;
-    category?: string;
-    status?: string;
-    startDate?: string;
-    endDate?: string;
-    search?: string;
-  }) => api.get('/accounting/expenses', { params }),
-
-  // Create new expense
-  createExpense: (data: {
-    description: string;
-    amount: number;
-    category: string;
-    date: string;
-    status?: string;
-    paymentMethod?: string;
-    notes?: string;
-    invoiceId?: number;
-  }) => api.post('/accounting/expense', data),
-
-  // Update existing expense
-  updateExpense: (id: number, data: {
-    description?: string;
-    amount?: number;
-    category?: string;
-    date?: string;
-    status?: string;
-    paymentMethod?: string;
-    notes?: string;
-    invoiceId?: number;
-  }) => api.put(`/accounting/expense/${id}`, data),
-
-  // Delete expense
-  deleteExpense: (id: number) => api.delete(`/accounting/expense/${id}`),
+  
+  // Income Recording (TODO: Requires Expense model)
+  recordIncome: (data: any) => api.post('/accounting/income', data),
+  
+  // Expense Recording (TODO: Requires Expense model)
+  recordExpense: (data: any) => api.post('/accounting/expense', data),
 };
 
 // Invoice API
@@ -752,12 +600,6 @@ export const invoiceAPI = {
     startDate?: string;
     endDate?: string;
   }) => api.get(`/invoices/customer/${customerId}`, { params }),
-  
-  // Create generic invoice (manual entry)
-  create: (data: any) => api.post('/invoices', data),
-  
-  // Update invoice
-  update: (id: number, data: any) => api.put(`/invoices/${id}`, data),
   
   // Create rental invoice
   createRental: (data: {
@@ -811,13 +653,6 @@ export const invoiceAPI = {
     installments: number;
     startDate: string;
   }) => api.post('/invoices/payment-plan', data),
-  
-  // Send invoice via email
-  sendEmail: (id: number, data: {
-    recipientEmail?: string;
-    message?: string;
-    pdfBuffer?: string;
-  }) => api.post(`/invoices/${id}/send-email`, data),
 };
 
 // Offer API
@@ -884,168 +719,6 @@ export const offerAPI = {
   // Update offer status
   updateStatus: (id: number, status: string) =>
     api.patch(`/offers/${id}/status`, { status }),
-  
-  // Send offer via email
-  sendEmail: (id: number, data: {
-    recipientEmail?: string;
-    message?: string;
-    pdfBuffer?: string;
-  }) => api.post(`/offers/${id}/send-email`, data),
-};
-
-// Check API
-export const checkAPI = {
-  // List all checks
-  getAll: (params?: {
-    type?: 'received' | 'issued';
-    status?: 'portfolio' | 'deposited' | 'bounced' | 'cashed' | 'endorsed';
-    startDate?: string;
-    endDate?: string;
-    search?: string;
-    limit?: number;
-    offset?: number;
-  }) => api.get('/checks', { params }),
-
-  // Get check statistics
-  getStats: () => api.get('/checks/stats'),
-
-  // Create new check
-  create: (data: {
-    checkNumber: string;
-    serialNumber?: string;
-    amount: number;
-    currency?: string;
-    issueDate: string;
-    dueDate: string;
-    type: 'received' | 'issued';
-    status?: 'portfolio' | 'deposited' | 'bounced' | 'cashed' | 'endorsed';
-    drawerName: string;
-    drawerTaxNumber?: string;
-    payeeName?: string;
-    bankName?: string;
-    bankBranch?: string;
-    bankAccount?: string;
-    location?: string;
-    customerId?: number;
-    supplierId?: number;
-    invoiceId?: number;
-    notes?: string;
-  }) => api.post('/checks', data),
-
-  // Update check
-  update: (id: number, data: {
-    checkNumber?: string;
-    serialNumber?: string;
-    amount?: number;
-    currency?: string;
-    issueDate?: string;
-    dueDate?: string;
-    type?: 'received' | 'issued';
-    status?: 'portfolio' | 'deposited' | 'bounced' | 'cashed' | 'endorsed';
-    drawerName?: string;
-    drawerTaxNumber?: string;
-    payeeName?: string;
-    bankName?: string;
-    bankBranch?: string;
-    bankAccount?: string;
-    location?: string;
-    customerId?: number;
-    supplierId?: number;
-    invoiceId?: number;
-    notes?: string;
-  }) => api.put(`/checks/${id}`, data),
-
-  // Delete check
-  delete: (id: number) => api.delete(`/checks/${id}`),
-
-  // Endorse check (Ciro)
-  endorse: (id: number, endorsedTo: string) => 
-    api.post(`/checks/${id}/endorse`, { endorsedTo }),
-
-  // Deposit check to bank
-  deposit: (id: number) => api.post(`/checks/${id}/deposit`),
-
-  // Cash check
-  cash: (id: number) => api.post(`/checks/${id}/cash`),
-
-  // Bounce check (Karşılıksız)
-  bounce: (id: number, bouncedReason?: string) =>
-    api.post(`/checks/${id}/bounce`, { bouncedReason }),
-};
-
-// Promissory Note API
-export const promissoryNoteAPI = {
-  // List all promissory notes
-  getAll: (params?: {
-    type?: 'receivable' | 'payable';
-    status?: 'portfolio' | 'collected' | 'defaulted' | 'endorsed';
-    startDate?: string;
-    endDate?: string;
-    search?: string;
-    limit?: number;
-    offset?: number;
-  }) => api.get('/promissory-notes', { params }),
-
-  // Get promissory note statistics
-  getStats: () => api.get('/promissory-notes/stats'),
-
-  // Create new promissory note
-  create: (data: {
-    noteNumber: string;
-    serialNumber?: string;
-    amount: number;
-    currency?: string;
-    issueDate: string;
-    dueDate: string;
-    type: 'receivable' | 'payable';
-    status?: 'portfolio' | 'collected' | 'defaulted' | 'endorsed';
-    drawerName: string;
-    drawerTaxNumber?: string;
-    payeeName?: string;
-    guarantorName?: string;
-    guarantorTaxNo?: string;
-    location?: string;
-    customerId?: number;
-    supplierId?: number;
-    invoiceId?: number;
-    notes?: string;
-  }) => api.post('/promissory-notes', data),
-
-  // Update promissory note
-  update: (id: number, data: {
-    noteNumber?: string;
-    serialNumber?: string;
-    amount?: number;
-    currency?: string;
-    issueDate?: string;
-    dueDate?: string;
-    type?: 'receivable' | 'payable';
-    status?: 'portfolio' | 'collected' | 'defaulted' | 'endorsed';
-    drawerName?: string;
-    drawerTaxNumber?: string;
-    payeeName?: string;
-    guarantorName?: string;
-    guarantorTaxNo?: string;
-    location?: string;
-    customerId?: number;
-    supplierId?: number;
-    invoiceId?: number;
-    notes?: string;
-  }) => api.put(`/promissory-notes/${id}`, data),
-
-  // Delete promissory note
-  delete: (id: number) => api.delete(`/promissory-notes/${id}`),
-
-  // Endorse promissory note (Ciro)
-  endorse: (id: number, endorsedTo: string) =>
-    api.post(`/promissory-notes/${id}/endorse`, { endorsedTo }),
-
-  // Collect promissory note (Tahsil)
-  collect: (id: number) => api.post(`/promissory-notes/${id}/collect`),
-
-  // Default promissory note (Protestolu)
-  default: (id: number, defaultReason?: string) =>
-    api.post(`/promissory-notes/${id}/default`, { defaultReason }),
 };
 
 export default api

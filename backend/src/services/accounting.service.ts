@@ -30,25 +30,29 @@ export class AccountingService {
         hasPayment: prisma ? typeof prisma.payment : 'undefined',
       });
 
-      // 1. BU AY GELİR - Income tablosundan çekiyoruz
-      const incomes = await prisma.income.findMany({
+      // 1. BU AY GELİR - Ödenen faturalar toplamı
+      const paidInvoices = await prisma.invoice.findMany({
         where: {
-          date: {
+          invoiceDate: {
             gte: start,
             lte: end,
           },
-          status: 'received', // Sadece tahsil edilmiş gelirler
+          status: {
+            in: ['paid', 'partial_paid'],
+          },
         },
         select: {
-          amount: true,
+          paidAmount: true,
+          grandTotal: true,
+          status: true,
         },
       });
 
-      const totalRevenue = incomes.reduce((sum, income) => {
-        return sum + income.amount;
+      const totalRevenue = paidInvoices.reduce((sum, invoice) => {
+        return sum + invoice.paidAmount;
       }, 0);
 
-      // 2. BU AY TAHSİLAT - Ödeme kayıtları toplamı (invoice payments)
+      // 2. BU AY TAHSİLAT - Ödeme kayıtları toplamı
       const payments = await prisma.payment.findMany({
         where: {
           paymentDate: {
@@ -65,22 +69,25 @@ export class AccountingService {
         return sum + payment.amount;
       }, 0);
 
-      // 3. BU AY GİDER - Expense tablosundan çekiyoruz
-      const expenses = await prisma.expense.findMany({
+      // 3. BU AY GİDER - TODO: Expense model oluşturulduğunda güncellenecek
+      // Şimdilik gecikme cezası ve depozito iadeleri dahil edilebilir
+      const expenses = await prisma.invoice.findMany({
         where: {
-          date: {
+          invoiceDate: {
             gte: start,
             lte: end,
           },
-          status: 'paid', // Sadece ödenmiş giderler
+          type: {
+            in: ['deposit_refund'], // Depozito iadesi gider sayılır
+          },
         },
         select: {
-          amount: true,
+          grandTotal: true,
         },
       });
 
       const totalExpenses = expenses.reduce((sum, expense) => {
-        return sum + expense.amount;
+        return sum + Math.abs(expense.grandTotal); // Negatif değerler olabilir
       }, 0);
 
       // 4. NET KÂR
