@@ -106,8 +106,8 @@ const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
         <NotificationBanner />
         
         {/* Content */}
-        <div className={`p-6 ${isDarkMode ? 'text-white' : ''}`}>
-          <div className="max-w-5xl mx-auto w-full">
+        <div className="flex justify-center w-full">
+          <div className="max-w-5xl w-full p-6">
             {children}
           </div>
         </div>
