@@ -7,6 +7,12 @@ on:
     paths:
       - 'backend/**'
       - '.github/workflows/deploy-backend.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
   workflow_dispatch: # Manuel trigger için
 
 # Prevent concurrent deployments
@@ -50,6 +56,7 @@ jobs:
           npx prisma generate
 
       - name: Build and Deploy to Cloud Run
+        if: github.event_name == 'push'
         run: |
           cd backend
           gcloud run deploy ${{ env.SERVICE_NAME }} \
@@ -79,18 +86,19 @@ jobs:
           echo "Backend deployed to: $URL"
 
       - name: Health Check
+        if: github.event_name == 'push'
         run: |
           sleep 10
           curl -f ${{ steps.get-url.outputs.url }}/api/health || exit 1
 
       - name: Deployment Success Notification
-        if: success()
+        if: success() && github.event_name == 'push'
         run: |
           echo "✅ Backend deployment successful!"
           echo "URL: ${{ steps.get-url.outputs.url }}"
 
       - name: Deployment Failure Notification
-        if: failure()
+        if: failure() && github.event_name == 'push'
         run: |
           echo "❌ Backend deployment failed!"
           exit 1

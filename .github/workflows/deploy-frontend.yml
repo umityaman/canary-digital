@@ -7,6 +7,12 @@ on:
     paths:
       - 'frontend/**'
       - '.github/workflows/deploy-frontend.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
   workflow_dispatch: # Manuel trigger için
 
 # Prevent concurrent deployments
@@ -97,6 +103,7 @@ jobs:
           echo "=== End verification ==="
 
       - name: Deploy to Cloud Run
+        if: github.event_name == 'push'
         run: |
           cd frontend
           echo "Deploying to Cloud Run..."
@@ -122,19 +129,20 @@ jobs:
           echo "Frontend deployed to: $URL"
 
       - name: Health Check
+        if: github.event_name == 'push'
         run: |
           sleep 10
           curl -f ${{ steps.get-url.outputs.url }} || exit 1
 
       - name: Deployment Success Notification
-        if: success()
+        if: success() && github.event_name == 'push'
         run: |
           echo "✅ Frontend deployment successful!"
           echo "URL: ${{ steps.get-url.outputs.url }}"
           echo "Deployment timestamp: $(date)"
 
       - name: Deployment Failure Notification
-        if: failure()
+        if: failure() && github.event_name == 'push'
         run: |
           echo "❌ Frontend deployment failed!"
           exit 1
