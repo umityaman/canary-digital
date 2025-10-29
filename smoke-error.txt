@@ -1,0 +1,6 @@
+﻿Invoke-WebRequest : {"error":"Route not found","path":"/api/pdf/invoice/1"}
+At C:\Users\umity\Desktop\CANARY-BACKUP-20251008-1156\scripts\smoke-test.ps1:31 char:9
++         Invoke-WebRequest -Uri $pdfUrl -Method Get -Headers @{ Author ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand

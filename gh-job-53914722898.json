@@ -1,0 +1,132 @@
+﻿{
+    "id":  53914722898,
+    "run_id":  18889874452,
+    "workflow_name":  "Full Deployment (Backend + Frontend)",
+    "head_branch":  "main",
+    "run_url":  "https://api.github.com/repos/umityaman/canary-digital/actions/runs/18889874452",
+    "run_attempt":  1,
+    "node_id":  "CR_kwDOQETzf88AAAAMjZFiUg",
+    "head_sha":  "69f812101edc72bd1f85f4544fb0c641a3c31a55",
+    "url":  "https://api.github.com/repos/umityaman/canary-digital/actions/jobs/53914722898",
+    "html_url":  "https://github.com/umityaman/canary-digital/actions/runs/18889874452/job/53914722898",
+    "status":  "completed",
+    "conclusion":  "failure",
+    "created_at":  "2025-10-28T21:34:12Z",
+    "started_at":  "2025-10-28T21:34:14Z",
+    "completed_at":  "2025-10-28T21:35:40Z",
+    "name":  "Deploy Backend",
+    "steps":  [
+                  {
+                      "name":  "Set up job",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  1,
+                      "started_at":  "2025-10-28T21:34:14Z",
+                      "completed_at":  "2025-10-28T21:34:16Z"
+                  },
+                  {
+                      "name":  "Checkout Code",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  2,
+                      "started_at":  "2025-10-28T21:34:16Z",
+                      "completed_at":  "2025-10-28T21:34:17Z"
+                  },
+                  {
+                      "name":  "Google Auth",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  3,
+                      "started_at":  "2025-10-28T21:34:17Z",
+                      "completed_at":  "2025-10-28T21:34:17Z"
+                  },
+                  {
+                      "name":  "Set up Cloud SDK",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  4,
+                      "started_at":  "2025-10-28T21:34:17Z",
+                      "completed_at":  "2025-10-28T21:34:38Z"
+                  },
+                  {
+                      "name":  "Setup Node.js",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  5,
+                      "started_at":  "2025-10-28T21:34:38Z",
+                      "completed_at":  "2025-10-28T21:34:41Z"
+                  },
+                  {
+                      "name":  "Install backend dependencies and generate Prisma client",
+                      "status":  "completed",
+                      "conclusion":  "failure",
+                      "number":  6,
+                      "started_at":  "2025-10-28T21:34:41Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  },
+                  {
+                      "name":  "Deploy Backend to Cloud Run",
+                      "status":  "completed",
+                      "conclusion":  "skipped",
+                      "number":  7,
+                      "started_at":  "2025-10-28T21:35:38Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  },
+                  {
+                      "name":  "Get Backend URL",
+                      "status":  "completed",
+                      "conclusion":  "skipped",
+                      "number":  8,
+                      "started_at":  "2025-10-28T21:35:38Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  },
+                  {
+                      "name":  "Backend Health Check",
+                      "status":  "completed",
+                      "conclusion":  "skipped",
+                      "number":  9,
+                      "started_at":  "2025-10-28T21:35:38Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  },
+                  {
+                      "name":  "Post Setup Node.js",
+                      "status":  "completed",
+                      "conclusion":  "skipped",
+                      "number":  16,
+                      "started_at":  "2025-10-28T21:35:38Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  },
+                  {
+                      "name":  "Post Google Auth",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  17,
+                      "started_at":  "2025-10-28T21:35:38Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  },
+                  {
+                      "name":  "Post Checkout Code",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  18,
+                      "started_at":  "2025-10-28T21:35:38Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  },
+                  {
+                      "name":  "Complete job",
+                      "status":  "completed",
+                      "conclusion":  "success",
+                      "number":  19,
+                      "started_at":  "2025-10-28T21:35:38Z",
+                      "completed_at":  "2025-10-28T21:35:38Z"
+                  }
+              ],
+    "check_run_url":  "https://api.github.com/repos/umityaman/canary-digital/check-runs/53914722898",
+    "labels":  [
+                   "ubuntu-latest"
+               ],
+    "runner_id":  1000001560,
+    "runner_name":  "GitHub Actions 1000001560",
+    "runner_group_id":  0,
+    "runner_group_name":  "GitHub Actions"
+}
