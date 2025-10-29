@@ -249,10 +249,26 @@ jobs:
           }
           $body = @{ email = $env:SMOKE_USER; password = $env:SMOKE_PASS } | ConvertTo-Json
           # Use PowerShell expansion of environment variable inside the script
-          $resp = Invoke-RestMethod -Uri "$($env:BASE_URL)/api/auth/login" -Method Post -ContentType 'application/json' -Body $body -ErrorAction Stop
-          $token = $null
-          if ($null -ne $resp.token) { $token = $resp.token } elseif ($null -ne $resp.accessToken) { $token = $resp.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.accessToken) { $token = $resp.data.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.token) { $token = $resp.data.token }
-          if ($token) { $token | Out-File -FilePath login-token.txt -Encoding utf8; Write-Output 'Token saved to login-token.txt' } else { Write-Output 'No token in login response'; exit 1 }
+          try {
+            $resp = Invoke-RestMethod -Uri "$($env:BASE_URL)/api/auth/login" -Method Post -ContentType 'application/json' -Body $body -ErrorAction Stop
+            # Save full login response for debugging
+            $resp | ConvertTo-Json -Depth 6 | Out-File -FilePath login-response.json -Encoding utf8
+            $token = $null
+            if ($null -ne $resp.token) { $token = $resp.token } elseif ($null -ne $resp.accessToken) { $token = $resp.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.accessToken) { $token = $resp.data.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.token) { $token = $resp.data.token }
+            if ($token) { $token | Out-File -FilePath login-token.txt -Encoding utf8; Write-Output 'Token saved to login-token.txt' } else { Write-Output 'No token in login response'; exit 1 }
+          } catch {
+            Write-Output "Login failed: $($_.Exception.Message)"
+            try {
+              if ($_.Exception.Response) {
+                $stream = $_.Exception.Response.GetResponseStream()
+                $sr = New-Object System.IO.StreamReader($stream)
+                $bodyText = $sr.ReadToEnd()
+                $bodyText | Out-File -FilePath login-response.json -Encoding utf8
+                Write-Output 'Saved login response body to login-response.json'
+              }
+            } catch { }
+            exit 1
+          }
           PS1
           pwsh -NoProfile -ExecutionPolicy Bypass -File ./login-smoke.ps1
 
@@ -270,8 +286,12 @@ jobs:
           path: |
             invoices.json
             invoice-*.pdf
+            login-token.txt
+            login-response.json
+            smoke-extended-log.txt
             health-result-*.json
             smoke-extended-error.txt
+            smoke-extended-pdf-error-body.txt
 
   notify-failure:
     name: Deployment Failure

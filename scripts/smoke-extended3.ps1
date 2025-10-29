@@ -8,6 +8,10 @@ Set-Location -Path '..'  # repo root
 $baseUrl = 'https://canary-backend-672344972017.europe-west1.run.app'
 Write-Output "==> Extended smoke tests (list -> create if needed -> pdf -> health)"
 
+# Initialize smoke log
+if (Test-Path .\smoke-extended-log.txt) { Remove-Item .\smoke-extended-log.txt -ErrorAction SilentlyContinue }
+"$(Get-Date -Format o) - Smoke run started" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8
+
 try {
     if (-Not (Test-Path .\login-token.txt)) {
         throw "login-token.txt not found. Run the login step first or run scripts/smoke-test.ps1"
@@ -21,9 +25,10 @@ try {
     $invoicesList = @()
     try {
         $invoicesResp = Invoke-RestMethod -Uri "$baseUrl/api/invoices" -Headers $headers -Method Get -ErrorAction Stop
-        if ($invoicesResp -is [System.Collections.IDictionary] -and $invoicesResp.ContainsKey('data')) { $invoicesList = $invoicesResp.data } else { $invoicesList = $invoicesResp }
-        $invoicesList | ConvertTo-Json -Depth 6 | Out-File -FilePath invoices.json -Encoding utf8
-        Write-Output "Saved invoices.json"
+    if ($invoicesResp -is [System.Collections.IDictionary] -and $invoicesResp.ContainsKey('data')) { $invoicesList = $invoicesResp.data } else { $invoicesList = $invoicesResp }
+    $invoicesList | ConvertTo-Json -Depth 6 | Out-File -FilePath invoices.json -Encoding utf8
+    Write-Output "Saved invoices.json"
+    "$(Get-Date -Format o) - Saved invoices.json with $($invoicesList.Count) entries" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
     } catch {
         Write-Output "List invoices failed: $($_.Exception.Message)"
         try {
@@ -31,6 +36,7 @@ try {
             if ($invoicesResp -is [System.Collections.IDictionary] -and $invoicesResp.ContainsKey('data')) { $invoicesList = $invoicesResp.data } else { $invoicesList = $invoicesResp }
             $invoicesList | ConvertTo-Json -Depth 6 | Out-File -FilePath invoices.json -Encoding utf8
             Write-Output "Saved invoices.json (fallback /api/invoice)"
+            "$(Get-Date -Format o) - Saved invoices.json (fallback /api/invoice) with $($invoicesList.Count) entries" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
         } catch {
             Write-Output "Both invoice list attempts failed: $($_.Exception.Message)"
         }
@@ -76,10 +82,11 @@ try {
                 $createResp = Invoke-RestMethod -Uri ($baseUrl + $ep) -Method Post -ContentType 'application/json' -Body $body -Headers $headers -ErrorAction Stop
                 $createResp | ConvertTo-Json -Depth 6 | Out-File -FilePath invoice-create.json -Encoding utf8
                 Write-Output "Create response saved to invoice-create.json"
+                "$(Get-Date -Format o) - Create response saved to invoice-create.json" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
                 if ($createResp.id) { $selectedId = $createResp.id }
                 elseif ($createResp.invoiceId) { $selectedId = $createResp.invoiceId }
                 elseif ($createResp.data -and $createResp.data.id) { $selectedId = $createResp.data.id }
-                if ($selectedId) { Write-Output "Created invoice id: $selectedId"; break }
+                if ($selectedId) { Write-Output "Created invoice id: $selectedId"; "$(Get-Date -Format o) - Created invoice id: $selectedId" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append; break }
             } catch {
                 Write-Output "Create attempt $ep failed: $($_.Exception.Message)"
             }
@@ -93,8 +100,12 @@ try {
     try {
         Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile "invoice-$selectedId.pdf" -UseBasicParsing -ErrorAction Stop
         Write-Output "Invoice PDF saved to invoice-$selectedId.pdf"
+        # Log filename and size
+        $fi = Get-Item -Path "invoice-$selectedId.pdf"
+        "$(Get-Date -Format o) - Saved invoice-$selectedId.pdf ($([math]::Round($fi.Length/1KB,2)) KB)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
     } catch {
         Write-Output "Failed to download PDF: $($_.Exception.Message)"
+        "$(Get-Date -Format o) - Failed to download PDF for id=$selectedId: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
         try {
             if ($_.Exception.Response) {
                 $resp = $_.Exception.Response.GetResponseStream()
@@ -102,6 +113,7 @@ try {
                 $body = $sr.ReadToEnd()
                 $body | Out-File -FilePath smoke-extended-pdf-error-body.txt -Encoding utf8
                 Write-Output "Response body saved to smoke-extended-pdf-error-body.txt"
+                "$(Get-Date -Format o) - Saved PDF error body to smoke-extended-pdf-error-body.txt" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
             }
         } catch { }
     }
@@ -115,6 +127,7 @@ try {
             $r = Invoke-RestMethod -Uri $u -Method Get -ErrorAction Stop
             $r | ConvertTo-Json -Depth 6 | Out-File -FilePath ("health-result-" + ($p -replace '/','_') + ".json") -Encoding utf8
             Write-Output "Health path $p returned OK; saved health-result-$($p -replace '/','_').json"
+            "$(Get-Date -Format o) - Health path $p returned OK" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
             break
         } catch {
             Write-Output "Health path $p failed: $($_.Exception.Message)"
@@ -122,10 +135,12 @@ try {
     }
 
     Write-Output "==> Extended smoke finished"
+    "$(Get-Date -Format o) - Extended smoke finished" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
     exit 0
 }
 catch {
     Write-Output "ERROR: $($_.Exception.Message)"
     $_ | Out-File -FilePath smoke-extended-error.txt -Encoding utf8
+    "$(Get-Date -Format o) - ERROR: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
     exit 1
 }
