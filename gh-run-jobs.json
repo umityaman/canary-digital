@@ -1,0 +1,30 @@
+﻿[
+    {
+        "id":  53916314000,
+        "name":  "Deploy Backend",
+        "conclusion":  "failure",
+        "status":  "completed",
+        "html_url":  "https://github.com/umityaman/canary-digital/actions/runs/18890353233/job/53916314000"
+    },
+    {
+        "id":  53916407485,
+        "name":  "Deploy Frontend",
+        "conclusion":  "skipped",
+        "status":  "completed",
+        "html_url":  "https://github.com/umityaman/canary-digital/actions/runs/18890353233/job/53916407485"
+    },
+    {
+        "id":  53916407520,
+        "name":  "Deployment Failure",
+        "conclusion":  "failure",
+        "status":  "completed",
+        "html_url":  "https://github.com/umityaman/canary-digital/actions/runs/18890353233/job/53916407520"
+    },
+    {
+        "id":  53916407680,
+        "name":  "Deployment Success",
+        "conclusion":  "skipped",
+        "status":  "completed",
+        "html_url":  "https://github.com/umityaman/canary-digital/actions/runs/18890353233/job/53916407680"
+    }
+]
