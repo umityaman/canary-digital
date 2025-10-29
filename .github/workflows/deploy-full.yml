@@ -258,7 +258,9 @@ jobs:
 
       - name: Run extended smoke script
         run: |
-          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\smoke-extended3.ps1
+          # Use Unix-style path on Linux runners (bash) — backslashes were being removed
+          # resulting in a malformed script path like '.scriptssmoke-extended3.ps1'.
+          pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/smoke-extended3.ps1
 
       - name: Upload smoke artifacts
         if: always()
