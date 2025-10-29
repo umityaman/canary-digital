@@ -38,8 +38,10 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd frontend
-          npm ci
+          echo "Installing npm workspaces at repository root"
+          echo "Repo root: $(pwd)"
+          echo "node: $(node -v) npm: $(npm -v)"
+          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
 
       - name: Google Auth
         uses: google-github-actions/auth@v2
