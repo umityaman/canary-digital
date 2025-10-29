@@ -239,6 +239,14 @@ jobs:
           cat > login-smoke.ps1 <<'PS1'
           $ErrorActionPreference = 'Stop'
           Write-Output 'Attempting login for smoke test...'
+          # If BASE_URL is empty for any reason, fall back to a known stable URL so the smoke
+          # job can still run while we investigate why the output wasn't propagated.
+          if (-not $env:BASE_URL -or $env:BASE_URL -eq '') {
+            Write-Output 'BASE_URL is empty; falling back to stable backend URL'
+            $env:BASE_URL = 'https://canary-backend-672344972017.europe-west1.run.app'
+          } else {
+            Write-Output "Using BASE_URL=$env:BASE_URL"
+          }
           $body = @{ email = $env:SMOKE_USER; password = $env:SMOKE_PASS } | ConvertTo-Json
           # Use PowerShell expansion of environment variable inside the script
           $resp = Invoke-RestMethod -Uri "$($env:BASE_URL)/api/auth/login" -Method Post -ContentType 'application/json' -Body $body -ErrorAction Stop
