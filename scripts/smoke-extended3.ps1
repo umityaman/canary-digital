@@ -105,7 +105,7 @@ try {
         "$(Get-Date -Format o) - Saved invoice-$selectedId.pdf ($([math]::Round($fi.Length/1KB,2)) KB)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
     } catch {
         Write-Output "Failed to download PDF: $($_.Exception.Message)"
-        "$(Get-Date -Format o) - Failed to download PDF for id=$selectedId: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+    "$(Get-Date -Format o) - Failed to download PDF for id=$($selectedId): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
         try {
             if ($_.Exception.Response) {
                 $resp = $_.Exception.Response.GetResponseStream()
