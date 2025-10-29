@@ -217,6 +217,48 @@ jobs:
           echo "Backend: ${{ needs.deploy-backend.outputs.backend-url }}"
           echo "Frontend: Check Cloud Run console"
 
+  post-deploy-smoke:
+    name: Post-deploy smoke tests
+    runs-on: ubuntu-latest
+    needs: deploy-frontend
+    continue-on-error: true
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run login and save token
+        env:
+          BASE_URL: ${{ needs.deploy-backend.outputs.backend-url }}
+          SMOKE_USER: ${{ secrets.SMOKE_USER }}
+          SMOKE_PASS: ${{ secrets.SMOKE_PASS }}
+        run: |
+          pwsh -NoProfile -Command "
+            $ErrorActionPreference = 'Stop';
+            Write-Output 'Attempting login for smoke test...';
+            $body = @{ email = $env:SMOKE_USER; password = $env:SMOKE_PASS } | ConvertTo-Json;
+            $resp = Invoke-RestMethod -Uri "$env:BASE_URL/api/auth/login" -Method Post -ContentType 'application/json' -Body $body -ErrorAction Stop;
+            $token = $null;
+            if ($null -ne $resp.token) { $token = $resp.token } elseif ($null -ne $resp.accessToken) { $token = $resp.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.accessToken) { $token = $resp.data.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.token) { $token = $resp.data.token };
+            if ($token) { $token | Out-File -FilePath login-token.txt -Encoding utf8; Write-Output 'Token saved to login-token.txt' } else { Write-Output 'No token in login response'; exit 1 }
+          "
+
+      - name: Run extended smoke script
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\smoke-extended3.ps1
+
+      - name: Upload smoke artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-artifacts
+          path: |
+            invoices.json
+            invoice-*.pdf
+            health-result-*.json
+            smoke-extended-error.txt
+
   notify-failure:
     name: Deployment Failure
     runs-on: ubuntu-latest
