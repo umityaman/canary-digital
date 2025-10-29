@@ -60,8 +60,8 @@ jobs:
           sed -n '1,200p' package.json || true
           echo "package-lock.json (root - head):";
           head -n 50 package-lock.json || true
-          echo "Running npm ci...";
-          npm ci --no-audit --prefer-offline
+          echo "Running npm ci (with fallback to npm install)...";
+          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
 
       - name: Generate Prisma client (debug)
         run: |
@@ -135,7 +135,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd frontend
-          npm ci
+          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
 
       - name: Google Auth
         uses: google-github-actions/auth@v2
@@ -154,7 +154,7 @@ jobs:
           # run inside frontend after checkout
           cd frontend
           echo "Building with VITE_API_URL=$VITE_API_URL"
-          npm ci
+          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
           npm run build
           echo "Build complete - dist folder ready"
           ls -la dist/

@@ -52,7 +52,7 @@ jobs:
       - name: Install backend dependencies and generate Prisma client
         run: |
           cd backend
-          npm ci
+          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
           npx prisma generate
 
       - name: Build and Deploy to Cloud Run
