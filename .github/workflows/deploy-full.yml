@@ -114,9 +114,9 @@ jobs:
     name: Deploy Frontend
     runs-on: ubuntu-latest
     needs: deploy-backend
-    defaults:
-      run:
-        working-directory: frontend
+    # Do not use job-level working-directory (it caused npm ci to run inside subfolder
+    # and fail for npm workspaces). We'll run installs at repo root and explicitly cd
+    # into frontend for build steps.
     
     steps:
       - name: Checkout Code
@@ -129,10 +129,13 @@ jobs:
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install Dependencies
+      - name: Install Dependencies (root workspaces)
         run: |
-          cd frontend
-          npm ci
+          echo "Installing npm workspaces at repository root"
+          echo "Repo root: $(pwd)"
+          echo "node: $(node -v) npm: $(npm -v)"
+          # Install workspace packages from root so npm ci can respect the root lockfile
+          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
 
       - name: Google Auth
         uses: google-github-actions/auth@v2
@@ -149,7 +152,7 @@ jobs:
           VITE_API_URL: ${{ needs.deploy-backend.outputs.backend-url }}/api
         run: |
           echo "Building with VITE_API_URL=$VITE_API_URL"
-          npm ci
+          cd frontend
           npm run build
           echo "Build complete - dist folder ready"
           ls -la dist/
