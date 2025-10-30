@@ -101,16 +101,16 @@ try {
     $pdfSaved = $false
     for ($attempt = 1; $attempt -le 3; $attempt++) {
         try {
-            Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile "invoice-$selectedId.pdf" -UseBasicParsing -ErrorAction Stop
-            Write-Output "Invoice PDF saved to invoice-$selectedId.pdf"
+            Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile "invoice-$($selectedId).pdf" -UseBasicParsing -ErrorAction Stop
+            Write-Output "Invoice PDF saved to invoice-$($selectedId).pdf"
             # Log filename and size
-            $fi = Get-Item -Path "invoice-$selectedId.pdf"
-            "$(Get-Date -Format o) - Saved invoice-$selectedId.pdf ($([math]::Round($fi.Length/1KB,2)) KB) (attempt $attempt)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            $fi = Get-Item -Path "invoice-$($selectedId).pdf"
+            "$(Get-Date -Format o) - Saved invoice-$($selectedId).pdf ($([math]::Round($fi.Length/1KB,2)) KB) (attempt $($attempt))" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
             $pdfSaved = $true
             break
         } catch {
-            Write-Output "Failed to download PDF (attempt $attempt): $($_.Exception.Message)"
-            "$(Get-Date -Format o) - Failed to download PDF for id=$($selectedId) on attempt $attempt: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            Write-Output "Failed to download PDF (attempt $($attempt)): $($_.Exception.Message)"
+            "$(Get-Date -Format o) - Failed to download PDF for id=$($selectedId) on attempt $($attempt): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
             if ($attempt -lt 3) { Start-Sleep -Seconds (5 * $attempt) }
             else {
                 try {
