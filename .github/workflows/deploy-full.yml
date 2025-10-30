@@ -311,6 +311,18 @@ jobs:
             echo "Verified $file"
           done < pdf-hashes.txt
           echo "All PDF hashes verified"
+          # Extra verification: ensure pdf-results.json reports all downloads as success
+          if [ -f pdf-results.json ]; then
+            if grep -E '"success"\s*:\s*false' -q pdf-results.json; then
+              echo "One or more PDF downloads failed according to pdf-results.json"; exit 5
+            fi
+            if grep -E '"savedFile"\s*:\s*null' -q pdf-results.json; then
+              echo "One or more pdf-results.json entries have null savedFile"; exit 6
+            fi
+            echo "pdf-results.json verification passed"
+          else
+            echo "pdf-results.json not present; skipping results verification"
+          fi
 
       - name: Upload smoke artifacts
         if: always()
@@ -322,6 +334,8 @@ jobs:
             invoice-*.pdf
             pdf-hashes.txt
             pdf-missing.txt
+            pdf-results.json
+            smoke-extended-pdf-error-body-*.txt
             login-response.json
             smoke-extended-log.txt
             health-result-*.json

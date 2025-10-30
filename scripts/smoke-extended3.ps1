@@ -76,6 +76,9 @@ try {
         }
     }
 
+    # Prepare results array to collect per-PDF metadata for artifact and CI verification
+    $resultsArray = @()
+
     # choose invoice id if available
     $selectedId = $null
     if ($invoicesList -and $invoicesList.Count -gt 0) {
@@ -133,7 +136,23 @@ try {
         foreach ($id in $idsToDownload) {
             $pdfUrl = "$baseUrl/api/pdf/invoice/$id"
             $pdfSaved = $false
+            # Prepare per-id result object
+            $result = [ordered]@{
+                id = $id
+                attempts = 0
+                success = $false
+                statusCode = $null
+                responseSizeBytes = $null
+                savedFile = $null
+                fileSizeBytes = $null
+                sha256 = $null
+                errorBodyFile = $null
+                startedAt = (Get-Date).ToString('o')
+                finishedAt = $null
+                notes = $null
+            }
             for ($attempt = 1; $attempt -le 3; $attempt++) {
+                $result.attempts = $attempt
                 try {
                     $outFile = "invoice-$($id).pdf"
                     Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile $outFile -UseBasicParsing -ErrorAction Stop
@@ -146,34 +165,53 @@ try {
                         $hash = Get-FileHash -Path $outFile -Algorithm SHA256
                         "$($hash.Hash)  $outFile" | Out-File -FilePath pdf-hashes.txt -Encoding utf8 -Append
                         "$(Get-Date -Format o) - SHA256 $($outFile): $($hash.Hash)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                        $result.sha256 = $hash.Hash.ToUpper()
                     } catch {
                         "$(Get-Date -Format o) - Could not compute SHA256 for $($outFile): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                        $result.notes = "Could not compute SHA256: $($_.Exception.Message)"
                     }
+                    # fill result success fields
+                    $result.success = $true
+                    $result.savedFile = $outFile
+                    $result.fileSizeBytes = $fi.Length
+                    $result.finishedAt = (Get-Date).ToString('o')
                     $pdfSaved = $true
                     $downloadedAny = $true
                     break
                 } catch {
                     Write-Output "Failed to download PDF for id=$id (attempt $($attempt)): $($_.Exception.Message)"
                     "$(Get-Date -Format o) - Failed to download PDF for id=$id on attempt $($attempt): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-                    if ($attempt -lt 3) { Start-Sleep -Seconds (5 * $attempt) }
-                    else {
-                        try {
-                            if ($_.Exception.Response) {
-                                $resp = $_.Exception.Response.GetResponseStream()
-                                $sr = New-Object System.IO.StreamReader($resp)
-                                $body = $sr.ReadToEnd()
-                                $body | Out-File -FilePath smoke-extended-pdf-error-body.txt -Encoding utf8
-                                Write-Output "Response body saved to smoke-extended-pdf-error-body.txt"
-                                "$(Get-Date -Format o) - Saved PDF error body to smoke-extended-pdf-error-body.txt" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-                            }
-                        } catch { }
+                    # try to capture response body/status when available
+                    try {
+                        if ($_.Exception.Response) {
+                            # attempt to read status code if present
+                            try { $status = $_.Exception.Response.StatusCode } catch { $status = $null }
+                            if ($status) { $result.statusCode = $status }
+                            $resp = $_.Exception.Response.GetResponseStream()
+                            $sr = New-Object System.IO.StreamReader($resp)
+                            $body = $sr.ReadToEnd()
+                            $errFile = "smoke-extended-pdf-error-body-$($id).txt"
+                            $body | Out-File -FilePath $errFile -Encoding utf8
+                            Write-Output "Response body saved to $errFile"
+                            "$(Get-Date -Format o) - Saved PDF error body to $errFile" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                            $result.errorBodyFile = $errFile
+                            $result.responseSizeBytes = [Text.Encoding]::UTF8.GetByteCount($body)
+                        }
+                    } catch {
+                        $result.notes = "Could not capture error body: $($_.Exception.Message)"
                     }
+                    if ($attempt -lt 3) { Start-Sleep -Seconds (5 * $attempt) }
                 }
             }
             if (-not $pdfSaved) {
                 Write-Output "Could not download PDF after retries for id=$id"
                 $missing += $id
+                $result.success = $false
+                $result.finishedAt = (Get-Date).ToString('o')
+                if (-not $result.errorBodyFile) { $result.notes = "Download failed after retries" }
             }
+            # append per-id result
+            $resultsArray += [PSCustomObject]$result
         }
         if (-not $downloadedAny) {
             Write-Output "No PDFs were downloaded."
@@ -183,6 +221,14 @@ try {
             $missing | Out-File -FilePath pdf-missing.txt -Encoding utf8
             "$(Get-Date -Format o) - Missing PDFs for ids: $($missing -join ',')" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
         }
+
+    # Dump per-invoice results to JSON for artifact/CI verification
+    try {
+        $resultsArray | ConvertTo-Json -Depth 6 | Out-File -FilePath pdf-results.json -Encoding utf8
+        "$(Get-Date -Format o) - Wrote pdf-results.json with $($resultsArray.Count) entries" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+    } catch {
+        "$(Get-Date -Format o) - Failed to write pdf-results.json: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+    }
 
     
 
