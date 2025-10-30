@@ -295,6 +295,23 @@ jobs:
           # resulting in a malformed script path like '.scriptssmoke-extended3.ps1'.
           pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/smoke-extended3.ps1
 
+      - name: Verify PDF hashes
+        run: |
+          set -e
+          echo "Verifying pdf-hashes.txt against downloaded invoice-*.pdf files"
+          if [ ! -f pdf-hashes.txt ]; then echo "pdf-hashes.txt not found"; exit 2; fi
+          while IFS= read -r line || [ -n "$line" ]; do
+            # pdf-hashes.txt lines are: <HEX>  <filename>
+            hash=$(echo "$line" | awk '{print $1}')
+            file=$(echo "$line" | awk '{print $2}')
+            if [ ! -f "$file" ]; then echo "Missing expected file: $file"; exit 3; fi
+            calc=$(sha256sum "$file" | awk '{print $1}' | tr '[:lower:]' '[:upper:]')
+            expected=$(echo "$hash" | tr '[:lower:]' '[:upper:]')
+            if [ "$calc" != "$expected" ]; then echo "Hash mismatch for $file: expected $expected got $calc"; exit 4; fi
+            echo "Verified $file"
+          done < pdf-hashes.txt
+          echo "All PDF hashes verified"
+
       - name: Upload smoke artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -304,6 +321,7 @@ jobs:
             invoices.json
             invoice-*.pdf
             pdf-hashes.txt
+            pdf-missing.txt
             login-response.json
             smoke-extended-log.txt
             health-result-*.json

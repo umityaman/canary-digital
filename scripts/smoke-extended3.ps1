@@ -114,6 +114,75 @@ try {
     }
 
     if (-Not $selectedId) { throw "Could not determine an invoice id to request PDF for." }
+    
+        # Prepare list of invoice ids to download: if we have a list, download all; otherwise the single selectedId
+        $idsToDownload = @()
+        if ($invoicesList -and $invoicesList.Count -gt 0) {
+            foreach ($inv in $invoicesList) {
+                if ($inv.id) { $idsToDownload += $inv.id }
+                elseif ($inv.invoiceId) { $idsToDownload += $inv.invoiceId }
+                elseif ($inv.ID) { $idsToDownload += $inv.ID }
+            }
+        } else {
+            $idsToDownload += $selectedId
+        }
+    
+        Write-Output "==> Attempting to download invoice PDFs for ids: $($idsToDownload -join ',') using POST"
+        $downloadedAny = $false
+        $missing = @()
+        foreach ($id in $idsToDownload) {
+            $pdfUrl = "$baseUrl/api/pdf/invoice/$id"
+            $pdfSaved = $false
+            for ($attempt = 1; $attempt -le 3; $attempt++) {
+                try {
+                    $outFile = "invoice-$($id).pdf"
+                    Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile $outFile -UseBasicParsing -ErrorAction Stop
+                    Write-Output "Invoice PDF saved to $outFile"
+                    # Log filename and size
+                    $fi = Get-Item -Path $outFile
+                    "$(Get-Date -Format o) - Saved $outFile ($([math]::Round($fi.Length/1KB,2)) KB) (attempt $($attempt))" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                    # Compute SHA256 of the downloaded PDF and append to pdf-hashes.txt
+                    try {
+                        $hash = Get-FileHash -Path $outFile -Algorithm SHA256
+                        "$($hash.Hash)  $outFile" | Out-File -FilePath pdf-hashes.txt -Encoding utf8 -Append
+                        "$(Get-Date -Format o) - SHA256 $outFile: $($hash.Hash)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                    } catch {
+                        "$(Get-Date -Format o) - Could not compute SHA256 for $outFile: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                    }
+                    $pdfSaved = $true
+                    $downloadedAny = $true
+                    break
+                } catch {
+                    Write-Output "Failed to download PDF for id=$id (attempt $($attempt)): $($_.Exception.Message)"
+                    "$(Get-Date -Format o) - Failed to download PDF for id=$id on attempt $($attempt): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                    if ($attempt -lt 3) { Start-Sleep -Seconds (5 * $attempt) }
+                    else {
+                        try {
+                            if ($_.Exception.Response) {
+                                $resp = $_.Exception.Response.GetResponseStream()
+                                $sr = New-Object System.IO.StreamReader($resp)
+                                $body = $sr.ReadToEnd()
+                                $body | Out-File -FilePath smoke-extended-pdf-error-body.txt -Encoding utf8
+                                Write-Output "Response body saved to smoke-extended-pdf-error-body.txt"
+                                "$(Get-Date -Format o) - Saved PDF error body to smoke-extended-pdf-error-body.txt" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                            }
+                        } catch { }
+                    }
+                }
+            }
+            if (-not $pdfSaved) {
+                Write-Output "Could not download PDF after retries for id=$id"
+                $missing += $id
+            }
+        }
+        if (-not $downloadedAny) {
+            Write-Output "No PDFs were downloaded."
+        }
+        # If any downloads failed, write missing ids to pdf-missing.txt for artifact collection
+        if ($missing -and $missing.Count -gt 0) {
+            $missing | Out-File -FilePath pdf-missing.txt -Encoding utf8
+            "$(Get-Date -Format o) - Missing PDFs for ids: $($missing -join ',')" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+        }
 
     Write-Output "==> Attempting to download invoice PDF (id=$selectedId) using POST"
     $pdfUrl = "$baseUrl/api/pdf/invoice/$selectedId"
