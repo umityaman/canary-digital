@@ -97,25 +97,37 @@ try {
 
     Write-Output "==> Attempting to download invoice PDF (id=$selectedId) using POST"
     $pdfUrl = "$baseUrl/api/pdf/invoice/$selectedId"
-    try {
-        Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile "invoice-$selectedId.pdf" -UseBasicParsing -ErrorAction Stop
-        Write-Output "Invoice PDF saved to invoice-$selectedId.pdf"
-        # Log filename and size
-        $fi = Get-Item -Path "invoice-$selectedId.pdf"
-        "$(Get-Date -Format o) - Saved invoice-$selectedId.pdf ($([math]::Round($fi.Length/1KB,2)) KB)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-    } catch {
-        Write-Output "Failed to download PDF: $($_.Exception.Message)"
-    "$(Get-Date -Format o) - Failed to download PDF for id=$($selectedId): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+    # Attempt PDF download with retries
+    $pdfSaved = $false
+    for ($attempt = 1; $attempt -le 3; $attempt++) {
         try {
-            if ($_.Exception.Response) {
-                $resp = $_.Exception.Response.GetResponseStream()
-                $sr = New-Object System.IO.StreamReader($resp)
-                $body = $sr.ReadToEnd()
-                $body | Out-File -FilePath smoke-extended-pdf-error-body.txt -Encoding utf8
-                Write-Output "Response body saved to smoke-extended-pdf-error-body.txt"
-                "$(Get-Date -Format o) - Saved PDF error body to smoke-extended-pdf-error-body.txt" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile "invoice-$selectedId.pdf" -UseBasicParsing -ErrorAction Stop
+            Write-Output "Invoice PDF saved to invoice-$selectedId.pdf"
+            # Log filename and size
+            $fi = Get-Item -Path "invoice-$selectedId.pdf"
+            "$(Get-Date -Format o) - Saved invoice-$selectedId.pdf ($([math]::Round($fi.Length/1KB,2)) KB) (attempt $attempt)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            $pdfSaved = $true
+            break
+        } catch {
+            Write-Output "Failed to download PDF (attempt $attempt): $($_.Exception.Message)"
+            "$(Get-Date -Format o) - Failed to download PDF for id=$($selectedId) on attempt $attempt: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            if ($attempt -lt 3) { Start-Sleep -Seconds (5 * $attempt) }
+            else {
+                try {
+                    if ($_.Exception.Response) {
+                        $resp = $_.Exception.Response.GetResponseStream()
+                        $sr = New-Object System.IO.StreamReader($resp)
+                        $body = $sr.ReadToEnd()
+                        $body | Out-File -FilePath smoke-extended-pdf-error-body.txt -Encoding utf8
+                        Write-Output "Response body saved to smoke-extended-pdf-error-body.txt"
+                        "$(Get-Date -Format o) - Saved PDF error body to smoke-extended-pdf-error-body.txt" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                    }
+                } catch { }
             }
-        } catch { }
+        }
+    }
+    if (-not $pdfSaved) {
+        Write-Output "Could not download PDF after retries for id=$selectedId"
     }
 
     Write-Output "==> Running health checks"

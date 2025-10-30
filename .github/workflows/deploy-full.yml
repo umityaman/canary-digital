@@ -249,25 +249,42 @@ jobs:
           }
           $body = @{ email = $env:SMOKE_USER; password = $env:SMOKE_PASS } | ConvertTo-Json
           # Use PowerShell expansion of environment variable inside the script
-          try {
-            $resp = Invoke-RestMethod -Uri "$($env:BASE_URL)/api/auth/login" -Method Post -ContentType 'application/json' -Body $body -ErrorAction Stop
-            # Save full login response for debugging
-            $resp | ConvertTo-Json -Depth 6 | Out-File -FilePath login-response.json -Encoding utf8
+          # Retry login up to 3 times with exponential backoff
+          $resp = $null
+          for ($i = 1; $i -le 3; $i++) {
+            try {
+              $resp = Invoke-RestMethod -Uri "$($env:BASE_URL)/api/auth/login" -Method Post -ContentType 'application/json' -Body $body -ErrorAction Stop
+              break
+            } catch {
+              Write-Output "Login attempt $i failed: $($_.Exception.Message)"
+              if ($i -lt 3) { Start-Sleep -Seconds (5 * $i) } else {
+                # on final failure, try to save response body for debugging then exit
+                try {
+                  if ($_.Exception.Response) {
+                    $stream = $_.Exception.Response.GetResponseStream()
+                    $sr = New-Object System.IO.StreamReader($stream)
+                    $bodyText = $sr.ReadToEnd()
+                    $bodyText | Out-File -FilePath login-response-body.txt -Encoding utf8
+                    Write-Output 'Saved login response body to login-response-body.txt'
+                  }
+                } catch { }
+                Write-Output 'Login failed after 3 attempts'; exit 1
+              }
+            }
+          }
+
+          # If login succeeded, extract token and save sanitized login response (no token)
+          if ($null -ne $resp) {
             $token = $null
             if ($null -ne $resp.token) { $token = $resp.token } elseif ($null -ne $resp.accessToken) { $token = $resp.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.accessToken) { $token = $resp.data.accessToken } elseif ($null -ne $resp.data -and $null -ne $resp.data.token) { $token = $resp.data.token }
             if ($token) { $token | Out-File -FilePath login-token.txt -Encoding utf8; Write-Output 'Token saved to login-token.txt' } else { Write-Output 'No token in login response'; exit 1 }
-          } catch {
-            Write-Output "Login failed: $($_.Exception.Message)"
-            try {
-              if ($_.Exception.Response) {
-                $stream = $_.Exception.Response.GetResponseStream()
-                $sr = New-Object System.IO.StreamReader($stream)
-                $bodyText = $sr.ReadToEnd()
-                $bodyText | Out-File -FilePath login-response.json -Encoding utf8
-                Write-Output 'Saved login response body to login-response.json'
-              }
-            } catch { }
-            exit 1
+            # Save sanitized login response without token for debugging
+            $safe = @{}
+            if ($resp.PSObject.Properties['message']) { $safe.message = $resp.message }
+            if ($resp.PSObject.Properties['user']) { $safe.user = $resp.user }
+            $safe | ConvertTo-Json -Depth 6 | Out-File -FilePath login-response.json -Encoding utf8
+          } else {
+            Write-Output 'Login response missing after retries'; exit 1
           }
           PS1
           pwsh -NoProfile -ExecutionPolicy Bypass -File ./login-smoke.ps1
