@@ -28,7 +28,17 @@ try {
     if ($invoicesResp -is [System.Collections.IDictionary] -and $invoicesResp.ContainsKey('data')) { $invoicesList = $invoicesResp.data } else { $invoicesList = $invoicesResp }
     $invoicesList | ConvertTo-Json -Depth 6 | Out-File -FilePath invoices.json -Encoding utf8
     Write-Output "Saved invoices.json"
-    "$(Get-Date -Format o) - Saved invoices.json with $($invoicesList.Count) entries" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+    # Re-read saved file to log the actual saved entry count for artifact/log consistency
+    try {
+        $savedRaw = Get-Content .\invoices.json -Raw
+        $savedJson = $savedRaw | ConvertFrom-Json
+        $savedCount = 0
+        if ($savedJson -and $savedJson.data) { $savedCount = $savedJson.data.Count }
+        elseif ($savedJson -is [System.Collections.IEnumerable]) { $savedCount = ($savedJson | Measure-Object).Count }
+        "$(Get-Date -Format o) - Saved invoices.json with $($savedCount) entries" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+    } catch {
+        "$(Get-Date -Format o) - Saved invoices.json (could not re-parse saved file)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+    }
     } catch {
         Write-Output "List invoices failed: $($_.Exception.Message)"
         try {
@@ -36,7 +46,17 @@ try {
             if ($invoicesResp -is [System.Collections.IDictionary] -and $invoicesResp.ContainsKey('data')) { $invoicesList = $invoicesResp.data } else { $invoicesList = $invoicesResp }
             $invoicesList | ConvertTo-Json -Depth 6 | Out-File -FilePath invoices.json -Encoding utf8
             Write-Output "Saved invoices.json (fallback /api/invoice)"
-            "$(Get-Date -Format o) - Saved invoices.json (fallback /api/invoice) with $($invoicesList.Count) entries" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            # Re-read saved file to log actual saved entry count
+            try {
+                $savedRaw = Get-Content .\invoices.json -Raw
+                $savedJson = $savedRaw | ConvertFrom-Json
+                $savedCount = 0
+                if ($savedJson -and $savedJson.data) { $savedCount = $savedJson.data.Count }
+                elseif ($savedJson -is [System.Collections.IEnumerable]) { $savedCount = ($savedJson | Measure-Object).Count }
+                "$(Get-Date -Format o) - Saved invoices.json (fallback /api/invoice) with $($savedCount) entries" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            } catch {
+                "$(Get-Date -Format o) - Saved invoices.json (fallback) (could not re-parse saved file)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            }
         } catch {
             Write-Output "Both invoice list attempts failed: $($_.Exception.Message)"
         }
@@ -106,6 +126,14 @@ try {
             # Log filename and size
             $fi = Get-Item -Path "invoice-$($selectedId).pdf"
             "$(Get-Date -Format o) - Saved invoice-$($selectedId).pdf ($([math]::Round($fi.Length/1KB,2)) KB) (attempt $($attempt))" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            # Compute SHA256 of the downloaded PDF and append to pdf-hashes.txt
+            try {
+                $hash = Get-FileHash -Path "invoice-$($selectedId).pdf" -Algorithm SHA256
+                "$($hash.Hash)  invoice-$($selectedId).pdf" | Out-File -FilePath pdf-hashes.txt -Encoding utf8 -Append
+                "$(Get-Date -Format o) - SHA256 invoice-$($selectedId).pdf: $($hash.Hash)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            } catch {
+                "$(Get-Date -Format o) - Could not compute SHA256 for invoice-$($selectedId).pdf: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+            }
             $pdfSaved = $true
             break
         } catch {

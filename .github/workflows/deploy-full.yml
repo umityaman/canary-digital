@@ -303,6 +303,7 @@ jobs:
           path: |
             invoices.json
             invoice-*.pdf
+            pdf-hashes.txt
             login-response.json
             smoke-extended-log.txt
             health-result-*.json
