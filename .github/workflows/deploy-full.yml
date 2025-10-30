@@ -286,7 +286,6 @@ jobs:
           path: |
             invoices.json
             invoice-*.pdf
-            login-token.txt
             login-response.json
             smoke-extended-log.txt
             health-result-*.json
