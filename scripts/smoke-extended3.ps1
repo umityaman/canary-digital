@@ -145,9 +145,9 @@ try {
                     try {
                         $hash = Get-FileHash -Path $outFile -Algorithm SHA256
                         "$($hash.Hash)  $outFile" | Out-File -FilePath pdf-hashes.txt -Encoding utf8 -Append
-                        "$(Get-Date -Format o) - SHA256 $outFile: $($hash.Hash)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                        "$(Get-Date -Format o) - SHA256 $($outFile): $($hash.Hash)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
                     } catch {
-                        "$(Get-Date -Format o) - Could not compute SHA256 for $outFile: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
+                        "$(Get-Date -Format o) - Could not compute SHA256 for $($outFile): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
                     }
                     $pdfSaved = $true
                     $downloadedAny = $true
@@ -184,48 +184,7 @@ try {
             "$(Get-Date -Format o) - Missing PDFs for ids: $($missing -join ',')" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
         }
 
-    Write-Output "==> Attempting to download invoice PDF (id=$selectedId) using POST"
-    $pdfUrl = "$baseUrl/api/pdf/invoice/$selectedId"
-    # Attempt PDF download with retries
-    $pdfSaved = $false
-    for ($attempt = 1; $attempt -le 3; $attempt++) {
-        try {
-            Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers $headers -OutFile "invoice-$($selectedId).pdf" -UseBasicParsing -ErrorAction Stop
-            Write-Output "Invoice PDF saved to invoice-$($selectedId).pdf"
-            # Log filename and size
-            $fi = Get-Item -Path "invoice-$($selectedId).pdf"
-            "$(Get-Date -Format o) - Saved invoice-$($selectedId).pdf ($([math]::Round($fi.Length/1KB,2)) KB) (attempt $($attempt))" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-            # Compute SHA256 of the downloaded PDF and append to pdf-hashes.txt
-            try {
-                $hash = Get-FileHash -Path "invoice-$($selectedId).pdf" -Algorithm SHA256
-                "$($hash.Hash)  invoice-$($selectedId).pdf" | Out-File -FilePath pdf-hashes.txt -Encoding utf8 -Append
-                "$(Get-Date -Format o) - SHA256 invoice-$($selectedId).pdf: $($hash.Hash)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-            } catch {
-                "$(Get-Date -Format o) - Could not compute SHA256 for invoice-$($selectedId).pdf: $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-            }
-            $pdfSaved = $true
-            break
-        } catch {
-            Write-Output "Failed to download PDF (attempt $($attempt)): $($_.Exception.Message)"
-            "$(Get-Date -Format o) - Failed to download PDF for id=$($selectedId) on attempt $($attempt): $($_.Exception.Message)" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-            if ($attempt -lt 3) { Start-Sleep -Seconds (5 * $attempt) }
-            else {
-                try {
-                    if ($_.Exception.Response) {
-                        $resp = $_.Exception.Response.GetResponseStream()
-                        $sr = New-Object System.IO.StreamReader($resp)
-                        $body = $sr.ReadToEnd()
-                        $body | Out-File -FilePath smoke-extended-pdf-error-body.txt -Encoding utf8
-                        Write-Output "Response body saved to smoke-extended-pdf-error-body.txt"
-                        "$(Get-Date -Format o) - Saved PDF error body to smoke-extended-pdf-error-body.txt" | Out-File -FilePath .\smoke-extended-log.txt -Encoding utf8 -Append
-                    }
-                } catch { }
-            }
-        }
-    }
-    if (-not $pdfSaved) {
-        Write-Output "Could not download PDF after retries for id=$selectedId"
-    }
+    
 
     Write-Output "==> Running health checks"
     # try common health endpoints
