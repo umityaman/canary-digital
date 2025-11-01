@@ -345,8 +345,123 @@ router.get('/cash', authenticateToken, async (req, res) => {
 });
 
 /**
+ * @route   GET /api/accounting/reports/cashflow
+ * @desc    Nakit akış raporu (operating, investing, financing)
+ * @access  Private
+ * @query   months (default: 6)
+ */
+router.get('/reports/cashflow', authenticateToken, async (req, res) => {
+  try {
+    const { months = 6 } = req.query;
+    const companyId = (req as any).user?.companyId || 1;
+
+    const report = await accountingService.getCashflowReport(
+      companyId,
+      parseInt(months as string)
+    );
+
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error: any) {
+    log.error('Failed to get cashflow report:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get cashflow report',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/reports/profit-loss
+ * @desc    Kar-Zarar tablosu (P&L statement)
+ * @access  Private
+ * @query   startDate, endDate
+ */
+router.get('/reports/profit-loss', authenticateToken, async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    const companyId = (req as any).user?.companyId || 1;
+
+    const start = startDate ? new Date(startDate as string) : new Date(new Date().setMonth(new Date().getMonth() - 1));
+    const end = endDate ? new Date(endDate as string) : new Date();
+
+    const report = await accountingService.getProfitLossReport(companyId, start, end);
+
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error: any) {
+    log.error('Failed to get profit-loss report:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get profit-loss report',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/reports/balance-sheet
+ * @desc    Bilanço raporu (assets, liabilities, equity)
+ * @access  Private
+ * @query   asOfDate (default: today)
+ */
+router.get('/reports/balance-sheet', authenticateToken, async (req, res) => {
+  try {
+    const { asOfDate } = req.query;
+    const companyId = (req as any).user?.companyId || 1;
+
+    const date = asOfDate ? new Date(asOfDate as string) : new Date();
+
+    const report = await accountingService.getBalanceSheetReport(companyId, date);
+
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error: any) {
+    log.error('Failed to get balance sheet report:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get balance sheet report',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/reports/vat-declaration
+ * @desc    KDV beyannamesi hazırlık raporu
+ * @access  Private
+ * @query   months (default: 6)
+ */
+router.get('/reports/vat-declaration', authenticateToken, async (req, res) => {
+  try {
+    const { months = 6 } = req.query;
+    const companyId = (req as any).user?.companyId || 1;
+
+    const report = await accountingService.getVATDeclarationReport(
+      companyId,
+      parseInt(months as string)
+    );
+
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error: any) {
+    log.error('Failed to get VAT declaration report:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get VAT declaration report',
+    });
+  }
+});
+
+/**
  * @route   GET /api/accounting/vat-report
- * @desc    KDV raporu
+ * @desc    KDV raporu - Deprecated, use /reports/vat-declaration
  * @access  Private
  * @query   startDate, endDate
  */

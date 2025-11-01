@@ -453,8 +453,337 @@ export class AccountingService {
   }
 
   /**
+   * ADVANCED REPORTS
+   */
+
+  /**
+   * Cashflow Report - 3 Activity Types
+   * Operating, Investing, Financing activities
+   */
+  async getCashflowReport(companyId: number, months: number = 6) {
+    try {
+      log.info('Accounting Service: Cashflow report hazırlanıyor...', { months });
+
+      const cashflowData = [];
+      const now = new Date();
+
+      for (let i = months - 1; i >= 0; i--) {
+        const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+
+        // Operating Activities (Business operations)
+        const operatingInflows = await prisma.payment.aggregate({
+          where: {
+            paymentDate: { gte: monthStart, lte: monthEnd },
+          },
+          _sum: { amount: true },
+        });
+
+        const operatingOutflows = await prisma.expense.aggregate({
+          where: {
+            companyId,
+            date: { gte: monthStart, lte: monthEnd },
+            category: { in: ['Personel Maaşları', 'Kira', 'Elektrik/Su/Doğalgaz', 'İnternet/Telefon', 'Pazarlama/Reklam'] },
+          },
+          _sum: { amount: true },
+        });
+
+        // Investing Activities (Equipment purchases, etc.)
+        const investingOutflows = await prisma.expense.aggregate({
+          where: {
+            companyId,
+            date: { gte: monthStart, lte: monthEnd },
+            category: { in: ['Malzeme Alımı', 'Ekipman Bakım/Onarım'] },
+          },
+          _sum: { amount: true },
+        });
+
+        // Financing Activities (Loans, etc.)
+        const financingInflows = await prisma.expense.aggregate({
+          where: {
+            companyId,
+            date: { gte: monthStart, lte: monthEnd },
+            category: 'Finansman Geliri',
+          },
+          _sum: { amount: true },
+        });
+
+        const financingOutflows = await prisma.expense.aggregate({
+          where: {
+            companyId,
+            date: { gte: monthStart, lte: monthEnd },
+            category: { in: ['Kredi Ödemesi', 'Faiz Ödemesi'] },
+          },
+          _sum: { amount: true },
+        });
+
+        const operatingIn = operatingInflows._sum.amount || 0;
+        const operatingOut = operatingOutflows._sum.amount || 0;
+        const investingOut = investingOutflows._sum.amount || 0;
+        const financingIn = financingInflows._sum.amount || 0;
+        const financingOut = financingOutflows._sum.amount || 0;
+
+        const netChange = operatingIn - operatingOut - investingOut + financingIn - financingOut;
+
+        cashflowData.push({
+          period: monthStart.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }),
+          monthKey: `${monthStart.getFullYear()}-${String(monthStart.getMonth() + 1).padStart(2, '0')}`,
+          operatingInflow: Math.round(operatingIn * 100) / 100,
+          operatingOutflow: Math.round(operatingOut * 100) / 100,
+          investingInflow: 0,
+          investingOutflow: Math.round(investingOut * 100) / 100,
+          financingInflow: Math.round(financingIn * 100) / 100,
+          financingOutflow: Math.round(financingOut * 100) / 100,
+          netChange: Math.round(netChange * 100) / 100,
+        });
+      }
+
+      log.info('Accounting Service: Cashflow report hazırlandı');
+      return cashflowData;
+    } catch (error) {
+      log.error('Accounting Service: Cashflow report hazırlanamadı:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Profit & Loss Report (P&L Statement)
+   */
+  async getProfitLossReport(companyId: number, startDate: Date, endDate: Date) {
+    try {
+      log.info('Accounting Service: P&L report hazırlanıyor...');
+
+      // Revenue breakdown by type
+      const revenueByType = await prisma.invoice.groupBy({
+        by: ['type'],
+        where: {
+          invoiceDate: { gte: startDate, lte: endDate },
+          status: { in: ['paid', 'partial_paid'] },
+        },
+        _sum: { paidAmount: true },
+      });
+
+      const revenueData = revenueByType.map(item => ({
+        category: item.type === 'rental' ? 'Kiralama Geliri' : 
+                  item.type === 'sale' ? 'Satış Geliri' : 
+                  item.type === 'late_fee' ? 'Gecikme Cezası' : 'Diğer Gelir',
+        amount: Math.round((item._sum.paidAmount || 0) * 100) / 100,
+      }));
+
+      const totalRevenue = revenueData.reduce((sum, item) => sum + item.amount, 0);
+
+      // Calculate percentages
+      revenueData.forEach(item => {
+        (item as any).percentage = totalRevenue > 0 ? Math.round((item.amount / totalRevenue) * 100) : 0;
+      });
+
+      // Expense breakdown by category
+      const expenseByCategory = await prisma.expense.groupBy({
+        by: ['category'],
+        where: {
+          companyId,
+          date: { gte: startDate, lte: endDate },
+        },
+        _sum: { amount: true },
+      });
+
+      const expenseData = expenseByCategory.map(item => ({
+        category: item.category,
+        amount: Math.round((item._sum.amount || 0) * 100) / 100,
+      }));
+
+      const totalExpense = expenseData.reduce((sum, item) => sum + item.amount, 0);
+
+      // Calculate percentages
+      expenseData.forEach(item => {
+        (item as any).percentage = totalExpense > 0 ? Math.round((item.amount / totalExpense) * 100) : 0;
+      });
+
+      const netProfit = totalRevenue - totalExpense;
+
+      log.info('Accounting Service: P&L report hazırlandı');
+
+      return {
+        period: {
+          start: startDate.toISOString(),
+          end: endDate.toISOString(),
+        },
+        summary: {
+          totalRevenue: Math.round(totalRevenue * 100) / 100,
+          totalExpense: Math.round(totalExpense * 100) / 100,
+          netProfit: Math.round(netProfit * 100) / 100,
+          profitMargin: totalRevenue > 0 ? Math.round((netProfit / totalRevenue) * 100) : 0,
+        },
+        revenue: revenueData,
+        expenses: expenseData,
+      };
+    } catch (error) {
+      log.error('Accounting Service: P&L report hazırlanamadı:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Balance Sheet Report
+   */
+  async getBalanceSheetReport(companyId: number, asOfDate: Date) {
+    try {
+      log.info('Accounting Service: Balance sheet hazırlanıyor...');
+
+      // Assets - Current Assets
+      const cashBalance = await prisma.payment.aggregate({
+        where: { paymentDate: { lte: asOfDate } },
+        _sum: { amount: true },
+      });
+
+      const receivables = await prisma.invoice.aggregate({
+        where: {
+          invoiceDate: { lte: asOfDate },
+          status: { in: ['draft', 'sent', 'partial_paid'] },
+        },
+        _sum: { grandTotal: true, paidAmount: true },
+      });
+
+      const totalReceivables = (receivables._sum.grandTotal || 0) - (receivables._sum.paidAmount || 0);
+
+      // Assets - Fixed Assets (from expenses - equipment purchases)
+      const equipmentPurchases = await prisma.expense.aggregate({
+        where: {
+          companyId,
+          date: { lte: asOfDate },
+          category: 'Malzeme Alımı',
+        },
+        _sum: { amount: true },
+      });
+
+      // Liabilities - Current Liabilities
+      const payables = await prisma.expense.aggregate({
+        where: {
+          companyId,
+          date: { lte: asOfDate },
+          status: 'pending',
+        },
+        _sum: { amount: true },
+      });
+
+      // Calculate totals
+      const currentAssets = (cashBalance._sum.amount || 0) + totalReceivables;
+      const fixedAssets = equipmentPurchases._sum.amount || 0;
+      const totalAssets = currentAssets + fixedAssets;
+
+      const currentLiabilities = payables._sum.amount || 0;
+      const longTermLiabilities = 0; // TODO: Add when loan tracking is implemented
+      const totalLiabilities = currentLiabilities + longTermLiabilities;
+
+      const equity = totalAssets - totalLiabilities;
+
+      log.info('Accounting Service: Balance sheet hazırlandı');
+
+      return {
+        asOfDate: asOfDate.toISOString(),
+        assets: {
+          currentAssets: {
+            cash: Math.round((cashBalance._sum.amount || 0) * 100) / 100,
+            receivables: Math.round(totalReceivables * 100) / 100,
+            inventory: 0, // TODO: Add when inventory valuation is implemented
+            total: Math.round(currentAssets * 100) / 100,
+          },
+          fixedAssets: {
+            equipment: Math.round((equipmentPurchases._sum.amount || 0) * 100) / 100,
+            accumulated_depreciation: 0, // TODO: Add depreciation tracking
+            total: Math.round(fixedAssets * 100) / 100,
+          },
+          totalAssets: Math.round(totalAssets * 100) / 100,
+        },
+        liabilities: {
+          currentLiabilities: {
+            payables: Math.round((payables._sum.amount || 0) * 100) / 100,
+            shortTermLoans: 0,
+            total: Math.round(currentLiabilities * 100) / 100,
+          },
+          longTermLiabilities: {
+            longTermLoans: 0,
+            total: 0,
+          },
+          totalLiabilities: Math.round(totalLiabilities * 100) / 100,
+        },
+        equity: {
+          capital: Math.round(equity * 100) / 100,
+          retainedEarnings: 0,
+          totalEquity: Math.round(equity * 100) / 100,
+        },
+        balanceCheck: {
+          assetsEqualsLiabilitiesPlusEquity: Math.abs(totalAssets - (totalLiabilities + equity)) < 0.01,
+          difference: Math.round((totalAssets - (totalLiabilities + equity)) * 100) / 100,
+        },
+      };
+    } catch (error) {
+      log.error('Accounting Service: Balance sheet hazırlanamadı:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * VAT Declaration Report
+   */
+  async getVATDeclarationReport(companyId: number, months: number = 6) {
+    try {
+      log.info('Accounting Service: VAT declaration hazırlanıyor...', { months });
+
+      const vatData = [];
+      const now = new Date();
+
+      for (let i = months - 1; i >= 0; i--) {
+        const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+
+        // Output VAT (Sales)
+        const salesVAT = await prisma.invoice.aggregate({
+          where: {
+            invoiceDate: { gte: monthStart, lte: monthEnd },
+            status: { not: 'cancelled' },
+          },
+          _sum: { totalAmount: true, vatAmount: true },
+        });
+
+        // Input VAT (Purchases)
+        const purchasesVAT = await prisma.expense.aggregate({
+          where: {
+            companyId,
+            date: { gte: monthStart, lte: monthEnd },
+          },
+          _sum: { amount: true },
+        });
+
+        // Estimate 20% VAT on purchases (TODO: Add vatRate field to Expense model)
+        const estimatedInputVAT = (purchasesVAT._sum.amount || 0) * 0.20;
+
+        const outputVAT = salesVAT._sum.vatAmount || 0;
+        const inputVAT = estimatedInputVAT;
+        const netVAT = outputVAT - inputVAT;
+
+        vatData.push({
+          period: monthStart.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }),
+          monthKey: `${monthStart.getFullYear()}-${String(monthStart.getMonth() + 1).padStart(2, '0')}`,
+          sales: Math.round((salesVAT._sum.totalAmount || 0) * 100) / 100,
+          outputVAT: Math.round(outputVAT * 100) / 100,
+          purchases: Math.round((purchasesVAT._sum.amount || 0) * 100) / 100,
+          inputVAT: Math.round(inputVAT * 100) / 100,
+          netVAT: Math.round(netVAT * 100) / 100,
+        });
+      }
+
+      log.info('Accounting Service: VAT declaration hazırlandı');
+      return vatData;
+    } catch (error) {
+      log.error('Accounting Service: VAT declaration hazırlanamadı:', error);
+      throw error;
+    }
+  }
+
+  /**
    * KDV Raporu
-   * Dönemsel KDV hesaplaması
+   * Dönemsel KDV hesaplaması - Deprecated, use getVATDeclarationReport
    */
   async getVATReport(startDate: Date, endDate: Date) {
     try {
@@ -868,7 +1197,6 @@ export class AccountingService {
           phone: customer.phone,
           taxNumber: customer.taxNumber,
           address: customer.address,
-          city: customer.city,
         },
         summary: {
           totalDebt: Math.round(totalDebt * 100) / 100,
