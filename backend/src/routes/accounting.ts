@@ -3,8 +3,16 @@ import { accountingService } from '../services/accounting.service';
 import * as gibService from '../services/gib-soap.service';
 import { authenticateToken } from './auth';
 import { log } from '../config/logger';
+import chartOfAccountsRoutes from './accounting/chartOfAccounts.routes';
+import journalEntryRoutes from './accounting/journalEntry.routes';
 
 const router = express.Router();
+
+// Chart of Accounts routes (Turkish Accounting Standards)
+router.use('/chart-of-accounts', chartOfAccountsRoutes);
+
+// Journal Entry routes (Yevmiye Defteri)
+router.use('/journal-entries', journalEntryRoutes);
 
 /**
  * @route   GET /api/accounting/dashboard/stats
