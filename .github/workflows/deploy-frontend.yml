@@ -120,9 +120,11 @@ jobs:
 
       - name: Verify Build Output
         run: |
-          cd frontend/dist
+          cd frontend
+          echo "=== Checking dist folder ==="
+          ls -lah dist/ || echo "dist folder not found!"
           echo "=== Checking built files for API URL ==="
-          grep -o "https://canary-backend[^\"']*" index*.js | head -5 || echo "No URLs found"
+          grep -r "https://canary-backend[^\"']*" dist/ | head -5 || echo "No URLs found"
           echo "=== End verification ==="
 
       - name: Deploy to Cloud Run
