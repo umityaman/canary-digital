@@ -1339,4 +1339,339 @@ router.post('/delivery-note/:id/link-invoice/:invoiceId', authenticateToken, asy
   }
 });
 
+/**
+ * BANK & CASH OPERATIONS
+ */
+
+/**
+ * @route   GET /api/accounting/bank-accounts
+ * @desc    List all bank accounts for company
+ * @access  Private
+ */
+router.get('/bank-accounts', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const accounts = await accountingService.listBankAccounts(companyId);
+
+    res.json({
+      success: true,
+      data: accounts,
+    });
+  } catch (error: any) {
+    log.error('Failed to list bank accounts:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to list bank accounts',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/bank-account
+ * @desc    Create new bank account
+ * @access  Private
+ */
+router.post('/bank-account', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { bankName, accountType, iban, branch, balance, currency } = req.body;
+
+    if (!bankName || !accountType || !iban) {
+      return res.status(400).json({
+        success: false,
+        message: 'bankName, accountType, and iban are required',
+      });
+    }
+
+    const account = await accountingService.createBankAccount({
+      companyId,
+      bankName,
+      accountType,
+      iban,
+      branch,
+      balance: balance ? parseFloat(balance) : 0,
+      currency: currency || 'TRY',
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Bank account created successfully',
+      data: account,
+    });
+  } catch (error: any) {
+    log.error('Failed to create bank account:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create bank account',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/bank-account/:id/transactions
+ * @desc    Get bank account transactions with pagination
+ * @access  Private
+ * @query   startDate, endDate, page, limit
+ */
+router.get('/bank-account/:id/transactions', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { startDate, endDate, page = '1', limit = '50' } = req.query;
+
+    const result = await accountingService.getBankTransactions(
+      parseInt(id),
+      {
+        startDate: startDate ? new Date(startDate as string) : undefined,
+        endDate: endDate ? new Date(endDate as string) : undefined,
+      },
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
+
+    res.json({
+      success: true,
+      data: result.transactions,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.limit),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to get bank transactions:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get bank transactions',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/bank-transaction
+ * @desc    Create bank transaction (deposit/withdrawal)
+ * @access  Private
+ */
+router.post('/bank-transaction', authenticateToken, async (req, res) => {
+  try {
+    const { accountId, type, amount, description, date } = req.body;
+
+    if (!accountId || !type || !amount) {
+      return res.status(400).json({
+        success: false,
+        message: 'accountId, type, and amount are required',
+      });
+    }
+
+    if (!['deposit', 'withdrawal'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'type must be either "deposit" or "withdrawal"',
+      });
+    }
+
+    const transaction = await accountingService.createBankTransaction({
+      accountId: parseInt(accountId),
+      type,
+      amount: parseFloat(amount),
+      description,
+      date: date ? new Date(date) : new Date(),
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Bank transaction created successfully',
+      data: transaction,
+    });
+  } catch (error: any) {
+    log.error('Failed to create bank transaction:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create bank transaction',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/bank-reconciliation
+ * @desc    Reconcile bank statement with recorded transactions
+ * @access  Private
+ * @body    accountId, statementBalance, statementDate
+ */
+router.post('/bank-reconciliation', authenticateToken, async (req, res) => {
+  try {
+    const { accountId, statementBalance, statementDate } = req.body;
+
+    if (!accountId || statementBalance === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'accountId and statementBalance are required',
+      });
+    }
+
+    const result = await accountingService.reconcileBankAccount(
+      parseInt(accountId),
+      parseFloat(statementBalance),
+      statementDate ? new Date(statementDate) : new Date()
+    );
+
+    res.json({
+      success: true,
+      message: 'Bank reconciliation completed',
+      data: result,
+    });
+  } catch (error: any) {
+    log.error('Failed to reconcile bank account:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to reconcile bank account',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/cash-transactions
+ * @desc    List cash transactions
+ * @access  Private
+ * @query   startDate, endDate, type, page, limit
+ */
+router.get('/cash-transactions', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { startDate, endDate, type, page = '1', limit = '50' } = req.query;
+
+    const result = await accountingService.listCashTransactions(
+      companyId,
+      {
+        startDate: startDate ? new Date(startDate as string) : undefined,
+        endDate: endDate ? new Date(endDate as string) : undefined,
+        type: type as string,
+      },
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
+
+    res.json({
+      success: true,
+      data: result.transactions,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.limit),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to list cash transactions:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to list cash transactions',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/cash-transaction
+ * @desc    Create cash transaction (in/out)
+ * @access  Private
+ */
+router.post('/cash-transaction', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const userId = (req as any).user?.id;
+    const { type, amount, description, date } = req.body;
+
+    if (!type || !amount) {
+      return res.status(400).json({
+        success: false,
+        message: 'type and amount are required',
+      });
+    }
+
+    if (!['in', 'out'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'type must be either "in" or "out"',
+      });
+    }
+
+    const transaction = await accountingService.createCashTransaction({
+      companyId,
+      userId,
+      type,
+      amount: parseFloat(amount),
+      description,
+      date: date ? new Date(date) : new Date(),
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Cash transaction created successfully',
+      data: transaction,
+    });
+  } catch (error: any) {
+    log.error('Failed to create cash transaction:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create cash transaction',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/cash-balance
+ * @desc    Get current cash balance
+ * @access  Private
+ */
+router.get('/cash-balance', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const balance = await accountingService.getCashBalance(companyId);
+
+    res.json({
+      success: true,
+      data: { balance },
+    });
+  } catch (error: any) {
+    log.error('Failed to get cash balance:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get cash balance',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/parse-mt940
+ * @desc    Parse MT940 bank statement file (prep for future implementation)
+ * @access  Private
+ * @body    fileContent (MT940 format text)
+ */
+router.post('/parse-mt940', authenticateToken, async (req, res) => {
+  try {
+    const { fileContent } = req.body;
+
+    if (!fileContent) {
+      return res.status(400).json({
+        success: false,
+        message: 'fileContent is required',
+      });
+    }
+
+    const result = await accountingService.parseMT940Statement(fileContent);
+
+    res.json({
+      success: true,
+      message: 'MT940 statement parsed successfully',
+      data: result,
+    });
+  } catch (error: any) {
+    log.error('Failed to parse MT940 statement:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to parse MT940 statement',
+    });
+  }
+});
+
 export default router;

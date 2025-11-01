@@ -2497,6 +2497,442 @@ export class AccountingService {
       throw error;
     }
   }
+
+  /**
+   * BANK & CASH OPERATIONS
+   */
+
+  /**
+   * List all bank accounts for company
+   */
+  async listBankAccounts(companyId: number) {
+    try {
+      const accounts = await prisma.bankAccount.findMany({
+        where: { companyId, isActive: true },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      log.info('Bank accounts listed:', { count: accounts.length });
+
+      return accounts;
+    } catch (error) {
+      log.error('Failed to list bank accounts:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create new bank account
+   */
+  async createBankAccount(data: {
+    companyId: number;
+    bankName: string;
+    accountType: string;
+    iban: string;
+    branch?: string;
+    balance?: number;
+    currency?: string;
+  }) {
+    try {
+      const account = await prisma.bankAccount.create({
+        data: {
+          companyId: data.companyId,
+          bankName: data.bankName,
+          accountType: data.accountType,
+          iban: data.iban,
+          branch: data.branch,
+          balance: data.balance || 0,
+          currency: data.currency || 'TRY',
+          isActive: true,
+        },
+      });
+
+      log.info('Bank account created:', {
+        id: account.id,
+        bankName: account.bankName,
+        iban: account.iban,
+      });
+
+      return account;
+    } catch (error) {
+      log.error('Failed to create bank account:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get bank transactions with pagination
+   */
+  async getBankTransactions(
+    accountId: number,
+    filters: {
+      startDate?: Date;
+      endDate?: Date;
+    },
+    page: number = 1,
+    limit: number = 50
+  ) {
+    try {
+      const where: any = { accountId };
+
+      if (filters.startDate || filters.endDate) {
+        where.date = {};
+        if (filters.startDate) where.date.gte = filters.startDate;
+        if (filters.endDate) where.date.lte = filters.endDate;
+      }
+
+      const [transactions, total] = await Promise.all([
+        prisma.bankTransaction.findMany({
+          where,
+          orderBy: { date: 'desc' },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        prisma.bankTransaction.count({ where }),
+      ]);
+
+      log.info('Bank transactions listed:', { count: transactions.length, total });
+
+      return {
+        transactions,
+        total,
+        page,
+        limit,
+      };
+    } catch (error) {
+      log.error('Failed to get bank transactions:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create bank transaction and update account balance
+   */
+  async createBankTransaction(data: {
+    accountId: number;
+    type: 'deposit' | 'withdrawal';
+    amount: number;
+    description?: string;
+    date: Date;
+  }) {
+    try {
+      // Get current account balance
+      const account = await prisma.bankAccount.findUnique({
+        where: { id: data.accountId },
+      });
+
+      if (!account) {
+        throw new Error('Bank account not found');
+      }
+
+      // Calculate new balance
+      const newBalance =
+        data.type === 'deposit'
+          ? account.balance + data.amount
+          : account.balance - data.amount;
+
+      if (newBalance < 0) {
+        throw new Error('Insufficient balance');
+      }
+
+      // Create transaction and update account balance in a transaction
+      const [transaction] = await prisma.$transaction([
+        prisma.bankTransaction.create({
+          data: {
+            accountId: data.accountId,
+            type: data.type,
+            amount: data.amount,
+            description: data.description,
+            balanceAfter: newBalance,
+            date: data.date,
+          },
+        }),
+        prisma.bankAccount.update({
+          where: { id: data.accountId },
+          data: { balance: newBalance },
+        }),
+      ]);
+
+      log.info('Bank transaction created:', {
+        id: transaction.id,
+        type: data.type,
+        amount: data.amount,
+        newBalance,
+      });
+
+      return transaction;
+    } catch (error) {
+      log.error('Failed to create bank transaction:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Reconcile bank account with statement
+   */
+  async reconcileBankAccount(
+    accountId: number,
+    statementBalance: number,
+    statementDate: Date
+  ) {
+    try {
+      const account = await prisma.bankAccount.findUnique({
+        where: { id: accountId },
+      });
+
+      if (!account) {
+        throw new Error('Bank account not found');
+      }
+
+      const difference = statementBalance - account.balance;
+      const isReconciled = Math.abs(difference) < 0.01; // Within 1 kuruş tolerance
+
+      log.info('Bank reconciliation result:', {
+        accountId,
+        systemBalance: account.balance,
+        statementBalance,
+        difference,
+        isReconciled,
+      });
+
+      return {
+        accountId,
+        accountName: account.bankName,
+        systemBalance: account.balance,
+        statementBalance,
+        difference,
+        isReconciled,
+        statementDate,
+        message: isReconciled
+          ? 'Account is reconciled'
+          : `Difference of ${Math.abs(difference).toFixed(2)} TL found`,
+      };
+    } catch (error) {
+      log.error('Failed to reconcile bank account:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * List cash transactions
+   */
+  async listCashTransactions(
+    companyId: number,
+    filters: {
+      startDate?: Date;
+      endDate?: Date;
+      type?: string;
+    },
+    page: number = 1,
+    limit: number = 50
+  ) {
+    try {
+      const where: any = { companyId };
+
+      if (filters.type) {
+        where.type = filters.type;
+      }
+
+      if (filters.startDate || filters.endDate) {
+        where.date = {};
+        if (filters.startDate) where.date.gte = filters.startDate;
+        if (filters.endDate) where.date.lte = filters.endDate;
+      }
+
+      const [transactions, total] = await Promise.all([
+        prisma.cashTransaction.findMany({
+          where,
+          include: {
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+              },
+            },
+          },
+          orderBy: { date: 'desc' },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        prisma.cashTransaction.count({ where }),
+      ]);
+
+      log.info('Cash transactions listed:', { count: transactions.length, total });
+
+      return {
+        transactions,
+        total,
+        page,
+        limit,
+      };
+    } catch (error) {
+      log.error('Failed to list cash transactions:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create cash transaction
+   */
+  async createCashTransaction(data: {
+    companyId: number;
+    userId?: number;
+    type: 'in' | 'out';
+    amount: number;
+    description?: string;
+    date: Date;
+  }) {
+    try {
+      const transaction = await prisma.cashTransaction.create({
+        data: {
+          companyId: data.companyId,
+          userId: data.userId,
+          type: data.type,
+          amount: data.amount,
+          description: data.description,
+          date: data.date,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+            },
+          },
+        },
+      });
+
+      log.info('Cash transaction created:', {
+        id: transaction.id,
+        type: data.type,
+        amount: data.amount,
+      });
+
+      return transaction;
+    } catch (error) {
+      log.error('Failed to create cash transaction:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get current cash balance
+   */
+  async getCashBalance(companyId: number) {
+    try {
+      const result = await prisma.cashTransaction.groupBy({
+        by: ['type'],
+        where: { companyId },
+        _sum: { amount: true },
+      });
+
+      const inflows = result.find(r => r.type === 'in')?._sum.amount || 0;
+      const outflows = result.find(r => r.type === 'out')?._sum.amount || 0;
+      const balance = inflows - outflows;
+
+      log.info('Cash balance calculated:', {
+        companyId,
+        inflows,
+        outflows,
+        balance,
+      });
+
+      return Math.round(balance * 100) / 100;
+    } catch (error) {
+      log.error('Failed to get cash balance:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Parse MT940 bank statement (basic implementation)
+   * TODO: Implement full MT940 parser with all tags
+   */
+  async parseMT940Statement(fileContent: string) {
+    try {
+      log.info('Parsing MT940 statement...');
+
+      const lines = fileContent.split('\n').map(line => line.trim());
+      const transactions: any[] = [];
+
+      let currentTransaction: any = null;
+
+      for (const line of lines) {
+        // :20: Transaction Reference
+        if (line.startsWith(':20:')) {
+          currentTransaction = {
+            reference: line.substring(4),
+          };
+        }
+
+        // :25: Account Identification
+        if (line.startsWith(':25:') && currentTransaction) {
+          currentTransaction.accountNumber = line.substring(4);
+        }
+
+        // :60F: Opening Balance
+        if (line.startsWith(':60F:')) {
+          // Format: :60F:C230915EUR1234,56
+          // C/D = Credit/Debit, Date (YYMMDD), Currency, Amount
+        }
+
+        // :61: Statement Line (Transaction)
+        if (line.startsWith(':61:')) {
+          if (currentTransaction && currentTransaction.amount) {
+            transactions.push({ ...currentTransaction });
+          }
+
+          // Format: :61:2309150915DR50,00NTRFNONREF
+          const parts = line.substring(4);
+          const debitCredit = parts.includes('DR') ? 'withdrawal' : 'deposit';
+          
+          // Extract amount (simplified parsing)
+          const amountMatch = parts.match(/(\d+[,\.]\d+)/);
+          const amount = amountMatch ? parseFloat(amountMatch[1].replace(',', '.')) : 0;
+
+          currentTransaction = {
+            ...currentTransaction,
+            type: debitCredit,
+            amount,
+            rawLine: line,
+          };
+        }
+
+        // :86: Transaction Details
+        if (line.startsWith(':86:') && currentTransaction) {
+          currentTransaction.description = line.substring(4);
+        }
+
+        // :62F: Closing Balance
+        if (line.startsWith(':62F:')) {
+          // Format similar to :60F:
+          if (currentTransaction && currentTransaction.amount) {
+            transactions.push({ ...currentTransaction });
+            currentTransaction = null;
+          }
+        }
+      }
+
+      // Add last transaction if exists
+      if (currentTransaction && currentTransaction.amount) {
+        transactions.push(currentTransaction);
+      }
+
+      log.info('MT940 statement parsed:', {
+        transactionCount: transactions.length,
+      });
+
+      return {
+        parsed: true,
+        transactionCount: transactions.length,
+        transactions,
+        warning: 'This is a basic MT940 parser. Full implementation needed for production.',
+      };
+    } catch (error) {
+      log.error('Failed to parse MT940 statement:', error);
+      throw error;
+    }
+  }
 }
 
 export const accountingService = new AccountingService();
