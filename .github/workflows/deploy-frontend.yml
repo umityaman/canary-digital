@@ -80,57 +80,27 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Build Frontend with correct API URL
+      - name: Prepare .dockerignore
         run: |
           cd frontend
-          rm -rf dist node_modules/.vite .vite .env .env.production
-          echo "VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app" > .env.production
-          echo "Created .env.production:"
-          cat .env.production
-          echo "Starting build..."
-          (
-            unset VITE_API_URL
-            export NODE_ENV=production
-            npm run build 2>&1 | tee build.log || (echo "Build failed!" && cat build.log && exit 1)
-          )
-          echo "Build completed successfully"
-          echo "Verifying built files:"
-          ls -lh dist/ || echo "No dist folder"
-          grep -o "https://canary-backend[^\"']*" dist/assets/*.js 2>/dev/null | head -3 || echo "No URLs found"
-
-      - name: Prepare Frontend for deployment
-        run: |
-          cd frontend
-          # Create .dockerignore to exclude everything except dist
           cat > .dockerignore << 'EOF'
-          *
-          !dist
-          !nginx.conf
+          node_modules
+          .git
+          .github
+          .vscode
+          .DS_Store
+          *.md
+          .env.local
+          .env.development
+          coverage
+          build.log
           EOF
-          # Backup original Dockerfile
-          cp Dockerfile Dockerfile.original
-          # Create simple Dockerfile for pre-built dist
-          cat > Dockerfile << 'EOF'
-          FROM nginx:alpine
-          COPY dist /usr/share/nginx/html
-          COPY nginx.conf /etc/nginx/conf.d/default.conf
-          EXPOSE 8080
-          CMD ["nginx", "-g", "daemon off;"]
-          EOF
-
-      - name: Verify Build Output
-        run: |
-          cd frontend
-          echo "=== Checking dist folder ==="
-          ls -lah dist/ || echo "dist folder not found!"
-          echo "=== Checking built files for API URL ==="
-          grep -r "https://canary-backend[^\"']*" dist/ | head -5 || echo "No URLs found"
-          echo "=== End verification ==="
+          echo "Created .dockerignore"
 
       - name: Deploy to Cloud Run
         run: |
           cd frontend
-          echo "Deploying to Cloud Run..."
+          echo "Deploying to Cloud Run with build args..."
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --source . \
             --region=${{ env.REGION }} \
@@ -141,7 +111,8 @@ jobs:
             --memory=512Mi \
             --cpu=1 \
             --port=8080 \
-            --timeout=900
+            --timeout=900 \
+            --set-build-env-vars="VITE_API_URL=${{ env.BACKEND_URL }}"
 
       - name: Get Service URL
         id: get-url

@@ -1,8 +1,29 @@
-# Use pre-built dist folder with nginx
+# Multi-stage build for Cloud Run
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY . .
+
+# Build argument for API URL
+ARG VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app
+ENV VITE_API_URL=${VITE_API_URL}
+
+# Build the app
+RUN npm run build
+
+# Production stage with nginx
 FROM nginx:alpine
 
-# Copy built files
-COPY dist /usr/share/nginx/html
+# Copy built files from builder
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
