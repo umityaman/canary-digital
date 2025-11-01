@@ -1,0 +1,28 @@
+# Test Dockerfile - Minimal version for debugging
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Step 1: Test base image
+RUN echo "✅ Step 1: Base image OK"
+
+# Step 2: Test package installation
+RUN apk add --no-cache openssl
+RUN echo "✅ Step 2: OpenSSL OK"
+
+# Step 3: Test native deps
+RUN apk add --no-cache libc6-compat python3 make g++
+RUN echo "✅ Step 3: Native deps OK"
+
+# Step 4: Test vips (for Sharp)
+RUN apk add --no-cache vips-dev || echo "❌ vips-dev failed"
+RUN echo "✅ Step 4: vips-dev OK"
+
+COPY package.json ./
+RUN echo "✅ Step 5: package.json copied"
+
+# Step 6: Test npm ci
+RUN npm ci --verbose 2>&1 | head -50 || echo "❌ npm ci failed"
+RUN echo "✅ Step 6: npm ci OK"
+
+CMD ["echo", "Build test completed"]
