@@ -194,6 +194,7 @@ safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
 safeLoadRoute('/api/offers', './routes/offer', 'Offers & Quotes');
 safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
 safeLoadRoute('/api/einvoice', './routes/einvoice', 'E-Invoice');
+safeLoadRoute('/api/earchive', './routes/earchive', 'E-Archive Invoice');
 // Accounting sub-resources mounted at root paths expected by frontend
 safeLoadRoute('/api/checks', './routes/checks', 'Checks');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
