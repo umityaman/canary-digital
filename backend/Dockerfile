@@ -6,10 +6,10 @@ RUN apk add --no-cache openssl libc6-compat
 WORKDIR /usr/src/app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY package.json ./
 
 # Install ALL dependencies (ts-node needed at runtime)
-RUN npm ci && npm cache clean --force
+RUN npm install --production=false && npm cache clean --force
 
 # Copy prisma schema
 COPY prisma ./prisma
