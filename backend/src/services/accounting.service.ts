@@ -28,6 +28,29 @@ const deliveryNotesStore: Map<number, DeliveryNote> = new Map();
 let deliveryNoteIdCounter = 1;
 
 /**
+ * Stock Movement interface (temporary until Prisma model is added)
+ */
+interface StockMovement {
+  id: number;
+  companyId: number;
+  equipmentId: number;
+  type: 'in' | 'out' | 'adjustment';
+  quantity: number;
+  unitCost?: number;
+  totalCost?: number;
+  balanceAfter: number;
+  notes?: string;
+  userId?: number;
+  orderId?: number;
+  date: Date;
+  createdAt: Date;
+}
+
+// In-memory storage for stock movements (temporary until DB model is added)
+const stockMovementsStore: Map<number, StockMovement> = new Map();
+let stockMovementIdCounter = 1;
+
+/**
  * Accounting Service
  * Muhasebe istatistikleri ve raporlama servisi
  */
@@ -2930,6 +2953,412 @@ export class AccountingService {
       };
     } catch (error) {
       log.error('Failed to parse MT940 statement:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * STOCK MOVEMENTS OPERATIONS
+   */
+
+  /**
+   * Create stock movement and update equipment quantity
+   */
+  async createStockMovement(data: {
+    companyId: number;
+    userId?: number;
+    equipmentId: number;
+    type: 'in' | 'out' | 'adjustment';
+    quantity: number;
+    unitCost?: number;
+    notes?: string;
+    orderId?: number;
+  }) {
+    try {
+      log.info('Creating stock movement...', {
+        equipmentId: data.equipmentId,
+        type: data.type,
+        quantity: data.quantity,
+      });
+
+      // Get equipment
+      const equipment = await prisma.equipment.findUnique({
+        where: { id: data.equipmentId },
+      });
+
+      if (!equipment) {
+        throw new Error('Equipment not found');
+      }
+
+      // Calculate new balance
+      const currentBalance = equipment.quantity || 0;
+      let newBalance = currentBalance;
+
+      if (data.type === 'in') {
+        newBalance = currentBalance + data.quantity;
+      } else if (data.type === 'out') {
+        newBalance = currentBalance - data.quantity;
+        if (newBalance < 0) {
+          throw new Error('Insufficient stock quantity');
+        }
+      } else if (data.type === 'adjustment') {
+        newBalance = data.quantity; // Direct set
+      }
+
+      // Calculate cost
+      const totalCost = data.unitCost ? data.unitCost * Math.abs(data.quantity) : undefined;
+
+      // Create movement
+      const movement: StockMovement = {
+        id: stockMovementIdCounter++,
+        companyId: data.companyId,
+        equipmentId: data.equipmentId,
+        type: data.type,
+        quantity: data.quantity,
+        unitCost: data.unitCost,
+        totalCost,
+        balanceAfter: newBalance,
+        notes: data.notes,
+        userId: data.userId,
+        orderId: data.orderId,
+        date: new Date(),
+        createdAt: new Date(),
+      };
+
+      stockMovementsStore.set(movement.id, movement);
+
+      // Update equipment quantity
+      await prisma.equipment.update({
+        where: { id: data.equipmentId },
+        data: { quantity: newBalance },
+      });
+
+      log.info('Stock movement created:', {
+        id: movement.id,
+        equipmentId: data.equipmentId,
+        type: data.type,
+        balanceAfter: newBalance,
+      });
+
+      return {
+        ...movement,
+        equipment: {
+          id: equipment.id,
+          name: equipment.name,
+          previousBalance: currentBalance,
+          newBalance,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to create stock movement:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * List stock movements with filters
+   */
+  async listStockMovements(
+    companyId: number,
+    filters: {
+      equipmentId?: number;
+      type?: string;
+      startDate?: Date;
+      endDate?: Date;
+    },
+    page: number = 1,
+    limit: number = 50
+  ) {
+    try {
+      let movements = Array.from(stockMovementsStore.values()).filter(
+        m => m.companyId === companyId
+      );
+
+      // Apply filters
+      if (filters.equipmentId) {
+        movements = movements.filter(m => m.equipmentId === filters.equipmentId);
+      }
+
+      if (filters.type) {
+        movements = movements.filter(m => m.type === filters.type);
+      }
+
+      if (filters.startDate) {
+        movements = movements.filter(m => m.date >= filters.startDate!);
+      }
+
+      if (filters.endDate) {
+        movements = movements.filter(m => m.date <= filters.endDate!);
+      }
+
+      // Sort by date desc
+      movements.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+      const total = movements.length;
+      const start = (page - 1) * limit;
+      const paginatedMovements = movements.slice(start, start + limit);
+
+      // Enrich with equipment and user info
+      const enrichedMovements = await Promise.all(
+        paginatedMovements.map(async m => {
+          const [equipment, user] = await Promise.all([
+            prisma.equipment.findUnique({
+              where: { id: m.equipmentId },
+              select: {
+                id: true,
+                name: true,
+                serialNumber: true,
+              },
+            }),
+            m.userId
+              ? prisma.user.findUnique({
+                  where: { id: m.userId },
+                  select: { id: true, fullName: true },
+                })
+              : null,
+          ]);
+
+          return {
+            ...m,
+            equipment,
+            user,
+          };
+        })
+      );
+
+      log.info('Stock movements listed:', { count: enrichedMovements.length, total });
+
+      return {
+        movements: enrichedMovements,
+        total,
+        page,
+        limit,
+      };
+    } catch (error) {
+      log.error('Failed to list stock movements:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get stock valuation using FIFO or LIFO method
+   */
+  async getStockValuation(
+    companyId: number,
+    method: 'fifo' | 'lifo',
+    equipmentId?: number
+  ) {
+    try {
+      log.info('Calculating stock valuation...', { method, equipmentId });
+
+      // Get all stock movements
+      let movements = Array.from(stockMovementsStore.values()).filter(
+        m => m.companyId === companyId && m.unitCost !== undefined
+      );
+
+      if (equipmentId) {
+        movements = movements.filter(m => m.equipmentId === equipmentId);
+      }
+
+      // Group by equipment
+      const equipmentMap = new Map<number, any>();
+
+      for (const movement of movements) {
+        if (!equipmentMap.has(movement.equipmentId)) {
+          const equipment = await prisma.equipment.findUnique({
+            where: { id: movement.equipmentId },
+          });
+
+          equipmentMap.set(movement.equipmentId, {
+            equipmentId: movement.equipmentId,
+            equipmentName: equipment?.name || 'Unknown',
+            currentQuantity: equipment?.quantity || 0,
+            movements: [],
+            totalValue: 0,
+            averageCost: 0,
+          });
+        }
+
+        const item = equipmentMap.get(movement.equipmentId)!;
+        if (movement.type === 'in' && movement.unitCost) {
+          item.movements.push({
+            date: movement.date,
+            quantity: movement.quantity,
+            unitCost: movement.unitCost,
+            totalCost: movement.totalCost,
+          });
+        }
+      }
+
+      // Calculate valuation for each equipment
+      const valuations = Array.from(equipmentMap.values()).map(item => {
+        if (item.movements.length === 0) {
+          return {
+            ...item,
+            totalValue: 0,
+            averageCost: 0,
+            method,
+          };
+        }
+
+        // Sort movements
+        if (method === 'fifo') {
+          // First In First Out - oldest first
+          item.movements.sort((a: any, b: any) => a.date.getTime() - b.date.getTime());
+        } else {
+          // Last In First Out - newest first
+          item.movements.sort((a: any, b: any) => b.date.getTime() - a.date.getTime());
+        }
+
+        // Calculate value based on current quantity
+        let remainingQty = item.currentQuantity;
+        let totalValue = 0;
+
+        for (const movement of item.movements) {
+          if (remainingQty <= 0) break;
+
+          const qtyToUse = Math.min(remainingQty, movement.quantity);
+          totalValue += qtyToUse * movement.unitCost;
+          remainingQty -= qtyToUse;
+        }
+
+        const averageCost = item.currentQuantity > 0 ? totalValue / item.currentQuantity : 0;
+
+        return {
+          equipmentId: item.equipmentId,
+          equipmentName: item.equipmentName,
+          currentQuantity: item.currentQuantity,
+          totalValue: Math.round(totalValue * 100) / 100,
+          averageCost: Math.round(averageCost * 100) / 100,
+          method,
+        };
+      });
+
+      const totalInventoryValue = valuations.reduce((sum, v) => sum + v.totalValue, 0);
+
+      log.info('Stock valuation calculated:', {
+        method,
+        itemCount: valuations.length,
+        totalValue: totalInventoryValue,
+      });
+
+      return {
+        method,
+        valuations,
+        summary: {
+          totalItems: valuations.length,
+          totalInventoryValue: Math.round(totalInventoryValue * 100) / 100,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to calculate stock valuation:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get current stock balance for equipment
+   */
+  async getStockBalance(equipmentId: number) {
+    try {
+      const equipment = await prisma.equipment.findUnique({
+        where: { id: equipmentId },
+        select: {
+          id: true,
+          name: true,
+          serialNumber: true,
+          quantity: true,
+        },
+      });
+
+      if (!equipment) {
+        throw new Error('Equipment not found');
+      }
+
+      // Get movements for this equipment
+      const movements = Array.from(stockMovementsStore.values())
+        .filter(m => m.equipmentId === equipmentId)
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .slice(0, 10); // Last 10 movements
+
+      // Calculate total in/out
+      const allMovements = Array.from(stockMovementsStore.values()).filter(
+        m => m.equipmentId === equipmentId
+      );
+
+      const totalIn = allMovements
+        .filter(m => m.type === 'in')
+        .reduce((sum, m) => sum + m.quantity, 0);
+
+      const totalOut = allMovements
+        .filter(m => m.type === 'out')
+        .reduce((sum, m) => sum + m.quantity, 0);
+
+      log.info('Stock balance retrieved:', {
+        equipmentId,
+        currentQuantity: equipment.quantity,
+      });
+
+      return {
+        equipment: {
+          id: equipment.id,
+          name: equipment.name,
+          serialNumber: equipment.serialNumber,
+        },
+        currentQuantity: equipment.quantity || 0,
+        totalIn,
+        totalOut,
+        recentMovements: movements,
+      };
+    } catch (error) {
+      log.error('Failed to get stock balance:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get low stock alert - equipment with quantity below threshold
+   */
+  async getLowStockAlert(companyId: number, threshold: number = 5) {
+    try {
+      const equipment = await prisma.equipment.findMany({
+        where: {
+          companyId,
+          quantity: {
+            lte: threshold,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          serialNumber: true,
+          quantity: true,
+          category: true,
+        },
+        orderBy: {
+          quantity: 'asc',
+        },
+      });
+
+      log.info('Low stock alert retrieved:', {
+        threshold,
+        itemCount: equipment.length,
+      });
+
+      return {
+        threshold,
+        itemCount: equipment.length,
+        items: equipment.map(eq => ({
+          id: eq.id,
+          name: eq.name,
+          serialNumber: eq.serialNumber,
+          currentQuantity: eq.quantity || 0,
+          category: eq.category,
+          status: eq.quantity === 0 ? 'out_of_stock' : 'low_stock',
+        })),
+      };
+    } catch (error) {
+      log.error('Failed to get low stock alert:', error);
       throw error;
     }
   }

@@ -1674,4 +1674,199 @@ router.post('/parse-mt940', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+ * STOCK MOVEMENTS OPERATIONS
+ */
+
+/**
+ * @route   POST /api/accounting/stock-movement
+ * @desc    Create stock movement (in/out/adjustment)
+ * @access  Private
+ * @body    equipmentId, type, quantity, unitCost, notes
+ */
+router.post('/stock-movement', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const userId = (req as any).user?.id;
+    const { equipmentId, type, quantity, unitCost, notes, orderId } = req.body;
+
+    if (!equipmentId || !type || quantity === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'equipmentId, type, and quantity are required',
+      });
+    }
+
+    if (!['in', 'out', 'adjustment'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'type must be "in", "out", or "adjustment"',
+      });
+    }
+
+    const movement = await accountingService.createStockMovement({
+      companyId,
+      userId,
+      equipmentId: parseInt(equipmentId),
+      type,
+      quantity: parseFloat(quantity),
+      unitCost: unitCost ? parseFloat(unitCost) : undefined,
+      notes,
+      orderId: orderId ? parseInt(orderId) : undefined,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Stock movement created successfully',
+      data: movement,
+    });
+  } catch (error: any) {
+    log.error('Failed to create stock movement:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create stock movement',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/stock-movements
+ * @desc    List stock movements with filters
+ * @access  Private
+ * @query   equipmentId, type, startDate, endDate, page, limit
+ */
+router.get('/stock-movements', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const {
+      equipmentId,
+      type,
+      startDate,
+      endDate,
+      page = '1',
+      limit = '50',
+    } = req.query;
+
+    const filters = {
+      equipmentId: equipmentId ? parseInt(equipmentId as string) : undefined,
+      type: type as string,
+      startDate: startDate ? new Date(startDate as string) : undefined,
+      endDate: endDate ? new Date(endDate as string) : undefined,
+    };
+
+    const result = await accountingService.listStockMovements(
+      companyId,
+      filters,
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
+
+    res.json({
+      success: true,
+      data: result.movements,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.limit),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to list stock movements:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to list stock movements',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/stock-valuation
+ * @desc    Get stock valuation report (FIFO/LIFO)
+ * @access  Private
+ * @query   method (fifo/lifo), equipmentId (optional)
+ */
+router.get('/stock-valuation', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { method = 'fifo', equipmentId } = req.query;
+
+    if (!['fifo', 'lifo'].includes(method as string)) {
+      return res.status(400).json({
+        success: false,
+        message: 'method must be "fifo" or "lifo"',
+      });
+    }
+
+    const valuation = await accountingService.getStockValuation(
+      companyId,
+      method as 'fifo' | 'lifo',
+      equipmentId ? parseInt(equipmentId as string) : undefined
+    );
+
+    res.json({
+      success: true,
+      data: valuation,
+    });
+  } catch (error: any) {
+    log.error('Failed to get stock valuation:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get stock valuation',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/stock-balance/:equipmentId
+ * @desc    Get current stock balance for equipment
+ * @access  Private
+ */
+router.get('/stock-balance/:equipmentId', authenticateToken, async (req, res) => {
+  try {
+    const { equipmentId } = req.params;
+    const balance = await accountingService.getStockBalance(parseInt(equipmentId));
+
+    res.json({
+      success: true,
+      data: balance,
+    });
+  } catch (error: any) {
+    log.error('Failed to get stock balance:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get stock balance',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/low-stock-alert
+ * @desc    Get equipment with low stock levels
+ * @access  Private
+ * @query   threshold (minimum quantity, default 5)
+ */
+router.get('/low-stock-alert', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { threshold = '5' } = req.query;
+
+    const lowStockItems = await accountingService.getLowStockAlert(
+      companyId,
+      parseInt(threshold as string)
+    );
+
+    res.json({
+      success: true,
+      data: lowStockItems,
+    });
+  } catch (error: any) {
+    log.error('Failed to get low stock alert:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get low stock alert',
+    });
+  }
+});
+
 export default router;
