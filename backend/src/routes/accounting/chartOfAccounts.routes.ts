@@ -13,7 +13,7 @@ const router = Router();
  */
 router.get(
   '/',
-  authenticate,
+  authenticateToken,
   [
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
     query('limit').optional().isInt({ min: 1, max: 1000 }).withMessage('Limit must be between 1 and 1000'),
@@ -36,7 +36,7 @@ router.get(
  */
 router.get(
   '/hierarchy',
-  authenticate,
+  authenticateToken,
   [
     query('type').optional().isIn(['asset', 'liability', 'equity', 'income', 'expense']).withMessage('Invalid account type'),
     query('rootCode').optional().isString().withMessage('Root code must be a string'),
@@ -52,7 +52,7 @@ router.get(
  */
 router.get(
   '/:code',
-  authenticate,
+  authenticateToken,
   [
     param('code').notEmpty().withMessage('Account code is required'),
   ],
@@ -67,7 +67,7 @@ router.get(
  */
 router.post(
   '/',
-  authenticate,
+  authenticateToken,
   [
     body('code').notEmpty().isString().withMessage('Account code is required'),
     body('name').notEmpty().isString().withMessage('Account name is required'),
@@ -90,7 +90,7 @@ router.post(
  */
 router.put(
   '/:code',
-  authenticate,
+  authenticateToken,
   [
     param('code').notEmpty().withMessage('Account code is required'),
     body('name').optional().isString().withMessage('Account name must be a string'),
@@ -110,7 +110,7 @@ router.put(
  */
 router.delete(
   '/:code',
-  authenticate,
+  authenticateToken,
   [
     param('code').notEmpty().withMessage('Account code is required'),
   ],
@@ -125,7 +125,7 @@ router.delete(
  */
 router.get(
   '/:code/balance',
-  authenticate,
+  authenticateToken,
   [
     param('code').notEmpty().withMessage('Account code is required'),
     query('startDate').optional().isISO8601().withMessage('Start date must be a valid date'),

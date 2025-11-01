@@ -274,13 +274,14 @@ export const getJournalEntryById = async (req: AuthRequest, res: Response) => {
             description: true,
           },
         },
-        reversalEntry: {
+        reversalEntries: {
           select: {
             id: true,
             entryNumber: true,
             entryDate: true,
             description: true,
           },
+          take: 1,
         },
       },
     });
@@ -677,7 +678,7 @@ export const reverseJournalEntry = async (req: AuthRequest, res: Response) => {
         createdBy,
         postedBy: createdBy,
         postedAt: new Date(),
-        reversedEntryId: entry.id,
+        reversedById: entry.id,
         journalEntryItems: {
           create: entry.journalEntryItems.map((item, index) => ({
             companyId,
@@ -697,7 +698,6 @@ export const reverseJournalEntry = async (req: AuthRequest, res: Response) => {
       data: {
         isReversed: true,
         status: 'reversed',
-        reversalEntryId: reversalEntry.id,
       },
     });
 

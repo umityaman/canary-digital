@@ -34,7 +34,7 @@ router.get(
  */
 router.get(
   '/:id',
-  authenticate,
+  authenticateToken,
   [
     param('id').isInt({ min: 1 }).withMessage('Valid journal entry ID is required'),
   ],
@@ -49,7 +49,7 @@ router.get(
  */
 router.post(
   '/',
-  authenticate,
+  authenticateToken,
   [
     body('entryDate').notEmpty().isISO8601().withMessage('Entry date is required'),
     body('entryType').optional().isString().withMessage('Entry type must be a string'),
@@ -72,7 +72,7 @@ router.post(
  */
 router.put(
   '/:id',
-  authenticate,
+  authenticateToken,
   [
     param('id').isInt({ min: 1 }).withMessage('Valid journal entry ID is required'),
     body('entryDate').optional().isISO8601().withMessage('Entry date must be a valid date'),
@@ -95,7 +95,7 @@ router.put(
  */
 router.post(
   '/:id/post',
-  authenticate,
+  authenticateToken,
   [
     param('id').isInt({ min: 1 }).withMessage('Valid journal entry ID is required'),
   ],
@@ -110,7 +110,7 @@ router.post(
  */
 router.post(
   '/:id/reverse',
-  authenticate,
+  authenticateToken,
   [
     param('id').isInt({ min: 1 }).withMessage('Valid journal entry ID is required'),
     body('reason').notEmpty().isString().withMessage('Reason for reversal is required'),
@@ -127,7 +127,7 @@ router.post(
  */
 router.delete(
   '/:id',
-  authenticate,
+  authenticateToken,
   [
     param('id').isInt({ min: 1 }).withMessage('Valid journal entry ID is required'),
   ],
@@ -142,7 +142,7 @@ router.delete(
  */
 router.post(
   '/validate',
-  authenticate,
+  authenticateToken,
   [
     body('items').isArray({ min: 2 }).withMessage('At least 2 journal entry items are required'),
     body('items.*.accountCode').notEmpty().withMessage('Account code is required for each item'),
