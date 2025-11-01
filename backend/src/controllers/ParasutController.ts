@@ -581,6 +581,109 @@ export class ParasutController {
       });
     }
   }
+
+  /**
+   * Sync invoice to Paraşüt
+   */
+  async syncInvoice(req: Request, res: Response) {
+    try {
+      const { invoiceId } = req.params;
+      const parasutIntegration = await import('../services/parasutIntegration.service');
+      
+      const parasutInvoiceId = await parasutIntegration.default.syncInvoice(parseInt(invoiceId));
+      
+      res.json({
+        success: true,
+        parasutInvoiceId,
+        message: 'Invoice synced successfully'
+      });
+    } catch (error) {
+      console.error('Invoice sync error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Invoice sync failed',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
+   * Sync payment to Paraşüt
+   */
+  async syncPayment(req: Request, res: Response) {
+    try {
+      const { paymentId } = req.params;
+      const parasutIntegration = await import('../services/parasutIntegration.service');
+      
+      const result = await parasutIntegration.default.syncPayment(parseInt(paymentId));
+      
+      res.json({
+        success: true,
+        result,
+        message: 'Payment synced successfully'
+      });
+    } catch (error) {
+      console.error('Payment sync error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Payment sync failed',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
+   * Bulk sync all pending items
+   */
+  async bulkSync(req: Request, res: Response) {
+    try {
+      const companyId = req.user?.companyId;
+      
+      if (!companyId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const parasutIntegration = await import('../services/parasutIntegration.service');
+      const results = await parasutIntegration.default.bulkSync(companyId);
+      
+      res.json({
+        success: true,
+        results,
+        message: 'Bulk sync completed'
+      });
+    } catch (error) {
+      console.error('Bulk sync error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Bulk sync failed',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
+   * Handle Paraşüt webhook
+   */
+  async handleWebhook(req: Request, res: Response) {
+    try {
+      const webhookData = req.body;
+      const parasutIntegration = await import('../services/parasutIntegration.service');
+      
+      await parasutIntegration.default.handleWebhook(webhookData);
+      
+      res.json({
+        success: true,
+        message: 'Webhook processed'
+      });
+    } catch (error) {
+      console.error('Webhook processing error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Webhook processing failed',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
 }
 
 export const parasutController = new ParasutController();

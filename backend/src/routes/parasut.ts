@@ -504,4 +504,87 @@ router.get('/accounts',
   parasutController.getAccounts.bind(parasutController)
 );
 
+/**
+ * @swagger
+ * /api/parasut/sync/invoice/{invoiceId}:
+ *   post:
+ *     summary: Sync invoice to Paraşüt
+ *     tags: [Parasut]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: invoiceId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Invoice synced successfully
+ */
+router.post('/sync/invoice/:invoiceId',
+  authenticate,
+  parasutController.syncInvoice.bind(parasutController)
+);
+
+/**
+ * @swagger
+ * /api/parasut/sync/payment/{paymentId}:
+ *   post:
+ *     summary: Sync payment to Paraşüt
+ *     tags: [Parasut]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: paymentId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Payment synced successfully
+ */
+router.post('/sync/payment/:paymentId',
+  authenticate,
+  parasutController.syncPayment.bind(parasutController)
+);
+
+/**
+ * @swagger
+ * /api/parasut/sync/bulk:
+ *   post:
+ *     summary: Bulk sync all pending items
+ *     tags: [Parasut]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Bulk sync completed
+ */
+router.post('/sync/bulk',
+  authenticate,
+  parasutController.bulkSync.bind(parasutController)
+);
+
+/**
+ * @swagger
+ * /api/parasut/webhook:
+ *   post:
+ *     summary: Handle Paraşüt webhook
+ *     tags: [Parasut]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Webhook processed successfully
+ */
+router.post('/webhook',
+  parasutController.handleWebhook.bind(parasutController)
+);
+
 export default router;
