@@ -11,6 +11,7 @@ import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
 import AccountingDashboard from '../components/accounting/AccountingDashboard'
 import AccountCardList from '../components/accounting/AccountCardList'
+import EInvoiceList from '../components/accounting/EInvoiceList'
 import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari'
@@ -1079,28 +1080,7 @@ export default function Accounting() {
             )}
 
             {/* e-Belge Tab */}
-            {activeTab === 'ebelge' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">e-Belge Çözümleri</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {[
-                    { name: 'e-Fatura', desc: 'GİB uyumlu e-fatura sistemi' },
-                    { name: 'e-Arşiv', desc: 'Dijital fatura kesme' },
-                    { name: 'e-İrsaliye', desc: 'Dijital sevkiyat belgeleri' },
-                    { name: 'e-SMM', desc: 'Serbest meslek makbuzu' },
-                  ].map((item) => (
-                    <div key={item.name} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-lg transition-all">
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className="font-semibold text-neutral-900">{item.name}</h3>
-                        <CreditCard className="text-neutral-600" size={24} />
-                      </div>
-                      <p className="text-sm text-neutral-600">{item.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {activeTab === 'ebelge' && <EInvoiceList />}
 
             {/* Integration Tab */}
             {activeTab === 'integration' && (
