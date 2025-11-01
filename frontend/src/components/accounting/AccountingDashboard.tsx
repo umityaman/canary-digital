@@ -50,55 +50,46 @@ export default function AccountingDashboard() {
   const loadDashboardData = async () => {
     setLoading(true)
     try {
-      const { accountingAPI } = await import('../../services/api')
+      // Import API dynamically
+      const { default: axios } = await import('axios')
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
       
-      // Get incomes and expenses for current and previous month
-      const now = new Date()
-      const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-      const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-      const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-      const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0)
+      // Get token from localStorage
+      const token = localStorage.getItem('token')
+      
+      if (!token) {
+        toast.error('Oturum bilgisi bulunamadı')
+        return
+      }
 
-      // Fetch current month data
-      const [currentIncomes, currentExpenses] = await Promise.all([
-        accountingAPI.getIncomes({
-          startDate: currentMonthStart.toISOString().split('T')[0],
-          endDate: currentMonthEnd.toISOString().split('T')[0],
-          limit: 1000
-        }),
-        accountingAPI.getExpenses({
-          startDate: currentMonthStart.toISOString().split('T')[0],
-          endDate: currentMonthEnd.toISOString().split('T')[0],
-          limit: 1000
-        })
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+
+      // Fetch dashboard stats, trends, and categories in parallel
+      const [statsRes, trendsRes, incomeCatRes, expenseCatRes] = await Promise.all([
+        axios.get(`${API_URL}/api/accounting/dashboard/stats`, { headers }),
+        axios.get(`${API_URL}/api/accounting/dashboard/trends?months=6`, { headers }),
+        axios.get(`${API_URL}/api/accounting/dashboard/categories?type=income`, { headers }),
+        axios.get(`${API_URL}/api/accounting/dashboard/categories?type=expense`, { headers })
       ])
 
-      // Fetch previous month data
-      const [previousIncomes, previousExpenses] = await Promise.all([
-        accountingAPI.getIncomes({
-          startDate: previousMonthStart.toISOString().split('T')[0],
-          endDate: previousMonthEnd.toISOString().split('T')[0],
-          limit: 1000
-        }),
-        accountingAPI.getExpenses({
-          startDate: previousMonthStart.toISOString().split('T')[0],
-          endDate: previousMonthEnd.toISOString().split('T')[0],
-          limit: 1000
-        })
-      ])
+      const statsData = statsRes.data.data
+      const trendsData = trendsRes.data.data
+      const incomeCategories = incomeCatRes.data.data
+      const expenseCategories = expenseCatRes.data.data
 
-      // Calculate totals
-      const currentIncomeTotal = currentIncomes.data.data.reduce((sum: number, item: any) => sum + item.amount, 0)
-      const currentExpenseTotal = currentExpenses.data.data.reduce((sum: number, item: any) => sum + item.amount, 0)
-      const previousIncomeTotal = previousIncomes.data.data.reduce((sum: number, item: any) => sum + item.amount, 0)
-      const previousExpenseTotal = previousExpenses.data.data.reduce((sum: number, item: any) => sum + item.amount, 0)
+      // Calculate previous month stats from trends (second to last month)
+      const currentMonthTrend = trendsData[trendsData.length - 1]
+      const previousMonthTrend = trendsData[trendsData.length - 2]
 
-      // Calculate trends
-      const incomeChange = previousIncomeTotal > 0 
-        ? ((currentIncomeTotal - previousIncomeTotal) / previousIncomeTotal) * 100 
+      // Calculate changes
+      const incomeChange = previousMonthTrend.income > 0 
+        ? ((currentMonthTrend.income - previousMonthTrend.income) / previousMonthTrend.income) * 100 
         : 0
-      const expenseChange = previousExpenseTotal > 0 
-        ? ((currentExpenseTotal - previousExpenseTotal) / previousExpenseTotal) * 100 
+      const expenseChange = previousMonthTrend.expense > 0 
+        ? ((currentMonthTrend.expense - previousMonthTrend.expense) / previousMonthTrend.expense) * 100 
         : 0
       const currentProfit = currentIncomeTotal - currentExpenseTotal
       const previousProfit = previousIncomeTotal - previousExpenseTotal

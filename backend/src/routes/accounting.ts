@@ -6,8 +6,106 @@ import { log } from '../config/logger';
 const router = express.Router();
 
 /**
- * @route   GET /api/accounting/stats
+ * @route   GET /api/accounting/dashboard/stats
  * @desc    Dashboard quick stats (gelir, gider, kâr, tahsilat)
+ * @access  Private
+ * @query   startDate, endDate (optional)
+ */
+router.get('/dashboard/stats', authenticateToken, async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const start = startDate ? new Date(startDate as string) : undefined;
+    const end = endDate ? new Date(endDate as string) : undefined;
+
+    const stats = await accountingService.getDashboardStats(start, end);
+
+    res.json({
+      success: true,
+      data: stats,
+    });
+  } catch (error: any) {
+    log.error('Failed to get accounting stats:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get accounting stats',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/dashboard/trends
+ * @desc    Dashboard 6-month trend data
+ * @access  Private
+ * @query   months (default: 6)
+ */
+router.get('/dashboard/trends', authenticateToken, async (req, res) => {
+  try {
+    const { months = 6 } = req.query;
+    const companyId = (req as any).user?.companyId || 1;
+
+    const trends = await accountingService.getDashboardTrends(
+      companyId,
+      parseInt(months as string)
+    );
+
+    res.json({
+      success: true,
+      data: trends,
+    });
+  } catch (error: any) {
+    log.error('Failed to get dashboard trends:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get dashboard trends',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/dashboard/categories
+ * @desc    Dashboard category breakdown
+ * @access  Private
+ * @query   type (income/expense), startDate, endDate
+ */
+router.get('/dashboard/categories', authenticateToken, async (req, res) => {
+  try {
+    const { type, startDate, endDate } = req.query;
+    const companyId = (req as any).user?.companyId || 1;
+
+    if (!type || (type !== 'income' && type !== 'expense')) {
+      return res.status(400).json({
+        success: false,
+        message: 'type must be "income" or "expense"',
+      });
+    }
+
+    const start = startDate ? new Date(startDate as string) : undefined;
+    const end = endDate ? new Date(endDate as string) : undefined;
+
+    const categories = await accountingService.getCategoryBreakdown(
+      companyId,
+      type as 'income' | 'expense',
+      start,
+      end
+    );
+
+    res.json({
+      success: true,
+      data: categories,
+    });
+  } catch (error: any) {
+    log.error('Failed to get category breakdown:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get category breakdown',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/stats
+ * @desc    Dashboard quick stats (gelir, gider, kâr, tahsilat) - Deprecated, use /dashboard/stats
  * @access  Private
  * @query   startDate, endDate (optional)
  */

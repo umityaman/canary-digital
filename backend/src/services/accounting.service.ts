@@ -313,6 +313,146 @@ export class AccountingService {
   }
 
   /**
+   * Dashboard 6-Month Trends
+   * Last N months income/expense trends
+   */
+  async getDashboardTrends(companyId: number, months: number = 6) {
+    try {
+      log.info('Accounting Service: Dashboard trends hesaplanıyor...', { months });
+
+      const trends = [];
+      const now = new Date();
+
+      for (let i = months - 1; i >= 0; i--) {
+        const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+
+        // Income from paid invoices
+        const monthlyIncome = await prisma.invoice.aggregate({
+          where: {
+            invoiceDate: {
+              gte: monthStart,
+              lte: monthEnd,
+            },
+            status: {
+              in: ['paid', 'partial_paid'],
+            },
+          },
+          _sum: {
+            paidAmount: true,
+          },
+        });
+
+        // Expenses
+        const monthlyExpense = await prisma.expense.aggregate({
+          where: {
+            companyId,
+            date: {
+              gte: monthStart,
+              lte: monthEnd,
+            },
+          },
+          _sum: {
+            amount: true,
+          },
+        });
+
+        const income = monthlyIncome._sum.paidAmount || 0;
+        const expense = monthlyExpense._sum.amount || 0;
+
+        trends.push({
+          month: monthStart.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }),
+          monthKey: `${monthStart.getFullYear()}-${String(monthStart.getMonth() + 1).padStart(2, '0')}`,
+          income: Math.round(income * 100) / 100,
+          expense: Math.round(expense * 100) / 100,
+          profit: Math.round((income - expense) * 100) / 100,
+        });
+      }
+
+      log.info('Accounting Service: Dashboard trends hesaplandı', { trendsCount: trends.length });
+      return trends;
+    } catch (error) {
+      log.error('Accounting Service: Dashboard trends hesaplanamadı:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Category Breakdown
+   * Income or Expense by category
+   */
+  async getCategoryBreakdown(
+    companyId: number,
+    type: 'income' | 'expense',
+    startDate?: Date,
+    endDate?: Date
+  ) {
+    try {
+      log.info('Accounting Service: Category breakdown hesaplanıyor...', { type });
+
+      const start = startDate || startOfMonth(new Date());
+      const end = endDate || endOfMonth(new Date());
+
+      if (type === 'income') {
+        // Group invoices by type
+        const invoices = await prisma.invoice.groupBy({
+          by: ['type'],
+          where: {
+            invoiceDate: {
+              gte: start,
+              lte: end,
+            },
+            status: {
+              in: ['paid', 'partial_paid'],
+            },
+          },
+          _sum: {
+            paidAmount: true,
+          },
+          _count: true,
+        });
+
+        const total = invoices.reduce((sum, item) => sum + (item._sum.paidAmount || 0), 0);
+
+        return invoices.map(item => ({
+          category: item.type,
+          amount: Math.round((item._sum.paidAmount || 0) * 100) / 100,
+          count: item._count,
+          percentage: total > 0 ? Math.round((item._sum.paidAmount || 0) / total * 100) : 0,
+        }));
+      } else {
+        // Group expenses by category
+        const expenses = await prisma.expense.groupBy({
+          by: ['category'],
+          where: {
+            companyId,
+            date: {
+              gte: start,
+              lte: end,
+            },
+          },
+          _sum: {
+            amount: true,
+          },
+          _count: true,
+        });
+
+        const total = expenses.reduce((sum, item) => sum + (item._sum.amount || 0), 0);
+
+        return expenses.map(item => ({
+          category: item.category,
+          amount: Math.round((item._sum.amount || 0) * 100) / 100,
+          count: item._count,
+          percentage: total > 0 ? Math.round((item._sum.amount || 0) / total * 100) : 0,
+        }));
+      }
+    } catch (error) {
+      log.error('Accounting Service: Category breakdown hesaplanamadı:', error);
+      throw error;
+    }
+  }
+
+  /**
    * KDV Raporu
    * Dönemsel KDV hesaplaması
    */
