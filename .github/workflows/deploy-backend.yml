@@ -1,0 +1,131 @@
+name: Deploy Backend to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch: # Manuel trigger için
+
+# Prevent concurrent deployments
+concurrency:
+  group: deploy-backend-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: canary-digital-475319
+  REGION: europe-west1
+  SERVICE_NAME: canary-backend
+
+jobs:
+  deploy:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            backend/node_modules
+          key: ${{ runner.os }}-node-backend-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-backend-
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install backend dependencies and generate Prisma client
+        run: |
+          cd backend
+          npm ci
+          npx prisma generate
+
+      - name: Build Docker Image with Cloud Build
+        id: build
+        run: |
+          cd backend
+          IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/canary/backend:${{ github.sha }}"
+          gcloud builds submit \
+            --tag=$IMAGE_TAG \
+            --timeout=20m \
+            .
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Deploy Image to Cloud Run
+        id: deploy
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image=${{ env.IMAGE_TAG }} \
+            --region=${{ env.REGION }} \
+            --platform=managed \
+            --allow-unauthenticated \
+            --min-instances=0 \
+            --max-instances=10 \
+            --memory=1Gi \
+            --cpu=1 \
+            --port=4000 \
+            --timeout=300 \
+            --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
+            --update-secrets=JWT_SECRET=jwt-secret:latest \
+            --update-secrets=JWT_REFRESH_SECRET=jwt-secret:latest \
+            --update-secrets=DATABASE_URL=database-url:latest \
+            --set-env-vars="NODE_ENV=production"
+
+      - name: Get Build Logs on Failure
+        if: failure() || steps.deploy.outcome == 'failure'
+        run: |
+          echo "Fetching recent Cloud Build logs..."
+          gcloud builds list --limit=1 --format="value(id)" > build_id.txt
+          BUILD_ID=$(cat build_id.txt)
+          if [ ! -z "$BUILD_ID" ]; then
+            echo "Build ID: $BUILD_ID"
+            gcloud builds log $BUILD_ID --region=${{ env.REGION }} || gcloud builds log $BUILD_ID
+          fi
+
+      - name: Get Service URL
+        id: get-url
+        run: |
+          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region=${{ env.REGION }} \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Backend deployed to: $URL"
+
+      - name: Health Check
+        run: |
+          sleep 10
+          curl -f ${{ steps.get-url.outputs.url }}/api/health || exit 1
+
+      - name: Deployment Success Notification
+        if: success()
+        run: |
+          echo "✅ Backend deployment successful!"
+          echo "URL: ${{ steps.get-url.outputs.url }}"
+
+      - name: Deployment Failure Notification
+        if: failure()
+        run: |
+          echo "❌ Backend deployment failed!"
+          exit 1
