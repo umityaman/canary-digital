@@ -826,4 +826,252 @@ router.delete('/expense/:id', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+ * E-INVOICE CRUD OPERATIONS
+ */
+
+/**
+ * @route   POST /api/accounting/e-invoice
+ * @desc    Create new e-invoice (e-fatura or e-archive)
+ * @access  Private
+ * @body    orderId, customerId, items, type (auto-detect if not provided)
+ */
+router.post('/e-invoice', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { orderId, customerId, items, type, notes } = req.body;
+
+    if (!orderId || !customerId || !items || !Array.isArray(items)) {
+      return res.status(400).json({
+        success: false,
+        message: 'orderId, customerId, and items array are required',
+      });
+    }
+
+    const invoice = await accountingService.createEInvoice({
+      companyId,
+      orderId: parseInt(orderId),
+      customerId: parseInt(customerId),
+      items,
+      type, // Optional: will auto-detect if not provided
+      notes,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'E-Invoice created successfully',
+      data: invoice,
+    });
+  } catch (error: any) {
+    log.error('Failed to create e-invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create e-invoice',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/e-invoice/:id
+ * @desc    Get e-invoice details
+ * @access  Private
+ */
+router.get('/e-invoice/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const invoice = await accountingService.getEInvoiceDetail(parseInt(id));
+
+    if (!invoice) {
+      return res.status(404).json({
+        success: false,
+        message: 'E-Invoice not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      data: invoice,
+    });
+  } catch (error: any) {
+    log.error('Failed to get e-invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get e-invoice',
+    });
+  }
+});
+
+/**
+ * @route   PUT /api/accounting/e-invoice/:id
+ * @desc    Update e-invoice (only if status = draft)
+ * @access  Private
+ */
+router.put('/e-invoice/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { items, notes, dueDate } = req.body;
+
+    const invoice = await accountingService.updateEInvoice(parseInt(id), {
+      items,
+      notes,
+      dueDate: dueDate ? new Date(dueDate) : undefined,
+    });
+
+    res.json({
+      success: true,
+      message: 'E-Invoice updated successfully',
+      data: invoice,
+    });
+  } catch (error: any) {
+    log.error('Failed to update e-invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update e-invoice',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/e-invoice/:id/send
+ * @desc    Send e-invoice to GIB (change status from draft to sent)
+ * @access  Private
+ */
+router.post('/e-invoice/:id/send', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const invoice = await accountingService.sendEInvoice(parseInt(id));
+
+    res.json({
+      success: true,
+      message: 'E-Invoice sent successfully',
+      data: invoice,
+    });
+  } catch (error: any) {
+    log.error('Failed to send e-invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to send e-invoice',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/e-invoice/:id/cancel
+ * @desc    Cancel e-invoice (soft delete, change status to cancelled)
+ * @access  Private
+ */
+router.post('/e-invoice/:id/cancel', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const invoice = await accountingService.cancelEInvoice(parseInt(id), reason);
+
+    res.json({
+      success: true,
+      message: 'E-Invoice cancelled successfully',
+      data: invoice,
+    });
+  } catch (error: any) {
+    log.error('Failed to cancel e-invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to cancel e-invoice',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/e-invoices
+ * @desc    List e-invoices with filters
+ * @access  Private
+ * @query   status, type, startDate, endDate, page, limit
+ */
+router.get('/e-invoices', authenticateToken, async (req, res) => {
+  try {
+    const {
+      status,
+      type,
+      startDate,
+      endDate,
+      page = '1',
+      limit = '20',
+    } = req.query;
+
+    const filters = {
+      status: status as string,
+      type: type as string,
+      startDate: startDate ? new Date(startDate as string) : undefined,
+      endDate: endDate ? new Date(endDate as string) : undefined,
+    };
+
+    const result = await accountingService.listEInvoices(
+      filters,
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
+
+    res.json({
+      success: true,
+      data: result.invoices,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.limit),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to list e-invoices:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to list e-invoices',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/e-invoice/:id/download-pdf
+ * @desc    Generate and download e-invoice PDF
+ * @access  Private
+ */
+router.post('/e-invoice/:id/download-pdf', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pdfBuffer = await accountingService.generateEInvoicePDF(parseInt(id));
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=invoice-${id}.pdf`);
+    res.send(pdfBuffer);
+  } catch (error: any) {
+    log.error('Failed to generate e-invoice PDF:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to generate e-invoice PDF',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/e-invoice/:id/download-xml
+ * @desc    Generate and download e-invoice XML (UBL-TR format)
+ * @access  Private
+ */
+router.post('/e-invoice/:id/download-xml', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const xmlContent = await accountingService.generateEInvoiceXML(parseInt(id));
+
+    res.setHeader('Content-Type', 'application/xml');
+    res.setHeader('Content-Disposition', `attachment; filename=invoice-${id}.xml`);
+    res.send(xmlContent);
+  } catch (error: any) {
+    log.error('Failed to generate e-invoice XML:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to generate e-invoice XML',
+    });
+  }
+});
+
 export default router;

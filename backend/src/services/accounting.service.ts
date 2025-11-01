@@ -1559,6 +1559,510 @@ export class AccountingService {
       throw error;
     }
   }
+
+  /**
+   * E-INVOICE CRUD OPERATIONS
+   */
+
+  /**
+   * Create E-Invoice with smart type detection
+   * Auto-detects e-fatura vs e-archive based on customer tax info
+   */
+  async createEInvoice(data: {
+    companyId: number;
+    orderId: number;
+    customerId: number;
+    items: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      vatRate?: number;
+    }>;
+    type?: string;
+    notes?: string;
+  }) {
+    try {
+      log.info('Creating e-invoice...', { orderId: data.orderId });
+
+      // Get customer info to determine invoice type
+      const customer = await prisma.user.findUnique({
+        where: { id: data.customerId },
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+          taxNumber: true,
+          taxOffice: true,
+        },
+      });
+
+      if (!customer) {
+        throw new Error('Customer not found');
+      }
+
+      // Smart type detection: e-fatura if customer has tax number, otherwise e-archive
+      let invoiceType = data.type;
+      if (!invoiceType) {
+        invoiceType = customer.taxNumber && customer.taxNumber.length >= 10 
+          ? 'e-fatura' 
+          : 'e-archive';
+      }
+
+      // Calculate invoice totals
+      let totalAmount = 0;
+      let vatAmount = 0;
+
+      data.items.forEach(item => {
+        const lineTotal = item.quantity * item.unitPrice;
+        const vatRate = item.vatRate || 0.20; // Default 20% KDV
+        const lineVat = lineTotal * vatRate;
+
+        totalAmount += lineTotal;
+        vatAmount += lineVat;
+      });
+
+      const grandTotal = totalAmount + vatAmount;
+
+      // Generate invoice number
+      const today = new Date();
+      const year = today.getFullYear();
+      const count = await prisma.invoice.count({
+        where: {
+          invoiceDate: {
+            gte: new Date(year, 0, 1),
+            lte: new Date(year, 11, 31),
+          },
+        },
+      });
+
+      const invoiceNumber = `${invoiceType === 'e-fatura' ? 'EFA' : 'EAR'}${year}${String(count + 1).padStart(6, '0')}`;
+
+      // Create invoice
+      const invoice = await prisma.invoice.create({
+        data: {
+          orderId: data.orderId,
+          customerId: data.customerId,
+          invoiceNumber,
+          invoiceDate: new Date(),
+          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+          totalAmount,
+          vatAmount,
+          grandTotal,
+          paidAmount: 0,
+          status: 'draft',
+          type: invoiceType,
+        },
+        include: {
+          customer: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phone: true,
+              taxNumber: true,
+              taxOffice: true,
+            },
+          },
+          order: {
+            select: {
+              id: true,
+              orderNumber: true,
+            },
+          },
+        },
+      });
+
+      log.info('E-invoice created:', {
+        invoiceId: invoice.id,
+        invoiceNumber: invoice.invoiceNumber,
+        type: invoiceType,
+      });
+
+      return {
+        ...invoice,
+        items: data.items,
+        detectedType: invoiceType,
+      };
+    } catch (error) {
+      log.error('Failed to create e-invoice:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get E-Invoice detail with full information
+   */
+  async getEInvoiceDetail(id: number) {
+    try {
+      const invoice = await prisma.invoice.findUnique({
+        where: { id },
+        include: {
+          customer: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phone: true,
+              taxNumber: true,
+              taxOffice: true,
+              address: true,
+            },
+          },
+          order: {
+            select: {
+              id: true,
+              orderNumber: true,
+              startDate: true,
+              endDate: true,
+            },
+          },
+          payments: {
+            select: {
+              id: true,
+              amount: true,
+              paymentDate: true,
+              paymentMethod: true,
+              status: true,
+            },
+          },
+        },
+      });
+
+      return invoice;
+    } catch (error) {
+      log.error('Failed to get e-invoice detail:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update E-Invoice (only if status = draft)
+   */
+  async updateEInvoice(
+    id: number,
+    data: {
+      items?: Array<any>;
+      notes?: string;
+      dueDate?: Date;
+    }
+  ) {
+    try {
+      // Check if invoice is still in draft
+      const existing = await prisma.invoice.findUnique({
+        where: { id },
+      });
+
+      if (!existing) {
+        throw new Error('Invoice not found');
+      }
+
+      if (existing.status !== 'draft') {
+        throw new Error('Cannot update invoice that is not in draft status');
+      }
+
+      // Recalculate totals if items are updated
+      let updateData: any = {};
+
+      if (data.items) {
+        let totalAmount = 0;
+        let vatAmount = 0;
+
+        data.items.forEach(item => {
+          const lineTotal = item.quantity * item.unitPrice;
+          const vatRate = item.vatRate || 0.20;
+          const lineVat = lineTotal * vatRate;
+
+          totalAmount += lineTotal;
+          vatAmount += lineVat;
+        });
+
+        updateData.totalAmount = totalAmount;
+        updateData.vatAmount = vatAmount;
+        updateData.grandTotal = totalAmount + vatAmount;
+      }
+
+      if (data.dueDate) {
+        updateData.dueDate = data.dueDate;
+      }
+
+      const invoice = await prisma.invoice.update({
+        where: { id },
+        data: updateData,
+        include: {
+          customer: true,
+          order: true,
+        },
+      });
+
+      log.info('E-invoice updated:', id);
+
+      return {
+        ...invoice,
+        items: data.items,
+      };
+    } catch (error) {
+      log.error('Failed to update e-invoice:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send E-Invoice to GIB (change status from draft to sent)
+   * In production, this will call GIB SOAP API
+   */
+  async sendEInvoice(id: number) {
+    try {
+      const invoice = await prisma.invoice.findUnique({
+        where: { id },
+        include: { customer: true },
+      });
+
+      if (!invoice) {
+        throw new Error('Invoice not found');
+      }
+
+      if (invoice.status !== 'draft') {
+        throw new Error('Only draft invoices can be sent');
+      }
+
+      // TODO: Call GIB SOAP API here
+      // For now, just update status
+
+      const updated = await prisma.invoice.update({
+        where: { id },
+        data: {
+          status: 'sent',
+        },
+        include: {
+          customer: true,
+          order: true,
+        },
+      });
+
+      log.info('E-invoice sent to GIB (simulated):', {
+        invoiceId: id,
+        invoiceNumber: updated.invoiceNumber,
+      });
+
+      return updated;
+    } catch (error) {
+      log.error('Failed to send e-invoice:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel E-Invoice (soft delete)
+   */
+  async cancelEInvoice(id: number, reason?: string) {
+    try {
+      const invoice = await prisma.invoice.findUnique({
+        where: { id },
+      });
+
+      if (!invoice) {
+        throw new Error('Invoice not found');
+      }
+
+      // TODO: If already sent to GIB, call GIB cancel API
+
+      const updated = await prisma.invoice.update({
+        where: { id },
+        data: {
+          status: 'cancelled',
+        },
+      });
+
+      log.info('E-invoice cancelled:', {
+        invoiceId: id,
+        reason: reason || 'No reason provided',
+      });
+
+      return updated;
+    } catch (error) {
+      log.error('Failed to cancel e-invoice:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * List E-Invoices with filters and pagination
+   */
+  async listEInvoices(
+    filters: {
+      status?: string;
+      type?: string;
+      startDate?: Date;
+      endDate?: Date;
+    },
+    page: number = 1,
+    limit: number = 20
+  ) {
+    try {
+      const where: any = {};
+
+      if (filters.status) {
+        where.status = filters.status;
+      }
+
+      if (filters.type) {
+        where.type = filters.type;
+      }
+
+      if (filters.startDate || filters.endDate) {
+        where.invoiceDate = {};
+        if (filters.startDate) {
+          where.invoiceDate.gte = filters.startDate;
+        }
+        if (filters.endDate) {
+          where.invoiceDate.lte = filters.endDate;
+        }
+      }
+
+      const [invoices, total] = await Promise.all([
+        prisma.invoice.findMany({
+          where,
+          include: {
+            customer: {
+              select: {
+                id: true,
+                fullName: true,
+                taxNumber: true,
+              },
+            },
+            order: {
+              select: {
+                id: true,
+                orderNumber: true,
+              },
+            },
+          },
+          orderBy: {
+            invoiceDate: 'desc',
+          },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        prisma.invoice.count({ where }),
+      ]);
+
+      log.info('E-invoices listed:', { count: invoices.length, total });
+
+      return {
+        invoices,
+        total,
+        page,
+        limit,
+      };
+    } catch (error) {
+      log.error('Failed to list e-invoices:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Generate E-Invoice PDF
+   * TODO: Implement PDF generation library (pdfkit or puppeteer)
+   */
+  async generateEInvoicePDF(id: number): Promise<Buffer> {
+    try {
+      const invoice = await this.getEInvoiceDetail(id);
+
+      if (!invoice) {
+        throw new Error('Invoice not found');
+      }
+
+      // TODO: Implement PDF generation
+      // For now, return a placeholder
+
+      const placeholder = Buffer.from(`
+        E-FATURA / E-ARCHIVE INVOICE
+        
+        Invoice Number: ${invoice.invoiceNumber}
+        Date: ${invoice.invoiceDate.toLocaleDateString('tr-TR')}
+        
+        Customer: ${invoice.customer.fullName}
+        Tax Number: ${invoice.customer.taxNumber || 'N/A'}
+        
+        Total Amount: ${invoice.totalAmount.toFixed(2)} TL
+        VAT Amount: ${invoice.vatAmount.toFixed(2)} TL
+        Grand Total: ${invoice.grandTotal.toFixed(2)} TL
+        
+        Status: ${invoice.status.toUpperCase()}
+      `);
+
+      log.info('E-invoice PDF generated (placeholder):', id);
+
+      return placeholder;
+    } catch (error) {
+      log.error('Failed to generate e-invoice PDF:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Generate E-Invoice XML (UBL-TR format)
+   * TODO: Implement UBL-TR XML generation for GIB
+   */
+  async generateEInvoiceXML(id: number): Promise<string> {
+    try {
+      const invoice = await this.getEInvoiceDetail(id);
+
+      if (!invoice) {
+        throw new Error('Invoice not found');
+      }
+
+      // TODO: Implement proper UBL-TR XML generation
+      // For now, return a basic XML structure
+
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+  <ID>${invoice.invoiceNumber}</ID>
+  <IssueDate>${invoice.invoiceDate.toISOString().split('T')[0]}</IssueDate>
+  <InvoiceTypeCode>${invoice.type === 'e-fatura' ? 'SATIS' : 'EARSIVFATURA'}</InvoiceTypeCode>
+  
+  <AccountingSupplierParty>
+    <Party>
+      <PartyName>
+        <Name>CANARY Digital</Name>
+      </PartyName>
+    </Party>
+  </AccountingSupplierParty>
+  
+  <AccountingCustomerParty>
+    <Party>
+      <PartyName>
+        <Name>${invoice.customer.fullName}</Name>
+      </PartyName>
+      <PartyTaxScheme>
+        <TaxScheme>
+          <TaxTypeCode>VKN</TaxTypeCode>
+          <TaxIdentificationNumber>${invoice.customer.taxNumber || ''}</TaxIdentificationNumber>
+        </TaxScheme>
+      </PartyTaxScheme>
+    </Party>
+  </AccountingCustomerParty>
+  
+  <LegalMonetaryTotal>
+    <LineExtensionAmount currencyID="TRY">${invoice.totalAmount.toFixed(2)}</LineExtensionAmount>
+    <TaxExclusiveAmount currencyID="TRY">${invoice.totalAmount.toFixed(2)}</TaxExclusiveAmount>
+    <TaxInclusiveAmount currencyID="TRY">${invoice.grandTotal.toFixed(2)}</TaxInclusiveAmount>
+    <PayableAmount currencyID="TRY">${invoice.grandTotal.toFixed(2)}</PayableAmount>
+  </LegalMonetaryTotal>
+  
+  <TaxTotal>
+    <TaxAmount currencyID="TRY">${invoice.vatAmount.toFixed(2)}</TaxAmount>
+  </TaxTotal>
+</Invoice>`;
+
+      log.info('E-invoice XML generated (placeholder):', id);
+
+      return xml;
+    } catch (error) {
+      log.error('Failed to generate e-invoice XML:', error);
+      throw error;
+    }
+  }
 }
 
 export const accountingService = new AccountingService();
