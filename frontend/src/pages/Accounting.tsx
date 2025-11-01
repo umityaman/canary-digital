@@ -392,9 +392,9 @@ export default function Accounting() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pb-10">
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
         {/* Bu Ay Gelir */}
         <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
@@ -464,14 +464,14 @@ export default function Accounting() {
 
       {/* Tabs - Vertical Layout */}
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-        <div className="flex">
+        <div className="flex flex-col lg:flex-row">
           {/* Sidebar Tabs */}
-          <nav className="w-64 border-r border-neutral-200 flex-shrink-0">
+          <nav className="flex flex-row gap-2 overflow-x-auto border-b border-neutral-200 lg:border-b-0 lg:border-r lg:w-64 lg:flex-col lg:gap-0 flex-shrink-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-colors ${
+                className={`flex min-w-[11rem] items-center space-x-3 px-4 py-3 text-sm font-medium transition-colors lg:min-w-0 lg:w-full ${
                   activeTab === tab.id
                     ? 'bg-neutral-900 text-white'
                     : 'text-neutral-700 hover:bg-neutral-50'
@@ -484,7 +484,7 @@ export default function Accounting() {
           </nav>
 
           {/* Content Area */}
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-6 lg:p-8">
             {/* Dashboard Tab */}
             {activeTab === 'dashboard' && <AccountingDashboard />}
 

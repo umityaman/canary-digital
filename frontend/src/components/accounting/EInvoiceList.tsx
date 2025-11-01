@@ -1,12 +1,21 @@
 import { useState, useEffect } from 'react'
 import {
-  Search, Download, Filter, FileText, Send, X, CheckCircle,
+  Search, Download, FileText, Send, X, CheckCircle,
   Clock, AlertCircle, Eye, Plus, RefreshCw, ExternalLink, File,
   Calendar, User, DollarSign, Hash, Archive, Zap
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import EInvoiceForm from './EInvoiceForm'
 import EInvoiceDetail from './EInvoiceDetail'
+
+interface EInvoiceMeta {
+  uuid: string
+  gibStatus: string
+  ettn?: string | null
+  sentDate?: string | null
+  responseDate?: string | null
+  xmlHash?: string | null
+}
 
 interface EInvoice {
   id: number
@@ -23,7 +32,8 @@ interface EInvoice {
   description: string | null
   parasutId: string | null
   parasutInvoiceNo: string | null
-  eDocumentStatus: 'pending' | 'sent' | 'delivered' | 'failed' | null
+  eDocumentStatus: 'pending' | 'sent' | 'delivered' | 'failed' | 'draft' | null
+  eInvoiceMeta?: EInvoiceMeta | null
 }
 
 export default function EInvoiceList() {
@@ -36,6 +46,25 @@ export default function EInvoiceList() {
   const [showForm, setShowForm] = useState(false)
   const [selectedInvoice, setSelectedInvoice] = useState<EInvoice | null>(null)
   const [showDetail, setShowDetail] = useState(false)
+  const [actionInvoiceId, setActionInvoiceId] = useState<number | null>(null)
+
+  const buildHeaders = (withJson = false) => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      toast.error('Oturum bilgisi bulunamadı')
+      return null
+    }
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${token}`,
+    }
+
+    if (withJson) {
+      headers['Content-Type'] = 'application/json'
+    }
+
+    return headers
+  }
 
   useEffect(() => {
     loadInvoices()
@@ -58,15 +87,35 @@ export default function EInvoiceList() {
 
       const data = await response.json()
       const invoicesList = data.data || data
-      
-      // Map invoices and determine type based on customer tax number
-      const mappedInvoices = invoicesList.map((inv: any) => ({
-        ...inv,
-        invoiceType: inv.customer?.taxNumber ? 'e-fatura' : 'e-arsiv',
-        customerName: inv.customer?.fullName || 'Bilinmeyen',
-        customerTaxNumber: inv.customer?.taxNumber || null,
-        eDocumentStatus: inv.parasutId ? 'delivered' : null
-      }))
+
+      const mappedInvoices = invoicesList.map((inv: any) => {
+        const invoiceType = inv.customer?.taxNumber ? 'e-fatura' : 'e-arsiv'
+        const eInvoiceMeta = inv.eInvoice
+          ? {
+              uuid: inv.eInvoice.uuid,
+              gibStatus: inv.eInvoice.gibStatus,
+              ettn: inv.eInvoice.ettn,
+              sentDate: inv.eInvoice.sentDate,
+              responseDate: inv.eInvoice.responseDate,
+              xmlHash: inv.eInvoice.xmlHash,
+            }
+          : null
+
+        const eDocumentStatus = invoiceType === 'e-fatura'
+          ? (eInvoiceMeta?.gibStatus || 'draft')
+          : inv.parasutId
+            ? 'delivered'
+            : null
+
+        return {
+          ...inv,
+          invoiceType,
+          customerName: inv.customer?.fullName || inv.customer?.name || 'Bilinmeyen',
+          customerTaxNumber: inv.customer?.taxNumber || null,
+          eDocumentStatus,
+          eInvoiceMeta,
+        }
+      })
 
       setInvoices(mappedInvoices)
     } catch (error: any) {
@@ -121,32 +170,143 @@ export default function EInvoiceList() {
   }
 
   const handleSendEDocument = async (invoice: EInvoice) => {
+    if (invoice.invoiceType === 'e-fatura') {
+      const headers = buildHeaders()
+      if (!headers) return
+
+      try {
+        setActionInvoiceId(invoice.id)
+
+        const generateResponse = await fetch(`/api/einvoice/generate/${invoice.id}`, {
+          method: 'POST',
+          headers,
+        })
+        const generatePayload = await generateResponse.json().catch(() => ({}))
+        if (!generateResponse.ok) {
+          throw new Error(generatePayload?.message || 'E-Fatura XML oluşturulamadı')
+        }
+
+        const sendResponse = await fetch(`/api/einvoice/send/${invoice.id}`, {
+          method: 'POST',
+          headers,
+        })
+        const sendPayload = await sendResponse.json().catch(() => ({}))
+        if (!sendResponse.ok) {
+          throw new Error(sendPayload?.message || 'E-Fatura gönderilemedi')
+        }
+
+        toast.success('E-Fatura GİB\'e gönderildi')
+        loadInvoices()
+      } catch (error: any) {
+        console.error('Failed to send e-invoice:', error)
+        toast.error(error.message || 'E-Fatura gönderilemedi')
+      } finally {
+        setActionInvoiceId(null)
+      }
+
+      return
+    }
+
     if (!invoice.parasutId) {
       toast.error('Paraşüt fatura ID bulunamadı')
       return
     }
 
+    const headers = buildHeaders(true)
+    if (!headers) return
+
     try {
+      setActionInvoiceId(invoice.id)
+
       const response = await fetch(`/api/invoices/${invoice.id}/send-edocument`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
+        headers,
       })
 
-      if (!response.ok) throw new Error('Failed to send e-document')
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}))
+        throw new Error(payload?.message || 'E-Arşiv gönderilemedi')
+      }
 
-      toast.success(
-        invoice.invoiceType === 'e-fatura' 
-          ? 'E-Fatura başarıyla gönderildi' 
-          : 'E-Arşiv başarıyla oluşturuldu'
-      )
-      
+      toast.success('E-Arşiv başarıyla oluşturuldu')
       loadInvoices()
     } catch (error: any) {
-      console.error('Failed to send e-document:', error)
-      toast.error('E-Belge gönderilemedi')
+      console.error('Failed to send e-archive:', error)
+      toast.error(error.message || 'E-Arşiv gönderilemedi')
+    } finally {
+      setActionInvoiceId(null)
+    }
+  }
+
+  const handleCheckEInvoiceStatus = async (invoice: EInvoice) => {
+    if (invoice.invoiceType !== 'e-fatura') {
+      return
+    }
+
+    const headers = buildHeaders()
+    if (!headers) return
+
+    try {
+      setActionInvoiceId(invoice.id)
+
+      const response = await fetch(`/api/einvoice/status/${invoice.id}`, {
+        method: 'GET',
+        headers,
+      })
+      const payload = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(payload?.message || 'Durum sorgulanamadı')
+      }
+
+      toast.success(`GİB durumu: ${payload?.data?.status || 'bilinmiyor'}`)
+      loadInvoices()
+    } catch (error: any) {
+      console.error('Failed to check e-invoice status:', error)
+      toast.error(error.message || 'Durum sorgulanamadı')
+    } finally {
+      setActionInvoiceId(null)
+    }
+  }
+
+  const handleDownloadXML = async (invoice: EInvoice) => {
+    if (invoice.invoiceType !== 'e-fatura') {
+      return
+    }
+
+    const headers = buildHeaders()
+    if (!headers) return
+
+    try {
+      setActionInvoiceId(invoice.id)
+
+      const response = await fetch(`/api/einvoice/xml/${invoice.id}`, {
+        method: 'GET',
+        headers,
+      })
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}))
+        throw new Error(payload?.message || 'XML indirilemedi')
+      }
+
+      const xml = await response.text()
+      const blob = new Blob([xml], { type: 'application/xml' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${invoice.invoiceNumber || invoice.id}-efatura.xml`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+
+      toast.success('E-Fatura XML indirildi')
+    } catch (error: any) {
+      console.error('Failed to download e-invoice XML:', error)
+      toast.error(error.message || 'XML indirilemedi')
+    } finally {
+      setActionInvoiceId(null)
     }
   }
 
@@ -202,9 +362,42 @@ export default function EInvoiceList() {
     )
   }
 
-  const getEDocumentStatusBadge = (status: string | null) => {
+  const getEDocumentStatusBadge = (invoice: EInvoice) => {
+    if (invoice.invoiceType === 'e-fatura') {
+      const status = invoice.eInvoiceMeta?.gibStatus || 'draft'
+      const badges = {
+        draft: { label: 'XML Taslak', color: 'bg-gray-100 text-gray-700', icon: <File size={12} /> },
+        sent: { label: 'GİB Gönderildi', color: 'bg-blue-100 text-blue-700', icon: <Send size={12} /> },
+        delivered: { label: 'Yanıt Alındı', color: 'bg-green-100 text-green-700', icon: <CheckCircle size={12} /> },
+        failed: { label: 'Hata', color: 'bg-red-100 text-red-700', icon: <AlertCircle size={12} /> },
+      }
+      const badge = badges[status as keyof typeof badges] || badges.draft
+
+      return (
+        <div className="flex flex-col items-center gap-1">
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${badge.color}`}>
+            {badge.icon}
+            {badge.label}
+          </span>
+          {invoice.eInvoiceMeta?.uuid && (
+            <span className="inline-flex items-center gap-1 text-[11px] text-neutral-500">
+              <Hash size={11} />
+              {invoice.eInvoiceMeta.uuid.slice(0, 8)}...
+            </span>
+          )}
+          {invoice.eInvoiceMeta?.ettn && (
+            <span className="inline-flex items-center gap-1 text-[11px] text-neutral-500">
+              <Hash size={11} />
+              {invoice.eInvoiceMeta.ettn}
+            </span>
+          )}
+        </div>
+      )
+    }
+
+    const status = invoice.eDocumentStatus
     if (!status) return null
-    
+
     const badges = {
       pending: { label: 'Bekliyor', color: 'bg-yellow-100 text-yellow-700', icon: <Clock size={12} /> },
       sent: { label: 'Gönderildi', color: 'bg-blue-100 text-blue-700', icon: <Send size={12} /> },
@@ -212,6 +405,7 @@ export default function EInvoiceList() {
       failed: { label: 'Başarısız', color: 'bg-red-100 text-red-700', icon: <AlertCircle size={12} /> },
     }
     const badge = badges[status as keyof typeof badges] || badges.pending
+
     return (
       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${badge.color}`}>
         {badge.icon}
@@ -485,7 +679,7 @@ export default function EInvoiceList() {
                       {getStatusBadge(invoice.status)}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {getEDocumentStatusBadge(invoice.eDocumentStatus)}
+                      {getEDocumentStatusBadge(invoice)}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center gap-2">
@@ -503,17 +697,40 @@ export default function EInvoiceList() {
                         {invoice.status === 'draft' && (
                           <button
                             onClick={() => handleSendEDocument(invoice)}
-                            className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
+                            disabled={actionInvoiceId === invoice.id}
+                            className="p-2 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
                             title="E-Belge Gönder"
                           >
                             <Send size={18} className="text-blue-600" />
                           </button>
                         )}
+
+                        {invoice.invoiceType === 'e-fatura' && (
+                          <>
+                            <button
+                              onClick={() => handleCheckEInvoiceStatus(invoice)}
+                              disabled={actionInvoiceId === invoice.id}
+                              className="p-2 hover:bg-neutral-100 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                              title="GİB Durumunu Sorgula"
+                            >
+                              <RefreshCw size={18} className="text-neutral-600" />
+                            </button>
+                            <button
+                              onClick={() => handleDownloadXML(invoice)}
+                              disabled={actionInvoiceId === invoice.id}
+                              className="p-2 hover:bg-purple-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                              title="E-Fatura XML İndir"
+                            >
+                              <File size={18} className="text-purple-600" />
+                            </button>
+                          </>
+                        )}
                         
                         {invoice.parasutId && (
                           <button
                             onClick={() => handleDownloadPDF(invoice)}
-                            className="p-2 hover:bg-green-50 rounded-lg transition-colors"
+                            disabled={actionInvoiceId === invoice.id}
+                            className="p-2 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
                             title="PDF İndir"
                           >
                             <Download size={18} className="text-green-600" />
@@ -523,7 +740,8 @@ export default function EInvoiceList() {
                         {invoice.status !== 'cancelled' && invoice.status !== 'paid' && (
                           <button
                             onClick={() => handleCancelInvoice(invoice)}
-                            className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                            disabled={actionInvoiceId === invoice.id}
+                            className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
                             title="İptal Et"
                           >
                             <X size={18} className="text-red-600" />

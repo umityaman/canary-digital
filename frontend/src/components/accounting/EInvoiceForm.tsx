@@ -201,15 +201,52 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
       // If sending immediately, also send e-document
       if (sendImmediately && result.data?.id) {
         try {
-          await fetch(`/api/invoices/${result.data.id}/send-edocument`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
+          const token = localStorage.getItem('token')
+          if (!token) {
+            throw new Error('Oturum bilgisi bulunamadı')
+          }
+
+          const headers: Record<string, string> = {
+            Authorization: `Bearer ${token}`,
+          }
+
+          if (invoiceData.invoiceType === 'e-fatura') {
+            const generateResponse = await fetch(`/api/einvoice/generate/${result.data.id}`, {
+              method: 'POST',
+              headers,
+            })
+            const generatePayload = await generateResponse.json().catch(() => ({}))
+            if (!generateResponse.ok) {
+              throw new Error(generatePayload?.message || 'E-Fatura XML oluşturulamadı')
             }
-          })
+
+            const sendResponse = await fetch(`/api/einvoice/send/${result.data.id}`, {
+              method: 'POST',
+              headers,
+            })
+            const sendPayload = await sendResponse.json().catch(() => ({}))
+            if (!sendResponse.ok) {
+              throw new Error(sendPayload?.message || 'E-Fatura gönderilemedi')
+            }
+          } else {
+            const archiveHeaders = {
+              ...headers,
+              'Content-Type': 'application/json',
+            }
+            const archiveResponse = await fetch(`/api/invoices/${result.data.id}/send-edocument`, {
+              method: 'POST',
+              headers: archiveHeaders,
+            })
+            if (!archiveResponse.ok) {
+              const payload = await archiveResponse.json().catch(() => ({}))
+              throw new Error(payload?.message || 'E-Arşiv gönderilemedi')
+            }
+          }
+
           toast.success('Fatura oluşturuldu ve e-belge gönderildi')
-        } catch (sendError) {
-          toast.warning('Fatura oluşturuldu ancak e-belge gönderilemedi')
+        } catch (sendError: any) {
+          console.error('Failed to auto-send invoice:', sendError)
+          toast.warning(sendError.message || 'Fatura oluşturuldu ancak e-belge gönderilemedi')
         }
       } else {
         toast.success(editInvoice ? 'Fatura güncellendi' : 'Fatura oluşturuldu')

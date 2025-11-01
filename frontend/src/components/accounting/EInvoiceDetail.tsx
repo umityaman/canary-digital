@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, Download, Send, X, CheckCircle, Edit, FileText, Calendar, User, DollarSign } from 'lucide-react'
+import { ArrowLeft, Download, Send, X, CheckCircle, FileText, Calendar, User, DollarSign, RefreshCw, File, Hash } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 interface EInvoiceDetailProps {
@@ -10,6 +10,24 @@ interface EInvoiceDetailProps {
 
 export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDetailProps) {
   const [loading, setLoading] = useState(false)
+
+  const buildHeaders = (withJson = false) => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      toast.error('Oturum bilgisi bulunamadı')
+      return null
+    }
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${token}`,
+    }
+
+    if (withJson) {
+      headers['Content-Type'] = 'application/json'
+    }
+
+    return headers
+  }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('tr-TR', {
@@ -29,27 +47,137 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
   }
 
   const handleSendEDocument = async () => {
+    if (invoice.invoiceType === 'e-fatura') {
+      const headers = buildHeaders()
+      if (!headers) return
+
+      setLoading(true)
+      try {
+        const generateResponse = await fetch(`/api/einvoice/generate/${invoice.id}`, {
+          method: 'POST',
+          headers,
+        })
+        const generatePayload = await generateResponse.json().catch(() => ({}))
+        if (!generateResponse.ok) {
+          throw new Error(generatePayload?.message || 'E-Fatura XML oluşturulamadı')
+        }
+
+        const sendResponse = await fetch(`/api/einvoice/send/${invoice.id}`, {
+          method: 'POST',
+          headers,
+        })
+        const sendPayload = await sendResponse.json().catch(() => ({}))
+        if (!sendResponse.ok) {
+          throw new Error(sendPayload?.message || 'E-Fatura gönderilemedi')
+        }
+
+        toast.success('E-Fatura GİB\'e gönderildi')
+        onUpdate()
+      } catch (error: any) {
+        console.error('Failed to send e-invoice:', error)
+        toast.error(error.message || 'E-Fatura gönderilemedi')
+      } finally {
+        setLoading(false)
+      }
+
+      return
+    }
+
+    if (!invoice.parasutId) {
+      toast.error('Paraşüt fatura ID bulunamadı')
+      return
+    }
+
+    const headers = buildHeaders(true)
+    if (!headers) return
+
     setLoading(true)
     try {
       const response = await fetch(`/api/invoices/${invoice.id}/send-edocument`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        headers,
       })
 
-      if (!response.ok) throw new Error('Failed to send e-document')
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}))
+        throw new Error(payload?.message || 'E-Arşiv gönderilemedi')
+      }
 
-      toast.success(
-        invoice.invoiceType === 'e-fatura'
-          ? 'E-Fatura başarıyla gönderildi'
-          : 'E-Arşiv başarıyla oluşturuldu'
-      )
-      
+      toast.success('E-Arşiv başarıyla oluşturuldu')
       onUpdate()
     } catch (error: any) {
       console.error('Failed to send e-document:', error)
-      toast.error('E-Belge gönderilemedi')
+      toast.error(error.message || 'E-Belge gönderilemedi')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCheckStatus = async () => {
+    if (invoice.invoiceType !== 'e-fatura') {
+      return
+    }
+
+    const headers = buildHeaders()
+    if (!headers) return
+
+    setLoading(true)
+    try {
+      const response = await fetch(`/api/einvoice/status/${invoice.id}`, {
+        method: 'GET',
+        headers,
+      })
+      const payload = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(payload?.message || 'Durum sorgulanamadı')
+      }
+
+      toast.success(`GİB durumu: ${payload?.data?.status || 'bilinmiyor'}`)
+      onUpdate()
+    } catch (error: any) {
+      console.error('Failed to check e-invoice status:', error)
+      toast.error(error.message || 'Durum sorgulanamadı')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDownloadXML = async () => {
+    if (invoice.invoiceType !== 'e-fatura') {
+      return
+    }
+
+    const headers = buildHeaders()
+    if (!headers) return
+
+    setLoading(true)
+    try {
+      const response = await fetch(`/api/einvoice/xml/${invoice.id}`, {
+        method: 'GET',
+        headers,
+      })
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}))
+        throw new Error(payload?.message || 'XML indirilemedi')
+      }
+
+      const xml = await response.text()
+      const blob = new Blob([xml], { type: 'application/xml' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${invoice.invoiceNumber || invoice.id}-efatura.xml`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+
+      toast.success('E-Fatura XML indirildi')
+    } catch (error: any) {
+      console.error('Failed to download e-invoice XML:', error)
+      toast.error(error.message || 'XML indirilemedi')
     } finally {
       setLoading(false)
     }
@@ -120,7 +248,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap justify-end gap-2">
           {invoice.status === 'draft' && (
             <button
               onClick={handleSendEDocument}
@@ -130,6 +258,26 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
               <Send size={18} />
               <span className="hidden sm:inline">E-Belge Gönder</span>
             </button>
+          )}
+          {invoice.invoiceType === 'e-fatura' && (
+            <>
+              <button
+                onClick={handleCheckStatus}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-neutral-200 text-neutral-800 rounded-xl hover:bg-neutral-300 transition-colors disabled:opacity-50"
+              >
+                <RefreshCw size={18} />
+                <span className="hidden sm:inline">Durum Sorgula</span>
+              </button>
+              <button
+                onClick={handleDownloadXML}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50"
+              >
+                <File size={18} />
+                <span className="hidden sm:inline">XML İndir</span>
+              </button>
+            </>
           )}
           
           {invoice.parasutId && (
@@ -162,12 +310,29 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
           {statusInfo.label}
         </span>
         
-        {invoice.eDocumentStatus && (
+        {invoice.invoiceType === 'e-fatura' ? (
           <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold ${
-            invoice.eDocumentStatus === 'delivered' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+            invoice.eInvoiceMeta?.gibStatus === 'sent'
+              ? 'bg-blue-100 text-blue-700'
+              : invoice.eInvoiceMeta?.gibStatus === 'delivered'
+                ? 'bg-green-100 text-green-700'
+                : 'bg-gray-100 text-gray-700'
           }`}>
-            {invoice.eDocumentStatus === 'delivered' ? 'E-Belge Teslim Edildi' : 'E-Belge İşleniyor'}
+            <Hash size={16} />
+            {invoice.eInvoiceMeta?.gibStatus === 'sent'
+              ? 'GİB Gönderildi'
+              : invoice.eInvoiceMeta?.gibStatus === 'delivered'
+                ? 'GİB Yanıtı Alındı'
+                : 'XML Taslak'}
           </span>
+        ) : (
+          invoice.eDocumentStatus && (
+            <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold ${
+              invoice.eDocumentStatus === 'delivered' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+            }`}>
+              {invoice.eDocumentStatus === 'delivered' ? 'E-Belge Teslim Edildi' : 'E-Belge İşleniyor'}
+            </span>
+          )
         )}
       </div>
 

@@ -337,7 +337,7 @@ export default function AccountingDashboard() {
             <h3 className="text-lg font-semibold text-neutral-900">Aylık Trend</h3>
             <BarChart3 className="text-neutral-400" size={20} />
           </div>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={260}>
             <LineChart data={stats.monthlyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
@@ -377,7 +377,7 @@ export default function AccountingDashboard() {
             <h3 className="text-lg font-semibold text-neutral-900">Gelir vs Gider</h3>
             <BarChart3 className="text-neutral-400" size={20} />
           </div>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={260}>
             <BarChart data={stats.monthlyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
@@ -404,7 +404,7 @@ export default function AccountingDashboard() {
               <h3 className="text-lg font-semibold text-neutral-900">Gelir Kategorileri</h3>
               <PieChartIcon className="text-neutral-400" size={20} />
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={260}>
               <PieChart>
                 <Pie
                   data={stats.categoryBreakdown.income}
@@ -412,7 +412,7 @@ export default function AccountingDashboard() {
                   nameKey="category"
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
+                  outerRadius={90}
                   label={(entry) => `${entry.category}: ${formatCurrency(entry.amount)}`}
                   labelLine={false}
                 >
@@ -433,7 +433,7 @@ export default function AccountingDashboard() {
               <h3 className="text-lg font-semibold text-neutral-900">Gider Kategorileri</h3>
               <PieChartIcon className="text-neutral-400" size={20} />
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={260}>
               <PieChart>
                 <Pie
                   data={stats.categoryBreakdown.expense}
@@ -441,7 +441,7 @@ export default function AccountingDashboard() {
                   nameKey="category"
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
+                  outerRadius={90}
                   label={(entry) => `${entry.category}: ${formatCurrency(entry.amount)}`}
                   labelLine={false}
                 >

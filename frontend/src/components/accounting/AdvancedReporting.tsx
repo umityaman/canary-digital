@@ -435,7 +435,7 @@ export default function AdvancedReporting() {
           {/* Chart */}
           <div className="bg-white rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold text-neutral-900 mb-6">Aylık Nakit Akış Trendi</h3>
-            <ResponsiveContainer width="100%" height={400}>
+            <ResponsiveContainer width="100%" height={320}>
               <LineChart data={cashflowData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
@@ -537,7 +537,7 @@ export default function AdvancedReporting() {
             {/* Revenue Pie */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gelir Dağılımı</h3>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={260}>
                 <RechartsPie>
                   <Pie
                     data={revenueData}
@@ -561,7 +561,7 @@ export default function AdvancedReporting() {
             {/* Expense Pie */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gider Dağılımı</h3>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={260}>
                 <RechartsPie>
                   <Pie
                     data={expenseData}
@@ -801,7 +801,7 @@ export default function AdvancedReporting() {
           {/* Chart */}
           <div className="bg-white rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold text-neutral-900 mb-6">KDV Trendi</h3>
-            <ResponsiveContainer width="100%" height={400}>
+            <ResponsiveContainer width="100%" height={320}>
               <BarChart data={vatData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
