@@ -1,6 +1,7 @@
 import express from 'express';
 import { authenticateToken } from '../middleware/auth';
 import deliveryNoteService from '../services/deliveryNoteService';
+import deliveryNotePDFService from '../services/deliveryNotePDFService';
 
 const router = express.Router();
 
@@ -205,6 +206,58 @@ router.get('/statistics/summary', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch statistics',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * Convert delivery note to invoice
+ * POST /api/delivery-notes/:id/convert-to-invoice
+ */
+router.post('/:id/convert-to-invoice', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { invoiceDate, dueDate, paymentMethod, notes } = req.body;
+
+    const result = await deliveryNoteService.convertToInvoice(parseInt(id), {
+      invoiceDate: invoiceDate ? new Date(invoiceDate) : undefined,
+      dueDate: dueDate ? new Date(dueDate) : undefined,
+      paymentMethod,
+      notes
+    });
+
+    res.json({
+      success: true,
+      message: 'Delivery note converted to invoice successfully',
+      data: result
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to convert to invoice',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * Generate delivery note PDF
+ * GET /api/delivery-notes/:id/pdf
+ */
+router.get('/:id/pdf', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const pdfBuffer = await deliveryNotePDFService.generatePDF(parseInt(id));
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=irsaliye-${id}.pdf`);
+    res.send(pdfBuffer);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate PDF',
       error: error.message
     });
   }

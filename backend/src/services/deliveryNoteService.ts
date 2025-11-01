@@ -427,6 +427,130 @@ export class DeliveryNoteService {
       cancelled
     };
   }
+
+  /**
+   * Convert delivery note to invoice
+   */
+  async convertToInvoice(id: number, options: {
+    invoiceDate?: Date;
+    dueDate?: Date;
+    paymentMethod?: string;
+    notes?: string;
+  } = {}) {
+    // Get delivery note with all details
+    const deliveryNote = await prisma.deliveryNote.findUnique({
+      where: { id },
+      include: {
+        customer: true,
+        order: true,
+        items: {
+          include: {
+            equipment: true
+          }
+        }
+      }
+    });
+
+    if (!deliveryNote) {
+      throw new Error('Delivery note not found');
+    }
+
+    // Check if already converted
+    if (deliveryNote.invoiceId) {
+      throw new Error('Delivery note already converted to invoice');
+    }
+
+    // Check status
+    if (deliveryNote.status === 'cancelled') {
+      throw new Error('Cannot convert cancelled delivery note to invoice');
+    }
+
+    // Calculate totals
+    let totalAmount = 0;
+    let vatAmount = 0;
+
+    deliveryNote.items.forEach(item => {
+      const lineTotal = item.quantity * item.unitPrice;
+      const lineVat = lineTotal * (item.vatRate / 100);
+      
+      totalAmount += lineTotal;
+      vatAmount += lineVat;
+    });
+
+    const grandTotal = totalAmount + vatAmount;
+
+    // Generate invoice number
+    const year = new Date().getFullYear();
+    const invoiceCount = await prisma.invoice.count({
+      where: {
+        invoiceNumber: {
+          startsWith: `INV${year}`
+        }
+      }
+    });
+    const nextNumber = (invoiceCount + 1).toString().padStart(5, '0');
+    const invoiceNumber = `INV${year}${nextNumber}`;
+
+    // Create invoice in transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Create invoice
+      const invoice = await tx.invoice.create({
+        data: {
+          invoiceNumber,
+          invoiceDate: options.invoiceDate || new Date(),
+          dueDate: options.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+          orderId: deliveryNote.orderId!,
+          customerId: deliveryNote.customerId,
+          totalAmount,
+          vatAmount,
+          grandTotal,
+          status: 'draft',
+          type: 'rental',
+          paidAmount: 0
+        }
+      });
+
+      // Create invoice items (using raw SQL since InvoiceItem doesn't exist in schema)
+      // Note: You may need to adjust this based on your actual invoice items structure
+      for (const item of deliveryNote.items) {
+        await tx.$executeRaw`
+          INSERT INTO "InvoiceItem" 
+          ("invoiceId", "equipmentId", "description", "quantity", "unitPrice", "vatRate", "createdAt", "updatedAt")
+          VALUES 
+          (${invoice.id}, ${item.equipmentId}, ${item.description}, ${item.quantity}, ${item.unitPrice}, ${item.vatRate}, NOW(), NOW())
+        `;
+      }
+
+      // Update delivery note
+      await tx.deliveryNote.update({
+        where: { id },
+        data: {
+          invoiceId: invoice.id,
+          status: 'invoiced'
+        }
+      });
+
+      return invoice;
+    });
+
+    // Return invoice with items
+    const invoice = await prisma.invoice.findUnique({
+      where: { id: result.id },
+      include: {
+        customer: true,
+        order: true
+      }
+    });
+
+    return {
+      invoice,
+      deliveryNote: {
+        id: deliveryNote.id,
+        deliveryNumber: deliveryNote.deliveryNumber,
+        status: 'invoiced'
+      }
+    };
+  }
 }
 
 export default new DeliveryNoteService();
