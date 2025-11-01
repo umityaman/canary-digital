@@ -167,6 +167,15 @@ model User {
   // Delivery Notes
   deliveryNotes            DeliveryNote[]
   createdDeliveryNotes     DeliveryNote[]          @relation("DeliveryNoteCreator")
+  // Stock Management Relations
+  stockMovements           StockMovement[]         @relation("StockMovementUser")
+  acknowledgedStockAlerts  StockAlert[]            @relation("StockAlertAcknowledger")
+  requestedTransfers       StockTransfer[]         @relation("TransferRequester")
+  approvedTransfers        StockTransfer[]         @relation("TransferApprover")
+  shippedTransfers         StockTransfer[]         @relation("TransferShipper")
+  receivedTransfers        StockTransfer[]         @relation("TransferReceiver")
+  countedStocks            StockCount[]            @relation("StockCounter")
+  verifiedStocks           StockCount[]            @relation("StockVerifier")
 }
 
 model Category {
@@ -223,6 +232,11 @@ model Equipment {
   serviceAssets     ServiceAsset[]
   workOrders        WorkOrder[]
   deliveryNoteItems DeliveryNoteItem[]
+  // Stock Management Relations
+  stockMovements    StockMovement[]       @relation("EquipmentStockMovements")
+  stockAlerts       StockAlert[]          @relation("EquipmentStockAlerts")
+  stockTransfers    StockTransfer[]       @relation("EquipmentStockTransfers")
+  stockCountItems   StockCountItem[]      @relation("EquipmentStockCounts")
 }
 
 model Customer {
@@ -276,6 +290,8 @@ model Order {
   // Accounting relations
   checks            Check[]
   deliveryNotes     DeliveryNote[]
+  // Stock Management
+  stockMovements    StockMovement[]    @relation("StockMovementOrder")
 }
 
 model OrderItem {
@@ -1054,6 +1070,7 @@ model Invoice {
   eInvoice         EInvoice?
   eArchiveInvoice  EArchiveInvoice?
   deliveryNote     DeliveryNote?
+  stockMovements   StockMovement[]
 
   @@index([orderId])
   @@index([customerId])
@@ -1132,6 +1149,9 @@ model DeliveryNote {
   createdById    Int?
   createdBy      User?              @relation("DeliveryNoteCreator", fields: [createdById], references: [id])
   
+  // Stock Management
+  stockMovements StockMovement[]    @relation("StockMovementDeliveryNote")
+  
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   
@@ -1190,22 +1210,27 @@ model Offer {
 }
 
 model Expense {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  description   String
-  amount        Float
-  category      String
-  date          DateTime
-  status        String   @default("pending")
-  paymentMethod String?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  company       Company  @relation(fields: [companyId], references: [id])
+  id              Int              @id @default(autoincrement())
+  companyId       Int
+  description     String
+  amount          Float
+  category        String
+  date            DateTime
+  status          String           @default("pending")
+  paymentMethod   String?
+  notes           String?
+  // Cost Center
+  costCenterId    Int?
+  costCenter      CostCenter?      @relation("ExpenseCostCenter", fields: [costCenterId], references: [id])
+  costAllocations CostAllocation[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  company         Company          @relation(fields: [companyId], references: [id])
 
   @@index([companyId])
   @@index([category])
   @@index([date])
+  @@index([costCenterId])
 }
 
 // Accounting extensions: Checks, PromissoryNotes, Bank/Cash models, Categories and Tags
@@ -2922,5 +2947,370 @@ model JournalEntryItem {
   
   @@index([journalEntryId])
   @@index([accountCode])
+  @@index([companyId])
+}
+
+// ==================== STOK YÖNETİMİ ====================
+
+// Stok Hareketi (Stock Movement)
+// Tüm stok giriş/çıkış/transfer işlemleri
+model StockMovement {
+  id                Int                 @id @default(autoincrement())
+  equipmentId       Int
+  equipment         Equipment           @relation("EquipmentStockMovements", fields: [equipmentId], references: [id])
+  
+  // Movement details
+  movementType      String              // "in" (giriş), "out" (çıkış), "adjustment" (düzeltme), "transfer" (transfer)
+  movementReason    String              // "sale", "return", "purchase", "damage", "loss", "found", "correction"
+  quantity          Int                 // Pozitif veya negatif
+  
+  // Related documents
+  invoiceId         Int?
+  invoice           Invoice?            @relation(fields: [invoiceId], references: [id])
+  deliveryNoteId    Int?
+  deliveryNote      DeliveryNote?       @relation("StockMovementDeliveryNote", fields: [deliveryNoteId], references: [id])
+  orderId           Int?
+  order             Order?              @relation("StockMovementOrder", fields: [orderId], references: [id])
+  
+  // Location (for transfers)
+  fromLocation      String?             // "Warehouse A", "Store 1", etc.
+  toLocation        String?
+  
+  // Stock levels after this movement
+  stockBefore       Int
+  stockAfter        Int
+  
+  // Metadata
+  reference         String?             // External reference number
+  notes             String?
+  performedBy       Int?
+  user              User?               @relation("StockMovementUser", fields: [performedBy], references: [id])
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  
+  @@index([equipmentId])
+  @@index([movementType])
+  @@index([movementReason])
+  @@index([invoiceId])
+  @@index([deliveryNoteId])
+  @@index([orderId])
+  @@index([companyId])
+  @@index([createdAt])
+}
+
+// Stok Uyarıları (Stock Alerts)
+// Düşük stok ve diğer uyarılar
+model StockAlert {
+  id                Int                 @id @default(autoincrement())
+  equipmentId       Int
+  equipment         Equipment           @relation("EquipmentStockAlerts", fields: [equipmentId], references: [id])
+  
+  // Alert details
+  alertType         String              // "low_stock", "out_of_stock", "overstock", "expiring_soon"
+  severity          String              @default("medium") // "low", "medium", "high", "critical"
+  message           String
+  
+  // Thresholds
+  currentStock      Int
+  thresholdValue    Int?
+  
+  // Status
+  status            String              @default("active") // "active", "acknowledged", "resolved", "dismissed"
+  acknowledgedBy    Int?
+  acknowledgedUser  User?               @relation("StockAlertAcknowledger", fields: [acknowledgedBy], references: [id])
+  acknowledgedAt    DateTime?
+  resolvedAt        DateTime?
+  
+  // Notifications sent
+  notificationSent  Boolean             @default(false)
+  notificationCount Int                 @default(0)
+  lastNotifiedAt    DateTime?
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@index([equipmentId])
+  @@index([alertType])
+  @@index([severity])
+  @@index([status])
+  @@index([companyId])
+  @@index([createdAt])
+}
+
+// Stok Transfer (Stock Transfer)
+// Lokasyonlar arası stok transferi
+model StockTransfer {
+  id                Int                 @id @default(autoincrement())
+  transferNumber    String              @unique
+  
+  // Equipment being transferred
+  equipmentId       Int
+  equipment         Equipment           @relation("EquipmentStockTransfers", fields: [equipmentId], references: [id])
+  quantity          Int
+  
+  // Locations
+  fromLocation      String
+  toLocation        String
+  
+  // Status
+  status            String              @default("pending") // "pending", "in_transit", "completed", "cancelled"
+  
+  // Dates
+  requestedDate     DateTime            @default(now())
+  shippedDate       DateTime?
+  receivedDate      DateTime?
+  expectedDate      DateTime?
+  
+  // People involved
+  requestedBy       Int
+  requester         User                @relation("TransferRequester", fields: [requestedBy], references: [id])
+  approvedBy        Int?
+  approver          User?               @relation("TransferApprover", fields: [approvedBy], references: [id])
+  shippedBy         Int?
+  shipper           User?               @relation("TransferShipper", fields: [shippedBy], references: [id])
+  receivedBy        Int?
+  receiver          User?               @relation("TransferReceiver", fields: [receivedBy], references: [id])
+  
+  // Logistics
+  carrier           String?
+  trackingNumber    String?
+  vehiclePlate      String?
+  driverName        String?
+  driverPhone       String?
+  
+  // Costs
+  shippingCost      Float?              @default(0)
+  insuranceCost     Float?              @default(0)
+  
+  // Documents
+  documents         String[]            @default([])
+  
+  // Notes
+  notes             String?
+  rejectionReason   String?
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@index([equipmentId])
+  @@index([status])
+  @@index([fromLocation])
+  @@index([toLocation])
+  @@index([requestedBy])
+  @@index([companyId])
+  @@index([transferNumber])
+  @@index([createdAt])
+}
+
+// Stok Sayım (Stock Count/Physical Inventory)
+// Fiziksel sayım kayıtları
+model StockCount {
+  id                Int                 @id @default(autoincrement())
+  countNumber       String              @unique
+  
+  // Count details
+  countDate         DateTime            @default(now())
+  countType         String              @default("full") // "full", "partial", "cycle"
+  location          String?
+  
+  // Status
+  status            String              @default("planned") // "planned", "in_progress", "completed", "cancelled"
+  
+  // Scope
+  category          String?             // Equipment category to count
+  
+  // Results
+  totalItems        Int                 @default(0)
+  countedItems      Int                 @default(0)
+  discrepancies     Int                 @default(0)
+  
+  // People
+  countedBy         Int?
+  counter           User?               @relation("StockCounter", fields: [countedBy], references: [id])
+  verifiedBy        Int?
+  verifier          User?               @relation("StockVerifier", fields: [verifiedBy], references: [id])
+  
+  // Timing
+  startedAt         DateTime?
+  completedAt       DateTime?
+  
+  // Items
+  items             StockCountItem[]
+  
+  // Notes
+  notes             String?
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@index([status])
+  @@index([location])
+  @@index([countDate])
+  @@index([companyId])
+  @@index([countNumber])
+}
+
+// Stok Sayım Kalemleri (Stock Count Items)
+model StockCountItem {
+  id                Int                 @id @default(autoincrement())
+  stockCountId      Int
+  stockCount        StockCount          @relation(fields: [stockCountId], references: [id], onDelete: Cascade)
+  
+  equipmentId       Int
+  equipment         Equipment           @relation("EquipmentStockCounts", fields: [equipmentId], references: [id])
+  
+  // Expected vs Actual
+  expectedQty       Int
+  countedQty        Int
+  difference        Int                 // countedQty - expectedQty
+  
+  // Status
+  status            String              @default("pending") // "pending", "counted", "verified", "adjusted"
+  
+  // Notes
+  notes             String?
+  condition         String?             // Equipment condition notes
+  
+  // Adjustments made
+  adjustmentMade    Boolean             @default(false)
+  adjustedAt        DateTime?
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@index([stockCountId])
+  @@index([equipmentId])
+  @@index([status])
+}
+
+// ==================== MALİYET MUHASEBESİ ====================
+
+// Maliyet Merkezi (Cost Center)
+// Giderlerin kategorize edilmesi için
+model CostCenter {
+  id                Int                 @id @default(autoincrement())
+  code              String              // "CC-001", "DEPT-SALES"
+  name              String              // "Sales Department", "Marketing", "Operations"
+  description       String?
+  
+  // Hierarchy
+  parentId          Int?
+  parent            CostCenter?         @relation("CostCenterHierarchy", fields: [parentId], references: [id])
+  children          CostCenter[]        @relation("CostCenterHierarchy")
+  
+  // Budget
+  annualBudget      Float?              @default(0)
+  quarterlyBudget   Float?              @default(0)
+  monthlyBudget     Float?              @default(0)
+  
+  // Tracking
+  isActive          Boolean             @default(true)
+  responsiblePerson String?
+  
+  // Relations
+  expenses          Expense[]           @relation("ExpenseCostCenter")
+  budgetItems       BudgetItem[]
+  costAllocations   CostAllocation[]
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@unique([companyId, code])
+  @@index([companyId])
+  @@index([code])
+  @@index([parentId])
+  @@index([isActive])
+}
+
+// Bütçe Kalemleri (Budget Items)
+// Detaylı bütçe planlaması
+model BudgetItem {
+  id                Int                 @id @default(autoincrement())
+  costCenterId      Int?
+  costCenter        CostCenter?         @relation(fields: [costCenterId], references: [id])
+  
+  // Budget details
+  name              String
+  category          String              // "personnel", "marketing", "operations", "utilities", etc.
+  description       String?
+  
+  // Period
+  budgetYear        Int
+  budgetMonth       Int?                // null for annual budgets
+  budgetQuarter     Int?                // 1, 2, 3, 4 for quarterly
+  
+  // Amounts
+  plannedAmount     Float
+  actualAmount      Float               @default(0)
+  variance          Float               @default(0) // actualAmount - plannedAmount
+  variancePercent   Float               @default(0)
+  
+  // Status
+  status            String              @default("draft") // "draft", "approved", "active", "closed"
+  approvedBy        Int?
+  approvedAt        DateTime?
+  
+  // Tracking
+  lastUpdated       DateTime            @default(now())
+  
+  // Notes
+  notes             String?
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@index([costCenterId])
+  @@index([category])
+  @@index([budgetYear])
+  @@index([budgetMonth])
+  @@index([status])
+  @@index([companyId])
+}
+
+// Maliyet Dağılımı (Cost Allocation)
+// Maliyetlerin maliyet merkezlerine dağıtımı
+model CostAllocation {
+  id                Int                 @id @default(autoincrement())
+  expenseId         Int
+  expense           Expense             @relation(fields: [expenseId], references: [id])
+  costCenterId      Int
+  costCenter        CostCenter          @relation(fields: [costCenterId], references: [id])
+  
+  // Allocation details
+  allocationType    String              @default("direct") // "direct", "indirect", "shared"
+  allocationMethod  String?             // "percentage", "headcount", "area", "usage"
+  
+  // Amount
+  amount            Float               // Portion of expense allocated to this cost center
+  percentage        Float?              // If allocation by percentage
+  
+  // Notes
+  notes             String?
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  
+  @@index([expenseId])
+  @@index([costCenterId])
   @@index([companyId])
 }
