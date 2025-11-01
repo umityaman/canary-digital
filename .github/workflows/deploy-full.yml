@@ -1,9 +1,10 @@
 name: Full Deployment (Backend + Frontend)
 
 on:
-  push:
-    branches:
-      - main
+  # Temporarily disabled - using deploy-backend-v2.yml instead
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
     inputs:
       environment:
