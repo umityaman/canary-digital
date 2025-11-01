@@ -81,6 +81,7 @@ model Company {
   // Turkish Accounting
   chartOfAccounts      ChartOfAccounts[]
   journalEntries       JournalEntry[]
+  deliveryNotes        DeliveryNote[]
 }
 
 model User {
@@ -163,6 +164,9 @@ model User {
   // Turkish Accounting
   journalEntriesCreated    JournalEntry[]          @relation("JournalEntryCreator")
   journalEntriesPosted     JournalEntry[]          @relation("JournalEntryPoster")
+  // Delivery Notes
+  deliveryNotes            DeliveryNote[]
+  createdDeliveryNotes     DeliveryNote[]          @relation("DeliveryNoteCreator")
 }
 
 model Category {
@@ -218,6 +222,7 @@ model Equipment {
   scanLogs          ScanLog[]
   serviceAssets     ServiceAsset[]
   workOrders        WorkOrder[]
+  deliveryNoteItems DeliveryNoteItem[]
 }
 
 model Customer {
@@ -270,6 +275,7 @@ model Order {
   transactions      Transaction[]
   // Accounting relations
   checks            Check[]
+  deliveryNotes     DeliveryNote[]
 }
 
 model OrderItem {
@@ -1047,6 +1053,7 @@ model Invoice {
   transactions     Transaction[]
   eInvoice         EInvoice?
   eArchiveInvoice  EArchiveInvoice?
+  deliveryNote     DeliveryNote?
 
   @@index([orderId])
   @@index([customerId])
@@ -1081,6 +1088,84 @@ model EArchiveInvoice {
   htmlContent  String?  @db.Text
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model DeliveryNote {
+  id             Int                @id @default(autoincrement())
+  deliveryNumber String             @unique
+  deliveryDate   DateTime           @default(now())
+  deliveryType   String             @default("sevk") // sevk (dispatch), tahsilat (collection)
+  
+  // Relations
+  orderId        Int?
+  order          Order?             @relation(fields: [orderId], references: [id])
+  
+  customerId     Int
+  customer       User               @relation(fields: [customerId], references: [id])
+  
+  companyId      Int?
+  company        Company?           @relation(fields: [companyId], references: [id])
+  
+  items          DeliveryNoteItem[]
+  
+  // Invoice conversion
+  invoiceId      Int?               @unique
+  invoice        Invoice?           @relation(fields: [invoiceId], references: [id])
+  
+  // Status
+  status         String             @default("pending") // pending, delivered, invoiced, cancelled
+  
+  // Logistics
+  driverName     String?
+  driverPhone    String?
+  vehiclePlate   String?
+  
+  // Addresses
+  fromAddress    String?
+  toAddress      String?
+  
+  // Additional info
+  notes          String?            @db.Text
+  attachments    Json?              // PDF paths, images, etc.
+  
+  // Audit
+  createdById    Int?
+  createdBy      User?              @relation("DeliveryNoteCreator", fields: [createdById], references: [id])
+  
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  
+  @@index([customerId])
+  @@index([orderId])
+  @@index([status])
+  @@index([deliveryDate])
+  @@index([deliveryNumber])
+}
+
+model DeliveryNoteItem {
+  id             Int          @id @default(autoincrement())
+  deliveryNoteId Int
+  deliveryNote   DeliveryNote @relation(fields: [deliveryNoteId], references: [id], onDelete: Cascade)
+  
+  equipmentId    Int?
+  equipment      Equipment?   @relation(fields: [equipmentId], references: [id])
+  
+  description    String
+  quantity       Int
+  unitPrice      Float
+  vatRate        Float        @default(20) // KDV oranı
+  
+  // Unit of measure
+  unit           String       @default("Adet") // Adet, Kg, Metre, vb.
+  
+  // Order item reference (if converted from order)
+  orderItemId    Int?
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  @@index([deliveryNoteId])
+  @@index([equipmentId])
 }
 
 model Offer {
