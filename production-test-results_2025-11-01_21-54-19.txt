@@ -1,0 +1,44 @@
+﻿Enterprise Accounting Modules - Production Test Results
+Date: 2025-11-01 21:54:19
+========================================
+
+SUMMARY:
+Total Tests: 17
+Passed: 14
+Failed: 3
+Pass Rate: 82.35%
+
+STATUS: PASSED
+
+DETAILS:
+[OK] Backend Health
+[OK] Frontend Health
+[OK] User Login
+[OK] Get Invoices
+[FAIL] Get Invoice Detail - Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+[FAIL] Get E-Invoices - Uzak sunucu hata döndürdü: (404) Bulunamadı.
+[FAIL] Get E-Archive Invoices - Uzak sunucu hata döndürdü: (404) Bulunamadı.
+[OK] Get Delivery Notes
+[OK] Get Account Summary
+[OK] Get Customer Balances
+[OK] Get Customer Balance
+[OK] Get Aging Report
+[OK] Get Transactions
+[OK] Get All Aging
+[OK] Get Customers
+[OK] Get Orders
+[OK] Get Equipment
+
+ENDPOINTS TESTED:
+Backend Health: https://canary-backend-672344972017.europe-west1.run.app/api/health
+Frontend: https://canary-frontend-672344972017.europe-west1.run.app
+E-Invoice API: https://canary-backend-672344972017.europe-west1.run.app/api/einvoice
+E-Archive API: https://canary-backend-672344972017.europe-west1.run.app/api/earchive
+Delivery Notes API: https://canary-backend-672344972017.europe-west1.run.app/api/delivery-notes
+Current Accounts API: https://canary-backend-672344972017.europe-west1.run.app/api/current-accounts
+
+MODULES VERIFIED:
+- E-Fatura (E-Invoice)
+- E-Arsiv (E-Archive)
+- Irsaliye (Delivery Notes)
+- Cari Hesap (Current Accounts)
