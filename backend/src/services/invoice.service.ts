@@ -429,6 +429,8 @@ export class InvoiceService {
           },
           customer: true,
           payments: true,
+          eInvoice: true,
+          eArchiveInvoice: true,
         },
       });
 
@@ -501,6 +503,8 @@ export class InvoiceService {
             },
           },
           payments: true,
+          eInvoice: true,
+          eArchiveInvoice: true,
         },
         orderBy: {
           invoiceDate: 'desc',

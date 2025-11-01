@@ -1045,9 +1045,42 @@ model Invoice {
   order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   payments         Payment[]
   transactions     Transaction[]
+  eInvoice         EInvoice?
+  eArchiveInvoice  EArchiveInvoice?
 
   @@index([orderId])
   @@index([customerId])
+}
+
+model EInvoice {
+  id          Int       @id @default(autoincrement())
+  invoiceId   Int       @unique
+  invoice     Invoice   @relation(fields: [invoiceId], references: [id])
+  uuid        String    @unique
+  ettn        String?
+  gibStatus   String    @default("draft")
+  gibResponse Json?
+  xmlContent  String    @db.Text
+  xmlHash     String?
+  sentDate    DateTime?
+  responseDate DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([gibStatus])
+  @@index([uuid])
+}
+
+model EArchiveInvoice {
+  id           Int      @id @default(autoincrement())
+  invoiceId    Int      @unique
+  invoice      Invoice  @relation(fields: [invoiceId], references: [id])
+  archiveId    String   @unique
+  portalStatus String   @default("pending")
+  pdfUrl       String?
+  htmlContent  String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Offer {

@@ -69,9 +69,12 @@ router.get('/', authenticateToken, async (req, res) => {
             select: {
               id: true,
               name: true,
+              fullName: true,
               email: true,
               phone: true,
               taxNumber: true,
+              taxOffice: true,
+              address: true,
             },
           },
           order: {
@@ -97,6 +100,8 @@ router.get('/', authenticateToken, async (req, res) => {
               paymentMethod: true,
             },
           },
+          eInvoice: true,
+          eArchiveInvoice: true,
         },
         orderBy: {
           [sortBy as string]: sortOrder as string,
