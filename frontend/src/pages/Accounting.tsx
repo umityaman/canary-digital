@@ -16,9 +16,10 @@ import DeliveryNoteList from '../components/accounting/DeliveryNoteList'
 import BankReconciliation from '../components/accounting/BankReconciliation'
 import InventoryAccounting from '../components/accounting/InventoryAccounting'
 import AdvancedReporting from '../components/accounting/AdvancedReporting'
+import GIBIntegration from '../components/accounting/GIBIntegration'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory'
+type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib'
 
 interface AccountingStats {
   totalRevenue: number
@@ -379,6 +380,7 @@ export default function Accounting() {
     { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
     { id: 'inventory' as const, label: 'Stok-Muhasebe', icon: <Package size={18} /> },
+    { id: 'gib' as const, label: 'GİB Entegrasyonu', icon: <Globe size={18} /> },
     { id: 'integration' as const, label: 'Entegrasyonlar', icon: <RefreshCw size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
@@ -1073,6 +1075,9 @@ export default function Accounting() {
 
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}
+
+            {/* GIB Integration Tab */}
+            {activeTab === 'gib' && <GIBIntegration />}
 
             {/* Integration Tab */}
             {activeTab === 'integration' && (

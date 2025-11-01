@@ -1,5 +1,6 @@
 import express from 'express';
 import { accountingService } from '../services/accounting.service';
+import * as gibService from '../services/gib-soap.service';
 import { authenticateToken } from './auth';
 import { log } from '../config/logger';
 
@@ -2214,6 +2215,178 @@ router.get('/due-soon', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to get due soon items',
+    });
+  }
+});
+
+// ==================== GIB SOAP Integration ====================
+
+/**
+ * @route   POST /api/accounting/gib/send-invoice
+ * @desc    Send e-Invoice to GIB (e-Fatura or e-Arşiv)
+ * @access  Private
+ * @body    invoiceData (InvoiceData type from gib-soap.service)
+ */
+router.post('/gib/send-invoice', authenticateToken, async (req, res) => {
+  try {
+    const invoiceData = req.body;
+
+    // Generate UBL-TR 1.2 XML
+    const invoiceXML = gibService.generateInvoiceXML(invoiceData);
+
+    // Determine if e-Fatura or e-Arşiv based on customer tax number
+    const isEFatura = !!invoiceData.customer.taxNumber;
+    
+    let result;
+    if (isEFatura) {
+      result = await gibService.sendInvoice(invoiceXML);
+    } else {
+      result = await gibService.sendArchiveInvoice(invoiceXML);
+    }
+
+    res.json({
+      success: result.success,
+      data: {
+        type: isEFatura ? 'e-Fatura' : 'e-Arşiv',
+        invoiceId: invoiceData.invoiceId,
+        uuid: invoiceData.uuid,
+        xml: invoiceXML,
+        gibResponse: result,
+      },
+      message: result.success 
+        ? `${isEFatura ? 'e-Fatura' : 'e-Arşiv'} başarıyla GİB'e gönderildi` 
+        : 'Fatura gönderimi başarısız',
+    });
+  } catch (error: any) {
+    log.error('Failed to send invoice to GIB:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to send invoice to GIB',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/gib/invoice-status/:uuid
+ * @desc    Query invoice status from GIB
+ * @access  Private
+ * @param   uuid - Invoice UUID
+ */
+router.get('/gib/invoice-status/:uuid', authenticateToken, async (req, res) => {
+  try {
+    const { uuid } = req.params;
+
+    const status = await gibService.queryInvoiceStatus(uuid);
+
+    res.json({
+      success: true,
+      data: {
+        uuid,
+        status: status.status,
+        message: status.message,
+        details: status,
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to query invoice status:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to query invoice status',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/gib/cancel-invoice
+ * @desc    Cancel invoice on GIB
+ * @access  Private
+ * @body    uuid, reason
+ */
+router.post('/gib/cancel-invoice', authenticateToken, async (req, res) => {
+  try {
+    const { uuid, reason } = req.body;
+
+    if (!uuid || !reason) {
+      return res.status(400).json({
+        success: false,
+        message: 'UUID ve iptal nedeni gereklidir',
+      });
+    }
+
+    const result = await gibService.cancelInvoice(uuid, reason);
+
+    res.json({
+      success: result.success,
+      data: {
+        uuid,
+        reason,
+        gibResponse: result,
+      },
+      message: result.success ? 'Fatura başarıyla iptal edildi' : 'Fatura iptali başarısız',
+    });
+  } catch (error: any) {
+    log.error('Failed to cancel invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to cancel invoice',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/gib/generate-xml
+ * @desc    Generate UBL-TR 1.2 XML for preview (without sending to GIB)
+ * @access  Private
+ * @body    invoiceData
+ */
+router.post('/gib/generate-xml', authenticateToken, async (req, res) => {
+  try {
+    const invoiceData = req.body;
+
+    const invoiceXML = gibService.generateInvoiceXML(invoiceData);
+
+    res.json({
+      success: true,
+      data: {
+        invoiceId: invoiceData.invoiceId,
+        uuid: invoiceData.uuid,
+        xml: invoiceXML,
+      },
+      message: 'XML başarıyla oluşturuldu',
+    });
+  } catch (error: any) {
+    log.error('Failed to generate XML:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to generate XML',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/gib/test-connection
+ * @desc    Test GIB service connection
+ * @access  Private
+ */
+router.get('/gib/test-connection', authenticateToken, async (req, res) => {
+  try {
+    const isConnected = await gibService.testConnection();
+
+    res.json({
+      success: isConnected,
+      data: {
+        connected: isConnected,
+        environment: process.env.NODE_ENV === 'production' ? 'Production' : 'Test',
+      },
+      message: isConnected 
+        ? 'GİB servisleri erişilebilir' 
+        : 'GİB servisleri erişilemiyor',
+    });
+  } catch (error: any) {
+    log.error('Failed to test GIB connection:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to test GIB connection',
     });
   }
 });
