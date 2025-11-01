@@ -12,9 +12,10 @@ import ExpenseTab from '../components/accounting/ExpenseTab'
 import AccountingDashboard from '../components/accounting/AccountingDashboard'
 import AccountCardList from '../components/accounting/AccountCardList'
 import EInvoiceList from '../components/accounting/EInvoiceList'
+import DeliveryNoteList from '../components/accounting/DeliveryNoteList'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari'
+type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery'
 
 interface AccountingStats {
   totalRevenue: number
@@ -372,6 +373,7 @@ export default function Accounting() {
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
     { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
     { id: 'ebelge' as const, label: 'e-Belge', icon: <CreditCard size={18} /> },
+    { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'integration' as const, label: 'Entegrasyonlar', icon: <RefreshCw size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
@@ -1081,6 +1083,9 @@ export default function Accounting() {
 
             {/* e-Belge Tab */}
             {activeTab === 'ebelge' && <EInvoiceList />}
+
+            {/* Delivery Note Tab */}
+            {activeTab === 'delivery' && <DeliveryNoteList />}
 
             {/* Integration Tab */}
             {activeTab === 'integration' && (
