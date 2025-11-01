@@ -1074,4 +1074,269 @@ router.post('/e-invoice/:id/download-xml', authenticateToken, async (req, res) =
   }
 });
 
+/**
+ * DELIVERY NOTES (İRSALİYE) CRUD OPERATIONS
+ */
+
+/**
+ * @route   POST /api/accounting/delivery-note
+ * @desc    Create new delivery note
+ * @access  Private
+ * @body    orderId, customerId, items, type (inbound/outbound), waybillNumber
+ */
+router.post('/delivery-note', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { orderId, customerId, items, type, waybillNumber, notes, vehicleInfo } = req.body;
+
+    if (!orderId || !customerId || !items || !Array.isArray(items)) {
+      return res.status(400).json({
+        success: false,
+        message: 'orderId, customerId, and items array are required',
+      });
+    }
+
+    if (!type || !['inbound', 'outbound'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'type must be either "inbound" or "outbound"',
+      });
+    }
+
+    const deliveryNote = await accountingService.createDeliveryNote({
+      companyId,
+      orderId: parseInt(orderId),
+      customerId: parseInt(customerId),
+      items,
+      type,
+      waybillNumber,
+      notes,
+      vehicleInfo,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Delivery note created successfully',
+      data: deliveryNote,
+    });
+  } catch (error: any) {
+    log.error('Failed to create delivery note:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create delivery note',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/delivery-note/:id
+ * @desc    Get delivery note details
+ * @access  Private
+ */
+router.get('/delivery-note/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deliveryNote = await accountingService.getDeliveryNoteDetail(parseInt(id));
+
+    if (!deliveryNote) {
+      return res.status(404).json({
+        success: false,
+        message: 'Delivery note not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      data: deliveryNote,
+    });
+  } catch (error: any) {
+    log.error('Failed to get delivery note:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get delivery note',
+    });
+  }
+});
+
+/**
+ * @route   PUT /api/accounting/delivery-note/:id
+ * @desc    Update delivery note (only if status = draft)
+ * @access  Private
+ */
+router.put('/delivery-note/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { items, notes, vehicleInfo, waybillNumber } = req.body;
+
+    const deliveryNote = await accountingService.updateDeliveryNote(parseInt(id), {
+      items,
+      notes,
+      vehicleInfo,
+      waybillNumber,
+    });
+
+    res.json({
+      success: true,
+      message: 'Delivery note updated successfully',
+      data: deliveryNote,
+    });
+  } catch (error: any) {
+    log.error('Failed to update delivery note:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update delivery note',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/delivery-note/:id/confirm
+ * @desc    Confirm delivery note (change status from draft to confirmed)
+ * @access  Private
+ */
+router.post('/delivery-note/:id/confirm', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deliveryNote = await accountingService.confirmDeliveryNote(parseInt(id));
+
+    res.json({
+      success: true,
+      message: 'Delivery note confirmed successfully',
+      data: deliveryNote,
+    });
+  } catch (error: any) {
+    log.error('Failed to confirm delivery note:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to confirm delivery note',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/delivery-note/:id/cancel
+ * @desc    Cancel delivery note
+ * @access  Private
+ */
+router.post('/delivery-note/:id/cancel', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const deliveryNote = await accountingService.cancelDeliveryNote(parseInt(id), reason);
+
+    res.json({
+      success: true,
+      message: 'Delivery note cancelled successfully',
+      data: deliveryNote,
+    });
+  } catch (error: any) {
+    log.error('Failed to cancel delivery note:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to cancel delivery note',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/delivery-notes
+ * @desc    List delivery notes with filters
+ * @access  Private
+ * @query   status, type, orderId, startDate, endDate, page, limit
+ */
+router.get('/delivery-notes', authenticateToken, async (req, res) => {
+  try {
+    const {
+      status,
+      type,
+      orderId,
+      startDate,
+      endDate,
+      page = '1',
+      limit = '20',
+    } = req.query;
+
+    const filters = {
+      status: status as string,
+      type: type as string,
+      orderId: orderId ? parseInt(orderId as string) : undefined,
+      startDate: startDate ? new Date(startDate as string) : undefined,
+      endDate: endDate ? new Date(endDate as string) : undefined,
+    };
+
+    const result = await accountingService.listDeliveryNotes(
+      filters,
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
+
+    res.json({
+      success: true,
+      data: result.deliveryNotes,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.limit),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to list delivery notes:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to list delivery notes',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/delivery-note/:id/download-pdf
+ * @desc    Generate and download delivery note PDF
+ * @access  Private
+ */
+router.post('/delivery-note/:id/download-pdf', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pdfBuffer = await accountingService.generateDeliveryNotePDF(parseInt(id));
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=delivery-note-${id}.pdf`);
+    res.send(pdfBuffer);
+  } catch (error: any) {
+    log.error('Failed to generate delivery note PDF:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to generate delivery note PDF',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/delivery-note/:id/link-invoice/:invoiceId
+ * @desc    Link delivery note to invoice
+ * @access  Private
+ */
+router.post('/delivery-note/:id/link-invoice/:invoiceId', authenticateToken, async (req, res) => {
+  try {
+    const { id, invoiceId } = req.params;
+    const deliveryNote = await accountingService.linkDeliveryNoteToInvoice(
+      parseInt(id),
+      parseInt(invoiceId)
+    );
+
+    res.json({
+      success: true,
+      message: 'Delivery note linked to invoice successfully',
+      data: deliveryNote,
+    });
+  } catch (error: any) {
+    log.error('Failed to link delivery note to invoice:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to link delivery note to invoice',
+    });
+  }
+});
+
 export default router;

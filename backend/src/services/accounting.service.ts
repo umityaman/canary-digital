@@ -3,6 +3,31 @@ import { log } from '../config/logger';
 import { startOfMonth, endOfMonth, startOfDay, endOfDay } from 'date-fns';
 
 /**
+ * Delivery Note interface (temporary until Prisma model is added)
+ */
+interface DeliveryNote {
+  id: number;
+  companyId: number;
+  orderId: number;
+  customerId: number;
+  deliveryNoteNumber: string;
+  deliveryDate: Date;
+  type: string; // 'inbound' | 'outbound'
+  status: string; // 'draft' | 'confirmed' | 'cancelled'
+  waybillNumber?: string;
+  vehicleInfo?: any;
+  notes?: string;
+  items: any[];
+  linkedInvoiceId?: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// In-memory storage for delivery notes (temporary until DB model is added)
+const deliveryNotesStore: Map<number, DeliveryNote> = new Map();
+let deliveryNoteIdCounter = 1;
+
+/**
  * Accounting Service
  * Muhasebe istatistikleri ve raporlama servisi
  */
@@ -2060,6 +2085,415 @@ export class AccountingService {
       return xml;
     } catch (error) {
       log.error('Failed to generate e-invoice XML:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * DELIVERY NOTES (İRSALİYE) CRUD OPERATIONS
+   */
+
+  /**
+   * Create Delivery Note
+   * Creates inbound or outbound delivery note
+   */
+  async createDeliveryNote(data: {
+    companyId: number;
+    orderId: number;
+    customerId: number;
+    items: Array<{
+      description: string;
+      quantity: number;
+      unit: string;
+    }>;
+    type: 'inbound' | 'outbound';
+    waybillNumber?: string;
+    notes?: string;
+    vehicleInfo?: any;
+  }) {
+    try {
+      log.info('Creating delivery note...', { orderId: data.orderId, type: data.type });
+
+      // Verify order and customer exist
+      const [order, customer] = await Promise.all([
+        prisma.order.findUnique({ where: { id: data.orderId } }),
+        prisma.user.findUnique({ where: { id: data.customerId } }),
+      ]);
+
+      if (!order) {
+        throw new Error('Order not found');
+      }
+
+      if (!customer) {
+        throw new Error('Customer not found');
+      }
+
+      // Generate delivery note number
+      const today = new Date();
+      const year = today.getFullYear();
+      const prefix = data.type === 'inbound' ? 'IRSG' : 'IRSC'; // Giriş/Çıkış
+
+      const deliveryNoteNumber = `${prefix}${year}${String(deliveryNoteIdCounter).padStart(6, '0')}`;
+
+      // Create delivery note
+      const deliveryNote: DeliveryNote = {
+        id: deliveryNoteIdCounter++,
+        companyId: data.companyId,
+        orderId: data.orderId,
+        customerId: data.customerId,
+        deliveryNoteNumber,
+        deliveryDate: new Date(),
+        type: data.type,
+        status: 'draft',
+        waybillNumber: data.waybillNumber,
+        vehicleInfo: data.vehicleInfo,
+        notes: data.notes,
+        items: data.items,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      deliveryNotesStore.set(deliveryNote.id, deliveryNote);
+
+      log.info('Delivery note created:', {
+        id: deliveryNote.id,
+        deliveryNoteNumber: deliveryNote.deliveryNoteNumber,
+        type: data.type,
+      });
+
+      return {
+        ...deliveryNote,
+        order: {
+          id: order.id,
+          orderNumber: order.orderNumber,
+        },
+        customer: {
+          id: customer.id,
+          fullName: customer.fullName,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to create delivery note:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get Delivery Note detail
+   */
+  async getDeliveryNoteDetail(id: number) {
+    try {
+      const deliveryNote = deliveryNotesStore.get(id);
+
+      if (!deliveryNote) {
+        return null;
+      }
+
+      // Get related order and customer info
+      const [order, customer] = await Promise.all([
+        prisma.order.findUnique({
+          where: { id: deliveryNote.orderId },
+          select: {
+            id: true,
+            orderNumber: true,
+            startDate: true,
+            endDate: true,
+          },
+        }),
+        prisma.user.findUnique({
+          where: { id: deliveryNote.customerId },
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            address: true,
+          },
+        }),
+      ]);
+
+      return {
+        ...deliveryNote,
+        order,
+        customer,
+      };
+    } catch (error) {
+      log.error('Failed to get delivery note detail:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update Delivery Note (only if status = draft)
+   */
+  async updateDeliveryNote(
+    id: number,
+    data: {
+      items?: Array<any>;
+      notes?: string;
+      vehicleInfo?: any;
+      waybillNumber?: string;
+    }
+  ) {
+    try {
+      const deliveryNote = deliveryNotesStore.get(id);
+
+      if (!deliveryNote) {
+        throw new Error('Delivery note not found');
+      }
+
+      if (deliveryNote.status !== 'draft') {
+        throw new Error('Cannot update delivery note that is not in draft status');
+      }
+
+      // Update fields
+      if (data.items) deliveryNote.items = data.items;
+      if (data.notes !== undefined) deliveryNote.notes = data.notes;
+      if (data.vehicleInfo) deliveryNote.vehicleInfo = data.vehicleInfo;
+      if (data.waybillNumber !== undefined) deliveryNote.waybillNumber = data.waybillNumber;
+
+      deliveryNote.updatedAt = new Date();
+
+      deliveryNotesStore.set(id, deliveryNote);
+
+      log.info('Delivery note updated:', id);
+
+      return deliveryNote;
+    } catch (error) {
+      log.error('Failed to update delivery note:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Confirm Delivery Note (change status from draft to confirmed)
+   */
+  async confirmDeliveryNote(id: number) {
+    try {
+      const deliveryNote = deliveryNotesStore.get(id);
+
+      if (!deliveryNote) {
+        throw new Error('Delivery note not found');
+      }
+
+      if (deliveryNote.status !== 'draft') {
+        throw new Error('Only draft delivery notes can be confirmed');
+      }
+
+      deliveryNote.status = 'confirmed';
+      deliveryNote.updatedAt = new Date();
+
+      deliveryNotesStore.set(id, deliveryNote);
+
+      log.info('Delivery note confirmed:', {
+        id,
+        deliveryNoteNumber: deliveryNote.deliveryNoteNumber,
+      });
+
+      return deliveryNote;
+    } catch (error) {
+      log.error('Failed to confirm delivery note:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel Delivery Note
+   */
+  async cancelDeliveryNote(id: number, reason?: string) {
+    try {
+      const deliveryNote = deliveryNotesStore.get(id);
+
+      if (!deliveryNote) {
+        throw new Error('Delivery note not found');
+      }
+
+      deliveryNote.status = 'cancelled';
+      deliveryNote.notes = reason
+        ? `${deliveryNote.notes || ''}\n\nCancellation reason: ${reason}`
+        : deliveryNote.notes;
+      deliveryNote.updatedAt = new Date();
+
+      deliveryNotesStore.set(id, deliveryNote);
+
+      log.info('Delivery note cancelled:', {
+        id,
+        reason: reason || 'No reason provided',
+      });
+
+      return deliveryNote;
+    } catch (error) {
+      log.error('Failed to cancel delivery note:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * List Delivery Notes with filters and pagination
+   */
+  async listDeliveryNotes(
+    filters: {
+      status?: string;
+      type?: string;
+      orderId?: number;
+      startDate?: Date;
+      endDate?: Date;
+    },
+    page: number = 1,
+    limit: number = 20
+  ) {
+    try {
+      let deliveryNotes = Array.from(deliveryNotesStore.values());
+
+      // Apply filters
+      if (filters.status) {
+        deliveryNotes = deliveryNotes.filter(dn => dn.status === filters.status);
+      }
+
+      if (filters.type) {
+        deliveryNotes = deliveryNotes.filter(dn => dn.type === filters.type);
+      }
+
+      if (filters.orderId) {
+        deliveryNotes = deliveryNotes.filter(dn => dn.orderId === filters.orderId);
+      }
+
+      if (filters.startDate) {
+        deliveryNotes = deliveryNotes.filter(
+          dn => dn.deliveryDate >= filters.startDate!
+        );
+      }
+
+      if (filters.endDate) {
+        deliveryNotes = deliveryNotes.filter(
+          dn => dn.deliveryDate <= filters.endDate!
+        );
+      }
+
+      // Sort by date desc
+      deliveryNotes.sort((a, b) => b.deliveryDate.getTime() - a.deliveryDate.getTime());
+
+      const total = deliveryNotes.length;
+      const start = (page - 1) * limit;
+      const paginatedNotes = deliveryNotes.slice(start, start + limit);
+
+      // Enrich with customer and order info
+      const enrichedNotes = await Promise.all(
+        paginatedNotes.map(async dn => {
+          const [order, customer] = await Promise.all([
+            prisma.order.findUnique({
+              where: { id: dn.orderId },
+              select: { id: true, orderNumber: true },
+            }),
+            prisma.user.findUnique({
+              where: { id: dn.customerId },
+              select: { id: true, fullName: true },
+            }),
+          ]);
+
+          return {
+            ...dn,
+            order,
+            customer,
+          };
+        })
+      );
+
+      log.info('Delivery notes listed:', { count: enrichedNotes.length, total });
+
+      return {
+        deliveryNotes: enrichedNotes,
+        total,
+        page,
+        limit,
+      };
+    } catch (error) {
+      log.error('Failed to list delivery notes:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Generate Delivery Note PDF
+   * TODO: Implement PDF generation
+   */
+  async generateDeliveryNotePDF(id: number): Promise<Buffer> {
+    try {
+      const deliveryNote = deliveryNotesStore.get(id);
+
+      if (!deliveryNote) {
+        throw new Error('Delivery note not found');
+      }
+
+      const [order, customer] = await Promise.all([
+        prisma.order.findUnique({ where: { id: deliveryNote.orderId } }),
+        prisma.user.findUnique({ where: { id: deliveryNote.customerId } }),
+      ]);
+
+      // TODO: Implement PDF generation
+      const placeholder = Buffer.from(`
+        İRSALİYE / DELIVERY NOTE
+        
+        İrsaliye No: ${deliveryNote.deliveryNoteNumber}
+        Tarih: ${deliveryNote.deliveryDate.toLocaleDateString('tr-TR')}
+        Tip: ${deliveryNote.type === 'inbound' ? 'Giriş' : 'Çıkış'}
+        
+        Müşteri: ${customer?.fullName || 'N/A'}
+        Sipariş No: ${order?.orderNumber || 'N/A'}
+        
+        Sevk İrsaliyesi: ${deliveryNote.waybillNumber || 'N/A'}
+        
+        Ürünler:
+        ${deliveryNote.items.map((item, i) => `${i + 1}. ${item.description} - ${item.quantity} ${item.unit}`).join('\n        ')}
+        
+        Notlar: ${deliveryNote.notes || '-'}
+        
+        Durum: ${deliveryNote.status.toUpperCase()}
+      `);
+
+      log.info('Delivery note PDF generated (placeholder):', id);
+
+      return placeholder;
+    } catch (error) {
+      log.error('Failed to generate delivery note PDF:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Link Delivery Note to Invoice
+   */
+  async linkDeliveryNoteToInvoice(deliveryNoteId: number, invoiceId: number) {
+    try {
+      const deliveryNote = deliveryNotesStore.get(deliveryNoteId);
+
+      if (!deliveryNote) {
+        throw new Error('Delivery note not found');
+      }
+
+      // Verify invoice exists
+      const invoice = await prisma.invoice.findUnique({
+        where: { id: invoiceId },
+      });
+
+      if (!invoice) {
+        throw new Error('Invoice not found');
+      }
+
+      // Link them
+      deliveryNote.linkedInvoiceId = invoiceId;
+      deliveryNote.updatedAt = new Date();
+
+      deliveryNotesStore.set(deliveryNoteId, deliveryNote);
+
+      log.info('Delivery note linked to invoice:', {
+        deliveryNoteId,
+        invoiceId,
+      });
+
+      return deliveryNote;
+    } catch (error) {
+      log.error('Failed to link delivery note to invoice:', error);
       throw error;
     }
   }
