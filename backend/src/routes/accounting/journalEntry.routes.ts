@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, query, param } from 'express-validator';
-import { authenticate } from '../../middleware/auth.middleware';
-import { validate } from '../../middleware/validation.middleware';
+import { authenticateToken } from '../auth';
+import { validate } from '../../middleware/validate';
 import * as journalEntryController from '../../controllers/accounting/journalEntry.controller';
 
 const router = Router();
@@ -13,7 +13,7 @@ const router = Router();
  */
 router.get(
   '/',
-  authenticate,
+  authenticateToken,
   [
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
     query('limit').optional().isInt({ min: 1, max: 1000 }).withMessage('Limit must be between 1 and 1000'),

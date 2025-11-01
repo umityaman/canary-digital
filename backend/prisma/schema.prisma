@@ -2693,8 +2693,8 @@ model ChartOfAccounts {
   type              String              // "asset", "liability", "equity", "income", "expense"
   category          String              // "current_asset", "fixed_asset", "short_term_liability", etc.
   parentCode        String?             // Üst hesap kodu (null ise ana hesap)
-  parentAccount     ChartOfAccounts?    @relation("AccountHierarchy", fields: [parentCode], references: [code])
-  childAccounts     ChartOfAccounts[]   @relation("AccountHierarchy")
+  parent            ChartOfAccounts?    @relation("AccountHierarchy", fields: [parentCode], references: [code])
+  children          ChartOfAccounts[]   @relation("AccountHierarchy")
   
   // Balance tracking
   normalBalance     String              @default("debit") // "debit" or "credit"
@@ -2709,8 +2709,7 @@ model ChartOfAccounts {
   company           Company             @relation(fields: [companyId], references: [id])
   
   // Journal entries
-  debitEntries      JournalEntryItem[]  @relation("DebitAccount")
-  creditEntries     JournalEntryItem[]  @relation("CreditAccount")
+  journalEntryItems JournalEntryItem[]
   
   // Metadata
   description       String?
@@ -2741,7 +2740,7 @@ model JournalEntry {
   reference         String?             // Invoice number, payment reference, etc.
   
   // Items (always balanced: total debit = total credit)
-  items             JournalEntryItem[]
+  journalEntryItems JournalEntryItem[]
   
   // Totals
   totalDebit        Float               @default(0)
@@ -2783,14 +2782,12 @@ model JournalEntry {
 // Her kalemde ya borç ya da alacak bulunur
 model JournalEntryItem {
   id                Int                 @id @default(autoincrement())
-  entryId           Int
-  entry             JournalEntry        @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  journalEntryId    Int
+  journalEntry      JournalEntry        @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
   
-  // Account
+  // Account (single account per line - either debit or credit)
   accountCode       String
-  account           ChartOfAccounts     @relation("DebitAccount", fields: [accountCode, companyId], references: [code, companyId])
-  accountCodeCredit String?
-  creditAccount     ChartOfAccounts?    @relation("CreditAccount", fields: [accountCodeCredit, companyId], references: [code, companyId])
+  account           ChartOfAccounts     @relation(fields: [accountCode], references: [code])
   
   // Amounts (one must be 0)
   debit             Float               @default(0)
@@ -2805,7 +2802,7 @@ model JournalEntryItem {
   
   createdAt         DateTime            @default(now())
   
-  @@index([entryId])
+  @@index([journalEntryId])
   @@index([accountCode])
   @@index([companyId])
 }
