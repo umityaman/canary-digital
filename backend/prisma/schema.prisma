@@ -78,6 +78,9 @@ model Company {
   accountCategories    AccountCategory[]
   accountingTags       AccountingTag[]
   accountingReportSchedules AccountingReportSchedule[]
+  // Turkish Accounting
+  chartOfAccounts      ChartOfAccounts[]
+  journalEntries       JournalEntry[]
 }
 
 model User {
@@ -157,6 +160,9 @@ model User {
   cashTransactions        CashTransaction[]
   company                  Company?                @relation(fields: [companyId], references: [id])
   workOrders               WorkOrder[]
+  // Turkish Accounting
+  journalEntriesCreated    JournalEntry[]          @relation("JournalEntryCreator")
+  journalEntriesPosted     JournalEntry[]          @relation("JournalEntryPoster")
 }
 
 model Category {
@@ -1090,8 +1096,8 @@ model Check {
   companyId     Int
   checkNumber   String
   type          String   // "received" | "issued"
-  drawer        String   // Keşideci / Lehtar
-  bank          String
+  drawer        String?  // Keşideci / Lehtar
+  bank          String?
   branch        String?
   accountNumber String?
   amount        Float
@@ -1116,7 +1122,7 @@ model PromissoryNote {
   companyId     Int
   noteNumber    String
   type          String   // "received" | "issued"
-  drawer        String
+  drawer        String?
   amount        Float
   issueDate     DateTime
   dueDate       DateTime
@@ -2672,4 +2678,134 @@ model ReportSchedule {
   @@index([templateId])
   @@index([isActive])
   @@index([nextRun])
+}
+
+// ==================== MUHASEBE MODÜLLERI ====================
+
+// Hesap Planı (Chart of Accounts)
+// Türk Tekdüzen Hesap Planı standardına uygun
+model ChartOfAccounts {
+  id                Int                 @id @default(autoincrement())
+  code              String              @unique // "100", "120", "320.001", "600.01.01"
+  name              String              // "Kasa", "Bankalar", "Sermaye"
+  nameEn            String?             // English name for international use
+  level             Int                 @default(1) // 1, 2, 3, 4 (hesap seviyesi)
+  type              String              // "asset", "liability", "equity", "income", "expense"
+  category          String              // "current_asset", "fixed_asset", "short_term_liability", etc.
+  parentCode        String?             // Üst hesap kodu (null ise ana hesap)
+  parentAccount     ChartOfAccounts?    @relation("AccountHierarchy", fields: [parentCode], references: [code])
+  childAccounts     ChartOfAccounts[]   @relation("AccountHierarchy")
+  
+  // Balance tracking
+  normalBalance     String              @default("debit") // "debit" or "credit"
+  currentBalance    Float               @default(0)
+  
+  // Status
+  isActive          Boolean             @default(true)
+  isSystem          Boolean             @default(false) // Sistem hesabı mı (silinemez)
+  
+  // Company relation
+  companyId         Int
+  company           Company             @relation(fields: [companyId], references: [id])
+  
+  // Journal entries
+  debitEntries      JournalEntryItem[]  @relation("DebitAccount")
+  creditEntries     JournalEntryItem[]  @relation("CreditAccount")
+  
+  // Metadata
+  description       String?
+  notes             String?
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@unique([companyId, code])
+  @@index([companyId])
+  @@index([code])
+  @@index([type])
+  @@index([category])
+  @@index([parentCode])
+  @@index([isActive])
+}
+
+// Yevmiye Defteri (Journal Entry)
+// Çift taraflı kayıt sistemi
+model JournalEntry {
+  id                Int                 @id @default(autoincrement())
+  entryNumber       String              // "2024-001", "2024-002"
+  entryDate         DateTime            @default(now())
+  entryType         String              @default("manual") // "manual", "auto_invoice", "auto_payment", etc.
+  
+  // Description
+  description       String
+  reference         String?             // Invoice number, payment reference, etc.
+  
+  // Items (always balanced: total debit = total credit)
+  items             JournalEntryItem[]
+  
+  // Totals
+  totalDebit        Float               @default(0)
+  totalCredit       Float               @default(0)
+  
+  // Status
+  status            String              @default("draft") // "draft", "posted", "cancelled"
+  isReversed        Boolean             @default(false)
+  reversedById      Int?
+  reversedEntry     JournalEntry?       @relation("ReversalEntry", fields: [reversedById], references: [id])
+  reversalEntries   JournalEntry[]      @relation("ReversalEntry")
+  
+  // Company & User
+  companyId         Int
+  company           Company             @relation(fields: [companyId], references: [id])
+  createdBy         Int
+  creator           User                @relation("JournalEntryCreator", fields: [createdBy], references: [id])
+  postedBy          Int?
+  poster            User?               @relation("JournalEntryPoster", fields: [postedBy], references: [id])
+  postedAt          DateTime?
+  
+  // Metadata
+  attachments       String[]            @default([])
+  tags              String[]            @default([])
+  notes             String?
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@unique([companyId, entryNumber])
+  @@index([companyId])
+  @@index([entryDate])
+  @@index([entryType])
+  @@index([status])
+  @@index([createdBy])
+}
+
+// Yevmiye Kaydı Kalemleri (Journal Entry Items)
+// Her kalemde ya borç ya da alacak bulunur
+model JournalEntryItem {
+  id                Int                 @id @default(autoincrement())
+  entryId           Int
+  entry             JournalEntry        @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  
+  // Account
+  accountCode       String
+  account           ChartOfAccounts     @relation("DebitAccount", fields: [accountCode, companyId], references: [code, companyId])
+  accountCodeCredit String?
+  creditAccount     ChartOfAccounts?    @relation("CreditAccount", fields: [accountCodeCredit, companyId], references: [code, companyId])
+  
+  // Amounts (one must be 0)
+  debit             Float               @default(0)
+  credit            Float               @default(0)
+  
+  // Description
+  description       String?
+  lineNumber        Int                 // Satır sırası
+  
+  // Company
+  companyId         Int
+  
+  createdAt         DateTime            @default(now())
+  
+  @@index([entryId])
+  @@index([accountCode])
+  @@index([companyId])
 }
