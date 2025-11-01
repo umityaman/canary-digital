@@ -176,11 +176,41 @@ jobs:
           IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/canary/backend:${{ github.sha }}"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           
-          # Submit build and wait
-          gcloud builds submit \
+          echo "📦 Submitting build to Cloud Build..."
+          echo "Image: $IMAGE_TAG"
+          echo "View build status: https://console.cloud.google.com/cloud-build/builds?project=${{ env.PROJECT_ID }}"
+          
+          # Submit build asynchronously
+          BUILD_ID=$(gcloud builds submit \
             --tag=$IMAGE_TAG \
             --timeout=20m \
-            . 
+            --async \
+            --format="value(id)" \
+            .)
+          
+          echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
+          echo "Build ID: $BUILD_ID"
+          
+          # Poll build status
+          echo "⏳ Waiting for build to complete..."
+          for i in {1..120}; do
+            STATUS=$(gcloud builds describe $BUILD_ID --format="value(status)" 2>/dev/null || echo "UNKNOWN")
+            echo "Build status: $STATUS (attempt $i/120)"
+            
+            if [ "$STATUS" = "SUCCESS" ]; then
+              echo "✅ Build completed successfully!"
+              exit 0
+            elif [ "$STATUS" = "FAILURE" ] || [ "$STATUS" = "TIMEOUT" ] || [ "$STATUS" = "CANCELLED" ]; then
+              echo "❌ Build failed with status: $STATUS"
+              echo "Check logs: https://console.cloud.google.com/cloud-build/builds/$BUILD_ID?project=${{ env.PROJECT_ID }}"
+              exit 1
+            fi
+            
+            sleep 10
+          done
+          
+          echo "⏰ Build timeout - check console manually"
+          exit 1 
 
       - name: Deploy Image to Cloud Run
         id: deploy
