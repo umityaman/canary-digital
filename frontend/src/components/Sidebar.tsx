@@ -37,6 +37,7 @@ const Sidebar: React.FC = () => {
     { to: '/suppliers', label: 'Tedarikçiler', icon: Truck },
     { to: '/accounting', label: 'Muhasebe', icon: Calculator },
     { to: '/delivery-notes', label: 'İrsaliyeler', icon: FileCheck },
+    { to: '/current-accounts', label: 'Cari Hesaplar', icon: Users },
     { to: '/social', label: 'Sosyal Medya', icon: Share2 },
     { to: '/website', label: 'Web Sitesi', icon: Globe },
     { to: '/todo', label: 'Yapılacaklar', icon: CheckSquare },
