@@ -165,15 +165,30 @@ jobs:
           npm run test:ci
         # Fail the job if tests fail to prevent bad deploys
 
-      - name: Build and Deploy to Cloud Run
-        id: deploy
-        continue-on-error: true
+      - name: Create Artifact Registry Repository (if not exists)
+        run: |
+          gcloud artifacts repositories create canary \
+            --repository-format=docker \
+            --location=${{ env.REGION }} \
+            --description="Canary Docker images" || echo "Repository already exists"
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Build Docker Image
         run: |
           cd backend
-          # Set build timeout to 20 minutes
-          gcloud config set builds/timeout 1200
+          IMAGE_NAME="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/canary/backend:${{ github.sha }}"
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --source . \
+            --image=${{ env.IMAGE_NAME }} \
             --region=${{ env.REGION }} \
             --platform=managed \
             --allow-unauthenticated \
