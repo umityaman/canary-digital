@@ -8,16 +8,23 @@ WORKDIR /usr/src/app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install ALL dependencies
-RUN npm ci
+# Install ALL dependencies (ts-node needed at runtime)
+RUN npm ci && npm cache clean --force
 
-# Copy source code
-COPY . .
+# Copy prisma schema
+COPY prisma ./prisma
+
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Cloud Run automatically sets PORT env var
-# Backend uses: const PORT = process.env.PORT || 4000
+# Copy source code (uses .dockerignore to exclude unnecessary files)
+COPY . .
 
-# Start full application with all routes (uses ts-node to match previous behavior)
+# Set production environment
+ENV NODE_ENV=production
+
+# Cloud Run sets PORT automatically
+EXPOSE 4000
+
+# Start application with ts-node
 CMD ["npx", "ts-node", "--transpile-only", "src/index.ts"]
