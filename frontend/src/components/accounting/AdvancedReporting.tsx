@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   TrendingUp, TrendingDown, DollarSign, Calendar, Download, 
   FileText, BarChart3, PieChart, Building2, CreditCard,
@@ -6,6 +6,9 @@ import {
 } from 'lucide-react'
 import { LineChart, Line, BarChart, Bar, PieChart as RechartsPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { toast } from 'react-hot-toast'
+import axios from 'axios'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 type ReportType = 'cashflow' | 'profitloss' | 'balance' | 'vat'
 
@@ -50,9 +53,110 @@ export default function AdvancedReporting() {
     start: new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
   })
+  const [loading, setLoading] = useState(false)
+  const [cashflowData, setCashflowData] = useState<CashflowData[]>([])
+  const [revenueData, setRevenueData] = useState<ProfitLossData[]>([])
+  const [expenseData, setExpenseData] = useState<ProfitLossData[]>([])
+  const [assets, setAssets] = useState<BalanceSheetData[]>([])
+  const [liabilities, setLiabilities] = useState<BalanceSheetData[]>([])
+  const [vatData, setVatData] = useState<VATData[]>([])
 
-  // Mock data for Cashflow
-  const cashflowData: CashflowData[] = [
+  // Load data when report type changes
+  useEffect(() => {
+    loadReportData()
+  }, [activeReport, dateRange])
+
+  const loadReportData = async () => {
+    setLoading(true)
+    const token = localStorage.getItem('token')
+    
+    try {
+      if (activeReport === 'cashflow') {
+        const response = await axios.get(`${API_URL}/api/accounting/reports/cashflow`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { months: 6 }
+        })
+        setCashflowData(response.data.data)
+      } else if (activeReport === 'profitloss') {
+        const response = await axios.get(`${API_URL}/api/accounting/reports/profit-loss`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { 
+            startDate: dateRange.start,
+            endDate: dateRange.end
+          }
+        })
+        setRevenueData(response.data.data.revenue || [])
+        setExpenseData(response.data.data.expenses || [])
+      } else if (activeReport === 'balance') {
+        const response = await axios.get(`${API_URL}/api/accounting/reports/balance-sheet`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { asOfDate: dateRange.end }
+        })
+        
+        // Transform API response to component format
+        const apiData = response.data.data
+        setAssets([
+          {
+            category: 'Dönen Varlıklar',
+            subcategories: [
+              { name: 'Nakit ve Benzerleri', amount: apiData.assets.currentAssets.cash },
+              { name: 'Ticari Alacaklar', amount: apiData.assets.currentAssets.receivables },
+              { name: 'Stoklar', amount: apiData.assets.currentAssets.inventory }
+            ],
+            total: apiData.assets.currentAssets.total
+          },
+          {
+            category: 'Duran Varlıklar',
+            subcategories: [
+              { name: 'Maddi Duran Varlıklar', amount: apiData.assets.fixedAssets.equipment },
+              { name: 'Birikmiş Amortisman', amount: -apiData.assets.fixedAssets.accumulated_depreciation }
+            ],
+            total: apiData.assets.fixedAssets.total
+          }
+        ])
+        
+        setLiabilities([
+          {
+            category: 'Kısa Vadeli Yükümlülükler',
+            subcategories: [
+              { name: 'Ticari Borçlar', amount: apiData.liabilities.currentLiabilities.payables },
+              { name: 'Kısa Vadeli Krediler', amount: apiData.liabilities.currentLiabilities.shortTermLoans }
+            ],
+            total: apiData.liabilities.currentLiabilities.total
+          },
+          {
+            category: 'Uzun Vadeli Yükümlülükler',
+            subcategories: [
+              { name: 'Uzun Vadeli Krediler', amount: apiData.liabilities.longTermLiabilities.longTermLoans }
+            ],
+            total: apiData.liabilities.longTermLiabilities.total
+          },
+          {
+            category: 'Özkaynaklar',
+            subcategories: [
+              { name: 'Sermaye', amount: apiData.equity.capital },
+              { name: 'Geçmiş Yıl Karları', amount: apiData.equity.retainedEarnings }
+            ],
+            total: apiData.equity.totalEquity
+          }
+        ])
+      } else if (activeReport === 'vat') {
+        const response = await axios.get(`${API_URL}/api/accounting/reports/vat-declaration`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { months: 6 }
+        })
+        setVatData(response.data.data)
+      }
+    } catch (error: any) {
+      console.error('Failed to load report data:', error)
+      toast.error(error.response?.data?.message || 'Rapor verileri yüklenemedi')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Fallback mock data for development
+  const mockCashflowData: CashflowData[] = [
     {
       period: 'Ocak 2024',
       operatingInflow: 150000,
@@ -115,85 +219,17 @@ export default function AdvancedReporting() {
     }
   ]
 
-  // Mock data for Profit & Loss
-  const revenueData: ProfitLossData[] = [
-    { category: 'Kiralama Geliri', amount: 850000, percentage: 65 },
-    { category: 'Satış Geliri', amount: 320000, percentage: 25 },
-    { category: 'Hizmet Geliri', amount: 130000, percentage: 10 }
-  ]
-
-  const expenseData: ProfitLossData[] = [
-    { category: 'Personel Giderleri', amount: 350000, percentage: 35 },
-    { category: 'İşletme Giderleri', amount: 200000, percentage: 20 },
-    { category: 'Pazarlama Giderleri', amount: 150000, percentage: 15 },
-    { category: 'Kira & Enerji', amount: 120000, percentage: 12 },
-    { category: 'Amortisman', amount: 100000, percentage: 10 },
-    { category: 'Diğer Giderler', amount: 80000, percentage: 8 }
-  ]
-
+  // Calculate totals from API data
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.amount, 0)
   const totalExpense = expenseData.reduce((sum, item) => sum + item.amount, 0)
   const netProfit = totalRevenue - totalExpense
 
-  // Mock data for Balance Sheet
-  const assets: BalanceSheetData[] = [
-    {
-      category: 'Dönen Varlıklar',
-      subcategories: [
-        { name: 'Kasa', amount: 50000 },
-        { name: 'Banka', amount: 450000 },
-        { name: 'Alacaklar', amount: 320000 },
-        { name: 'Stoklar', amount: 280000 }
-      ],
-      total: 1100000
-    },
-    {
-      category: 'Duran Varlıklar',
-      subcategories: [
-        { name: 'Ekipmanlar', amount: 800000 },
-        { name: 'Demirbaşlar', amount: 150000 },
-        { name: 'Araçlar', amount: 200000 },
-        { name: 'Birikmiş Amortisman', amount: -180000 }
-      ],
-      total: 970000
-    }
-  ]
-
-  const liabilities: BalanceSheetData[] = [
-    {
-      category: 'Kısa Vadeli Yükümlülükler',
-      subcategories: [
-        { name: 'Satıcılar', amount: 180000 },
-        { name: 'Bankalar', amount: 120000 },
-        { name: 'Vergi Borçları', amount: 80000 },
-        { name: 'Diğer Borçlar', amount: 70000 }
-      ],
-      total: 450000
-    },
-    {
-      category: 'Uzun Vadeli Yükümlülükler',
-      subcategories: [
-        { name: 'Banka Kredileri', amount: 400000 },
-        { name: 'Finansal Kiralama', amount: 150000 }
-      ],
-      total: 550000
-    },
-    {
-      category: 'Özkaynaklar',
-      subcategories: [
-        { name: 'Sermaye', amount: 500000 },
-        { name: 'Geçmiş Yıl Karları', amount: 270000 },
-        { name: 'Dönem Net Karı', amount: 300000 }
-      ],
-      total: 1070000
-    }
-  ]
-
+  // Calculate Balance Sheet totals from API data
   const totalAssets = assets.reduce((sum, item) => sum + item.total, 0)
   const totalLiabilities = liabilities.reduce((sum, item) => sum + item.total, 0)
 
-  // Mock data for VAT
-  const vatData: VATData[] = [
+  // Mock data for VAT (fallback)
+  const mockVatData: VATData[] = [
     {
       period: 'Ocak 2024',
       sales: 150000,
@@ -262,6 +298,18 @@ export default function AdvancedReporting() {
   }
 
   const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1']
+
+  // Show loading spinner
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-neutral-600">Rapor yükleniyor...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
