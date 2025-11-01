@@ -2,8 +2,15 @@ import { PrismaClient, Document, DocumentCategory, DocumentShare, User } from '@
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
-import sharp from 'sharp';
 import multer from 'multer';
+
+// Sharp is optional - only for thumbnail generation
+let sharp: any = null;
+try {
+  sharp = require('sharp');
+} catch (e) {
+  console.warn('Sharp not available - thumbnail generation will be disabled');
+}
 
 const writeFile = promisify(fs.writeFile);
 const unlink = promisify(fs.unlink);
@@ -80,6 +87,12 @@ export class DocumentService {
 
   private async generateThumbnail(filePath: string, mimeType: string): Promise<string | null> {
     if (!mimeType.startsWith('image/')) {
+      return null;
+    }
+
+    // Sharp is optional - only generate thumbnails if available
+    if (!sharp) {
+      console.log('Sharp not available - skipping thumbnail generation');
       return null;
     }
 

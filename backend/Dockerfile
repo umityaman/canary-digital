@@ -1,13 +1,7 @@
 FROM node:18-alpine
 
-# Install dependencies for Prisma and Sharp
-RUN apk add --no-cache \
-    openssl \
-    libc6-compat \
-    python3 \
-    make \
-    g++ \
-    vips-dev
+# Install minimal dependencies for Prisma
+RUN apk add --no-cache openssl libc6-compat
 
 WORKDIR /usr/src/app
 
