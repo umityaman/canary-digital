@@ -10,6 +10,7 @@ import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI
 import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
 import AccountingDashboard from '../components/accounting/AccountingDashboard'
+import AccountCardList from '../components/accounting/AccountCardList'
 import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari'
@@ -530,44 +531,7 @@ export default function Accounting() {
             )}
 
             {/* Cari (Account Cards) Tab */}
-            {activeTab === 'cari' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-neutral-900">Cari Hesap Kartları</h2>
-                </div>
-
-                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-                  {cariLoading ? (
-                    <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
-                  ) : cariSummary.length === 0 ? (
-                    <div className="p-12 text-center text-neutral-600">Cari hesap bulunamadı</div>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-neutral-50 border-b border-neutral-200">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Borç</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Alacak</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Bakiye</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-neutral-200">
-                          {cariSummary.map((c: any) => (
-                            <tr key={c.customerId || c.id} className="hover:bg-neutral-50">
-                              <td className="px-6 py-4">{c.customerName || c.name}</td>
-                              <td className="px-6 py-4">{formatCurrency(c.debit || 0)}</td>
-                              <td className="px-6 py-4">{formatCurrency(c.credit || 0)}</td>
-                              <td className="px-6 py-4">{formatCurrency((c.credit || 0) - (c.debit || 0))}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            {activeTab === 'cari' && <AccountCardList />}
 
             {/* Reports Tab */}
             {activeTab === 'reports' && (
