@@ -1,6 +1,8 @@
 import * as Sentry from '@sentry/node';
-import { ProfilingIntegration } from '@sentry/profiling-node';
 import { Express } from 'express';
+
+// Use a loose/any alias for Sentry to avoid type mismatches with different @sentry versions
+const SentryAny: any = Sentry as any;
 
 /**
  * Initialize Sentry error tracking and performance monitoring
@@ -25,15 +27,14 @@ export function initializeSentry(app: Express): void {
     // Profiling
     profilesSampleRate: isProduction ? 0.1 : 1.0,
     integrations: [
-      // Enable HTTP calls tracing
-      new Sentry.Integrations.Http({ tracing: true }),
+  // Enable HTTP calls tracing
+  SentryAny.Integrations && SentryAny.Integrations.Http ? new SentryAny.Integrations.Http({ tracing: true }) : undefined,
       
-      // Enable Express.js middleware tracing
-      new Sentry.Integrations.Express({ app }),
+  // Enable Express.js middleware tracing
+  SentryAny.Integrations && SentryAny.Integrations.Express ? new SentryAny.Integrations.Express({ app }) : undefined,
       
-      // Enable Profiling
-      new ProfilingIntegration(),
-    ],
+      // Profiling: skip if profiling integration is not available in this Sentry package
+    ].filter(Boolean),
 
     // Release tracking
     release: process.env.SENTRY_RELEASE || 'canary@1.0.0',
@@ -64,7 +65,10 @@ export function initializeSentry(app: Express): void {
         
         // Sanitize query parameters
         if (event.request.query_string) {
-          event.request.query_string = event.request.query_string
+          const qs = typeof event.request.query_string === 'string'
+            ? event.request.query_string
+            : String(event.request.query_string);
+          event.request.query_string = qs
             .replace(/password=[^&]*/gi, 'password=[REDACTED]')
             .replace(/token=[^&]*/gi, 'token=[REDACTED]');
         }
@@ -99,7 +103,7 @@ export function sentryRequestHandler() {
   if (!process.env.SENTRY_DSN) {
     return (req: any, res: any, next: any) => next();
   }
-  return Sentry.Handlers.requestHandler();
+  return SentryAny.Handlers ? SentryAny.Handlers.requestHandler() : (req: any, res: any, next: any) => next();
 }
 
 /**
@@ -109,7 +113,7 @@ export function sentryTracingHandler() {
   if (!process.env.SENTRY_DSN) {
     return (req: any, res: any, next: any) => next();
   }
-  return Sentry.Handlers.tracingHandler();
+  return SentryAny.Handlers ? SentryAny.Handlers.tracingHandler() : (req: any, res: any, next: any) => next();
 }
 
 /**
@@ -120,15 +124,15 @@ export function sentryErrorHandler() {
   if (!process.env.SENTRY_DSN) {
     return (err: any, req: any, res: any, next: any) => next(err);
   }
-  return Sentry.Handlers.errorHandler({
-    shouldHandleError(error) {
+  return SentryAny.Handlers ? SentryAny.Handlers.errorHandler({
+    shouldHandleError(error: any) {
       // Capture all 4xx and 5xx errors
-      if (error.status && error.status >= 400) {
+      if (error && error.status && error.status >= 400) {
         return true;
       }
       return true;
     },
-  });
+  }) : ((err: any, req: any, res: any, next: any) => next(err));
 }
 
 /**
@@ -144,8 +148,8 @@ export function captureException(error: Error, context?: Record<string, any>): v
 /**
  * Manually capture a message
  */
-export function captureMessage(message: string, level: Sentry.SeverityLevel = 'info'): void {
-  Sentry.captureMessage(message, level);
+export function captureMessage(message: string, level: any = 'info'): void {
+  SentryAny.captureMessage(message, level);
 }
 
 /**
@@ -169,11 +173,11 @@ export function clearUser(): void {
 /**
  * Create a transaction for performance monitoring
  */
-export function startTransaction(name: string, op: string): Sentry.Transaction {
-  return Sentry.startTransaction({
+export function startTransaction(name: string, op: string): any {
+  return SentryAny.startTransaction ? SentryAny.startTransaction({
     name,
     op,
-  });
+  }) : null;
 }
 
 /**

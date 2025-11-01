@@ -1,0 +1,102 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "orderId": 5,
+      "customerId": 6,
+      "parasutInvoiceId": null,
+      "invoiceNumber": "INV-2025-0001",
+      "invoiceDate": "2025-10-28T00:00:00Z",
+      "dueDate": "2025-11-27T00:00:00Z",
+      "totalAmount": 2000,
+      "vatAmount": 400,
+      "grandTotal": 2400,
+      "paidAmount": 0,
+      "status": "PENDING",
+      "type": "rental",
+      "createdAt": "2025-10-28T06:12:51.154Z",
+      "updatedAt": "2025-10-28T06:12:51.153Z",
+      "customer": {
+        "id": 6,
+        "name": "Ümit",
+        "email": "umit@gmail.com",
+        "phone": "054255587889",
+        "taxNumber": "123456895"
+      },
+      "order": {
+        "id": 5,
+        "orderNumber": "MAN-1761631971123",
+        "orderItems": []
+      },
+      "payments": []
+    },
+    {
+      "id": 2,
+      "orderId": 6,
+      "customerId": 7,
+      "parasutInvoiceId": null,
+      "invoiceNumber": "INV-2025-0002",
+      "invoiceDate": "2025-10-28T00:00:00Z",
+      "dueDate": "2025-11-27T00:00:00Z",
+      "totalAmount": 3000,
+      "vatAmount": 600,
+      "grandTotal": 3600,
+      "paidAmount": 0,
+      "status": "PENDING",
+      "type": "rental",
+      "createdAt": "2025-10-28T07:32:12.476Z",
+      "updatedAt": "2025-10-28T07:32:12.475Z",
+      "customer": {
+        "id": 7,
+        "name": "Ümit yaman",
+        "email": "umit@canary.com",
+        "phone": "55512345",
+        "taxNumber": "125488566"
+      },
+      "order": {
+        "id": 6,
+        "orderNumber": "MAN-1761636732446",
+        "orderItems": []
+      },
+      "payments": []
+    },
+    {
+      "id": 3,
+      "orderId": 7,
+      "customerId": 8,
+      "parasutInvoiceId": null,
+      "invoiceNumber": "INV-2025-0003",
+      "invoiceDate": "2025-10-28T00:00:00Z",
+      "dueDate": "2025-11-27T00:00:00Z",
+      "totalAmount": 100,
+      "vatAmount": 20,
+      "grandTotal": 120,
+      "paidAmount": 0,
+      "status": "PENDING",
+      "type": "rental",
+      "createdAt": "2025-10-28T12:58:04.916Z",
+      "updatedAt": "2025-10-28T12:58:04.915Z",
+      "customer": {
+        "id": 8,
+        "name": "Ümit",
+        "email": "umit@yaman.com",
+        "phone": "22544452",
+        "taxNumber": null
+      },
+      "order": {
+        "id": 7,
+        "orderNumber": "MAN-1761656284880",
+        "orderItems": []
+      },
+      "payments": []
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 3,
+    "totalPages": 1,
+    "hasMore": false
+  }
+}

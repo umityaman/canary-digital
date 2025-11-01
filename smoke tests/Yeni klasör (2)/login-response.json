@@ -1,0 +1,35 @@
+{
+  "message": "Login successful",
+  "user": {
+    "id": 1,
+    "email": "admin@canary.com",
+    "name": "Admin User",
+    "role": "ADMIN",
+    "company": {
+      "id": 1,
+      "name": "Canary Camera Rentals",
+      "email": "info@canaryrentals.com",
+      "phone": "+90 212 555 0123",
+      "address": "İstanbul, Türkiye",
+      "address2": null,
+      "taxNumber": null,
+      "taxOffice": null,
+      "tradeRegister": null,
+      "mersisNo": null,
+      "city": null,
+      "district": null,
+      "postalCode": null,
+      "website": null,
+      "logo": null,
+      "mobilePhone": null,
+      "authorizedPerson": null,
+      "iban": null,
+      "bankName": null,
+      "bankBranch": null,
+      "accountHolder": null,
+      "timezone": "Europe/Istanbul",
+      "createdAt": "2025-10-17T18:20:28.685Z",
+      "updatedAt": "2025-10-17T18:20:28.685Z"
+    }
+  }
+}

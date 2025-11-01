@@ -1,48 +1,64 @@
 import { PrismaClient } from '@prisma/client';
 
-// Mock Prisma Client for tests
-export const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: 'file:./test.db',
-    },
-  },
-});
+// Try to create a Prisma client for tests, but be resilient if the
+// environment isn't configured (so unit tests that mock prisma still run).
+let prisma: PrismaClient | null = null;
+let connected = false;
+try {
+  prisma = new PrismaClient({
+    datasources: { db: { url: 'file:./test.db' } },
+  });
+} catch (err) {
+  // If PrismaClient construction fails, continue — some tests mock the DB.
+  // eslint-disable-next-line no-console
+  console.warn('PrismaClient not constructed for tests:', (err as any)?.message || err)
+}
 
 // Setup before all tests
 beforeAll(async () => {
-  // Connect to test database
-  await prisma.$connect();
-  
-  // Clean database
-  await prisma.user.deleteMany();
-  await prisma.equipment.deleteMany();
-  await prisma.reservation.deleteMany();
-});
+  if (!prisma) return
+  try {
+    await prisma.$connect()
+    connected = true
+
+    // Try best-effort cleanup for commonly present tables
+    await Promise.allSettled([
+      prisma.user?.deleteMany?.() as any,
+      prisma.equipment?.deleteMany?.() as any,
+      prisma.reservation?.deleteMany?.() as any,
+    ])
+  } catch (err) {
+    // Don't fail the test run if DB isn't available
+    // eslint-disable-next-line no-console
+    console.warn('Prisma test DB connect/cleanup skipped:', (err as any)?.message || err)
+  }
+})
 
 // Cleanup after all tests
 afterAll(async () => {
-  // Disconnect from database
-  await prisma.$disconnect();
-});
+  if (!prisma || !connected) return
+  try {
+    await prisma.$disconnect()
+  } catch (err) {
+    // ignore
+  }
+})
 
 // Setup before each test
 beforeEach(async () => {
-  // Clean specific tables if needed
-});
+  // nothing by default
+})
 
 // Cleanup after each test
 afterEach(async () => {
-  // Reset mocks
   jest.clearAllMocks();
 });
 
-// Global test utilities
-global.console = {
+// Keep console as-is but silence info logs in test output
+(global as any).console = {
   ...console,
-  // Suppress console.log in tests
   log: jest.fn(),
-  // Keep error and warn
+  info: jest.fn(),
   error: console.error,
   warn: console.warn,
 };

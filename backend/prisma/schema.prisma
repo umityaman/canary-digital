@@ -70,6 +70,14 @@ model Company {
   websiteProjects      WebsiteProject[]
   whatsappMessages     WhatsAppMessage[]
   workOrders           WorkOrder[]
+  // Accounting relations
+  checks               Check[]
+  promissoryNotes      PromissoryNote[]
+  bankAccounts         BankAccount[]
+  cashTransactions     CashTransaction[]
+  accountCategories    AccountCategory[]
+  accountingTags       AccountingTag[]
+  accountingReportSchedules AccountingReportSchedule[]
 }
 
 model User {
@@ -146,6 +154,7 @@ model User {
   socialMediaSchedules     SocialMediaSchedule[]
   technician               Technician?
   transactions             Transaction[]
+  cashTransactions        CashTransaction[]
   company                  Company?                @relation(fields: [companyId], references: [id])
   workOrders               WorkOrder[]
 }
@@ -222,6 +231,9 @@ model Customer {
   inspections       Inspection[]
   orders            Order[]
   workOrders        WorkOrder[]
+  // Accounting relations
+  checks            Check[]
+  promissoryNotes   PromissoryNote[]
 }
 
 model Order {
@@ -250,6 +262,8 @@ model Order {
   customer          Customer        @relation(fields: [customerId], references: [id])
   orderItems        OrderItem[]
   transactions      Transaction[]
+  // Accounting relations
+  checks            Check[]
 }
 
 model OrderItem {
@@ -1068,6 +1082,150 @@ model Expense {
   @@index([companyId])
   @@index([category])
   @@index([date])
+}
+
+// Accounting extensions: Checks, PromissoryNotes, Bank/Cash models, Categories and Tags
+model Check {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  checkNumber   String
+  type          String   // "received" | "issued"
+  drawer        String   // Keşideci / Lehtar
+  bank          String
+  branch        String?
+  accountNumber String?
+  amount        Float
+  issueDate     DateTime
+  dueDate       DateTime
+  status        String   // "portfolio" | "endorsed" | "collected" | "bounced" | "returned"
+  customerId    Int?
+  orderId       Int?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer      Customer? @relation(fields: [customerId], references: [id])
+  order         Order?   @relation(fields: [orderId], references: [id])
+
+  @@index([companyId, dueDate, status])
+}
+
+model PromissoryNote {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  noteNumber    String
+  type          String   // "received" | "issued"
+  drawer        String
+  amount        Float
+  issueDate     DateTime
+  dueDate       DateTime
+  status        String
+  aval          String?
+  customerId    Int?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer      Customer? @relation(fields: [customerId], references: [id])
+
+  @@index([companyId, dueDate, status])
+}
+
+model BankAccount {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  bankName      String
+  accountType   String   // "checking" | "savings"
+  iban          String
+  branch        String?
+  balance       Float    @default(0)
+  currency      String   @default("TRY")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  transactions  BankTransaction[]
+
+  @@index([companyId, isActive])
+}
+
+model BankTransaction {
+  id              Int        @id @default(autoincrement())
+  accountId       Int
+  type            String     // "deposit" | "withdrawal"
+  amount          Float
+  description     String?
+  transactionType String?
+  balanceAfter    Float?
+  date            DateTime
+  createdAt       DateTime   @default(now())
+
+  account         BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, date])
+}
+
+model CashTransaction {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  type          String   // "in" | "out"
+  amount        Float
+  description   String?
+  currency      String   @default("TRY")
+  userId        Int?
+  date          DateTime
+  createdAt     DateTime @default(now())
+
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user          User?    @relation(fields: [userId], references: [id])
+
+  @@index([companyId, date])
+}
+
+model AccountCategory {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  name          String
+  type          String   // "income" | "expense"
+  color         String?
+  icon          String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, type])
+}
+
+model AccountingTag {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  name          String
+  color         String?
+  createdAt     DateTime @default(now())
+
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+}
+
+model AccountingReportSchedule {
+  id            Int      @id @default(autoincrement())
+  companyId     Int
+  reportType    String   // "profit-loss" | "cash-flow" | "statement"
+  frequency     String   // "daily" | "weekly" | "monthly"
+  recipients    String[]
+  isActive      Boolean  @default(true)
+  lastRun       DateTime?
+  nextRun       DateTime?
+  createdAt     DateTime @default(now())
+
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, nextRun])
 }
 
 model Payment {

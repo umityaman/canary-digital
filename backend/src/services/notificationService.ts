@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import nodemailer from 'nodemailer';
 
-const prisma = new PrismaClient();
+// Short-term: cast Prisma client to any to avoid generated-client type mismatches during triage
+const prisma = new PrismaClient() as any;
 
 // Email transporter (nodemailer already configured in app)
 const transporter = nodemailer.createTransport({

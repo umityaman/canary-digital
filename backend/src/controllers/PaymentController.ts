@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { PaymentStatus } from '@prisma/client';
 import { iyzipayService } from '../services/IyzipayService';
 import { prisma } from '../database';
+
+const p = prisma as any;
 
 export class PaymentController {
   
@@ -28,7 +29,7 @@ export class PaymentController {
       }
 
       // Get contract
-      const contract = await prisma.contract.findFirst({
+      const contract = await (p.contract.findFirst as any)({
         where: {
           id: parseInt(contractId),
           companyId
@@ -45,7 +46,7 @@ export class PaymentController {
             }
           }
         }
-      });
+      } as any);
 
       if (!contract) {
         return res.status(404).json({ error: 'Sözleşme bulunamadı' });
@@ -102,7 +103,7 @@ export class PaymentController {
         currency,
         iyzipayPaymentId: result.paymentId,
         conversationId,
-        status: result.status === 'success' ? PaymentStatus.COMPLETED : PaymentStatus.PENDING,
+        status: result.status === 'success' ? 'COMPLETED' : 'PENDING',
         paymentMethod: 'CREDIT_CARD',
         description,
         metadata: {
@@ -150,7 +151,7 @@ export class PaymentController {
       }
 
       // Find payment record
-      const payment = await prisma.payment.findFirst({
+      const payment = await p.payment.findFirst({
         where: {
           conversationId,
           companyId
@@ -170,9 +171,9 @@ export class PaymentController {
       // Update payment status
       const updatedPayment = await iyzipayService.updatePaymentStatus(
         payment.id,
-        result.status === 'success' ? PaymentStatus.COMPLETED : PaymentStatus.FAILED,
+        result.status === 'success' ? 'COMPLETED' : 'FAILED',
         {
-          ...payment.metadata,
+          ...(payment as any).metadata,
           completionResult: result
         }
       );
@@ -211,19 +212,19 @@ export class PaymentController {
       }
 
       // Get payment
-      const payment = await prisma.payment.findFirst({
+      const payment = await p.payment.findFirst({
         where: {
           id: parseInt(paymentId),
           companyId,
-          status: PaymentStatus.COMPLETED
+          status: 'COMPLETED'
         }
-      });
+      } as any);
 
       if (!payment) {
         return res.status(404).json({ error: 'Ödeme bulunamadı veya iade edilebilir durumda değil' });
       }
 
-      if (!payment.iyzipayPaymentId) {
+      if (!(payment as any).iyzipayPaymentId) {
         return res.status(400).json({ error: 'Iyzipay ödeme ID bulunamadı' });
       }
 
@@ -244,9 +245,9 @@ export class PaymentController {
       // Update payment status
       const updatedPayment = await iyzipayService.updatePaymentStatus(
         payment.id,
-        PaymentStatus.REFUNDED,
+        'REFUNDED',
         {
-          ...payment.metadata,
+          ...(payment as any).metadata,
           refundResult: result,
           refundReason: reason
         }
@@ -340,7 +341,7 @@ export class PaymentController {
         return res.status(401).json({ error: 'Yetkisiz erişim' });
       }
 
-      const payment = await prisma.payment.findFirst({
+      const payment = await p.payment.findFirst({
         where: {
           id: parseInt(paymentId),
           companyId
@@ -367,7 +368,7 @@ export class PaymentController {
 
       // If Iyzipay payment ID exists, get latest status from Iyzipay
       let iyzipayStatus = null;
-      if (payment.iyzipayPaymentId) {
+      if ((payment as any).iyzipayPaymentId) {
         try {
           iyzipayStatus = await iyzipayService.getPayment({
             paymentId: payment.iyzipayPaymentId
@@ -402,7 +403,7 @@ export class PaymentController {
       const { status, paymentId, conversationId } = req.body;
 
       // Find payment by conversation ID
-      const payment = await prisma.payment.findFirst({
+      const payment = await p.payment.findFirst({
         where: {
           conversationId
         }
@@ -414,23 +415,23 @@ export class PaymentController {
       }
 
       // Update payment status based on webhook
-      let newStatus: PaymentStatus;
+      let newStatus: string;
       switch (status) {
         case 'success':
-          newStatus = PaymentStatus.COMPLETED;
+          newStatus = 'COMPLETED';
           break;
         case 'failure':
-          newStatus = PaymentStatus.FAILED;
+          newStatus = 'FAILED';
           break;
         default:
-          newStatus = PaymentStatus.PENDING;
+          newStatus = 'PENDING';
       }
 
       await iyzipayService.updatePaymentStatus(
         payment.id,
         newStatus,
         {
-          ...payment.metadata,
+          ...(payment as any).metadata,
           webhookData: req.body,
           webhookReceivedAt: new Date().toISOString()
         }

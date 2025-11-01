@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import * as jwt from 'jsonwebtoken'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 
@@ -29,3 +29,8 @@ export const authenticateToken = (
     return res.status(403).json({ message: 'Geçersiz token' })
   }
 }
+
+// Backwards-compatible alias used across the codebase
+export const authenticate = authenticateToken
+
+export default authenticateToken

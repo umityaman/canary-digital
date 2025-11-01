@@ -42,8 +42,8 @@ router.use(authenticateToken);
  */
 router.post(
   '/upload',
-  MediaController.uploadSingle,
-  MediaController.uploadMedia
+  (MediaController.uploadSingle as any),
+  (MediaController.uploadMedia as any)
 );
 
 /**
@@ -72,8 +72,8 @@ router.post(
  */
 router.post(
   '/upload/multiple',
-  MediaController.uploadMultiple,
-  MediaController.uploadMultipleMedia
+  (MediaController.uploadMultiple as any),
+  (MediaController.uploadMultipleMedia as any)
 );
 
 /**

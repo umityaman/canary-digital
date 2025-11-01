@@ -2,6 +2,9 @@ import { parasutClient, formatDate } from '../config/parasut';
 import { prisma } from '../index';
 import { log } from '../config/logger';
 
+// Use the generated Prisma client types (avoid broad `as any` casts)
+const p = prisma;
+
 interface CreateInvoiceParams {
   orderId: number;
   customerId: number;
@@ -42,7 +45,7 @@ export class InvoiceService {
       log.info('Invoice Service: Kiralama faturası oluşturuluyor...', { orderId });
 
       // Müşteri bilgilerini al
-      const customer = await prisma.user.findUnique({
+      const customer = await p.user.findUnique({
         where: { id: customerId },
       });
 
@@ -50,11 +53,11 @@ export class InvoiceService {
         throw new Error('Customer not found');
       }
 
-      // Sipariş bilgilerini al
-      const order = await prisma.order.findUnique({
+      // Sipariş bilgilerini al (equipment relation is via orderItems -> equipment)
+      const order = await p.order.findUnique({
         where: { id: orderId },
         include: {
-          equipment: true,
+          orderItems: { include: { equipment: true } },
         },
       });
 
@@ -80,7 +83,7 @@ export class InvoiceService {
 
         // Contact ID'yi veritabanına kaydet
         parasutContactId = parasutContact.id;
-        await prisma.user.update({
+        await p.user.update({
           where: { id: customerId },
           data: { parasutContactId: parasutContact.id },
         });
@@ -130,7 +133,7 @@ export class InvoiceService {
       });
 
       // Veritabanına kaydet
-      const dbInvoice = await prisma.invoice.create({
+      const dbInvoice = await p.invoice.create({
         data: {
           orderId,
           customerId,
@@ -154,7 +157,7 @@ export class InvoiceService {
         await parasutClient.sendInvoice(parasutInvoice.id, customer.email);
         
         // Durumu güncelle
-        await prisma.invoice.update({
+        await p.invoice.update({
           where: { id: dbInvoice.id },
           data: { status: 'sent' },
         });
@@ -180,7 +183,7 @@ export class InvoiceService {
     try {
       log.info('Invoice Service: Ödeme kaydediliyor...', { invoiceId });
 
-      const invoice = await prisma.invoice.findUnique({
+      const invoice = await p.invoice.findUnique({
         where: { id: invoiceId },
       });
 
@@ -197,7 +200,7 @@ export class InvoiceService {
       });
 
       // Veritabanına kaydet
-      const payment = await prisma.payment.create({
+      const payment = await p.payment.create({
         data: {
           invoiceId,
           amount: paymentData.amount,
@@ -209,7 +212,7 @@ export class InvoiceService {
       });
 
       // Fatura durumunu güncelle
-      const totalPaid = await prisma.payment.aggregate({
+      const totalPaid = await p.payment.aggregate({
         where: { invoiceId },
         _sum: { amount: true },
       });
@@ -217,7 +220,7 @@ export class InvoiceService {
       const paidAmount = totalPaid._sum.amount || 0;
       const isPaid = paidAmount >= invoice.grandTotal;
 
-      await prisma.invoice.update({
+      await p.invoice.update({
         where: { id: invoiceId },
         data: {
           status: isPaid ? 'paid' : 'partial_paid',
@@ -255,11 +258,11 @@ export class InvoiceService {
         dailyFee,
       });
 
-      const order = await prisma.order.findUnique({
+      const order = await p.order.findUnique({
         where: { id: orderId },
         include: {
           customer: true,
-          equipment: true,
+          orderItems: { include: { equipment: true } },
         },
       });
 
@@ -267,7 +270,10 @@ export class InvoiceService {
         throw new Error('Order not found');
       }
 
-      if (!order.customer.parasutContactId) {
+      const parasutContactIdFromCustomer = (order as any).customer?.parasutContactId
+        ?? (await p.user.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
+
+      if (!parasutContactIdFromCustomer) {
         throw new Error('Customer not found in Paraşüt');
       }
 
@@ -279,13 +285,13 @@ export class InvoiceService {
 
       // Paraşüt'te fatura oluştur
       const parasutInvoice = await parasutClient.createInvoice({
-        contactId: order.customer.parasutContactId,
+  contactId: parasutContactIdFromCustomer,
         invoiceDate: formatDate(new Date()),
         dueDate: formatDate(dueDate),
         description,
         items: [
           {
-            productName: `${order.equipment.name} - Gecikme Ücreti`,
+            productName: `${order.orderItems?.[0]?.equipment?.name || 'Ekipman'} - Gecikme Ücreti`,
             quantity: lateDays,
             unitPrice: dailyFee,
             vatRate: 18,
@@ -296,7 +302,7 @@ export class InvoiceService {
       });
 
       // Veritabanına kaydet
-      const dbInvoice = await prisma.invoice.create({
+      const dbInvoice = await p.invoice.create({
         data: {
           orderId,
           customerId: order.customerId,
@@ -314,7 +320,7 @@ export class InvoiceService {
       });
 
       // e-Arşiv gönder
-      await parasutClient.sendInvoice(parasutInvoice.id, order.customer.email);
+  await parasutClient.sendInvoice(parasutInvoice.id, order.customer.email);
 
       log.info('Invoice Service: Gecikme cezası faturası oluşturuldu:', dbInvoice.id);
 
@@ -340,19 +346,22 @@ export class InvoiceService {
         depositAmount,
       });
 
-      const order = await prisma.order.findUnique({
+  const order = await p.order.findUnique({
         where: { id: orderId },
         include: {
           customer: true,
-          equipment: true,
+          orderItems: { include: { equipment: true } },
         },
-      });
+      }) as any;
 
       if (!order) {
         throw new Error('Order not found');
       }
 
-      if (!order.customer.parasutContactId) {
+      const parasutContactIdForDeposit = (order as any).customer?.parasutContactId
+        ?? (await p.user.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
+
+      if (!parasutContactIdForDeposit) {
         throw new Error('Customer not found in Paraşüt');
       }
 
@@ -360,13 +369,13 @@ export class InvoiceService {
 
       // Paraşüt'te fatura oluştur (negatif tutar için)
       const parasutInvoice = await parasutClient.createInvoice({
-        contactId: order.customer.parasutContactId,
+  contactId: parasutContactIdForDeposit,
         invoiceDate: formatDate(new Date()),
         dueDate: formatDate(new Date()),
         description,
         items: [
           {
-            productName: `${order.equipment.name} - Depozito İadesi`,
+            productName: `${order.orderItems?.[0]?.equipment?.name || 'Ekipman'} - Depozito İadesi`,
             quantity: 1,
             unitPrice: -depositAmount, // Negatif tutar
             vatRate: 0, // Depozito iadesi KDV'siz
@@ -377,7 +386,7 @@ export class InvoiceService {
       });
 
       // Veritabanına kaydet
-      const dbInvoice = await prisma.invoice.create({
+      const dbInvoice = await p.invoice.create({
         data: {
           orderId,
           customerId: order.customerId,
@@ -410,12 +419,12 @@ export class InvoiceService {
    */
   async getInvoiceDetails(invoiceId: number) {
     try {
-      const invoice = await prisma.invoice.findUnique({
+      const invoice = await p.invoice.findUnique({
         where: { id: invoiceId },
         include: {
           order: {
             include: {
-              equipment: true,
+              orderItems: { include: { equipment: true } },
             },
           },
           customer: true,
@@ -434,8 +443,8 @@ export class InvoiceService {
           
           // Durum farklıysa güncelle
           const parasutStatus = parasutInvoice.attributes.payment_status;
-          if (parasutStatus && parasutStatus !== invoice.status) {
-            await prisma.invoice.update({
+            if (parasutStatus && parasutStatus !== invoice.status) {
+            await p.invoice.update({
               where: { id: invoiceId },
               data: { status: parasutStatus },
             });
@@ -483,12 +492,12 @@ export class InvoiceService {
         }
       }
 
-      const invoices = await prisma.invoice.findMany({
+  const invoices = await p.invoice.findMany({
         where,
         include: {
           order: {
             include: {
-              equipment: true,
+              orderItems: { include: { equipment: true } },
             },
           },
           payments: true,
@@ -512,7 +521,7 @@ export class InvoiceService {
     try {
       log.info('Invoice Service: Fatura iptal ediliyor...', { invoiceId, reason });
 
-      const invoice = await prisma.invoice.findUnique({
+  const invoice = await p.invoice.findUnique({
         where: { id: invoiceId },
       });
 
@@ -525,7 +534,7 @@ export class InvoiceService {
       }
 
       // Veritabanında iptal et
-      await prisma.invoice.update({
+  await p.invoice.update({
         where: { id: invoiceId },
         data: {
           status: 'cancelled',

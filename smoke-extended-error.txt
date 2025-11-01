@@ -1,0 +1,7 @@
+﻿Could not determine an invoice id to request PDF for.
+At C:\Users\umity\Desktop\CANARY-BACKUP-20251008-1156\scripts\smoke-extended3.ps1:75 char:29
++ ... lectedId) { throw "Could not determine an invoice id to request PDF f ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Could not deter...equest PDF for.:String) [], RuntimeException
+    + FullyQualifiedErrorId : Could not determine an invoice id to request PDF for.
+ 

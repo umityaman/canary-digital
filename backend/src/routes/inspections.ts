@@ -1,12 +1,12 @@
 import { Router, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authenticateToken, AuthRequest } from './auth';
+import { authenticateToken } from '../middleware/auth';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
 const router = Router();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as any;
 
 // Multer configuration for photo uploads
 const storage = multer.diskStorage({
@@ -40,7 +40,7 @@ const upload = multer({
 });
 
 // GET /inspections - List all inspections
-router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/', authenticateToken, async (req: any, res: Response) => {
   try {
     const { inspectionType, status, search, dateFrom, dateTo } = req.query;
     const companyId = req.companyId;
@@ -92,7 +92,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 });
 
 // GET /inspections/:id - Get single inspection
-router.get('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/:id', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
     const companyId = req.companyId;
@@ -121,7 +121,7 @@ router.get('/:id', authenticateToken, async (req: AuthRequest, res: Response) =>
 });
 
 // POST /inspections - Create new inspection
-router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.post('/', authenticateToken, async (req: any, res: Response) => {
   try {
     const {
       inspectionType,
@@ -217,7 +217,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 });
 
 // PUT /inspections/:id - Update inspection
-router.put('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.put('/:id', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
     const { status, overallCondition, checklistData, customerSignature, inspectorSignature, notes } = req.body;
@@ -259,7 +259,7 @@ router.put('/:id', authenticateToken, async (req: AuthRequest, res: Response) =>
 });
 
 // DELETE /inspections/:id - Delete inspection
-router.delete('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.delete('/:id', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
     const companyId = req.companyId;
@@ -284,7 +284,7 @@ router.delete('/:id', authenticateToken, async (req: AuthRequest, res: Response)
 });
 
 // POST /inspections/:id/photos - Add photo
-router.post('/:id/photos', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.post('/:id/photos', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
     const { photoUrl, photoType, caption } = req.body;
@@ -315,7 +315,7 @@ router.post('/:id/photos', authenticateToken, async (req: AuthRequest, res: Resp
 });
 
 // DELETE /inspections/:id/photos/:photoId - Delete photo
-router.delete('/:id/photos/:photoId', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.delete('/:id/photos/:photoId', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id, photoId } = req.params;
     const companyId = req.companyId;
@@ -337,7 +337,7 @@ router.delete('/:id/photos/:photoId', authenticateToken, async (req: AuthRequest
 });
 
 // POST /inspections/:id/damages - Add damage report
-router.post('/:id/damages', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.post('/:id/damages', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
     const { damageType, severity, description, location, estimatedCost, responsibleParty, photoUrl } = req.body;
@@ -380,7 +380,7 @@ router.post('/:id/damages', authenticateToken, async (req: AuthRequest, res: Res
 });
 
 // DELETE /inspections/:id/damages/:damageId - Delete damage report
-router.delete('/:id/damages/:damageId', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.delete('/:id/damages/:damageId', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id, damageId } = req.params;
     const companyId = req.companyId;
@@ -402,7 +402,7 @@ router.delete('/:id/damages/:damageId', authenticateToken, async (req: AuthReque
 });
 
 // POST /inspection-photos - Upload inspection photo (Mobile)
-router.post('/inspection-photos', authenticateToken, upload.single('photo'), async (req: AuthRequest, res: Response) => {
+router.post('/inspection-photos', authenticateToken, (upload.single('photo') as any), async (req: any, res: Response) => {
   try {
     const { inspectionId, equipmentId, orderId, type } = req.body;
     const file = req.file;
@@ -425,24 +425,25 @@ router.post('/inspection-photos', authenticateToken, upload.single('photo'), asy
       }
     }
 
-    // Create photo record
-    const photo = await prisma.inspectionPhoto.create({
+    // Create photo record (store file path as photoUrl to match Prisma schema)
+    const photo = await (prisma.inspectionPhoto.create as any)({
       data: {
-        filename: file.filename,
+        photoUrl: file.path,
         inspectionId: inspectionId ? parseInt(inspectionId) : null,
         equipmentId: equipmentId ? parseInt(equipmentId) : null,
         uploadedById: req.user?.id,
-        notes: type || 'inspection' // pickup, return, damage, inspection
+        notes: type || 'inspection', // pickup, return, damage, inspection
+        photoType: 'GENERAL'
       }
     });
 
     res.status(201).json({
       message: 'Fotoğraf başarıyla yüklendi',
       photo: {
-        id: photo.id,
-        url: photo.url,
-        filename: photo.filename,
-        createdAt: photo.createdAt
+        id: (photo as any).id,
+        url: (photo as any).photoUrl,
+        filename: path.basename((photo as any).photoUrl || file.filename),
+        createdAt: (photo as any).createdAt
       }
     });
   } catch (error: any) {
@@ -462,7 +463,7 @@ router.post('/inspection-photos', authenticateToken, upload.single('photo'), asy
 });
 
 // DELETE /inspection-photos/:id - Delete inspection photo
-router.delete('/inspection-photos/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.delete('/inspection-photos/:id', authenticateToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
     const companyId = req.companyId;
@@ -479,7 +480,7 @@ router.delete('/inspection-photos/:id', authenticateToken, async (req: AuthReque
     }
 
     // Delete file from filesystem
-    const filePath = path.join(__dirname, '../../', photo.url);
+  const filePath = path.join(__dirname, '../../', (photo as any).photoUrl || '');
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }

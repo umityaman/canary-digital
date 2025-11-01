@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../database';
 
+const p = prisma as any;
 export interface ParasutConfig {
   clientId: string;
   clientSecret: string;
@@ -511,7 +512,7 @@ export class ParasutService {
    * Sync customer with Parasut
    */
   async syncCustomer(customerId: number): Promise<number> {
-    const customer = await prisma.customer.findUnique({
+    const customer = await p.customer.findUnique({
       where: { id: customerId }
     });
 
@@ -520,7 +521,7 @@ export class ParasutService {
     }
 
     // Check if customer already exists in Parasut
-    let parasutContact = await prisma.customer.findUnique({
+    let parasutContact = await p.customer.findUnique({
       where: { id: customerId },
       select: { parasutContactId: true }
     });
@@ -534,7 +535,7 @@ export class ParasutService {
     const createdContact = await this.createContact(contactData);
 
     // Save Parasut contact ID
-    await prisma.customer.update({
+    await p.customer.update({
       where: { id: customerId },
       data: { parasutContactId: createdContact.id }
     });
@@ -546,7 +547,7 @@ export class ParasutService {
    * Create invoice from contract
    */
   async createInvoiceFromContract(contractId: number): Promise<ParasutInvoice> {
-    const contract = await prisma.contract.findUnique({
+    const contract = await p.contract.findUnique({
       where: { id: contractId },
       include: {
         customer: true,
@@ -570,7 +571,7 @@ export class ParasutService {
     const createdInvoice = await this.createSalesInvoice(invoiceData);
 
     // Save invoice reference in contract
-    await prisma.contract.update({
+    await p.contract.update({
       where: { id: contractId },
       data: { 
         parasutInvoiceId: createdInvoice.id,

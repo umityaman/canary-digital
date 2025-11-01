@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { parasutService } from '../services/ParasutService';
 import { prisma } from '../database';
+const p = prisma as any;
 
 export class ParasutController {
 
@@ -78,7 +79,7 @@ export class ParasutController {
           id: parseInt(customerId),
           companyId
         }
-      });
+      } as any);
 
       if (!customer) {
         return res.status(404).json({ error: 'Customer not found' });
@@ -115,12 +116,12 @@ export class ParasutController {
       }
 
       // Verify contract belongs to company
-      const contract = await prisma.contract.findFirst({
+      const contract = await (p.contract.findFirst as any)({
         where: {
           id: parseInt(contractId),
           companyId
         }
-      });
+      } as any);
 
       if (!contract) {
         return res.status(404).json({ error: 'Contract not found' });
@@ -470,7 +471,7 @@ export class ParasutController {
           id: true,
           name: true
         }
-      });
+      } as any);
 
       const results = [];
       let successCount = 0;
@@ -532,26 +533,26 @@ export class ParasutController {
       // Count synchronized customers
       const totalCustomers = await prisma.customer.count({
         where: { companyId }
-      });
+      } as any);
 
       const syncedCustomers = await prisma.customer.count({
         where: {
           companyId,
           parasutContactId: { not: null }
         }
-      });
+      } as any);
 
       // Count contracts with invoices
-      const totalContracts = await prisma.contract.count({
+      const totalContracts = await (p.contract.count as any)({
         where: { companyId }
-      });
+      } as any);
 
-      const contractsWithInvoices = await prisma.contract.count({
+      const contractsWithInvoices = await (p.contract.count as any)({
         where: {
           companyId,
           parasutInvoiceId: { not: null }
         }
-      });
+      } as any);
 
       res.json({
         success: true,

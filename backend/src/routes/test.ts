@@ -66,10 +66,17 @@ router.post('/order-email', async (req, res) => {
       {
         orderNumber: 'ORD-TEST-001',
         customerName: 'Test Kullanıcı',
-        equipment: ['Sony A7III Kamera', 'Canon 24-70mm Lens', 'Manfrotto Tripod'],
+        equipment: [
+          { name: 'Sony A7III Kamera', quantity: 1, price: '3000' },
+          { name: 'Canon 24-70mm Lens', quantity: 1, price: '1500' },
+          { name: 'Manfrotto Tripod', quantity: 1, price: '500' }
+        ],
         startDate: '15 Ekim 2025',
         endDate: '20 Ekim 2025',
-        totalPrice: 5000
+        totalAmount: '5000',
+        duration: 5,
+        deliveryMethod: 'pickup',
+        orderUrl: 'https://example.com/order/ORD-TEST-001'
       }
     );
 

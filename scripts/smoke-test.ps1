@@ -25,12 +25,12 @@ try {
         Write-Output "No token field detected in login response"
     }
 
-    Write-Output "==> Attempting to download invoice PDF (id=1)"
+    Write-Output "==> Attempting to download invoice PDF (id=1) using POST"
     $pdfUrl = 'https://canary-backend-672344972017.europe-west1.run.app/api/pdf/invoice/1'
     if ($token) {
-        Invoke-WebRequest -Uri $pdfUrl -Method Get -Headers @{ Authorization = "Bearer $token" } -OutFile invoice-1.pdf -UseBasicParsing -ErrorAction Stop
+        Invoke-WebRequest -Uri $pdfUrl -Method Post -Headers @{ Authorization = "Bearer $token" } -OutFile invoice-1.pdf -UseBasicParsing -ErrorAction Stop
     } else {
-        Invoke-WebRequest -Uri $pdfUrl -Method Get -OutFile invoice-1.pdf -UseBasicParsing -ErrorAction Stop
+        Invoke-WebRequest -Uri $pdfUrl -Method Post -OutFile invoice-1.pdf -UseBasicParsing -ErrorAction Stop
     }
     Write-Output "Invoice PDF saved to invoice-1.pdf"
     exit 0

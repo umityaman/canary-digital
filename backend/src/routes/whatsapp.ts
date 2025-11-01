@@ -379,7 +379,7 @@ router.post('/send/bulk',
  */
 router.post('/upload',
   authenticate,
-  upload.single('file'),
+  (upload.single('file') as any),
   whatsAppController.uploadMedia.bind(whatsAppController)
 );
 

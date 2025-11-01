@@ -205,11 +205,12 @@ const swaggerSpec = swaggerJsdoc(options);
 
 export function setupSwagger(app: Express) {
   // Swagger UI
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  // Cast swagger-ui handlers to any to avoid express/handler type mismatches
+  app.use('/api-docs', swaggerUi.serve as any, (swaggerUi.setup(swaggerSpec, {
     explorer: true,
     customCss: '.swagger-ui .topbar { display: none }',
     customSiteTitle: 'CANARY API Documentation',
-  }));
+  }) as any));
 
   // JSON spec
   app.get('/api-docs.json', (req, res) => {

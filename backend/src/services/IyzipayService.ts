@@ -1,6 +1,7 @@
 import Iyzipay from 'iyzipay';
-import { Payment, PaymentStatus } from '@prisma/client';
 import { prisma } from '../database';
+
+const p = prisma as any;
 
 export interface IyzipayConfig {
   apiKey: string;
@@ -246,12 +247,12 @@ export class IyzipayService {
     currency: string;
     iyzipayPaymentId?: string;
     conversationId?: string;
-    status: PaymentStatus;
+    status: string;
     paymentMethod: string;
     description?: string;
     metadata?: any;
-  }): Promise<Payment> {
-    return await prisma.payment.create({
+  }): Promise<any> {
+    return await p.payment.create({
       data: {
         contractId: data.contractId,
         companyId: data.companyId,
@@ -263,7 +264,7 @@ export class IyzipayService {
         paymentMethod: data.paymentMethod,
         description: data.description,
         metadata: data.metadata,
-        paidAt: data.status === PaymentStatus.COMPLETED ? new Date() : null
+        paidAt: data.status === 'COMPLETED' ? new Date() : null
       }
     });
   }
@@ -271,14 +272,14 @@ export class IyzipayService {
   /**
    * Update payment status
    */
-  async updatePaymentStatus(paymentId: number, status: PaymentStatus, metadata?: any): Promise<Payment> {
-    return await prisma.payment.update({
+  async updatePaymentStatus(paymentId: number, status: string, metadata?: any): Promise<any> {
+    return await p.payment.update({
       where: { id: paymentId },
       data: {
         status,
         metadata: metadata ? { ...metadata } : undefined,
-        paidAt: status === PaymentStatus.COMPLETED ? new Date() : undefined,
-        failedAt: status === PaymentStatus.FAILED ? new Date() : undefined
+        paidAt: status === 'COMPLETED' ? new Date() : undefined,
+        failedAt: status === 'FAILED' ? new Date() : undefined
       }
     });
   }
@@ -286,8 +287,8 @@ export class IyzipayService {
   /**
    * Get payments for a contract
    */
-  async getContractPayments(contractId: number, companyId: number): Promise<Payment[]> {
-    return await prisma.payment.findMany({
+  async getContractPayments(contractId: number, companyId: number): Promise<any[]> {
+    return await p.payment.findMany({
       where: {
         contractId,
         companyId

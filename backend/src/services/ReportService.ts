@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const p = prisma as any;
 
 export class ReportService {
   /**
@@ -46,13 +47,13 @@ export class ReportService {
         upcomingReservations,
       ] = await Promise.all([
         // Total equipment count
-        prisma.equipment.count({ where }),
+  p.equipment.count({ where }),
 
         // Total reservations in period
-        prisma.reservation.count({ where: currentWhere }),
+  p.reservation.count({ where: currentWhere }),
 
         // Active reservations (CONFIRMED or IN_PROGRESS)
-        prisma.reservation.count({
+        p.reservation.count({
           where: {
             ...where,
             status: { in: ['CONFIRMED', 'IN_PROGRESS'] },
@@ -62,7 +63,7 @@ export class ReportService {
         }),
 
         // Completed reservations
-        prisma.reservation.count({
+        p.reservation.count({
           where: {
             ...currentWhere,
             status: 'COMPLETED',
@@ -70,7 +71,7 @@ export class ReportService {
         }),
 
         // Current period revenue
-        prisma.reservation.aggregate({
+        p.reservation.aggregate({
           where: {
             ...currentWhere,
             status: { in: ['CONFIRMED', 'IN_PROGRESS', 'COMPLETED'] },
@@ -79,7 +80,7 @@ export class ReportService {
         }),
 
         // Previous period revenue
-        prisma.reservation.aggregate({
+        p.reservation.aggregate({
           where: {
             ...previousWhere,
             status: { in: ['CONFIRMED', 'IN_PROGRESS', 'COMPLETED'] },
@@ -88,7 +89,7 @@ export class ReportService {
         }),
 
         // Top 5 most rented equipment
-        prisma.$queryRaw<Array<any>>`
+  p.$queryRaw<Array<any>>`
           SELECT 
             e.id,
             e.name,
@@ -110,7 +111,7 @@ export class ReportService {
         `,
 
         // Low stock equipment (quantity < 3)
-        prisma.equipment.findMany({
+        p.equipment.findMany({
           where: {
             ...where,
             quantity: { lt: 3 },
@@ -126,7 +127,7 @@ export class ReportService {
         }),
 
         // Upcoming reservations (next 7 days)
-        prisma.reservation.findMany({
+        p.reservation.findMany({
           where: {
             ...where,
             status: 'CONFIRMED',
@@ -206,7 +207,7 @@ export class ReportService {
     groupBy: 'day' | 'week' | 'month';
   }): Promise<any> {
     try {
-      const reservations = await prisma.reservation.findMany({
+      const reservations = await p.reservation.findMany({
         where: {
           companyId: params.companyId,
           createdAt: {
@@ -319,7 +320,7 @@ export class ReportService {
       }
 
       // Get equipment with their reservation stats
-      const equipment = await prisma.equipment.findMany({
+      const equipment = await p.equipment.findMany({
         where,
         include: {
           reservationItems: {
@@ -414,7 +415,7 @@ export class ReportService {
     endDate: Date;
   }): Promise<any> {
     try {
-      const reservations = await prisma.reservation.findMany({
+      const reservations = await p.reservation.findMany({
         where: {
           companyId: params.companyId,
           createdAt: {
@@ -515,7 +516,7 @@ export class ReportService {
     endDate: Date;
   }): Promise<any> {
     try {
-      const result = await prisma.$queryRaw<Array<any>>`
+  const result = await p.$queryRaw<Array<any>>`
         SELECT 
           e.category,
           COUNT(DISTINCT e.id) as equipmentCount,

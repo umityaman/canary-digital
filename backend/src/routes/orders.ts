@@ -3,12 +3,13 @@ import { PrismaClient } from '@prisma/client'
 import { authenticateToken } from './auth'
 import { AuthRequest } from '../middleware/auth'
 import { GoogleCalendarService } from '../services/googleCalendar'
-import { sendOrderConfirmation } from '../utils/emailService'
+import { sendOrderConfirmation, sendEmail } from '../utils/emailService'
 import PDFDocument from 'pdfkit'
 import { sendOrderConfirmationWhatsApp } from '../services/whatsapp.service'
 
 const router = Router()
-const prisma = new PrismaClient()
+const prisma = new PrismaClient() as any
+const p = prisma as any
 
 /**
  * Helper function to sync order with Canary Calendar System
@@ -17,7 +18,7 @@ async function syncOrderToCanaryCalendar(order: any, companyId: number, action: 
   try {
     if (action === 'create') {
       // Create calendar event for order
-      await prisma.calendarEvent.create({
+  await p.calendarEvent.create({
         data: {
           title: `Order: ${order.orderNumber}`,
           description: `Customer: ${order.customer?.name || 'Unknown'}\nStatus: ${order.status}`,
@@ -36,7 +37,7 @@ async function syncOrderToCanaryCalendar(order: any, companyId: number, action: 
 
       // Create delivery event (day before end date)
       const deliveryDate = new Date(order.startDate);
-      await prisma.calendarEvent.create({
+  await p.calendarEvent.create({
         data: {
           title: `Delivery: ${order.orderNumber}`,
           description: `Deliver equipment to ${order.customer?.name || 'Unknown'}`,
@@ -56,7 +57,7 @@ async function syncOrderToCanaryCalendar(order: any, companyId: number, action: 
 
       // Create pickup event (on end date)
       const pickupDate = new Date(order.endDate);
-      await prisma.calendarEvent.create({
+  await p.calendarEvent.create({
         data: {
           title: `Pickup: ${order.orderNumber}`,
           description: `Pick up equipment from ${order.customer?.name || 'Unknown'}`,
@@ -75,7 +76,7 @@ async function syncOrderToCanaryCalendar(order: any, companyId: number, action: 
       });
     } else if (action === 'update') {
       // Update all events related to this order
-      await prisma.calendarEvent.updateMany({
+  await p.calendarEvent.updateMany({
         where: { orderId: order.id },
         data: {
           description: `Customer: ${order.customer?.name || 'Unknown'}\nStatus: ${order.status}`,
@@ -91,13 +92,13 @@ async function syncOrderToCanaryCalendar(order: any, companyId: number, action: 
                          order.status === 'IN_PROGRESS' ? 'IN_PROGRESS' : 
                          'SCHEDULED';
 
-      await prisma.calendarEvent.updateMany({
+  await p.calendarEvent.updateMany({
         where: { orderId: order.id },
         data: { status: eventStatus },
       });
     } else if (action === 'delete') {
       // Delete all calendar events for this order
-      await prisma.calendarEvent.deleteMany({
+  await p.calendarEvent.deleteMany({
         where: { orderId: order.id },
       });
     }
@@ -113,7 +114,7 @@ async function syncOrderToCanaryCalendar(order: any, companyId: number, action: 
 async function syncOrderToCalendar(order: any, userId: number, action: 'create' | 'update' | 'delete') {
   try {
     // Get user's Google Calendar tokens
-    const user = await prisma.user.findUnique({
+  const user = await p.user.findUnique({
       where: { id: userId },
       select: {
         googleAccessToken: true,
@@ -197,7 +198,7 @@ async function syncOrderToCalendar(order: any, userId: number, action: 'create' 
 }
 
 // Tüm siparişleri getir (with advanced filtering & sorting)
-router.get('/', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/', authenticateToken, async (req: any, res) => {
   try {
     const { 
       status, 
@@ -258,8 +259,8 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
     const limitNum = parseInt(limit as string);
     const skip = (pageNum - 1) * limitNum;
 
-    // Get total count
-    const total = await prisma.order.count({ where });
+  // Get total count
+  const total = await p.order.count({ where });
 
     // Build orderBy
     const orderBy: any = {};
@@ -271,7 +272,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
       orderBy[sortBy as string] = sortOrder;
     }
 
-    const orders = await prisma.order.findMany({
+  const orders = await p.order.findMany({
       where,
       skip,
       take: limitNum,
@@ -297,7 +298,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
           },
         },
       },
-    })
+    }) as any
 
     res.json({
       orders,
@@ -315,10 +316,10 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
 })
 
 // Tek sipariş getir
-router.get('/:id', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/:id', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params
-    const order = await prisma.order.findUnique({
+  const order = await p.order.findUnique({
       where: { id: parseInt(id) },
       include: {
         customer: true,
@@ -328,7 +329,7 @@ router.get('/:id', authenticateToken, async (req: AuthRequest, res) => {
           },
         },
       },
-    })
+    }) as any
 
     if (!order) {
       return res.status(404).json({ message: 'Sipariş bulunamadı' })
@@ -342,12 +343,12 @@ router.get('/:id', authenticateToken, async (req: AuthRequest, res) => {
 })
 
 // Yeni sipariş oluştur
-router.post('/', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/', authenticateToken, async (req: any, res) => {
   try {
     const { customerId, startDate, endDate, items, notes } = req.body
 
     // Sipariş numarası oluştur
-    const orderCount = await prisma.order.count()
+  const orderCount = await p.order.count()
     const orderNumber = `ORD-${Date.now()}-${orderCount + 1}`
 
     // Toplam tutarı hesapla
@@ -356,7 +357,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res) => {
       totalAmount += item.totalPrice
     }
 
-    const order = await prisma.order.create({
+  const order = await p.order.create({
       data: {
         orderNumber,
         customerId: parseInt(customerId),
@@ -383,7 +384,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res) => {
           },
         },
       },
-    })
+  }) as any
 
     // Sync to Canary Calendar System (always)
     await syncOrderToCanaryCalendar(order, req.companyId, 'create');
@@ -477,7 +478,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res) => {
 })
 
 // Sipariş güncelle
-router.put('/:id', authenticateToken, async (req: AuthRequest, res) => {
+router.put('/:id', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params
     const { status, startDate, endDate, notes, totalAmount } = req.body
@@ -499,7 +500,7 @@ router.put('/:id', authenticateToken, async (req: AuthRequest, res) => {
           },
         },
       },
-    })
+  }) as any
 
     // Sync to Canary Calendar System (always)
     await syncOrderToCanaryCalendar(order, req.companyId, 'update');
@@ -515,7 +516,7 @@ router.put('/:id', authenticateToken, async (req: AuthRequest, res) => {
 })
 
 // Sipariş sil
-router.delete('/:id', authenticateToken, async (req: AuthRequest, res) => {
+router.delete('/:id', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params
 
@@ -523,7 +524,7 @@ router.delete('/:id', authenticateToken, async (req: AuthRequest, res) => {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(id) },
       select: { googleEventId: true }
-    });
+    }) as any;
 
     // Sync to Canary Calendar System (delete events)
     await syncOrderToCanaryCalendar({ id: parseInt(id) }, req.companyId, 'delete');
@@ -551,7 +552,7 @@ router.delete('/:id', authenticateToken, async (req: AuthRequest, res) => {
 })
 
 // Bulk update status
-router.post('/bulk/update-status', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/bulk/update-status', authenticateToken, async (req: any, res) => {
   try {
     const { orderIds, status } = req.body;
 
@@ -582,7 +583,7 @@ router.post('/bulk/update-status', authenticateToken, async (req: AuthRequest, r
 });
 
 // Bulk delete
-router.post('/bulk/delete', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/bulk/delete', authenticateToken, async (req: any, res) => {
   try {
     const { orderIds } = req.body;
 
@@ -619,7 +620,7 @@ router.post('/bulk/delete', authenticateToken, async (req: AuthRequest, res) => 
 });
 
 // Send order email
-router.post('/:id/email', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/:id/email', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params;
     const { recipient, subject, body, template } = req.body;
@@ -631,7 +632,7 @@ router.post('/:id/email', authenticateToken, async (req: AuthRequest, res) => {
       });
     }
 
-    const order = await prisma.order.findFirst({
+    const order = await (prisma.order.findFirst as any)({
       where: {
         id: parseInt(id),
         companyId: req.companyId
@@ -668,8 +669,8 @@ router.post('/:id/email', authenticateToken, async (req: AuthRequest, res) => {
       .replace(/#{RETURN_DATE}/g, order.endDate ? new Date(order.endDate).toLocaleDateString() : 'N/A')
       .replace(/#{TOTAL_AMOUNT}/g, `£${order.totalAmount?.toFixed(2) || '0.00'}`);
 
-    // Send email using emailService
-    await sendOrderConfirmation({
+    // Send email using emailService (direct send)
+    await sendEmail({
       to: recipient,
       subject: replacedSubject,
       html: replacedBody.replace(/\n/g, '<br>')
@@ -690,11 +691,11 @@ router.post('/:id/email', authenticateToken, async (req: AuthRequest, res) => {
 });
 
 // Get order tags
-router.get('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/:id/tags', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params;
 
-    const order = await prisma.order.findFirst({
+    const order = await (prisma.order.findFirst as any)({
       where: {
         id: parseInt(id),
         companyId: req.companyId
@@ -729,7 +730,7 @@ router.get('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
 });
 
 // Add order tag
-router.post('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/:id/tags', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params;
     const { name, color } = req.body;
@@ -741,7 +742,7 @@ router.post('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
       });
     }
 
-    const order = await prisma.order.findFirst({
+    const order = await (prisma.order.findFirst as any)({
       where: {
         id: parseInt(id),
         companyId: req.companyId
@@ -772,7 +773,7 @@ router.post('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
     existingTags.push(newTag);
 
     // Update order with new tags
-    await prisma.order.update({
+    await (prisma.order.update as any)({
       where: { id: parseInt(id) },
       data: { 
         tags: JSON.stringify(existingTags)
@@ -794,7 +795,7 @@ router.post('/:id/tags', authenticateToken, async (req: AuthRequest, res) => {
 });
 
 // Remove order tag
-router.delete('/:id/tags/:tagId', authenticateToken, async (req: AuthRequest, res) => {
+router.delete('/:id/tags/:tagId', authenticateToken, async (req: any, res) => {
   try {
     const { id, tagId } = req.params;
 
@@ -844,11 +845,11 @@ router.delete('/:id/tags/:tagId', authenticateToken, async (req: AuthRequest, re
 });
 
 // Get order documents
-router.get('/:id/documents', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/:id/documents', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params;
 
-    const order = await prisma.order.findFirst({
+    const order = await (prisma.order.findFirst as any)({
       where: {
         id: parseInt(id),
         companyId: req.companyId
@@ -883,7 +884,7 @@ router.get('/:id/documents', authenticateToken, async (req: AuthRequest, res) =>
 });
 
 // Upload order document (simulated - in production would handle file upload)
-router.post('/:id/documents', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/:id/documents', authenticateToken, async (req: any, res) => {
   try {
     const { id } = req.params;
     const { name, size, type, url } = req.body;
@@ -895,7 +896,7 @@ router.post('/:id/documents', authenticateToken, async (req: AuthRequest, res) =
       });
     }
 
-    const order = await prisma.order.findFirst({
+    const order = await (prisma.order.findFirst as any)({
       where: {
         id: parseInt(id),
         companyId: req.companyId
@@ -928,7 +929,7 @@ router.post('/:id/documents', authenticateToken, async (req: AuthRequest, res) =
     existingDocuments.push(newDocument);
 
     // Update order with new documents
-    await prisma.order.update({
+    await (prisma.order.update as any)({
       where: { id: parseInt(id) },
       data: { 
         documents: JSON.stringify(existingDocuments)
@@ -950,11 +951,11 @@ router.post('/:id/documents', authenticateToken, async (req: AuthRequest, res) =
 });
 
 // Remove order document
-router.delete('/:id/documents/:docId', authenticateToken, async (req: AuthRequest, res) => {
+router.delete('/:id/documents/:docId', authenticateToken, async (req: any, res) => {
   try {
     const { id, docId } = req.params;
 
-    const order = await prisma.order.findFirst({
+    const order = await (prisma.order.findFirst as any)({
       where: {
         id: parseInt(id),
         companyId: req.companyId
@@ -978,7 +979,7 @@ router.delete('/:id/documents/:docId', authenticateToken, async (req: AuthReques
     const updatedDocuments = existingDocuments.filter((doc: any) => doc.id !== docId);
 
     // Update order
-    await prisma.order.update({
+    await (prisma.order.update as any)({
       where: { id: parseInt(id) },
       data: { 
         documents: JSON.stringify(updatedDocuments)
@@ -1004,7 +1005,7 @@ router.delete('/:id/documents/:docId', authenticateToken, async (req: AuthReques
 // ============================================
 
 // Process payment for an order (simplified version - production would use actual Iyzico SDK)
-router.post('/:id/payment', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/:id/payment', authenticateToken, async (req: any, res) => {
   try {
     const orderId = parseInt(req.params.id);
     const { cardHolderName, cardNumber, expireMonth, expireYear, cvc, amount } = req.body;
@@ -1026,7 +1027,7 @@ router.post('/:id/payment', authenticateToken, async (req: AuthRequest, res) => 
       include: {
         customer: true
       }
-    });
+    }) as any;
 
     if (!order) {
       return res.status(404).json({ 
@@ -1056,7 +1057,7 @@ router.post('/:id/payment', authenticateToken, async (req: AuthRequest, res) => 
         paymentStatus: 'paid',
         updatedAt: new Date()
       }
-    });
+    }) as any;
 
     res.json({
       success: true,
@@ -1081,7 +1082,7 @@ router.post('/:id/payment', authenticateToken, async (req: AuthRequest, res) => 
 });
 
 // Get payment status for an order
-router.get('/:id/payment/status', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/:id/payment/status', authenticateToken, async (req: any, res) => {
   try {
     const orderId = parseInt(req.params.id);
 
@@ -1097,7 +1098,7 @@ router.get('/:id/payment/status', authenticateToken, async (req: AuthRequest, re
         paymentStatus: true,
         updatedAt: true
       }
-    });
+    }) as any;
 
     if (!order) {
       return res.status(404).json({ 
@@ -1131,7 +1132,7 @@ router.get('/:id/payment/status', authenticateToken, async (req: AuthRequest, re
 // ============================================
 
 // Generate PDF invoice for an order
-router.get('/:id/invoice', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/:id/invoice', authenticateToken, async (req: any, res) => {
   try {
     const orderId = parseInt(req.params.id);
 
@@ -1149,7 +1150,7 @@ router.get('/:id/invoice', authenticateToken, async (req: AuthRequest, res) => {
           }
         }
       }
-    });
+    }) as any;
 
     if (!order) {
       return res.status(404).json({ 

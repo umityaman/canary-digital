@@ -98,7 +98,11 @@ export async function getCache<T = any>(key: string): Promise<T | null> {
   try {
     const cached = await redisClient!.get(key);
     if (!cached) return null;
-    return JSON.parse(cached) as T;
+    // cached may sometimes already be an object depending on client usage
+    if (typeof cached === 'string') {
+      return JSON.parse(cached) as T;
+    }
+    return cached as unknown as T;
   } catch (error: any) {
     log.error(`Cache get error for key ${key}:`, error.message);
     return null;
@@ -240,5 +244,5 @@ export default {
   clear: clearAllCache,
   close: closeRedis,
   keys: CacheKeys,
-  ttl: CacheTTL,
+  ttlValues: CacheTTL,
 };

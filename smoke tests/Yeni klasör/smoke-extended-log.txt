@@ -1,0 +1,5 @@
+2025-10-30T09:33:58.3016056+00:00 - Smoke run started
+2025-10-30T09:33:58.7565395+00:00 - Saved invoices.json with 1 entries
+2025-10-30T09:33:59.1540794+00:00 - Saved invoice-1.pdf (3.7 KB) (attempt 1)
+2025-10-30T09:33:59.3543718+00:00 - Health path /api/health returned OK
+2025-10-30T09:33:59.3551139+00:00 - Extended smoke finished

@@ -3,6 +3,9 @@ import { invoiceService } from './invoice.service';
 import { prisma } from '../index';
 import { log } from '../config/logger';
 
+// Use generated Prisma client without broad `as any` casts
+const p = prisma;
+
 interface InitiatePaymentParams {
   orderId: number;
   customerId: number;
@@ -41,11 +44,11 @@ export class PaymentService {
       });
 
       // Sipariş bilgilerini al
-      const order = await prisma.order.findUnique({
+      const order = await p.order.findUnique({
         where: { id: params.orderId },
         include: {
           customer: true,
-          equipment: true,
+          orderItems: { include: { equipment: true } },
         },
       });
 
@@ -54,7 +57,7 @@ export class PaymentService {
       }
 
       // Müşteri bilgilerini al
-      const customer = await prisma.user.findUnique({
+      const customer = await p.user.findUnique({
         where: { id: params.customerId },
       });
 
@@ -89,9 +92,9 @@ export class PaymentService {
       // Basket items
       const basketItems = [
         {
-          id: `equipment-${order.equipment.id}`,
-          name: order.equipment.name,
-          category1: order.equipment.category || 'Genel',
+          id: `equipment-${order.orderItems?.[0]?.equipment?.id || '0'}`,
+          name: order.orderItems?.[0]?.equipment?.name || 'Ekipman',
+          category1: order.orderItems?.[0]?.equipment?.category || 'Genel',
           itemType: IyzicoConstants.BASKET_ITEM_TYPE.PHYSICAL,
           price: params.amount.toFixed(2),
         },
@@ -124,7 +127,7 @@ export class PaymentService {
       }
 
       // Transaction kaydı oluştur
-      const transaction = await prisma.transaction.create({
+  const transaction = await p.transaction.create({
         data: {
           orderId: params.orderId,
           customerId: params.customerId,
@@ -171,7 +174,7 @@ export class PaymentService {
       const orderId = parseInt(params.conversationData.split('-')[1]);
 
       // Transaction kaydını bul
-      const transaction = await prisma.transaction.findFirst({
+  const transaction = await p.transaction.findFirst({
         where: {
           conversationId: params.conversationData,
           orderId,
@@ -190,7 +193,7 @@ export class PaymentService {
 
       if (result.status === 'success') {
         // Transaction'ı güncelle
-        await prisma.transaction.update({
+  await p.transaction.update({
           where: { id: transaction.id },
           data: {
             status: 'completed',
@@ -202,13 +205,13 @@ export class PaymentService {
         });
 
         // Sipariş durumunu güncelle
-        await prisma.order.update({
+  await p.order.update({
           where: { id: orderId },
           data: { status: 'CONFIRMED' },
         });
 
         // Fatura varsa ödeme kaydet
-        const invoice = await prisma.invoice.findFirst({
+  const invoice = await p.invoice.findFirst({
           where: { orderId },
         });
 
@@ -236,14 +239,14 @@ export class PaymentService {
         };
       } else {
         // Ödeme başarısız
-        await prisma.transaction.update({
-          where: { id: transaction.id },
-          data: {
-            status: 'failed',
-            errorMessage: result.errorMessage,
-            responseData: JSON.stringify(result),
-          },
-        });
+          await p.transaction.update({
+            where: { id: transaction.id },
+            data: {
+              status: 'failed',
+              errorMessage: result.errorMessage,
+              responseData: JSON.stringify(result),
+            },
+          });
 
         log.error('Payment Service: Ödeme başarısız', {
           transactionId: transaction.id,
@@ -277,7 +280,7 @@ export class PaymentService {
       });
 
       // Transaction kaydını bul
-      const transaction = await prisma.transaction.findUnique({
+  const transaction = await p.transaction.findUnique({
         where: { id: transactionId },
         include: {
           order: true,
@@ -309,7 +312,7 @@ export class PaymentService {
 
       if (result.status === 'success') {
         // Refund kaydı oluştur
-        const refund = await prisma.refund.create({
+  const refund = await p.refund.create({
           data: {
             orderId: transaction.orderId,
             amount: refundAmount,
@@ -320,7 +323,7 @@ export class PaymentService {
         });
 
         // Transaction durumunu güncelle
-        await prisma.transaction.update({
+  await p.transaction.update({
           where: { id: transactionId },
           data: {
             status: 'refunded',
@@ -360,7 +363,7 @@ export class PaymentService {
         transactionId,
       });
 
-      const transaction = await prisma.transaction.findUnique({
+  const transaction = await p.transaction.findUnique({
         where: { id: transactionId },
       });
 
@@ -381,7 +384,7 @@ export class PaymentService {
 
       if (result.status === 'success') {
         // Transaction durumunu güncelle
-        await prisma.transaction.update({
+  await p.transaction.update({
           where: { id: transactionId },
           data: {
             status: 'cancelled',
@@ -471,17 +474,17 @@ export class PaymentService {
    */
   async getPaymentDetails(transactionId: number) {
     try {
-      const transaction = await prisma.transaction.findUnique({
+      const transaction = await p.transaction.findUnique({
         where: { id: transactionId },
         include: {
           order: {
             include: {
-              equipment: true,
               customer: true,
+              orderItems: { include: { equipment: true } },
             },
           },
         },
-      });
+      }) as any;
 
       if (!transaction) {
         throw new Error('Transaction not found');
@@ -497,7 +500,7 @@ export class PaymentService {
           // Durum farklıysa güncelle
           if (iyzicoResult.status === 'success' && 
               iyzicoResult.paymentStatus !== transaction.iyzicoPaymentStatus) {
-            await prisma.transaction.update({
+            await p.transaction.update({
               where: { id: transactionId },
               data: {
                 iyzicoPaymentStatus: iyzicoResult.paymentStatus,
@@ -548,19 +551,19 @@ export class PaymentService {
         }
       }
 
-      const transactions = await prisma.transaction.findMany({
+  const transactions = await p.transaction.findMany({
         where,
         include: {
           order: {
             include: {
-              equipment: true,
+              orderItems: { include: { equipment: true } },
             },
           },
         },
         orderBy: {
           createdAt: 'desc',
         },
-      });
+      }) as any;
 
       return transactions;
     } catch (error: any) {
@@ -577,7 +580,7 @@ export class PaymentService {
    */
   async getPaymentStats(startDate: Date, endDate: Date) {
     try {
-      const transactions = await prisma.transaction.findMany({
+  const transactions = await p.transaction.findMany({
         where: {
           createdAt: {
             gte: startDate,

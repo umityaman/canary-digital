@@ -114,20 +114,20 @@ app.use('/api/', createRateLimiter(
   1 * 60 * 1000, // 1 minute
   100,
   'Too many requests from this IP, please try again after a minute'
-));
+) as any);
 
 // Stricter limit for authentication endpoints: 5 requests per 15 minutes
 app.use('/api/auth/login', createRateLimiter(
   15 * 60 * 1000, // 15 minutes
   5,
   'Too many login attempts, please try again after 15 minutes'
-));
+) as any);
 
 app.use('/api/auth/register', createRateLimiter(
   60 * 60 * 1000, // 1 hour
   3,
   'Too many registration attempts, please try again after an hour'
-));
+) as any);
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -186,9 +186,15 @@ safeLoadRoute('/api/reports', './routes/reports', 'Reports');
 safeLoadRoute('/api/report-templates', './routes/reportTemplates', 'Report Templates');
 safeLoadRoute('/api/generated-reports', './routes/generatedReports', 'Generated Reports');
 safeLoadRoute('/api/monitoring', './routes/monitoring', 'Monitoring');
+// Accounting related lightweight routes
+safeLoadRoute('/api/checks', './routes/checks', 'Checks');
+safeLoadRoute('/api/promissory-notes', './routes/promissory-notes', 'Promissory Notes');
+safeLoadRoute('/api/aging', './routes/aging', 'Aging reports');
 safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
 safeLoadRoute('/api/offers', './routes/offer', 'Offers & Quotes');
 safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
+// Accounting sub-resources mounted at root paths expected by frontend
+safeLoadRoute('/api/checks', './routes/checks', 'Checks');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
 safeLoadRoute('/api/payment', './routes/payment', 'Payment');
 safeLoadRoute('/api/payments', './routes/payments', 'Iyzipay payments');

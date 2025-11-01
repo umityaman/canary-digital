@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "attempts": 1,
+    "success": true,
+    "statusCode": null,
+    "responseSizeBytes": null,
+    "savedFile": "invoice-1.pdf",
+    "fileSizeBytes": 3789,
+    "sha256": "BC7E0A207BE1892C2094656972F358907667C9F93E14007A8D6A2EAE97081D96",
+    "errorBodyFile": null,
+    "startedAt": "2025-10-30T11:29:14.0553537+00:00",
+    "finishedAt": "2025-10-30T11:29:14.4012378+00:00",
+    "notes": null
+  },
+  {
+    "id": 2,
+    "attempts": 1,
+    "success": true,
+    "statusCode": null,
+    "responseSizeBytes": null,
+    "savedFile": "invoice-2.pdf",
+    "fileSizeBytes": 3797,
+    "sha256": "7184FF042AA2A154F2526708C0E5EA40294E04EA94F17DCF678323AB850AB5CC",
+    "errorBodyFile": null,
+    "startedAt": "2025-10-30T11:29:14.4045673+00:00",
+    "finishedAt": "2025-10-30T11:29:14.5889339+00:00",
+    "notes": null
+  },
+  {
+    "id": 3,
+    "attempts": 1,
+    "success": true,
+    "statusCode": null,
+    "responseSizeBytes": null,
+    "savedFile": "invoice-3.pdf",
+    "fileSizeBytes": 3784,
+    "sha256": "27A4302B0A3C9EC7F38DAB99A445566C734F576EFB3F437234DED423445632D6",
+    "errorBodyFile": null,
+    "startedAt": "2025-10-30T11:29:14.5891818+00:00",
+    "finishedAt": "2025-10-30T11:29:14.7652955+00:00",
+    "notes": null
+  }
+]

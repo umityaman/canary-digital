@@ -3,7 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as any;
+const p = prisma as any;
 
 interface AuthRequest extends Request {
   user?: any;
@@ -81,7 +82,7 @@ router.get('/mock', async (req, res) => {
 });
 
 // GET /api/dashboard/stats - Dashboard KPI'ları
-router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/stats', authenticateToken, async (req: any, res: Response) => {
   try {
     const companyId = req.companyId;
 
@@ -109,14 +110,14 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
       recentCustomers,
     ] = await Promise.all([
       // Sipariş istatistikleri
-      prisma.order.count({ where: { companyId } }),
-      prisma.order.count({ 
+      p.order.count({ where: { companyId } }),
+      p.order.count({ 
         where: { 
           companyId,
           status: { in: ['PENDING', 'CONFIRMED', 'ACTIVE'] }
         }
       }),
-      prisma.order.count({ 
+      p.order.count({ 
         where: { 
           companyId,
           status: 'COMPLETED'
@@ -124,11 +125,11 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
       }),
       
       // Gelir istatistikleri
-      prisma.order.aggregate({
+      p.order.aggregate({
         where: { companyId },
         _sum: { totalAmount: true }
       }),
-      prisma.order.aggregate({
+      p.order.aggregate({
         where: {
           companyId,
           createdAt: {
@@ -139,22 +140,22 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
       }),
       
       // Müşteri istatistikleri
-      prisma.customer.count(),
+      p.customer.count(),
       
       // Ekipman istatistikleri
-      prisma.equipment.count({ where: { companyId } }),
-      prisma.equipment.count({ 
+      p.equipment.count({ where: { companyId } }),
+      p.equipment.count({ 
         where: { companyId, status: 'AVAILABLE' }
       }),
-      prisma.equipment.count({ 
+      p.equipment.count({ 
         where: { companyId, status: 'RENTED' }
       }),
-      prisma.equipment.count({ 
+      p.equipment.count({ 
         where: { companyId, status: 'MAINTENANCE' }
       }),
       
       // Yaklaşan etkinlikler
-      prisma.calendarEvent.count({
+      p.calendarEvent.count({
         where: {
           companyId,
           startDate: {
@@ -168,7 +169,7 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
       Promise.resolve(0),
       
       // Bekleyen kontroller
-      prisma.inspection.count({
+      p.inspection.count({
         where: {
           status: 'PENDING',
           order: {
@@ -178,7 +179,7 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
       }),
       
       // Bekleyen ödemeler (ACTIVE status olanların toplamı)
-      prisma.order.aggregate({
+      p.order.aggregate({
         where: {
           companyId,
           status: { in: ['PENDING', 'CONFIRMED', 'ACTIVE'] }
@@ -187,7 +188,7 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
       }),
       
       // Son siparişler
-      prisma.order.findMany({
+      p.order.findMany({
         where: { companyId },
         include: {
           customer: true,
@@ -197,7 +198,7 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
       }),
       
       // Son müşteriler
-      prisma.customer.findMany({
+      p.customer.findMany({
         orderBy: { createdAt: 'desc' },
         take: 5
       }),
@@ -283,7 +284,7 @@ router.get('/stats', authenticateToken, async (req: AuthRequest, res: Response) 
 });
 
 // GET /api/dashboard/upcoming-events - Yaklaşan etkinlikler
-router.get('/upcoming-events', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/upcoming-events', authenticateToken, async (req: any, res: Response) => {
   try {
     const companyId = req.companyId;
 
@@ -331,7 +332,7 @@ router.get('/upcoming-events', authenticateToken, async (req: AuthRequest, res: 
 });
 
 // GET /api/dashboard/recent-activity - Son aktiviteler
-router.get('/recent-activity', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/recent-activity', authenticateToken, async (req: any, res: Response) => {
   try {
     const companyId = req.companyId;
 
@@ -422,7 +423,7 @@ router.get('/recent-activity', authenticateToken, async (req: AuthRequest, res: 
 });
 
 // GET /api/dashboard/performance - Performans metrikleri
-router.get('/performance', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/performance', authenticateToken, async (req: any, res: Response) => {
   try {
     const companyId = req.companyId;
 
@@ -492,7 +493,7 @@ router.get('/performance', authenticateToken, async (req: AuthRequest, res: Resp
 });
 
 // GET /api/dashboard/revenue - Revenue chart data (last 6 months)
-router.get('/revenue', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/revenue', authenticateToken, async (req: any, res: Response) => {
   try {
     const companyId = req.companyId;
 
@@ -560,7 +561,7 @@ router.get('/revenue', authenticateToken, async (req: AuthRequest, res: Response
 });
 
 // GET /api/dashboard/orders - Orders chart data with period filter
-router.get('/orders', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/orders', authenticateToken, async (req: any, res: Response) => {
   try {
     const companyId = req.companyId;
     const period = (req.query.period as string) || 'monthly'; // daily, weekly, monthly
@@ -684,7 +685,7 @@ router.get('/orders', authenticateToken, async (req: AuthRequest, res: Response)
 });
 
 // GET /api/dashboard/equipment - Equipment utilization chart data
-router.get('/equipment', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.get('/equipment', authenticateToken, async (req: any, res: Response) => {
   try {
     const companyId = req.companyId;
 

@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { authenticateToken } from './auth';
 
 const router = Router();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as any;
 
 interface AuthRequest extends Request {
   user?: any;

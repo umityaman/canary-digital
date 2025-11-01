@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { Expo, ExpoPushMessage, ExpoPushTicket, ExpoPushErrorReceipt } from 'expo-server-sdk';
 
 const prisma = new PrismaClient();
+const p = prisma as any;
 const expo = new Expo();
 
 export interface SendNotificationOptions {
@@ -42,7 +43,7 @@ class NotificationService {
       } = options;
 
       // Get user's push tokens
-      const pushTokens = await prisma.pushToken.findMany({
+      const pushTokens = await p.pushToken.findMany({
         where: {
           userId,
           isActive: true,
@@ -87,7 +88,7 @@ class NotificationService {
       }
 
       // Save to notification history
-      await prisma.notificationHistory.create({
+      await p.notificationHistory.create({
         data: {
           userId,
           title,
@@ -100,7 +101,7 @@ class NotificationService {
       });
 
       // Update token last used
-      await prisma.pushToken.updateMany({
+      await p.pushToken.updateMany({
         where: {
           userId,
           isActive: true,
@@ -283,7 +284,7 @@ class NotificationService {
     data?: any
   ): Promise<void> {
     // Check if user has promotions enabled
-    const preferences = await prisma.notificationPreference.findUnique({
+    const preferences = await p.notificationPreference.findUnique({
       where: { userId },
     });
 
@@ -319,7 +320,7 @@ class NotificationService {
       }
 
       // Upsert token
-      await prisma.pushToken.upsert({
+      await p.pushToken.upsert({
         where: { token },
         update: {
           isActive: true,
@@ -348,7 +349,7 @@ class NotificationService {
    */
   async unregisterPushToken(token: string): Promise<boolean> {
     try {
-      await prisma.pushToken.update({
+      await p.pushToken.update({
         where: { token },
         data: { isActive: false },
       });
@@ -368,7 +369,7 @@ class NotificationService {
     offset = 0
   ): Promise<any[]> {
     try {
-      const history = await prisma.notificationHistory.findMany({
+      const history = await p.notificationHistory.findMany({
         where: { userId },
         orderBy: { sentAt: 'desc' },
         take: limit,
@@ -390,7 +391,7 @@ class NotificationService {
    */
   async markAsDelivered(notificationId: number): Promise<void> {
     try {
-      await prisma.notificationHistory.update({
+      await p.notificationHistory.update({
         where: { id: notificationId },
         data: {
           status: 'delivered',
@@ -407,7 +408,7 @@ class NotificationService {
    */
   async markAsOpened(notificationId: number): Promise<void> {
     try {
-      await prisma.notificationHistory.update({
+      await p.notificationHistory.update({
         where: { id: notificationId },
         data: {
           status: 'opened',
@@ -427,7 +428,7 @@ class NotificationService {
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
 
-      await prisma.notificationHistory.deleteMany({
+      await p.notificationHistory.deleteMany({
         where: {
           sentAt: {
             lt: cutoffDate,

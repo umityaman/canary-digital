@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { OTPService } from './otp.service';
 import { sendEmail } from '../utils/emailService';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as any;
 
 interface TwoFactorSecret {
   secret: string;
@@ -72,7 +72,7 @@ export class TwoFactorService {
       data: {
         twoFactorEnabled: false,
         twoFactorSecret: null,
-        backupCodes: [],
+        backupCodes: null,
       },
     });
   }

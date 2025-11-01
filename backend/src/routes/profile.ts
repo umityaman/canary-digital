@@ -6,7 +6,7 @@ import path from 'path';
 import fs from 'fs';
 
 const router = Router();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as any;
 
 // Multer configuration for avatar upload
 const storage = multer.diskStorage({
@@ -145,7 +145,7 @@ router.put('/', async (req: Request, res: Response) => {
 });
 
 // POST /api/profile/avatar - Upload avatar
-router.post('/avatar', upload.single('avatar'), async (req: Request, res: Response) => {
+router.post('/avatar', (upload.single('avatar') as any), async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
     
@@ -685,7 +685,7 @@ const logoUpload = multer({
 });
 
 // POST /api/profile/upload-logo - Upload company logo
-router.post('/upload-logo', logoUpload.single('logo'), async (req: Request, res: Response) => {
+router.post('/upload-logo', (logoUpload.single('logo') as any), async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
 

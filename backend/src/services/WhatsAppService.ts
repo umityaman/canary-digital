@@ -351,8 +351,11 @@ export class WhatsAppService {
    */
   async uploadMedia(mediaData: Buffer, mimeType: string): Promise<string> {
     try {
+      // Use Node-compatible form-data to build multipart payload (require used to avoid adding TS types here)
+      const FormData: any = require('form-data');
       const formData = new FormData();
-      formData.append('file', new Blob([mediaData], { type: mimeType }));
+      // Append the raw Buffer directly with a filename and content type
+      formData.append('file', mediaData, { filename: 'file', contentType: mimeType });
       formData.append('type', mimeType);
       formData.append('messaging_product', 'whatsapp');
 
@@ -361,7 +364,8 @@ export class WhatsAppService {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            // formData.getHeaders() contains the correct multipart boundary header
+            ...(formData.getHeaders ? formData.getHeaders() : {})
           }
         }
       );
@@ -625,6 +629,7 @@ export class WhatsAppService {
    */
   private async saveMessage(data: any): Promise<void> {
     try {
+      // Use typed Prisma client now that client was generated
       await prisma.whatsAppMessage.create({
         data: {
           from: data.from,
@@ -633,7 +638,9 @@ export class WhatsAppService {
           content: JSON.stringify(data.content),
           messageId: data.whatsapp_message_id,
           status: data.status,
-          companyId: 1 // Default company - should be dynamic
+          direction: data.direction || (data.status === 'received' ? 'inbound' : 'outbound'),
+          // attach to company via relation connect (scalar companyId is not accepted in strict create input)
+          company: { connect: { id: data.companyId || 1 } }
         }
       });
     } catch (error: any) {

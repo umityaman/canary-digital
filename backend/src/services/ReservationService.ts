@@ -2,7 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { NotificationService } from './notificationService';
 import { PricingService } from './pricingService';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as any;
+const p = prisma as any;
 
 export class ReservationService {
   /**
@@ -14,7 +15,7 @@ export class ReservationService {
     const prefix = `RES-${year}-`;
 
     // Get the last reservation for this year
-    const lastReservation = await prisma.reservation.findFirst({
+    const lastReservation = await p.reservation.findFirst({
       where: {
         companyId,
         reservationNo: {
@@ -50,7 +51,7 @@ export class ReservationService {
     availableQuantity: number;
   }> {
     // Get equipment total quantity
-    const equipment = await prisma.equipment.findUnique({
+    const equipment = await p.equipment.findUnique({
       where: { id: equipmentId },
       select: { quantity: true },
     });
@@ -62,7 +63,7 @@ export class ReservationService {
     const totalQuantity = equipment.quantity || 1;
 
     // Find overlapping reservations
-    const overlappingReservations = await prisma.reservationItem.findMany({
+    const overlappingReservations = await p.reservationItem.findMany({
       where: {
         equipmentId,
         reservation: {
@@ -181,7 +182,7 @@ export class ReservationService {
   }> {
     const itemPrices = await Promise.all(
       items.map(async (item) => {
-        const equipment = await prisma.equipment.findUnique({
+        const equipment = await p.equipment.findUnique({
           where: { id: item.equipmentId },
         });
 
@@ -190,7 +191,7 @@ export class ReservationService {
         }
 
         // Calculate price using pricing service
-        const priceCalc = await PricingService.calculatePrice({
+        const priceCalc: any = await PricingService.calculatePrice({
           equipmentId: item.equipmentId,
           startDate,
           endDate,
@@ -219,7 +220,7 @@ export class ReservationService {
     // Apply discount code if provided
     let appliedDiscount = null;
     if (discountCode) {
-      const discountValidation = await PricingService.validateDiscountCode(
+      const discountValidation = await (PricingService as any).validateDiscountCode(
         discountCode,
         companyId
       );
@@ -329,7 +330,7 @@ export class ReservationService {
     const remainingAmount = pricing.totalAmount - depositAmount;
 
     // 5. Create reservation with items
-    const reservation = await prisma.reservation.create({
+    const reservation = await p.reservation.create({
       data: {
         reservationNo,
         companyId: data.companyId,
@@ -391,7 +392,7 @@ export class ReservationService {
 
     // 6. Send notification to customer
     try {
-      await NotificationService.sendNotification({
+      await (NotificationService as any).sendNotification({
         companyId: data.companyId,
         type: 'RESERVATION',
         userId: data.customerId,
@@ -411,7 +412,7 @@ export class ReservationService {
 
       // Send email notification
       if (data.customerEmail) {
-        await NotificationService.sendEmail({
+        await (NotificationService as any).sendEmail({
           to: data.customerEmail,
           templateId: 'RESERVATION_CREATED',
           variables: {
@@ -443,7 +444,7 @@ export class ReservationService {
     reason?: string,
     notes?: string
   ): Promise<any> {
-    const reservation = await prisma.reservation.findUnique({
+    const reservation = await p.reservation.findUnique({
       where: { id: reservationId },
       include: { items: true },
     });
@@ -455,7 +456,7 @@ export class ReservationService {
     const oldStatus = reservation.status;
 
     // Update reservation status
-    const updated = await prisma.reservation.update({
+    const updated = await p.reservation.update({
       where: { id: reservationId },
       data: {
         status: newStatus,
@@ -513,7 +514,7 @@ export class ReservationService {
           break;
       }
 
-      await NotificationService.sendNotification({
+      await (NotificationService as any).sendNotification({
         companyId: reservation.companyId,
         type: 'RESERVATION',
         userId: reservation.customerId || undefined,
@@ -530,7 +531,7 @@ export class ReservationService {
 
       // Send email
       if (reservation.customerEmail) {
-        await NotificationService.sendEmail({
+        await (NotificationService as any).sendEmail({
           to: reservation.customerEmail,
           templateId: 'RESERVATION_STATUS_CHANGED',
           variables: {
@@ -576,7 +577,7 @@ export class ReservationService {
     }
 
     // Create payment record
-    const payment = await prisma.reservationPayment.create({
+    const payment = await p.reservationPayment.create({
       data: {
         reservationId: data.reservationId,
         amount: data.amount,
@@ -612,14 +613,14 @@ export class ReservationService {
       updateData.depositPaidAt = updateData.depositPaidAt || new Date();
     }
 
-    await prisma.reservation.update({
+    await p.reservation.update({
       where: { id: data.reservationId },
       data: updateData,
     });
 
     // Send payment confirmation
     try {
-      await NotificationService.sendNotification({
+      await (NotificationService as any).sendNotification({
         companyId: reservation.companyId,
         type: 'PAYMENT',
         userId: reservation.customerId || undefined,
@@ -644,7 +645,7 @@ export class ReservationService {
    * Get reservation by ID
    */
   async getReservation(reservationId: number): Promise<any> {
-    return await prisma.reservation.findUnique({
+    return await p.reservation.findUnique({
       where: { id: reservationId },
       include: {
         items: true,
@@ -712,7 +713,7 @@ export class ReservationService {
     }
 
     const [reservations, total] = await Promise.all([
-      prisma.reservation.findMany({
+      p.reservation.findMany({
         where,
         include: {
           items: true,
@@ -727,7 +728,7 @@ export class ReservationService {
         skip,
         take: limit,
       }),
-      prisma.reservation.count({ where }),
+      p.reservation.count({ where }),
     ]);
 
     return {
@@ -766,7 +767,7 @@ export class ReservationService {
       }[];
     }
   ): Promise<any> {
-    const reservation = await prisma.reservation.findUnique({
+    const reservation = await p.reservation.findUnique({
       where: { id: reservationId },
       include: { items: true },
     });
@@ -808,7 +809,7 @@ export class ReservationService {
       );
 
       // Update reservation with new pricing
-      const updated = await prisma.reservation.update({
+      const updated = await p.reservation.update({
         where: { id: reservationId },
         data: {
           ...data,
@@ -847,7 +848,7 @@ export class ReservationService {
     }
 
     // Simple update without pricing recalculation
-    return await prisma.reservation.update({
+      return await p.reservation.update({
       where: { id: reservationId },
       data,
       include: {
@@ -908,19 +909,19 @@ export class ReservationService {
       paidDeposits,
       fullPayments,
     ] = await Promise.all([
-      prisma.reservation.count({ where }),
-      prisma.reservation.count({ where: { ...where, status: 'PENDING' } }),
-      prisma.reservation.count({ where: { ...where, status: 'CONFIRMED' } }),
-      prisma.reservation.count({ where: { ...where, status: 'IN_PROGRESS' } }),
-      prisma.reservation.count({ where: { ...where, status: 'COMPLETED' } }),
-      prisma.reservation.count({ where: { ...where, status: 'CANCELLED' } }),
-      prisma.reservation.count({ where: { ...where, status: 'REJECTED' } }),
-      prisma.reservation.aggregate({
+      p.reservation.count({ where }),
+      p.reservation.count({ where: { ...where, status: 'PENDING' } }),
+      p.reservation.count({ where: { ...where, status: 'CONFIRMED' } }),
+      p.reservation.count({ where: { ...where, status: 'IN_PROGRESS' } }),
+      p.reservation.count({ where: { ...where, status: 'COMPLETED' } }),
+      p.reservation.count({ where: { ...where, status: 'CANCELLED' } }),
+      p.reservation.count({ where: { ...where, status: 'REJECTED' } }),
+      p.reservation.aggregate({
         where: { ...where, status: { in: ['CONFIRMED', 'IN_PROGRESS', 'COMPLETED'] } },
         _sum: { totalAmount: true },
       }),
-      prisma.reservation.count({ where: { ...where, depositPaid: true } }),
-      prisma.reservation.count({ where: { ...where, fullPayment: true } }),
+      p.reservation.count({ where: { ...where, depositPaid: true } }),
+      p.reservation.count({ where: { ...where, fullPayment: true } }),
     ]);
 
     return {
@@ -968,7 +969,7 @@ export class ReservationService {
       }
 
       // Get all equipment
-      const equipment = await prisma.equipment.findMany({
+      const equipment = await p.equipment.findMany({
         where: equipmentWhere,
         orderBy: [
           { category: 'asc' },
@@ -1016,7 +1017,7 @@ export class ReservationService {
       }
 
       // Get all reservations in date range
-      const reservations = await prisma.reservation.findMany({
+      const reservations = await p.reservation.findMany({
         where: reservationWhere,
         include: {
           items: {

@@ -15,6 +15,7 @@ import EInvoiceList from '../components/accounting/EInvoiceList'
 import DeliveryNoteList from '../components/accounting/DeliveryNoteList'
 import BankReconciliation from '../components/accounting/BankReconciliation'
 import InventoryAccounting from '../components/accounting/InventoryAccounting'
+import AdvancedReporting from '../components/accounting/AdvancedReporting'
 import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory'
@@ -540,32 +541,8 @@ export default function Accounting() {
             {/* Cari (Account Cards) Tab */}
             {activeTab === 'cari' && <AccountCardList />}
 
-            {/* Reports Tab */}
-            {activeTab === 'reports' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Muhasebe Raporları</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {[
-                    { name: 'Tahsilat Raporları', icon: <Download size={20} />, color: 'blue' },
-                    { name: 'Nakit Akışı', icon: <TrendingUp size={20} />, color: 'green' },
-                    { name: 'Gelir-Gider', icon: <BarChart3 size={20} />, color: 'purple' },
-                    { name: 'Kasa Banka', icon: <Building2 size={20} />, color: 'indigo' },
-                    { name: 'Satışlar', icon: <Package size={20} />, color: 'pink' },
-                    { name: 'KDV Raporu', icon: <FileText size={20} />, color: 'orange' },
-                    { name: 'Giderler', icon: <TrendingDown size={20} />, color: 'red' },
-                    { name: 'Ödemeler', icon: <CreditCard size={20} />, color: 'cyan' },
-                  ].map((report) => (
-                    <button key={report.name} className="bg-white rounded-2xl p-4 border border-neutral-200 hover:shadow-md transition-all text-left">
-                      <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center mb-3">
-                        <div className="text-neutral-700">{report.icon}</div>
-                      </div>
-                      <h3 className="font-medium text-neutral-900 text-sm">{report.name}</h3>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Reports Tab - Advanced Reporting */}
+            {activeTab === 'reports' && <AdvancedReporting />}
 
             {/* Checks Tab */}
             {activeTab === 'checks' && (

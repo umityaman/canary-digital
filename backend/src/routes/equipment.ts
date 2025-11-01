@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { authenticateToken, AuthRequest } from '../middleware/auth';
 
 const router = Router();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as any;
 
 // Helper function to get companyId with fallback
 async function getCompanyId(req: AuthRequest): Promise<number | undefined> {
@@ -365,7 +365,7 @@ router.get('/:id/rentals', authenticateToken, async (req: AuthRequest, res: Resp
       ];
     }
 
-    const rentals = await prisma.orderItem.findMany({
+    const rentals = await (prisma.orderItem.findMany as any)({
       where,
       include: {
         order: {
