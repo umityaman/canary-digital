@@ -1,15 +1,15 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
-# Install minimal dependencies for Prisma
-RUN apk add --no-cache openssl libc6-compat
+# Install minimal dependencies for Prisma and build tools
+RUN apk add --no-cache openssl libc6-compat python3 make g++
 
 WORKDIR /usr/src/app
 
-# Copy package files
-COPY package.json ./
+# Copy package files (including lock file for consistent installs)
+COPY package*.json ./
 
 # Install ALL dependencies (ts-node needed at runtime)
-RUN npm install --production=false && npm cache clean --force
+RUN npm ci --production=false && npm cache clean --force
 
 # Copy prisma schema
 COPY prisma ./prisma

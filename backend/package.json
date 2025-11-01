@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc && npx prisma generate",
-    "start": "npx prisma db push --accept-data-loss && npx ts-node --transpile-only src/index.ts",
+    "start": "npx ts-node --transpile-only src/index.ts",
+    "start:migrate": "npx prisma db push --accept-data-loss && npx ts-node --transpile-only src/index.ts",
     "lint": "eslint . --ext .ts",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
