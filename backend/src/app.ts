@@ -212,6 +212,10 @@ safeLoadRoute('/api/whatsapp', './routes/whatsapp', 'WhatsApp');
 safeLoadRoute('/api/email', './routes/email', 'Email');
 safeLoadRoute('/api/social-media', './routes/social-media', 'Social Media');
 
+// Stock Management & Cost Accounting Routes
+safeLoadRoute('/api/stock', './routes/stock', 'Stock Management');
+safeLoadRoute('/api/cost-accounting', './routes/costAccounting', 'Cost Accounting');
+
 // CMS Module Routes
 safeLoadRoute('/api/cms/pages', './routes/cms-pages', 'CMS Pages');
 safeLoadRoute('/api/cms/blog', './routes/cms-blog', 'CMS Blog');

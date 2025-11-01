@@ -580,16 +580,18 @@ export class EArchiveService {
             email: true,
             phone: true,
             address: true,
-            city: true,
-            identityNumber: true,
             taxNumber: true
           }
         },
-        items: {
+        order: {
           include: {
-            equipment: {
-              select: {
-                name: true
+            orderItems: {
+              include: {
+                equipment: {
+                  select: {
+                    name: true
+                  }
+                }
               }
             }
           }
@@ -597,7 +599,13 @@ export class EArchiveService {
       }
     });
 
-    return invoice as InvoiceWithDetails | null;
+    if (!invoice) return null;
+
+    // Transform to InvoiceWithDetails format
+    return {
+      ...invoice,
+      items: invoice.order?.orderItems || []
+    } as any as InvoiceWithDetails;
   }
 
   /**

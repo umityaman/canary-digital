@@ -233,7 +233,6 @@ export class DeliveryNoteService {
             email: true,
             phone: true,
             address: true,
-            city: true,
             taxNumber: true,
             taxOffice: true
           }
