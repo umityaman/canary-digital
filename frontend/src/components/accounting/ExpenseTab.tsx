@@ -283,7 +283,7 @@ export default function ExpenseTab() {
 
       {/* Actions Bar */}
       <div className="bg-white rounded-2xl p-4 border border-neutral-200">
-        <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-col gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
@@ -299,11 +299,11 @@ export default function ExpenseTab() {
           </div>
 
           {/* Filters */}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="flex-1 min-w-[180px] px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
             >
               <option value="">Tüm Kategoriler</option>
               <option value="Personel Maaşları">Personel Maaşları</option>
@@ -316,7 +316,7 @@ export default function ExpenseTab() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="flex-1 min-w-[130px] px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
             >
               <option value="">Tüm Durumlar</option>
               <option value="paid">Ödendi</option>
@@ -326,10 +326,10 @@ export default function ExpenseTab() {
 
             <button
               onClick={handleExport}
-              className="px-4 py-2 border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors flex items-center gap-2"
+              className="px-4 py-2 border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors flex items-center gap-2 text-sm whitespace-nowrap"
             >
               <Download size={18} />
-              <span className="hidden lg:inline">Dışa Aktar</span>
+              <span className="hidden sm:inline">Dışa Aktar</span>
             </button>
 
             <button
@@ -337,7 +337,7 @@ export default function ExpenseTab() {
                 setEditingExpense(null)
                 setModalOpen(true)
               }}
-              className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2 text-sm whitespace-nowrap"
             >
               <Plus size={18} />
               <span>Yeni Gider</span>
@@ -359,7 +359,7 @@ export default function ExpenseTab() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[1000px]">
                 <thead className="bg-neutral-50 border-b border-neutral-200">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
