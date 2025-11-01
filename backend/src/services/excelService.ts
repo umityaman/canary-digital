@@ -318,7 +318,7 @@ export class ExcelService {
   }
 
   /**
-   * Import products from Excel
+   * Import equipment (products) from Excel
    */
   async importProducts(companyId: number, buffer: Buffer) {
     try {
@@ -343,22 +343,19 @@ export class ExcelService {
 
       for (const row of rows) {
         try {
-          const [name, sku, barcode, category, price, stock, minStock, unit] = row.values as any[];
+          const [name, sku, barcode, category, price, stock] = row.values as any[];
 
           if (!name) {
             continue;
           }
 
-          await prisma.product.create({
+          await prisma.equipment.create({
             data: {
               name,
-              sku: sku || null,
-              barcode: barcode || null,
-              category: category || null,
-              price: parseFloat(price) || 0,
-              stock: parseInt(stock) || 0,
-              minStock: parseInt(minStock) || 0,
-              unit: unit || 'adet',
+              serialNumber: sku || null,
+              category: category || 'General',
+              rentalPrice: parseFloat(price) || 0,
+              status: 'available',
               companyId
             }
           });
@@ -415,21 +412,19 @@ export class ExcelService {
   }
 
   /**
-   * Generate Excel template for products
+   * Generate Excel template for equipment (products)
    */
   async generateProductTemplate() {
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Ürünler');
+    const worksheet = workbook.addWorksheet('Ekipmanlar');
 
     worksheet.columns = [
-      { header: 'Ürün Adı', key: 'name', width: 30 },
-      { header: 'SKU', key: 'sku', width: 15 },
+      { header: 'Ekipman Adı', key: 'name', width: 30 },
+      { header: 'Seri No', key: 'sku', width: 15 },
       { header: 'Barkod', key: 'barcode', width: 15 },
       { header: 'Kategori', key: 'category', width: 20 },
-      { header: 'Fiyat', key: 'price', width: 12 },
-      { header: 'Stok', key: 'stock', width: 10 },
-      { header: 'Min. Stok', key: 'minStock', width: 10 },
-      { header: 'Birim', key: 'unit', width: 10 }
+      { header: 'Kiralama Fiyatı', key: 'price', width: 12 },
+      { header: 'Durum', key: 'stock', width: 10 }
     ];
 
     worksheet.getRow(1).font = { bold: true };
@@ -441,14 +436,12 @@ export class ExcelService {
 
     // Add sample data
     worksheet.addRow({
-      name: 'Örnek Ürün',
-      sku: 'PRD-001',
+      name: 'Örnek Ekipman',
+      sku: 'EQ-001',
       barcode: '1234567890123',
-      category: 'Elektronik',
-      price: 100.00,
-      stock: 50,
-      minStock: 10,
-      unit: 'adet'
+      category: 'Kamera',
+      price: 500.00,
+      stock: 'available'
     });
 
     return workbook;

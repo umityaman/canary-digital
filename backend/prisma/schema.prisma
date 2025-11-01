@@ -251,9 +251,13 @@ model Customer {
   address           String?
   company           String?
   taxNumber         String?
+  taxOffice         String?
   booqableId        String?          @unique
   booqableUpdatedAt DateTime?
   syncStatus        String           @default("LOCAL")
+  parasutId         String?
+  companyId         Int?
+  companyName       String?
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   calendarEvents    CalendarEvent[]
@@ -1056,19 +1060,27 @@ model Invoice {
   orderId          Int
   customerId       Int
   parasutInvoiceId String?           @unique
+  syncedToParasut  Boolean           @default(false)
+  syncedAt         DateTime?
   invoiceNumber    String?
   invoiceDate      DateTime
-  dueDate          DateTime
+  dueDate          DateTime?
+  description      String?
+  subtotal         Float             @default(0)
   totalAmount      Float
   vatAmount        Float
   grandTotal       Float
+  total            Float             @default(0)
   paidAmount       Float             @default(0)
   status           String            @default("draft")
   type             String            @default("rental")
+  currency         String            @default("TRY")
+  companyId        Int?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   customer         User              @relation(fields: [customerId], references: [id])
   order            Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  items            InvoiceItem[]
   payments         Payment[]
   transactions     Transaction[]
   eInvoice         EInvoice?
@@ -1079,6 +1091,21 @@ model Invoice {
 
   @@index([orderId])
   @@index([customerId])
+  @@index([companyId])
+}
+
+model InvoiceItem {
+  id          Int     @id @default(autoincrement())
+  invoiceId   Int
+  description String
+  quantity    Float
+  unitPrice   Float
+  vatRate     Float   @default(18)
+  discount    Float   @default(0)
+  total       Float
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
 }
 
 model EInvoice {
@@ -1217,8 +1244,11 @@ model Offer {
 model Expense {
   id               Int               @id @default(autoincrement())
   companyId        Int
+  supplierId       Int?
   description      String
   amount           Float
+  vatAmount        Float             @default(0)
+  total            Float             @default(0)
   category         String
   date             DateTime
   status           String            @default("pending")
@@ -1230,6 +1260,8 @@ model Expense {
   costAllocations  CostAllocation[]
   // Bank Integration
   bankTransactions BankTransaction[]
+  // Supplier relation
+  supplier         Supplier?         @relation(fields: [supplierId], references: [id])
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   company          Company           @relation(fields: [companyId], references: [id])
@@ -1238,6 +1270,7 @@ model Expense {
   @@index([category])
   @@index([date])
   @@index([costCenterId])
+  @@index([supplierId])
 }
 
 // Accounting extensions: Checks, PromissoryNotes, Bank/Cash models, Categories and Tags
@@ -1470,6 +1503,7 @@ model AccountingReportSchedule {
 model Payment {
   id               Int      @id @default(autoincrement())
   invoiceId        Int
+  companyId        Int?
   amount           Float
   paymentDate      DateTime
   paymentMethod    String
@@ -1484,6 +1518,7 @@ model Payment {
   @@index([invoiceId])
   @@index([paymentDate])
   @@index([paymentMethod])
+  @@index([companyId])
 }
 
 model Refund {
@@ -1502,17 +1537,21 @@ model Refund {
 }
 
 model Supplier {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name          String
   email         String?
   phone         String?
   address       String?
   contactPerson String?
   notes         String?
+  taxNumber     String?
+  taxOffice     String?
+  parasutId     String?
   companyId     Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  company       Company  @relation(fields: [companyId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  company       Company   @relation(fields: [companyId], references: [id])
+  expenses      Expense[]
 
   @@index([companyId])
   @@index([name])
