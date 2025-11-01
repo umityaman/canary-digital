@@ -1,13 +1,16 @@
 # Multi-stage build for Cloud Run
 FROM node:20-alpine AS builder
 
+# Install build tools for native dependencies
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
