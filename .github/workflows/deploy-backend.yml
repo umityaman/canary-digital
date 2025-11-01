@@ -168,44 +168,14 @@ jobs:
           npm run test:ci
         # Fail the job if tests fail to prevent bad deploys
 
-      - name: Create Artifact Registry Repository (if not exists)
-        run: |
-          gcloud artifacts repositories create canary \
-            --repository-format=docker \
-            --location=${{ env.REGION }} \
-            --description="Canary Docker images" || echo "Repository already exists"
-
-      - name: Configure Docker for Artifact Registry
-        run: |
-          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
-
-      - name: Build Docker Image
-        run: |
-          cd backend
-          IMAGE_NAME="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/canary/backend:${{ github.sha }}"
-          docker build -t $IMAGE_NAME .
-          docker push $IMAGE_NAME
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-
-      - name: Deploy to Cloud Run
+      - name: Build and Deploy with Cloud Build
         id: deploy
         run: |
-          gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image=${{ env.IMAGE_NAME }} \
-            --region=${{ env.REGION }} \
-            --platform=managed \
-            --allow-unauthenticated \
-            --min-instances=0 \
-            --max-instances=10 \
-            --memory=1Gi \
-            --cpu=1 \
-            --port=4000 \
-            --timeout=300 \
-            --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
-            --update-secrets=JWT_SECRET=jwt-secret:latest \
-            --update-secrets=JWT_REFRESH_SECRET=jwt-secret:latest \
-            --update-secrets=DATABASE_URL=database-url:latest \
-            --set-env-vars="NODE_ENV=production,FRONTEND_URL=https://canary-frontend-672344972017.${{ env.REGION }}.run.app"
+          gcloud builds submit \
+            --config=backend/cloudbuild.yaml \
+            --substitutions=COMMIT_SHA=${{ github.sha }},PROJECT_ID=${{ env.PROJECT_ID }} \
+            --timeout=40m \
+            .
 
       - name: Get Build Logs on Failure
         if: failure() || steps.deploy.outcome == 'failure'

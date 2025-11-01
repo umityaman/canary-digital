@@ -1,0 +1,51 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/canary/backend:$COMMIT_SHA'
+      - '-t'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/canary/backend:latest'
+      - '.'
+    dir: 'backend'
+    timeout: '1200s'
+
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/canary/backend:$COMMIT_SHA'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/canary/backend:latest'
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'canary-backend'
+      - '--image=europe-west1-docker.pkg.dev/$PROJECT_ID/canary/backend:$COMMIT_SHA'
+      - '--region=europe-west1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--min-instances=0'
+      - '--max-instances=10'
+      - '--memory=1Gi'
+      - '--cpu=1'
+      - '--port=4000'
+      - '--timeout=300'
+      - '--set-cloudsql-instances=$PROJECT_ID:europe-west1:canary-postgres'
+      - '--update-secrets=JWT_SECRET=jwt-secret:latest'
+      - '--update-secrets=JWT_REFRESH_SECRET=jwt-secret:latest'
+      - '--update-secrets=DATABASE_URL=database-url:latest'
+      - '--set-env-vars=NODE_ENV=production'
+
+timeout: '2400s'
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
