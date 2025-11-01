@@ -219,6 +219,9 @@ safeLoadRoute('/api/cost-accounting', './routes/costAccounting', 'Cost Accountin
 // Bank Account Tracking Routes
 safeLoadRoute('/api/bank-accounts', './routes/bankAccount', 'Bank Account Tracking');
 
+// Excel Import/Export Routes
+safeLoadRoute('/api/excel', './routes/excel', 'Excel Import/Export');
+
 // CMS Module Routes
 safeLoadRoute('/api/cms/pages', './routes/cms-pages', 'CMS Pages');
 safeLoadRoute('/api/cms/blog', './routes/cms-blog', 'CMS Blog');

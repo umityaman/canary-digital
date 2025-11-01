@@ -8,6 +8,7 @@ import {
   Paper
 } from '@mui/material';
 import ParasutIntegration from '../../components/Integrations/ParasutIntegration';
+import ExcelImportExport from '../../components/Excel/ExcelImportExport';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,7 +46,7 @@ const Integrations: React.FC = () => {
           Entegrasyonlar
         </Typography>
         <Typography variant="body1" color="textSecondary">
-          Dış sistemlerle otomatik veri senkronizasyonu
+          Dış sistemlerle otomatik veri senkronizasyonu ve toplu veri işlemleri
         </Typography>
       </Box>
 
@@ -66,14 +67,7 @@ const Integrations: React.FC = () => {
         </TabPanel>
 
         <TabPanel value={activeTab} index={1}>
-          <Box p={3}>
-            <Typography variant="h6" gutterBottom>
-              Excel Import/Export
-            </Typography>
-            <Typography color="textSecondary">
-              Excel dosyalarını içe/dışa aktarma özelliği yakında...
-            </Typography>
-          </Box>
+          <ExcelImportExport />
         </TabPanel>
 
         <TabPanel value={activeTab} index={2}>
