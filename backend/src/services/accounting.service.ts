@@ -259,7 +259,7 @@ export class AccountingService {
         },
         select: {
           id: true,
-          fullName: true,
+          name: true,
           email: true,
           phone: true,
           invoices: {
@@ -286,7 +286,7 @@ export class AccountingService {
 
         return {
           customerId: customer.id,
-          customerName: customer.fullName,
+          customerName: customer.name,
           email: customer.email,
           phone: customer.phone,
           totalDebt: Math.round(totalDebt * 100) / 100,
@@ -859,7 +859,7 @@ export class AccountingService {
           type: true,
           customer: {
             select: {
-              fullName: true,
+              name: true,
               taxNumber: true,
             },
           },
@@ -885,7 +885,7 @@ export class AccountingService {
         invoices: invoices.map(inv => ({
           invoiceNumber: inv.invoiceNumber,
           date: inv.invoiceDate.toISOString(),
-          customer: inv.customer.fullName,
+          customer: inv.customer.name,
           taxNumber: inv.customer.taxNumber,
           base: inv.totalAmount,
           vat: inv.vatAmount,
@@ -1135,7 +1135,7 @@ export class AccountingService {
 
         return {
           id: customer.id,
-          name: customer.fullName,
+          name: customer.name,
           email: customer.email,
           phone: customer.phone,
           taxNumber: customer.taxNumber,
@@ -1240,7 +1240,7 @@ export class AccountingService {
       return {
         customer: {
           id: customer.id,
-          name: customer.fullName,
+          name: customer.name,
           email: customer.email,
           phone: customer.phone,
           taxNumber: customer.taxNumber,
@@ -1321,7 +1321,7 @@ export class AccountingService {
 
       return {
         customerId,
-        customerName: customer.fullName,
+        customerName: customer.name,
         aging: {
           current: Math.round(aging.current * 100) / 100,
           days30: Math.round(aging.days30 * 100) / 100,
@@ -1422,7 +1422,7 @@ export class AccountingService {
       return {
         customer: {
           id: customer.id,
-          name: customer.fullName,
+          name: customer.name,
           email: customer.email,
         },
         period: {
@@ -1637,7 +1637,7 @@ export class AccountingService {
         where: { id: data.customerId },
         select: {
           id: true,
-          fullName: true,
+          name: true,
           email: true,
           taxNumber: true,
           taxOffice: true,
@@ -1704,7 +1704,7 @@ export class AccountingService {
           customer: {
             select: {
               id: true,
-              fullName: true,
+              name: true,
               email: true,
               phone: true,
               taxNumber: true,
@@ -1748,7 +1748,7 @@ export class AccountingService {
           customer: {
             select: {
               id: true,
-              fullName: true,
+              name: true,
               email: true,
               phone: true,
               taxNumber: true,
@@ -1974,7 +1974,7 @@ export class AccountingService {
             customer: {
               select: {
                 id: true,
-                fullName: true,
+                name: true,
                 taxNumber: true,
               },
             },
@@ -2029,7 +2029,7 @@ export class AccountingService {
         Invoice Number: ${invoice.invoiceNumber}
         Date: ${invoice.invoiceDate.toLocaleDateString('tr-TR')}
         
-        Customer: ${invoice.customer.fullName}
+        Customer: ${invoice.customer.name}
         Tax Number: ${invoice.customer.taxNumber || 'N/A'}
         
         Total Amount: ${invoice.totalAmount.toFixed(2)} TL
@@ -2080,7 +2080,7 @@ export class AccountingService {
   <AccountingCustomerParty>
     <Party>
       <PartyName>
-        <Name>${invoice.customer.fullName}</Name>
+        <Name>${invoice.customer.name}</Name>
       </PartyName>
       <PartyTaxScheme>
         <TaxScheme>
@@ -2192,7 +2192,7 @@ export class AccountingService {
         },
         customer: {
           id: customer.id,
-          fullName: customer.fullName,
+          fullName: customer.name,
         },
       };
     } catch (error) {
@@ -2227,7 +2227,7 @@ export class AccountingService {
           where: { id: deliveryNote.customerId },
           select: {
             id: true,
-            fullName: true,
+            name: true,
             email: true,
             phone: true,
             address: true,
@@ -2769,7 +2769,7 @@ export class AccountingService {
             user: {
               select: {
                 id: true,
-                fullName: true,
+                name: true,
               },
             },
           },
@@ -2819,7 +2819,7 @@ export class AccountingService {
           user: {
             select: {
               id: true,
-              fullName: true,
+              name: true,
             },
           },
         },
@@ -3359,6 +3359,472 @@ export class AccountingService {
       };
     } catch (error) {
       log.error('Failed to get low stock alert:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * CHECKS & PROMISSORY NOTES OPERATIONS
+   */
+
+  /**
+   * Create new check
+   */
+  async createCheck(data: {
+    companyId: number;
+    checkNumber: string;
+    type: 'received' | 'issued';
+    drawer: string;
+    bank: string;
+    branch?: string;
+    accountNumber?: string;
+    amount: number;
+    issueDate: Date;
+    dueDate: Date;
+    customerId?: number;
+    orderId?: number;
+    notes?: string;
+  }) {
+    try {
+      const check = await prisma.check.create({
+        data: {
+          companyId: data.companyId,
+          checkNumber: data.checkNumber,
+          type: data.type,
+          drawer: data.drawer,
+          bank: data.bank,
+          branch: data.branch,
+          accountNumber: data.accountNumber,
+          amount: data.amount,
+          issueDate: data.issueDate,
+          dueDate: data.dueDate,
+          status: 'portfolio', // Initial status
+          customerId: data.customerId,
+          orderId: data.orderId,
+          notes: data.notes,
+        },
+        include: {
+          customer: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+
+      log.info('Check created:', {
+        id: check.id,
+        checkNumber: check.checkNumber,
+        type: data.type,
+        amount: data.amount,
+      });
+
+      return check;
+    } catch (error) {
+      log.error('Failed to create check:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * List checks with filters
+   */
+  async listChecks(
+    companyId: number,
+    filters: {
+      type?: string;
+      status?: string;
+      startDate?: Date;
+      endDate?: Date;
+    },
+    page: number = 1,
+    limit: number = 50
+  ) {
+    try {
+      const where: any = { companyId };
+
+      if (filters.type) {
+        where.type = filters.type;
+      }
+
+      if (filters.status) {
+        where.status = filters.status;
+      }
+
+      if (filters.startDate || filters.endDate) {
+        where.dueDate = {};
+        if (filters.startDate) where.dueDate.gte = filters.startDate;
+        if (filters.endDate) where.dueDate.lte = filters.endDate;
+      }
+
+      const [checks, total] = await Promise.all([
+        prisma.check.findMany({
+          where,
+          include: {
+            customer: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            order: {
+              select: {
+                id: true,
+                orderNumber: true,
+              },
+            },
+          },
+          orderBy: {
+            dueDate: 'asc',
+          },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        prisma.check.count({ where }),
+      ]);
+
+      log.info('Checks listed:', { count: checks.length, total });
+
+      return {
+        checks,
+        total,
+        page,
+        limit,
+      };
+    } catch (error) {
+      log.error('Failed to list checks:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Endorse check to another party
+   */
+  async endorseCheck(checkId: number, endorsedTo: string, notes?: string) {
+    try {
+      const check = await prisma.check.findUnique({
+        where: { id: checkId },
+      });
+
+      if (!check) {
+        throw new Error('Check not found');
+      }
+
+      if (check.status !== 'portfolio') {
+        throw new Error('Only portfolio checks can be endorsed');
+      }
+
+      const updated = await prisma.check.update({
+        where: { id: checkId },
+        data: {
+          status: 'endorsed',
+          notes: notes
+            ? `${check.notes || ''}\n\nEndorsed to: ${endorsedTo}. ${notes}`
+            : `${check.notes || ''}\n\nEndorsed to: ${endorsedTo}`,
+        },
+      });
+
+      log.info('Check endorsed:', {
+        checkId,
+        endorsedTo,
+      });
+
+      return updated;
+    } catch (error) {
+      log.error('Failed to endorse check:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Collect check
+   */
+  async collectCheck(checkId: number) {
+    try {
+      const check = await prisma.check.findUnique({
+        where: { id: checkId },
+      });
+
+      if (!check) {
+        throw new Error('Check not found');
+      }
+
+      if (!['portfolio', 'endorsed'].includes(check.status)) {
+        throw new Error('Only portfolio or endorsed checks can be collected');
+      }
+
+      const updated = await prisma.check.update({
+        where: { id: checkId },
+        data: {
+          status: 'collected',
+        },
+      });
+
+      log.info('Check collected:', { checkId });
+
+      return updated;
+    } catch (error) {
+      log.error('Failed to collect check:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Mark check as bounced
+   */
+  async bounceCheck(checkId: number, reason?: string) {
+    try {
+      const check = await prisma.check.findUnique({
+        where: { id: checkId },
+      });
+
+      if (!check) {
+        throw new Error('Check not found');
+      }
+
+      const updated = await prisma.check.update({
+        where: { id: checkId },
+        data: {
+          status: 'bounced',
+          notes: reason
+            ? `${check.notes || ''}\n\nBounced: ${reason}`
+            : `${check.notes || ''}\n\nBounced`,
+        },
+      });
+
+      log.info('Check bounced:', { checkId, reason });
+
+      return updated;
+    } catch (error) {
+      log.error('Failed to bounce check:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create promissory note
+   */
+  async createPromissoryNote(data: {
+    companyId: number;
+    noteNumber: string;
+    type: 'received' | 'issued';
+    drawer: string;
+    amount: number;
+    issueDate: Date;
+    dueDate: Date;
+    aval?: string;
+    customerId?: number;
+    notes?: string;
+  }) {
+    try {
+      const note = await prisma.promissoryNote.create({
+        data: {
+          companyId: data.companyId,
+          noteNumber: data.noteNumber,
+          type: data.type,
+          drawer: data.drawer,
+          amount: data.amount,
+          issueDate: data.issueDate,
+          dueDate: data.dueDate,
+          status: 'portfolio', // Initial status
+          aval: data.aval,
+          customerId: data.customerId,
+          notes: data.notes,
+        },
+        include: {
+          customer: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+
+      log.info('Promissory note created:', {
+        id: note.id,
+        noteNumber: note.noteNumber,
+        type: data.type,
+        amount: data.amount,
+      });
+
+      return note;
+    } catch (error) {
+      log.error('Failed to create promissory note:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * List promissory notes with filters
+   */
+  async listPromissoryNotes(
+    companyId: number,
+    filters: {
+      type?: string;
+      status?: string;
+      startDate?: Date;
+      endDate?: Date;
+    },
+    page: number = 1,
+    limit: number = 50
+  ) {
+    try {
+      const where: any = { companyId };
+
+      if (filters.type) {
+        where.type = filters.type;
+      }
+
+      if (filters.status) {
+        where.status = filters.status;
+      }
+
+      if (filters.startDate || filters.endDate) {
+        where.dueDate = {};
+        if (filters.startDate) where.dueDate.gte = filters.startDate;
+        if (filters.endDate) where.dueDate.lte = filters.endDate;
+      }
+
+      const [notes, total] = await Promise.all([
+        prisma.promissoryNote.findMany({
+          where,
+          include: {
+            customer: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            dueDate: 'asc',
+          },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        prisma.promissoryNote.count({ where }),
+      ]);
+
+      log.info('Promissory notes listed:', { count: notes.length, total });
+
+      return {
+        notes,
+        total,
+        page,
+        limit,
+      };
+    } catch (error) {
+      log.error('Failed to list promissory notes:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get checks and promissory notes due soon
+   */
+  async getDueSoon(companyId: number, days: number = 30) {
+    try {
+      const today = new Date();
+      const futureDate = new Date();
+      futureDate.setDate(today.getDate() + days);
+
+      const [checks, notes] = await Promise.all([
+        prisma.check.findMany({
+          where: {
+            companyId,
+            dueDate: {
+              gte: today,
+              lte: futureDate,
+            },
+            status: {
+              in: ['portfolio', 'endorsed'],
+            },
+          },
+          include: {
+            customer: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            dueDate: 'asc',
+          },
+        }),
+        prisma.promissoryNote.findMany({
+          where: {
+            companyId,
+            dueDate: {
+              gte: today,
+              lte: futureDate,
+            },
+            status: {
+              in: ['portfolio'],
+            },
+          },
+          include: {
+            customer: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            dueDate: 'asc',
+          },
+        }),
+      ]);
+
+      const totalAmount =
+        checks.reduce((sum, c) => sum + c.amount, 0) +
+        notes.reduce((sum, n) => sum + n.amount, 0);
+
+      log.info('Due soon items retrieved:', {
+        checkCount: checks.length,
+        noteCount: notes.length,
+        totalAmount,
+      });
+
+      return {
+        checks: checks.map(c => ({
+          id: c.id,
+          type: 'check',
+          number: c.checkNumber,
+          drawer: c.drawer,
+          bank: c.bank,
+          amount: c.amount,
+          dueDate: c.dueDate,
+          daysUntilDue: Math.ceil(
+            (c.dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+          ),
+          status: c.status,
+          customer: c.customer,
+        })),
+        promissoryNotes: notes.map(n => ({
+          id: n.id,
+          type: 'promissory_note',
+          number: n.noteNumber,
+          drawer: n.drawer,
+          amount: n.amount,
+          dueDate: n.dueDate,
+          daysUntilDue: Math.ceil(
+            (n.dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+          ),
+          status: n.status,
+          customer: n.customer,
+        })),
+        summary: {
+          totalChecks: checks.length,
+          totalNotes: notes.length,
+          totalAmount: Math.round(totalAmount * 100) / 100,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to get due soon items:', error);
       throw error;
     }
   }

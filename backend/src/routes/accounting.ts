@@ -1869,4 +1869,353 @@ router.get('/low-stock-alert', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+ * CHECKS & PROMISSORY NOTES OPERATIONS
+ */
+
+/**
+ * @route   POST /api/accounting/check
+ * @desc    Create new check (received/issued)
+ * @access  Private
+ */
+router.post('/check', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const {
+      checkNumber,
+      type,
+      drawer,
+      bank,
+      branch,
+      accountNumber,
+      amount,
+      issueDate,
+      dueDate,
+      customerId,
+      orderId,
+      notes,
+    } = req.body;
+
+    if (!checkNumber || !type || !drawer || !bank || !amount || !dueDate) {
+      return res.status(400).json({
+        success: false,
+        message: 'checkNumber, type, drawer, bank, amount, and dueDate are required',
+      });
+    }
+
+    if (!['received', 'issued'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'type must be "received" or "issued"',
+      });
+    }
+
+    const check = await accountingService.createCheck({
+      companyId,
+      checkNumber,
+      type,
+      drawer,
+      bank,
+      branch,
+      accountNumber,
+      amount: parseFloat(amount),
+      issueDate: issueDate ? new Date(issueDate) : new Date(),
+      dueDate: new Date(dueDate),
+      customerId: customerId ? parseInt(customerId) : undefined,
+      orderId: orderId ? parseInt(orderId) : undefined,
+      notes,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Check created successfully',
+      data: check,
+    });
+  } catch (error: any) {
+    log.error('Failed to create check:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create check',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/checks
+ * @desc    List checks with filters
+ * @access  Private
+ * @query   type, status, startDate, endDate, page, limit
+ */
+router.get('/checks', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const {
+      type,
+      status,
+      startDate,
+      endDate,
+      page = '1',
+      limit = '50',
+    } = req.query;
+
+    const filters = {
+      type: type as string,
+      status: status as string,
+      startDate: startDate ? new Date(startDate as string) : undefined,
+      endDate: endDate ? new Date(endDate as string) : undefined,
+    };
+
+    const result = await accountingService.listChecks(
+      companyId,
+      filters,
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
+
+    res.json({
+      success: true,
+      data: result.checks,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.limit),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to list checks:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to list checks',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/check/:id/endorse
+ * @desc    Endorse check to another party
+ * @access  Private
+ */
+router.post('/check/:id/endorse', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { endorsedTo, notes } = req.body;
+
+    if (!endorsedTo) {
+      return res.status(400).json({
+        success: false,
+        message: 'endorsedTo is required',
+      });
+    }
+
+    const check = await accountingService.endorseCheck(
+      parseInt(id),
+      endorsedTo,
+      notes
+    );
+
+    res.json({
+      success: true,
+      message: 'Check endorsed successfully',
+      data: check,
+    });
+  } catch (error: any) {
+    log.error('Failed to endorse check:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to endorse check',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/check/:id/collect
+ * @desc    Mark check as collected
+ * @access  Private
+ */
+router.post('/check/:id/collect', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const check = await accountingService.collectCheck(parseInt(id));
+
+    res.json({
+      success: true,
+      message: 'Check collected successfully',
+      data: check,
+    });
+  } catch (error: any) {
+    log.error('Failed to collect check:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to collect check',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/check/:id/bounce
+ * @desc    Mark check as bounced
+ * @access  Private
+ */
+router.post('/check/:id/bounce', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const check = await accountingService.bounceCheck(parseInt(id), reason);
+
+    res.json({
+      success: true,
+      message: 'Check marked as bounced',
+      data: check,
+    });
+  } catch (error: any) {
+    log.error('Failed to bounce check:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to bounce check',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/promissory-note
+ * @desc    Create new promissory note
+ * @access  Private
+ */
+router.post('/promissory-note', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const {
+      noteNumber,
+      type,
+      drawer,
+      amount,
+      issueDate,
+      dueDate,
+      aval,
+      customerId,
+      notes,
+    } = req.body;
+
+    if (!noteNumber || !type || !drawer || !amount || !dueDate) {
+      return res.status(400).json({
+        success: false,
+        message: 'noteNumber, type, drawer, amount, and dueDate are required',
+      });
+    }
+
+    if (!['received', 'issued'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'type must be "received" or "issued"',
+      });
+    }
+
+    const note = await accountingService.createPromissoryNote({
+      companyId,
+      noteNumber,
+      type,
+      drawer,
+      amount: parseFloat(amount),
+      issueDate: issueDate ? new Date(issueDate) : new Date(),
+      dueDate: new Date(dueDate),
+      aval,
+      customerId: customerId ? parseInt(customerId) : undefined,
+      notes,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Promissory note created successfully',
+      data: note,
+    });
+  } catch (error: any) {
+    log.error('Failed to create promissory note:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create promissory note',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/promissory-notes
+ * @desc    List promissory notes with filters
+ * @access  Private
+ */
+router.get('/promissory-notes', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const {
+      type,
+      status,
+      startDate,
+      endDate,
+      page = '1',
+      limit = '50',
+    } = req.query;
+
+    const filters = {
+      type: type as string,
+      status: status as string,
+      startDate: startDate ? new Date(startDate as string) : undefined,
+      endDate: endDate ? new Date(endDate as string) : undefined,
+    };
+
+    const result = await accountingService.listPromissoryNotes(
+      companyId,
+      filters,
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
+
+    res.json({
+      success: true,
+      data: result.notes,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.limit),
+      },
+    });
+  } catch (error: any) {
+    log.error('Failed to list promissory notes:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to list promissory notes',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/due-soon
+ * @desc    Get checks and notes due within specified days
+ * @access  Private
+ * @query   days (default 30)
+ */
+router.get('/due-soon', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { days = '30' } = req.query;
+
+    const dueSoon = await accountingService.getDueSoon(
+      companyId,
+      parseInt(days as string)
+    );
+
+    res.json({
+      success: true,
+      data: dueSoon,
+    });
+  } catch (error: any) {
+    log.error('Failed to get due soon items:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get due soon items',
+    });
+  }
+});
+
 export default router;
