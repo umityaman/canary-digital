@@ -696,6 +696,377 @@ export class AccountingService {
   }
 
   /**
+   * ACCOUNT CARDS (CARI HESAP) MANAGEMENT
+   */
+
+  /**
+   * Get accounts list with filters and pagination
+   */
+  async getAccountsList(params: {
+    companyId: number;
+    page: number;
+    limit: number;
+    search?: string;
+    type?: 'customer' | 'supplier';
+    minDebt?: number;
+    status?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+  }) {
+    try {
+      const { companyId, page, limit, search, type, minDebt, sortBy, sortOrder } = params;
+      const skip = (page - 1) * limit;
+
+      // Get all customers with their invoices
+      const customers = await prisma.user.findMany({
+        where: {
+          role: 'customer',
+          ...(search && {
+            OR: [
+              { fullName: { contains: search, mode: 'insensitive' } },
+              { email: { contains: search, mode: 'insensitive' } },
+              { phone: { contains: search, mode: 'insensitive' } },
+            ],
+          }),
+        },
+        include: {
+          invoices: {
+            select: {
+              grandTotal: true,
+              paidAmount: true,
+              status: true,
+              dueDate: true,
+            },
+          },
+        },
+      });
+
+      // Calculate debt for each customer
+      const accountsWithDebt = customers.map(customer => {
+        const totalDebt = customer.invoices.reduce((sum, inv) => {
+          return sum + (inv.grandTotal - inv.paidAmount);
+        }, 0);
+
+        const overdueDebt = customer.invoices
+          .filter(inv => inv.dueDate < new Date() && inv.status !== 'paid')
+          .reduce((sum, inv) => {
+            return sum + (inv.grandTotal - inv.paidAmount);
+          }, 0);
+
+        const totalInvoiced = customer.invoices.reduce((sum, inv) => sum + inv.grandTotal, 0);
+        const totalPaid = customer.invoices.reduce((sum, inv) => sum + inv.paidAmount, 0);
+
+        return {
+          id: customer.id,
+          name: customer.fullName,
+          email: customer.email,
+          phone: customer.phone,
+          taxNumber: customer.taxNumber,
+          totalDebt: Math.round(totalDebt * 100) / 100,
+          overdueDebt: Math.round(overdueDebt * 100) / 100,
+          totalInvoiced: Math.round(totalInvoiced * 100) / 100,
+          totalPaid: Math.round(totalPaid * 100) / 100,
+          invoiceCount: customer.invoices.length,
+          status: overdueDebt > 0 ? 'overdue' : totalDebt > 0 ? 'active' : 'clear',
+          riskLevel: overdueDebt > 10000 ? 'high' : overdueDebt > 5000 ? 'medium' : 'low',
+        };
+      });
+
+      // Filter by minDebt
+      let filteredAccounts = accountsWithDebt;
+      if (minDebt) {
+        filteredAccounts = filteredAccounts.filter(acc => acc.totalDebt >= minDebt);
+      }
+
+      // Sort
+      filteredAccounts.sort((a, b) => {
+        const field = sortBy || 'totalDebt';
+        const order = sortOrder === 'asc' ? 1 : -1;
+        return ((a as any)[field] - (b as any)[field]) * order;
+      });
+
+      // Paginate
+      const total = filteredAccounts.length;
+      const data = filteredAccounts.slice(skip, skip + limit);
+
+      log.info('Accounts list fetched:', { total, page, limit });
+
+      return {
+        data,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
+    } catch (error) {
+      log.error('Failed to get accounts list:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get account detail with all data
+   */
+  async getAccountDetail(customerId: number) {
+    try {
+      const customer = await prisma.user.findUnique({
+        where: { id: customerId },
+        include: {
+          invoices: {
+            include: {
+              payments: true,
+            },
+            orderBy: {
+              invoiceDate: 'desc',
+            },
+          },
+        },
+      });
+
+      if (!customer) {
+        return null;
+      }
+
+      // Calculate summary
+      const totalDebt = customer.invoices.reduce((sum, inv) => {
+        return sum + (inv.grandTotal - inv.paidAmount);
+      }, 0);
+
+      const overdueDebt = customer.invoices
+        .filter(inv => inv.dueDate < new Date() && inv.status !== 'paid')
+        .reduce((sum, inv) => {
+          return sum + (inv.grandTotal - inv.paidAmount);
+        }, 0);
+
+      const totalInvoiced = customer.invoices.reduce((sum, inv) => sum + inv.grandTotal, 0);
+      const totalPaid = customer.invoices.reduce((sum, inv) => sum + inv.paidAmount, 0);
+
+      // Monthly trend (last 6 months)
+      const monthlyTrend = [];
+      for (let i = 5; i >= 0; i--) {
+        const monthStart = new Date(new Date().getFullYear(), new Date().getMonth() - i, 1);
+        const monthEnd = new Date(new Date().getFullYear(), new Date().getMonth() - i + 1, 0);
+
+        const monthInvoices = customer.invoices.filter(
+          inv => inv.invoiceDate >= monthStart && inv.invoiceDate <= monthEnd
+        );
+
+        monthlyTrend.push({
+          month: monthStart.toLocaleDateString('tr-TR', { month: 'long' }),
+          invoiced: monthInvoices.reduce((sum, inv) => sum + inv.grandTotal, 0),
+          paid: monthInvoices.reduce((sum, inv) => sum + inv.paidAmount, 0),
+        });
+      }
+
+      return {
+        customer: {
+          id: customer.id,
+          name: customer.fullName,
+          email: customer.email,
+          phone: customer.phone,
+          taxNumber: customer.taxNumber,
+          address: customer.address,
+          city: customer.city,
+        },
+        summary: {
+          totalDebt: Math.round(totalDebt * 100) / 100,
+          overdueDebt: Math.round(overdueDebt * 100) / 100,
+          totalInvoiced: Math.round(totalInvoiced * 100) / 100,
+          totalPaid: Math.round(totalPaid * 100) / 100,
+          invoiceCount: customer.invoices.length,
+          paymentCount: customer.invoices.reduce((sum, inv) => sum + inv.payments.length, 0),
+        },
+        invoices: customer.invoices.map(inv => ({
+          id: inv.id,
+          invoiceNumber: inv.invoiceNumber,
+          invoiceDate: inv.invoiceDate,
+          dueDate: inv.dueDate,
+          grandTotal: inv.grandTotal,
+          paidAmount: inv.paidAmount,
+          remainingAmount: inv.grandTotal - inv.paidAmount,
+          status: inv.status,
+        })),
+        monthlyTrend,
+      };
+    } catch (error) {
+      log.error('Failed to get account detail:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get account aging analysis (30/60/90 days)
+   */
+  async getAccountAging(customerId: number) {
+    try {
+      const customer = await prisma.user.findUnique({
+        where: { id: customerId },
+        include: {
+          invoices: {
+            where: {
+              status: {
+                not: 'paid',
+              },
+            },
+          },
+        },
+      });
+
+      if (!customer) {
+        throw new Error('Customer not found');
+      }
+
+      const now = new Date();
+      const aging = {
+        current: 0, // 0-30 days
+        days30: 0, // 31-60 days
+        days60: 0, // 61-90 days
+        days90Plus: 0, // 90+ days
+      };
+
+      customer.invoices.forEach(inv => {
+        const remainingAmount = inv.grandTotal - inv.paidAmount;
+        const daysOverdue = Math.floor((now.getTime() - inv.dueDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (daysOverdue <= 30) {
+          aging.current += remainingAmount;
+        } else if (daysOverdue <= 60) {
+          aging.days30 += remainingAmount;
+        } else if (daysOverdue <= 90) {
+          aging.days60 += remainingAmount;
+        } else {
+          aging.days90Plus += remainingAmount;
+        }
+      });
+
+      const total = aging.current + aging.days30 + aging.days60 + aging.days90Plus;
+
+      return {
+        customerId,
+        customerName: customer.fullName,
+        aging: {
+          current: Math.round(aging.current * 100) / 100,
+          days30: Math.round(aging.days30 * 100) / 100,
+          days60: Math.round(aging.days60 * 100) / 100,
+          days90Plus: Math.round(aging.days90Plus * 100) / 100,
+        },
+        total: Math.round(total * 100) / 100,
+        percentages: {
+          current: total > 0 ? Math.round((aging.current / total) * 100) : 0,
+          days30: total > 0 ? Math.round((aging.days30 / total) * 100) : 0,
+          days60: total > 0 ? Math.round((aging.days60 / total) * 100) : 0,
+          days90Plus: total > 0 ? Math.round((aging.days90Plus / total) * 100) : 0,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to get account aging:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get account statement (all transactions)
+   */
+  async getAccountStatement(
+    customerId: number,
+    startDate?: Date,
+    endDate?: Date
+  ) {
+    try {
+      const customer = await prisma.user.findUnique({
+        where: { id: customerId },
+        include: {
+          invoices: {
+            where: {
+              ...(startDate && endDate && {
+                invoiceDate: {
+                  gte: startDate,
+                  lte: endDate,
+                },
+              }),
+            },
+            include: {
+              payments: true,
+            },
+            orderBy: {
+              invoiceDate: 'asc',
+            },
+          },
+        },
+      });
+
+      if (!customer) {
+        throw new Error('Customer not found');
+      }
+
+      // Build transaction list (invoices + payments)
+      const transactions: any[] = [];
+      let runningBalance = 0;
+
+      customer.invoices.forEach(inv => {
+        // Invoice (debit - borç artar)
+        runningBalance += inv.grandTotal;
+        transactions.push({
+          date: inv.invoiceDate,
+          type: 'invoice',
+          description: `Fatura: ${inv.invoiceNumber}`,
+          invoiceNumber: inv.invoiceNumber,
+          debit: inv.grandTotal,
+          credit: 0,
+          balance: runningBalance,
+        });
+
+        // Payments (credit - borç azalır)
+        inv.payments.forEach(payment => {
+          runningBalance -= payment.amount;
+          transactions.push({
+            date: payment.paymentDate,
+            type: 'payment',
+            description: `Ödeme: ${payment.paymentMethod}`,
+            invoiceNumber: inv.invoiceNumber,
+            debit: 0,
+            credit: payment.amount,
+            balance: runningBalance,
+          });
+        });
+      });
+
+      // Sort by date
+      transactions.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+      // Recalculate running balance after sort
+      runningBalance = 0;
+      transactions.forEach(t => {
+        runningBalance += t.debit - t.credit;
+        t.balance = Math.round(runningBalance * 100) / 100;
+      });
+
+      return {
+        customer: {
+          id: customer.id,
+          name: customer.fullName,
+          email: customer.email,
+        },
+        period: {
+          start: startDate?.toISOString(),
+          end: endDate?.toISOString(),
+        },
+        summary: {
+          totalDebit: Math.round(transactions.reduce((sum, t) => sum + t.debit, 0) * 100) / 100,
+          totalCredit: Math.round(transactions.reduce((sum, t) => sum + t.credit, 0) * 100) / 100,
+          finalBalance: Math.round(runningBalance * 100) / 100,
+        },
+        transactions,
+      };
+    } catch (error) {
+      log.error('Failed to get account statement:', error);
+      throw error;
+    }
+  }
+
+  /**
    * EXPENSE MANAGEMENT
    */
 

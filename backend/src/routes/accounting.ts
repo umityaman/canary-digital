@@ -168,8 +168,140 @@ router.get('/income-expense', authenticateToken, async (req, res) => {
 });
 
 /**
+ * @route   GET /api/accounting/accounts
+ * @desc    Cari hesap listesi (filters, pagination, sorting)
+ * @access  Private
+ * @query   page, limit, search, type (customer/supplier), minDebt, status
+ */
+router.get('/accounts', authenticateToken, async (req, res) => {
+  try {
+    const { 
+      page = 1, 
+      limit = 20, 
+      search, 
+      type, 
+      minDebt, 
+      status,
+      sortBy = 'totalDebt',
+      sortOrder = 'desc'
+    } = req.query;
+
+    const companyId = (req as any).user?.companyId || 1;
+
+    const accounts = await accountingService.getAccountsList({
+      companyId,
+      page: parseInt(page as string),
+      limit: parseInt(limit as string),
+      search: search as string,
+      type: type as 'customer' | 'supplier',
+      minDebt: minDebt ? parseFloat(minDebt as string) : undefined,
+      status: status as string,
+      sortBy: sortBy as string,
+      sortOrder: sortOrder as 'asc' | 'desc',
+    });
+
+    res.json({
+      success: true,
+      data: accounts.data,
+      pagination: accounts.pagination,
+    });
+  } catch (error: any) {
+    log.error('Failed to get accounts list:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get accounts list',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/account/:id
+ * @desc    Cari hesap detayı (overview with 4 tabs data)
+ * @access  Private
+ */
+router.get('/account/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const account = await accountingService.getAccountDetail(parseInt(id));
+
+    if (!account) {
+      return res.status(404).json({
+        success: false,
+        message: 'Account not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      data: account,
+    });
+  } catch (error: any) {
+    log.error('Failed to get account detail:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get account detail',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/account/:id/aging
+ * @desc    Yaşlandırma analizi (30/60/90 gün)
+ * @access  Private
+ */
+router.get('/account/:id/aging', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const aging = await accountingService.getAccountAging(parseInt(id));
+
+    res.json({
+      success: true,
+      data: aging,
+    });
+  } catch (error: any) {
+    log.error('Failed to get account aging:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get account aging',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/account/:id/statement
+ * @desc    Cari hesap ekstresi (tüm işlemler)
+ * @access  Private
+ * @query   startDate, endDate
+ */
+router.get('/account/:id/statement', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { startDate, endDate } = req.query;
+
+    const statement = await accountingService.getAccountStatement(
+      parseInt(id),
+      startDate ? new Date(startDate as string) : undefined,
+      endDate ? new Date(endDate as string) : undefined
+    );
+
+    res.json({
+      success: true,
+      data: statement,
+    });
+  } catch (error: any) {
+    log.error('Failed to get account statement:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get account statement',
+    });
+  }
+});
+
+/**
  * @route   GET /api/accounting/cari
- * @desc    Cari hesap özeti (müşteri bazlı alacak-borç)
+ * @desc    Cari hesap özeti (müşteri bazlı alacak-borç) - Deprecated, use /accounts
  * @access  Private
  */
 router.get('/cari', authenticateToken, async (req, res) => {
