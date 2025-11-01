@@ -8,80 +8,80 @@ datasource db {
 }
 
 model Company {
-  id                   Int                    @id @default(autoincrement())
-  name                 String
-  email                String?
-  phone                String?
-  address              String?
-  address2             String?
-  taxNumber            String?
-  taxOffice            String?
-  tradeRegister        String?
-  mersisNo             String?
-  city                 String?
-  district             String?
-  postalCode           String?
-  website              String?
-  logo                 String?
-  mobilePhone          String?
-  authorizedPerson     String?
-  iban                 String?
-  bankName             String?
-  bankBranch           String?
-  accountHolder        String?
-  timezone             String?                @default("Europe/Istanbul")
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt
-  blogCategories       BlogCategory[]
-  blogPosts            BlogPost[]
-  blogTags             BlogTag[]
-  booqableConnection   BooqableConnection?
-  cmsPages             CMSPage[]
-  cmsSettings          CMSSetting[]
-  calendarEvents       CalendarEvent[]
-  categories           Category[]
-  chatbotIntents       ChatbotIntent[]
-  chatbotKnowledge     ChatbotKnowledge[]
-  conversations        Conversation[]
-  companyDocuments     Document[]
-  documents            DocumentCategory[]
-  equipment            Equipment[]
-  expenses             Expense[]
-  generatedReports     GeneratedReport[]      @relation("CompanyGeneratedReports")
-  mediaFiles           MediaFile[]
-  mediaFolders         MediaFolder[]
-  menus                Menu[]
-  notifications        Notification[]
-  orders               Order[]
-  productionProjects   ProductionProject[]
-  reportSchedules      ReportSchedule[]       @relation("CompanyReportSchedules")
-  reportTemplates      ReportTemplate[]       @relation("CompanyReportTemplates")
-  savedSearches        SavedSearch[]
-  searchHistory        SearchHistory[]
-  serviceAssets        ServiceAsset[]
-  serviceParts         ServicePart[]
-  socialMediaAccounts  SocialMediaAccount[]
-  socialMediaAnalytics SocialMediaAnalytics[]
-  socialMediaPosts     SocialMediaPost[]
-  socialMediaSchedules SocialMediaSchedule[]
-  suppliers            Supplier[]
-  technicians          Technician[]
-  users                User[]
-  websiteProjects      WebsiteProject[]
-  whatsappMessages     WhatsAppMessage[]
-  workOrders           WorkOrder[]
+  id                        Int                        @id @default(autoincrement())
+  name                      String
+  email                     String?
+  phone                     String?
+  address                   String?
+  address2                  String?
+  taxNumber                 String?
+  taxOffice                 String?
+  tradeRegister             String?
+  mersisNo                  String?
+  city                      String?
+  district                  String?
+  postalCode                String?
+  website                   String?
+  logo                      String?
+  mobilePhone               String?
+  authorizedPerson          String?
+  iban                      String?
+  bankName                  String?
+  bankBranch                String?
+  accountHolder             String?
+  timezone                  String?                    @default("Europe/Istanbul")
+  createdAt                 DateTime                   @default(now())
+  updatedAt                 DateTime                   @updatedAt
+  blogCategories            BlogCategory[]
+  blogPosts                 BlogPost[]
+  blogTags                  BlogTag[]
+  booqableConnection        BooqableConnection?
+  cmsPages                  CMSPage[]
+  cmsSettings               CMSSetting[]
+  calendarEvents            CalendarEvent[]
+  categories                Category[]
+  chatbotIntents            ChatbotIntent[]
+  chatbotKnowledge          ChatbotKnowledge[]
+  conversations             Conversation[]
+  companyDocuments          Document[]
+  documents                 DocumentCategory[]
+  equipment                 Equipment[]
+  expenses                  Expense[]
+  generatedReports          GeneratedReport[]          @relation("CompanyGeneratedReports")
+  mediaFiles                MediaFile[]
+  mediaFolders              MediaFolder[]
+  menus                     Menu[]
+  notifications             Notification[]
+  orders                    Order[]
+  productionProjects        ProductionProject[]
+  reportSchedules           ReportSchedule[]           @relation("CompanyReportSchedules")
+  reportTemplates           ReportTemplate[]           @relation("CompanyReportTemplates")
+  savedSearches             SavedSearch[]
+  searchHistory             SearchHistory[]
+  serviceAssets             ServiceAsset[]
+  serviceParts              ServicePart[]
+  socialMediaAccounts       SocialMediaAccount[]
+  socialMediaAnalytics      SocialMediaAnalytics[]
+  socialMediaPosts          SocialMediaPost[]
+  socialMediaSchedules      SocialMediaSchedule[]
+  suppliers                 Supplier[]
+  technicians               Technician[]
+  users                     User[]
+  websiteProjects           WebsiteProject[]
+  whatsappMessages          WhatsAppMessage[]
+  workOrders                WorkOrder[]
   // Accounting relations
-  checks               Check[]
-  promissoryNotes      PromissoryNote[]
-  bankAccounts         BankAccount[]
-  cashTransactions     CashTransaction[]
-  accountCategories    AccountCategory[]
-  accountingTags       AccountingTag[]
+  checks                    Check[]
+  promissoryNotes           PromissoryNote[]
+  bankAccounts              BankAccount[]
+  cashTransactions          CashTransaction[]
+  accountCategories         AccountCategory[]
+  accountingTags            AccountingTag[]
   accountingReportSchedules AccountingReportSchedule[]
   // Turkish Accounting
-  chartOfAccounts      ChartOfAccounts[]
-  journalEntries       JournalEntry[]
-  deliveryNotes        DeliveryNote[]
+  chartOfAccounts           ChartOfAccounts[]
+  journalEntries            JournalEntry[]
+  deliveryNotes             DeliveryNote[]
 }
 
 model User {
@@ -158,7 +158,7 @@ model User {
   socialMediaSchedules     SocialMediaSchedule[]
   technician               Technician?
   transactions             Transaction[]
-  cashTransactions        CashTransaction[]
+  cashTransactions         CashTransaction[]
   company                  Company?                @relation(fields: [companyId], references: [id])
   workOrders               WorkOrder[]
   // Turkish Accounting
@@ -176,6 +176,10 @@ model User {
   receivedTransfers        StockTransfer[]         @relation("TransferReceiver")
   countedStocks            StockCount[]            @relation("StockCounter")
   verifiedStocks           StockCount[]            @relation("StockVerifier")
+  // Bank Account Relations
+  reconciledTransactions   BankTransaction[]       @relation("TransactionReconciler")
+  uploadedStatements       BankStatement[]         @relation("StatementUploader")
+  performedReconciliations BankReconciliation[]    @relation("ReconciliationPerformer")
 }
 
 model Category {
@@ -240,18 +244,18 @@ model Equipment {
 }
 
 model Customer {
-  id                Int             @id @default(autoincrement())
+  id                Int              @id @default(autoincrement())
   name              String
   email             String?
   phone             String?
   address           String?
   company           String?
   taxNumber         String?
-  booqableId        String?         @unique
+  booqableId        String?          @unique
   booqableUpdatedAt DateTime?
-  syncStatus        String          @default("LOCAL")
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  syncStatus        String           @default("LOCAL")
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
   calendarEvents    CalendarEvent[]
   inspections       Inspection[]
   orders            Order[]
@@ -291,7 +295,7 @@ model Order {
   checks            Check[]
   deliveryNotes     DeliveryNote[]
   // Stock Management
-  stockMovements    StockMovement[]    @relation("StockMovementOrder")
+  stockMovements    StockMovement[] @relation("StockMovementOrder")
 }
 
 model OrderItem {
@@ -1048,48 +1052,49 @@ model DeviceToken {
 }
 
 model Invoice {
-  id               Int           @id @default(autoincrement())
+  id               Int               @id @default(autoincrement())
   orderId          Int
   customerId       Int
-  parasutInvoiceId String?       @unique
+  parasutInvoiceId String?           @unique
   invoiceNumber    String?
   invoiceDate      DateTime
   dueDate          DateTime
   totalAmount      Float
   vatAmount        Float
   grandTotal       Float
-  paidAmount       Float         @default(0)
-  status           String        @default("draft")
-  type             String        @default("rental")
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  customer         User          @relation(fields: [customerId], references: [id])
-  order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  paidAmount       Float             @default(0)
+  status           String            @default("draft")
+  type             String            @default("rental")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  customer         User              @relation(fields: [customerId], references: [id])
+  order            Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
   payments         Payment[]
   transactions     Transaction[]
   eInvoice         EInvoice?
   eArchiveInvoice  EArchiveInvoice?
   deliveryNote     DeliveryNote?
   stockMovements   StockMovement[]
+  bankTransactions BankTransaction[]
 
   @@index([orderId])
   @@index([customerId])
 }
 
 model EInvoice {
-  id          Int       @id @default(autoincrement())
-  invoiceId   Int       @unique
-  invoice     Invoice   @relation(fields: [invoiceId], references: [id])
-  uuid        String    @unique
-  ettn        String?
-  gibStatus   String    @default("draft")
-  gibResponse Json?
-  xmlContent  String    @db.Text
-  xmlHash     String?
-  sentDate    DateTime?
+  id           Int       @id @default(autoincrement())
+  invoiceId    Int       @unique
+  invoice      Invoice   @relation(fields: [invoiceId], references: [id])
+  uuid         String    @unique
+  ettn         String?
+  gibStatus    String    @default("draft")
+  gibResponse  Json?
+  xmlContent   String    @db.Text
+  xmlHash      String?
+  sentDate     DateTime?
   responseDate DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@index([gibStatus])
   @@index([uuid])
@@ -1108,53 +1113,53 @@ model EArchiveInvoice {
 }
 
 model DeliveryNote {
-  id             Int                @id @default(autoincrement())
-  deliveryNumber String             @unique
-  deliveryDate   DateTime           @default(now())
-  deliveryType   String             @default("sevk") // sevk (dispatch), tahsilat (collection)
-  
+  id             Int      @id @default(autoincrement())
+  deliveryNumber String   @unique
+  deliveryDate   DateTime @default(now())
+  deliveryType   String   @default("sevk") // sevk (dispatch), tahsilat (collection)
+
   // Relations
-  orderId        Int?
-  order          Order?             @relation(fields: [orderId], references: [id])
-  
-  customerId     Int
-  customer       User               @relation(fields: [customerId], references: [id])
-  
-  companyId      Int?
-  company        Company?           @relation(fields: [companyId], references: [id])
-  
-  items          DeliveryNoteItem[]
-  
+  orderId Int?
+  order   Order? @relation(fields: [orderId], references: [id])
+
+  customerId Int
+  customer   User @relation(fields: [customerId], references: [id])
+
+  companyId Int?
+  company   Company? @relation(fields: [companyId], references: [id])
+
+  items DeliveryNoteItem[]
+
   // Invoice conversion
-  invoiceId      Int?               @unique
-  invoice        Invoice?           @relation(fields: [invoiceId], references: [id])
-  
+  invoiceId Int?     @unique
+  invoice   Invoice? @relation(fields: [invoiceId], references: [id])
+
   // Status
-  status         String             @default("pending") // pending, delivered, invoiced, cancelled
-  
+  status String @default("pending") // pending, delivered, invoiced, cancelled
+
   // Logistics
-  driverName     String?
-  driverPhone    String?
-  vehiclePlate   String?
-  
+  driverName   String?
+  driverPhone  String?
+  vehiclePlate String?
+
   // Addresses
-  fromAddress    String?
-  toAddress      String?
-  
+  fromAddress String?
+  toAddress   String?
+
   // Additional info
-  notes          String?            @db.Text
-  attachments    Json?              // PDF paths, images, etc.
-  
+  notes       String? @db.Text
+  attachments Json? // PDF paths, images, etc.
+
   // Audit
-  createdById    Int?
-  createdBy      User?              @relation("DeliveryNoteCreator", fields: [createdById], references: [id])
-  
+  createdById Int?
+  createdBy   User? @relation("DeliveryNoteCreator", fields: [createdById], references: [id])
+
   // Stock Management
-  stockMovements StockMovement[]    @relation("StockMovementDeliveryNote")
-  
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
-  
+  stockMovements StockMovement[] @relation("StockMovementDeliveryNote")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([customerId])
   @@index([orderId])
   @@index([status])
@@ -1166,24 +1171,24 @@ model DeliveryNoteItem {
   id             Int          @id @default(autoincrement())
   deliveryNoteId Int
   deliveryNote   DeliveryNote @relation(fields: [deliveryNoteId], references: [id], onDelete: Cascade)
-  
-  equipmentId    Int?
-  equipment      Equipment?   @relation(fields: [equipmentId], references: [id])
-  
-  description    String
-  quantity       Int
-  unitPrice      Float
-  vatRate        Float        @default(20) // KDV oranı
-  
+
+  equipmentId Int?
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+
+  description String
+  quantity    Int
+  unitPrice   Float
+  vatRate     Float  @default(20) // KDV oranı
+
   // Unit of measure
-  unit           String       @default("Adet") // Adet, Kg, Metre, vb.
-  
+  unit String @default("Adet") // Adet, Kg, Metre, vb.
+
   // Order item reference (if converted from order)
-  orderItemId    Int?
-  
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  
+  orderItemId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([deliveryNoteId])
   @@index([equipmentId])
 }
@@ -1210,22 +1215,24 @@ model Offer {
 }
 
 model Expense {
-  id              Int              @id @default(autoincrement())
-  companyId       Int
-  description     String
-  amount          Float
-  category        String
-  date            DateTime
-  status          String           @default("pending")
-  paymentMethod   String?
-  notes           String?
+  id               Int               @id @default(autoincrement())
+  companyId        Int
+  description      String
+  amount           Float
+  category         String
+  date             DateTime
+  status           String            @default("pending")
+  paymentMethod    String?
+  notes            String?
   // Cost Center
-  costCenterId    Int?
-  costCenter      CostCenter?      @relation("ExpenseCostCenter", fields: [costCenterId], references: [id])
-  costAllocations CostAllocation[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  company         Company          @relation(fields: [companyId], references: [id])
+  costCenterId     Int?
+  costCenter       CostCenter?       @relation("ExpenseCostCenter", fields: [costCenterId], references: [id])
+  costAllocations  CostAllocation[]
+  // Bank Integration
+  bankTransactions BankTransaction[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  company          Company           @relation(fields: [companyId], references: [id])
 
   @@index([companyId])
   @@index([category])
@@ -1238,141 +1245,224 @@ model Check {
   id            Int      @id @default(autoincrement())
   companyId     Int
   checkNumber   String
-  type          String   // "received" | "issued"
-  drawer        String?  // Keşideci / Lehtar
+  type          String // "received" | "issued"
+  drawer        String? // Keşideci / Lehtar
   bank          String?
   branch        String?
   accountNumber String?
   amount        Float
   issueDate     DateTime
   dueDate       DateTime
-  status        String   // "portfolio" | "endorsed" | "collected" | "bounced" | "returned"
+  status        String // "portfolio" | "endorsed" | "collected" | "bounced" | "returned"
   customerId    Int?
   orderId       Int?
   notes         String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  customer      Customer? @relation(fields: [customerId], references: [id])
-  order         Order?   @relation(fields: [orderId], references: [id])
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer Customer? @relation(fields: [customerId], references: [id])
+  order    Order?    @relation(fields: [orderId], references: [id])
 
   @@index([companyId, dueDate, status])
 }
 
 model PromissoryNote {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  noteNumber    String
-  type          String   // "received" | "issued"
-  drawer        String?
-  amount        Float
-  issueDate     DateTime
-  dueDate       DateTime
-  status        String
-  aval          String?
-  customerId    Int?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  companyId  Int
+  noteNumber String
+  type       String // "received" | "issued"
+  drawer     String?
+  amount     Float
+  issueDate  DateTime
+  dueDate    DateTime
+  status     String
+  aval       String?
+  customerId Int?
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  customer      Customer? @relation(fields: [customerId], references: [id])
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer Customer? @relation(fields: [customerId], references: [id])
 
   @@index([companyId, dueDate, status])
 }
 
 model BankAccount {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  bankName      String
-  accountType   String   // "checking" | "savings"
-  iban          String
-  branch        String?
-  balance       Float    @default(0)
-  currency      String   @default("TRY")
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                Int       @id @default(autoincrement())
+  companyId         Int
+  bankName          String
+  accountNumber     String
+  accountType       String // "checking" | "savings" | "investment"
+  iban              String    @unique
+  branch            String?
+  branchCode        String?
+  balance           Float     @default(0)
+  availableBalance  Float     @default(0)
+  blockedBalance    Float     @default(0)
+  currency          String    @default("TRY")
+  isActive          Boolean   @default(true)
+  lastReconciled    DateTime?
+  lastStatementDate DateTime?
+  autoReconcile     Boolean   @default(false)
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  transactions  BankTransaction[]
+  company         Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  transactions    BankTransaction[]
+  statements      BankStatement[]
+  reconciliations BankReconciliation[]
 
   @@index([companyId, isActive])
+  @@index([iban])
 }
 
 model BankTransaction {
-  id              Int        @id @default(autoincrement())
-  accountId       Int
-  type            String     // "deposit" | "withdrawal"
-  amount          Float
-  description     String?
-  transactionType String?
-  balanceAfter    Float?
-  date            DateTime
-  createdAt       DateTime   @default(now())
+  id                Int       @id @default(autoincrement())
+  accountId         Int
+  transactionNumber String?   @unique
+  type              String // "deposit" | "withdrawal" | "transfer"
+  amount            Float
+  description       String?
+  transactionType   String? // "eft" | "havale" | "pos" | "otomatik_odeme" | "cek" | "other"
+  balanceAfter      Float?
+  balanceBefore     Float?
+  category          String?
+  reference         String? // External reference number
+  counterParty      String? // Other party name
+  counterPartyIBAN  String?
+  status            String    @default("completed") // "completed" | "pending" | "failed" | "cancelled"
+  isReconciled      Boolean   @default(false)
+  reconciledAt      DateTime?
+  reconciledBy      Int?
+  expenseId         Int? // Link to expense
+  invoiceId         Int? // Link to invoice/income
+  notes             String?
+  date              DateTime
+  valueDate         DateTime? // When the transaction actually affects balance
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  account         BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  account          BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  reconciledByUser User?       @relation("TransactionReconciler", fields: [reconciledBy], references: [id])
+  expense          Expense?    @relation(fields: [expenseId], references: [id])
+  invoice          Invoice?    @relation(fields: [invoiceId], references: [id])
 
   @@index([accountId, date])
+  @@index([status, isReconciled])
+  @@index([transactionNumber])
+}
+
+model BankStatement {
+  id               Int       @id @default(autoincrement())
+  accountId        Int
+  statementNumber  String
+  periodStart      DateTime
+  periodEnd        DateTime
+  openingBalance   Float
+  closingBalance   Float
+  totalDeposits    Float     @default(0)
+  totalWithdrawals Float     @default(0)
+  transactionCount Int       @default(0)
+  fileName         String? // If uploaded from file
+  fileUrl          String?
+  uploadedBy       Int?
+  uploadedAt       DateTime?
+  status           String    @default("pending") // "pending" | "processing" | "completed" | "failed"
+  notes            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  account        BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  uploadedByUser User?       @relation("StatementUploader", fields: [uploadedBy], references: [id])
+
+  @@unique([accountId, statementNumber])
+  @@index([accountId, periodEnd])
+}
+
+model BankReconciliation {
+  id                   Int       @id @default(autoincrement())
+  accountId            Int
+  reconciliationNumber String    @unique
+  periodStart          DateTime
+  periodEnd            DateTime
+  bookBalance          Float // Balance in our books
+  bankBalance          Float // Balance per bank statement
+  difference           Float // Discrepancy
+  status               String    @default("in_progress") // "in_progress" | "completed" | "cancelled"
+  reconciledBy         Int
+  reconciledAt         DateTime?
+  notes                String?
+  unreconciledCount    Int       @default(0)
+  reconciledCount      Int       @default(0)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  account          BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  reconciledByUser User        @relation("ReconciliationPerformer", fields: [reconciledBy], references: [id])
+
+  @@index([accountId, status])
+  @@index([periodEnd])
 }
 
 model CashTransaction {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  type          String   // "in" | "out"
-  amount        Float
-  description   String?
-  currency      String   @default("TRY")
-  userId        Int?
-  date          DateTime
-  createdAt     DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  type        String // "in" | "out"
+  amount      Float
+  description String?
+  currency    String   @default("TRY")
+  userId      Int?
+  date        DateTime
+  createdAt   DateTime @default(now())
 
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  user          User?    @relation(fields: [userId], references: [id])
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id])
 
   @@index([companyId, date])
 }
 
 model AccountCategory {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  name          String
-  type          String   // "income" | "expense"
-  color         String?
-  icon          String?
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  name      String
+  type      String // "income" | "expense"
+  color     String?
+  icon      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
 
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([companyId, type])
 }
 
 model AccountingTag {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  name          String
-  color         String?
-  createdAt     DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  name      String
+  color     String?
+  createdAt DateTime @default(now())
 
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([companyId])
 }
 
 model AccountingReportSchedule {
-  id            Int      @id @default(autoincrement())
-  companyId     Int
-  reportType    String   // "profit-loss" | "cash-flow" | "statement"
-  frequency     String   // "daily" | "weekly" | "monthly"
-  recipients    String[]
-  isActive      Boolean  @default(true)
-  lastRun       DateTime?
-  nextRun       DateTime?
-  createdAt     DateTime @default(now())
+  id         Int       @id @default(autoincrement())
+  companyId  Int
+  reportType String // "profit-loss" | "cash-flow" | "statement"
+  frequency  String // "daily" | "weekly" | "monthly"
+  recipients String[]
+  isActive   Boolean   @default(true)
+  lastRun    DateTime?
+  nextRun    DateTime?
+  createdAt  DateTime  @default(now())
 
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([companyId, nextRun])
 }
@@ -2828,39 +2918,39 @@ model ReportSchedule {
 // Hesap Planı (Chart of Accounts)
 // Türk Tekdüzen Hesap Planı standardına uygun
 model ChartOfAccounts {
-  id                Int                 @id @default(autoincrement())
-  code              String              @unique // "100", "120", "320.001", "600.01.01"
-  name              String              // "Kasa", "Bankalar", "Sermaye"
-  nameEn            String?             // English name for international use
-  level             Int                 @default(1) // 1, 2, 3, 4 (hesap seviyesi)
-  type              String              // "asset", "liability", "equity", "income", "expense"
-  category          String              // "current_asset", "fixed_asset", "short_term_liability", etc.
-  parentCode        String?             // Üst hesap kodu (null ise ana hesap)
-  parent            ChartOfAccounts?    @relation("AccountHierarchy", fields: [parentCode], references: [code])
-  children          ChartOfAccounts[]   @relation("AccountHierarchy")
-  
+  id         Int               @id @default(autoincrement())
+  code       String            @unique // "100", "120", "320.001", "600.01.01"
+  name       String // "Kasa", "Bankalar", "Sermaye"
+  nameEn     String? // English name for international use
+  level      Int               @default(1) // 1, 2, 3, 4 (hesap seviyesi)
+  type       String // "asset", "liability", "equity", "income", "expense"
+  category   String // "current_asset", "fixed_asset", "short_term_liability", etc.
+  parentCode String? // Üst hesap kodu (null ise ana hesap)
+  parent     ChartOfAccounts?  @relation("AccountHierarchy", fields: [parentCode], references: [code])
+  children   ChartOfAccounts[] @relation("AccountHierarchy")
+
   // Balance tracking
-  normalBalance     String              @default("debit") // "debit" or "credit"
-  currentBalance    Float               @default(0)
-  
+  normalBalance  String @default("debit") // "debit" or "credit"
+  currentBalance Float  @default(0)
+
   // Status
-  isActive          Boolean             @default(true)
-  isSystem          Boolean             @default(false) // Sistem hesabı mı (silinemez)
-  
+  isActive Boolean @default(true)
+  isSystem Boolean @default(false) // Sistem hesabı mı (silinemez)
+
   // Company relation
-  companyId         Int
-  company           Company             @relation(fields: [companyId], references: [id])
-  
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id])
+
   // Journal entries
   journalEntryItems JournalEntryItem[]
-  
+
   // Metadata
-  description       String?
-  notes             String?
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  description String?
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([companyId, code])
   @@index([companyId])
   @@index([code])
@@ -2873,46 +2963,46 @@ model ChartOfAccounts {
 // Yevmiye Defteri (Journal Entry)
 // Çift taraflı kayıt sistemi
 model JournalEntry {
-  id                Int                 @id @default(autoincrement())
-  entryNumber       String              // "2024-001", "2024-002"
-  entryDate         DateTime            @default(now())
-  entryType         String              @default("manual") // "manual", "auto_invoice", "auto_payment", etc.
-  
+  id          Int      @id @default(autoincrement())
+  entryNumber String // "2024-001", "2024-002"
+  entryDate   DateTime @default(now())
+  entryType   String   @default("manual") // "manual", "auto_invoice", "auto_payment", etc.
+
   // Description
-  description       String
-  reference         String?             // Invoice number, payment reference, etc.
-  
+  description String
+  reference   String? // Invoice number, payment reference, etc.
+
   // Items (always balanced: total debit = total credit)
   journalEntryItems JournalEntryItem[]
-  
+
   // Totals
-  totalDebit        Float               @default(0)
-  totalCredit       Float               @default(0)
-  
+  totalDebit  Float @default(0)
+  totalCredit Float @default(0)
+
   // Status
-  status            String              @default("draft") // "draft", "posted", "cancelled"
-  isReversed        Boolean             @default(false)
-  reversedById      Int?
-  reversedEntry     JournalEntry?       @relation("ReversalEntry", fields: [reversedById], references: [id])
-  reversalEntries   JournalEntry[]      @relation("ReversalEntry")
-  
+  status          String         @default("draft") // "draft", "posted", "cancelled"
+  isReversed      Boolean        @default(false)
+  reversedById    Int?
+  reversedEntry   JournalEntry?  @relation("ReversalEntry", fields: [reversedById], references: [id])
+  reversalEntries JournalEntry[] @relation("ReversalEntry")
+
   // Company & User
-  companyId         Int
-  company           Company             @relation(fields: [companyId], references: [id])
-  createdBy         Int
-  creator           User                @relation("JournalEntryCreator", fields: [createdBy], references: [id])
-  postedBy          Int?
-  poster            User?               @relation("JournalEntryPoster", fields: [postedBy], references: [id])
-  postedAt          DateTime?
-  
+  companyId Int
+  company   Company   @relation(fields: [companyId], references: [id])
+  createdBy Int
+  creator   User      @relation("JournalEntryCreator", fields: [createdBy], references: [id])
+  postedBy  Int?
+  poster    User?     @relation("JournalEntryPoster", fields: [postedBy], references: [id])
+  postedAt  DateTime?
+
   // Metadata
-  attachments       String[]            @default([])
-  tags              String[]            @default([])
-  notes             String?
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  attachments String[] @default([])
+  tags        String[] @default([])
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([companyId, entryNumber])
   @@index([companyId])
   @@index([entryDate])
@@ -2924,27 +3014,27 @@ model JournalEntry {
 // Yevmiye Kaydı Kalemleri (Journal Entry Items)
 // Her kalemde ya borç ya da alacak bulunur
 model JournalEntryItem {
-  id                Int                 @id @default(autoincrement())
-  journalEntryId    Int
-  journalEntry      JournalEntry        @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
-  
+  id             Int          @id @default(autoincrement())
+  journalEntryId Int
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+
   // Account (single account per line - either debit or credit)
-  accountCode       String
-  account           ChartOfAccounts     @relation(fields: [accountCode], references: [code])
-  
+  accountCode String
+  account     ChartOfAccounts @relation(fields: [accountCode], references: [code])
+
   // Amounts (one must be 0)
-  debit             Float               @default(0)
-  credit            Float               @default(0)
-  
+  debit  Float @default(0)
+  credit Float @default(0)
+
   // Description
-  description       String?
-  lineNumber        Int                 // Satır sırası
-  
+  description String?
+  lineNumber  Int // Satır sırası
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+
   @@index([journalEntryId])
   @@index([accountCode])
   @@index([companyId])
@@ -2955,42 +3045,42 @@ model JournalEntryItem {
 // Stok Hareketi (Stock Movement)
 // Tüm stok giriş/çıkış/transfer işlemleri
 model StockMovement {
-  id                Int                 @id @default(autoincrement())
-  equipmentId       Int
-  equipment         Equipment           @relation("EquipmentStockMovements", fields: [equipmentId], references: [id])
-  
+  id          Int       @id @default(autoincrement())
+  equipmentId Int
+  equipment   Equipment @relation("EquipmentStockMovements", fields: [equipmentId], references: [id])
+
   // Movement details
-  movementType      String              // "in" (giriş), "out" (çıkış), "adjustment" (düzeltme), "transfer" (transfer)
-  movementReason    String              // "sale", "return", "purchase", "damage", "loss", "found", "correction"
-  quantity          Int                 // Pozitif veya negatif
-  
+  movementType   String // "in" (giriş), "out" (çıkış), "adjustment" (düzeltme), "transfer" (transfer)
+  movementReason String // "sale", "return", "purchase", "damage", "loss", "found", "correction"
+  quantity       Int // Pozitif veya negatif
+
   // Related documents
-  invoiceId         Int?
-  invoice           Invoice?            @relation(fields: [invoiceId], references: [id])
-  deliveryNoteId    Int?
-  deliveryNote      DeliveryNote?       @relation("StockMovementDeliveryNote", fields: [deliveryNoteId], references: [id])
-  orderId           Int?
-  order             Order?              @relation("StockMovementOrder", fields: [orderId], references: [id])
-  
+  invoiceId      Int?
+  invoice        Invoice?      @relation(fields: [invoiceId], references: [id])
+  deliveryNoteId Int?
+  deliveryNote   DeliveryNote? @relation("StockMovementDeliveryNote", fields: [deliveryNoteId], references: [id])
+  orderId        Int?
+  order          Order?        @relation("StockMovementOrder", fields: [orderId], references: [id])
+
   // Location (for transfers)
-  fromLocation      String?             // "Warehouse A", "Store 1", etc.
-  toLocation        String?
-  
+  fromLocation String? // "Warehouse A", "Store 1", etc.
+  toLocation   String?
+
   // Stock levels after this movement
-  stockBefore       Int
-  stockAfter        Int
-  
+  stockBefore Int
+  stockAfter  Int
+
   // Metadata
-  reference         String?             // External reference number
-  notes             String?
-  performedBy       Int?
-  user              User?               @relation("StockMovementUser", fields: [performedBy], references: [id])
-  
+  reference   String? // External reference number
+  notes       String?
+  performedBy Int?
+  user        User?   @relation("StockMovementUser", fields: [performedBy], references: [id])
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+
   @@index([equipmentId])
   @@index([movementType])
   @@index([movementReason])
@@ -3004,37 +3094,37 @@ model StockMovement {
 // Stok Uyarıları (Stock Alerts)
 // Düşük stok ve diğer uyarılar
 model StockAlert {
-  id                Int                 @id @default(autoincrement())
-  equipmentId       Int
-  equipment         Equipment           @relation("EquipmentStockAlerts", fields: [equipmentId], references: [id])
-  
+  id          Int       @id @default(autoincrement())
+  equipmentId Int
+  equipment   Equipment @relation("EquipmentStockAlerts", fields: [equipmentId], references: [id])
+
   // Alert details
-  alertType         String              // "low_stock", "out_of_stock", "overstock", "expiring_soon"
-  severity          String              @default("medium") // "low", "medium", "high", "critical"
-  message           String
-  
+  alertType String // "low_stock", "out_of_stock", "overstock", "expiring_soon"
+  severity  String @default("medium") // "low", "medium", "high", "critical"
+  message   String
+
   // Thresholds
-  currentStock      Int
-  thresholdValue    Int?
-  
+  currentStock   Int
+  thresholdValue Int?
+
   // Status
-  status            String              @default("active") // "active", "acknowledged", "resolved", "dismissed"
-  acknowledgedBy    Int?
-  acknowledgedUser  User?               @relation("StockAlertAcknowledger", fields: [acknowledgedBy], references: [id])
-  acknowledgedAt    DateTime?
-  resolvedAt        DateTime?
-  
+  status           String    @default("active") // "active", "acknowledged", "resolved", "dismissed"
+  acknowledgedBy   Int?
+  acknowledgedUser User?     @relation("StockAlertAcknowledger", fields: [acknowledgedBy], references: [id])
+  acknowledgedAt   DateTime?
+  resolvedAt       DateTime?
+
   // Notifications sent
-  notificationSent  Boolean             @default(false)
-  notificationCount Int                 @default(0)
+  notificationSent  Boolean   @default(false)
+  notificationCount Int       @default(0)
   lastNotifiedAt    DateTime?
-  
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([equipmentId])
   @@index([alertType])
   @@index([severity])
@@ -3046,61 +3136,61 @@ model StockAlert {
 // Stok Transfer (Stock Transfer)
 // Lokasyonlar arası stok transferi
 model StockTransfer {
-  id                Int                 @id @default(autoincrement())
-  transferNumber    String              @unique
-  
+  id             Int    @id @default(autoincrement())
+  transferNumber String @unique
+
   // Equipment being transferred
-  equipmentId       Int
-  equipment         Equipment           @relation("EquipmentStockTransfers", fields: [equipmentId], references: [id])
-  quantity          Int
-  
+  equipmentId Int
+  equipment   Equipment @relation("EquipmentStockTransfers", fields: [equipmentId], references: [id])
+  quantity    Int
+
   // Locations
-  fromLocation      String
-  toLocation        String
-  
+  fromLocation String
+  toLocation   String
+
   // Status
-  status            String              @default("pending") // "pending", "in_transit", "completed", "cancelled"
-  
+  status String @default("pending") // "pending", "in_transit", "completed", "cancelled"
+
   // Dates
-  requestedDate     DateTime            @default(now())
-  shippedDate       DateTime?
-  receivedDate      DateTime?
-  expectedDate      DateTime?
-  
+  requestedDate DateTime  @default(now())
+  shippedDate   DateTime?
+  receivedDate  DateTime?
+  expectedDate  DateTime?
+
   // People involved
-  requestedBy       Int
-  requester         User                @relation("TransferRequester", fields: [requestedBy], references: [id])
-  approvedBy        Int?
-  approver          User?               @relation("TransferApprover", fields: [approvedBy], references: [id])
-  shippedBy         Int?
-  shipper           User?               @relation("TransferShipper", fields: [shippedBy], references: [id])
-  receivedBy        Int?
-  receiver          User?               @relation("TransferReceiver", fields: [receivedBy], references: [id])
-  
+  requestedBy Int
+  requester   User  @relation("TransferRequester", fields: [requestedBy], references: [id])
+  approvedBy  Int?
+  approver    User? @relation("TransferApprover", fields: [approvedBy], references: [id])
+  shippedBy   Int?
+  shipper     User? @relation("TransferShipper", fields: [shippedBy], references: [id])
+  receivedBy  Int?
+  receiver    User? @relation("TransferReceiver", fields: [receivedBy], references: [id])
+
   // Logistics
-  carrier           String?
-  trackingNumber    String?
-  vehiclePlate      String?
-  driverName        String?
-  driverPhone       String?
-  
+  carrier        String?
+  trackingNumber String?
+  vehiclePlate   String?
+  driverName     String?
+  driverPhone    String?
+
   // Costs
-  shippingCost      Float?              @default(0)
-  insuranceCost     Float?              @default(0)
-  
+  shippingCost  Float? @default(0)
+  insuranceCost Float? @default(0)
+
   // Documents
-  documents         String[]            @default([])
-  
+  documents String[] @default([])
+
   // Notes
-  notes             String?
-  rejectionReason   String?
-  
+  notes           String?
+  rejectionReason String?
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([equipmentId])
   @@index([status])
   @@index([fromLocation])
@@ -3114,47 +3204,47 @@ model StockTransfer {
 // Stok Sayım (Stock Count/Physical Inventory)
 // Fiziksel sayım kayıtları
 model StockCount {
-  id                Int                 @id @default(autoincrement())
-  countNumber       String              @unique
-  
+  id          Int    @id @default(autoincrement())
+  countNumber String @unique
+
   // Count details
-  countDate         DateTime            @default(now())
-  countType         String              @default("full") // "full", "partial", "cycle"
-  location          String?
-  
+  countDate DateTime @default(now())
+  countType String   @default("full") // "full", "partial", "cycle"
+  location  String?
+
   // Status
-  status            String              @default("planned") // "planned", "in_progress", "completed", "cancelled"
-  
+  status String @default("planned") // "planned", "in_progress", "completed", "cancelled"
+
   // Scope
-  category          String?             // Equipment category to count
-  
+  category String? // Equipment category to count
+
   // Results
-  totalItems        Int                 @default(0)
-  countedItems      Int                 @default(0)
-  discrepancies     Int                 @default(0)
-  
+  totalItems    Int @default(0)
+  countedItems  Int @default(0)
+  discrepancies Int @default(0)
+
   // People
-  countedBy         Int?
-  counter           User?               @relation("StockCounter", fields: [countedBy], references: [id])
-  verifiedBy        Int?
-  verifier          User?               @relation("StockVerifier", fields: [verifiedBy], references: [id])
-  
+  countedBy  Int?
+  counter    User? @relation("StockCounter", fields: [countedBy], references: [id])
+  verifiedBy Int?
+  verifier   User? @relation("StockVerifier", fields: [verifiedBy], references: [id])
+
   // Timing
-  startedAt         DateTime?
-  completedAt       DateTime?
-  
+  startedAt   DateTime?
+  completedAt DateTime?
+
   // Items
-  items             StockCountItem[]
-  
+  items StockCountItem[]
+
   // Notes
-  notes             String?
-  
+  notes String?
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([status])
   @@index([location])
   @@index([countDate])
@@ -3164,32 +3254,32 @@ model StockCount {
 
 // Stok Sayım Kalemleri (Stock Count Items)
 model StockCountItem {
-  id                Int                 @id @default(autoincrement())
-  stockCountId      Int
-  stockCount        StockCount          @relation(fields: [stockCountId], references: [id], onDelete: Cascade)
-  
-  equipmentId       Int
-  equipment         Equipment           @relation("EquipmentStockCounts", fields: [equipmentId], references: [id])
-  
+  id           Int        @id @default(autoincrement())
+  stockCountId Int
+  stockCount   StockCount @relation(fields: [stockCountId], references: [id], onDelete: Cascade)
+
+  equipmentId Int
+  equipment   Equipment @relation("EquipmentStockCounts", fields: [equipmentId], references: [id])
+
   // Expected vs Actual
-  expectedQty       Int
-  countedQty        Int
-  difference        Int                 // countedQty - expectedQty
-  
+  expectedQty Int
+  countedQty  Int
+  difference  Int // countedQty - expectedQty
+
   // Status
-  status            String              @default("pending") // "pending", "counted", "verified", "adjusted"
-  
+  status String @default("pending") // "pending", "counted", "verified", "adjusted"
+
   // Notes
-  notes             String?
-  condition         String?             // Equipment condition notes
-  
+  notes     String?
+  condition String? // Equipment condition notes
+
   // Adjustments made
-  adjustmentMade    Boolean             @default(false)
-  adjustedAt        DateTime?
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  adjustmentMade Boolean   @default(false)
+  adjustedAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([stockCountId])
   @@index([equipmentId])
   @@index([status])
@@ -3200,36 +3290,36 @@ model StockCountItem {
 // Maliyet Merkezi (Cost Center)
 // Giderlerin kategorize edilmesi için
 model CostCenter {
-  id                Int                 @id @default(autoincrement())
-  code              String              // "CC-001", "DEPT-SALES"
-  name              String              // "Sales Department", "Marketing", "Operations"
-  description       String?
-  
+  id          Int     @id @default(autoincrement())
+  code        String // "CC-001", "DEPT-SALES"
+  name        String // "Sales Department", "Marketing", "Operations"
+  description String?
+
   // Hierarchy
-  parentId          Int?
-  parent            CostCenter?         @relation("CostCenterHierarchy", fields: [parentId], references: [id])
-  children          CostCenter[]        @relation("CostCenterHierarchy")
-  
+  parentId Int?
+  parent   CostCenter?  @relation("CostCenterHierarchy", fields: [parentId], references: [id])
+  children CostCenter[] @relation("CostCenterHierarchy")
+
   // Budget
-  annualBudget      Float?              @default(0)
-  quarterlyBudget   Float?              @default(0)
-  monthlyBudget     Float?              @default(0)
-  
+  annualBudget    Float? @default(0)
+  quarterlyBudget Float? @default(0)
+  monthlyBudget   Float? @default(0)
+
   // Tracking
-  isActive          Boolean             @default(true)
+  isActive          Boolean @default(true)
   responsiblePerson String?
-  
+
   // Relations
-  expenses          Expense[]           @relation("ExpenseCostCenter")
-  budgetItems       BudgetItem[]
-  costAllocations   CostAllocation[]
-  
+  expenses        Expense[]        @relation("ExpenseCostCenter")
+  budgetItems     BudgetItem[]
+  costAllocations CostAllocation[]
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([companyId, code])
   @@index([companyId])
   @@index([code])
@@ -3240,43 +3330,43 @@ model CostCenter {
 // Bütçe Kalemleri (Budget Items)
 // Detaylı bütçe planlaması
 model BudgetItem {
-  id                Int                 @id @default(autoincrement())
-  costCenterId      Int?
-  costCenter        CostCenter?         @relation(fields: [costCenterId], references: [id])
-  
+  id           Int         @id @default(autoincrement())
+  costCenterId Int?
+  costCenter   CostCenter? @relation(fields: [costCenterId], references: [id])
+
   // Budget details
-  name              String
-  category          String              // "personnel", "marketing", "operations", "utilities", etc.
-  description       String?
-  
+  name        String
+  category    String // "personnel", "marketing", "operations", "utilities", etc.
+  description String?
+
   // Period
-  budgetYear        Int
-  budgetMonth       Int?                // null for annual budgets
-  budgetQuarter     Int?                // 1, 2, 3, 4 for quarterly
-  
+  budgetYear    Int
+  budgetMonth   Int? // null for annual budgets
+  budgetQuarter Int? // 1, 2, 3, 4 for quarterly
+
   // Amounts
-  plannedAmount     Float
-  actualAmount      Float               @default(0)
-  variance          Float               @default(0) // actualAmount - plannedAmount
-  variancePercent   Float               @default(0)
-  
+  plannedAmount   Float
+  actualAmount    Float @default(0)
+  variance        Float @default(0) // actualAmount - plannedAmount
+  variancePercent Float @default(0)
+
   // Status
-  status            String              @default("draft") // "draft", "approved", "active", "closed"
-  approvedBy        Int?
-  approvedAt        DateTime?
-  
+  status     String    @default("draft") // "draft", "approved", "active", "closed"
+  approvedBy Int?
+  approvedAt DateTime?
+
   // Tracking
-  lastUpdated       DateTime            @default(now())
-  
+  lastUpdated DateTime @default(now())
+
   // Notes
-  notes             String?
-  
+  notes String?
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([costCenterId])
   @@index([category])
   @@index([budgetYear])
@@ -3288,28 +3378,28 @@ model BudgetItem {
 // Maliyet Dağılımı (Cost Allocation)
 // Maliyetlerin maliyet merkezlerine dağıtımı
 model CostAllocation {
-  id                Int                 @id @default(autoincrement())
-  expenseId         Int
-  expense           Expense             @relation(fields: [expenseId], references: [id])
-  costCenterId      Int
-  costCenter        CostCenter          @relation(fields: [costCenterId], references: [id])
-  
+  id           Int        @id @default(autoincrement())
+  expenseId    Int
+  expense      Expense    @relation(fields: [expenseId], references: [id])
+  costCenterId Int
+  costCenter   CostCenter @relation(fields: [costCenterId], references: [id])
+
   // Allocation details
-  allocationType    String              @default("direct") // "direct", "indirect", "shared"
-  allocationMethod  String?             // "percentage", "headcount", "area", "usage"
-  
+  allocationType   String  @default("direct") // "direct", "indirect", "shared"
+  allocationMethod String? // "percentage", "headcount", "area", "usage"
+
   // Amount
-  amount            Float               // Portion of expense allocated to this cost center
-  percentage        Float?              // If allocation by percentage
-  
+  amount     Float // Portion of expense allocated to this cost center
+  percentage Float? // If allocation by percentage
+
   // Notes
-  notes             String?
-  
+  notes String?
+
   // Company
-  companyId         Int
-  
-  createdAt         DateTime            @default(now())
-  
+  companyId Int
+
+  createdAt DateTime @default(now())
+
   @@index([expenseId])
   @@index([costCenterId])
   @@index([companyId])
