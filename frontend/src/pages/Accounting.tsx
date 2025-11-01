@@ -12,8 +12,9 @@ import ExpenseTab from '../components/accounting/ExpenseTab'
 import AccountingDashboard from '../components/accounting/AccountingDashboard'
 import AccountCardList from '../components/accounting/AccountCardList'
 import EInvoiceList from '../components/accounting/EInvoiceList'
-import DeliveryNoteList from '../components/accounting/DeliveryNoteList'
 import BankReconciliation from '../components/accounting/BankReconciliation'
+import DeliveryNoteList from '../components/delivery-notes/DeliveryNoteList'
+import CurrentAccountList from '../components/current-accounts/CurrentAccountList'
 import InventoryAccounting from '../components/accounting/InventoryAccounting'
 import AdvancedReporting from '../components/accounting/AdvancedReporting'
 import GIBIntegration from '../components/accounting/GIBIntegration'
@@ -541,7 +542,7 @@ export default function Accounting() {
             )}
 
             {/* Cari (Account Cards) Tab */}
-            {activeTab === 'cari' && <AccountCardList />}
+            {activeTab === 'cari' && <CurrentAccountList />}
 
             {/* Reports Tab - Advanced Reporting */}
             {activeTab === 'reports' && <AdvancedReporting />}

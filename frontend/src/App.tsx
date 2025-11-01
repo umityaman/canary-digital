@@ -58,12 +58,6 @@ import Pricing from './pages/Pricing'
 import Analytics from './pages/Analytics'
 import FloatingChatWidget from './components/FloatingChatWidget'
 import FloatingToolsWidget from './components/FloatingToolsWidget'
-import DeliveryNoteList from './components/delivery-notes/DeliveryNoteList'
-import DeliveryNoteForm from './components/delivery-notes/DeliveryNoteForm'
-import DeliveryNoteDetail from './components/delivery-notes/DeliveryNoteDetail'
-import CurrentAccountList from './components/current-accounts/CurrentAccountList'
-import CurrentAccountDetail from './components/current-accounts/CurrentAccountDetail'
-
 export default function App(){
   const { isAuthenticated, loadUserFromStorage } = useAuthStore()
 
@@ -132,12 +126,6 @@ export default function App(){
           <Route path='/inspection' element={<Inspection/>} />
           <Route path='/inspection/new' element={<InspectionCreate/>} />
           <Route path='/inspection/:id' element={<InspectionDetail/>} />
-          <Route path='/delivery-notes' element={<DeliveryNoteList/>} />
-          <Route path='/delivery-notes/new' element={<DeliveryNoteForm/>} />
-          <Route path='/delivery-notes/:id' element={<DeliveryNoteDetail/>} />
-          <Route path='/delivery-notes/:id/edit' element={<DeliveryNoteForm/>} />
-          <Route path='/current-accounts' element={<CurrentAccountList/>} />
-          <Route path='/current-accounts/:customerId' element={<CurrentAccountDetail/>} />
           <Route path='/pricing' element={<Pricing/>} />
           <Route path='/analytics' element={<Analytics/>} />
           <Route path='/settings' element={<Settings/>} />
