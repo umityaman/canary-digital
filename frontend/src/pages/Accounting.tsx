@@ -6,7 +6,7 @@ import {
   Search, Filter, ChevronLeft, ChevronRight, Check, X
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
-import CheckFormModal from '../components/accounting/CheckFormModal'
+// import CheckFormModal from '../components/accounting/CheckFormModal' // TODO: Add this component later
 import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
 import { toast } from 'react-hot-toast'
@@ -1275,15 +1275,15 @@ export default function Accounting() {
           </div>
         </div>
       </div>
-      {/* Check Modal */}
-      {checkModalOpen && (
+      {/* Check Modal - TODO: Add CheckFormModal component later */}
+      {/* {checkModalOpen && (
         <CheckFormModal
           open={checkModalOpen}
           onClose={() => setCheckModalOpen(false)}
           onSaved={() => loadChecks()}
           initial={editingCheck || undefined}
         />
-      )}
+      )} */}
     </div>
   )
 }
