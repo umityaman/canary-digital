@@ -9,6 +9,7 @@ import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI
 // import CheckFormModal from '../components/accounting/CheckFormModal' // TODO: Add this component later
 import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
+import AccountingDashboard from '../components/accounting/AccountingDashboard'
 import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari'
@@ -474,37 +475,7 @@ export default function Accounting() {
           {/* Content Area */}
           <div className="flex-1 p-6">
             {/* Dashboard Tab */}
-            {activeTab === 'dashboard' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Hızlı İşlemler</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <button className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-all text-left">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-neutral-900">Hızlı Fatura Kes</h3>
-                      <FileText className="text-neutral-700" size={24} />
-                    </div>
-                    <p className="text-sm text-neutral-600">Yeni fatura oluştur</p>
-                  </button>
-
-                  <button className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-all text-left">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-neutral-900">Gelir Ekle</h3>
-                      <TrendingUp className="text-neutral-700" size={24} />
-                    </div>
-                    <p className="text-sm text-neutral-600">Yeni gelir kaydı</p>
-                  </button>
-
-                  <button className="bg-white rounded-2xl p-6 border border-neutral-200 hover:shadow-md transition-all text-left">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-neutral-900">Gider Ekle</h3>
-                      <TrendingDown className="text-neutral-700" size={24} />
-                    </div>
-                    <p className="text-sm text-neutral-600">Yeni gider kaydı</p>
-                  </button>
-                </div>
-              </div>
-            )}
+            {activeTab === 'dashboard' && <AccountingDashboard />}
 
             {/* Income Tab */}
             {activeTab === 'income' && <IncomeTab />}
