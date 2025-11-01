@@ -385,6 +385,341 @@ export class AccountingService {
       throw error;
     }
   }
+
+  /**
+   * INCOME MANAGEMENT
+   */
+
+  /**
+   * Get incomes with pagination and filters
+   */
+  async getIncomes(params: {
+    page: number;
+    limit: number;
+    category?: string;
+    status?: string;
+    startDate?: Date;
+    endDate?: Date;
+    search?: string;
+  }) {
+    try {
+      const { page, limit, category, status, startDate, endDate, search } = params;
+      const skip = (page - 1) * limit;
+
+      const where: any = {};
+
+      if (category) {
+        where.category = category;
+      }
+
+      if (status) {
+        where.status = status;
+      }
+
+      if (startDate && endDate) {
+        where.date = {
+          gte: startDate,
+          lte: endDate,
+        };
+      }
+
+      if (search) {
+        where.OR = [
+          { description: { contains: search, mode: 'insensitive' } },
+          { notes: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+
+      const [total, data] = await Promise.all([
+        prisma.expense.count({ where }), // Note: Using Expense model as Income model doesn't exist yet
+        prisma.expense.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { date: 'desc' },
+        }),
+      ]);
+
+      return {
+        data,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
+    } catch (error) {
+      log.error('Failed to get incomes:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get income by ID
+   */
+  async getIncomeById(id: number) {
+    try {
+      // Note: Using Expense model as Income model doesn't exist yet
+      const income = await prisma.expense.findUnique({
+        where: { id },
+      });
+
+      return income;
+    } catch (error) {
+      log.error('Failed to get income by ID:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create income
+   */
+  async createIncome(data: {
+    companyId: number;
+    description: string;
+    amount: number;
+    category: string;
+    date: Date;
+    status: string;
+    paymentMethod: string;
+    notes?: string;
+    invoiceId?: number;
+  }) {
+    try {
+      // Note: Using Expense model for now
+      // TODO: Create Income model in schema
+      const income = await prisma.expense.create({
+        data: {
+          companyId: data.companyId,
+          description: data.description,
+          amount: data.amount,
+          category: data.category,
+          date: data.date,
+          status: data.status,
+          paymentMethod: data.paymentMethod,
+          notes: data.notes,
+        },
+      });
+
+      log.info('Income created:', income.id);
+      return income;
+    } catch (error) {
+      log.error('Failed to create income:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update income
+   */
+  async updateIncome(id: number, data: Partial<{
+    description: string;
+    amount: number;
+    category: string;
+    date: Date;
+    status: string;
+    paymentMethod: string;
+    notes: string;
+    invoiceId: number;
+  }>) {
+    try {
+      const income = await prisma.expense.update({
+        where: { id },
+        data: {
+          ...data,
+        },
+      });
+
+      log.info('Income updated:', income.id);
+      return income;
+    } catch (error) {
+      log.error('Failed to update income:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete income
+   */
+  async deleteIncome(id: number) {
+    try {
+      await prisma.expense.delete({
+        where: { id },
+      });
+
+      log.info('Income deleted:', id);
+    } catch (error) {
+      log.error('Failed to delete income:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * EXPENSE MANAGEMENT
+   */
+
+  /**
+   * Get expenses with pagination and filters
+   */
+  async getExpenses(params: {
+    page: number;
+    limit: number;
+    category?: string;
+    status?: string;
+    startDate?: Date;
+    endDate?: Date;
+    search?: string;
+  }) {
+    try {
+      const { page, limit, category, status, startDate, endDate, search } = params;
+      const skip = (page - 1) * limit;
+
+      const where: any = {};
+
+      if (category) {
+        where.category = category;
+      }
+
+      if (status) {
+        where.status = status;
+      }
+
+      if (startDate && endDate) {
+        where.date = {
+          gte: startDate,
+          lte: endDate,
+        };
+      }
+
+      if (search) {
+        where.OR = [
+          { description: { contains: search, mode: 'insensitive' } },
+          { notes: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+
+      const [total, data] = await Promise.all([
+        prisma.expense.count({ where }),
+        prisma.expense.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { date: 'desc' },
+        }),
+      ]);
+
+      return {
+        data,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
+    } catch (error) {
+      log.error('Failed to get expenses:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get expense by ID
+   */
+  async getExpenseById(id: number) {
+    try {
+      const expense = await prisma.expense.findUnique({
+        where: { id },
+      });
+
+      return expense;
+    } catch (error) {
+      log.error('Failed to get expense by ID:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create expense
+   */
+  async createExpense(data: {
+    companyId: number;
+    description: string;
+    amount: number;
+    category: string;
+    date: Date;
+    status: string;
+    paymentMethod: string;
+    notes?: string;
+    receiptUrl?: string;
+  }) {
+    try {
+      const expense = await prisma.expense.create({
+        data: {
+          companyId: data.companyId,
+          description: data.description,
+          amount: data.amount,
+          category: data.category,
+          date: data.date,
+          status: data.status,
+          paymentMethod: data.paymentMethod,
+          notes: data.notes,
+        },
+      });
+
+      log.info('Expense created:', expense.id);
+      return expense;
+    } catch (error) {
+      log.error('Failed to create expense:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update expense
+   */
+  async updateExpense(id: number, data: Partial<{
+    description: string;
+    amount: number;
+    category: string;
+    date: Date;
+    status: string;
+    paymentMethod: string;
+    notes: string;
+    receiptUrl: string;
+  }>) {
+    try {
+      const expense = await prisma.expense.update({
+        where: { id },
+        data: {
+          ...data,
+        },
+      });
+
+      log.info('Expense updated:', expense.id);
+      return expense;
+    } catch (error) {
+      log.error('Failed to update expense:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete expense
+   */
+  async deleteExpense(id: number) {
+    try {
+      await prisma.expense.delete({
+        where: { id },
+      });
+
+      log.info('Expense deleted:', id);
+    } catch (error) {
+      log.error('Failed to delete expense:', error);
+      throw error;
+    }
+  }
 }
 
 export const accountingService = new AccountingService();

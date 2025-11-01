@@ -5,10 +5,13 @@ import {
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
   Search, Filter, ChevronLeft, ChevronRight, Check, X
 } from 'lucide-react'
-import { accountingAPI, invoiceAPI, offerAPI } from '../services/api'
+import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
+import CheckFormModal from '../components/accounting/CheckFormModal'
+import IncomeTab from '../components/accounting/IncomeTab'
+import ExpenseTab from '../components/accounting/ExpenseTab'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'preaccounting' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support'
+type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari'
 
 interface AccountingStats {
   totalRevenue: number
@@ -106,6 +109,26 @@ export default function Accounting() {
   const [offerCurrentPage, setOfferCurrentPage] = useState(1)
   const [offerTotalPages, setOfferTotalPages] = useState(1)
 
+  // Checks state
+  const [checks, setChecks] = useState<any[]>([])
+  const [checksLoading, setChecksLoading] = useState(false)
+
+  // Promissory notes state
+  const [promissory, setPromissory] = useState<any[]>([])
+  const [promissoryLoading, setPromissoryLoading] = useState(false)
+
+  // Aging state
+  const [agingData, setAgingData] = useState<any | null>(null)
+  const [agingLoading, setAgingLoading] = useState(false)
+
+  // Cari (account cards)
+  const [cariSummary, setCariSummary] = useState<any[]>([])
+  const [cariLoading, setCariLoading] = useState(false)
+
+  // Checks modal state
+  const [checkModalOpen, setCheckModalOpen] = useState(false)
+  const [editingCheck, setEditingCheck] = useState<any | null>(null)
+
   // Load accounting stats on mount
   useEffect(() => {
     loadStats()
@@ -124,6 +147,34 @@ export default function Accounting() {
       loadOffers()
     }
   }, [activeTab, offerCurrentPage, offerStatusFilter])
+
+  // Load checks when checks tab active
+  useEffect(() => {
+    if (activeTab === 'checks') {
+      loadChecks()
+    }
+  }, [activeTab])
+
+  // Load promissory notes when promissory tab active
+  useEffect(() => {
+    if (activeTab === 'promissory') {
+      loadPromissory()
+    }
+  }, [activeTab])
+
+  // Load aging when aging tab active
+  useEffect(() => {
+    if (activeTab === 'aging') {
+      loadAging()
+    }
+  }, [activeTab])
+
+  // Load cari summary when cari tab active
+  useEffect(() => {
+    if (activeTab === 'cari') {
+      loadCari()
+    }
+  }, [activeTab])
 
   const loadStats = async () => {
     try {
@@ -206,6 +257,58 @@ export default function Accounting() {
     }
   }
 
+  const loadChecks = async () => {
+    try {
+      setChecksLoading(true)
+      const res = await checksAPI.getAll({ limit: 50 })
+      setChecks(res.data.data || res.data)
+    } catch (error: any) {
+      console.error('Failed to load checks:', error)
+      toast.error('Çekler yüklenemedi: ' + (error.response?.data?.message || error.message))
+    } finally {
+      setChecksLoading(false)
+    }
+  }
+
+  const loadPromissory = async () => {
+    try {
+      setPromissoryLoading(true)
+      const res = await promissoryAPI.getAll({ limit: 50 })
+      setPromissory(res.data.data || res.data)
+    } catch (error: any) {
+      console.error('Failed to load promissory notes:', error)
+      toast.error('Senetler yüklenemedi: ' + (error.response?.data?.message || error.message))
+    } finally {
+      setPromissoryLoading(false)
+    }
+  }
+
+  const loadAging = async () => {
+    try {
+      setAgingLoading(true)
+      const res = await agingAPI.getCombinedAging()
+      setAgingData(res.data.data || res.data)
+    } catch (error: any) {
+      console.error('Failed to load aging data:', error)
+      toast.error('Yaşlandırma verisi alınamadı: ' + (error.response?.data?.message || error.message))
+    } finally {
+      setAgingLoading(false)
+    }
+  }
+
+  const loadCari = async () => {
+    try {
+      setCariLoading(true)
+      const res = await accountingAPI.getCariSummary()
+      setCariSummary(res.data.data || res.data)
+    } catch (error: any) {
+      console.error('Failed to load cari summary:', error)
+      toast.error('Cari özet yüklenemedi: ' + (error.response?.data?.message || error.message))
+    } finally {
+      setCariLoading(false)
+    }
+  }
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('tr-TR', {
       style: 'currency',
@@ -259,6 +362,8 @@ export default function Accounting() {
 
   const tabs = [
     { id: 'dashboard' as const, label: 'Ana Sayfa', icon: <BarChart3 size={18} /> },
+    { id: 'income' as const, label: 'Gelirler', icon: <TrendingUp size={18} /> },
+    { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
@@ -268,6 +373,10 @@ export default function Accounting() {
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
     { id: 'support' as const, label: 'Yardım & Araçlar', icon: <Globe size={18} /> },
+    { id: 'cari' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
+    { id: 'checks' as const, label: 'Çekler', icon: <Check size={18} /> },
+    { id: 'promissory' as const, label: 'Senetler', icon: <FileText size={18} /> },
+    { id: 'aging' as const, label: 'Yaşlandırma', icon: <Clock size={18} /> },
   ]
 
   return (
@@ -397,6 +506,12 @@ export default function Accounting() {
               </div>
             )}
 
+            {/* Income Tab */}
+            {activeTab === 'income' && <IncomeTab />}
+
+            {/* Expense Tab */}
+            {activeTab === 'expense' && <ExpenseTab />}
+
             {/* Pre-Accounting Tab */}
             {activeTab === 'preaccounting' && (
               <div className="space-y-6">
@@ -443,6 +558,46 @@ export default function Accounting() {
               </div>
             )}
 
+            {/* Cari (Account Cards) Tab */}
+            {activeTab === 'cari' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-neutral-900">Cari Hesap Kartları</h2>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                  {cariLoading ? (
+                    <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
+                  ) : cariSummary.length === 0 ? (
+                    <div className="p-12 text-center text-neutral-600">Cari hesap bulunamadı</div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-neutral-50 border-b border-neutral-200">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Borç</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Alacak</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Bakiye</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-neutral-200">
+                          {cariSummary.map((c: any) => (
+                            <tr key={c.customerId || c.id} className="hover:bg-neutral-50">
+                              <td className="px-6 py-4">{c.customerName || c.name}</td>
+                              <td className="px-6 py-4">{formatCurrency(c.debit || 0)}</td>
+                              <td className="px-6 py-4">{formatCurrency(c.credit || 0)}</td>
+                              <td className="px-6 py-4">{formatCurrency((c.credit || 0) - (c.debit || 0))}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Reports Tab */}
             {activeTab === 'reports' && (
               <div className="space-y-6">
@@ -466,6 +621,118 @@ export default function Accounting() {
                       <h3 className="font-medium text-neutral-900 text-sm">{report.name}</h3>
                     </button>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* Checks Tab */}
+            {activeTab === 'checks' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-neutral-900">Çekler</h2>
+                  <div>
+                    <button
+                      onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
+                      className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                    >
+                      <FileText size={18} />
+                      Yeni Çek
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                  {checksLoading ? (
+                    <div className="p-12 text-center text-neutral-600">Çekler yükleniyor...</div>
+                  ) : checks.length === 0 ? (
+                    <div className="p-12 text-center text-neutral-600">Çek bulunamadı</div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-neutral-50 border-b border-neutral-200">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">No</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-neutral-200">
+                          {checks.map((c: any) => (
+                            <tr key={c.id} className="hover:bg-neutral-50">
+                              <td className="px-6 py-4">{c.documentNumber || `#${c.id}`}</td>
+                              <td className="px-6 py-4">{c.customer?.name || c.customerName || '-'}</td>
+                              <td className="px-6 py-4">{formatCurrency(c.amount || 0)}</td>
+                              <td className="px-6 py-4">{c.dueDate ? formatDate(c.dueDate) : '-'}</td>
+                              <td className="px-6 py-4">{c.status || '-'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Promissory Notes Tab */}
+            {activeTab === 'promissory' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-neutral-900">Senetler</h2>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                  {promissoryLoading ? (
+                    <div className="p-12 text-center text-neutral-600">Senetler yükleniyor...</div>
+                  ) : promissory.length === 0 ? (
+                    <div className="p-12 text-center text-neutral-600">Senet bulunamadı</div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-neutral-50 border-b border-neutral-200">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">No</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-neutral-200">
+                          {promissory.map((p: any) => (
+                            <tr key={p.id} className="hover:bg-neutral-50">
+                              <td className="px-6 py-4">{p.documentNumber || `#${p.id}`}</td>
+                              <td className="px-6 py-4">{p.customer?.name || p.customerName || '-'}</td>
+                              <td className="px-6 py-4">{formatCurrency(p.amount || 0)}</td>
+                              <td className="px-6 py-4">{p.dueDate ? formatDate(p.dueDate) : '-'}</td>
+                              <td className="px-6 py-4">{p.status || '-'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Aging Tab */}
+            {activeTab === 'aging' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-neutral-900">Yaşlandırma Raporu</h2>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+                  {agingLoading ? (
+                    <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
+                  ) : !agingData ? (
+                    <div className="p-12 text-center text-neutral-600">Yaşlandırma verisi yok</div>
+                  ) : (
+                    <pre className="text-xs text-neutral-700 overflow-auto">{JSON.stringify(agingData, null, 2)}</pre>
+                  )}
                 </div>
               </div>
             )}
@@ -1008,6 +1275,15 @@ export default function Accounting() {
           </div>
         </div>
       </div>
+      {/* Check Modal */}
+      {checkModalOpen && (
+        <CheckFormModal
+          open={checkModalOpen}
+          onClose={() => setCheckModalOpen(false)}
+          onSaved={() => loadChecks()}
+          initial={editingCheck || undefined}
+        />
+      )}
     </div>
   )
 }

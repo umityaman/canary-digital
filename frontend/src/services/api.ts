@@ -572,12 +572,120 @@ export const accountingAPI = {
   getVATReport: (params: { startDate: string; endDate: string }) => 
     api.get('/accounting/vat-report', { params }),
   
-  // Income Recording (TODO: Requires Expense model)
-  recordIncome: (data: any) => api.post('/accounting/income', data),
+  // Income Management
+  getIncomes: (params?: { 
+    page?: number; 
+    limit?: number; 
+    category?: string; 
+    status?: string; 
+    startDate?: string; 
+    endDate?: string; 
+    search?: string; 
+  }) => api.get('/accounting/incomes', { params }),
   
-  // Expense Recording (TODO: Requires Expense model)
-  recordExpense: (data: any) => api.post('/accounting/expense', data),
+  getIncomeById: (id: number) => api.get(`/accounting/income/${id}`),
+  
+  createIncome: (data: {
+    description: string;
+    amount: number;
+    category: string;
+    date: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    invoiceId?: number;
+  }) => api.post('/accounting/income', data),
+  
+  updateIncome: (id: number, data: {
+    description?: string;
+    amount?: number;
+    category?: string;
+    date?: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    invoiceId?: number;
+  }) => api.put(`/accounting/income/${id}`, data),
+  
+  deleteIncome: (id: number) => api.delete(`/accounting/income/${id}`),
+  
+  // Expense Management
+  getExpenses: (params?: { 
+    page?: number; 
+    limit?: number; 
+    category?: string; 
+    status?: string; 
+    startDate?: string; 
+    endDate?: string; 
+    search?: string; 
+  }) => api.get('/accounting/expenses', { params }),
+  
+  getExpenseById: (id: number) => api.get(`/accounting/expense/${id}`),
+  
+  createExpense: (data: {
+    description: string;
+    amount: number;
+    category: string;
+    date: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    receiptUrl?: string;
+  }) => api.post('/accounting/expense', data),
+  
+  updateExpense: (id: number, data: {
+    description?: string;
+    amount?: number;
+    category?: string;
+    date?: string;
+    status?: string;
+    paymentMethod?: string;
+    notes?: string;
+    receiptUrl?: string;
+  }) => api.put(`/accounting/expense/${id}`, data),
+  
+  deleteExpense: (id: number) => api.delete(`/accounting/expense/${id}`),
 };
+
+// Checks API (Çekler)
+export const checksAPI = {
+  getAll: (params?: { status?: string; search?: string; page?: number; limit?: number }) =>
+    api.get('/checks', { params }),
+
+  getById: (id: number) => api.get(`/checks/${id}`),
+
+  create: (data: any) => api.post('/checks', data),
+
+  update: (id: number, data: any) => api.put(`/checks/${id}`, data),
+
+  delete: (id: number) => api.delete(`/checks/${id}`),
+}
+
+// Promissory Notes API (Senetler)
+export const promissoryAPI = {
+  getAll: (params?: { status?: string; search?: string; page?: number; limit?: number }) =>
+    api.get('/promissory-notes', { params }),
+
+  getById: (id: number) => api.get(`/promissory-notes/${id}`),
+
+  create: (data: any) => api.post('/promissory-notes', data),
+
+  update: (id: number, data: any) => api.put(`/promissory-notes/${id}`, data),
+
+  delete: (id: number) => api.delete(`/promissory-notes/${id}`),
+}
+
+// Aging APIs (Yaşlandırma)
+export const agingAPI = {
+  getChecksAging: (params?: { companyId?: number; asOfDate?: string }) =>
+    api.get('/aging/checks', { params }),
+
+  getPromissoryAging: (params?: { companyId?: number; asOfDate?: string }) =>
+    api.get('/aging/promissory-notes', { params }),
+
+  getCombinedAging: (params?: { companyId?: number; asOfDate?: string }) =>
+    api.get('/aging/combined', { params }),
+}
 
 // Invoice API
 export const invoiceAPI = {
