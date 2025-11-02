@@ -18,9 +18,10 @@ import CurrentAccountList from '../components/current-accounts/CurrentAccountLis
 import InventoryAccounting from '../components/accounting/InventoryAccounting'
 import AdvancedReporting from '../components/accounting/AdvancedReporting'
 import GIBIntegration from '../components/accounting/GIBIntegration'
+import CostAccountingTab from '../components/accounting/CostAccountingTab'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib'
+type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting'
 
 interface AccountingStats {
   totalRevenue: number
@@ -374,13 +375,14 @@ export default function Accounting() {
     { id: 'income' as const, label: 'Gelirler', icon: <TrendingUp size={18} /> },
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
+    { id: 'cost-accounting' as const, label: 'Maliyet Muhasebesi', icon: <DollarSign size={18} /> },
+    { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
     { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
     { id: 'ebelge' as const, label: 'e-Belge', icon: <CreditCard size={18} /> },
     { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
-    { id: 'inventory' as const, label: 'Stok-Muhasebe', icon: <Package size={18} /> },
     { id: 'gib' as const, label: 'GİB Entegrasyonu', icon: <Globe size={18} /> },
     { id: 'integration' as const, label: 'Entegrasyonlar', icon: <RefreshCw size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
@@ -393,7 +395,7 @@ export default function Accounting() {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pb-10">
+    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pb-10">
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
         {/* Bu Ay Gelir */}
@@ -467,19 +469,19 @@ export default function Accounting() {
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar Tabs */}
-          <nav className="flex flex-row gap-2 overflow-x-auto border-b border-neutral-200 lg:border-b-0 lg:border-r lg:w-64 lg:flex-col lg:gap-0 flex-shrink-0">
+          <nav className="flex flex-row gap-2 overflow-x-auto border-b border-neutral-200 lg:border-b-0 lg:border-r lg:w-56 lg:flex-col lg:gap-0 flex-shrink-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex min-w-[11rem] items-center space-x-3 px-4 py-3 text-sm font-medium transition-colors lg:min-w-0 lg:w-full ${
+                className={`flex min-w-[9rem] items-center space-x-2 px-3 py-2.5 text-sm font-medium transition-colors lg:min-w-0 lg:w-full ${
                   activeTab === tab.id
                     ? 'bg-neutral-900 text-white'
                     : 'text-neutral-700 hover:bg-neutral-50'
                 }`}
               >
                 {tab.icon}
-                <span>{tab.label}</span>
+                <span className="text-xs lg:text-sm">{tab.label}</span>
               </button>
             ))}
           </nav>
@@ -1073,6 +1075,9 @@ export default function Accounting() {
 
             {/* Bank Reconciliation Tab */}
             {activeTab === 'reconciliation' && <BankReconciliation />}
+
+            {/* Cost Accounting Tab */}
+            {activeTab === 'cost-accounting' && <CostAccountingTab />}
 
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}

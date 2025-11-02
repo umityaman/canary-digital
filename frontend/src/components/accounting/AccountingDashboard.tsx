@@ -71,6 +71,8 @@ export default function AccountingDashboard() {
       
       if (!token) {
         toast.error('Oturum bilgisi bulunamadı')
+        setLoading(false)
+        setRefreshing(false)
         return
       }
 
@@ -79,23 +81,36 @@ export default function AccountingDashboard() {
         'Content-Type': 'application/json'
       }
 
+      console.log('📊 Loading dashboard data...', { API_URL })
+
       // Fetch dashboard trends and categories in parallel
       const [trendsRes, incomeCatRes, expenseCatRes] = await Promise.all([
-        axios.get(`${API_URL}/api/accounting/dashboard/trends?months=6`, { headers }),
-        axios.get(`${API_URL}/api/accounting/dashboard/categories?type=income`, { headers }),
-        axios.get(`${API_URL}/api/accounting/dashboard/categories?type=expense`, { headers })
+        axios.get(`${API_URL}/api/accounting/dashboard/trends?months=6`, { headers }).catch(err => {
+          console.error('❌ Trends API error:', err.response?.data || err.message)
+          return { data: { data: [] } }
+        }),
+        axios.get(`${API_URL}/api/accounting/dashboard/categories?type=income`, { headers }).catch(err => {
+          console.error('❌ Income categories API error:', err.response?.data || err.message)
+          return { data: { data: [] } }
+        }),
+        axios.get(`${API_URL}/api/accounting/dashboard/categories?type=expense`, { headers }).catch(err => {
+          console.error('❌ Expense categories API error:', err.response?.data || err.message)
+          return { data: { data: [] } }
+        })
       ])
 
-      const trendsData = trendsRes.data.data
-      const incomeCategories = incomeCatRes.data.data
-      const expenseCategories = expenseCatRes.data.data
+      console.log('✅ Dashboard data loaded:', { trendsRes: trendsRes.data, incomeCatRes: incomeCatRes.data, expenseCatRes: expenseCatRes.data })
+
+      const trendsData = trendsRes.data.data || []
+      const incomeCategories = incomeCatRes.data.data || []
+      const expenseCategories = expenseCatRes.data.data || []
 
       // Format monthly data from trends
-      const monthlyData = trendsData.map((trend: any) => ({
+      const monthlyData = Array.isArray(trendsData) ? trendsData.map((trend: any) => ({
         month: new Date(trend.month).toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' }),
         income: trend.income || 0,
         expense: trend.expense || 0
-      }))
+      })) : []
 
       // Get current and previous month stats
       const currentMonthTrend = trendsData[trendsData.length - 1] || { income: 0, expense: 0 }
