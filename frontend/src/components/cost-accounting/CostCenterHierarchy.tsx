@@ -3,8 +3,6 @@ import {
   Box,
   Paper,
   Typography,
-  TreeView,
-  TreeItem,
   Chip,
   IconButton,
   Button,
@@ -16,6 +14,8 @@ import {
   Grid,
   Alert
 } from '@mui/material';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import {
   ExpandMore as ExpandMoreIcon,
   ChevronRight as ChevronRightIcon,

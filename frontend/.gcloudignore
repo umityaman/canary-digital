@@ -4,11 +4,5 @@ node_modules/
 *.md
 .env*
 !.env.production
-src/
-public/
-*.config.ts
-*.config.js
-!vite.config.ts
-tsconfig.json
-.eslintrc.js
-.prettierrc
+# Allow build sources like src/ and public/
+# Avoid ignoring config files required by Vite build
