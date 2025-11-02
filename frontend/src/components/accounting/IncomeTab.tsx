@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, Search, Filter, Download, TrendingUp, Calendar, DollarSign, FileText, Trash2, Edit2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { accountingAPI } from '../../services/api'
 import IncomeModal from './IncomeModal'
 
 interface Income {
@@ -53,8 +54,6 @@ export default function IncomeTab() {
   const loadIncomes = async () => {
     setLoading(true)
     try {
-      const { accountingAPI } = await import('../../services/api')
-      
       const response = await accountingAPI.getIncomes({
         page: currentPage,
         limit: itemsPerPage,
@@ -117,7 +116,6 @@ export default function IncomeTab() {
     }
     
     try {
-      const { accountingAPI } = await import('../../services/api')
       await accountingAPI.deleteIncome(id)
       toast.success('Gelir kaydı silindi')
       loadIncomes()

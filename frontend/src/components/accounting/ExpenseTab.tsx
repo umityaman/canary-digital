@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, Search, Filter, Download, TrendingDown, Calendar, DollarSign, FileText, Trash2, Edit2, Eye, PieChart } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { accountingAPI } from '../../services/api'
 import ExpenseModal from './ExpenseModal'
 
 interface Expense {
@@ -65,8 +66,6 @@ export default function ExpenseTab() {
   const loadExpenses = async () => {
     setLoading(true)
     try {
-      const { accountingAPI } = await import('../../services/api')
-      
       const response = await accountingAPI.getExpenses({
         page: currentPage,
         limit: itemsPerPage,
@@ -130,7 +129,6 @@ export default function ExpenseTab() {
     }
     
     try {
-      const { accountingAPI } = await import('../../services/api')
       await accountingAPI.deleteExpense(id)
       toast.success('Gider kaydı silindi')
       loadExpenses()

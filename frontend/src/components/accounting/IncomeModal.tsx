@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { accountingAPI } from '../../services/api'
 
 interface IncomeModalProps {
   open: boolean
@@ -85,8 +86,6 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
 
     setLoading(true)
     try {
-      const { accountingAPI } = await import('../../services/api')
-      
       if (initial?.id) {
         await accountingAPI.updateIncome(initial.id, formData)
         toast.success('Gelir güncellendi')

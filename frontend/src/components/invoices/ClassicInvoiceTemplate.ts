@@ -1,4 +1,4 @@
-import jsPDF from 'jspdf';
+import type jsPDF from 'jspdf';
 import { InvoiceData, InvoiceConfig } from './InvoiceTypes';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
@@ -11,8 +11,8 @@ export class ClassicInvoiceTemplate {
   private pageHeight: number;
   private margin: number;
 
-  constructor(data: InvoiceData, config: InvoiceConfig) {
-    this.doc = new jsPDF('p', 'mm', 'a4');
+  constructor(doc: jsPDF, data: InvoiceData, config: InvoiceConfig) {
+    this.doc = doc;
     this.data = data;
     this.config = config;
     this.pageWidth = this.doc.internal.pageSize.getWidth();

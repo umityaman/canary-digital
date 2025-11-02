@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Download, Mail, Printer, Eye, FileText } from 'lucide-react';
-import jsPDF from 'jspdf';
+import type jsPDF from 'jspdf';
 import { InvoiceData, InvoiceConfig, InvoiceTemplate } from './InvoiceTypes';
 import { ModernInvoiceTemplate } from './ModernInvoiceTemplate';
 import { ClassicInvoiceTemplate } from './ClassicInvoiceTemplate';
@@ -49,54 +49,79 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
     },
   };
 
-  const generatePDF = (): jsPDF | null => {
+  const generatePDF = async (): Promise<jsPDF | null> => {
     try {
-      setIsGenerating(true);
-      
-      let template;
+      const { default: JsPDF } = await import('jspdf');
+      const doc: jsPDF = new JsPDF('p', 'mm', 'a4');
+
+      let template:
+        | ModernInvoiceTemplate
+        | ClassicInvoiceTemplate
+        | MinimalInvoiceTemplate;
+
       switch (selectedTemplate) {
         case 'modern':
-          template = new ModernInvoiceTemplate(invoiceData, config);
+          template = new ModernInvoiceTemplate(doc, invoiceData, config);
           break;
         case 'classic':
-          template = new ClassicInvoiceTemplate(invoiceData, config);
+          template = new ClassicInvoiceTemplate(doc, invoiceData, config);
           break;
         case 'minimal':
-          template = new MinimalInvoiceTemplate(invoiceData, config);
+          template = new MinimalInvoiceTemplate(doc, invoiceData, config);
           break;
         default:
-          template = new ModernInvoiceTemplate(invoiceData, config);
+          template = new ModernInvoiceTemplate(doc, invoiceData, config);
       }
-      
+
       return template.generate();
     } catch (error) {
       console.error('PDF generation error:', error);
       alert('PDF oluşturulurken hata oluştu');
       return null;
+    }
+  };
+
+  const handleDownload = async () => {
+    setIsGenerating(true);
+    try {
+      const pdf = await generatePDF();
+      if (pdf) {
+        pdf.save(`Fatura_${invoiceData.invoiceNumber}.pdf`);
+      }
     } finally {
       setIsGenerating(false);
     }
   };
 
-  const handleDownload = () => {
-    const pdf = generatePDF();
-    if (pdf) {
-      pdf.save(`Fatura_${invoiceData.invoiceNumber}.pdf`);
-    }
-  };
-
-  const handlePreview = () => {
-    const pdf = generatePDF();
-    if (pdf) {
+  const handlePreview = async () => {
+    setIsGenerating(true);
+    try {
+      const pdf = await generatePDF();
+      if (!pdf) {
+        return;
+      }
       const pdfBlob = pdf.output('blob');
       const pdfUrl = URL.createObjectURL(pdfBlob);
-      window.open(pdfUrl, '_blank');
+      const previewWindow = window.open(pdfUrl, '_blank');
+      if (previewWindow) {
+        previewWindow.addEventListener('beforeunload', () => {
+          URL.revokeObjectURL(pdfUrl);
+        });
+      } else {
+        URL.revokeObjectURL(pdfUrl);
+      }
+    } finally {
+      setIsGenerating(false);
     }
   };
 
-  const handlePrint = () => {
-    const pdf = generatePDF();
-    if (pdf) {
+  const handlePrint = async () => {
+    setIsGenerating(true);
+    try {
+      const pdf = await generatePDF();
+      if (!pdf) {
+        return;
+      }
       const pdfBlob = pdf.output('blob');
       const pdfUrl = URL.createObjectURL(pdfBlob);
       const printWindow = window.open(pdfUrl, '_blank');
@@ -104,27 +129,35 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
         printWindow.onload = () => {
           printWindow.print();
         };
+        printWindow.addEventListener('beforeunload', () => {
+          URL.revokeObjectURL(pdfUrl);
+        });
+      } else {
+        URL.revokeObjectURL(pdfUrl);
       }
+    } finally {
+      setIsGenerating(false);
     }
   };
 
   const handleEmail = async () => {
-    const pdf = generatePDF();
-    if (!pdf) return;
-
+    setIsGenerating(true);
     try {
-      setIsGenerating(true);
-      
-      // Convert PDF to base64 for email attachment
+      const pdf = await generatePDF();
+      if (!pdf) {
+        return;
+      }
+
+      // Convert PDF to base64 for email attachment when API endpoint gets ready
       // const pdfBase64 = pdf.output('dataurlstring');
-      
+
       // TODO: Send email via API endpoint
       // await api.post('/invoices/send-email', {
       //   to: invoiceData.customer.email,
       //   invoiceNumber: invoiceData.invoiceNumber,
       //   pdfData: pdfBase64,
       // });
-      
+
       alert(`Fatura ${invoiceData.customer.email} adresine gönderilecek! (API endpoint hazırlanıyor)`);
       onEmailSent?.();
     } catch (error) {

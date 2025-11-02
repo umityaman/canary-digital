@@ -4,6 +4,7 @@ import {
   Eye, FileText, Clock, AlertCircle, ChevronRight, Phone, Mail
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { accountingAPI } from '../../services/api'
 import AccountCardDetail from './AccountCardDetail'
 
 interface AccountCard {
@@ -36,7 +37,6 @@ export default function AccountCardList() {
   const loadAccounts = async () => {
     setLoading(true)
     try {
-      const { accountingAPI } = await import('../../services/api')
       const res = await accountingAPI.getCariSummary()
       const data = res.data.data || res.data
       setAccounts(data)

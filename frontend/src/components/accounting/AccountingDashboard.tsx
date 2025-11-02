@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 import {
   TrendingUp, TrendingDown, DollarSign, Calendar, ArrowUpRight, ArrowDownRight,
-  PieChart as PieChartIcon, BarChart3, FileText, Plus
+  PieChart as PieChartIcon, BarChart3, FileText, Plus, RefreshCw, Download, 
+  LineChart as LineChartIcon, AreaChart as AreaChartIcon, Eye, EyeOff,
+  Target, Activity, Zap, BarChart2
 } from 'lucide-react'
 import {
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'react-hot-toast'
@@ -42,16 +45,25 @@ export default function AccountingDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'quarter' | 'year'>('month')
+  const [refreshing, setRefreshing] = useState(false)
+  const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line')
+  const [showComparison, setShowComparison] = useState(false)
+  const [exporting, setExporting] = useState(false)
+  const [showAdvancedStats, setShowAdvancedStats] = useState(false)
+  const [monthlyTarget, setMonthlyTarget] = useState<number>(0)
 
   useEffect(() => {
     loadDashboardData()
   }, [selectedPeriod])
 
-  const loadDashboardData = async () => {
-    setLoading(true)
+  const loadDashboardData = async (isRefresh = false) => {
+    if (isRefresh) {
+      setRefreshing(true)
+    } else {
+      setLoading(true)
+    }
     try {
-      // Import API dynamically
-      const { default: axios } = await import('axios')
+      // API endpoint and auth header setup
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
       
       // Get token from localStorage
@@ -67,85 +79,62 @@ export default function AccountingDashboard() {
         'Content-Type': 'application/json'
       }
 
-      // Fetch dashboard stats, trends, and categories in parallel
-      const [statsRes, trendsRes, incomeCatRes, expenseCatRes] = await Promise.all([
-        axios.get(`${API_URL}/api/accounting/dashboard/stats`, { headers }),
+      // Fetch dashboard trends and categories in parallel
+      const [trendsRes, incomeCatRes, expenseCatRes] = await Promise.all([
         axios.get(`${API_URL}/api/accounting/dashboard/trends?months=6`, { headers }),
         axios.get(`${API_URL}/api/accounting/dashboard/categories?type=income`, { headers }),
         axios.get(`${API_URL}/api/accounting/dashboard/categories?type=expense`, { headers })
       ])
 
-      const statsData = statsRes.data.data
       const trendsData = trendsRes.data.data
       const incomeCategories = incomeCatRes.data.data
       const expenseCategories = expenseCatRes.data.data
 
-      // Calculate previous month stats from trends (second to last month)
-      const currentMonthTrend = trendsData[trendsData.length - 1]
-      const previousMonthTrend = trendsData[trendsData.length - 2]
+      // Format monthly data from trends
+      const monthlyData = trendsData.map((trend: any) => ({
+        month: new Date(trend.month).toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' }),
+        income: trend.income || 0,
+        expense: trend.expense || 0
+      }))
 
-      // Calculate changes
+      // Get current and previous month stats
+      const currentMonthTrend = trendsData[trendsData.length - 1] || { income: 0, expense: 0 }
+      const previousMonthTrend = trendsData[trendsData.length - 2] || { income: 0, expense: 0 }
+
+      const currentProfit = currentMonthTrend.income - currentMonthTrend.expense
+      const previousProfit = previousMonthTrend.income - previousMonthTrend.expense
+
+      // Calculate percentage changes
       const incomeChange = previousMonthTrend.income > 0 
         ? ((currentMonthTrend.income - previousMonthTrend.income) / previousMonthTrend.income) * 100 
         : 0
       const expenseChange = previousMonthTrend.expense > 0 
         ? ((currentMonthTrend.expense - previousMonthTrend.expense) / previousMonthTrend.expense) * 100 
         : 0
-      const currentProfit = currentIncomeTotal - currentExpenseTotal
-      const previousProfit = previousIncomeTotal - previousExpenseTotal
       const profitChange = previousProfit !== 0 
         ? ((currentProfit - previousProfit) / Math.abs(previousProfit)) * 100 
         : 0
 
-      // Get last 6 months data
-      const monthlyData = []
-      for (let i = 5; i >= 0; i--) {
-        const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1)
-        const monthStart = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1)
-        const monthEnd = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0)
-        
-        const [monthIncomes, monthExpenses] = await Promise.all([
-          accountingAPI.getIncomes({
-            startDate: monthStart.toISOString().split('T')[0],
-            endDate: monthEnd.toISOString().split('T')[0],
-            limit: 1000
-          }),
-          accountingAPI.getExpenses({
-            startDate: monthStart.toISOString().split('T')[0],
-            endDate: monthEnd.toISOString().split('T')[0],
-            limit: 1000
-          })
-        ])
+      // Format category data
+      const formattedIncomeCategories = (incomeCategories || []).map((cat: any) => ({
+        category: cat.category || 'Diğer',
+        amount: cat.total || cat.amount || 0
+      }))
 
-        monthlyData.push({
-          month: monthDate.toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' }),
-          income: monthIncomes.data.data.reduce((sum: number, item: any) => sum + item.amount, 0),
-          expense: monthExpenses.data.data.reduce((sum: number, item: any) => sum + item.amount, 0)
-        })
-      }
-
-      // Category breakdown
-      const incomeCategoryMap = new Map<string, number>()
-      currentIncomes.data.data.forEach((item: any) => {
-        const current = incomeCategoryMap.get(item.category) || 0
-        incomeCategoryMap.set(item.category, current + item.amount)
-      })
-
-      const expenseCategoryMap = new Map<string, number>()
-      currentExpenses.data.data.forEach((item: any) => {
-        const current = expenseCategoryMap.get(item.category) || 0
-        expenseCategoryMap.set(item.category, current + item.amount)
-      })
+      const formattedExpenseCategories = (expenseCategories || []).map((cat: any) => ({
+        category: cat.category || 'Diğer',
+        amount: cat.total || cat.amount || 0
+      }))
 
       setStats({
         currentMonth: {
-          income: currentIncomeTotal,
-          expense: currentExpenseTotal,
+          income: currentMonthTrend.income || 0,
+          expense: currentMonthTrend.expense || 0,
           profit: currentProfit
         },
         previousMonth: {
-          income: previousIncomeTotal,
-          expense: previousExpenseTotal,
+          income: previousMonthTrend.income || 0,
+          expense: previousMonthTrend.expense || 0,
           profit: previousProfit
         },
         trends: {
@@ -155,14 +144,8 @@ export default function AccountingDashboard() {
         },
         monthlyData,
         categoryBreakdown: {
-          income: Array.from(incomeCategoryMap.entries()).map(([category, amount]) => ({
-            category,
-            amount
-          })),
-          expense: Array.from(expenseCategoryMap.entries()).map(([category, amount]) => ({
-            category,
-            amount
-          }))
+          income: formattedIncomeCategories,
+          expense: formattedExpenseCategories
         }
       })
     } catch (error: any) {
@@ -170,6 +153,7 @@ export default function AccountingDashboard() {
       toast.error('Dashboard verileri yüklenemedi')
     } finally {
       setLoading(false)
+      setRefreshing(false)
     }
   }
 
@@ -185,6 +169,138 @@ export default function AccountingDashboard() {
   const formatPercentage = (value: number) => {
     const sign = value >= 0 ? '+' : ''
     return `${sign}${value.toFixed(1)}%`
+  }
+
+  // Advanced statistics calculations
+  const calculateAdvancedStats = () => {
+    if (!stats || !stats.monthlyData || stats.monthlyData.length === 0) {
+      return null
+    }
+
+    const incomes = stats.monthlyData.map(d => d.income)
+    const expenses = stats.monthlyData.map(d => d.expense)
+    const profits = stats.monthlyData.map(d => d.income - d.expense)
+
+    // Average calculations
+    const avgIncome = incomes.reduce((a, b) => a + b, 0) / incomes.length
+    const avgExpense = expenses.reduce((a, b) => a + b, 0) / expenses.length
+    const avgProfit = profits.reduce((a, b) => a + b, 0) / profits.length
+
+    // Max/Min values
+    const maxIncome = Math.max(...incomes)
+    const minIncome = Math.min(...incomes)
+    const maxExpense = Math.max(...expenses)
+    const minExpense = Math.min(...expenses)
+
+    // Profitability ratio
+    const profitabilityRatio = avgIncome > 0 ? (avgProfit / avgIncome) * 100 : 0
+
+    // Growth rate (last month vs first month)
+    const firstMonthIncome = incomes[0] || 0
+    const lastMonthIncome = incomes[incomes.length - 1] || 0
+    const growthRate = firstMonthIncome > 0 
+      ? ((lastMonthIncome - firstMonthIncome) / firstMonthIncome) * 100 
+      : 0
+
+    // Forecast next month (simple linear regression)
+    const forecastIncome = lastMonthIncome * (1 + (growthRate / 100))
+    const forecastExpense = expenses[expenses.length - 1] * (1 + (growthRate / 100))
+    const forecastProfit = forecastIncome - forecastExpense
+
+    // Target achievement
+    const targetAchievement = monthlyTarget > 0 
+      ? (stats.currentMonth.income / monthlyTarget) * 100 
+      : 0
+
+    return {
+      avgIncome,
+      avgExpense,
+      avgProfit,
+      maxIncome,
+      minIncome,
+      maxExpense,
+      minExpense,
+      profitabilityRatio,
+      growthRate,
+      forecastIncome,
+      forecastExpense,
+      forecastProfit,
+      targetAchievement
+    }
+  }
+
+  const advancedStats = calculateAdvancedStats()
+
+  const handleExportPDF = async () => {
+    setExporting(true)
+    try {
+      // Dynamically import jsPDF
+      const { default: JsPDF } = await import('jspdf')
+      const doc = new JsPDF()
+      
+      // Add title
+      doc.setFontSize(20)
+      doc.text('Muhasebe Dashboard Raporu', 20, 20)
+      
+      // Add date
+      doc.setFontSize(10)
+      doc.text(`Oluşturulma: ${new Date().toLocaleString('tr-TR')}`, 20, 30)
+      
+      // Add stats
+      doc.setFontSize(12)
+      let yPos = 45
+      
+      if (stats) {
+        doc.text(`Gelir: ${formatCurrency(stats.currentMonth.income)}`, 20, yPos)
+        yPos += 10
+        doc.text(`Gider: ${formatCurrency(stats.currentMonth.expense)}`, 20, yPos)
+        yPos += 10
+        doc.text(`Kar/Zarar: ${formatCurrency(stats.currentMonth.profit)}`, 20, yPos)
+        yPos += 10
+        doc.text(`Nakit Akışı: ${formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}`, 20, yPos)
+      }
+      
+      doc.save(`muhasebe-dashboard-${new Date().getTime()}.pdf`)
+      toast.success('PDF indirildi')
+    } catch (error) {
+      console.error('PDF export error:', error)
+      toast.error('PDF oluşturulamadı')
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  const handleExportExcel = () => {
+    if (!stats) return
+    
+    try {
+      // Create CSV content
+      const csvContent = [
+        ['Muhasebe Dashboard Raporu'],
+        ['Oluşturulma', new Date().toLocaleString('tr-TR')],
+        [''],
+        ['Metrik', 'Bu Ay', 'Geçen Ay', 'Değişim'],
+        ['Gelir', stats.currentMonth.income, stats.previousMonth.income, `${formatPercentage(stats.trends.incomeChange)}`],
+        ['Gider', stats.currentMonth.expense, stats.previousMonth.expense, `${formatPercentage(stats.trends.expenseChange)}`],
+        ['Kar/Zarar', stats.currentMonth.profit, stats.previousMonth.profit, `${formatPercentage(stats.trends.profitChange)}`],
+        [''],
+        ['Aylık Veriler'],
+        ['Ay', 'Gelir', 'Gider'],
+        ...stats.monthlyData.map(d => [d.month, d.income, d.expense])
+      ]
+      
+      const csv = csvContent.map(row => row.join(',')).join('\n')
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = `muhasebe-dashboard-${new Date().getTime()}.csv`
+      link.click()
+      
+      toast.success('Excel dosyası indirildi')
+    } catch (error) {
+      console.error('Excel export error:', error)
+      toast.error('Excel dosyası oluşturulamadı')
+    }
   }
 
   if (loading) {
@@ -211,11 +327,65 @@ export default function AccountingDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-neutral-900">Muhasebe Dashboard</h2>
-        <div className="flex gap-2">
+        <div>
+          <h2 className="text-2xl font-bold text-neutral-900">Muhasebe Dashboard</h2>
+          <p className="text-sm text-neutral-600 mt-1">
+            Son güncelleme: {new Date().toLocaleString('tr-TR')}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => loadDashboardData(true)}
+            disabled={refreshing}
+            className="px-3 py-2 rounded-xl text-sm font-medium bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors disabled:opacity-50 flex items-center gap-2"
+            title="Yenile"
+          >
+            <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
+            <span className="hidden sm:inline">{refreshing ? 'Yenileniyor...' : 'Yenile'}</span>
+          </button>
+          
+          <div className="h-8 w-px bg-neutral-300 hidden sm:block" />
+          
+          <button
+            onClick={() => setShowComparison(!showComparison)}
+            className="px-3 py-2 rounded-xl text-sm font-medium bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors flex items-center gap-2"
+            title={showComparison ? 'Karşılaştırmayı Gizle' : 'Karşılaştırmayı Göster'}
+          >
+            {showComparison ? <EyeOff size={16} /> : <Eye size={16} />}
+            <span className="hidden sm:inline">Karşılaştır</span>
+          </button>
+          
+          <div className="relative group">
+            <button
+              disabled={exporting}
+              className="px-3 py-2 rounded-xl text-sm font-medium bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors disabled:opacity-50 flex items-center gap-2"
+            >
+              <Download size={16} />
+              <span className="hidden sm:inline">Dışa Aktar</span>
+            </button>
+            <div className="hidden group-hover:block absolute right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-neutral-200 py-2 min-w-[160px] z-10">
+              <button
+                onClick={handleExportPDF}
+                disabled={exporting}
+                className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 transition-colors disabled:opacity-50"
+              >
+                PDF olarak indir
+              </button>
+              <button
+                onClick={handleExportExcel}
+                disabled={exporting}
+                className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 transition-colors disabled:opacity-50"
+              >
+                Excel olarak indir
+              </button>
+            </div>
+          </div>
+          
+          <div className="h-8 w-px bg-neutral-300 hidden sm:block" />
+          
           <button
             onClick={() => setSelectedPeriod('month')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+            className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
               selectedPeriod === 'month'
                 ? 'bg-neutral-900 text-white'
                 : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
@@ -225,7 +395,7 @@ export default function AccountingDashboard() {
           </button>
           <button
             onClick={() => setSelectedPeriod('quarter')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+            className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
               selectedPeriod === 'quarter'
                 ? 'bg-neutral-900 text-white'
                 : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
@@ -235,7 +405,7 @@ export default function AccountingDashboard() {
           </button>
           <button
             onClick={() => setSelectedPeriod('year')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+            className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
               selectedPeriod === 'year'
                 ? 'bg-neutral-900 text-white'
                 : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
@@ -247,7 +417,7 @@ export default function AccountingDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {/* Income Card */}
         <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
           <div className="flex items-center justify-between mb-4">
@@ -327,7 +497,369 @@ export default function AccountingDashboard() {
             Geçen ay: {formatCurrency(Math.abs(stats.previousMonth.profit))}
           </p>
         </div>
+
+        {/* Cash Flow Card */}
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+              <Calendar className="text-white" size={24} />
+            </div>
+            <span className="text-xs text-purple-700 font-medium">Bu Ay</span>
+          </div>
+          <h3 className="text-3xl font-bold text-purple-900 mb-1">
+            {formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}
+          </h3>
+          <p className="text-sm text-purple-700">Nakit Akışı</p>
+          <div className="mt-3 flex items-center gap-2 text-xs">
+            <span className="text-green-600">↑ {formatCurrency(stats.currentMonth.income)}</span>
+            <span className="text-neutral-400">|</span>
+            <span className="text-red-600">↓ {formatCurrency(stats.currentMonth.expense)}</span>
+          </div>
+        </div>
       </div>
+
+      {/* Advanced Statistics and Target Tracking */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Quick Analytics */}
+        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-6 border border-indigo-200">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center">
+              <Zap className="text-white" size={20} />
+            </div>
+            <h3 className="text-lg font-semibold text-indigo-900">Hızlı Analizler</h3>
+          </div>
+          {advancedStats && (
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-indigo-700">Kârlılık Oranı</span>
+                <span className={`text-lg font-bold ${
+                  advancedStats.profitabilityRatio >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {advancedStats.profitabilityRatio.toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-indigo-700">Büyüme Hızı</span>
+                <span className={`text-lg font-bold ${
+                  advancedStats.growthRate >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {formatPercentage(advancedStats.growthRate)}
+                </span>
+              </div>
+              <div className="h-px bg-indigo-300 my-2" />
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-indigo-600">Ort. Gelir</span>
+                <span className="text-sm font-semibold text-indigo-900">{formatCurrency(advancedStats.avgIncome)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-indigo-600">Ort. Gider</span>
+                <span className="text-sm font-semibold text-indigo-900">{formatCurrency(advancedStats.avgExpense)}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Forecast */}
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
+              <BarChart2 className="text-white" size={20} />
+            </div>
+            <h3 className="text-lg font-semibold text-amber-900">Gelecek Ay Tahmini</h3>
+          </div>
+          {advancedStats && (
+            <div className="space-y-3">
+              <div className="bg-white/60 rounded-xl p-3">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-amber-700">Tahmini Gelir</span>
+                  <span className="text-green-600 text-xs">↑</span>
+                </div>
+                <span className="text-xl font-bold text-amber-900">{formatCurrency(advancedStats.forecastIncome)}</span>
+              </div>
+              <div className="bg-white/60 rounded-xl p-3">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-amber-700">Tahmini Gider</span>
+                  <span className="text-red-600 text-xs">↓</span>
+                </div>
+                <span className="text-xl font-bold text-amber-900">{formatCurrency(advancedStats.forecastExpense)}</span>
+              </div>
+              <div className="bg-white rounded-xl p-3">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-amber-700">Tahmini Kâr</span>
+                  <span className={`text-xs ${advancedStats.forecastProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {advancedStats.forecastProfit >= 0 ? '↑' : '↓'}
+                  </span>
+                </div>
+                <span className={`text-xl font-bold ${
+                  advancedStats.forecastProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {formatCurrency(Math.abs(advancedStats.forecastProfit))}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Target Tracking */}
+        <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl p-6 border border-teal-200">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center">
+              <Target className="text-white" size={20} />
+            </div>
+            <h3 className="text-lg font-semibold text-teal-900">Hedef Takibi</h3>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm text-teal-700 mb-2 block">Aylık Gelir Hedefi</label>
+              <input
+                type="number"
+                value={monthlyTarget}
+                onChange={(e) => setMonthlyTarget(Number(e.target.value))}
+                placeholder="Hedef tutarı girin"
+                className="w-full px-4 py-2 rounded-xl border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"
+              />
+            </div>
+            {monthlyTarget > 0 && advancedStats && (
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-teal-700">Gerçekleşme</span>
+                  <span className={`text-xl font-bold ${
+                    advancedStats.targetAchievement >= 100 ? 'text-green-600' : 'text-amber-600'
+                  }`}>
+                    {advancedStats.targetAchievement.toFixed(1)}%
+                  </span>
+                </div>
+                <div className="bg-white rounded-full h-3 overflow-hidden">
+                  <div 
+                    className={`h-full transition-all duration-500 ${
+                      advancedStats.targetAchievement >= 100 ? 'bg-green-500' : 'bg-amber-500'
+                    }`}
+                    style={{ width: `${Math.min(advancedStats.targetAchievement, 100)}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-teal-600">Hedef: {formatCurrency(monthlyTarget)}</span>
+                  <span className="text-teal-600">Kalan: {formatCurrency(Math.max(0, monthlyTarget - stats.currentMonth.income))}</span>
+                </div>
+                {advancedStats.targetAchievement >= 100 && (
+                  <div className="bg-green-100 text-green-800 text-xs px-3 py-2 rounded-lg text-center font-medium">
+                    🎉 Hedef aşıldı!
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Advanced Statistics Toggle */}
+      <div className="flex items-center justify-between bg-white rounded-2xl p-4 border border-neutral-200">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center">
+            <Activity className="text-neutral-600" size={20} />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-neutral-900">Detaylı İstatistikler</h3>
+            <p className="text-xs text-neutral-600">Ortalama, maksimum ve minimum değerleri göster</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setShowAdvancedStats(!showAdvancedStats)}
+          className="px-4 py-2 rounded-xl text-sm font-medium bg-neutral-900 text-white hover:bg-neutral-800 transition-colors"
+        >
+          {showAdvancedStats ? 'Gizle' : 'Göster'}
+        </button>
+      </div>
+
+      {/* Detailed Statistics Section */}
+      {showAdvancedStats && advancedStats && (
+        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+          <h3 className="text-lg font-semibold text-slate-900 mb-6">Detaylı İstatistikler</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Income Stats */}
+            <div className="bg-white rounded-xl p-5">
+              <h4 className="text-sm font-semibold text-green-700 mb-4">Gelir İstatistikleri</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Ortalama</span>
+                  <span className="text-sm font-bold text-slate-900">{formatCurrency(advancedStats.avgIncome)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">En Yüksek</span>
+                  <span className="text-sm font-bold text-green-600">{formatCurrency(advancedStats.maxIncome)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">En Düşük</span>
+                  <span className="text-sm font-bold text-slate-600">{formatCurrency(advancedStats.minIncome)}</span>
+                </div>
+                <div className="h-px bg-slate-200 my-2" />
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Değişkenlik</span>
+                  <span className="text-sm font-bold text-slate-900">
+                    {formatCurrency(advancedStats.maxIncome - advancedStats.minIncome)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Expense Stats */}
+            <div className="bg-white rounded-xl p-5">
+              <h4 className="text-sm font-semibold text-red-700 mb-4">Gider İstatistikleri</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Ortalama</span>
+                  <span className="text-sm font-bold text-slate-900">{formatCurrency(advancedStats.avgExpense)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">En Yüksek</span>
+                  <span className="text-sm font-bold text-red-600">{formatCurrency(advancedStats.maxExpense)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">En Düşük</span>
+                  <span className="text-sm font-bold text-slate-600">{formatCurrency(advancedStats.minExpense)}</span>
+                </div>
+                <div className="h-px bg-slate-200 my-2" />
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Değişkenlik</span>
+                  <span className="text-sm font-bold text-slate-900">
+                    {formatCurrency(advancedStats.maxExpense - advancedStats.minExpense)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Profit Stats */}
+            <div className="bg-white rounded-xl p-5">
+              <h4 className="text-sm font-semibold text-blue-700 mb-4">Kâr/Zarar İstatistikleri</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Ortalama Kâr</span>
+                  <span className={`text-sm font-bold ${
+                    advancedStats.avgProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {formatCurrency(Math.abs(advancedStats.avgProfit))}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Kârlılık</span>
+                  <span className={`text-sm font-bold ${
+                    advancedStats.profitabilityRatio >= 0 ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {advancedStats.profitabilityRatio.toFixed(1)}%
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Büyüme Hızı</span>
+                  <span className={`text-sm font-bold ${
+                    advancedStats.growthRate >= 0 ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {formatPercentage(advancedStats.growthRate)}
+                  </span>
+                </div>
+                <div className="h-px bg-slate-200 my-2" />
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-600">Performans</span>
+                  <span className={`text-xs font-bold px-2 py-1 rounded ${
+                    advancedStats.profitabilityRatio >= 20 
+                      ? 'bg-green-100 text-green-700'
+                      : advancedStats.profitabilityRatio >= 10
+                      ? 'bg-amber-100 text-amber-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}>
+                    {advancedStats.profitabilityRatio >= 20 ? 'Mükemmel' : advancedStats.profitabilityRatio >= 10 ? 'İyi' : 'Geliştirilmeli'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Comparison Section */}
+      {showComparison && (
+        <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 border border-neutral-200">
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Dönem Karşılaştırması</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-neutral-600">Gelir Artışı</span>
+                <div className={`flex items-center gap-1 text-sm font-semibold ${
+                  stats.trends.incomeChange >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {stats.trends.incomeChange >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                  {formatPercentage(stats.trends.incomeChange)}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Bu ay:</span>
+                  <span className="font-medium">{formatCurrency(stats.currentMonth.income)}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Geçen ay:</span>
+                  <span className="font-medium">{formatCurrency(stats.previousMonth.income)}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Fark:</span>
+                  <span className="font-medium">{formatCurrency(stats.currentMonth.income - stats.previousMonth.income)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-neutral-600">Gider Değişimi</span>
+                <div className={`flex items-center gap-1 text-sm font-semibold ${
+                  stats.trends.expenseChange >= 0 ? 'text-red-600' : 'text-green-600'
+                }`}>
+                  {stats.trends.expenseChange >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                  {formatPercentage(stats.trends.expenseChange)}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Bu ay:</span>
+                  <span className="font-medium">{formatCurrency(stats.currentMonth.expense)}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Geçen ay:</span>
+                  <span className="font-medium">{formatCurrency(stats.previousMonth.expense)}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Fark:</span>
+                  <span className="font-medium">{formatCurrency(stats.currentMonth.expense - stats.previousMonth.expense)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-neutral-600">Kar/Zarar Değişimi</span>
+                <div className={`flex items-center gap-1 text-sm font-semibold ${
+                  stats.trends.profitChange >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {stats.trends.profitChange >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                  {formatPercentage(stats.trends.profitChange)}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Bu ay:</span>
+                  <span className="font-medium">{formatCurrency(stats.currentMonth.profit)}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Geçen ay:</span>
+                  <span className="font-medium">{formatCurrency(stats.previousMonth.profit)}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Fark:</span>
+                  <span className="font-medium">{formatCurrency(stats.currentMonth.profit - stats.previousMonth.profit)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -335,39 +867,117 @@ export default function AccountingDashboard() {
         <div className="bg-white rounded-2xl p-6 border border-neutral-200">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-neutral-900">Aylık Trend</h3>
-            <BarChart3 className="text-neutral-400" size={20} />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setChartType('line')}
+                className={`p-2 rounded-lg transition-colors ${
+                  chartType === 'line' ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:bg-neutral-100'
+                }`}
+                title="Çizgi Grafik"
+              >
+                <LineChartIcon size={16} />
+              </button>
+              <button
+                onClick={() => setChartType('bar')}
+                className={`p-2 rounded-lg transition-colors ${
+                  chartType === 'bar' ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:bg-neutral-100'
+                }`}
+                title="Çubuk Grafik"
+              >
+                <BarChart3 size={16} />
+              </button>
+              <button
+                onClick={() => setChartType('area')}
+                className={`p-2 rounded-lg transition-colors ${
+                  chartType === 'area' ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:bg-neutral-100'
+                }`}
+                title="Alan Grafik"
+              >
+                <AreaChartIcon size={16} />
+              </button>
+            </div>
           </div>
           <ResponsiveContainer width="100%" height={260}>
-            <LineChart data={stats.monthlyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
-              <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" />
-              <Tooltip
-                formatter={(value: any) => formatCurrency(value)}
-                contentStyle={{
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px'
-                }}
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="income"
-                stroke="#10b981"
-                strokeWidth={2}
-                name="Gelir"
-                dot={{ fill: '#10b981', r: 4 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="expense"
-                stroke="#ef4444"
-                strokeWidth={2}
-                name="Gider"
-                dot={{ fill: '#ef4444', r: 4 }}
-              />
-            </LineChart>
+            {chartType === 'line' ? (
+              <LineChart data={stats.monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" />
+                <Tooltip
+                  formatter={(value: any) => formatCurrency(value)}
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px'
+                  }}
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="income"
+                  stroke="#10b981"
+                  strokeWidth={2}
+                  name="Gelir"
+                  dot={{ fill: '#10b981', r: 4 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="expense"
+                  stroke="#ef4444"
+                  strokeWidth={2}
+                  name="Gider"
+                  dot={{ fill: '#ef4444', r: 4 }}
+                />
+              </LineChart>
+            ) : chartType === 'bar' ? (
+              <BarChart data={stats.monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" />
+                <Tooltip
+                  formatter={(value: any) => formatCurrency(value)}
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px'
+                  }}
+                />
+                <Legend />
+                <Bar dataKey="income" fill="#10b981" name="Gelir" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="expense" fill="#ef4444" name="Gider" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            ) : (
+              <AreaChart data={stats.monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" />
+                <Tooltip
+                  formatter={(value: any) => formatCurrency(value)}
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px'
+                  }}
+                />
+                <Legend />
+                <Area
+                  type="monotone"
+                  dataKey="income"
+                  stroke="#10b981"
+                  fill="#10b981"
+                  fillOpacity={0.3}
+                  name="Gelir"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="expense"
+                  stroke="#ef4444"
+                  fill="#ef4444"
+                  fillOpacity={0.3}
+                  name="Gider"
+                />
+              </AreaChart>
+            )}
           </ResponsiveContainer>
         </div>
 
@@ -413,10 +1023,10 @@ export default function AccountingDashboard() {
                   cx="50%"
                   cy="50%"
                   outerRadius={90}
-                  label={(entry) => `${entry.category}: ${formatCurrency(entry.amount)}`}
+                  label={(entry: any) => `${entry.category}: ${formatCurrency(entry.amount)}`}
                   labelLine={false}
                 >
-                  {stats.categoryBreakdown.income.map((entry, index) => (
+                  {stats.categoryBreakdown.income.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -442,10 +1052,10 @@ export default function AccountingDashboard() {
                   cx="50%"
                   cy="50%"
                   outerRadius={90}
-                  label={(entry) => `${entry.category}: ${formatCurrency(entry.amount)}`}
+                  label={(entry: any) => `${entry.category}: ${formatCurrency(entry.amount)}`}
                   labelLine={false}
                 >
-                  {stats.categoryBreakdown.expense.map((entry, index) => (
+                  {stats.categoryBreakdown.expense.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

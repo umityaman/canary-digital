@@ -17,6 +17,7 @@ import {
   FileText
 } from 'lucide-react';
 import { useInspectionStore } from '../stores/inspectionStore';
+import inspectionApi from '../services/inspectionApi';
 
 export default function InspectionDetail() {
   const { id } = useParams<{ id: string }>();
@@ -48,8 +49,7 @@ export default function InspectionDetail() {
 
   const handleDownloadPDF = async () => {
     try {
-      const inspectionApi = await import('../services/inspectionApi');
-      const blob = await inspectionApi.default.generatePDF(parseInt(id!));
+      const blob = await inspectionApi.generatePDF(parseInt(id!));
       
       // Create download link
       const url = window.URL.createObjectURL(blob);

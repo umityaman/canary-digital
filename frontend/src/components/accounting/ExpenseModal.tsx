@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X, Upload } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { accountingAPI } from '../../services/api'
 
 interface ExpenseModalProps {
   open: boolean
@@ -126,8 +127,6 @@ export default function ExpenseModal({ open, onClose, onSaved, initial }: Expens
 
     setLoading(true)
     try {
-      const { accountingAPI } = await import('../../services/api')
-      
       if (initial?.id) {
         await accountingAPI.updateExpense(initial.id, formData)
         toast.success('Gider güncellendi')
