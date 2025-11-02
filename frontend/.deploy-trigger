@@ -2,5 +2,5 @@
 
 This file is updated to trigger frontend deployment.
 
-Last update: Feature 8 Complete - Invoice PDF Generation
-Date: October 21, 2025
+Last update: Dockerfile Fix - Using npm install instead of npm ci
+Date: November 2, 2025
