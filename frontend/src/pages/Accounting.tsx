@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
@@ -140,10 +141,22 @@ export default function Accounting() {
   const [checkModalOpen, setCheckModalOpen] = useState(false)
   const [editingCheck, setEditingCheck] = useState<any | null>(null)
 
+  // Navigation and search params
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+
   // Load accounting stats on mount
   useEffect(() => {
     loadStats()
   }, [])
+
+  // Handle URL tab parameter
+  useEffect(() => {
+    const tabParam = searchParams.get('tab')
+    if (tabParam && tabs.some(t => t.id === tabParam)) {
+      setActiveTab(tabParam as Tab)
+    }
+  }, [searchParams])
 
   // Load invoices when invoice tab is active
   useEffect(() => {
@@ -668,7 +681,10 @@ export default function Accounting() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-neutral-900">Fatura Listesi</h2>
-                  <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2">
+                  <button 
+                    onClick={() => navigate('/accounting/invoice/new')}
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                  >
                     <FileText size={18} />
                     Yeni Fatura
                   </button>
@@ -857,7 +873,10 @@ export default function Accounting() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-neutral-900">Teklif Listesi</h2>
-                  <button className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2">
+                  <button 
+                    onClick={() => navigate('/accounting/quote/new')}
+                    className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                  >
                     <Receipt size={18} />
                     Yeni Teklif
                   </button>
