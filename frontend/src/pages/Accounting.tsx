@@ -22,9 +22,10 @@ import GIBIntegration from '../components/accounting/GIBIntegration'
 import CostAccountingTab from '../components/accounting/CostAccountingTab'
 import CategoryTagManagement from '../components/accounting/CategoryTagManagement'
 import CompanyInfo from '../components/accounting/CompanyInfo'
+import CashBankManagement from '../components/accounting/CashBankManagement'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company'
+type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank'
 
 interface AccountingStats {
   totalRevenue: number
@@ -394,6 +395,7 @@ export default function Accounting() {
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
     { id: 'categories' as const, label: 'Kategoriler & Etiketler', icon: <Tag size={18} /> },
     { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
+    { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
     { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
@@ -1125,6 +1127,9 @@ export default function Accounting() {
 
             {/* Company Information Tab */}
             {activeTab === 'company' && <CompanyInfo />}
+
+            {/* Cash & Bank Management Tab */}
+            {activeTab === 'cash-bank' && <CashBankManagement />}
 
             {/* GIB Integration Tab */}
             {activeTab === 'gib' && <GIBIntegration />}
