@@ -6,6 +6,7 @@ import { GoogleCalendarService } from '../services/googleCalendar'
 import { sendOrderConfirmation, sendEmail } from '../utils/emailService'
 import PDFDocument from 'pdfkit'
 import { sendOrderConfirmationWhatsApp } from '../services/whatsapp.service'
+import notificationService from '../services/notification.service'
 
 const router = Router()
 const prisma = new PrismaClient() as any
@@ -194,6 +195,91 @@ async function syncOrderToCalendar(order: any, userId: number, action: 'create' 
   } catch (error) {
     console.error('Calendar sync error:', error);
     // Log error but don't fail the order operation
+  }
+}
+
+/**
+ * Send notification to accounting team when order is completed
+ */
+async function notifyAccountingOnOrderComplete(order: any, companyId: number) {
+  try {
+    // Get users with 'accounting' or 'admin' role
+    const accountingUsers = await prisma.user.findMany({
+      where: {
+        companyId,
+        role: {
+          in: ['accounting', 'admin', 'accountant']
+        }
+      },
+      select: { id: true, email: true, name: true }
+    });
+
+    if (accountingUsers.length === 0) {
+      console.log('No accounting users found to notify');
+      return;
+    }
+
+    // Prepare notification details
+    const customerName = order.customer?.name || 'Müşteri';
+    const orderNumber = order.orderNumber || `#${order.id}`;
+    const equipmentNames = order.orderItems?.map((item: any) => item.equipment?.name).filter(Boolean).join(', ') || 'Ekipman';
+    const totalAmount = order.totalAmount ? `₺${order.totalAmount.toLocaleString('tr-TR')}` : '';
+
+    // Send notification to each accounting user
+    for (const user of accountingUsers) {
+      try {
+        // Send push notification
+        await notificationService.sendNotification({
+          userId: user.id,
+          title: '📦 Sipariş Tamamlandı',
+          body: `${customerName} - ${orderNumber}\n${equipmentNames}${totalAmount ? ` - ${totalAmount}` : ''}`,
+          data: {
+            type: 'order_completed',
+            orderId: order.id,
+            orderNumber,
+            customerId: order.customerId,
+            customerName,
+            totalAmount: order.totalAmount,
+            screen: 'Accounting',
+            tab: 'invoice'
+          },
+          type: 'order_completed',
+          priority: 'high'
+        });
+
+        // Also send email notification
+        await sendEmail({
+          to: user.email,
+          subject: `Sipariş Tamamlandı - ${orderNumber}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+              <h2 style="color: #059669;">🎉 Sipariş Tamamlandı</h2>
+              <p>Merhaba ${user.name || 'Değerli Kullanıcı'},</p>
+              <p>Aşağıdaki sipariş tamamlandı ve faturalama için hazır:</p>
+              <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p style="margin: 5px 0;"><strong>Sipariş No:</strong> ${orderNumber}</p>
+                <p style="margin: 5px 0;"><strong>Müşteri:</strong> ${customerName}</p>
+                <p style="margin: 5px 0;"><strong>Ekipman:</strong> ${equipmentNames}</p>
+                ${totalAmount ? `<p style="margin: 5px 0;"><strong>Tutar:</strong> ${totalAmount}</p>` : ''}
+              </div>
+              <p>Muhasebe sisteminden fatura oluşturabilirsiniz.</p>
+              <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+                Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.
+              </p>
+            </div>
+          `
+        }).catch(err => console.error('Email send failed:', err));
+
+        console.log(`Notification sent to accounting user: ${user.email}`);
+      } catch (error) {
+        console.error(`Failed to notify user ${user.id}:`, error);
+      }
+    }
+
+    console.log(`Order completion notifications sent to ${accountingUsers.length} accounting users`);
+  } catch (error) {
+    console.error('Failed to notify accounting team:', error);
+    // Don't throw error - notification failure shouldn't break order update
   }
 }
 
@@ -483,6 +569,12 @@ router.put('/:id', authenticateToken, async (req: any, res) => {
     const { id } = req.params
     const { status, startDate, endDate, notes, totalAmount } = req.body
 
+    // Get old order to check status change
+    const oldOrder = await prisma.order.findUnique({
+      where: { id: parseInt(id) },
+      select: { status: true }
+    });
+
     const order = await prisma.order.update({
       where: { id: parseInt(id) },
       data: {
@@ -507,6 +599,11 @@ router.put('/:id', authenticateToken, async (req: any, res) => {
 
     // Sync to Google Calendar (if enabled)
     await syncOrderToCalendar(order, req.userId, 'update');
+
+    // Send notification to accounting if order is completed
+    if (status && oldOrder && oldOrder.status !== 'completed' && status === 'completed') {
+      await notifyAccountingOnOrderComplete(order, req.companyId);
+    }
 
     res.json(order)
   } catch (error) {
