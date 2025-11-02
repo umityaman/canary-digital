@@ -19,9 +19,10 @@ import InventoryAccounting from '../components/accounting/InventoryAccounting'
 import AdvancedReporting from '../components/accounting/AdvancedReporting'
 import GIBIntegration from '../components/accounting/GIBIntegration'
 import CostAccountingTab from '../components/accounting/CostAccountingTab'
+import CategoryManagement from '../components/accounting/CategoryManagement'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting'
+type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories'
 
 interface AccountingStats {
   totalRevenue: number
@@ -377,6 +378,7 @@ export default function Accounting() {
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'cost-accounting' as const, label: 'Maliyet Muhasebesi', icon: <DollarSign size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
+    { id: 'categories' as const, label: 'Kategori Yönetimi', icon: <Settings size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
     { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
@@ -1081,6 +1083,9 @@ export default function Accounting() {
 
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}
+
+            {/* Category Management Tab */}
+            {activeTab === 'categories' && <CategoryManagement />}
 
             {/* GIB Integration Tab */}
             {activeTab === 'gib' && <GIBIntegration />}

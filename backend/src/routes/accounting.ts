@@ -5,8 +5,10 @@ import { authenticateToken } from './auth';
 import { log } from '../config/logger';
 import chartOfAccountsRoutes from './accounting/chartOfAccounts.routes';
 import journalEntryRoutes from './accounting/journalEntry.routes';
+import { PrismaClient } from '@prisma/client';
 
 const router = express.Router();
+const prisma = new PrismaClient();
 
 // Chart of Accounts routes (Turkish Accounting Standards)
 router.use('/chart-of-accounts', chartOfAccountsRoutes);
@@ -831,6 +833,167 @@ router.delete('/expense/:id', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to delete expense',
+    });
+  }
+});
+
+/**
+ * CATEGORY MANAGEMENT OPERATIONS
+ */
+
+/**
+ * @route   GET /api/accounting/categories
+ * @desc    Get all income/expense categories
+ * @access  Private
+ * @query   type (income|expense)
+ */
+router.get('/categories', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { type } = req.query;
+
+    // Get categories from Income and Expense tables
+    let categories: { id: string; name: string; type: string; color?: string }[] = [];
+
+    if (!type || type === 'income') {
+      const incomes = await prisma.income.findMany({
+        where: { companyId },
+        select: { category: true },
+        distinct: ['category'],
+      });
+      const incomeCats = incomes
+        .filter(i => i.category)
+        .map(i => ({ 
+          id: `income-${i.category}`, 
+          name: i.category!, 
+          type: 'income',
+          color: '#10b981'
+        }));
+      categories.push(...incomeCats);
+    }
+
+    if (!type || type === 'expense') {
+      const expenses = await prisma.expense.findMany({
+        where: { companyId },
+        select: { category: true },
+        distinct: ['category'],
+      });
+      const expenseCats = expenses
+        .filter(e => e.category)
+        .map(e => ({ 
+          id: `expense-${e.category}`, 
+          name: e.category!, 
+          type: 'expense',
+          color: '#ef4444'
+        }));
+      categories.push(...expenseCats);
+    }
+
+    res.json({
+      success: true,
+      data: categories,
+    });
+  } catch (error: any) {
+    log.error('Failed to get categories:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get categories',
+    });
+  }
+});
+
+/**
+ * @route   POST /api/accounting/categories/rename
+ * @desc    Rename a category (updates all records)
+ * @access  Private
+ * @body    type, oldName, newName
+ */
+router.post('/categories/rename', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { type, oldName, newName } = req.body;
+
+    if (!type || !oldName || !newName) {
+      return res.status(400).json({
+        success: false,
+        message: 'type, oldName, and newName are required',
+      });
+    }
+
+    let updatedCount = 0;
+
+    if (type === 'income') {
+      const result = await prisma.income.updateMany({
+        where: { companyId, category: oldName },
+        data: { category: newName },
+      });
+      updatedCount = result.count;
+    } else if (type === 'expense') {
+      const result = await prisma.expense.updateMany({
+        where: { companyId, category: oldName },
+        data: { category: newName },
+      });
+      updatedCount = result.count;
+    }
+
+    res.json({
+      success: true,
+      message: `Category renamed successfully. ${updatedCount} records updated.`,
+      data: { updatedCount },
+    });
+  } catch (error: any) {
+    log.error('Failed to rename category:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to rename category',
+    });
+  }
+});
+
+/**
+ * @route   DELETE /api/accounting/categories/:type/:name
+ * @desc    Delete a category (moves records to 'Uncategorized')
+ * @access  Private
+ */
+router.delete('/categories/:type/:name', authenticateToken, async (req, res) => {
+  try {
+    const companyId = (req as any).user?.companyId || 1;
+    const { type, name } = req.params;
+
+    if (!type || !name) {
+      return res.status(400).json({
+        success: false,
+        message: 'type and name are required',
+      });
+    }
+
+    const decodedName = decodeURIComponent(name);
+    let updatedCount = 0;
+
+    if (type === 'income') {
+      const result = await prisma.income.updateMany({
+        where: { companyId, category: decodedName },
+        data: { category: 'Diğer' },
+      });
+      updatedCount = result.count;
+    } else if (type === 'expense') {
+      const result = await prisma.expense.updateMany({
+        where: { companyId, category: decodedName },
+        data: { category: 'Diğer' },
+      });
+      updatedCount = result.count;
+    }
+
+    res.json({
+      success: true,
+      message: `Category deleted. ${updatedCount} records moved to 'Diğer'.`,
+      data: { updatedCount },
+    });
+  } catch (error: any) {
+    log.error('Failed to delete category:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to delete category',
     });
   }
 });
