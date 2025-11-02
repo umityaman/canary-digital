@@ -20,7 +20,7 @@ import InventoryAccounting from '../components/accounting/InventoryAccounting'
 import AdvancedReporting from '../components/accounting/AdvancedReporting'
 import GIBIntegration from '../components/accounting/GIBIntegration'
 import CostAccountingTab from '../components/accounting/CostAccountingTab'
-import CategoryManagement from '../components/accounting/CategoryManagement'
+import CategoryTagManagement from '../components/accounting/CategoryTagManagement'
 import CompanyInfo from '../components/accounting/CompanyInfo'
 import { toast } from 'react-hot-toast'
 
@@ -392,7 +392,7 @@ export default function Accounting() {
     { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'cost-accounting' as const, label: 'Maliyet Muhasebesi', icon: <DollarSign size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
-    { id: 'categories' as const, label: 'Kategori Yönetimi', icon: <Settings size={18} /> },
+    { id: 'categories' as const, label: 'Kategoriler & Etiketler', icon: <Tag size={18} /> },
     { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
@@ -1120,8 +1120,8 @@ export default function Accounting() {
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}
 
-            {/* Category Management Tab */}
-            {activeTab === 'categories' && <CategoryManagement />}
+            {/* Category and Tag Management Tab */}
+            {activeTab === 'categories' && <CategoryTagManagement />}
 
             {/* Company Information Tab */}
             {activeTab === 'company' && <CompanyInfo />}
