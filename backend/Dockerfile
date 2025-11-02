@@ -5,11 +5,12 @@ RUN apk add --no-cache openssl libc6-compat python3 make g++
 
 WORKDIR /usr/src/app
 
-# Copy package files (including lock file for consistent installs)
+# Copy package files
 COPY package*.json ./
 
 # Install ALL dependencies (ts-node needed at runtime)
-RUN npm ci --production=false && npm cache clean --force
+# Note: Using npm install instead of npm ci because package-lock.json is not committed
+RUN npm install --production=false && npm cache clean --force
 
 # Copy prisma schema
 COPY prisma ./prisma
