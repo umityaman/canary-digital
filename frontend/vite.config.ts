@@ -12,9 +12,11 @@ export default defineConfig({
   ],
   
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: [
+      { find: "@", replacement: path.resolve(__dirname, "./src") },
+      // Shim the removed date-fns v2 formatter helper so the legacy adapter keeps working on v4.
+      { find: "date-fns/_lib/format/longFormatters", replacement: path.resolve(__dirname, "./src/utils/dateFnsLongFormatters.ts") },
+    ],
   },
   
   server: {
