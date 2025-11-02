@@ -558,8 +558,23 @@ export default function Accounting() {
               </div>
             )}
 
-            {/* Cari (Account Cards) Tab */}
-            {activeTab === 'cari' && <CurrentAccountList />}
+            {/* Cari (Account Cards) Tab - Navigate to dedicated page */}
+            {activeTab === 'cari' && (
+              <div className="text-center py-12">
+                <Users className="mx-auto text-neutral-400 mb-4" size={64} />
+                <h3 className="text-xl font-semibold text-neutral-900 mb-2">Cari Hesaplar</h3>
+                <p className="text-neutral-600 mb-6">
+                  Müşteri ve tedarikçi hesap kartlarını görüntüleyin ve yönetin
+                </p>
+                <button
+                  onClick={() => navigate('/account-cards')}
+                  className="px-6 py-3 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors inline-flex items-center gap-2"
+                >
+                  <Users size={20} />
+                  Cari Hesaplara Git
+                </button>
+              </div>
+            )}
 
             {/* Reports Tab - Advanced Reporting */}
             {activeTab === 'reports' && <AdvancedReporting />}

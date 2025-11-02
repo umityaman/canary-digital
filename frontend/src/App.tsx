@@ -25,6 +25,8 @@ const Suppliers = lazy(() => import('./pages/Suppliers'))
 const Accounting = lazy(() => import('./pages/Accounting'))
 const InvoiceForm = lazy(() => import('./pages/InvoiceForm'))
 const QuoteForm = lazy(() => import('./pages/QuoteForm'))
+const AccountCardList = lazy(() => import('./pages/AccountCardList'))
+const AccountCardDetail = lazy(() => import('./pages/AccountCardDetail'))
 const Social = lazy(() => import('./pages/Social'))
 const Website = lazy(() => import('./pages/Website'))
 const SiteBuilder = lazy(() => import('./pages/website/SiteBuilder'))
@@ -103,6 +105,8 @@ export default function App(){
               <Route path='/accounting/invoice/:id' element={<InvoiceForm />} />
               <Route path='/accounting/quote/new' element={<QuoteForm />} />
               <Route path='/accounting/quote/:id' element={<QuoteForm />} />
+              <Route path='/account-cards' element={<AccountCardList />} />
+              <Route path='/account-cards/:id' element={<AccountCardDetail />} />
               <Route path='/social' element={<Social />} />
               <Route path='/website' element={<Website />} />
               <Route path='/website/builder' element={<SiteBuilder />} />
