@@ -1,13 +1,13 @@
-name: Deploy Backend to Cloud Run
+name: Deploy Backend to Cloud Run (DISABLED - Use deploy-backend-v2.yml)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'backend/**'
-      - '.github/workflows/deploy-backend.yml'
-  workflow_dispatch: # Manuel trigger için
+  workflow_dispatch: # Sadece manuel trigger - otomatik deploy kapalı
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'backend/**'
+  #     - '.github/workflows/deploy-backend.yml'
 
 # Prevent concurrent deployments
 concurrency:
