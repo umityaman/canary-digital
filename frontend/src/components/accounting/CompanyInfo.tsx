@@ -1,0 +1,683 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Building2,
+  Phone,
+  Mail,
+  MapPin,
+  Globe,
+  FileText,
+  User,
+  CreditCard,
+  Building,
+  Save,
+  RefreshCw,
+  AlertCircle,
+} from 'lucide-react';
+import { apiClient } from '../../utils/api';
+import toast from 'react-hot-toast';
+
+interface CompanyData {
+  id: number;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  mobilePhone: string | null;
+  address: string | null;
+  address2: string | null;
+  city: string | null;
+  district: string | null;
+  postalCode: string | null;
+  taxNumber: string | null;
+  taxOffice: string | null;
+  tradeRegister: string | null;
+  mersisNo: string | null;
+  website: string | null;
+  logo: string | null;
+  authorizedPerson: string | null;
+  iban: string | null;
+  bankName: string | null;
+  bankBranch: string | null;
+  accountHolder: string | null;
+  timezone: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface BankAccount {
+  id: number;
+  bankName: string;
+  accountNumber: string;
+  accountType: string;
+  iban: string;
+  branch: string | null;
+  branchCode: string | null;
+  balance: number;
+  availableBalance: number;
+  blockedBalance: number;
+  currency: string;
+  isActive: boolean;
+  lastReconciled: string | null;
+  lastStatementDate: string | null;
+  autoReconcile: boolean;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface BankAccountSummary {
+  accounts: BankAccount[];
+  totals: {
+    totalBalance: number;
+    totalAvailable: number;
+    totalBlocked: number;
+    activeAccounts: number;
+    totalAccounts: number;
+  };
+}
+
+const CompanyInfo: React.FC = () => {
+  const [companyData, setCompanyData] = useState<CompanyData | null>(null);
+  const [bankAccounts, setBankAccounts] = useState<BankAccountSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [companyResponse, bankResponse] = await Promise.all([
+        apiClient.get('/company'),
+        apiClient.get('/company/bank-accounts'),
+      ]);
+      setCompanyData(companyResponse.data);
+      setBankAccounts(bankResponse.data);
+    } catch (error: any) {
+      console.error('Error loading company data:', error);
+      toast.error('Şirket bilgileri yüklenirken hata oluştu');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!companyData) return;
+
+    try {
+      setSaving(true);
+      const response = await apiClient.put('/company', companyData);
+      setCompanyData(response.data);
+      setIsEditing(false);
+      toast.success('Şirket bilgileri güncellendi');
+    } catch (error: any) {
+      console.error('Error saving company data:', error);
+      toast.error('Şirket bilgileri kaydedilirken hata oluştu');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleInputChange = (field: keyof CompanyData, value: string) => {
+    if (!companyData) return;
+    setCompanyData({ ...companyData, [field]: value });
+  };
+
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('tr-TR', {
+      style: 'currency',
+      currency: 'TRY',
+    }).format(amount);
+  };
+
+  const formatDate = (date: string | null): string => {
+    if (!date) return '-';
+    return new Date(date).toLocaleDateString('tr-TR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
+        <span className="ml-3 text-gray-600">Yükleniyor...</span>
+      </div>
+    );
+  }
+
+  if (!companyData) {
+    return (
+      <div className="flex items-center justify-center h-64 text-red-500">
+        <AlertCircle className="w-6 h-6 mr-2" />
+        Şirket bilgileri yüklenemedi
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <Building2 className="w-8 h-8 text-blue-600" />
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Şirket Bilgileri</h2>
+            <p className="text-sm text-gray-500">Şirket ve banka hesap bilgilerinizi yönetin</p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          {isEditing ? (
+            <>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              >
+                İptal
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex items-center px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {saving ? 'Kaydediliyor...' : 'Kaydet'}
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="px-4 py-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
+            >
+              Düzenle
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Company Information */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="p-6 space-y-6">
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+            <Building2 className="w-5 h-5 mr-2 text-gray-600" />
+            Genel Bilgiler
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Company Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Şirket Adı *
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.name}</p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Mail className="w-4 h-4 mr-1" />
+                E-posta
+              </label>
+              {isEditing ? (
+                <input
+                  type="email"
+                  value={companyData.email || ''}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.email || '-'}</p>
+              )}
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Phone className="w-4 h-4 mr-1" />
+                Telefon
+              </label>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  value={companyData.phone || ''}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.phone || '-'}</p>
+              )}
+            </div>
+
+            {/* Mobile Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Phone className="w-4 h-4 mr-1" />
+                Mobil Telefon
+              </label>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  value={companyData.mobilePhone || ''}
+                  onChange={(e) => handleInputChange('mobilePhone', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.mobilePhone || '-'}</p>
+              )}
+            </div>
+
+            {/* Website */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Globe className="w-4 h-4 mr-1" />
+                Web Sitesi
+              </label>
+              {isEditing ? (
+                <input
+                  type="url"
+                  value={companyData.website || ''}
+                  onChange={(e) => handleInputChange('website', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.website || '-'}</p>
+              )}
+            </div>
+
+            {/* Authorized Person */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <User className="w-4 h-4 mr-1" />
+                Yetkili Kişi
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.authorizedPerson || ''}
+                  onChange={(e) => handleInputChange('authorizedPerson', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.authorizedPerson || '-'}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Address Information */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="p-6 space-y-6">
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+            <MapPin className="w-5 h-5 mr-2 text-gray-600" />
+            Adres Bilgileri
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Address */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Adres
+              </label>
+              {isEditing ? (
+                <textarea
+                  value={companyData.address || ''}
+                  onChange={(e) => handleInputChange('address', e.target.value)}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.address || '-'}</p>
+              )}
+            </div>
+
+            {/* Address 2 */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Adres 2
+              </label>
+              {isEditing ? (
+                <textarea
+                  value={companyData.address2 || ''}
+                  onChange={(e) => handleInputChange('address2', e.target.value)}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.address2 || '-'}</p>
+              )}
+            </div>
+
+            {/* City */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İl
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.city || ''}
+                  onChange={(e) => handleInputChange('city', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.city || '-'}</p>
+              )}
+            </div>
+
+            {/* District */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İlçe
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.district || ''}
+                  onChange={(e) => handleInputChange('district', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.district || '-'}</p>
+              )}
+            </div>
+
+            {/* Postal Code */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Posta Kodu
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.postalCode || ''}
+                  onChange={(e) => handleInputChange('postalCode', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.postalCode || '-'}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tax Information */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="p-6 space-y-6">
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+            <FileText className="w-5 h-5 mr-2 text-gray-600" />
+            Vergi ve Ticari Bilgiler
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Tax Number */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Vergi Numarası
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.taxNumber || ''}
+                  onChange={(e) => handleInputChange('taxNumber', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.taxNumber || '-'}</p>
+              )}
+            </div>
+
+            {/* Tax Office */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Vergi Dairesi
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.taxOffice || ''}
+                  onChange={(e) => handleInputChange('taxOffice', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.taxOffice || '-'}</p>
+              )}
+            </div>
+
+            {/* Trade Register */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ticaret Sicil No
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.tradeRegister || ''}
+                  onChange={(e) => handleInputChange('tradeRegister', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.tradeRegister || '-'}</p>
+              )}
+            </div>
+
+            {/* Mersis No */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mersis No
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.mersisNo || ''}
+                  onChange={(e) => handleInputChange('mersisNo', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.mersisNo || '-'}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Default Bank Information */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="p-6 space-y-6">
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+            <CreditCard className="w-5 h-5 mr-2 text-gray-600" />
+            Varsayılan Banka Bilgileri
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Bank Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Banka Adı
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.bankName || ''}
+                  onChange={(e) => handleInputChange('bankName', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.bankName || '-'}</p>
+              )}
+            </div>
+
+            {/* Bank Branch */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Şube
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.bankBranch || ''}
+                  onChange={(e) => handleInputChange('bankBranch', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.bankBranch || '-'}</p>
+              )}
+            </div>
+
+            {/* IBAN */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                IBAN
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.iban || ''}
+                  onChange={(e) => handleInputChange('iban', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900 font-mono">{companyData.iban || '-'}</p>
+              )}
+            </div>
+
+            {/* Account Holder */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hesap Sahibi
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={companyData.accountHolder || ''}
+                  onChange={(e) => handleInputChange('accountHolder', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{companyData.accountHolder || '-'}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bank Accounts Summary */}
+      {bankAccounts && (
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="p-6 space-y-6">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+              <Building className="w-5 h-5 mr-2 text-gray-600" />
+              Banka Hesapları
+            </h3>
+
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <p className="text-sm text-gray-600">Toplam Bakiye</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {formatCurrency(bankAccounts.totals.totalBalance)}
+                </p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg">
+                <p className="text-sm text-gray-600">Kullanılabilir</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {formatCurrency(bankAccounts.totals.totalAvailable)}
+                </p>
+              </div>
+              <div className="p-4 bg-orange-50 rounded-lg">
+                <p className="text-sm text-gray-600">Bloke</p>
+                <p className="text-2xl font-bold text-orange-600">
+                  {formatCurrency(bankAccounts.totals.totalBlocked)}
+                </p>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-lg">
+                <p className="text-sm text-gray-600">Aktif Hesap</p>
+                <p className="text-2xl font-bold text-purple-600">
+                  {bankAccounts.totals.activeAccounts} / {bankAccounts.totals.totalAccounts}
+                </p>
+              </div>
+            </div>
+
+            {/* Bank Accounts Table */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Banka
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Hesap No
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      IBAN
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Bakiye
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Durum
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {bankAccounts.accounts.map((account) => (
+                    <tr key={account.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <div>
+                          <p className="font-medium text-gray-900">{account.bankName}</p>
+                          {account.branch && (
+                            <p className="text-sm text-gray-500">{account.branch}</p>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-gray-700">{account.accountNumber}</td>
+                      <td className="px-4 py-3 font-mono text-sm text-gray-700">
+                        {account.iban}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div>
+                          <p className="font-semibold text-gray-900">
+                            {formatCurrency(account.balance)}
+                          </p>
+                          <p className="text-xs text-gray-500">{account.currency}</p>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            account.isActive
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {account.isActive ? 'Aktif' : 'Pasif'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CompanyInfo;

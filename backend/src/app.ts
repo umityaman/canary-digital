@@ -217,7 +217,8 @@ safeLoadRoute('/api/social-media', './routes/social-media', 'Social Media');
 safeLoadRoute('/api/stock', './routes/stock', 'Stock Management');
 safeLoadRoute('/api/cost-accounting', './routes/costAccounting', 'Cost Accounting');
 
-// Bank Account Tracking Routes
+// Company & Bank Account Routes
+safeLoadRoute('/api/company', './routes/company', 'Company Management');
 safeLoadRoute('/api/bank-accounts', './routes/bankAccount', 'Bank Account Tracking');
 
 // Excel Import/Export Routes

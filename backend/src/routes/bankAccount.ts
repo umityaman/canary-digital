@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { authenticateJWT } from '../middleware/auth';
+import { authenticate } from '../middleware/auth';
 import bankAccountService from '../services/bankAccountService';
 
 const router = Router();
 
 // Apply authentication to all routes
-router.use(authenticateJWT);
+router.use(authenticate);
 
 /**
  * POST /api/bank-accounts - Create a new bank account

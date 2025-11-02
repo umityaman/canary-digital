@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { authenticateJWT } from '../middleware/auth';
+import { authenticate } from '../middleware/auth';
 import excelService from '../services/excelService';
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Apply authentication to all routes
-router.use(authenticateJWT);
+router.use(authenticate);
 
 /**
  * GET /api/excel/export/invoices - Export invoices to Excel
