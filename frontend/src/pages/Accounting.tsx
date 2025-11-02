@@ -4,7 +4,7 @@ import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
-  Search, Filter, ChevronLeft, ChevronRight, Check, X
+  Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
 // import CheckFormModal from '../components/accounting/CheckFormModal' // TODO: Add this component later
