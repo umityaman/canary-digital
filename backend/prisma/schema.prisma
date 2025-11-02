@@ -71,6 +71,7 @@ model Company {
   whatsappMessages          WhatsAppMessage[]
   workOrders                WorkOrder[]
   // Accounting relations
+  accountCards              AccountCard[]              @relation("CompanyAccountCards")
   checks                    Check[]
   promissoryNotes           PromissoryNote[]
   bankAccounts              BankAccount[]
@@ -164,6 +165,9 @@ model User {
   // Turkish Accounting
   journalEntriesCreated    JournalEntry[]          @relation("JournalEntryCreator")
   journalEntriesPosted     JournalEntry[]          @relation("JournalEntryPoster")
+  // Account Cards
+  accountCardsCreated      AccountCard[]           @relation("AccountCardCreator")
+  accountCardTransactions  AccountCardTransaction[] @relation("TransactionCreator")
   // Delivery Notes
   deliveryNotes            DeliveryNote[]
   createdDeliveryNotes     DeliveryNote[]          @relation("DeliveryNoteCreator")
@@ -258,6 +262,7 @@ model Customer {
   parasutId         String?
   companyId         Int?
   companyName       String?
+  accountCardId     Int?             // Cari hesap ba��lant�s�
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   calendarEvents    CalendarEvent[]
@@ -267,6 +272,9 @@ model Customer {
   // Accounting relations
   checks            Check[]
   promissoryNotes   PromissoryNote[]
+  accountCard       AccountCard?     @relation("CustomerAccountCard", fields: [accountCardId], references: [id])
+
+  @@index([accountCardId])
 }
 
 model Order {
@@ -1076,10 +1084,12 @@ model Invoice {
   type             String            @default("rental")
   currency         String            @default("TRY")
   companyId        Int?
+  accountCardId    Int?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   customer         User              @relation(fields: [customerId], references: [id])
   order            Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  accountCard      AccountCard?      @relation("AccountCardInvoices", fields: [accountCardId], references: [id])
   items            InvoiceItem[]
   payments         Payment[]
   transactions     Transaction[]
@@ -1262,6 +1272,9 @@ model Expense {
   bankTransactions BankTransaction[]
   // Supplier relation
   supplier         Supplier?         @relation(fields: [supplierId], references: [id])
+  // Account Card relation
+  accountCardId    Int?
+  accountCard      AccountCard?      @relation("AccountCardExpenses", fields: [accountCardId], references: [id])
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   company          Company           @relation(fields: [companyId], references: [id])
@@ -1271,6 +1284,73 @@ model Expense {
   @@index([date])
   @@index([costCenterId])
   @@index([supplierId])
+  @@index([accountCardId])
+}
+
+// Account Card (Cari Hesap) Models
+model AccountCard {
+  id              Int                       @id @default(autoincrement())
+  code            String                    @unique @db.VarChar(20)
+  name            String                    @db.VarChar(200)
+  type            String                    @db.VarChar(20)
+  taxNumber       String?                   @db.VarChar(20)
+  taxOffice       String?                   @db.VarChar(100)
+  phone           String?                   @db.VarChar(20)
+  email           String?                   @db.VarChar(100)
+  address         String?                   @db.Text
+  city            String?                   @db.VarChar(50)
+  district        String?                   @db.VarChar(50)
+  postalCode      String?                   @db.VarChar(10)
+  country         String?                   @db.VarChar(50)  @default("Türkiye")
+  contactPerson   String?                   @db.VarChar(100)
+  contactPhone    String?                   @db.VarChar(20)
+  contactEmail    String?                   @db.VarChar(100)
+  website         String?                   @db.VarChar(200)
+  notes           String?                   @db.Text
+  balance         Float                     @default(0)
+  creditLimit     Float?
+  paymentTerm     Int?
+  discountRate    Float?
+  isActive        Boolean                   @default(true)
+  createdBy       Int
+  companyId       Int
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+  company         Company                   @relation("CompanyAccountCards", fields: [companyId], references: [id])
+  user            User                      @relation("AccountCardCreator", fields: [createdBy], references: [id])
+  transactions    AccountCardTransaction[]
+  invoices        Invoice[]                 @relation("AccountCardInvoices")
+  expenses        Expense[]                 @relation("AccountCardExpenses")
+  customers       Customer[]                @relation("CustomerAccountCard")
+  suppliers       Supplier[]                @relation("SupplierAccountCard")
+
+  @@index([companyId])
+  @@index([type])
+  @@index([isActive])
+  @@index([balance])
+  @@index([code])
+}
+
+model AccountCardTransaction {
+  id              Int           @id @default(autoincrement())
+  accountCardId   Int
+  type            String        @db.VarChar(10)
+  amount          Float
+  date            DateTime
+  dueDate         DateTime?
+  description     String        @db.Text
+  referenceType   String?       @db.VarChar(20)
+  referenceId     Int?
+  createdBy       Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  accountCard     AccountCard   @relation(fields: [accountCardId], references: [id], onDelete: Cascade)
+  user            User          @relation("TransactionCreator", fields: [createdBy], references: [id])
+
+  @@index([accountCardId])
+  @@index([type])
+  @@index([date])
+  @@index([dueDate])
 }
 
 // Accounting extensions: Checks, PromissoryNotes, Bank/Cash models, Categories and Tags
@@ -1537,7 +1617,7 @@ model Refund {
 }
 
 model Supplier {
-  id            Int       @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   name          String
   email         String?
   phone         String?
@@ -1548,13 +1628,16 @@ model Supplier {
   taxOffice     String?
   parasutId     String?
   companyId     Int
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  company       Company   @relation(fields: [companyId], references: [id])
+  accountCardId Int?         // Cari hesap ba��lant�s�
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  company       Company      @relation(fields: [companyId], references: [id])
   expenses      Expense[]
+  accountCard   AccountCard? @relation("SupplierAccountCard", fields: [accountCardId], references: [id])
 
   @@index([companyId])
   @@index([name])
+  @@index([accountCardId])
 }
 
 model SavedSearch {

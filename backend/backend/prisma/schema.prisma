@@ -14,16 +14,16 @@ model AccountCard {
   city            String?                   @db.VarChar(50)
   district        String?                   @db.VarChar(50)
   postalCode      String?                   @db.VarChar(10)
-  country         String?                   @db.VarChar(50)  @default("Türkiye")
+  country         String?                   @db.VarChar(50)  @default("Tï¿½rkiye")
   contactPerson   String?                   @db.VarChar(100)
   contactPhone    String?                   @db.VarChar(20)
   contactEmail    String?                   @db.VarChar(100)
   website         String?                   @db.VarChar(200)
   notes           String?                   @db.Text
-  balance         Float                     @default(0) // Güncel bakiye (+ borç, - alacak)
+  balance         Float                     @default(0) // Gï¿½ncel bakiye (+ borï¿½, - alacak)
   creditLimit     Float?                    // Kredi limiti
-  paymentTerm     Int?                      // Ödeme vadesi (gün)
-  discountRate    Float?                    // Ýskonto oraný (%)
+  paymentTerm     Int?                      // ï¿½deme vadesi (gï¿½n)
+  discountRate    Float?                    // ï¿½skonto oranï¿½ (%)
   isActive        Boolean                   @default(true)
   createdBy       Int
   companyId       Int
@@ -34,6 +34,8 @@ model AccountCard {
   transactions    AccountCardTransaction[]
   invoices        Invoice[]                 @relation("AccountCardInvoices")
   expenses        Expense[]                 @relation("AccountCardExpenses")
+  customers       Customer[]                @relation("CustomerAccountCard")
+  suppliers       Supplier[]                @relation("SupplierAccountCard")
 
   @@index([companyId])
   @@index([type])
@@ -45,13 +47,13 @@ model AccountCard {
 model AccountCardTransaction {
   id              Int           @id @default(autoincrement())
   accountCardId   Int
-  type            String        @db.VarChar(10) // debit (borç), credit (alacak)
+  type            String        @db.VarChar(10) // debit (borï¿½), credit (alacak)
   amount          Float
   date            DateTime
   dueDate         DateTime?     // Vade tarihi
   description     String        @db.Text
   referenceType   String?       @db.VarChar(20) // invoice, payment, expense, manual
-  referenceId     Int?          // Ýlgili invoice, payment, expense ID
+  referenceId     Int?          // ï¿½lgili invoice, payment, expense ID
   createdBy       Int
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
