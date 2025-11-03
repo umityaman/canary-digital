@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
@@ -12,33 +12,36 @@ import { useDebounce } from '../hooks/useDebounce'
 import CheckFormModal from '../components/accounting/CheckFormModal'
 import PromissoryNoteFormModal from '../components/accounting/PromissoryNoteFormModal'
 import AgingReportTable from '../components/accounting/AgingReportTable'
-import IncomeTab from '../components/accounting/IncomeTab'
-import ExpenseTab from '../components/accounting/ExpenseTab'
-import AccountingDashboard from '../components/accounting/AccountingDashboard'
-import AccountCardList from '../components/accounting/AccountCardList'
-import EInvoiceList from '../components/accounting/EInvoiceList'
-import BankReconciliation from '../components/accounting/BankReconciliation'
-import DeliveryNoteList from '../components/delivery-notes/DeliveryNoteList'
-import CurrentAccountList from '../components/current-accounts/CurrentAccountList'
-import InventoryAccounting from '../components/accounting/InventoryAccounting'
-import AdvancedReporting from '../components/accounting/AdvancedReporting'
-import GIBIntegration from '../components/accounting/GIBIntegration'
-import CostAccountingTab from '../components/accounting/CostAccountingTab'
-import CategoryTagManagement from '../components/accounting/CategoryTagManagement'
-import CompanyInfo from '../components/accounting/CompanyInfo'
-import CashBankManagement from '../components/accounting/CashBankManagement'
-import ReminderManagement from '../components/reminders/ReminderManagement'
-import StatementSharing from '../components/statements/StatementSharing'
-import BarcodeScanner from '../components/barcode/BarcodeScanner'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
+import LoadingFallback from '../components/ui/LoadingFallback'
 import ErrorBoundary from '../components/ErrorBoundary'
-import NotificationsTab from '../components/accounting/tabs/NotificationsTab'
-import ToolsTab from '../components/accounting/tabs/ToolsTab'
-import AdvisorTab from '../components/accounting/tabs/AdvisorTab'
-import SupportTab from '../components/accounting/tabs/SupportTab'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
+
+// Lazy load heavy components for better performance
+const IncomeTab = lazy(() => import('../components/accounting/IncomeTab'))
+const ExpenseTab = lazy(() => import('../components/accounting/ExpenseTab'))
+const AccountingDashboard = lazy(() => import('../components/accounting/AccountingDashboard'))
+const AccountCardList = lazy(() => import('../components/accounting/AccountCardList'))
+const EInvoiceList = lazy(() => import('../components/accounting/EInvoiceList'))
+const BankReconciliation = lazy(() => import('../components/accounting/BankReconciliation'))
+const DeliveryNoteList = lazy(() => import('../components/delivery-notes/DeliveryNoteList'))
+const CurrentAccountList = lazy(() => import('../components/current-accounts/CurrentAccountList'))
+const InventoryAccounting = lazy(() => import('../components/accounting/InventoryAccounting'))
+const AdvancedReporting = lazy(() => import('../components/accounting/AdvancedReporting'))
+const GIBIntegration = lazy(() => import('../components/accounting/GIBIntegration'))
+const CostAccountingTab = lazy(() => import('../components/accounting/CostAccountingTab'))
+const CategoryTagManagement = lazy(() => import('../components/accounting/CategoryTagManagement'))
+const CompanyInfo = lazy(() => import('../components/accounting/CompanyInfo'))
+const CashBankManagement = lazy(() => import('../components/accounting/CashBankManagement'))
+const ReminderManagement = lazy(() => import('../components/reminders/ReminderManagement'))
+const StatementSharing = lazy(() => import('../components/statements/StatementSharing'))
+const BarcodeScanner = lazy(() => import('../components/barcode/BarcodeScanner'))
+const NotificationsTab = lazy(() => import('../components/accounting/tabs/NotificationsTab'))
+const ToolsTab = lazy(() => import('../components/accounting/tabs/ToolsTab'))
+const AdvisorTab = lazy(() => import('../components/accounting/tabs/AdvisorTab'))
+const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab'))
 
 type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders' | 'statements' | 'barcode' | 'notifications'
 
@@ -929,14 +932,15 @@ export default function Accounting() {
           {/* Content Area */}
           <div className="flex-1 p-6 lg:p-8">
             <ErrorBoundary fallbackTitle="Muhasebe Modülü Hatası" fallbackMessage="Muhasebe modülünde bir sorun oluştu. Lütfen sayfayı yenileyin.">
-              {/* Dashboard Tab */}
-              {activeTab === 'dashboard' && <AccountingDashboard />}
+              <Suspense fallback={<LoadingFallback message="İçerik yükleniyor..." />}>
+                {/* Dashboard Tab */}
+                {activeTab === 'dashboard' && <AccountingDashboard />}
 
-              {/* Income Tab */}
-              {activeTab === 'income' && <IncomeTab />}
+                {/* Income Tab */}
+                {activeTab === 'income' && <IncomeTab />}
 
-              {/* Expense Tab */}
-              {activeTab === 'expense' && <ExpenseTab />}
+                {/* Expense Tab */}
+                {activeTab === 'expense' && <ExpenseTab />}
 
             {/* Cari (Account Cards) Tab */}
             {activeTab === 'cari' && <CurrentAccountList />}
@@ -2504,6 +2508,7 @@ export default function Accounting() {
                 </div>
               </div>
             )}
+              </Suspense>
             </ErrorBoundary>
           </div>
         </div>
