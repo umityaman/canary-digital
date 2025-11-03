@@ -241,6 +241,57 @@ export default function Accounting() {
     }
   }, [activeTab, receivablesSubTab])
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+N - New invoice/offer
+      if (e.ctrlKey && e.key === 'n') {
+        e.preventDefault()
+        if (activeTab === 'invoice') {
+          navigate('/accounting/invoice/new')
+          toast.success('Yeni fatura oluşturuluyor...')
+        } else if (activeTab === 'offer') {
+          navigate('/accounting/quote/new')
+          toast.success('Yeni teklif oluşturuluyor...')
+        }
+      }
+      
+      // Ctrl+F - Focus search input
+      if (e.ctrlKey && e.key === 'f') {
+        e.preventDefault()
+        if (activeTab === 'invoice') {
+          const searchInput = document.querySelector('input[placeholder*="Fatura no veya müşteri ara"]') as HTMLInputElement
+          searchInput?.focus()
+          toast('Arama kutusuna odaklandı', { icon: '🔍', duration: 1500 })
+        } else if (activeTab === 'offer') {
+          const searchInput = document.querySelector('input[placeholder*="Teklif no veya müşteri ara"]') as HTMLInputElement
+          searchInput?.focus()
+          toast('Arama kutusuna odaklandı', { icon: '🔍', duration: 1500 })
+        }
+      }
+      
+      // Ctrl+P - Print
+      if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault()
+        window.print()
+        toast.success('Yazdırma penceresi açılıyor...')
+      }
+      
+      // Esc - Close dropdowns and deselect
+      if (e.key === 'Escape') {
+        setOpenInvoiceDropdown(null)
+        setOpenOfferDropdown(null)
+        setSelectedInvoices([])
+        setSelectedOffers([])
+        setShowAdvancedFilters(false)
+        setShowOfferAdvancedFilters(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [activeTab, navigate])
+
   const loadStats = async () => {
     try {
       setLoading(true)
@@ -753,6 +804,26 @@ export default function Accounting() {
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pb-10">
+      {/* Keyboard Shortcuts Info */}
+      <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3 flex items-center gap-6 text-xs text-neutral-600">
+        <div className="flex items-center gap-2">
+          <kbd className="px-2 py-1 bg-white border border-neutral-300 rounded shadow-sm font-mono">Ctrl+N</kbd>
+          <span>Yeni Oluştur</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <kbd className="px-2 py-1 bg-white border border-neutral-300 rounded shadow-sm font-mono">Ctrl+F</kbd>
+          <span>Ara</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <kbd className="px-2 py-1 bg-white border border-neutral-300 rounded shadow-sm font-mono">Ctrl+P</kbd>
+          <span>Yazdır</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <kbd className="px-2 py-1 bg-white border border-neutral-300 rounded shadow-sm font-mono">Esc</kbd>
+          <span>Kapat</span>
+        </div>
+      </div>
+
       {/* Quick Stats */}
       {loading ? (
         <CardSkeleton count={4} />
