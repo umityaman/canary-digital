@@ -122,6 +122,14 @@ export default function Accounting() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
+  // Advanced filters for invoices
+  const [dateRange, setDateRange] = useState<'all' | '7days' | '30days' | 'custom'>('all')
+  const [customDateFrom, setCustomDateFrom] = useState('')
+  const [customDateTo, setCustomDateTo] = useState('')
+  const [minAmount, setMinAmount] = useState('')
+  const [maxAmount, setMaxAmount] = useState('')
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
+
   // Bulk selection state for invoices
   const [selectedInvoices, setSelectedInvoices] = useState<number[]>([])
 
@@ -136,6 +144,14 @@ export default function Accounting() {
 
   // Bulk selection state for offers
   const [selectedOffers, setSelectedOffers] = useState<number[]>([])
+
+  // Offer advanced filters
+  const [offerDateRange, setOfferDateRange] = useState<'all' | '7days' | '30days' | 'custom'>('all')
+  const [offerCustomDateFrom, setOfferCustomDateFrom] = useState('')
+  const [offerCustomDateTo, setOfferCustomDateTo] = useState('')
+  const [offerMinAmount, setOfferMinAmount] = useState('')
+  const [offerMaxAmount, setOfferMaxAmount] = useState('')
+  const [showOfferAdvancedFilters, setShowOfferAdvancedFilters] = useState(false)
 
   // Checks state
   const [checks, setChecks] = useState<any[]>([])
@@ -401,6 +417,69 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('Bulk delete failed:', error)
       toast.error('Toplu silme başarısız')
+    }
+  }
+
+  // Advanced filter handlers
+  const handleResetFilters = () => {
+    setInvoiceStatusFilter('')
+    setInvoiceSearch('')
+    setDateRange('all')
+    setCustomDateFrom('')
+    setCustomDateTo('')
+    setMinAmount('')
+    setMaxAmount('')
+    setCurrentPage(1)
+  }
+
+  const getDateRangeValues = () => {
+    const now = new Date()
+    switch (dateRange) {
+      case '7days':
+        const sevenDaysAgo = new Date(now)
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+        return { from: sevenDaysAgo.toISOString().split('T')[0], to: now.toISOString().split('T')[0] }
+      case '30days':
+        const thirtyDaysAgo = new Date(now)
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+        return { from: thirtyDaysAgo.toISOString().split('T')[0], to: now.toISOString().split('T')[0] }
+      case 'custom':
+        return { from: customDateFrom, to: customDateTo }
+      default:
+        return { from: '', to: '' }
+    }
+  }
+
+  // Handle reset offer filters
+  const handleResetOfferFilters = () => {
+    setOfferDateRange('all')
+    setOfferCustomDateFrom('')
+    setOfferCustomDateTo('')
+    setOfferMinAmount('')
+    setOfferMaxAmount('')
+    setOfferSearch('')
+    setOfferStatusFilter('')
+    setOfferCurrentPage(1)
+  }
+
+  // Get offer date range values
+  const getOfferDateRangeValues = () => {
+    const now = new Date()
+    switch (offerDateRange) {
+      case 'all':
+        return { from: '', to: '' }
+      case '7days':
+        const sevenDaysAgo = new Date(now)
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+        return { from: sevenDaysAgo.toISOString().split('T')[0], to: now.toISOString().split('T')[0] }
+      case '30days':
+        const thirtyDaysAgo = new Date(now)
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+        return { from: thirtyDaysAgo.toISOString().split('T')[0], to: now.toISOString().split('T')[0] }
+      case 'custom':
+        return { from: offerCustomDateFrom, to: offerCustomDateTo }
+      default:
+        return { from: '', to: '' }
     }
   }
 
@@ -859,8 +938,9 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className="bg-white rounded-2xl p-4 border border-neutral-200">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white rounded-2xl p-4 border border-neutral-200 space-y-4">
+                  {/* Basic Filters */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Search */}
                     <div className="relative">
                       <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
@@ -894,6 +974,15 @@ export default function Accounting() {
                       </select>
                     </div>
 
+                    {/* Advanced Filters Toggle */}
+                    <button
+                      onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                      className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors flex items-center gap-2 justify-center"
+                    >
+                      <Filter size={18} />
+                      {showAdvancedFilters ? 'Filtreleri Gizle' : 'Gelişmiş Filtre'}
+                    </button>
+
                     {/* Search Button */}
                     <button
                       onClick={handleSearchInvoices}
@@ -902,6 +991,101 @@ export default function Accounting() {
                       Ara
                     </button>
                   </div>
+
+                  {/* Advanced Filters */}
+                  {showAdvancedFilters && (
+                    <div className="pt-4 border-t border-neutral-200 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Date Range Preset */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Tarih Aralığı
+                          </label>
+                          <select
+                            value={dateRange}
+                            onChange={(e) => setDateRange(e.target.value as any)}
+                            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          >
+                            <option value="all">Tüm Zamanlar</option>
+                            <option value="7days">Son 7 Gün</option>
+                            <option value="30days">Son 30 Gün</option>
+                            <option value="custom">Özel Tarih</option>
+                          </select>
+                        </div>
+
+                        {/* Min Amount */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Min. Tutar (₺)
+                          </label>
+                          <input
+                            type="number"
+                            value={minAmount}
+                            onChange={(e) => setMinAmount(e.target.value)}
+                            placeholder="0"
+                            min="0"
+                            step="0.01"
+                            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          />
+                        </div>
+
+                        {/* Max Amount */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Max. Tutar (₺)
+                          </label>
+                          <input
+                            type="number"
+                            value={maxAmount}
+                            onChange={(e) => setMaxAmount(e.target.value)}
+                            placeholder="999999"
+                            min="0"
+                            step="0.01"
+                            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Custom Date Range */}
+                      {dateRange === 'custom' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
+                              Başlangıç Tarihi
+                            </label>
+                            <input
+                              type="date"
+                              value={customDateFrom}
+                              onChange={(e) => setCustomDateFrom(e.target.value)}
+                              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
+                              Bitiş Tarihi
+                            </label>
+                            <input
+                              type="date"
+                              value={customDateTo}
+                              onChange={(e) => setCustomDateTo(e.target.value)}
+                              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Reset Filters Button */}
+                      <div className="flex justify-end">
+                        <button
+                          onClick={handleResetFilters}
+                          className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors flex items-center gap-2"
+                        >
+                          <X size={18} />
+                          Filtreleri Temizle
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Invoice Table */}
@@ -1090,8 +1274,9 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className="bg-white rounded-2xl p-4 border border-neutral-200">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white rounded-2xl p-4 border border-neutral-200 space-y-4">
+                  {/* Basic Filters */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Search */}
                     <div className="relative">
                       <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
@@ -1126,6 +1311,15 @@ export default function Accounting() {
                       </select>
                     </div>
 
+                    {/* Advanced Filters Toggle */}
+                    <button
+                      onClick={() => setShowOfferAdvancedFilters(!showOfferAdvancedFilters)}
+                      className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors flex items-center gap-2 justify-center"
+                    >
+                      <Filter size={18} />
+                      {showOfferAdvancedFilters ? 'Filtreleri Gizle' : 'Gelişmiş Filtre'}
+                    </button>
+
                     {/* Search Button */}
                     <button
                       onClick={handleSearchOffers}
@@ -1134,6 +1328,101 @@ export default function Accounting() {
                       Ara
                     </button>
                   </div>
+
+                  {/* Advanced Filters */}
+                  {showOfferAdvancedFilters && (
+                    <div className="pt-4 border-t border-neutral-200 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Date Range Preset */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Tarih Aralığı
+                          </label>
+                          <select
+                            value={offerDateRange}
+                            onChange={(e) => setOfferDateRange(e.target.value as any)}
+                            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          >
+                            <option value="all">Tüm Zamanlar</option>
+                            <option value="7days">Son 7 Gün</option>
+                            <option value="30days">Son 30 Gün</option>
+                            <option value="custom">Özel Tarih</option>
+                          </select>
+                        </div>
+
+                        {/* Min Amount */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Min. Tutar (₺)
+                          </label>
+                          <input
+                            type="number"
+                            value={offerMinAmount}
+                            onChange={(e) => setOfferMinAmount(e.target.value)}
+                            placeholder="0"
+                            min="0"
+                            step="0.01"
+                            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          />
+                        </div>
+
+                        {/* Max Amount */}
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Max. Tutar (₺)
+                          </label>
+                          <input
+                            type="number"
+                            value={offerMaxAmount}
+                            onChange={(e) => setOfferMaxAmount(e.target.value)}
+                            placeholder="999999"
+                            min="0"
+                            step="0.01"
+                            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Custom Date Range */}
+                      {offerDateRange === 'custom' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
+                              Başlangıç Tarihi
+                            </label>
+                            <input
+                              type="date"
+                              value={offerCustomDateFrom}
+                              onChange={(e) => setOfferCustomDateFrom(e.target.value)}
+                              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
+                              Bitiş Tarihi
+                            </label>
+                            <input
+                              type="date"
+                              value={offerCustomDateTo}
+                              onChange={(e) => setOfferCustomDateTo(e.target.value)}
+                              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Reset Filters Button */}
+                      <div className="flex justify-end">
+                        <button
+                          onClick={handleResetOfferFilters}
+                          className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors flex items-center gap-2"
+                        >
+                          <X size={18} />
+                          Filtreleri Temizle
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Offer Table */}
