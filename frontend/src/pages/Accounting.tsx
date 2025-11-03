@@ -7,6 +7,7 @@ import {
   Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag, Edit2, Trash2
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
+import { useDebounce } from '../hooks/useDebounce'
 import CheckFormModal from '../components/accounting/CheckFormModal'
 import PromissoryNoteFormModal from '../components/accounting/PromissoryNoteFormModal'
 import AgingReportTable from '../components/accounting/AgingReportTable'
@@ -113,6 +114,7 @@ export default function Accounting() {
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [invoicesLoading, setInvoicesLoading] = useState(false)
   const [invoiceSearch, setInvoiceSearch] = useState('')
+  const debouncedInvoiceSearch = useDebounce(invoiceSearch, 500)
   const [invoiceStatusFilter, setInvoiceStatusFilter] = useState<string>('')
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -121,6 +123,7 @@ export default function Accounting() {
   const [offers, setOffers] = useState<Offer[]>([])
   const [offersLoading, setOffersLoading] = useState(false)
   const [offerSearch, setOfferSearch] = useState('')
+  const debouncedOfferSearch = useDebounce(offerSearch, 500)
   const [offerStatusFilter, setOfferStatusFilter] = useState<string>('')
   const [offerCurrentPage, setOfferCurrentPage] = useState(1)
   const [offerTotalPages, setOfferTotalPages] = useState(1)
@@ -168,16 +171,32 @@ export default function Accounting() {
   // Load invoices when invoice tab is active
   useEffect(() => {
     if (activeTab === 'invoice') {
+      setCurrentPage(1) // Reset to first page on search
       loadInvoices()
     }
-  }, [activeTab, currentPage, invoiceStatusFilter])
+  }, [activeTab, debouncedInvoiceSearch, invoiceStatusFilter])
+
+  // Load invoices when page changes
+  useEffect(() => {
+    if (activeTab === 'invoice') {
+      loadInvoices()
+    }
+  }, [currentPage])
 
   // Load offers when offer tab is active
   useEffect(() => {
     if (activeTab === 'offer') {
+      setOfferCurrentPage(1) // Reset to first page on search
       loadOffers()
     }
-  }, [activeTab, offerCurrentPage, offerStatusFilter])
+  }, [activeTab, debouncedOfferSearch, offerStatusFilter])
+
+  // Load offers when page changes
+  useEffect(() => {
+    if (activeTab === 'offer') {
+      loadOffers()
+    }
+  }, [offerCurrentPage])
 
   // Load receivables data when receivables tab is active (checks, promissory, aging)
   useEffect(() => {
@@ -211,10 +230,10 @@ export default function Accounting() {
   const loadInvoices = async () => {
     try {
       setInvoicesLoading(true)
-      console.log('🔍 Loading invoices...', { invoiceStatusFilter, invoiceSearch, currentPage })
+      console.log('🔍 Loading invoices...', { invoiceStatusFilter, debouncedInvoiceSearch, currentPage })
       const response = await invoiceAPI.getAll({
         status: invoiceStatusFilter || undefined,
-        search: invoiceSearch || undefined,
+        search: debouncedInvoiceSearch || undefined,
         page: currentPage,
         limit: 10,
       })
@@ -238,10 +257,10 @@ export default function Accounting() {
   const loadOffers = async () => {
     try {
       setOffersLoading(true)
-      console.log('🔍 Loading offers...', { offerStatusFilter, offerSearch, offerCurrentPage })
+      console.log('🔍 Loading offers...', { offerStatusFilter, debouncedOfferSearch, offerCurrentPage })
       const response = await offerAPI.getAll({
         status: offerStatusFilter || undefined,
-        search: offerSearch || undefined,
+        search: debouncedOfferSearch || undefined,
         page: offerCurrentPage,
         limit: 10,
       })
