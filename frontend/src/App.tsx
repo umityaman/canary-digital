@@ -24,7 +24,9 @@ const Documents = lazy(() => import('./pages/Documents'))
 const Suppliers = lazy(() => import('./pages/Suppliers'))
 const Accounting = lazy(() => import('./pages/Accounting'))
 const InvoiceForm = lazy(() => import('./pages/InvoiceForm'))
+const InvoiceDetail = lazy(() => import('./pages/InvoiceDetail'))
 const QuoteForm = lazy(() => import('./pages/QuoteForm'))
+const QuoteDetail = lazy(() => import('./pages/QuoteDetail'))
 const AccountCardList = lazy(() => import('./pages/AccountCardList'))
 const AccountCardDetail = lazy(() => import('./pages/AccountCardDetail'))
 const Social = lazy(() => import('./pages/Social'))
@@ -102,9 +104,11 @@ export default function App(){
               <Route path='/suppliers' element={<Suppliers />} />
               <Route path='/accounting' element={<Accounting />} />
               <Route path='/accounting/invoice/new' element={<InvoiceForm />} />
-              <Route path='/accounting/invoice/:id' element={<InvoiceForm />} />
+              <Route path='/accounting/invoice/:id/edit' element={<InvoiceForm />} />
+              <Route path='/accounting/invoice/:id' element={<InvoiceDetail />} />
               <Route path='/accounting/quote/new' element={<QuoteForm />} />
-              <Route path='/accounting/quote/:id' element={<QuoteForm />} />
+              <Route path='/accounting/quote/:id/edit' element={<QuoteForm />} />
+              <Route path='/accounting/quote/:id' element={<QuoteDetail />} />
               <Route path='/account-cards' element={<AccountCardList />} />
               <Route path='/account-cards/:id' element={<AccountCardDetail />} />
               <Route path='/social' element={<Social />} />
