@@ -29,6 +29,7 @@ import CompanyInfo from '../components/accounting/CompanyInfo'
 import CashBankManagement from '../components/accounting/CashBankManagement'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
+import ErrorBoundary from '../components/ErrorBoundary'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
@@ -920,14 +921,15 @@ export default function Accounting() {
 
           {/* Content Area */}
           <div className="flex-1 p-6 lg:p-8">
-            {/* Dashboard Tab */}
-            {activeTab === 'dashboard' && <AccountingDashboard />}
+            <ErrorBoundary fallbackTitle="Muhasebe Modülü Hatası" fallbackMessage="Muhasebe modülünde bir sorun oluştu. Lütfen sayfayı yenileyin.">
+              {/* Dashboard Tab */}
+              {activeTab === 'dashboard' && <AccountingDashboard />}
 
-            {/* Income Tab */}
-            {activeTab === 'income' && <IncomeTab />}
+              {/* Income Tab */}
+              {activeTab === 'income' && <IncomeTab />}
 
-            {/* Expense Tab */}
-            {activeTab === 'expense' && <ExpenseTab />}
+              {/* Expense Tab */}
+              {activeTab === 'expense' && <ExpenseTab />}
 
             {/* Cari (Account Cards) Tab */}
             {activeTab === 'cari' && <CurrentAccountList />}
@@ -1121,9 +1123,10 @@ export default function Accounting() {
 
             {/* Invoice Tab */}
             {activeTab === 'invoice' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-neutral-900">Fatura Listesi</h2>
+              <ErrorBoundary fallbackTitle="Fatura Listesi Hatası" fallbackMessage="Fatura listesi yüklenirken bir sorun oluştu.">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-neutral-900">Fatura Listesi</h2>
                   <button 
                     onClick={() => navigate('/accounting/invoice/new')}
                     className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
@@ -1507,14 +1510,16 @@ export default function Accounting() {
                     </>
                   )}
                 </div>
-              </div>
+                </div>
+              </ErrorBoundary>
             )}
 
             {/* Offer Tab */}
             {activeTab === 'offer' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-neutral-900">Teklif Listesi</h2>
+              <ErrorBoundary fallbackTitle="Teklif Listesi Hatası" fallbackMessage="Teklif listesi yüklenirken bir sorun oluştu.">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-neutral-900">Teklif Listesi</h2>
                   <button 
                     onClick={() => navigate('/accounting/quote/new')}
                     className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
@@ -1929,7 +1934,8 @@ export default function Accounting() {
                     </>
                   )}
                 </div>
-              </div>
+                </div>
+              </ErrorBoundary>
             )}
 
             {/* e-Belge Tab */}
@@ -2064,6 +2070,7 @@ export default function Accounting() {
                 </div>
               </div>
             )}
+            </ErrorBoundary>
           </div>
         </div>
       </div>
