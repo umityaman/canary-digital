@@ -4,7 +4,8 @@ import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
-  Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag, Edit2, Trash2
+  Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag, Edit2, Trash2,
+  MoreVertical, Mail, MessageCircle, Printer, Copy
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
 import { useDebounce } from '../hooks/useDebounce'
@@ -152,6 +153,10 @@ export default function Accounting() {
   const [offerMinAmount, setOfferMinAmount] = useState('')
   const [offerMaxAmount, setOfferMaxAmount] = useState('')
   const [showOfferAdvancedFilters, setShowOfferAdvancedFilters] = useState(false)
+
+  // Quick actions dropdown state
+  const [openInvoiceDropdown, setOpenInvoiceDropdown] = useState<number | null>(null)
+  const [openOfferDropdown, setOpenOfferDropdown] = useState<number | null>(null)
 
   // Checks state
   const [checks, setChecks] = useState<any[]>([])
@@ -481,6 +486,126 @@ export default function Accounting() {
       default:
         return { from: '', to: '' }
     }
+  }
+
+  // Quick action handlers
+  const handleDownloadPDF = async (invoice: any) => {
+    try {
+      toast.loading('PDF indiriliyor...')
+      const response = await axios.get(`/api/invoices/${invoice.id}/pdf`, {
+        responseType: 'blob',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `fatura-${invoice.invoiceNumber || invoice.id}.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      toast.dismiss()
+      toast.success('PDF indirildi!')
+    } catch (error) {
+      toast.dismiss()
+      toast.error('PDF indirilemedi')
+      console.error('Download error:', error)
+    }
+    setOpenInvoiceDropdown(null)
+  }
+
+  const handleSendEmail = (_invoice: any) => {
+    toast('Email gönderme özelliği yakında eklenecek!', { icon: 'ℹ️' })
+    setOpenInvoiceDropdown(null)
+  }
+
+  const handleSendWhatsApp = (invoice: any) => {
+    const customer = invoice.customer
+    if (!customer?.phone) {
+      toast.error('Müşterinin telefon numarası bulunamadı')
+      return
+    }
+    const message = `Merhaba, ${invoice.invoiceNumber} numaralı faturanız hazır. Toplam: ${invoice.total?.toFixed(2)} TL`
+    const whatsappUrl = `https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
+    toast.success('WhatsApp açılıyor...')
+    setOpenInvoiceDropdown(null)
+  }
+
+  const handlePrint = (invoice: any) => {
+    navigate(`/accounting/invoice/${invoice.id}`)
+    setTimeout(() => window.print(), 500)
+    setOpenInvoiceDropdown(null)
+  }
+
+  const handleCopyInvoice = async (invoice: any) => {
+    try {
+      const invoiceText = `Fatura No: ${invoice.invoiceNumber}\nMüşteri: ${invoice.customer?.name}\nTutar: ${invoice.total?.toFixed(2)} TL`
+      await navigator.clipboard.writeText(invoiceText)
+      toast.success('Fatura bilgileri kopyalandı!')
+    } catch (error) {
+      toast.error('Kopyalama başarısız')
+    }
+    setOpenInvoiceDropdown(null)
+  }
+
+  // Offer quick actions
+  const handleDownloadOfferPDF = async (offer: any) => {
+    try {
+      toast.loading('PDF indiriliyor...')
+      const response = await axios.get(`/api/offers/${offer.id}/pdf`, {
+        responseType: 'blob',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `teklif-${offer.offerNumber || offer.id}.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      toast.dismiss()
+      toast.success('PDF indirildi!')
+    } catch (error) {
+      toast.dismiss()
+      toast.error('PDF indirilemedi')
+      console.error('Download error:', error)
+    }
+    setOpenOfferDropdown(null)
+  }
+
+  const handleSendOfferEmail = (_offer: any) => {
+    toast('Email gönderme özelliği yakında eklenecek!', { icon: 'ℹ️' })
+    setOpenOfferDropdown(null)
+  }
+
+  const handleSendOfferWhatsApp = (offer: any) => {
+    const customer = offer.customer
+    if (!customer?.phone) {
+      toast.error('Müşterinin telefon numarası bulunamadı')
+      return
+    }
+    const message = `Merhaba, ${offer.offerNumber} numaralı teklifimiz hazır. Toplam: ${offer.total?.toFixed(2)} TL`
+    const whatsappUrl = `https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
+    toast.success('WhatsApp açılıyor...')
+    setOpenOfferDropdown(null)
+  }
+
+  const handlePrintOffer = (offer: any) => {
+    navigate(`/accounting/quote/${offer.id}`)
+    setTimeout(() => window.print(), 500)
+    setOpenOfferDropdown(null)
+  }
+
+  const handleCopyOffer = async (offer: any) => {
+    try {
+      const offerText = `Teklif No: ${offer.offerNumber}\nMüşteri: ${offer.customer?.name}\nTutar: ${offer.total?.toFixed(2)} TL`
+      await navigator.clipboard.writeText(offerText)
+      toast.success('Teklif bilgileri kopyalandı!')
+    } catch (error) {
+      toast.error('Kopyalama başarısız')
+    }
+    setOpenOfferDropdown(null)
   }
 
   const loadChecks = async () => {
@@ -1218,12 +1343,67 @@ export default function Accounting() {
                                   {getStatusBadge(invoice.status)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                  <button 
-                                    onClick={() => navigate(`/accounting/invoice/${invoice.id}`)}
-                                    className="text-neutral-900 hover:text-neutral-700 font-medium hover:underline transition-all"
-                                  >
-                                    Detay
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    <button 
+                                      onClick={() => navigate(`/accounting/invoice/${invoice.id}`)}
+                                      className="text-neutral-900 hover:text-neutral-700 font-medium hover:underline transition-all"
+                                    >
+                                      Detay
+                                    </button>
+                                    <div className="relative">
+                                      <button
+                                        onClick={() => setOpenInvoiceDropdown(openInvoiceDropdown === invoice.id ? null : invoice.id)}
+                                        className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
+                                      >
+                                        <MoreVertical size={18} className="text-neutral-600" />
+                                      </button>
+                                      {openInvoiceDropdown === invoice.id && (
+                                        <>
+                                          <div 
+                                            className="fixed inset-0 z-10" 
+                                            onClick={() => setOpenInvoiceDropdown(null)}
+                                          />
+                                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-1 z-20">
+                                            <button
+                                              onClick={() => handleDownloadPDF(invoice)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Download size={16} />
+                                              PDF İndir
+                                            </button>
+                                            <button
+                                              onClick={() => handleSendEmail(invoice)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Mail size={16} />
+                                              Email Gönder
+                                            </button>
+                                            <button
+                                              onClick={() => handleSendWhatsApp(invoice)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <MessageCircle size={16} />
+                                              WhatsApp Gönder
+                                            </button>
+                                            <button
+                                              onClick={() => handlePrint(invoice)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Printer size={16} />
+                                              Yazdır
+                                            </button>
+                                            <button
+                                              onClick={() => handleCopyInvoice(invoice)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Copy size={16} />
+                                              Kopyala
+                                            </button>
+                                          </div>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
                                 </td>
                               </tr>
                             ))}
@@ -1548,7 +1728,7 @@ export default function Accounting() {
                                   {getOfferStatusBadge(offer.status)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="flex items-center gap-2">
+                                  <div className="flex items-center gap-3">
                                     {offer.status === 'draft' && (
                                       <button
                                         onClick={() => handleOfferStatusUpdate(offer.id, 'sent')}
@@ -1585,6 +1765,66 @@ export default function Accounting() {
                                         Faturala
                                       </button>
                                     )}
+                                    <div className="relative">
+                                      <button
+                                        onClick={() => setOpenOfferDropdown(openOfferDropdown === offer.id ? null : offer.id)}
+                                        className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
+                                      >
+                                        <MoreVertical size={18} className="text-neutral-600" />
+                                      </button>
+                                      {openOfferDropdown === offer.id && (
+                                        <>
+                                          <div 
+                                            className="fixed inset-0 z-10" 
+                                            onClick={() => setOpenOfferDropdown(null)}
+                                          />
+                                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-1 z-20">
+                                            <button
+                                              onClick={() => navigate(`/accounting/quote/${offer.id}`)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <FileText size={16} />
+                                              Detay Görüntüle
+                                            </button>
+                                            <button
+                                              onClick={() => handleDownloadOfferPDF(offer)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Download size={16} />
+                                              PDF İndir
+                                            </button>
+                                            <button
+                                              onClick={() => handleSendOfferEmail(offer)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Mail size={16} />
+                                              Email Gönder
+                                            </button>
+                                            <button
+                                              onClick={() => handleSendOfferWhatsApp(offer)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <MessageCircle size={16} />
+                                              WhatsApp Gönder
+                                            </button>
+                                            <button
+                                              onClick={() => handlePrintOffer(offer)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Printer size={16} />
+                                              Yazdır
+                                            </button>
+                                            <button
+                                              onClick={() => handleCopyOffer(offer)}
+                                              className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                            >
+                                              <Copy size={16} />
+                                              Kopyala
+                                            </button>
+                                          </div>
+                                        </>
+                                      )}
+                                    </div>
                                   </div>
                                 </td>
                               </tr>
