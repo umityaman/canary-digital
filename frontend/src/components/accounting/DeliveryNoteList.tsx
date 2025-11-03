@@ -6,6 +6,7 @@ import {
 import { toast } from 'react-hot-toast'
 import DeliveryNoteForm from './DeliveryNoteForm'
 import DeliveryNoteDetail from './DeliveryNoteDetail'
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface DeliveryNote {
   id: number
@@ -155,17 +156,18 @@ export default function DeliveryNoteList() {
   }
 
   const getStatusBadge = (status: string) => {
-    const badges = {
-      prepared: { label: 'Hazırlandı', color: 'bg-blue-100 text-blue-700', icon: <Package size={14} /> },
-      shipped: { label: 'Yolda', color: 'bg-orange-100 text-orange-700', icon: <Truck size={14} /> },
-      delivered: { label: 'Teslim Edildi', color: 'bg-green-100 text-green-700', icon: <CheckCircle size={14} /> },
-      cancelled: { label: 'İptal', color: 'bg-red-100 text-red-700', icon: <X size={14} /> },
+    const statusMap: Record<string, { status: string; icon: JSX.Element }> = {
+      prepared: { status: 'partial', icon: <Package size={14} /> },
+      shipped: { status: 'partial', icon: <Truck size={14} /> },
+      delivered: { status: 'paid', icon: <CheckCircle size={14} /> },
+      cancelled: { status: 'overdue', icon: <X size={14} /> },
     }
-    const badge = badges[status as keyof typeof badges] || badges.prepared
+    const mapped = statusMap[status] || statusMap.prepared
+    const badgeData = badge(mapped.status, 'invoice', 'sm', 'solid')
     return (
-      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${badge.color}`}>
-        {badge.icon}
-        {badge.label}
+      <span className={cx(badgeData.className, 'inline-flex items-center gap-1')}>
+        {mapped.icon}
+        {badgeData.label}
       </span>
     )
   }
@@ -237,20 +239,20 @@ export default function DeliveryNoteList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">İrsaliye Yönetimi</h2>
-          <p className="text-sm text-neutral-600 mt-1">Sevkiyat ve teslimat takibi</p>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>İrsaliye Yönetimi</h2>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>Sevkiyat ve teslimat takibi</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => loadDeliveryNotes()}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors"
+            className={cx(button('md', 'outline', 'md'), 'gap-2')}
           >
             <RefreshCw size={18} />
             <span className="hidden sm:inline">Yenile</span>
           </button>
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+            className={cx(button('md', 'primary', 'md'), 'gap-2')}
           >
             <Plus size={18} />
             <span className="hidden sm:inline">Yeni İrsaliye</span>
@@ -260,68 +262,68 @@ export default function DeliveryNoteList() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200">
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-blue-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-blue-900">{stats.total}</h3>
-          <p className="text-xs text-blue-700">Toplam İrsaliye</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-blue-900`}>{stats.total}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-blue-700`}>Toplam İrsaliye</p>
         </div>
 
-        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-4 border border-indigo-200">
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200')}>
           <div className="flex items-center justify-between mb-2">
             <Package className="text-indigo-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-indigo-900">{stats.prepared}</h3>
-          <p className="text-xs text-indigo-700">Hazırlandı</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-indigo-900`}>{stats.prepared}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-indigo-700`}>Hazırlandı</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4 border border-orange-200">
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
           <div className="flex items-center justify-between mb-2">
             <Truck className="text-orange-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-orange-900">{stats.shipped}</h3>
-          <p className="text-xs text-orange-700">Yolda</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-orange-900`}>{stats.shipped}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-orange-700`}>Yolda</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200">
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
           <div className="flex items-center justify-between mb-2">
             <CheckCircle className="text-green-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-green-900">{stats.delivered}</h3>
-          <p className="text-xs text-green-700">Teslim Edildi</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-green-900`}>{stats.delivered}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-700`}>Teslim Edildi</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200">
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-purple-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-purple-900">{stats.invoiced}</h3>
-          <p className="text-xs text-purple-700">Faturalandı</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-purple-900`}>{stats.invoiced}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-purple-700`}>Faturalandı</p>
         </div>
 
-        <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-4 border border-yellow-200">
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200')}>
           <div className="flex items-center justify-between mb-2">
             <Clock className="text-yellow-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-yellow-900">{stats.pending}</h3>
-          <p className="text-xs text-yellow-700">Fatura Bekliyor</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-yellow-900`}>{stats.pending}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-yellow-700`}>Fatura Bekliyor</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+      <div className={card('sm', 'none', 'default', 'lg')}>
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
+              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${DESIGN_TOKENS.colors.text.muted}`} size={20} />
               <input
                 type="text"
                 placeholder="İrsaliye no, müşteri, sipariş no, adres ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
+                className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
               />
             </div>
           </div>
@@ -330,7 +332,7 @@ export default function DeliveryNoteList() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as any)}
-            className="px-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+            className={input('md', 'default', undefined, 'md')}
           >
             <option value="all">Tüm Durumlar</option>
             <option value="prepared">Hazırlandı</option>
