@@ -4,7 +4,7 @@ import {
   Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
-  Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag
+  Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag, Edit2, Trash2
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
 import CheckFormModal from '../components/accounting/CheckFormModal'
@@ -27,7 +27,7 @@ import CompanyInfo from '../components/accounting/CompanyInfo'
 import CashBankManagement from '../components/accounting/CashBankManagement'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration'
 
 interface AccountingStats {
   totalRevenue: number
@@ -137,10 +137,6 @@ export default function Accounting() {
   const [agingData, setAgingData] = useState<any | null>(null)
   const [agingLoading, setAgingLoading] = useState(false)
 
-  // Cari (account cards)
-  const [cariSummary, setCariSummary] = useState<any[]>([])
-  const [cariLoading, setCariLoading] = useState(false)
-
   // Checks modal state
   const [checkModalOpen, setCheckModalOpen] = useState(false)
   const [editingCheck, setEditingCheck] = useState<any | null>(null)
@@ -183,33 +179,18 @@ export default function Accounting() {
     }
   }, [activeTab, offerCurrentPage, offerStatusFilter])
 
-  // Load checks when checks tab active
+  // Load receivables data when receivables tab is active (checks, promissory, aging)
   useEffect(() => {
-    if (activeTab === 'checks') {
-      loadChecks()
+    if (activeTab === 'receivables') {
+      if (receivablesSubTab === 'checks') {
+        loadChecks()
+      } else if (receivablesSubTab === 'promissory') {
+        loadPromissory()
+      } else if (receivablesSubTab === 'aging') {
+        loadAging()
+      }
     }
-  }, [activeTab])
-
-  // Load promissory notes when promissory tab active
-  useEffect(() => {
-    if (activeTab === 'promissory') {
-      loadPromissory()
-    }
-  }, [activeTab])
-
-  // Load aging when aging tab active
-  useEffect(() => {
-    if (activeTab === 'aging') {
-      loadAging()
-    }
-  }, [activeTab])
-
-  // Load cari summary when cari tab active
-  useEffect(() => {
-    if (activeTab === 'cari') {
-      loadCari()
-    }
-  }, [activeTab])
+  }, [activeTab, receivablesSubTab])
 
   const loadStats = async () => {
     try {
@@ -292,6 +273,32 @@ export default function Accounting() {
     }
   }
 
+  const handleConvertToInvoice = async (offerId: number) => {
+    if (!confirm('Bu teklifi faturaya dönüştürmek istediğinizden emin misiniz?')) {
+      return
+    }
+    
+    try {
+      // Note: Bu endpoint için orderId, startDate, endDate gerekiyor
+      // Basitleştirilmiş versiyon - gerçek implementasyonda modal ile bu bilgileri almalısınız
+      const today = new Date().toISOString().split('T')[0]
+      const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]
+      
+      const response = await offerAPI.convertToInvoice(offerId, {
+        orderId: offerId, // Geçici olarak offerId kullanıyoruz
+        startDate: today,
+        endDate: nextMonth,
+        notes: 'Tekliften otomatik oluşturuldu'
+      })
+      
+      toast.success('Teklif başarıyla faturaya dönüştürüldü')
+      navigate(`/accounting/invoice/${response.data.invoice.id}`)
+    } catch (error: any) {
+      console.error('Failed to convert offer:', error)
+      toast.error('Dönüştürme başarısız: ' + (error.response?.data?.message || error.message))
+    }
+  }
+
   const loadChecks = async () => {
     try {
       setChecksLoading(true)
@@ -318,6 +325,36 @@ export default function Accounting() {
     }
   }
 
+  const handleDeleteCheck = async (id: number) => {
+    if (!confirm('Bu çeki silmek istediğinizden emin misiniz?')) {
+      return
+    }
+    
+    try {
+      await checksAPI.delete(id)
+      toast.success('Çek başarıyla silindi')
+      loadChecks()
+    } catch (error: any) {
+      console.error('Failed to delete check:', error)
+      toast.error('Çek silinemedi: ' + (error.response?.data?.message || error.message))
+    }
+  }
+
+  const handleDeletePromissory = async (id: number) => {
+    if (!confirm('Bu senedi silmek istediğinizden emin misiniz?')) {
+      return
+    }
+    
+    try {
+      await promissoryAPI.delete(id)
+      toast.success('Senet başarıyla silindi')
+      loadPromissory()
+    } catch (error: any) {
+      console.error('Failed to delete promissory note:', error)
+      toast.error('Senet silinemedi: ' + (error.response?.data?.message || error.message))
+    }
+  }
+
   const loadAging = async () => {
     try {
       setAgingLoading(true)
@@ -328,19 +365,6 @@ export default function Accounting() {
       toast.error('Yaşlandırma verisi alınamadı: ' + (error.response?.data?.message || error.message))
     } finally {
       setAgingLoading(false)
-    }
-  }
-
-  const loadCari = async () => {
-    try {
-      setCariLoading(true)
-      const res = await accountingAPI.getCariSummary()
-      setCariSummary(res.data.data || res.data)
-    } catch (error: any) {
-      console.error('Failed to load cari summary:', error)
-      toast.error('Cari özet yüklenemedi: ' + (error.response?.data?.message || error.message))
-    } finally {
-      setCariLoading(false)
     }
   }
 
@@ -595,6 +619,7 @@ export default function Accounting() {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">İşlemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-200">
@@ -605,6 +630,24 @@ export default function Accounting() {
                                   <td className="px-6 py-4">{formatCurrency(c.amount || 0)}</td>
                                   <td className="px-6 py-4">{c.dueDate ? formatDate(c.dueDate) : '-'}</td>
                                   <td className="px-6 py-4">{c.status || '-'}</td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        onClick={() => { setEditingCheck(c); setCheckModalOpen(true) }}
+                                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                                        title="Düzenle"
+                                      >
+                                        <Edit2 size={16} />
+                                      </button>
+                                      <button
+                                        onClick={() => handleDeleteCheck(c.id)}
+                                        className="text-red-600 hover:text-red-800 transition-colors"
+                                        title="Sil"
+                                      >
+                                        <Trash2 size={16} />
+                                      </button>
+                                    </div>
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
@@ -644,6 +687,7 @@ export default function Accounting() {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">İşlemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-200">
@@ -654,6 +698,24 @@ export default function Accounting() {
                                   <td className="px-6 py-4">{formatCurrency(p.amount || 0)}</td>
                                   <td className="px-6 py-4">{p.dueDate ? formatDate(p.dueDate) : '-'}</td>
                                   <td className="px-6 py-4">{p.status || '-'}</td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        onClick={() => { setEditingPromissory(p); setPromissoryModalOpen(true) }}
+                                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                                        title="Düzenle"
+                                      >
+                                        <Edit2 size={16} />
+                                      </button>
+                                      <button
+                                        onClick={() => handleDeletePromissory(p.id)}
+                                        className="text-red-600 hover:text-red-800 transition-colors"
+                                        title="Sil"
+                                      >
+                                        <Trash2 size={16} />
+                                      </button>
+                                    </div>
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
@@ -827,7 +889,10 @@ export default function Accounting() {
                                   {getStatusBadge(invoice.status)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                  <button className="text-neutral-900 hover:text-neutral-700 font-medium">
+                                  <button 
+                                    onClick={() => navigate(`/accounting/invoice/${invoice.id}`)}
+                                    className="text-neutral-900 hover:text-neutral-700 font-medium hover:underline transition-all"
+                                  >
                                     Detay
                                   </button>
                                 </td>
@@ -1043,7 +1108,8 @@ export default function Accounting() {
                                     )}
                                     {(offer.status === 'accepted' || offer.status === 'sent') && (
                                       <button
-                                        className="text-neutral-900 hover:text-neutral-700 font-medium text-sm"
+                                        onClick={() => handleConvertToInvoice(offer.id)}
+                                        className="text-neutral-900 hover:text-neutral-700 font-medium text-sm hover:underline transition-all"
                                         title="Faturaya Dönüştür"
                                       >
                                         Faturala
