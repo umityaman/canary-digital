@@ -194,6 +194,7 @@ safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
 safeLoadRoute('/api/offers', './routes/offer', 'Offers & Quotes');
 safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
 safeLoadRoute('/api/accounting/tags', './routes/accounting-tags', 'Accounting Tags');
+safeLoadRoute('/api/reminders', './routes/reminders', 'Payment & Due Date Reminders');
 safeLoadRoute('/api/account-cards', './routes/account-cards', 'Account Cards (Cari Hesap)');
 safeLoadRoute('/api/einvoice', './routes/einvoice', 'E-Invoice');
 safeLoadRoute('/api/earchive', './routes/earchive', 'E-Archive Invoice');

@@ -83,6 +83,8 @@ model Company {
   chartOfAccounts           ChartOfAccounts[]
   journalEntries            JournalEntry[]
   deliveryNotes             DeliveryNote[]
+  // Reminders
+  reminders                 Reminder[]             @relation("CompanyReminders")
 }
 
 model User {
@@ -173,6 +175,8 @@ model User {
   createdDeliveryNotes     DeliveryNote[]          @relation("DeliveryNoteCreator")
   // Stock Management Relations
   stockMovements           StockMovement[]         @relation("StockMovementUser")
+  // Reminders
+  reminders                Reminder[]              @relation("UserReminders")
   acknowledgedStockAlerts  StockAlert[]            @relation("StockAlertAcknowledger")
   requestedTransfers       StockTransfer[]         @relation("TransferRequester")
   approvedTransfers        StockTransfer[]         @relation("TransferApprover")
@@ -273,6 +277,7 @@ model Customer {
   checks            Check[]
   promissoryNotes   PromissoryNote[]
   accountCard       AccountCard?     @relation("CustomerAccountCard", fields: [accountCardId], references: [id])
+  reminders         Reminder[]       @relation("CustomerReminders")
 
   @@index([accountCardId])
 }
@@ -1098,6 +1103,7 @@ model Invoice {
   deliveryNote     DeliveryNote?
   stockMovements   StockMovement[]
   bankTransactions BankTransaction[]
+  reminders        Reminder[]       @relation("InvoiceReminders")
 
   @@index([orderId])
   @@index([customerId])
@@ -3525,4 +3531,51 @@ model CostAllocation {
   @@index([expenseId])
   @@index([costCenterId])
   @@index([companyId])
+}
+
+// Reminder System for Payments and Due Dates
+model Reminder {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation("CompanyReminders", fields: [companyId], references: [id], onDelete: Cascade)
+  userId      Int
+  user        User     @relation("UserReminders", fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Reminder details
+  title       String
+  description String?
+  type        String   @default("payment") // "payment", "invoice", "due_date", "custom"
+  priority    String   @default("medium") // "low", "medium", "high", "urgent"
+  status      String   @default("pending") // "pending", "sent", "completed", "cancelled"
+  
+  // Timing
+  reminderDate DateTime
+  dueDate      DateTime?
+  sentAt       DateTime?
+  completedAt  DateTime?
+  
+  // Related entities
+  invoiceId    Int?
+  invoice      Invoice? @relation("InvoiceReminders", fields: [invoiceId], references: [id], onDelete: SetNull)
+  customerId   Int?
+  customer     Customer? @relation("CustomerReminders", fields: [customerId], references: [id], onDelete: SetNull)
+  
+  // Notification settings
+  sendEmail    Boolean  @default(true)
+  sendSms      Boolean  @default(false)
+  sendPush     Boolean  @default(true)
+  
+  // Recurring settings
+  isRecurring  Boolean  @default(false)
+  recurrence   String?  // "daily", "weekly", "monthly", "yearly"
+  recurrenceEnd DateTime?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([companyId])
+  @@index([userId])
+  @@index([reminderDate])
+  @@index([status])
+  @@index([type])
 }
