@@ -5,7 +5,7 @@ import {
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
   Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag, Edit2, Trash2,
-  MoreVertical, Mail, MessageCircle, Printer, Copy
+  MoreVertical, Mail, MessageCircle, Printer, Copy, Zap, Heart, HelpCircle
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
 import { useDebounce } from '../hooks/useDebounce'
@@ -1998,17 +1998,122 @@ export default function Accounting() {
                 <h2 className="text-xl font-semibold text-neutral-900 mb-4">İşletme Kolaylıkları</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {[
-                    { name: 'Etiketleme', desc: 'Gelir-giderleri sınıflandır' },
-                    { name: 'Hatırlatmalar', desc: 'Ödeme bildirimleri' },
-                    { name: 'Ekstre Paylaşımı', desc: 'Müşterilere ekstre gönder' },
-                    { name: 'Barkod Okuma', desc: 'Hızlı fatura oluştur' },
-                  ].map((item) => (
-                    <div key={item.name} className="bg-white rounded-2xl p-6 border border-neutral-200">
-                      <h3 className="font-semibold mb-2">{item.name}</h3>
-                      <p className="text-sm text-neutral-600">{item.desc}</p>
+                  {/* Etiketleme */}
+                  <button
+                    onClick={() => setActiveTab('categories')}
+                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <Tag className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
+                      </div>
+                      <h3 className="font-semibold text-neutral-900 group-hover:text-neutral-900">Etiketleme</h3>
                     </div>
-                  ))}
+                    <p className="text-sm text-neutral-600">Gelir-giderleri kategorilere ayırın ve etiketleyin</p>
+                  </button>
+
+                  {/* Hatırlatmalar */}
+                  <button
+                    onClick={() => toast('Hatırlatma sistemi yakında aktif olacak!', { icon: '🔔', duration: 3000 })}
+                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <Clock className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
+                      </div>
+                      <h3 className="font-semibold text-neutral-900">Hatırlatmalar</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">Ödeme bildirimleri ve vade uyarıları</p>
+                    <div className="mt-3 text-xs text-orange-600 font-medium">Yakında</div>
+                  </button>
+
+                  {/* Ekstre Paylaşımı */}
+                  <button
+                    onClick={() => setActiveTab('cari')}
+                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <FileText className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
+                      </div>
+                      <h3 className="font-semibold text-neutral-900">Ekstre Paylaşımı</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">Müşterilere hesap ekstresi gönderin</p>
+                  </button>
+
+                  {/* Barkod Okuma */}
+                  <button
+                    onClick={() => toast('Barkod okuma özelliği geliştiriliyor!', { icon: '📷', duration: 3000 })}
+                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <Package className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
+                      </div>
+                      <h3 className="font-semibold text-neutral-900">Barkod Okuma</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">Hızlı fatura ve stok girişi</p>
+                    <div className="mt-3 text-xs text-orange-600 font-medium">Yakında</div>
+                  </button>
+
+                  {/* Toplu Email */}
+                  <button
+                    onClick={() => toast('Toplu email özelliği hazırlanıyor!', { icon: '📧', duration: 3000 })}
+                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <Mail className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
+                      </div>
+                      <h3 className="font-semibold text-neutral-900">Toplu Email</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">Fatura ve teklifleri toplu gönderin</p>
+                    <div className="mt-3 text-xs text-orange-600 font-medium">Yakında</div>
+                  </button>
+
+                  {/* Raporlar */}
+                  <button
+                    onClick={() => setActiveTab('reports')}
+                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <BarChart3 className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
+                      </div>
+                      <h3 className="font-semibold text-neutral-900">Gelişmiş Raporlar</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">Detaylı analiz ve özel raporlar</p>
+                  </button>
+                </div>
+
+                {/* Quick Stats for Tools */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-blue-900">Aktif Etiketler</h4>
+                      <Tag className="text-blue-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-blue-900">12</p>
+                    <p className="text-xs text-blue-600 mt-1">Son 30 gün</p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-green-900">Hatırlatmalar</h4>
+                      <Clock className="text-green-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-green-900">5</p>
+                    <p className="text-xs text-green-600 mt-1">Bu hafta</p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-purple-900">Gönderilen Ekstre</h4>
+                      <FileText className="text-purple-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-purple-900">28</p>
+                    <p className="text-xs text-purple-600 mt-1">Bu ay</p>
+                  </div>
                 </div>
               </div>
             )}
