@@ -11,6 +11,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'react-hot-toast'
+import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface DashboardStats {
   currentMonth: {
@@ -343,8 +344,8 @@ export default function AccountingDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Muhasebe Dashboard</h2>
-          <p className="text-sm text-neutral-600 mt-1">
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Muhasebe Dashboard</h2>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
             Son güncelleme: {new Date().toLocaleString('tr-TR')}
           </p>
         </div>
@@ -352,18 +353,18 @@ export default function AccountingDashboard() {
           <button
             onClick={() => loadDashboardData(true)}
             disabled={refreshing}
-            className="px-3 py-2 rounded-xl text-sm font-medium bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors disabled:opacity-50 flex items-center gap-2"
+            className={cx(button('sm', 'outline', 'md'), 'gap-2')}
             title="Yenile"
           >
             <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
             <span className="hidden sm:inline">{refreshing ? 'Yenileniyor...' : 'Yenile'}</span>
           </button>
           
-          <div className="h-8 w-px bg-neutral-300 hidden sm:block" />
+          <div className={`h-8 w-px ${DESIGN_TOKENS.colors.border.default} hidden sm:block`} />
           
           <button
             onClick={() => setShowComparison(!showComparison)}
-            className="px-3 py-2 rounded-xl text-sm font-medium bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors flex items-center gap-2"
+            className={cx(button('sm', 'outline', 'md'), 'gap-2')}
             title={showComparison ? 'Karşılaştırmayı Gizle' : 'Karşılaştırmayı Göster'}
           >
             {showComparison ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -373,12 +374,12 @@ export default function AccountingDashboard() {
           <div className="relative group">
             <button
               disabled={exporting}
-              className="px-3 py-2 rounded-xl text-sm font-medium bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors disabled:opacity-50 flex items-center gap-2"
+              className={cx(button('sm', 'outline', 'md'), 'gap-2')}
             >
               <Download size={16} />
               <span className="hidden sm:inline">Dışa Aktar</span>
             </button>
-            <div className="hidden group-hover:block absolute right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-neutral-200 py-2 min-w-[160px] z-10">
+            <div className={`hidden group-hover:block absolute right-0 top-full mt-1 ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.colors.bg.primary} border ${DESIGN_TOKENS.colors.border.default} py-2 min-w-[160px] z-10`}>
               <button
                 onClick={handleExportPDF}
                 disabled={exporting}
@@ -434,79 +435,79 @@ export default function AccountingDashboard() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {/* Income Card */}
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+            <div className={`w-12 h-12 bg-green-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <TrendingUp className="text-white" size={24} />
             </div>
-            <div className={`flex items-center gap-1 text-sm font-semibold ${
+            <div className={`flex items-center gap-1 ${DESIGN_TOKENS.typography.label.sm} font-semibold ${
               stats.trends.incomeChange >= 0 ? 'text-green-600' : 'text-red-600'
             }`}>
               {stats.trends.incomeChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
               {formatPercentage(stats.trends.incomeChange)}
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-green-900 mb-1">
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} text-green-900 mb-1`}>
             {formatCurrency(stats.currentMonth.income)}
           </h3>
-          <p className="text-sm text-green-700">Bu Ay Gelir</p>
-          <p className="text-xs text-green-600 mt-2">
+          <p className={`${DESIGN_TOKENS.typography.label.md} text-green-700`}>Bu Ay Gelir</p>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-600 mt-2`}>
             Geçen ay: {formatCurrency(stats.previousMonth.income)}
           </p>
         </div>
 
         {/* Expense Card */}
-        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
+            <div className={`w-12 h-12 bg-red-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <TrendingDown className="text-white" size={24} />
             </div>
-            <div className={`flex items-center gap-1 text-sm font-semibold ${
+            <div className={`flex items-center gap-1 ${DESIGN_TOKENS.typography.label.sm} font-semibold ${
               stats.trends.expenseChange >= 0 ? 'text-red-600' : 'text-green-600'
             }`}>
               {stats.trends.expenseChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
               {formatPercentage(stats.trends.expenseChange)}
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-red-900 mb-1">
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} text-red-900 mb-1`}>
             {formatCurrency(stats.currentMonth.expense)}
           </h3>
-          <p className="text-sm text-red-700">Bu Ay Gider</p>
-          <p className="text-xs text-red-600 mt-2">
+          <p className={`${DESIGN_TOKENS.typography.label.md} text-red-700`}>Bu Ay Gider</p>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-red-600 mt-2`}>
             Geçen ay: {formatCurrency(stats.previousMonth.expense)}
           </p>
         </div>
 
         {/* Profit Card */}
-        <div className={`bg-gradient-to-br rounded-2xl p-6 border ${
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), `bg-gradient-to-br ${
           stats.currentMonth.profit >= 0
             ? 'from-blue-50 to-blue-100 border-blue-200'
             : 'from-orange-50 to-orange-100 border-orange-200'
-        }`}>
+        }`)}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+            <div className={`w-12 h-12 ${DESIGN_TOKENS.radius.md} flex items-center justify-center ${
               stats.currentMonth.profit >= 0 ? 'bg-blue-500' : 'bg-orange-500'
             }`}>
               <DollarSign className="text-white" size={24} />
             </div>
-            <div className={`flex items-center gap-1 text-sm font-semibold ${
+            <div className={`flex items-center gap-1 ${DESIGN_TOKENS.typography.label.sm} font-semibold ${
               stats.trends.profitChange >= 0 ? 'text-green-600' : 'text-red-600'
             }`}>
               {stats.trends.profitChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
               {formatPercentage(stats.trends.profitChange)}
             </div>
           </div>
-          <h3 className={`text-3xl font-bold mb-1 ${
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1 ${
             stats.currentMonth.profit >= 0 ? 'text-blue-900' : 'text-orange-900'
           }`}>
             {formatCurrency(Math.abs(stats.currentMonth.profit))}
           </h3>
-          <p className={`text-sm ${
+          <p className={`${DESIGN_TOKENS.typography.label.md} ${
             stats.currentMonth.profit >= 0 ? 'text-blue-700' : 'text-orange-700'
           }`}>
             {stats.currentMonth.profit >= 0 ? 'Net Kâr' : 'Net Zarar'}
           </p>
-          <p className={`text-xs mt-2 ${
+          <p className={`${DESIGN_TOKENS.typography.body.sm} mt-2 ${
             stats.currentMonth.profit >= 0 ? 'text-blue-600' : 'text-orange-600'
           }`}>
             Geçen ay: {formatCurrency(Math.abs(stats.previousMonth.profit))}
@@ -514,17 +515,17 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Cash Flow Card */}
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+            <div className={`w-12 h-12 bg-purple-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <Calendar className="text-white" size={24} />
             </div>
-            <span className="text-xs text-purple-700 font-medium">Bu Ay</span>
+            <span className={`${DESIGN_TOKENS.typography.body.sm} text-purple-700 font-medium`}>Bu Ay</span>
           </div>
-          <h3 className="text-3xl font-bold text-purple-900 mb-1">
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} text-purple-900 mb-1`}>
             {formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}
           </h3>
-          <p className="text-sm text-purple-700">Nakit Akışı</p>
+          <p className={`${DESIGN_TOKENS.typography.label.md} text-purple-700`}>Nakit Akışı</p>
           <div className="mt-3 flex items-center gap-2 text-xs">
             <span className="text-green-600">↑ {formatCurrency(stats.currentMonth.income)}</span>
             <span className="text-neutral-400">|</span>
@@ -879,9 +880,9 @@ export default function AccountingDashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Trend Chart */}
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+        <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-neutral-900">Aylık Trend</h3>
+            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Aylık Trend</h3>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setChartType('line')}
@@ -997,9 +998,9 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Income vs Expense Bar Chart */}
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+        <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-neutral-900">Gelir vs Gider</h3>
+            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Gelir vs Gider</h3>
             <BarChart3 className="text-neutral-400" size={20} />
           </div>
           <ResponsiveContainer width="100%" height={260}>
@@ -1024,9 +1025,9 @@ export default function AccountingDashboard() {
 
         {/* Income Category Breakdown */}
         {stats.categoryBreakdown.income.length > 0 && (
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-neutral-900">Gelir Kategorileri</h3>
+              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Gelir Kategorileri</h3>
               <PieChartIcon className="text-neutral-400" size={20} />
             </div>
             <ResponsiveContainer width="100%" height={260}>
@@ -1053,9 +1054,9 @@ export default function AccountingDashboard() {
 
         {/* Expense Category Breakdown */}
         {stats.categoryBreakdown.expense.length > 0 && (
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-neutral-900">Gider Kategorileri</h3>
+              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Gider Kategorileri</h3>
               <PieChartIcon className="text-neutral-400" size={20} />
             </div>
             <ResponsiveContainer width="100%" height={260}>
