@@ -131,8 +131,9 @@ jobs:
         with:
           path: |
             ~/.npm
+            node_modules
             backend/node_modules
-          key: ${{ runner.os }}-node-backend-${{ hashFiles('backend/package-lock.json') }}
+          key: ${{ runner.os }}-node-backend-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-backend-
 
@@ -159,8 +160,10 @@ jobs:
 
       - name: Install backend dependencies and generate Prisma client
         run: |
+          # Install workspace dependencies from root
+          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
+          # Generate Prisma client
           cd backend
-          npm ci
           npx prisma generate
 
       # Tests temporarily disabled - Jest memory issues
