@@ -36,7 +36,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders' | 'statements' | 'barcode'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders' | 'statements' | 'barcode' | 'notifications'
 
 interface AccountingStats {
   totalRevenue: number
@@ -2122,22 +2122,96 @@ export default function Accounting() {
             {/* Advisor Tab */}
             {activeTab === 'advisor' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Mali Müşavirler İçin</h2>
-                
-                <div className="bg-white rounded-2xl p-8 border border-neutral-200">
-                  <div className="flex items-start space-x-6">
-                    <div className="w-16 h-16 bg-neutral-900 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <Users className="text-white" size={32} />
+                <div>
+                  <h2 className="text-2xl font-bold text-neutral-900">Mali Müşavir Paneli</h2>
+                  <p className="text-sm text-neutral-600 mt-1">Mükellef yönetimi ve toplu işlemler</p>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-blue-900">Toplam Mükellef</h4>
+                      <Users className="text-blue-600" size={20} />
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-neutral-900 mb-2">Veri Aktarımı</h3>
-                      <p className="text-neutral-600 mb-4">
-                        Mükelleflerin verilerini tek tıkla muhasebe programına aktarın.
-                      </p>
-                      <button className="bg-neutral-900 text-white px-6 py-3 rounded-xl hover:bg-neutral-800 transition-colors">
-                        Hemen Başla
-                      </button>
+                    <p className="text-3xl font-bold text-blue-900">42</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-green-900">Aktif Dönem</h4>
+                      <Calendar className="text-green-600" size={20} />
                     </div>
+                    <p className="text-3xl font-bold text-green-900">2025/10</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-orange-900">Bu Ay İşlem</h4>
+                      <FileText className="text-orange-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-orange-900">1,247</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-purple-900">E-Belge</h4>
+                      <Globe className="text-purple-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-purple-900">384</p>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <button onClick={() => toast('XML dışa aktarma hazırlanıyor...', { icon: '📄' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-600 rounded-xl flex items-center justify-center transition-colors">
+                        <Download className="text-blue-600 group-hover:text-white" size={24} />
+                      </div>
+                      <h3 className="font-semibold">XML Dışa Aktar</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">Toplu veri aktarımı</p>
+                  </button>
+
+                  <button onClick={() => toast('Excel raporu oluşturuluyor...', { icon: '📊' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-green-100 group-hover:bg-green-600 rounded-xl flex items-center justify-center transition-colors">
+                        <BarChart3 className="text-green-600 group-hover:text-white" size={24} />
+                      </div>
+                      <h3 className="font-semibold">Excel Rapor</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">Dönem sonu raporları</p>
+                  </button>
+
+                  <button onClick={() => toast('E-Belge gönderimi başlatılıyor...', { icon: '📧' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-purple-100 group-hover:bg-purple-600 rounded-xl flex items-center justify-center transition-colors">
+                        <Mail className="text-purple-600 group-hover:text-white" size={24} />
+                      </div>
+                      <h3 className="font-semibold">Toplu E-Belge</h3>
+                    </div>
+                    <p className="text-sm text-neutral-600">GİB'e toplu gönderim</p>
+                  </button>
+                </div>
+
+                {/* Client List */}
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <h3 className="font-semibold text-neutral-900 mb-4">Mükellef Listesi</h3>
+                  <div className="space-y-3">
+                    {[1, 2, 3, 4, 5].map(i => (
+                      <div key={i} className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-neutral-900 rounded-lg flex items-center justify-center text-white font-bold">
+                            {String.fromCharCode(64 + i)}
+                          </div>
+                          <div>
+                            <p className="font-medium text-neutral-900">Mükellef {i}</p>
+                            <p className="text-sm text-neutral-600">VKN: 123456789{i}</p>
+                          </div>
+                        </div>
+                        <button className="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors text-sm">
+                          Detay
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -2146,32 +2220,92 @@ export default function Accounting() {
             {/* Support Tab */}
             {activeTab === 'support' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Yardım ve Destek</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <Calculator className="text-neutral-700 mb-4" size={32} />
-                    <h3 className="font-semibold mb-2">Hesaplama Araçları</h3>
-                    <ul className="space-y-2 text-sm text-neutral-600">
-                      <li>• Personel Maliyet Hesaplama</li>
-                      <li>• Amortisman Hesaplama</li>
-                      <li>• KDV Hesaplama</li>
-                      <li>• Stopaj Hesaplama</li>
-                    </ul>
-                  </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-neutral-900">Destek Sistemi</h2>
+                  <p className="text-sm text-neutral-600 mt-1">Yardım, dokümantasyon ve canlı destek</p>
+                </div>
 
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <Globe className="text-neutral-700 mb-4" size={32} />
-                    <h3 className="font-semibold mb-2">Destek Merkezi</h3>
-                    <p className="text-sm text-neutral-600 mb-4">7/24 destek ekibimiz hazır</p>
-                    <div className="space-y-2">
-                      <button className="w-full bg-neutral-900 text-white py-2 rounded-xl hover:bg-neutral-800 transition-colors">
-                        Canlı Destek
+                {/* Quick Actions */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <button onClick={() => toast('Canlı destek başlatılıyor...', { icon: '💬' })} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 hover:shadow-lg transition-all text-left group">
+                    <MessageCircle className="text-blue-600 mb-3" size={32} />
+                    <h3 className="font-semibold text-blue-900 mb-2">Canlı Destek</h3>
+                    <p className="text-sm text-blue-700">7/24 online destek ekibi</p>
+                  </button>
+
+                  <button onClick={() => toast('Dokümantasyon açılıyor...', { icon: '📚' })} className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-all text-left group">
+                    <FileText className="text-green-600 mb-3" size={32} />
+                    <h3 className="font-semibold text-green-900 mb-2">Dokümantasyon</h3>
+                    <p className="text-sm text-green-700">Kapsamlı kullanım kılavuzu</p>
+                  </button>
+
+                  <button onClick={() => toast('Video eğitimleri hazırlanıyor...', { icon: '🎥' })} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-lg transition-all text-left group">
+                    <Globe className="text-purple-600 mb-3" size={32} />
+                    <h3 className="font-semibold text-purple-900 mb-2">Video Eğitimler</h3>
+                    <p className="text-sm text-purple-700">Adım adım videolar</p>
+                  </button>
+                </div>
+
+                {/* Support Tickets */}
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-neutral-900">Destek Talepleri</h3>
+                    <button onClick={() => toast('Yeni destek talebi oluşturuluyor...', { icon: '🎫' })} className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-xl hover:bg-neutral-800 transition-colors">
+                      <Plus size={16} />
+                      Yeni Talep
+                    </button>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {[
+                      { id: 1, subject: 'E-Fatura Entegrasyonu', status: 'open', priority: 'high' },
+                      { id: 2, subject: 'Ekstre Gönderimi Sorunu', status: 'in-progress', priority: 'medium' },
+                      { id: 3, subject: 'Barkod Okuma Desteği', status: 'resolved', priority: 'low' },
+                    ].map(ticket => (
+                      <div key={ticket.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-1">
+                            <p className="font-medium text-neutral-900">#{ticket.id} - {ticket.subject}</p>
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              ticket.status === 'open' ? 'bg-orange-100 text-orange-700' :
+                              ticket.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                              'bg-green-100 text-green-700'
+                            }`}>
+                              {ticket.status === 'open' ? 'Açık' : ticket.status === 'in-progress' ? 'İşlemde' : 'Çözüldü'}
+                            </span>
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              ticket.priority === 'high' ? 'bg-red-100 text-red-700' :
+                              ticket.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-blue-100 text-blue-700'
+                            }`}>
+                              {ticket.priority === 'high' ? 'Yüksek' : ticket.priority === 'medium' ? 'Orta' : 'Düşük'}
+                            </span>
+                          </div>
+                          <p className="text-sm text-neutral-600">2 saat önce güncellendi</p>
+                        </div>
+                        <button className="px-4 py-2 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
+                          Detay
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* FAQ */}
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <h3 className="font-semibold text-neutral-900 mb-4">Sık Sorulan Sorular</h3>
+                  <div className="space-y-3">
+                    {[
+                      'E-Fatura nasıl oluşturulur?',
+                      'Barkod okuyucu nasıl kullanılır?',
+                      'Ekstre paylaşımı nasıl yapılır?',
+                      'Hatırlatmalar nasıl ayarlanır?',
+                      'Mali müşavir paneli özellikleri nelerdir?',
+                    ].map((q, i) => (
+                      <button key={i} onClick={() => toast('Cevap açılıyor...', { icon: '❓' })} className="w-full text-left p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
+                        <p className="text-sm text-neutral-900">{q}</p>
                       </button>
-                      <button className="w-full bg-neutral-100 text-neutral-700 py-2 rounded-xl hover:bg-neutral-200 transition-colors">
-                        Dokümantasyon
-                      </button>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -2196,6 +2330,147 @@ export default function Accounting() {
               <ErrorBoundary>
                 <BarcodeScanner />
               </ErrorBoundary>
+            )}
+
+            {/* Notifications Tab */}
+            {activeTab === 'notifications' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-neutral-900">Bildirim Merkezi</h2>
+                    <p className="text-sm text-neutral-600 mt-1">Tüm sistem bildirimleri ve uyarılar</p>
+                  </div>
+                  <button onClick={() => toast('Tüm bildirimler okundu olarak işaretlendi', { icon: '✅' })} className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors">
+                    Tümünü Okundu İşaretle
+                  </button>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-blue-900">Toplam</h4>
+                      <Bell className="text-blue-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-blue-900">127</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-orange-900">Okunmamış</h4>
+                      <AlertCircle className="text-orange-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-orange-900">8</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-red-900">Acil</h4>
+                      <XCircle className="text-red-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-red-900">3</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-green-900">Bu Hafta</h4>
+                      <CheckCircle className="text-green-600" size={20} />
+                    </div>
+                    <p className="text-3xl font-bold text-green-900">42</p>
+                  </div>
+                </div>
+
+                {/* Filters */}
+                <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <Filter size={20} className="text-neutral-600" />
+                    {['Tümü', 'Okunmamış', 'Ödemeler', 'Faturalar', 'Hatırlatmalar', 'Sistem'].map(filter => (
+                      <button key={filter} className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-900 hover:text-white transition-colors">
+                        {filter}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Notifications List */}
+                <div className="space-y-3">
+                  {[
+                    { id: 1, type: 'payment', title: 'Ödeme Hatırlatması', message: 'ABC Ltd.Şti. için 15,000 ₺ ödeme vadesi yarın dolacak', time: '5 dk önce', unread: true, urgent: true },
+                    { id: 2, type: 'invoice', title: 'Yeni Fatura', message: 'XYZ A.Ş. için #INV-2025-042 numaralı fatura oluşturuldu', time: '1 saat önce', unread: true, urgent: false },
+                    { id: 3, type: 'reminder', title: 'Vade Tarihi Yaklaşıyor', message: '3 fatura için vade tarihi bu hafta içinde', time: '2 saat önce', unread: true, urgent: false },
+                    { id: 4, type: 'system', title: 'Sistem Güncellemesi', message: 'Yeni özellikler eklendi: Barkod okuyucu aktif', time: '3 saat önce', unread: false, urgent: false },
+                    { id: 5, type: 'statement', title: 'Ekstre Gönderildi', message: 'DEF Ticaret için hesap ekstresi email ile gönderildi', time: '5 saat önce', unread: false, urgent: false },
+                    { id: 6, type: 'payment', title: 'Ödeme Alındı', message: 'GHI Ltd. 8,500 ₺ ödeme gerçekleştirdi', time: '1 gün önce', unread: false, urgent: false },
+                  ].map(notif => (
+                    <div key={notif.id} className={`bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-lg ${
+                      notif.unread ? 'border-blue-200 bg-blue-50' : 'border-neutral-200'
+                    } ${notif.urgent ? 'ring-2 ring-red-300' : ''}`}>
+                      <div className="flex items-start gap-4">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                          notif.type === 'payment' ? 'bg-green-100' :
+                          notif.type === 'invoice' ? 'bg-blue-100' :
+                          notif.type === 'reminder' ? 'bg-orange-100' :
+                          notif.type === 'statement' ? 'bg-purple-100' :
+                          'bg-neutral-100'
+                        }`}>
+                          {notif.type === 'payment' && <DollarSign className="text-green-600" size={24} />}
+                          {notif.type === 'invoice' && <FileText className="text-blue-600" size={24} />}
+                          {notif.type === 'reminder' && <Clock className="text-orange-600" size={24} />}
+                          {notif.type === 'statement' && <Mail className="text-purple-600" size={24} />}
+                          {notif.type === 'system' && <Settings className="text-neutral-600" size={24} />}
+                        </div>
+                        
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-1">
+                            <h3 className="font-semibold text-neutral-900">{notif.title}</h3>
+                            {notif.unread && (
+                              <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                            )}
+                            {notif.urgent && (
+                              <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
+                                ACİL
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-neutral-600 mb-2">{notif.message}</p>
+                          <p className="text-xs text-neutral-500">{notif.time}</p>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {notif.unread && (
+                            <button onClick={() => toast('Bildirim okundu olarak işaretlendi', { icon: '✓' })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Okundu işaretle">
+                              <CheckCircle size={20} />
+                            </button>
+                          )}
+                          <button onClick={() => toast('Bildirim silindi', { icon: '🗑️' })} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
+                            <Trash2 size={20} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Settings */}
+                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                  <h3 className="font-semibold text-neutral-900 mb-4">Bildirim Tercihleri</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      { label: 'Email Bildirimleri', checked: true },
+                      { label: 'SMS Bildirimleri', checked: false },
+                      { label: 'Push Bildirimleri', checked: true },
+                      { label: 'Ödeme Hatırlatmaları', checked: true },
+                      { label: 'Fatura Bildirimleri', checked: true },
+                      { label: 'Sistem Güncellemeleri', checked: false },
+                    ].map((pref, i) => (
+                      <label key={i} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors cursor-pointer">
+                        <input type="checkbox" defaultChecked={pref.checked} className="w-5 h-5 text-neutral-900 rounded" />
+                        <span className="text-sm text-neutral-700">{pref.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <button onClick={() => toast('Tercihler kaydedildi', { icon: '💾' })} className="w-full mt-4 bg-neutral-900 text-white py-3 rounded-xl hover:bg-neutral-800 transition-colors">
+                    Tercihleri Kaydet
+                  </button>
+                </div>
+              </div>
             )}
             </ErrorBoundary>
           </div>
