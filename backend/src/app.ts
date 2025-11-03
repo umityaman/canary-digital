@@ -221,6 +221,7 @@ safeLoadRoute('/api/cost-accounting', './routes/costAccounting', 'Cost Accountin
 // Company & Bank Account Routes
 safeLoadRoute('/api/company', './routes/company', 'Company Management');
 safeLoadRoute('/api/bank-accounts', './routes/bankAccount', 'Bank Account Tracking');
+safeLoadRoute('/api/cash', './routes/cash', 'Cash Transaction Management');
 
 // Excel Import/Export Routes
 safeLoadRoute('/api/excel', './routes/excel', 'Excel Import/Export');
