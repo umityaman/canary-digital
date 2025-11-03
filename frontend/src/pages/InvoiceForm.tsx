@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Plus, Trash2, Save, User, Calendar, FileText, DollarSign } from 'lucide-react'
+import { ArrowLeft, Plus, Trash2, Save, User, Calendar, FileText, DollarSign, Percent } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { invoiceAPI, equipmentAPI } from '../services/api'
+import FormSkeleton from '../components/ui/FormSkeleton'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
@@ -11,7 +13,11 @@ interface InvoiceItem {
   description: string
   quantity: number
   unitPrice: number
+  taxRate: number
+  equipmentId?: number
   total: number
+  taxAmount: number
+  grandTotal: number
 }
 
 interface Customer {
@@ -21,6 +27,21 @@ interface Customer {
   phone: string
 }
 
+interface Equipment {
+  id: number
+  name: string
+  serialNumber: string
+  price: number
+}
+
+const TAX_RATES = [
+  { value: 0, label: '%0' },
+  { value: 1, label: '%1' },
+  { value: 8, label: '%8' },
+  { value: 10, label: '%10' },
+  { value: 20, label: '%20' }
+]
+
 const InvoiceForm: React.FC = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -28,6 +49,7 @@ const InvoiceForm: React.FC = () => {
 
   const [loading, setLoading] = useState(false)
   const [customers, setCustomers] = useState<Customer[]>([])
+  const [equipments, setEquipments] = useState<Equipment[]>([])
   
   const [formData, setFormData] = useState({
     invoiceNumber: '',
@@ -35,15 +57,17 @@ const InvoiceForm: React.FC = () => {
     issueDate: new Date().toISOString().split('T')[0],
     dueDate: '',
     notes: '',
+    discountPercentage: 0,
     status: 'pending' as 'pending' | 'paid' | 'overdue' | 'cancelled'
   })
 
   const [items, setItems] = useState<InvoiceItem[]>([
-    { id: '1', description: '', quantity: 1, unitPrice: 0, total: 0 }
+    { id: '1', description: '', quantity: 1, unitPrice: 0, taxRate: 20, total: 0, taxAmount: 0, grandTotal: 0 }
   ])
 
   useEffect(() => {
     loadCustomers()
+    loadEquipments()
     if (isEdit) {
       loadInvoice()
     }
@@ -52,20 +76,28 @@ const InvoiceForm: React.FC = () => {
   const loadCustomers = async () => {
     try {
       const response = await axios.get(`${API_URL}/customers`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
       })
-      setCustomers(response.data)
+      setCustomers(response.data.data || response.data || [])
     } catch (error) {
+      console.error('Failed to load customers:', error)
       toast.error('Müşteriler yüklenemedi')
+    }
+  }
+
+  const loadEquipments = async () => {
+    try {
+      const response = await equipmentAPI.getAll()
+      setEquipments(response.data.data || response.data || [])
+    } catch (error) {
+      console.error('Failed to load equipments:', error)
     }
   }
 
   const loadInvoice = async () => {
     try {
       setLoading(true)
-      const response = await axios.get(`${API_URL}/accounting/invoices/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      })
+      const response = await invoiceAPI.getById(parseInt(id!))
       const invoice = response.data
       setFormData({
         invoiceNumber: invoice.invoiceNumber,
@@ -73,10 +105,12 @@ const InvoiceForm: React.FC = () => {
         issueDate: invoice.issueDate.split('T')[0],
         dueDate: invoice.dueDate.split('T')[0],
         notes: invoice.notes || '',
+        discountPercentage: invoice.discountPercentage || 0,
         status: invoice.status
       })
       setItems(invoice.items || [])
     } catch (error) {
+      console.error('Failed to load invoice:', error)
       toast.error('Fatura yüklenemedi')
     } finally {
       setLoading(false)
@@ -89,7 +123,10 @@ const InvoiceForm: React.FC = () => {
       description: '',
       quantity: 1,
       unitPrice: 0,
-      total: 0
+      taxRate: 20,
+      total: 0,
+      taxAmount: 0,
+      grandTotal: 0
     }
     setItems([...items, newItem])
   }
@@ -107,22 +144,41 @@ const InvoiceForm: React.FC = () => {
       if (item.id === id) {
         const updated = { ...item, [field]: value }
         updated.total = updated.quantity * updated.unitPrice
+        updated.taxAmount = updated.total * (updated.taxRate / 100)
+        updated.grandTotal = updated.total + updated.taxAmount
         return updated
       }
       return item
     }))
   }
 
+  const handleEquipmentSelect = (id: string, equipmentId: number) => {
+    const equipment = equipments.find(e => e.id === equipmentId)
+    if (equipment) {
+      handleItemChange(id, 'description', equipment.name)
+      handleItemChange(id, 'unitPrice', equipment.price)
+      handleItemChange(id, 'equipmentId', equipmentId)
+    }
+  }
+
   const calculateSubtotal = () => {
     return items.reduce((sum, item) => sum + item.total, 0)
   }
 
-  const calculateVAT = () => {
-    return calculateSubtotal() * 0.20 // %20 KDV
+  const calculateTotalTax = () => {
+    return items.reduce((sum, item) => sum + item.taxAmount, 0)
+  }
+
+  const calculateDiscountAmount = () => {
+    const subtotal = calculateSubtotal()
+    return subtotal * (formData.discountPercentage / 100)
   }
 
   const calculateTotal = () => {
-    return calculateSubtotal() + calculateVAT()
+    const subtotal = calculateSubtotal()
+    const taxAmount = calculateTotalTax()
+    const discountAmount = calculateDiscountAmount()
+    return subtotal + taxAmount - discountAmount
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -147,26 +203,29 @@ const InvoiceForm: React.FC = () => {
       setLoading(true)
       const payload = {
         ...formData,
+        customerId: parseInt(formData.customerId as any),
         items,
         subtotal: calculateSubtotal(),
-        vatAmount: calculateVAT(),
+        taxAmount: calculateTotalTax(),
+        discountAmount: calculateDiscountAmount(),
         totalAmount: calculateTotal()
       }
 
       if (isEdit) {
-        await axios.put(`${API_URL}/accounting/invoices/${id}`, payload, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        await axios.put(`${API_URL}/invoices/${id}`, payload, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
         })
         toast.success('Fatura güncellendi')
       } else {
-        await axios.post(`${API_URL}/accounting/invoices`, payload, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        await axios.post(`${API_URL}/invoices`, payload, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
         })
         toast.success('Fatura oluşturuldu')
       }
       
       navigate('/accounting?tab=invoice')
     } catch (error: any) {
+      console.error('Failed to save invoice:', error)
       toast.error(error.response?.data?.message || 'Fatura kaydedilemedi')
     } finally {
       setLoading(false)
@@ -174,14 +233,7 @@ const InvoiceForm: React.FC = () => {
   }
 
   if (loading && isEdit) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-900 mx-auto"></div>
-          <p className="mt-4 text-neutral-600">Fatura yükleniyor...</p>
-        </div>
-      </div>
-    )
+    return <FormSkeleton />
   }
 
   return (
@@ -314,53 +366,121 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              {items.map((item, index) => (
-                <div key={item.id} className="grid grid-cols-12 gap-3 items-start p-4 bg-neutral-50 rounded-xl">
-                  <div className="col-span-12 md:col-span-5">
-                    <input
-                      type="text"
-                      value={item.description}
-                      onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
-                      placeholder="Ürün/Hizmet açıklaması"
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                    />
-                  </div>
-                  <div className="col-span-4 md:col-span-2">
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                      placeholder="Miktar"
-                      min="0"
-                      step="0.01"
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                    />
-                  </div>
-                  <div className="col-span-4 md:col-span-2">
-                    <input
-                      type="number"
-                      value={item.unitPrice}
-                      onChange={(e) => handleItemChange(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
-                      placeholder="Birim Fiyat"
-                      min="0"
-                      step="0.01"
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                    />
-                  </div>
-                  <div className="col-span-3 md:col-span-2">
-                    <div className="px-3 py-2 bg-neutral-100 rounded-lg text-sm font-medium text-neutral-900">
-                      ₺{item.total.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              {items.map((item) => (
+                <div key={item.id} className="p-4 bg-neutral-50 rounded-xl space-y-3">
+                  <div className="grid grid-cols-12 gap-3 items-start">
+                    {/* Equipment Select */}
+                    <div className="col-span-12 md:col-span-6">
+                      <label className="block text-xs text-neutral-600 mb-1">Ekipman (Opsiyonel)</label>
+                      <select
+                        value={item.equipmentId || ''}
+                        onChange={(e) => handleEquipmentSelect(item.id, parseInt(e.target.value))}
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                      >
+                        <option value="">Ekipman seçin veya manuel girin...</option>
+                        {equipments.map(equipment => (
+                          <option key={equipment.id} value={equipment.id}>
+                            {equipment.name} - {equipment.serialNumber}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                  </div>
-                  <div className="col-span-1 md:col-span-1 flex justify-end">
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveItem(item.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      disabled={items.length === 1}
-                    >
-                      <Trash2 size={18} />
-                    </button>
+
+                    {/* Description */}
+                    <div className="col-span-12 md:col-span-6">
+                      <label className="block text-xs text-neutral-600 mb-1">Açıklama *</label>
+                      <input
+                        type="text"
+                        value={item.description}
+                        onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
+                        placeholder="Ürün/Hizmet açıklaması"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                        required
+                      />
+                    </div>
+
+                    {/* Quantity */}
+                    <div className="col-span-6 md:col-span-2">
+                      <label className="block text-xs text-neutral-600 mb-1">Miktar *</label>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                        placeholder="0"
+                        min="0"
+                        step="0.01"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                        required
+                      />
+                    </div>
+
+                    {/* Unit Price */}
+                    <div className="col-span-6 md:col-span-2">
+                      <label className="block text-xs text-neutral-600 mb-1">Birim Fiyat *</label>
+                      <input
+                        type="number"
+                        value={item.unitPrice}
+                        onChange={(e) => handleItemChange(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                        required
+                      />
+                    </div>
+
+                    {/* Tax Rate */}
+                    <div className="col-span-6 md:col-span-2">
+                      <label className="block text-xs text-neutral-600 mb-1">KDV Oranı</label>
+                      <select
+                        value={item.taxRate}
+                        onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                      >
+                        {TAX_RATES.map(rate => (
+                          <option key={rate.value} value={rate.value}>
+                            {rate.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Subtotal */}
+                    <div className="col-span-6 md:col-span-2">
+                      <label className="block text-xs text-neutral-600 mb-1">Tutar</label>
+                      <div className="px-3 py-2 bg-neutral-100 rounded-lg text-sm font-medium text-neutral-900">
+                        ₺{item.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+
+                    {/* Tax Amount */}
+                    <div className="col-span-6 md:col-span-2">
+                      <label className="block text-xs text-neutral-600 mb-1">KDV</label>
+                      <div className="px-3 py-2 bg-neutral-100 rounded-lg text-sm font-medium text-neutral-700">
+                        ₺{item.taxAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+
+                    {/* Grand Total */}
+                    <div className="col-span-6 md:col-span-2">
+                      <label className="block text-xs text-neutral-600 mb-1">Toplam</label>
+                      <div className="px-3 py-2 bg-neutral-900 text-white rounded-lg text-sm font-bold">
+                        ₺{item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+
+                    {/* Delete Button */}
+                    <div className="col-span-12 md:col-span-1 flex md:items-end md:justify-end">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors self-end"
+                        disabled={items.length === 1}
+                        title="Ürünü Kaldır"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -368,24 +488,63 @@ const InvoiceForm: React.FC = () => {
 
             {/* Totals */}
             <div className="mt-6 pt-6 border-t border-neutral-200">
-              <div className="space-y-2 max-w-md ml-auto">
-                <div className="flex justify-between text-sm">
-                  <span className="text-neutral-600">Ara Toplam:</span>
-                  <span className="font-medium">
-                    ₺{calculateSubtotal().toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Discount Input */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
+                    <Percent size={16} />
+                    İndirim Oranı
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={formData.discountPercentage}
+                      onChange={(e) => setFormData({ ...formData, discountPercentage: parseFloat(e.target.value) || 0 })}
+                      placeholder="0"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      className="flex-1 px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                    />
+                    <div className="px-4 py-2 bg-neutral-100 rounded-xl font-medium">
+                      %
+                    </div>
+                  </div>
+                  {formData.discountPercentage > 0 && (
+                    <p className="text-xs text-neutral-600 mt-1">
+                      İndirim Tutarı: ₺{calculateDiscountAmount().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                    </p>
+                  )}
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-neutral-600">KDV (%20):</span>
-                  <span className="font-medium">
-                    ₺{calculateVAT().toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
-                </div>
-                <div className="flex justify-between text-lg font-bold pt-2 border-t border-neutral-200">
-                  <span>Toplam:</span>
-                  <span className="text-neutral-900">
-                    ₺{calculateTotal().toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
+
+                {/* Totals Summary */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Ara Toplam:</span>
+                    <span className="font-medium">
+                      ₺{calculateSubtotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Toplam KDV:</span>
+                    <span className="font-medium">
+                      ₺{calculateTotalTax().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                  {formData.discountPercentage > 0 && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span>İndirim ({formData.discountPercentage}%):</span>
+                      <span className="font-medium">
+                        -₺{calculateDiscountAmount().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-neutral-200">
+                    <span>Genel Toplam:</span>
+                    <span className="text-neutral-900">
+                      ₺{calculateTotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
