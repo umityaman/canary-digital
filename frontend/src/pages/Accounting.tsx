@@ -29,13 +29,14 @@ import CompanyInfo from '../components/accounting/CompanyInfo'
 import CashBankManagement from '../components/accounting/CashBankManagement'
 import ReminderManagement from '../components/reminders/ReminderManagement'
 import StatementSharing from '../components/statements/StatementSharing'
+import BarcodeScanner from '../components/barcode/BarcodeScanner'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
 import ErrorBoundary from '../components/ErrorBoundary'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders' | 'statements'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders' | 'statements' | 'barcode'
 
 interface AccountingStats {
   totalRevenue: number
@@ -2044,7 +2045,7 @@ export default function Accounting() {
 
                   {/* Barkod Okuma */}
                   <button
-                    onClick={() => toast('Barkod okuma özelliği geliştiriliyor!', { icon: '📷', duration: 3000 })}
+                    onClick={() => setActiveTab('barcode')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
@@ -2054,7 +2055,6 @@ export default function Accounting() {
                       <h3 className="font-semibold text-neutral-900">Barkod Okuma</h3>
                     </div>
                     <p className="text-sm text-neutral-600">Hızlı fatura ve stok girişi</p>
-                    <div className="mt-3 text-xs text-orange-600 font-medium">Yakında</div>
                   </button>
 
                   {/* Toplu Email */}
@@ -2188,6 +2188,13 @@ export default function Accounting() {
             {activeTab === 'statements' && (
               <ErrorBoundary>
                 <StatementSharing />
+              </ErrorBoundary>
+            )}
+
+            {/* Barcode Tab */}
+            {activeTab === 'barcode' && (
+              <ErrorBoundary>
+                <BarcodeScanner />
               </ErrorBoundary>
             )}
             </ErrorBoundary>
