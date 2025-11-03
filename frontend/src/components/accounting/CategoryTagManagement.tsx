@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Edit2, Trash2, Tag, TrendingUp, TrendingDown, Save, X, Plus, Filter } from 'lucide-react';
 import { apiClient } from '../../utils/api';
 import { toast } from 'react-hot-toast';
+import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 
 interface Category {
   id: string;
@@ -164,8 +165,8 @@ export default function CategoryTagManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Kategori ve Etiket Yönetimi</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Kategori ve Etiket Yönetimi</h2>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
             Gelir/gider kategorilerini ve etiketleri yönetin
           </p>
         </div>
@@ -173,30 +174,30 @@ export default function CategoryTagManagement() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Categories Section */}
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                <Filter className="w-5 h-5 mr-2 text-gray-600" />
+              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center`}>
+                <Filter className={`w-5 h-5 mr-2 ${DESIGN_TOKENS.colors.text.tertiary}`} />
                 Kategoriler
               </h3>
             </div>
 
             {/* Category Stats */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="p-4 bg-green-50 rounded-lg">
+              <div className={`p-4 ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-green-50`}>
                 <div className="flex items-center justify-between">
                   <TrendingUp className="w-6 h-6 text-green-600" />
-                  <span className="text-2xl font-bold text-green-600">{incomeCount}</span>
+                  <span className={`${DESIGN_TOKENS.typography.stat.lg} text-green-600`}>{incomeCount}</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-2">Gelir Kategorisi</p>
+                <p className={`${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.tertiary} mt-2`}>Gelir Kategorisi</p>
               </div>
-              <div className="p-4 bg-red-50 rounded-lg">
+              <div className={`p-4 ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-red-50`}>
                 <div className="flex items-center justify-between">
                   <TrendingDown className="w-6 h-6 text-red-600" />
-                  <span className="text-2xl font-bold text-red-600">{expenseCount}</span>
+                  <span className={`${DESIGN_TOKENS.typography.stat.lg} text-red-600`}>{expenseCount}</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-2">Gider Kategorisi</p>
+                <p className={`${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.tertiary} mt-2`}>Gider Kategorisi</p>
               </div>
             </div>
 
@@ -204,31 +205,31 @@ export default function CategoryTagManagement() {
             <div className="flex gap-2 mb-4">
               <button
                 onClick={() => setCategoryFilter('all')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  categoryFilter === 'all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                className={cx(
+                  button('sm', categoryFilter === 'all' ? 'primary' : 'outline', 'md')
+                )}
               >
                 Tümü ({categories.length})
               </button>
               <button
                 onClick={() => setCategoryFilter('income')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={cx(
+                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   categoryFilter === 'income'
                     ? 'bg-green-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                )}
               >
                 Gelir ({incomeCount})
               </button>
               <button
                 onClick={() => setCategoryFilter('expense')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={cx(
+                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   categoryFilter === 'expense'
                     ? 'bg-red-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                )}
               >
                 Gider ({expenseCount})
               </button>
@@ -327,11 +328,11 @@ export default function CategoryTagManagement() {
         </div>
 
         {/* Tags Section */}
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                <Tag className="w-5 h-5 mr-2 text-gray-600" />
+              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center`}>
+                <Tag className={`w-5 h-5 mr-2 ${DESIGN_TOKENS.colors.text.tertiary}`} />
                 Etiketler
               </h3>
               <button
@@ -340,46 +341,46 @@ export default function CategoryTagManagement() {
                   setEditingTagId(null);
                   setTagFormData({ name: '', color: '#3B82F6' });
                 }}
-                className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                className={cx(button('sm', 'primary', 'md'), 'gap-1')}
               >
-                <Plus className="w-4 h-4 mr-1" />
+                <Plus className="w-4 h-4" />
                 Yeni Etiket
               </button>
             </div>
 
             {/* Tag Form */}
             {showTagForm && (
-              <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h4 className="font-medium text-gray-900 mb-3">
+              <div className={`mb-6 p-4 bg-blue-50 ${DESIGN_TOKENS.radius.md} border border-blue-200`}>
+                <h4 className={`${DESIGN_TOKENS.typography.h4} ${DESIGN_TOKENS.colors.text.primary} mb-3`}>
                   {editingTagId ? 'Etiket Düzenle' : 'Yeni Etiket'}
                 </h4>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} mb-1`}>
                       Etiket Adı
                     </label>
                     <input
                       type="text"
                       value={tagFormData.name}
                       onChange={(e) => setTagFormData({ ...tagFormData, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={input('md', 'default', undefined, 'md')}
                       placeholder="Örn: Acil, Önemli, İncelenmeli"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Renk</label>
+                    <label className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} mb-1`}>Renk</label>
                     <div className="flex items-center gap-2">
                       <input
                         type="color"
                         value={tagFormData.color}
                         onChange={(e) => setTagFormData({ ...tagFormData, color: e.target.value })}
-                        className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
+                        className={`w-12 h-10 border ${DESIGN_TOKENS.colors.border.default} ${DESIGN_TOKENS.radius.sm} cursor-pointer`}
                       />
                       <input
                         type="text"
                         value={tagFormData.color}
                         onChange={(e) => setTagFormData({ ...tagFormData, color: e.target.value })}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                        className={cx(input('md', 'default', undefined, 'md'), 'flex-1 font-mono')}
                         placeholder="#3B82F6"
                       />
                     </div>
@@ -387,7 +388,7 @@ export default function CategoryTagManagement() {
                   <div className="flex gap-2">
                     <button
                       onClick={handleSaveTag}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                      className={cx(button('md', 'primary', 'md'), 'flex-1')}
                     >
                       {editingTagId ? 'Güncelle' : 'Kaydet'}
                     </button>
@@ -397,7 +398,7 @@ export default function CategoryTagManagement() {
                         setEditingTagId(null);
                         setTagFormData({ name: '', color: '#3B82F6' });
                       }}
-                      className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                      className={button('md', 'outline', 'md')}
                     >
                       İptal
                     </button>
