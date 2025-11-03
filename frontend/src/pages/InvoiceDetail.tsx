@@ -6,6 +6,7 @@ import {
   CheckCircle, XCircle, AlertCircle, Edit2, Trash2
 } from 'lucide-react'
 import { invoiceAPI } from '../services/api'
+import DetailSkeleton from '../components/ui/DetailSkeleton'
 import toast from 'react-hot-toast'
 
 interface InvoiceDetail {
@@ -180,14 +181,7 @@ export default function InvoiceDetail() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-900 mx-auto mb-4"></div>
-          <p className="text-neutral-600">Fatura yükleniyor...</p>
-        </div>
-      </div>
-    )
+    return <DetailSkeleton />
   }
 
   if (!invoice) {

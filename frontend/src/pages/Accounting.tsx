@@ -26,6 +26,8 @@ import CostAccountingTab from '../components/accounting/CostAccountingTab'
 import CategoryTagManagement from '../components/accounting/CategoryTagManagement'
 import CompanyInfo from '../components/accounting/CompanyInfo'
 import CashBankManagement from '../components/accounting/CashBankManagement'
+import CardSkeleton from '../components/ui/CardSkeleton'
+import TableSkeleton from '../components/ui/TableSkeleton'
 import { toast } from 'react-hot-toast'
 
 type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration'
@@ -464,73 +466,77 @@ export default function Accounting() {
   return (
     <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pb-10">
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
-        {/* Bu Ay Gelir */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
-              <TrendingUp className="text-neutral-700" size={24} />
+      {loading ? (
+        <CardSkeleton count={4} />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
+          {/* Bu Ay Gelir */}
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <TrendingUp className="text-neutral-700" size={24} />
+              </div>
+              {stats && stats.invoiceCount > 0 && (
+                <span className="text-xs text-neutral-700 font-medium">
+                  {stats.invoiceCount} fatura
+                </span>
+              )}
             </div>
-            {stats && stats.invoiceCount > 0 && (
-              <span className="text-xs text-neutral-700 font-medium">
-                {stats.invoiceCount} fatura
-              </span>
+            <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+              {stats ? formatCurrency(stats.totalRevenue) : '₺0'}
+            </h3>
+            <p className="text-sm text-neutral-600">Bu Ay Gelir</p>
+          </div>
+
+          {/* Bu Ay Gider */}
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <TrendingDown className="text-neutral-700" size={24} />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+              {stats ? formatCurrency(stats.totalExpenses) : '₺0'}
+            </h3>
+            <p className="text-sm text-neutral-600">Bu Ay Gider</p>
+          </div>
+
+          {/* Net Kâr */}
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <DollarSign className="text-neutral-700" size={24} />
+              </div>
+              <span className="text-xs text-neutral-700 font-medium">Net</span>
+            </div>
+            <h3 className={`text-2xl font-bold mb-1 ${
+              stats && stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+            }`}>
+              {stats ? formatCurrency(stats.netProfit) : '₺0'}
+            </h3>
+            <p className="text-sm text-neutral-600">Net Kâr</p>
+          </div>
+
+          {/* Tahsilat / Bekleyen */}
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                <Clock className="text-neutral-700" size={24} />
+              </div>
+              <span className="text-xs text-neutral-700 font-medium">Bekleyen</span>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+              {stats ? formatCurrency(stats.totalOverdue) : '₺0'}
+            </h3>
+            <p className="text-sm text-neutral-600">Vade Geçmiş</p>
+            {stats && stats.totalCollections > 0 && (
+              <p className="text-xs text-green-600 mt-2">
+                Bu ay: {formatCurrency(stats.totalCollections)}
+              </p>
             )}
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
-            {loading ? '...' : stats ? formatCurrency(stats.totalRevenue) : '₺0'}
-          </h3>
-          <p className="text-sm text-neutral-600">Bu Ay Gelir</p>
         </div>
-
-        {/* Bu Ay Gider */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
-              <TrendingDown className="text-neutral-700" size={24} />
-            </div>
-          </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
-            {loading ? '...' : stats ? formatCurrency(stats.totalExpenses) : '₺0'}
-          </h3>
-          <p className="text-sm text-neutral-600">Bu Ay Gider</p>
-        </div>
-
-        {/* Net Kâr */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
-              <DollarSign className="text-neutral-700" size={24} />
-            </div>
-            <span className="text-xs text-neutral-700 font-medium">Net</span>
-          </div>
-          <h3 className={`text-2xl font-bold mb-1 ${
-            stats && stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
-          }`}>
-            {loading ? '...' : stats ? formatCurrency(stats.netProfit) : '₺0'}
-          </h3>
-          <p className="text-sm text-neutral-600">Net Kâr</p>
-        </div>
-
-        {/* Tahsilat / Bekleyen */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
-              <Clock className="text-neutral-700" size={24} />
-            </div>
-            <span className="text-xs text-neutral-700 font-medium">Bekleyen</span>
-          </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
-            {loading ? '...' : stats ? formatCurrency(stats.totalOverdue) : '₺0'}
-          </h3>
-          <p className="text-sm text-neutral-600">Vade Geçmiş</p>
-          {stats && stats.totalCollections > 0 && (
-            <p className="text-xs text-green-600 mt-2">
-              Bu ay: {formatCurrency(stats.totalCollections)}
-            </p>
-          )}
-        </div>
-      </div>
+      )}
 
       {/* Tabs - Vertical Layout */}
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
@@ -817,10 +823,7 @@ export default function Accounting() {
                 {/* Invoice Table */}
                 <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
                   {invoicesLoading ? (
-                    <div className="p-12 text-center text-neutral-600">
-                      <RefreshCw className="animate-spin mx-auto mb-4" size={32} />
-                      Faturalar yükleniyor...
-                    </div>
+                    <TableSkeleton rows={10} columns={8} showHeader={true} />
                   ) : invoices.length === 0 ? (
                     <div className="p-12 text-center text-neutral-600">
                       <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
@@ -1013,10 +1016,7 @@ export default function Accounting() {
                 {/* Offer Table */}
                 <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
                   {offersLoading ? (
-                    <div className="p-12 text-center text-neutral-600">
-                      <RefreshCw className="animate-spin mx-auto mb-4" size={32} />
-                      Teklifler yükleniyor...
-                    </div>
+                    <TableSkeleton rows={10} columns={7} showHeader={true} />
                   ) : offers.length === 0 ? (
                     <div className="p-12 text-center text-neutral-600">
                       <Receipt className="mx-auto mb-4 text-neutral-400" size={48} />

@@ -6,6 +6,7 @@ import {
   CheckCircle, XCircle, AlertCircle, Edit2, Trash2, Send, Ban
 } from 'lucide-react'
 import { offerAPI } from '../services/api'
+import DetailSkeleton from '../components/ui/DetailSkeleton'
 import toast from 'react-hot-toast'
 
 interface QuoteDetail {
@@ -210,14 +211,7 @@ export default function QuoteDetail() {
   const isExpired = quote && new Date(quote.validUntil) < new Date()
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-900 mx-auto mb-4"></div>
-          <p className="text-neutral-600">Teklif yükleniyor...</p>
-        </div>
-      </div>
-    )
+    return <DetailSkeleton />
   }
 
   if (!quote) {
