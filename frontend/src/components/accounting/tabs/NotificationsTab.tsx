@@ -1,8 +1,8 @@
 import React from 'react'
 import { Bell, Check, X, Settings, Mail, MessageSquare, Smartphone } from 'lucide-react'
-import { useNotifications } from '../../hooks/useNotifications'
-import StatCard from '../ui/StatCard'
-import EmptyState from '../ui/EmptyState'
+import { useNotifications } from '../../../hooks/useNotifications'
+import StatCard from '../../ui/StatCard'
+import EmptyState from '../../ui/EmptyState'
 
 const NotificationsTab: React.FC = () => {
   const {
