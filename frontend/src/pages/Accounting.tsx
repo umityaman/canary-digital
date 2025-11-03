@@ -33,6 +33,10 @@ import BarcodeScanner from '../components/barcode/BarcodeScanner'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
 import ErrorBoundary from '../components/ErrorBoundary'
+import NotificationsTab from '../components/accounting/tabs/NotificationsTab'
+import ToolsTab from '../components/accounting/tabs/ToolsTab'
+import AdvisorTab from '../components/accounting/tabs/AdvisorTab'
+import SupportTab from '../components/accounting/tabs/SupportTab'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
@@ -1997,6 +2001,13 @@ export default function Accounting() {
 
             {/* Tools Tab */}
             {activeTab === 'tools' && (
+              <ErrorBoundary>
+                <ToolsTab onNavigate={(tab) => setActiveTab(tab as Tab)} />
+              </ErrorBoundary>
+            )}
+
+            {/* Tools Tab OLD - BACKUP */}
+            {false && activeTab === 'tools' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-neutral-900 mb-4">İşletme Kolaylıkları</h2>
                 
@@ -2121,6 +2132,13 @@ export default function Accounting() {
 
             {/* Advisor Tab */}
             {activeTab === 'advisor' && (
+              <ErrorBoundary>
+                <AdvisorTab />
+              </ErrorBoundary>
+            )}
+
+            {/* Advisor Tab OLD - BACKUP */}
+            {false && activeTab === 'advisor' && (
               <div className="space-y-6">
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900">Mali Müşavir Paneli</h2>
@@ -2219,6 +2237,13 @@ export default function Accounting() {
 
             {/* Support Tab */}
             {activeTab === 'support' && (
+              <ErrorBoundary>
+                <SupportTab />
+              </ErrorBoundary>
+            )}
+
+            {/* Support Tab OLD - BACKUP */}
+            {false && activeTab === 'support' && (
               <div className="space-y-6">
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900">Destek Sistemi</h2>
@@ -2334,6 +2359,13 @@ export default function Accounting() {
 
             {/* Notifications Tab */}
             {activeTab === 'notifications' && (
+              <ErrorBoundary>
+                <NotificationsTab />
+              </ErrorBoundary>
+            )}
+
+            {/* Notifications Tab OLD - BACKUP */}
+            {false && activeTab === 'notifications' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
