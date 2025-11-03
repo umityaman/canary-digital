@@ -7,7 +7,9 @@ import {
   Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
-// import CheckFormModal from '../components/accounting/CheckFormModal' // TODO: Add this component later
+import CheckFormModal from '../components/accounting/CheckFormModal'
+import PromissoryNoteFormModal from '../components/accounting/PromissoryNoteFormModal'
+import AgingReportTable from '../components/accounting/AgingReportTable'
 import IncomeTab from '../components/accounting/IncomeTab'
 import ExpenseTab from '../components/accounting/ExpenseTab'
 import AccountingDashboard from '../components/accounting/AccountingDashboard'
@@ -25,7 +27,7 @@ import CompanyInfo from '../components/accounting/CompanyInfo'
 import CashBankManagement from '../components/accounting/CashBankManagement'
 import { toast } from 'react-hot-toast'
 
-type Tab = 'dashboard' | 'preaccounting' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'integration' | 'tools' | 'advisor' | 'support' | 'checks' | 'promissory' | 'aging' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank'
 
 interface AccountingStats {
   totalRevenue: number
@@ -142,6 +144,13 @@ export default function Accounting() {
   // Checks modal state
   const [checkModalOpen, setCheckModalOpen] = useState(false)
   const [editingCheck, setEditingCheck] = useState<any | null>(null)
+
+  // Promissory notes modal state
+  const [promissoryModalOpen, setPromissoryModalOpen] = useState(false)
+  const [editingPromissory, setEditingPromissory] = useState<any | null>(null)
+
+  // Receivables sub-tab state
+  const [receivablesSubTab, setReceivablesSubTab] = useState<'checks' | 'promissory' | 'aging'>('checks')
 
   // Navigation and search params
   const navigate = useNavigate()
@@ -390,7 +399,6 @@ export default function Accounting() {
     { id: 'dashboard' as const, label: 'Ana Sayfa', icon: <BarChart3 size={18} /> },
     { id: 'income' as const, label: 'Gelirler', icon: <TrendingUp size={18} /> },
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
-    { id: 'preaccounting' as const, label: 'Ön Muhasebe', icon: <Calculator size={18} /> },
     { id: 'cost-accounting' as const, label: 'Maliyet Muhasebesi', icon: <DollarSign size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
     { id: 'categories' as const, label: 'Kategoriler & Etiketler', icon: <Tag size={18} /> },
@@ -403,14 +411,11 @@ export default function Accounting() {
     { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
     { id: 'gib' as const, label: 'GİB Entegrasyonu', icon: <Globe size={18} /> },
-    { id: 'integration' as const, label: 'Entegrasyonlar', icon: <RefreshCw size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
     { id: 'support' as const, label: 'Yardım & Araçlar', icon: <Globe size={18} /> },
     { id: 'cari' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
-    { id: 'checks' as const, label: 'Çekler', icon: <Check size={18} /> },
-    { id: 'promissory' as const, label: 'Senetler', icon: <FileText size={18} /> },
-    { id: 'aging' as const, label: 'Yaşlandırma', icon: <Clock size={18} /> },
+    { id: 'receivables' as const, label: 'Alacak Yönetimi', icon: <DollarSign size={18} /> },
   ]
 
   return (
@@ -516,182 +521,155 @@ export default function Accounting() {
             {/* Expense Tab */}
             {activeTab === 'expense' && <ExpenseTab />}
 
-            {/* Pre-Accounting Tab */}
-            {activeTab === 'preaccounting' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">Ön Muhasebe Yönetimi</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <TrendingUp className="mr-2 text-neutral-700" size={20} />
-                      Gelir-Gider Takibi
-                    </h3>
-                    <ul className="space-y-2 text-sm text-neutral-600">
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Gelir Takibi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Gider Takibi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Gider Kategorileri</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Banka Mutabakatı</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <Users className="mr-2 text-neutral-700" size={20} />
-                      Cari Hesap Takibi
-                    </h3>
-                    <ul className="space-y-2 text-sm text-neutral-600">
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Cari Hesap Ekstresi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>İşlem Geçmişi</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Çek/Nakit Girişi</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <Banknote className="mr-2 text-neutral-700" size={20} />
-                      Nakit Yönetimi
-                    </h3>
-                    <ul className="space-y-2 text-sm text-neutral-600">
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Kasa ve Banka</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Ödeme Hatırlatma</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-neutral-500 rounded-full mr-2"></span>Çek Takibi</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Cari (Account Cards) Tab - Navigate to dedicated page */}
-            {activeTab === 'cari' && (
-              <div className="text-center py-12">
-                <Users className="mx-auto text-neutral-400 mb-4" size={64} />
-                <h3 className="text-xl font-semibold text-neutral-900 mb-2">Cari Hesaplar</h3>
-                <p className="text-neutral-600 mb-6">
-                  Müşteri ve tedarikçi hesap kartlarını görüntüleyin ve yönetin
-                </p>
-                <button
-                  onClick={() => navigate('/account-cards')}
-                  className="px-6 py-3 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors inline-flex items-center gap-2"
-                >
-                  <Users size={20} />
-                  Cari Hesaplara Git
-                </button>
-              </div>
-            )}
+            {/* Cari (Account Cards) Tab */}
+            {activeTab === 'cari' && <CurrentAccountList />}
 
             {/* Reports Tab - Advanced Reporting */}
             {activeTab === 'reports' && <AdvancedReporting />}
 
-            {/* Checks Tab */}
-            {activeTab === 'checks' && (
+            {/* Receivables Management Tab - Çekler, Senetler, Yaşlandırma */}
+            {activeTab === 'receivables' && (
               <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-neutral-900">Çekler</h2>
-                  <div>
-                    <button
-                      onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
-                      className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
-                    >
-                      <FileText size={18} />
-                      Yeni Çek
-                    </button>
+                <h2 className="text-2xl font-bold text-neutral-900 mb-6">Alacak Yönetimi</h2>
+                
+                {/* Sub-tabs for Checks, Promissory, Aging */}
+                <div className="flex gap-2 border-b border-neutral-200 mb-6">
+                  <button
+                    onClick={() => setReceivablesSubTab('checks')}
+                    className={`px-6 py-3 font-medium transition-colors ${
+                      receivablesSubTab === 'checks'
+                        ? 'border-b-2 border-neutral-900 text-neutral-900'
+                        : 'text-neutral-600 hover:text-neutral-900'
+                    }`}
+                  >
+                    Çekler
+                  </button>
+                  <button
+                    onClick={() => setReceivablesSubTab('promissory')}
+                    className={`px-6 py-3 font-medium transition-colors ${
+                      receivablesSubTab === 'promissory'
+                        ? 'border-b-2 border-neutral-900 text-neutral-900'
+                        : 'text-neutral-600 hover:text-neutral-900'
+                    }`}
+                  >
+                    Senetler
+                  </button>
+                  <button
+                    onClick={() => setReceivablesSubTab('aging')}
+                    className={`px-6 py-3 font-medium transition-colors ${
+                      receivablesSubTab === 'aging'
+                        ? 'border-b-2 border-neutral-900 text-neutral-900'
+                        : 'text-neutral-600 hover:text-neutral-900'
+                    }`}
+                  >
+                    Yaşlandırma Raporu
+                  </button>
+                </div>
+
+                {/* Checks Sub-tab */}
+                {receivablesSubTab === 'checks' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-neutral-900">Çekler</h3>
+                      <button
+                        onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
+                        className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                      >
+                        <FileText size={18} />
+                        Yeni Çek
+                      </button>
+                    </div>
+
+                    <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                      {checksLoading ? (
+                        <div className="p-12 text-center text-neutral-600">Çekler yükleniyor...</div>
+                      ) : checks.length === 0 ? (
+                        <div className="p-12 text-center text-neutral-600">Çek bulunamadı</div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full">
+                            <thead className="bg-neutral-50 border-b border-neutral-200">
+                              <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">No</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-neutral-200">
+                              {checks.map((c: any) => (
+                                <tr key={c.id} className="hover:bg-neutral-50">
+                                  <td className="px-6 py-4">{c.documentNumber || `#${c.id}`}</td>
+                                  <td className="px-6 py-4">{c.customer?.name || c.customerName || '-'}</td>
+                                  <td className="px-6 py-4">{formatCurrency(c.amount || 0)}</td>
+                                  <td className="px-6 py-4">{c.dueDate ? formatDate(c.dueDate) : '-'}</td>
+                                  <td className="px-6 py-4">{c.status || '-'}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-                  {checksLoading ? (
-                    <div className="p-12 text-center text-neutral-600">Çekler yükleniyor...</div>
-                  ) : checks.length === 0 ? (
-                    <div className="p-12 text-center text-neutral-600">Çek bulunamadı</div>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-neutral-50 border-b border-neutral-200">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">No</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-neutral-200">
-                          {checks.map((c: any) => (
-                            <tr key={c.id} className="hover:bg-neutral-50">
-                              <td className="px-6 py-4">{c.documentNumber || `#${c.id}`}</td>
-                              <td className="px-6 py-4">{c.customer?.name || c.customerName || '-'}</td>
-                              <td className="px-6 py-4">{formatCurrency(c.amount || 0)}</td>
-                              <td className="px-6 py-4">{c.dueDate ? formatDate(c.dueDate) : '-'}</td>
-                              <td className="px-6 py-4">{c.status || '-'}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                {/* Promissory Notes Sub-tab */}
+                {receivablesSubTab === 'promissory' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-neutral-900">Senetler</h3>
+                      <button
+                        onClick={() => { setEditingPromissory(null); setPromissoryModalOpen(true) }}
+                        className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                      >
+                        <FileText size={18} />
+                        Yeni Senet
+                      </button>
                     </div>
-                  )}
-                </div>
-              </div>
-            )}
 
-            {/* Promissory Notes Tab */}
-            {activeTab === 'promissory' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-neutral-900">Senetler</h2>
-                </div>
-
-                <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-                  {promissoryLoading ? (
-                    <div className="p-12 text-center text-neutral-600">Senetler yükleniyor...</div>
-                  ) : promissory.length === 0 ? (
-                    <div className="p-12 text-center text-neutral-600">Senet bulunamadı</div>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-neutral-50 border-b border-neutral-200">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">No</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-neutral-200">
-                          {promissory.map((p: any) => (
-                            <tr key={p.id} className="hover:bg-neutral-50">
-                              <td className="px-6 py-4">{p.documentNumber || `#${p.id}`}</td>
-                              <td className="px-6 py-4">{p.customer?.name || p.customerName || '-'}</td>
-                              <td className="px-6 py-4">{formatCurrency(p.amount || 0)}</td>
-                              <td className="px-6 py-4">{p.dueDate ? formatDate(p.dueDate) : '-'}</td>
-                              <td className="px-6 py-4">{p.status || '-'}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                      {promissoryLoading ? (
+                        <div className="p-12 text-center text-neutral-600">Senetler yükleniyor...</div>
+                      ) : promissory.length === 0 ? (
+                        <div className="p-12 text-center text-neutral-600">Senet bulunamadı</div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full">
+                            <thead className="bg-neutral-50 border-b border-neutral-200">
+                              <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">No</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-neutral-200">
+                              {promissory.map((p: any) => (
+                                <tr key={p.id} className="hover:bg-neutral-50">
+                                  <td className="px-6 py-4">{p.documentNumber || `#${p.id}`}</td>
+                                  <td className="px-6 py-4">{p.customer?.name || p.customerName || '-'}</td>
+                                  <td className="px-6 py-4">{formatCurrency(p.amount || 0)}</td>
+                                  <td className="px-6 py-4">{p.dueDate ? formatDate(p.dueDate) : '-'}</td>
+                                  <td className="px-6 py-4">{p.status || '-'}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-            )}
+                  </div>
+                )}
 
-            {/* Aging Tab */}
-            {activeTab === 'aging' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-neutral-900">Yaşlandırma Raporu</h2>
-                </div>
-
-                <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-                  {agingLoading ? (
-                    <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
-                  ) : !agingData ? (
-                    <div className="p-12 text-center text-neutral-600">Yaşlandırma verisi yok</div>
-                  ) : (
-                    <pre className="text-xs text-neutral-700 overflow-auto">{JSON.stringify(agingData, null, 2)}</pre>
-                  )}
-                </div>
+                {/* Aging Report Sub-tab */}
+                {receivablesSubTab === 'aging' && (
+                  <div>
+                    <AgingReportTable data={agingData} loading={agingLoading} />
+                  </div>
+                )}
               </div>
             )}
 
@@ -964,10 +942,10 @@ export default function Accounting() {
                   ) : (
                     <>
                       <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-[800px]">
                           <thead className="bg-neutral-50 border-b border-neutral-200">
                             <tr>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
+                              <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
                                 Teklif No
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
@@ -1242,15 +1220,25 @@ export default function Accounting() {
           </div>
         </div>
       </div>
-      {/* Check Modal - TODO: Add CheckFormModal component later */}
-      {/* {checkModalOpen && (
+      {/* Check Modal */}
+      {checkModalOpen && (
         <CheckFormModal
           open={checkModalOpen}
           onClose={() => setCheckModalOpen(false)}
           onSaved={() => loadChecks()}
           initial={editingCheck || undefined}
         />
-      )} */}
+      )}
+
+      {/* Promissory Note Modal */}
+      {promissoryModalOpen && (
+        <PromissoryNoteFormModal
+          open={promissoryModalOpen}
+          onClose={() => setPromissoryModalOpen(false)}
+          onSaved={() => loadPromissory()}
+          initial={editingPromissory || undefined}
+        />
+      )}
     </div>
   )
 }

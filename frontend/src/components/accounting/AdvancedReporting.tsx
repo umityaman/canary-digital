@@ -433,9 +433,11 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Chart */}
-          <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-            <h3 className="text-lg font-semibold text-neutral-900 mb-6">Aylık Nakit Akış Trendi</h3>
-            <ResponsiveContainer width="100%" height={320}>
+          <div className="bg-white rounded-2xl border border-neutral-200 p-4 lg:p-6">
+            <h3 className="text-base lg:text-lg font-semibold text-neutral-900 mb-4 lg:mb-6">Aylık Nakit Akış Trendi</h3>
+            <div className="overflow-x-auto">
+              <div className="min-w-[600px]">
+                <ResponsiveContainer width="100%" height={320}>
               <LineChart data={cashflowData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
@@ -450,6 +452,8 @@ export default function AdvancedReporting() {
                 <Line type="monotone" dataKey="netChange" name="Net Değişim" stroke="#3b82f6" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
+              </div>
+            </div>
           </div>
 
           {/* Detailed Table */}

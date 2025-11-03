@@ -65,25 +65,54 @@ export default function CashBankManagement() {
     date: new Date().toISOString().split('T')[0],
   });
 
-  // Mock cash balance (bu backend'e eklenebilir)
-  const [cashBalance] = useState(45000);
-  const [cashInToday] = useState(12500);
-  const [cashOutToday] = useState(8300);
+  // Cash balance - loaded from API
+  const [cashBalance, setCashBalance] = useState(0);
+  const [cashInToday, setCashInToday] = useState(0);
+  const [cashOutToday, setCashOutToday] = useState(0);
+  const [cashTransactions, setCashTransactions] = useState<CashTransaction[]>([]);
+  const [cashFlowData, setCashFlowData] = useState<any[]>([]);
+  const [cashFlowYear, setCashFlowYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
     loadData();
   }, []);
 
+  useEffect(() => {
+    if (activeTab === 'cashflow') {
+      loadCashFlow();
+    }
+  }, [activeTab, cashFlowYear]);
+
   const loadData = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get('/company/bank-accounts');
-      setBankAccounts(response.data);
+      const [bankResponse, cashBalanceResponse, cashSummaryResponse, cashTransactionsResponse] = await Promise.all([
+        apiClient.get('/company/bank-accounts'),
+        apiClient.get('/cash/balance'),
+        apiClient.get('/cash/summary'),
+        apiClient.get('/cash/transactions?limit=10'),
+      ]);
+      
+      setBankAccounts(bankResponse.data);
+      setCashBalance(cashBalanceResponse.data.data.balance);
+      setCashInToday(cashSummaryResponse.data.data.todayIn);
+      setCashOutToday(cashSummaryResponse.data.data.todayOut);
+      setCashTransactions(cashTransactionsResponse.data.data);
     } catch (error: any) {
       console.error('Error loading data:', error);
       toast.error('Veriler yüklenirken hata oluştu');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadCashFlow = async () => {
+    try {
+      const response = await apiClient.get(`/cash/cash-flow?year=${cashFlowYear}`);
+      setCashFlowData(response.data.data);
+    } catch (error: any) {
+      console.error('Error loading cash flow:', error);
+      toast.error('Nakit akışı verileri yüklenemedi');
     }
   };
 
@@ -108,15 +137,29 @@ export default function CashBankManagement() {
       return;
     }
 
-    // Bu backend'e cash transaction endpoint'i eklendiğinde çalışacak
-    toast.success('İşlem kaydedildi');
-    setShowTransactionForm(false);
-    setTransactionForm({
-      amount: '',
-      description: '',
-      category: '',
-      date: new Date().toISOString().split('T')[0],
-    });
+    try {
+      await apiClient.post('/cash/transactions', {
+        type: transactionType,
+        amount: parseFloat(transactionForm.amount),
+        description: transactionForm.description,
+        date: transactionForm.date,
+      });
+      
+      toast.success('İşlem kaydedildi');
+      setShowTransactionForm(false);
+      setTransactionForm({
+        amount: '',
+        description: '',
+        category: '',
+        date: new Date().toISOString().split('T')[0],
+      });
+      
+      // Reload data to show new transaction
+      loadData();
+    } catch (error: any) {
+      console.error('Error saving transaction:', error);
+      toast.error(error.response?.data?.message || 'İşlem kaydedilemedi');
+    }
   };
 
   const totalBalance = (bankAccounts?.totals.totalBalance || 0) + cashBalance;
@@ -149,55 +192,54 @@ export default function CashBankManagement() {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <Wallet className="w-8 h-8 opacity-80" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 lg:p-6 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <Wallet className="w-6 h-6 lg:w-8 lg:h-8 opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>
           </div>
-          <p className="text-3xl font-bold mb-1">{formatCurrency(totalBalance)}</p>
-          <p className="text-sm opacity-90">Toplam Bakiye</p>
+          <p className="text-2xl lg:text-3xl font-bold mb-1 break-all">{formatCurrency(totalBalance)}</p>
+          <p className="text-xs lg:text-sm opacity-90">Toplam Bakiye</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Building2 className="w-8 h-8 text-blue-600" />
+        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6">
+          <div className="flex items-center justify-between mb-3">
+            <Building2 className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
             <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">Banka</span>
           </div>
-          <p className="text-3xl font-bold text-gray-900 mb-1">
+          <p className="text-2xl lg:text-3xl font-bold text-gray-900 mb-1 break-all">
             {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-xs lg:text-sm text-gray-600">
             {bankAccounts?.totals.activeAccounts || 0} Aktif Hesap
           </p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Wallet className="w-8 h-8 text-green-600" />
+        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6">
+          <div className="flex items-center justify-between mb-3">
+            <Wallet className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
             <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">Kasa</span>
           </div>
-          <p className="text-3xl font-bold text-gray-900 mb-1">{formatCurrency(cashBalance)}</p>
-          <p className="text-sm text-gray-600">Nakit Bakiye</p>
+          <p className="text-2xl lg:text-3xl font-bold text-gray-900 mb-1 break-all">{formatCurrency(cashBalance)}</p>
+          <p className="text-xs lg:text-sm text-gray-600">Nakit Bakiye</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Calendar className="w-8 h-8 text-purple-600" />
+        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6">
+          <div className="flex items-center justify-between mb-3">
+            <Calendar className="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" />
             <span className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-full">
               Bugün
             </span>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <p className="text-lg font-bold text-green-600">
+          <div className="space-y-2">
+            <div>
+              <p className="text-base lg:text-lg font-bold text-green-600 break-all">
                 +{formatCurrency(cashInToday)}
               </p>
               <p className="text-xs text-gray-500">Giriş</p>
             </div>
-            <div className="w-px h-8 bg-gray-200" />
-            <div className="flex-1 text-right">
-              <p className="text-lg font-bold text-red-600">-{formatCurrency(cashOutToday)}</p>
+            <div>
+              <p className="text-base lg:text-lg font-bold text-red-600 break-all">-{formatCurrency(cashOutToday)}</p>
               <p className="text-xs text-gray-500">Çıkış</p>
             </div>
           </div>
@@ -295,29 +337,18 @@ export default function CashBankManagement() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Son Hareketler</h3>
                 <div className="space-y-2">
-                  {[
-                    {
-                      id: 1,
-                      type: 'in',
-                      description: 'Müşteri ödemesi',
-                      amount: 5000,
-                      date: '2025-11-02',
-                    },
-                    {
-                      id: 2,
-                      type: 'out',
-                      description: 'Tedarikçi ödemesi',
-                      amount: 3500,
-                      date: '2025-11-02',
-                    },
-                    {
-                      id: 3,
-                      type: 'in',
-                      description: 'Fatura tahsilatı',
-                      amount: 7500,
-                      date: '2025-11-01',
-                    },
-                  ].map((transaction) => (
+                  {cashTransactions.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500">
+                      <p>Henüz kasa hareketi bulunmuyor</p>
+                      <button
+                        onClick={() => setShowTransactionForm(true)}
+                        className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
+                      >
+                        İlk işleminizi ekleyin
+                      </button>
+                    </div>
+                  ) : (
+                    cashTransactions.map((transaction) => (
                     <div
                       key={transaction.id}
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -348,7 +379,8 @@ export default function CashBankManagement() {
                         {formatCurrency(transaction.amount)}
                       </p>
                     </div>
-                  ))}
+                  ))
+                  )}
                 </div>
               </div>
             </div>
@@ -459,46 +491,125 @@ export default function CashBankManagement() {
           {/* Cash Flow Tab */}
           {activeTab === 'cashflow' && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Nakit Akışı Raporu</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
-                    <span className="text-sm font-medium text-gray-700">Toplam Giriş</span>
-                  </div>
-                  <p className="text-2xl font-bold text-green-600">
-                    {formatCurrency(cashInToday * 30)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">Bu ay</p>
-                </div>
-
-                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <TrendingDown className="w-5 h-5 text-red-600" />
-                    <span className="text-sm font-medium text-gray-700">Toplam Çıkış</span>
-                  </div>
-                  <p className="text-2xl font-bold text-red-600">
-                    {formatCurrency(cashOutToday * 30)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">Bu ay</p>
-                </div>
-
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Wallet className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm font-medium text-gray-700">Net Akış</span>
-                  </div>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {formatCurrency((cashInToday - cashOutToday) * 30)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">Bu ay</p>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Nakit Akışı Raporu</h3>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCashFlowYear(cashFlowYear - 1)}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    ←
+                  </button>
+                  <span className="text-sm font-medium px-4">{cashFlowYear}</span>
+                  <button
+                    onClick={() => setCashFlowYear(cashFlowYear + 1)}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    →
+                  </button>
                 </div>
               </div>
-              <div className="text-center py-12 text-gray-500">
-                <Calendar className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                <p className="text-lg font-medium">Detaylı rapor hazırlanıyor</p>
-                <p className="text-sm mt-1">Nakit akışı grafiği yakında eklenecek</p>
-              </div>
+
+              {cashFlowData.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <Calendar className="w-16 h-16 mx-auto mb-4 opacity-30" />
+                  <p className="text-lg font-medium">Bu yıl için veri bulunamadı</p>
+                  <p className="text-sm mt-1">İşlem eklediğinizde burada görünecektir</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Monthly Summary Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingUp className="w-5 h-5 text-green-600" />
+                        <span className="text-sm font-medium text-gray-700">Toplam Giriş</span>
+                      </div>
+                      <p className="text-2xl font-bold text-green-600">
+                        {formatCurrency(
+                          cashFlowData.reduce((sum, month) => sum + month.income, 0)
+                        )}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
+                    </div>
+
+                    <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingDown className="w-5 h-5 text-red-600" />
+                        <span className="text-sm font-medium text-gray-700">Toplam Çıkış</span>
+                      </div>
+                      <p className="text-2xl font-bold text-red-600">
+                        {formatCurrency(
+                          cashFlowData.reduce((sum, month) => sum + month.expense, 0)
+                        )}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
+                    </div>
+
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Wallet className="w-5 h-5 text-blue-600" />
+                        <span className="text-sm font-medium text-gray-700">Net Akış</span>
+                      </div>
+                      <p className="text-2xl font-bold text-blue-600">
+                        {formatCurrency(
+                          cashFlowData.reduce((sum, month) => sum + month.net, 0)
+                        )}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
+                    </div>
+                  </div>
+
+                  {/* Monthly Breakdown Table */}
+                  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <table className="min-w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                            Ay
+                          </th>
+                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                            Giriş
+                          </th>
+                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                            Çıkış
+                          </th>
+                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                            Net
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {cashFlowData.map((monthData) => (
+                          <tr key={monthData.month} className="hover:bg-gray-50">
+                            <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                              {new Date(cashFlowYear, monthData.month - 1).toLocaleDateString(
+                                'tr-TR',
+                                { month: 'long' }
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-right text-green-600 font-medium">
+                              {formatCurrency(monthData.income)}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-right text-red-600 font-medium">
+                              {formatCurrency(monthData.expense)}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-right font-bold">
+                              <span
+                                className={
+                                  monthData.net >= 0 ? 'text-blue-600' : 'text-red-600'
+                                }
+                              >
+                                {formatCurrency(monthData.net)}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

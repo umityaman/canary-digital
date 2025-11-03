@@ -47,16 +47,12 @@ export default function Dashboard() {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.get('/dashboard/stats');
+      const response = await api.get('/api/dashboard/stats');
       
-      if (response.data.success) {
-        setStats(response.data.data);
-      } else {
-        setError('İstatistikler yüklenemedi');
-      }
+      setStats(response.data);
     } catch (err: any) {
       console.error('Dashboard stats error:', err);
-      setError(err.response?.data?.message || 'Bir hata oluştu');
+      setError(err.response?.data?.message || 'Dashboard verisi yüklenemedi');
     } finally {
       setLoading(false);
     }
