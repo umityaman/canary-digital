@@ -3,6 +3,7 @@ import { Plus, Search, Filter, Download, TrendingDown, Calendar, DollarSign, Fil
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
 import ExpenseModal from './ExpenseModal'
+import { card, button, input, badge, getStatGradient, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface Expense {
   id: number

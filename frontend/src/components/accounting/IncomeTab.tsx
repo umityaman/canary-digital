@@ -3,6 +3,7 @@ import { Plus, Search, Filter, Download, TrendingUp, Calendar, DollarSign, FileT
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
 import IncomeModal from './IncomeModal'
+import { card, button, input, badge, getStatGradient, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface Income {
   id: number
@@ -153,15 +154,15 @@ export default function IncomeTab() {
   }
 
   const getStatusBadge = (status: string) => {
-    const badges: Record<string, { label: string; color: string }> = {
-      received: { label: 'Alındı', color: 'bg-green-100 text-green-700' },
-      pending: { label: 'Beklemede', color: 'bg-yellow-100 text-yellow-700' },
-      cancelled: { label: 'İptal', color: 'bg-red-100 text-red-700' },
+    const statusMap: Record<string, string> = {
+      received: 'paid',
+      pending: 'partial',
+      cancelled: 'overdue',
     }
-    const badge = badges[status] || { label: status, color: 'bg-gray-100 text-gray-700' }
+    const badgeData = badge(statusMap[status] || status, 'invoice', 'sm', 'solid')
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
-        {badge.label}
+      <span className={badgeData.className}>
+        {badgeData.label}
       </span>
     )
   }
@@ -170,59 +171,59 @@ export default function IncomeTab() {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white">
+        <div className={cx(card('md', 'sm', 'default', 'lg'), getStatGradient('revenue'), 'text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
               <TrendingUp size={24} />
             </div>
-            <span className="text-sm opacity-90">Bu Ay</span>
+            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Bu Ay</span>
           </div>
-          <h3 className="text-3xl font-bold mb-1">{formatCurrency(monthlyIncome)}</h3>
-          <p className="text-sm opacity-90">Aylık Gelir</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{formatCurrency(monthlyIncome)}</h3>
+          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Aylık Gelir</p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
+        <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-blue-500 to-blue-600 text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
               <DollarSign size={24} />
             </div>
-            <span className="text-sm opacity-90">Toplam</span>
+            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Toplam</span>
           </div>
-          <h3 className="text-3xl font-bold mb-1">{formatCurrency(totalIncome)}</h3>
-          <p className="text-sm opacity-90">Toplam Gelir</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{formatCurrency(totalIncome)}</h3>
+          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Toplam Gelir</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white">
+        <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-purple-500 to-purple-600 text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
               <FileText size={24} />
             </div>
-            <span className="text-sm opacity-90">Kayıt</span>
+            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Kayıt</span>
           </div>
-          <h3 className="text-3xl font-bold mb-1">{incomes.length}</h3>
-          <p className="text-sm opacity-90">Gelir Kaydı</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{incomes.length}</h3>
+          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Gelir Kaydı</p>
         </div>
       </div>
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Dağılımı</h3>
+        <div className={card('md', 'sm', 'default', 'lg')}>
+          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>Kategori Dağılımı</h3>
           <div className="space-y-3">
             {categoryStats.map((stat) => (
               <div key={stat.category}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-neutral-700">{stat.category}</span>
+                  <span className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary}`}>{stat.category}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-neutral-600">{stat.count} kayıt</span>
-                    <span className="text-sm font-semibold text-neutral-900">
+                    <span className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>{stat.count} kayıt</span>
+                    <span className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.primary}`}>
                       {formatCurrency(stat.total)}
                     </span>
                   </div>
                 </div>
-                <div className="w-full bg-neutral-100 rounded-full h-2">
+                <div className={`w-full ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.full} rounded-full h-2`}>
                   <div
-                    className="bg-green-500 h-2 rounded-full transition-all"
+                    className={`bg-green-500 h-2 ${DESIGN_TOKENS.radius.full} rounded-full transition-all`}
                     style={{ width: `${stat.percentage}%` }}
                   />
                 </div>
@@ -233,18 +234,18 @@ export default function IncomeTab() {
       )}
 
       {/* Actions Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+      <div className={card('sm', 'none', 'default', 'lg')}>
         <div className="flex flex-col gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={18} />
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS.colors.text.muted}`} size={18} />
               <input
                 type="text"
                 placeholder="Gelir ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
               />
             </div>
           </div>
@@ -254,7 +255,7 @@ export default function IncomeTab() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="flex-1 min-w-[150px] px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px]')}
             >
               <option value="">Tüm Kategoriler</option>
               <option value="Ekipman Kiralama">Ekipman Kiralama</option>
@@ -267,7 +268,7 @@ export default function IncomeTab() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="flex-1 min-w-[130px] px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
             >
               <option value="">Tüm Durumlar</option>
               <option value="received">Alındı</option>
@@ -277,7 +278,7 @@ export default function IncomeTab() {
 
             <button
               onClick={handleExport}
-              className="px-4 py-2 border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors flex items-center gap-2 text-sm whitespace-nowrap"
+              className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}
             >
               <Download size={18} />
               <span className="hidden sm:inline">Dışa Aktar</span>
@@ -288,7 +289,7 @@ export default function IncomeTab() {
                 setEditingIncome(null)
                 setModalOpen(true)
               }}
-              className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2 text-sm whitespace-nowrap"
+              className={cx(button('md', 'primary', 'md'), 'gap-2 whitespace-nowrap')}
             >
               <Plus size={18} />
               <span>Yeni Gelir</span>
@@ -298,7 +299,7 @@ export default function IncomeTab() {
       </div>
 
       {/* Income Table */}
-      <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+      <div className={card('none', 'sm', 'default', 'lg')}>
         {loading ? (
           <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : incomes.length === 0 ? (
