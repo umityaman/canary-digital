@@ -28,13 +28,14 @@ import CategoryTagManagement from '../components/accounting/CategoryTagManagemen
 import CompanyInfo from '../components/accounting/CompanyInfo'
 import CashBankManagement from '../components/accounting/CashBankManagement'
 import ReminderManagement from '../components/reminders/ReminderManagement'
+import StatementSharing from '../components/statements/StatementSharing'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
 import ErrorBoundary from '../components/ErrorBoundary'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders' | 'statements'
 
 interface AccountingStats {
   totalRevenue: number
@@ -2029,7 +2030,7 @@ export default function Accounting() {
 
                   {/* Ekstre Paylaşımı */}
                   <button
-                    onClick={() => setActiveTab('cari')}
+                    onClick={() => setActiveTab('statements')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
@@ -2180,6 +2181,13 @@ export default function Accounting() {
             {activeTab === 'reminders' && (
               <ErrorBoundary>
                 <ReminderManagement />
+              </ErrorBoundary>
+            )}
+
+            {/* Statements Tab */}
+            {activeTab === 'statements' && (
+              <ErrorBoundary>
+                <StatementSharing />
               </ErrorBoundary>
             )}
             </ErrorBoundary>
