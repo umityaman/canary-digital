@@ -29,6 +29,7 @@ import CashBankManagement from '../components/accounting/CashBankManagement'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
 import { toast } from 'react-hot-toast'
+import axios from 'axios'
 
 type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration'
 
@@ -121,6 +122,9 @@ export default function Accounting() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
+  // Bulk selection state for invoices
+  const [selectedInvoices, setSelectedInvoices] = useState<number[]>([])
+
   // Offer list state
   const [offers, setOffers] = useState<Offer[]>([])
   const [offersLoading, setOffersLoading] = useState(false)
@@ -129,6 +133,9 @@ export default function Accounting() {
   const [offerStatusFilter, setOfferStatusFilter] = useState<string>('')
   const [offerCurrentPage, setOfferCurrentPage] = useState(1)
   const [offerTotalPages, setOfferTotalPages] = useState(1)
+
+  // Bulk selection state for offers
+  const [selectedOffers, setSelectedOffers] = useState<number[]>([])
 
   // Checks state
   const [checks, setChecks] = useState<any[]>([])
@@ -317,6 +324,83 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('Failed to convert offer:', error)
       toast.error('Dönüştürme başarısız: ' + (error.response?.data?.message || error.message))
+    }
+  }
+
+  // Bulk selection handlers for invoices
+  const handleSelectInvoice = (invoiceId: number) => {
+    setSelectedInvoices(prev => 
+      prev.includes(invoiceId) 
+        ? prev.filter(id => id !== invoiceId)
+        : [...prev, invoiceId]
+    )
+  }
+
+  const handleSelectAllInvoices = () => {
+    if (selectedInvoices.length === invoices.length) {
+      setSelectedInvoices([])
+    } else {
+      setSelectedInvoices(invoices.map(inv => inv.id))
+    }
+  }
+
+  const handleBulkDeleteInvoices = async () => {
+    if (!confirm(`${selectedInvoices.length} faturayı silmek istediğinizden emin misiniz?`)) {
+      return
+    }
+    
+    try {
+      // Bu işlem her faturayı tek tek silecek - idealde backend'de bulk delete endpoint olmalı
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+      for (const id of selectedInvoices) {
+        await axios.delete(`${API_URL}/invoices/${id}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
+        })
+      }
+      toast.success(`${selectedInvoices.length} fatura silindi`)
+      setSelectedInvoices([])
+      loadInvoices()
+    } catch (error: any) {
+      console.error('Bulk delete failed:', error)
+      toast.error('Toplu silme başarısız')
+    }
+  }
+
+  // Bulk selection handlers for offers
+  const handleSelectOffer = (offerId: number) => {
+    setSelectedOffers(prev => 
+      prev.includes(offerId) 
+        ? prev.filter(id => id !== offerId)
+        : [...prev, offerId]
+    )
+  }
+
+  const handleSelectAllOffers = () => {
+    if (selectedOffers.length === offers.length) {
+      setSelectedOffers([])
+    } else {
+      setSelectedOffers(offers.map(offer => offer.id))
+    }
+  }
+
+  const handleBulkDeleteOffers = async () => {
+    if (!confirm(`${selectedOffers.length} teklifi silmek istediğinizden emin misiniz?`)) {
+      return
+    }
+    
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+      for (const id of selectedOffers) {
+        await axios.delete(`${API_URL}/quotes/${id}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
+        })
+      }
+      toast.success(`${selectedOffers.length} teklif silindi`)
+      setSelectedOffers([])
+      loadOffers()
+    } catch (error: any) {
+      console.error('Bulk delete failed:', error)
+      toast.error('Toplu silme başarısız')
     }
   }
 
@@ -832,10 +916,41 @@ export default function Accounting() {
                     </div>
                   ) : (
                     <>
+                      {/* Bulk Actions Bar */}
+                      {selectedInvoices.length > 0 && (
+                        <div className="bg-neutral-900 text-white px-6 py-3 flex items-center justify-between rounded-t-2xl">
+                          <div className="flex items-center gap-4">
+                            <span className="font-medium">{selectedInvoices.length} fatura seçildi</span>
+                            <button
+                              onClick={() => setSelectedInvoices([])}
+                              className="text-sm text-neutral-300 hover:text-white"
+                            >
+                              Seçimi Temizle
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={handleBulkDeleteInvoices}
+                              className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium transition-colors"
+                            >
+                              Toplu Sil
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="overflow-x-auto">
                         <table className="w-full">
                           <thead className="bg-neutral-50 border-b border-neutral-200">
                             <tr>
+                              <th className="px-6 py-3 text-left">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedInvoices.length === invoices.length && invoices.length > 0}
+                                  onChange={handleSelectAllInvoices}
+                                  className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
+                                />
+                              </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
                                 Fatura No
                               </th>
@@ -865,6 +980,14 @@ export default function Accounting() {
                           <tbody className="bg-white divide-y divide-neutral-200">
                             {invoices.map((invoice) => (
                               <tr key={invoice.id} className="hover:bg-neutral-50 transition-colors">
+                                <td className="px-6 py-4">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedInvoices.includes(invoice.id)}
+                                    onChange={() => handleSelectInvoice(invoice.id)}
+                                    className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
+                                  />
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {invoice.invoiceNumber || `#${invoice.id}`}
@@ -1025,10 +1148,41 @@ export default function Accounting() {
                     </div>
                   ) : (
                     <>
+                      {/* Bulk Actions Bar */}
+                      {selectedOffers.length > 0 && (
+                        <div className="bg-neutral-900 text-white px-6 py-3 flex items-center justify-between rounded-t-2xl">
+                          <div className="flex items-center gap-4">
+                            <span className="font-medium">{selectedOffers.length} teklif seçildi</span>
+                            <button
+                              onClick={() => setSelectedOffers([])}
+                              className="text-sm text-neutral-300 hover:text-white"
+                            >
+                              Seçimi Temizle
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={handleBulkDeleteOffers}
+                              className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium transition-colors"
+                            >
+                              Toplu Sil
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="overflow-x-auto">
                         <table className="w-full min-w-[800px]">
                           <thead className="bg-neutral-50 border-b border-neutral-200">
                             <tr>
+                              <th className="px-6 py-3 text-left">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedOffers.length === offers.length && offers.length > 0}
+                                  onChange={handleSelectAllOffers}
+                                  className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
+                                />
+                              </th>
                               <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
                                 Teklif No
                               </th>
@@ -1055,6 +1209,14 @@ export default function Accounting() {
                           <tbody className="bg-white divide-y divide-neutral-200">
                             {offers.map((offer) => (
                               <tr key={offer.id} className="hover:bg-neutral-50 transition-colors">
+                                <td className="px-6 py-4">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedOffers.includes(offer.id)}
+                                    onChange={() => handleSelectOffer(offer.id)}
+                                    className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
+                                  />
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.offerNumber}
