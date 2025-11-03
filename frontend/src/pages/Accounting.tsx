@@ -27,13 +27,14 @@ import CostAccountingTab from '../components/accounting/CostAccountingTab'
 import CategoryTagManagement from '../components/accounting/CategoryTagManagement'
 import CompanyInfo from '../components/accounting/CompanyInfo'
 import CashBankManagement from '../components/accounting/CashBankManagement'
+import ReminderManagement from '../components/reminders/ReminderManagement'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
 import ErrorBoundary from '../components/ErrorBoundary'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders'
 
 interface AccountingStats {
   totalRevenue: number
@@ -2014,7 +2015,7 @@ export default function Accounting() {
 
                   {/* Hatırlatmalar */}
                   <button
-                    onClick={() => toast('Hatırlatma sistemi yakında aktif olacak!', { icon: '🔔', duration: 3000 })}
+                    onClick={() => setActiveTab('reminders')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
@@ -2024,7 +2025,6 @@ export default function Accounting() {
                       <h3 className="font-semibold text-neutral-900">Hatırlatmalar</h3>
                     </div>
                     <p className="text-sm text-neutral-600">Ödeme bildirimleri ve vade uyarıları</p>
-                    <div className="mt-3 text-xs text-orange-600 font-medium">Yakında</div>
                   </button>
 
                   {/* Ekstre Paylaşımı */}
@@ -2174,6 +2174,13 @@ export default function Accounting() {
                   </div>
                 </div>
               </div>
+            )}
+
+            {/* Reminders Tab */}
+            {activeTab === 'reminders' && (
+              <ErrorBoundary>
+                <ReminderManagement />
+              </ErrorBoundary>
             )}
             </ErrorBoundary>
           </div>
