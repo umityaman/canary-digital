@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import {
   Search, Download, FileText, Send, X, CheckCircle,
   Clock, AlertCircle, Eye, Plus, RefreshCw, ExternalLink, File,
@@ -7,6 +7,7 @@ import {
 import { toast } from 'react-hot-toast'
 import EInvoiceForm from './EInvoiceForm'
 import EInvoiceDetail from './EInvoiceDetail'
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface EInvoiceMeta {
   uuid: string
@@ -458,7 +459,7 @@ export default function EInvoiceList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">E-Fatura & E-Arşiv</h2>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>E-Fatura & E-Arşiv</h2>
           <p className="text-sm text-neutral-600 mt-1">Elektronik belge yönetimi</p>
         </div>
         <div className="flex gap-2">
@@ -481,57 +482,57 @@ export default function EInvoiceList() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-blue-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-blue-900">{stats.total}</h3>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-blue-900`}>{stats.total}</h3>
           <p className="text-xs text-blue-700">Toplam Fatura</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
           <div className="flex items-center justify-between mb-2">
             <Zap className="text-purple-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-purple-900">{stats.eFatura}</h3>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-purple-900`}>{stats.eFatura}</h3>
           <p className="text-xs text-purple-700">E-Fatura</p>
         </div>
 
-        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-4 border border-indigo-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200')}>
           <div className="flex items-center justify-between mb-2">
             <Archive className="text-indigo-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-indigo-900">{stats.eArsiv}</h3>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-indigo-900`}>{stats.eArsiv}</h3>
           <p className="text-xs text-indigo-700">E-Arşiv</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
           <div className="flex items-center justify-between mb-2">
             <DollarSign className="text-green-600" size={20} />
           </div>
-          <h3 className="text-xl font-bold text-green-900">{formatCurrency(stats.totalAmount)}</h3>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.sm} font-bold text-green-900`}>{formatCurrency(stats.totalAmount)}</h3>
           <p className="text-xs text-green-700">Toplam Tutar</p>
         </div>
 
-        <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-4 border border-emerald-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200')}>
           <div className="flex items-center justify-between mb-2">
             <CheckCircle className="text-emerald-600" size={20} />
           </div>
-          <h3 className="text-xl font-bold text-emerald-900">{formatCurrency(stats.paidAmount)}</h3>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.sm} font-bold text-emerald-900`}>{formatCurrency(stats.paidAmount)}</h3>
           <p className="text-xs text-emerald-700">Tahsil Edilen</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4 border border-orange-200">
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
           <div className="flex items-center justify-between mb-2">
             <Clock className="text-orange-600" size={20} />
           </div>
-          <h3 className="text-2xl font-bold text-orange-900">{stats.unpaid}</h3>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-orange-900`}>{stats.unpaid}</h3>
           <p className="text-xs text-orange-700">Ödenmemiş</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+      <div className={card('md', 'sm', 'default', 'lg')}>
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
@@ -551,7 +552,7 @@ export default function EInvoiceList() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value as any)}
-            className="px-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+            className={input('md', 'default', undefined, 'md')}
           >
             <option value="all">Tüm Tipler</option>
             <option value="e-fatura">E-Fatura</option>
@@ -562,7 +563,7 @@ export default function EInvoiceList() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as any)}
-            className="px-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+            className={input('md', 'default', undefined, 'md')}
           >
             <option value="all">Tüm Durumlar</option>
             <option value="draft">Taslak</option>
@@ -574,7 +575,7 @@ export default function EInvoiceList() {
       </div>
 
       {/* Invoice List */}
-      <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+      <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
         {loading ? (
           <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : filteredInvoices.length === 0 ? (
