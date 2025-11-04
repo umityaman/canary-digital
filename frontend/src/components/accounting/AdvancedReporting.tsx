@@ -436,9 +436,7 @@ export default function AdvancedReporting() {
           {/* Chart */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <h3 className="text-base lg:text-lg font-semibold text-neutral-900 mb-4 lg:mb-6">Aylık Nakit Akış Trendi</h3>
-            <div className="overflow-x-auto">
-              <div className="min-w-[600px]">
-                <ResponsiveContainer width="100%" height={320}>
+            <ResponsiveContainer width="100%" height={240}>
               <LineChart data={cashflowData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
@@ -453,8 +451,6 @@ export default function AdvancedReporting() {
                 <Line type="monotone" dataKey="netChange" name="Net Değişim" stroke="#3b82f6" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
-              </div>
-            </div>
           </div>
 
           {/* Detailed Table */}
@@ -543,7 +539,7 @@ export default function AdvancedReporting() {
             <div className={card('md', 'lg', 'default', 'lg')}>
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gelir Dağılımı</h3>
               <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={260}>
+                <ResponsiveContainer width="100%" height={200}>
                   <RechartsPie>
                     <Pie
                       data={revenueData}
@@ -551,7 +547,7 @@ export default function AdvancedReporting() {
                       cy="50%"
                       labelLine={false}
                       label={(entry) => `${entry.category}: ${entry.percentage}%`}
-                      outerRadius={80}
+                      outerRadius={60}
                       fill="#8884d8"
                       dataKey="amount"
                     >
@@ -569,7 +565,7 @@ export default function AdvancedReporting() {
             <div className={card('md', 'lg', 'default', 'lg')}>
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gider Dağılımı</h3>
               <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={260}>
+                <ResponsiveContainer width="100%" height={200}>
                   <RechartsPie>
                     <Pie
                       data={expenseData}
@@ -577,7 +573,7 @@ export default function AdvancedReporting() {
                       cy="50%"
                       labelLine={false}
                       label={(entry) => `${entry.percentage}%`}
-                      outerRadius={80}
+                      outerRadius={60}
                       fill="#8884d8"
                       dataKey="amount"
                     >
@@ -810,10 +806,8 @@ export default function AdvancedReporting() {
           {/* Chart - Responsive */}
           <div className={card('md', 'lg', 'default', 'lg')}>
             <h3 className="text-lg font-semibold text-neutral-900 mb-6">KDV Trendi</h3>
-            <div className="overflow-x-auto">
-              <div className="min-w-[600px]">
-                <ResponsiveContainer width="100%" height={320}>
-                  <BarChart data={vatData}>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={vatData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                     <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
                     <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
@@ -827,8 +821,6 @@ export default function AdvancedReporting() {
                     <Bar dataKey="netVAT" name="Ödenecek KDV" fill="#f59e0b" />
                   </BarChart>
                 </ResponsiveContainer>
-              </div>
-            </div>
           </div>
 
           {/* VAT Table */}
