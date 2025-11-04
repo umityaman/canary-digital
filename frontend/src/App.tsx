@@ -39,6 +39,7 @@ const SEOMarketing = lazy(() => import('./pages/website/SEOMarketing'))
 const FinanceReports = lazy(() => import('./pages/website/FinanceReports'))
 const SecuritySettings = lazy(() => import('./pages/website/SecuritySettings'))
 const Todo = lazy(() => import('./pages/Todo'))
+const BankIntegrations = lazy(() => import('./components/banking/BankIntegrations'))
 const Messaging = lazy(() => import('./pages/Messaging'))
 const Meetings = lazy(() => import('./pages/Meetings'))
 const Tools = lazy(() => import('./pages/Tools'))
@@ -111,6 +112,7 @@ export default function App(){
               <Route path='/accounting/quote/:id' element={<QuoteDetail />} />
               <Route path='/account-cards' element={<AccountCardList />} />
               <Route path='/account-cards/:id' element={<AccountCardDetail />} />
+              <Route path='/bank-integrations' element={<BankIntegrations />} />
               <Route path='/social' element={<Social />} />
               <Route path='/website' element={<Website />} />
               <Route path='/website/builder' element={<SiteBuilder />} />
