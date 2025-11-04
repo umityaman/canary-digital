@@ -98,7 +98,14 @@ const CompanyInfo: React.FC = () => {
       setBankAccounts(bankResponse.data);
     } catch (error: any) {
       console.error('Error loading company data:', error);
-      toast.error('Şirket bilgileri yüklenirken hata oluştu');
+      // Graceful fallback - show empty form instead of error
+      if (error.response?.status === 404) {
+        console.warn('⚠️ No company data found, showing empty form');
+        setCompanyData(null);
+        setBankAccounts([]);
+      } else {
+        toast.error('Şirket bilgileri yüklenirken hata oluştu');
+      }
     } finally {
       setLoading(false);
     }
