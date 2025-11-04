@@ -31,7 +31,6 @@ const DeliveryNoteList = lazy(() => import('../components/delivery-notes/Deliver
 const CurrentAccountList = lazy(() => import('../components/current-accounts/CurrentAccountList'))
 const InventoryAccounting = lazy(() => import('../components/accounting/InventoryAccounting'))
 const AdvancedReporting = lazy(() => import('../components/accounting/AdvancedReporting'))
-const CategoryTagManagement = lazy(() => import('../components/accounting/CategoryTagManagement'))
 const CompanyInfo = lazy(() => import('../components/accounting/CompanyInfo'))
 const CashBankManagement = lazy(() => import('../components/accounting/CashBankManagement'))
 const ReminderManagement = lazy(() => import('../components/reminders/ReminderManagement'))
@@ -42,7 +41,7 @@ const ToolsTab = lazy(() => import('../components/accounting/tabs/ToolsTab'))
 const AdvisorTab = lazy(() => import('../components/accounting/tabs/AdvisorTab'))
 const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab'))
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'categories' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications'
 
 interface AccountingStats {
   totalRevenue: number
@@ -1974,9 +1973,6 @@ export default function Accounting() {
             {/* Cost Accounting Tab */}
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}
-
-            {/* Category and Tag Management Tab */}
-            {activeTab === 'categories' && <CategoryTagManagement />}
 
             {/* Company Information Tab */}
             {activeTab === 'company' && <CompanyInfo />}

@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { 
   FileText, Bell, BarChart, Users, Package, Calendar,
-  CreditCard, Mail, Calculator, FolderOpen
+  CreditCard, Mail, Calculator, FolderOpen, ArrowLeft
 } from 'lucide-react'
 import ActionCard from '../../ui/ActionCard'
 import StatCard from '../../ui/StatCard'
+import CategoryTagManagement from '../CategoryTagManagement'
 import { toast } from 'react-hot-toast'
+
+type ToolView = 'list' | 'categories'
 
 interface ToolsTabProps {
   onNavigate: (tab: string) => void
 }
 
 const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
+  const [currentView, setCurrentView] = useState<ToolView>('list')
+
   const quickStats = [
     {
       title: 'Aktif Araçlar',
@@ -35,11 +40,11 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
 
   const tools = [
     {
-      title: 'Hesap Kategorileri',
-      description: 'Gelir ve gider kategorilerini yönetin',
+      title: 'Kategori ve Etiket Yönetimi',
+      description: 'Gelir/gider kategorileri ve etiketleri yönetin',
       icon: FolderOpen,
       gradient: 'from-blue-500 to-blue-600',
-      onClick: () => onNavigate('categories'),
+      onClick: () => setCurrentView('categories'),
     },
     {
       title: 'Raporlar',
@@ -89,6 +94,26 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
     },
   ]
 
+  // Show Category Management view
+  if (currentView === 'categories') {
+    return (
+      <div className="space-y-4">
+        {/* Back Button */}
+        <button
+          onClick={() => setCurrentView('list')}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-medium">Araçlara Dön</span>
+        </button>
+
+        {/* Category Management Component */}
+        <CategoryTagManagement />
+      </div>
+    )
+  }
+
+  // Default Tools List View
   return (
     <div className="space-y-6">
       {/* Quick Stats */}
@@ -106,7 +131,7 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
 
       {/* Tools Grid */}
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Muhasebe Araçları</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">İşletme Kolaylıkları</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tools.map((tool, index) => (
