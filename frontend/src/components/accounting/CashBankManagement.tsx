@@ -193,8 +193,8 @@ export default function CashBankManagement() {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 lg:p-6 text-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 lg:p-6 text-white min-w-0">
           <div className="flex items-center justify-between mb-3">
             <Wallet className="w-6 h-6 lg:w-8 lg:h-8 opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>
@@ -203,7 +203,7 @@ export default function CashBankManagement() {
           <p className="text-xs lg:text-sm opacity-90">Toplam Bakiye</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 min-w-0">
           <div className="flex items-center justify-between mb-3">
             <Building2 className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
             <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">Banka</span>
@@ -216,7 +216,7 @@ export default function CashBankManagement() {
           </p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 min-w-0">
           <div className="flex items-center justify-between mb-3">
             <Wallet className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
             <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">Kasa</span>
@@ -225,7 +225,7 @@ export default function CashBankManagement() {
           <p className="text-xs lg:text-sm text-gray-600">Nakit Bakiye</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 min-w-0 col-span-1 sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between mb-3">
             <Calendar className="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" />
             <span className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-full">

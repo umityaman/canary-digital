@@ -340,10 +340,10 @@ export default function AdvancedReporting() {
       </div>
 
       {/* Report Type Selector */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <button
           onClick={() => setActiveReport('cashflow')}
-          className={`p-6 rounded-2xl border-2 transition-all ${
+          className={`p-6 rounded-2xl border-2 transition-all min-w-0 ${
             activeReport === 'cashflow'
               ? 'border-blue-500 bg-blue-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'
@@ -356,7 +356,7 @@ export default function AdvancedReporting() {
 
         <button
           onClick={() => setActiveReport('profitloss')}
-          className={`p-6 rounded-2xl border-2 transition-all ${
+          className={`p-6 rounded-2xl border-2 transition-all min-w-0 ${
             activeReport === 'profitloss'
               ? 'border-green-500 bg-green-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'
@@ -369,7 +369,7 @@ export default function AdvancedReporting() {
 
         <button
           onClick={() => setActiveReport('balance')}
-          className={`p-6 rounded-2xl border-2 transition-all ${
+          className={`p-6 rounded-2xl border-2 transition-all min-w-0 ${
             activeReport === 'balance'
               ? 'border-purple-500 bg-purple-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'
@@ -382,7 +382,7 @@ export default function AdvancedReporting() {
 
         <button
           onClick={() => setActiveReport('vat')}
-          className={`p-6 rounded-2xl border-2 transition-all ${
+          className={`p-6 rounded-2xl border-2 transition-all min-w-0 col-span-2 lg:col-span-1 ${
             activeReport === 'vat'
               ? 'border-orange-500 bg-orange-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'

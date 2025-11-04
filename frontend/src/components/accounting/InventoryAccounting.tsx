@@ -445,7 +445,7 @@ export default function InventoryAccounting() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
         {/* Total Transactions */}
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
           <div className="flex items-center justify-between mb-2">
