@@ -340,7 +340,7 @@ export default function AdvancedReporting() {
       </div>
 
       {/* Report Type Selector */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <button
           onClick={() => setActiveReport('cashflow')}
           className={`p-6 rounded-2xl border-2 transition-all min-w-0 ${
