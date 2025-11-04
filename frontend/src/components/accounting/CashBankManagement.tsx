@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import {
   Wallet,
   Building2,
@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../../utils/api';
 import toast from 'react-hot-toast';
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 
 interface BankAccount {
   id: number;
@@ -177,7 +178,7 @@ export default function CashBankManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Kasa ve Banka Yönetimi</h2>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Kasa ve Banka Yönetimi</h2>
           <p className="text-sm text-gray-500 mt-1">
             Nakit akışı, kasa ve banka hesaplarınızı takip edin
           </p>
@@ -198,7 +199,7 @@ export default function CashBankManagement() {
             <Wallet className="w-6 h-6 lg:w-8 lg:h-8 opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>
           </div>
-          <p className="text-2xl lg:text-3xl font-bold mb-1 break-all">{formatCurrency(totalBalance)}</p>
+          <p className={`${DESIGN_TOKENS.typography.stat.lg} mb-1 break-all`}>{formatCurrency(totalBalance)}</p>
           <p className="text-xs lg:text-sm opacity-90">Toplam Bakiye</p>
         </div>
 
@@ -207,7 +208,7 @@ export default function CashBankManagement() {
             <Building2 className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
             <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">Banka</span>
           </div>
-          <p className="text-2xl lg:text-3xl font-bold text-gray-900 mb-1 break-all">
+          <p className={cx(DESIGN_TOKENS.typography.stat.lg, DESIGN_TOKENS.colors.text.primary, 'mb-1 break-all')}>
             {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
           </p>
           <p className="text-xs lg:text-sm text-gray-600">
@@ -220,7 +221,7 @@ export default function CashBankManagement() {
             <Wallet className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
             <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">Kasa</span>
           </div>
-          <p className="text-2xl lg:text-3xl font-bold text-gray-900 mb-1 break-all">{formatCurrency(cashBalance)}</p>
+          <p className={cx(DESIGN_TOKENS.typography.stat.lg, DESIGN_TOKENS.colors.text.primary, 'mb-1 break-all')}>{formatCurrency(cashBalance)}</p>
           <p className="text-xs lg:text-sm text-gray-600">Nakit Bakiye</p>
         </div>
 
@@ -305,7 +306,7 @@ export default function CashBankManagement() {
                       <span className="text-sm font-medium text-gray-700">Banka Hesapları</span>
                       <Building2 className="w-5 h-5 text-blue-600" />
                     </div>
-                    <p className="text-2xl font-bold text-blue-600 mb-2">
+                    <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600 mb-2`}>
                       {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
@@ -323,7 +324,7 @@ export default function CashBankManagement() {
                       <span className="text-sm font-medium text-gray-700">Kasa</span>
                       <Wallet className="w-5 h-5 text-green-600" />
                     </div>
-                    <p className="text-2xl font-bold text-green-600 mb-2">
+                    <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600 mb-2`}>
                       {formatCurrency(cashBalance)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
@@ -525,7 +526,7 @@ export default function CashBankManagement() {
                         <TrendingUp className="w-5 h-5 text-green-600" />
                         <span className="text-sm font-medium text-gray-700">Toplam Giriş</span>
                       </div>
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.income, 0)
                         )}
@@ -538,7 +539,7 @@ export default function CashBankManagement() {
                         <TrendingDown className="w-5 h-5 text-red-600" />
                         <span className="text-sm font-medium text-gray-700">Toplam Çıkış</span>
                       </div>
-                      <p className="text-2xl font-bold text-red-600">
+                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-red-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.expense, 0)
                         )}
@@ -551,7 +552,7 @@ export default function CashBankManagement() {
                         <Wallet className="w-5 h-5 text-blue-600" />
                         <span className="text-sm font-medium text-gray-700">Net Akış</span>
                       </div>
-                      <p className="text-2xl font-bold text-blue-600">
+                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.net, 0)
                         )}
@@ -561,7 +562,7 @@ export default function CashBankManagement() {
                   </div>
 
                   {/* Monthly Breakdown Table */}
-                  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                  <div className={cx(card('md', 'none', 'default', 'md'), 'overflow-hidden')}>
                     <table className="min-w-full">
                       <thead className="bg-gray-50">
                         <tr>
@@ -618,7 +619,7 @@ export default function CashBankManagement() {
       {/* Transaction Form Modal */}
       {showTransactionForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+          <div className={cx(card('md', 'lg', 'default', 'md'), 'w-full max-w-md')}>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Yeni İşlem</h3>
               <button
@@ -737,7 +738,7 @@ export default function CashBankManagement() {
                 </button>
                 <button
                   onClick={() => setShowTransactionForm(false)}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                  className={button('md', 'outline', 'md')}
                 >
                   İptal
                 </button>
