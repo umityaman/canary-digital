@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { 
   Package, TrendingUp, TrendingDown, DollarSign, AlertCircle, 
   CheckCircle, ArrowRight, Settings, Filter, Calendar, FileText,
   BarChart3, RefreshCw, Link2, Eye, Edit2, XCircle
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface InventoryTransaction {
   id: string
@@ -427,7 +428,7 @@ export default function InventoryAccounting() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Stok-Muhasebe Entegrasyonu</h2>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Stok-Muhasebe Entegrasyonu</h2>
           <p className="text-sm text-neutral-600 mt-1">Stok hareketlerini otomatik muhasebe kayıtlarına dönüştür</p>
         </div>
         
@@ -449,7 +450,7 @@ export default function InventoryAccounting() {
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <Package size={18} className="lg:w-5 lg:h-5" />
-            <span className="text-xl lg:text-2xl font-bold">{stats.totalTransactions}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalTransactions}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Toplam İşlem</div>
         </div>
@@ -458,7 +459,7 @@ export default function InventoryAccounting() {
         <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={18} className="lg:w-5 lg:h-5" />
-            <span className="text-xl lg:text-2xl font-bold">{stats.pendingRecords}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.pendingRecords}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Bekliyor</div>
         </div>
@@ -467,7 +468,7 @@ export default function InventoryAccounting() {
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={18} className="lg:w-5 lg:h-5" />
-            <span className="text-xl lg:text-2xl font-bold">{stats.recordedCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.recordedCount}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Kaydedildi</div>
         </div>
@@ -476,7 +477,7 @@ export default function InventoryAccounting() {
         <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <XCircle size={18} className="lg:w-5 lg:h-5" />
-            <span className="text-xl lg:text-2xl font-bold">{stats.errorCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.errorCount}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Hata</div>
         </div>
@@ -492,7 +493,7 @@ export default function InventoryAccounting() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-2 flex gap-2">
+      <div className={cx(card('md', 'xs', 'default', 'lg'), 'flex gap-2')}>
         <button
           onClick={() => setActiveView('overview')}
           className={`flex-1 px-4 py-2 rounded-xl font-medium transition-colors ${
@@ -540,12 +541,12 @@ export default function InventoryAccounting() {
       {activeView === 'overview' && (
         <div className="space-y-6">
           {/* Filters */}
-          <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+          <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
               >
                 <option value="all">Tüm İşlem Tipleri</option>
                 <option value="purchase">Satın Alma</option>
@@ -559,7 +560,7 @@ export default function InventoryAccounting() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
               >
                 <option value="all">Tüm Durumlar</option>
                 <option value="pending">Bekliyor</option>
@@ -578,7 +579,7 @@ export default function InventoryAccounting() {
           </div>
 
           {/* Transactions List */}
-          <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+          <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
             <div className="p-4 border-b border-neutral-200">
               <h3 className="font-semibold text-neutral-900">Stok Hareketleri ({filteredTransactions.length})</h3>
             </div>
@@ -692,7 +693,7 @@ export default function InventoryAccounting() {
       {activeView === 'pending' && (
         <div className="space-y-4">
           {filteredTransactions.filter(t => t.accountingStatus === 'pending').map((transaction) => (
-            <div key={transaction.id} className="bg-white rounded-2xl border border-neutral-200 p-6">
+            <div key={transaction.id} className={card('md', 'lg', 'default', 'lg')}>
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
@@ -708,7 +709,7 @@ export default function InventoryAccounting() {
                   )}
                 </div>
                 <div className="text-right ml-4">
-                  <div className="text-2xl font-bold text-neutral-900">{formatCurrency(transaction.totalCost)}</div>
+                  <div className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>{formatCurrency(transaction.totalCost)}</div>
                   <div className="text-sm text-neutral-600">{formatCurrency(transaction.unitCost)} / adet</div>
                 </div>
               </div>
@@ -759,7 +760,7 @@ export default function InventoryAccounting() {
           ))}
 
           {filteredTransactions.filter(t => t.accountingStatus === 'pending').length === 0 && (
-            <div className="bg-white rounded-2xl border border-neutral-200 p-12 text-center">
+            <div className={cx(card('md', 'xl', 'default', 'lg'), 'text-center')}>
               <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
               <p className="text-lg font-medium text-neutral-900">Tüm işlemler kaydedildi!</p>
               <p className="text-sm text-neutral-600 mt-2">Bekleyen stok hareketi yok</p>
@@ -770,7 +771,7 @@ export default function InventoryAccounting() {
 
       {/* Recorded View */}
       {activeView === 'recorded' && (
-        <div className="bg-white rounded-2xl border border-neutral-200">
+        <div className={card('md', 'none', 'default', 'lg')}>
           <div className="p-4 border-b border-neutral-200">
             <h3 className="font-semibold text-neutral-900">Muhasebe Kayıtları ({accountingEntries.length})</h3>
           </div>
@@ -828,7 +829,7 @@ export default function InventoryAccounting() {
       {/* Settings View */}
       {activeView === 'settings' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+          <div className={card('md', 'lg', 'default', 'lg')}>
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Otomatik Kayıt Ayarları</h3>
             
             <div className="space-y-4">
@@ -850,7 +851,7 @@ export default function InventoryAccounting() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+          <div className={card('md', 'lg', 'default', 'lg')}>
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Hesap Eşleştirmeleri</h3>
             
             <div className="space-y-4">
