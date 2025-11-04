@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import axios from 'axios'
 import {
   TrendingUp, TrendingDown, DollarSign, Calendar, ArrowUpRight, ArrowDownRight,
@@ -542,7 +542,7 @@ export default function AccountingDashboard() {
             <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center">
               <Zap className="text-white" size={20} />
             </div>
-            <h3 className="text-lg font-semibold text-indigo-900">Hızlı Analizler</h3>
+            <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold text-indigo-900')}>Hızlı Analizler</h3>
           </div>
           {advancedStats && (
             <div className="space-y-3">
@@ -581,7 +581,7 @@ export default function AccountingDashboard() {
             <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
               <BarChart2 className="text-white" size={20} />
             </div>
-            <h3 className="text-lg font-semibold text-amber-900">Gelecek Ay Tahmini</h3>
+            <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold text-amber-900')}>Gelecek Ay Tahmini</h3>
           </div>
           {advancedStats && (
             <div className="space-y-3">
@@ -590,16 +590,16 @@ export default function AccountingDashboard() {
                   <span className="text-xs text-amber-700">Tahmini Gelir</span>
                   <span className="text-green-600 text-xs">↑</span>
                 </div>
-                <span className="text-xl font-bold text-amber-900">{formatCurrency(advancedStats.forecastIncome)}</span>
+                <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-amber-900')}>{formatCurrency(advancedStats.forecastIncome)}</span>
               </div>
               <div className="bg-white/60 rounded-xl p-3">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-xs text-amber-700">Tahmini Gider</span>
                   <span className="text-red-600 text-xs">↓</span>
                 </div>
-                <span className="text-xl font-bold text-amber-900">{formatCurrency(advancedStats.forecastExpense)}</span>
+                <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-amber-900')}>{formatCurrency(advancedStats.forecastExpense)}</span>
               </div>
-              <div className="bg-white rounded-xl p-3">
+              <div className={cx(card('md', 'xs', 'default', 'md'))}>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-xs text-amber-700">Tahmini Kâr</span>
                   <span className={`text-xs ${advancedStats.forecastProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -622,7 +622,7 @@ export default function AccountingDashboard() {
             <div className="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center">
               <Target className="text-white" size={20} />
             </div>
-            <h3 className="text-lg font-semibold text-teal-900">Hedef Takibi</h3>
+            <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold text-teal-900')}>Hedef Takibi</h3>
           </div>
           <div className="space-y-4">
             <div>
@@ -690,10 +690,10 @@ export default function AccountingDashboard() {
       {/* Detailed Statistics Section */}
       {showAdvancedStats && advancedStats && (
         <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
-          <h3 className="text-lg font-semibold text-slate-900 mb-6">Detaylı İstatistikler</h3>
+          <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold text-slate-900 mb-6')}>Detaylı İstatistikler</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Income Stats */}
-            <div className="bg-white rounded-xl p-5">
+            <div className={cx(card('md', 'md', 'default', 'md'))}>
               <h4 className="text-sm font-semibold text-green-700 mb-4">Gelir İstatistikleri</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
@@ -719,7 +719,7 @@ export default function AccountingDashboard() {
             </div>
 
             {/* Expense Stats */}
-            <div className="bg-white rounded-xl p-5">
+            <div className={cx(card('md', 'md', 'default', 'md'))}>
               <h4 className="text-sm font-semibold text-red-700 mb-4">Gider İstatistikleri</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
@@ -745,7 +745,7 @@ export default function AccountingDashboard() {
             </div>
 
             {/* Profit Stats */}
-            <div className="bg-white rounded-xl p-5">
+            <div className={cx(card('md', 'md', 'default', 'md'))}>
               <h4 className="text-sm font-semibold text-blue-700 mb-4">Kâr/Zarar İstatistikleri</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
@@ -794,9 +794,9 @@ export default function AccountingDashboard() {
       {/* Comparison Section */}
       {showComparison && (
         <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 border border-neutral-200">
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Dönem Karşılaştırması</h3>
+          <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold text-neutral-900 mb-4')}>Dönem Karşılaştırması</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-xl p-4">
+            <div className={cx(card('md', 'sm', 'default', 'md'))}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-neutral-600">Gelir Artışı</span>
                 <div className={`flex items-center gap-1 text-sm font-semibold ${
@@ -822,7 +822,7 @@ export default function AccountingDashboard() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-4">
+            <div className={cx(card('md', 'sm', 'default', 'md'))}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-neutral-600">Gider Değişimi</span>
                 <div className={`flex items-center gap-1 text-sm font-semibold ${
@@ -848,7 +848,7 @@ export default function AccountingDashboard() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-4">
+            <div className={cx(card('md', 'sm', 'default', 'md'))}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-neutral-600">Kar/Zarar Değişimi</span>
                 <div className={`flex items-center gap-1 text-sm font-semibold ${
@@ -1083,8 +1083,8 @@ export default function AccountingDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Hızlı İşlemler</h3>
+      <div className={card('md', 'lg', 'default', 'lg')}>
+        <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold text-neutral-900 mb-4')}>Hızlı İşlemler</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <button
             onClick={() => window.location.hash = '#income'}
