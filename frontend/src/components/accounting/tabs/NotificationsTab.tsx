@@ -3,6 +3,7 @@ import { Bell, Check, X, Settings, Mail, MessageSquare, Smartphone } from 'lucid
 import { useNotifications } from '../../../hooks/useNotifications'
 import StatCard from '../../ui/StatCard'
 import EmptyState from '../../ui/EmptyState'
+import { card, button, badge, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
 
 const NotificationsTab: React.FC = () => {
   const {
@@ -96,65 +97,41 @@ const NotificationsTab: React.FC = () => {
       </div>
 
       {/* Filter Buttons */}
-      <div className="bg-white rounded-lg shadow-md p-4">
+      <div className={card('md', 'xs')}>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveFilter('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              activeFilter === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={button('sm', activeFilter === 'all' ? 'primary' : 'ghost')}
           >
             Tümü ({stats.total})
           </button>
           <button
             onClick={() => setActiveFilter('unread')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              activeFilter === 'unread'
-                ? 'bg-orange-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={cx(button('sm', activeFilter === 'unread' ? 'primary' : 'ghost'), activeFilter === 'unread' && 'bg-orange-600 hover:bg-orange-700')}
           >
             Okunmamış ({stats.unread})
           </button>
           <button
             onClick={() => setActiveFilter('payment')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              activeFilter === 'payment'
-                ? 'bg-green-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={cx(button('sm', activeFilter === 'payment' ? 'primary' : 'ghost'), activeFilter === 'payment' && 'bg-green-600 hover:bg-green-700')}
           >
             💰 Ödemeler
           </button>
           <button
             onClick={() => setActiveFilter('invoice')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              activeFilter === 'invoice'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={button('sm', activeFilter === 'invoice' ? 'primary' : 'ghost')}
           >
             📄 Faturalar
           </button>
           <button
             onClick={() => setActiveFilter('reminder')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              activeFilter === 'reminder'
-                ? 'bg-orange-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={cx(button('sm', activeFilter === 'reminder' ? 'primary' : 'ghost'), activeFilter === 'reminder' && 'bg-orange-600 hover:bg-orange-700')}
           >
             ⏰ Hatırlatmalar
           </button>
           <button
             onClick={() => setActiveFilter('system')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              activeFilter === 'system'
-                ? 'bg-gray-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={cx(button('sm', activeFilter === 'system' ? 'primary' : 'ghost'), activeFilter === 'system' && 'bg-gray-600 hover:bg-gray-700')}
           >
             ⚙️ Sistem
           </button>
@@ -162,7 +139,7 @@ const NotificationsTab: React.FC = () => {
           {stats.unread > 0 && (
             <button
               onClick={markAllAsRead}
-              className="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+              className={cx(button('sm', 'success'), 'ml-auto')}
             >
               <Check size={18} className="inline mr-2" />
               Tümünü Okundu İşaretle
@@ -203,7 +180,7 @@ const NotificationsTab: React.FC = () => {
                       <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         {notification.title}
                         {notification.isUrgent && (
-                          <span className="px-2 py-0.5 text-xs bg-red-500 text-white rounded-full font-bold">
+                          <span className={cx(badge('danger', 'sm'), 'font-bold')}>
                             ACİL
                           </span>
                         )}
@@ -241,10 +218,10 @@ const NotificationsTab: React.FC = () => {
       </div>
 
       {/* Notification Preferences */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className={card('md', 'sm')}>
         <div className="flex items-center gap-3 mb-4">
           <Settings className="text-blue-600" size={24} />
-          <h3 className="text-lg font-semibold text-gray-900">Bildirim Tercihleri</h3>
+          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Bildirim Tercihleri</h3>
         </div>
 
         <div className="space-y-4">
