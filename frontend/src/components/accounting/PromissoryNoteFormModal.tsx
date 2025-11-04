@@ -60,9 +60,9 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className={cx(card('lg', 'none', 'default', 'xl'), 'w-full max-w-2xl max-h-[90vh] overflow-y-auto')}>
+      <div className={cx(card('lg', 'none', 'default', 'xl'), 'w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl')}>
         <div className={cx('sticky top-0 bg-white border-b border-neutral-200', DESIGN_TOKENS.spacing.padding.md, 'flex items-center justify-between')}>
-          <h3 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
+          <h3 className={`${DESIGN_TOKENS.typography.h1} ${DESIGN_TOKENS.colors.text.primary}`}>
             {initial?.id ? 'Senet Düzenle' : 'Yeni Senet'}
           </h3>
           <button
