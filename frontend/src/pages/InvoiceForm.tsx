@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Plus, Trash2, Save, User, Calendar, FileText, DollarSign, Percent } from 'lucide-react'
+import { ArrowLeft, Plus, Trash2, Save, User, Calendar, FileText, DollarSign, Percent, CheckCircle } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { invoiceAPI, equipmentAPI } from '../services/api'
 import FormSkeleton from '../components/ui/FormSkeleton'
@@ -50,6 +50,11 @@ const InvoiceForm: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [customers, setCustomers] = useState<Customer[]>([])
   const [equipments, setEquipments] = useState<Equipment[]>([])
+  const [customerSearch, setCustomerSearch] = useState('')
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false)
+  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([])
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
+  const [invoiceType, setInvoiceType] = useState<'corporate' | 'individual'>('corporate')
   
   const [formData, setFormData] = useState({
     invoiceNumber: '',
@@ -58,6 +63,7 @@ const InvoiceForm: React.FC = () => {
     dueDate: '',
     notes: '',
     discountPercentage: 0,
+    withholding: 0,
     status: 'pending' as 'pending' | 'paid' | 'overdue' | 'cancelled'
   })
 
@@ -94,6 +100,39 @@ const InvoiceForm: React.FC = () => {
     }
   }
 
+  // Customer search filter
+  const handleCustomerSearch = (value: string) => {
+    setCustomerSearch(value)
+    if (value.trim().length > 0) {
+      const filtered = customers.filter(customer =>
+        customer.name.toLowerCase().includes(value.toLowerCase()) ||
+        customer.email?.toLowerCase().includes(value.toLowerCase()) ||
+        customer.phone?.includes(value) ||
+        customer.taxNumber?.includes(value)
+      )
+      setFilteredCustomers(filtered)
+      setShowCustomerDropdown(true)
+    } else {
+      setFilteredCustomers([])
+      setShowCustomerDropdown(false)
+    }
+  }
+
+  const handleCustomerSelect = (customer: Customer) => {
+    setSelectedCustomer(customer)
+    setCustomerSearch(customer.name)
+    setFormData({ ...formData, customerId: customer.id.toString() })
+    setShowCustomerDropdown(false)
+  }
+
+  // Due date quick select
+  const handleDueDateQuickSelect = (days: number) => {
+    const issueDate = new Date(formData.issueDate)
+    const dueDate = new Date(issueDate)
+    dueDate.setDate(dueDate.getDate() + days)
+    setFormData({ ...formData, dueDate: dueDate.toISOString().split('T')[0] })
+  }
+
   const loadInvoice = async () => {
     try {
       setLoading(true)
@@ -106,6 +145,7 @@ const InvoiceForm: React.FC = () => {
         dueDate: invoice.dueDate.split('T')[0],
         notes: invoice.notes || '',
         discountPercentage: invoice.discountPercentage || 0,
+        withholding: invoice.withholding || 0,
         status: invoice.status
       })
       setItems(invoice.items || [])
@@ -174,11 +214,17 @@ const InvoiceForm: React.FC = () => {
     return subtotal * (formData.discountPercentage / 100)
   }
 
+  const calculateWithholdingAmount = () => {
+    const subtotal = calculateSubtotal()
+    return subtotal * (formData.withholding / 100)
+  }
+
   const calculateTotal = () => {
     const subtotal = calculateSubtotal()
     const taxAmount = calculateTotalTax()
     const discountAmount = calculateDiscountAmount()
-    return subtotal + taxAmount - discountAmount
+    const withholdingAmount = calculateWithholdingAmount()
+    return subtotal + taxAmount - discountAmount - withholdingAmount
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -204,10 +250,12 @@ const InvoiceForm: React.FC = () => {
       const payload = {
         ...formData,
         customerId: parseInt(formData.customerId as any),
+        invoiceType,
         items,
         subtotal: calculateSubtotal(),
         taxAmount: calculateTotalTax(),
         discountAmount: calculateDiscountAmount(),
+        withholdingAmount: calculateWithholdingAmount(),
         totalAmount: calculateTotal()
       }
 
@@ -282,24 +330,47 @@ const InvoiceForm: React.FC = () => {
                 />
               </div>
 
-              <div>
+              <div className="relative">
                 <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                   <User size={16} />
                   Müşteri *
                 </label>
-                <select
-                  value={formData.customerId}
-                  onChange={(e) => setFormData({ ...formData, customerId: e.target.value })}
+                <input
+                  type="text"
+                  value={customerSearch}
+                  onChange={(e) => handleCustomerSearch(e.target.value)}
+                  onFocus={() => {
+                    if (customerSearch.length > 0) setShowCustomerDropdown(true)
+                  }}
+                  placeholder="Müşteri ara (ad, email, telefon, vergi no)..."
                   className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
                   required
-                >
-                  <option value="">Müşteri seçin...</option>
-                  {customers.map(customer => (
-                    <option key={customer.id} value={customer.id}>
-                      {customer.name}
-                    </option>
-                  ))}
-                </select>
+                />
+                {showCustomerDropdown && filteredCustomers.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-300 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    {filteredCustomers.map(customer => (
+                      <button
+                        key={customer.id}
+                        type="button"
+                        onClick={() => handleCustomerSelect(customer)}
+                        className="w-full px-4 py-3 text-left hover:bg-neutral-50 border-b border-neutral-100 last:border-b-0"
+                      >
+                        <div className="font-medium text-neutral-900">{customer.name}</div>
+                        <div className="text-xs text-neutral-500 mt-1 flex gap-3">
+                          {customer.email && <span>📧 {customer.email}</span>}
+                          {customer.phone && <span>📱 {customer.phone}</span>}
+                          {customer.taxNumber && <span>🏢 VN: {customer.taxNumber}</span>}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {selectedCustomer && (
+                  <div className="mt-2 text-xs text-green-600 flex items-center gap-1">
+                    <CheckCircle size={14} />
+                    Seçili: {selectedCustomer.name}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -318,6 +389,37 @@ const InvoiceForm: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
+                  <FileText size={16} />
+                  Fatura Türü
+                </label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="invoiceType"
+                      value="corporate"
+                      checked={invoiceType === 'corporate'}
+                      onChange={() => setInvoiceType('corporate')}
+                      className="w-4 h-4 text-neutral-900"
+                    />
+                    <span className="text-sm text-neutral-700">Kurumsal</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="invoiceType"
+                      value="individual"
+                      checked={invoiceType === 'individual'}
+                      onChange={() => setInvoiceType('individual')}
+                      className="w-4 h-4 text-neutral-900"
+                    />
+                    <span className="text-sm text-neutral-700">Bireysel</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                   <Calendar size={16} />
                   Vade Tarihi *
                 </label>
@@ -328,9 +430,22 @@ const InvoiceForm: React.FC = () => {
                   className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
                   required
                 />
+                <div className="mt-2 flex gap-2 flex-wrap">
+                  <span className="text-xs text-neutral-600">Hızlı seç:</span>
+                  {[30, 45, 60, 90, 120].map(days => (
+                    <button
+                      key={days}
+                      type="button"
+                      onClick={() => handleDueDateQuickSelect(days)}
+                      className="text-xs px-2 py-1 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-neutral-700 transition-colors"
+                    >
+                      {days} gün
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div className="md:col-span-2">
+              <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
                   Durum
                 </label>
@@ -344,6 +459,28 @@ const InvoiceForm: React.FC = () => {
                   <option value="overdue">Gecikmiş</option>
                   <option value="cancelled">İptal</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
+                  <Percent size={16} />
+                  Tevkifat Oranı (%)
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={formData.withholding}
+                  onChange={(e) => setFormData({ ...formData, withholding: parseFloat(e.target.value) || 0 })}
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                  placeholder="0"
+                />
+                {formData.withholding > 0 && (
+                  <p className="text-xs text-neutral-500 mt-1">
+                    Tevkifat Tutarı: {calculateWithholdingAmount().toFixed(2)} ₺
+                  </p>
+                )}
               </div>
             </div>
           </div>
