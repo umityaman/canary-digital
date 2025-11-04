@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { 
   TrendingUp, TrendingDown, DollarSign, Calendar, Download, 
   FileText, BarChart3, PieChart, Building2, CreditCard,
@@ -7,6 +7,7 @@ import {
 import { LineChart, Line, BarChart, Bar, PieChart as RechartsPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
@@ -316,7 +317,7 @@ export default function AdvancedReporting() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Gelişmiş Raporlama</h2>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Gelişmiş Raporlama</h2>
           <p className="text-sm text-neutral-600 mt-1">Detaylı finansal analiz ve raporlar</p>
         </div>
         
@@ -433,7 +434,7 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Chart */}
-          <div className="bg-white rounded-2xl border border-neutral-200 p-4 lg:p-6">
+          <div className={card('md', 'sm', 'default', 'lg')}>
             <h3 className="text-base lg:text-lg font-semibold text-neutral-900 mb-4 lg:mb-6">Aylık Nakit Akış Trendi</h3>
             <div className="overflow-x-auto">
               <div className="min-w-[600px]">
@@ -457,7 +458,7 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Detailed Table */}
-          <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+          <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
             <div className="p-4 border-b border-neutral-200">
               <h3 className="font-semibold text-neutral-900">Detaylı Nakit Akış Tablosu</h3>
             </div>
@@ -539,7 +540,7 @@ export default function AdvancedReporting() {
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Revenue Pie */}
-            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+            <div className={card('md', 'lg', 'default', 'lg')}>
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gelir Dağılımı</h3>
               <ResponsiveContainer width="100%" height={260}>
                 <RechartsPie>
@@ -563,7 +564,7 @@ export default function AdvancedReporting() {
             </div>
 
             {/* Expense Pie */}
-            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+            <div className={card('md', 'lg', 'default', 'lg')}>
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gider Dağılımı</h3>
               <ResponsiveContainer width="100%" height={260}>
                 <RechartsPie>
@@ -588,7 +589,7 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Detailed P&L */}
-          <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+          <div className={card('md', 'lg', 'default', 'lg')}>
             <h3 className="text-lg font-semibold text-neutral-900 mb-6">Kar-Zarar Tablosu</h3>
             
             <div className="space-y-6">
@@ -665,7 +666,7 @@ export default function AdvancedReporting() {
           {/* Balance Sheet Table */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Assets */}
-            <div className="bg-white rounded-2xl border border-neutral-200">
+            <div className={card('md', 'none', 'default', 'lg')}>
               <div className="p-4 border-b border-neutral-200 bg-blue-50">
                 <h3 className="font-semibold text-blue-900">AKTİFLER (Varlıklar)</h3>
               </div>
@@ -690,14 +691,14 @@ export default function AdvancedReporting() {
                 <div className="pt-4 border-t-2 border-blue-500">
                   <div className="flex items-center justify-between">
                     <h4 className="text-lg font-bold text-blue-900">TOPLAM AKTİF</h4>
-                    <span className="text-2xl font-bold text-blue-900">{formatCurrency(totalAssets)}</span>
+                    <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-blue-900')}>{formatCurrency(totalAssets)}</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Liabilities */}
-            <div className="bg-white rounded-2xl border border-neutral-200">
+            <div className={card('md', 'none', 'default', 'lg')}>
               <div className="p-4 border-b border-neutral-200 bg-purple-50">
                 <h3 className="font-semibold text-purple-900">PASİFLER (Kaynaklar)</h3>
               </div>
@@ -722,7 +723,7 @@ export default function AdvancedReporting() {
                 <div className="pt-4 border-t-2 border-purple-500">
                   <div className="flex items-center justify-between">
                     <h4 className="text-lg font-bold text-purple-900">TOPLAM PASİF</h4>
-                    <span className="text-2xl font-bold text-purple-900">{formatCurrency(totalLiabilities)}</span>
+                    <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-purple-900')}>{formatCurrency(totalLiabilities)}</span>
                   </div>
                 </div>
               </div>
@@ -803,7 +804,7 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Chart */}
-          <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+          <div className={card('md', 'lg', 'default', 'lg')}>
             <h3 className="text-lg font-semibold text-neutral-900 mb-6">KDV Trendi</h3>
             <ResponsiveContainer width="100%" height={320}>
               <BarChart data={vatData}>
@@ -823,7 +824,7 @@ export default function AdvancedReporting() {
           </div>
 
           {/* VAT Table */}
-          <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+          <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
             <div className="p-4 border-b border-neutral-200">
               <h3 className="font-semibold text-neutral-900">KDV Beyanname Detayı</h3>
             </div>
