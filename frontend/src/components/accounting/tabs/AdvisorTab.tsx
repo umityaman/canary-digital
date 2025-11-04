@@ -5,6 +5,7 @@ import {
 import StatCard from '../../ui/StatCard'
 import ActionCard from '../../ui/ActionCard'
 import { toast } from 'react-hot-toast'
+import { card, button, badge, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
 
 const AdvisorTab: React.FC = () => {
   const stats = [
@@ -82,8 +83,8 @@ const AdvisorTab: React.FC = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Hızlı İşlemler</h2>
+      <div className={card('md', 'sm')}>
+        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>Hızlı İşlemler</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {actions.map((action, index) => (
@@ -100,8 +101,8 @@ const AdvisorTab: React.FC = () => {
       </div>
 
       {/* Client List */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Müşteri Listesi</h2>
+      <div className={card('md', 'sm')}>
+        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>Müşteri Listesi</h2>
         
         <div className="space-y-3">
           {clients.map((client, index) => (
@@ -115,19 +116,13 @@ const AdvisorTab: React.FC = () => {
               </div>
               
               <div className="flex items-center gap-3">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    client.status === 'active'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}
-                >
+                <span className={badge(client.status === 'active' ? 'success' : 'warning', 'sm')}>
                   {client.status === 'active' ? 'Aktif' : 'Beklemede'}
                 </span>
                 
                 <button
                   onClick={() => toast.success(`${client.name} detayları gösteriliyor...`)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  className={button('sm', 'primary')}
                 >
                   Detay
                 </button>
