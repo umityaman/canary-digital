@@ -16,9 +16,6 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Force rebuild by adding timestamp
-RUN echo "Build time: $(date)" > /tmp/buildtime.txt
-
 # Build argument for API URL
 ARG VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app
 ENV VITE_API_URL=${VITE_API_URL}
