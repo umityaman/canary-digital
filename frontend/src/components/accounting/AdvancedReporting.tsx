@@ -534,12 +534,12 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Charts - Responsive Layout */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {/* Revenue Pie */}
-            <div className={card('md', 'lg', 'default', 'lg')}>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gelir Dağılımı</h3>
+            <div className={card('md', 'sm', 'default', 'lg')}>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">Gelir Dağılımı</h3>
               <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={200}>
+                <ResponsiveContainer width="100%" height={180}>
                   <RechartsPie>
                     <Pie
                       data={revenueData}
@@ -562,10 +562,10 @@ export default function AdvancedReporting() {
             </div>
 
             {/* Expense Pie */}
-            <div className={card('md', 'lg', 'default', 'lg')}>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gider Dağılımı</h3>
+            <div className={card('md', 'sm', 'default', 'lg')}>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">Gider Dağılımı</h3>
               <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={200}>
+                <ResponsiveContainer width="100%" height={180}>
                   <RechartsPie>
                     <Pie
                       data={expenseData}
@@ -589,8 +589,8 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Detailed P&L */}
-          <div className={card('md', 'lg', 'default', 'lg')}>
-            <h3 className="text-lg font-semibold text-neutral-900 mb-6">Kar-Zarar Tablosu</h3>
+          <div className={card('md', 'sm', 'default', 'lg')}>
+            <h3 className="text-base font-semibold text-neutral-900 mb-4">Kar-Zarar Tablosu</h3>
             
             <div className="space-y-6">
               {/* Revenue Section */}
@@ -622,14 +622,14 @@ export default function AdvancedReporting() {
               </div>
 
               {/* Net Profit */}
-              <div className={`p-6 rounded-xl ${
+              <div className={`p-4 rounded-lg ${
                 netProfit >= 0 ? 'bg-blue-50 border border-blue-200' : 'bg-orange-50 border border-orange-200'
               }`}>
                 <div className="flex items-center justify-between">
-                  <h4 className={`text-xl font-bold ${netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'}`}>
+                  <h4 className={`text-lg font-bold ${netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'}`}>
                     NET {netProfit >= 0 ? 'KAR' : 'ZARAR'}
                   </h4>
-                  <span className={`text-3xl font-bold ${netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'}`}>
+                  <span className={`text-2xl font-bold ${netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'} truncate`}>
                     {formatCurrency(Math.abs(netProfit))}
                   </span>
                 </div>
@@ -664,13 +664,13 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Balance Sheet Table */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Assets */}
             <div className={card('md', 'none', 'default', 'lg')}>
-              <div className="p-4 border-b border-neutral-200 bg-blue-50">
-                <h3 className="font-semibold text-blue-900">AKTİFLER (Varlıklar)</h3>
+              <div className="p-3 border-b border-neutral-200 bg-blue-50">
+                <h3 className="text-sm font-semibold text-blue-900">AKTİFLER (Varlıklar)</h3>
               </div>
-              <div className="p-6 space-y-6">
+              <div className="p-4 space-y-4">
                 {assets.map((section, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-3 pb-2 border-b border-neutral-200">
@@ -699,10 +699,10 @@ export default function AdvancedReporting() {
 
             {/* Liabilities */}
             <div className={card('md', 'none', 'default', 'lg')}>
-              <div className="p-4 border-b border-neutral-200 bg-purple-50">
-                <h3 className="font-semibold text-purple-900">PASİFLER (Kaynaklar)</h3>
+              <div className="p-3 border-b border-neutral-200 bg-purple-50">
+                <h3 className="text-sm font-semibold text-purple-900">PASİFLER (Kaynaklar)</h3>
               </div>
-              <div className="p-6 space-y-6">
+              <div className="p-4 space-y-4">
                 {liabilities.map((section, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-3 pb-2 border-b border-neutral-200">
