@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react'
+﻿import { useState, useRef } from 'react'
 import { 
   Building2, Upload, Download, CheckCircle, AlertCircle, 
   Filter, Search, RefreshCw, Link2, XCircle, Eye, FileText,
   Calendar, DollarSign, TrendingUp, TrendingDown, Minus
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface BankTransaction {
   id: string
@@ -355,7 +356,7 @@ export default function BankReconciliation() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Banka Mutabakat</h2>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Banka Mutabakat</h2>
           <p className="text-sm text-neutral-600 mt-1">Banka ekstresi ile sistem kayıtlarını karşılaştır</p>
         </div>
         
@@ -390,7 +391,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <Building2 size={20} />
-            <span className="text-2xl font-bold">{stats.totalBankTransactions}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalBankTransactions}</span>
           </div>
           <div className="text-sm opacity-90">Banka İşlemi</div>
         </div>
@@ -399,7 +400,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <FileText size={20} />
-            <span className="text-2xl font-bold">{stats.totalSystemTransactions}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalSystemTransactions}</span>
           </div>
           <div className="text-sm opacity-90">Sistem Kaydı</div>
         </div>
@@ -408,7 +409,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={20} />
-            <span className="text-2xl font-bold">{stats.matchedCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.matchedCount}</span>
           </div>
           <div className="text-sm opacity-90">Eşleşti</div>
         </div>
@@ -417,7 +418,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
-            <span className="text-2xl font-bold">{stats.unmatchedBankCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.unmatchedBankCount}</span>
           </div>
           <div className="text-sm opacity-90">Banka (Eşleşmedi)</div>
         </div>
@@ -426,7 +427,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
-            <span className="text-2xl font-bold">{stats.unmatchedSystemCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.unmatchedSystemCount}</span>
           </div>
           <div className="text-sm opacity-90">Sistem (Eşleşmedi)</div>
         </div>
@@ -446,7 +447,7 @@ export default function BankReconciliation() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-2 flex gap-2">
+      <div className={cx(card('md', 'xs', 'default', 'lg'), 'flex gap-2')}>
         <button
           onClick={() => setActiveView('overview')}
           className={`flex-1 px-4 py-2 rounded-xl font-medium transition-colors ${
@@ -483,7 +484,7 @@ export default function BankReconciliation() {
       {activeView === 'overview' && (
         <div className="space-y-6">
           {/* Filters */}
-          <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+          <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
@@ -499,7 +500,7 @@ export default function BankReconciliation() {
               <select
                 value={selectedBankAccount}
                 onChange={(e) => setSelectedBankAccount(e.target.value)}
-                className="px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
               >
                 <option value="all">Tüm Hesaplar</option>
                 {bankAccounts.map(acc => (
@@ -510,7 +511,7 @@ export default function BankReconciliation() {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
               >
                 <option value="all">Tüm Durumlar</option>
                 <option value="matched">Eşleşenler</option>
@@ -531,7 +532,7 @@ export default function BankReconciliation() {
           {/* Transactions Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Bank Transactions */}
-            <div className="bg-white rounded-2xl border border-neutral-200">
+            <div className={card('md', 'none', 'default', 'lg')}>
               <div className="p-4 border-b border-neutral-200">
                 <h3 className="font-semibold text-neutral-900 flex items-center gap-2">
                   <Building2 size={20} />
@@ -597,7 +598,7 @@ export default function BankReconciliation() {
             </div>
 
             {/* System Transactions */}
-            <div className="bg-white rounded-2xl border border-neutral-200">
+            <div className={card('md', 'none', 'default', 'lg')}>
               <div className="p-4 border-b border-neutral-200">
                 <h3 className="font-semibold text-neutral-900 flex items-center gap-2">
                   <FileText size={20} />
@@ -656,7 +657,7 @@ export default function BankReconciliation() {
 
       {/* Match View */}
       {activeView === 'match' && (
-        <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+        <div className={card('md', 'lg', 'default', 'lg')}>
           <h3 className="text-lg font-semibold text-neutral-900 mb-4">Manuel Eşleştirme</h3>
           <p className="text-sm text-neutral-600 mb-6">
             Eşleşmeyen işlemleri manuel olarak birbirine bağlayın
@@ -668,7 +669,7 @@ export default function BankReconciliation() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex-1">
                     <div className="font-medium text-neutral-900">{bankTx.description}</div>
-                    <div className="text-sm text-neutral-600">{formatDate(bankTx.date)} • {formatCurrency(bankTx.amount)}</div>
+                    <div className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>{formatDate(bankTx.date)} • {formatCurrency(bankTx.amount)}</div>
                   </div>
                   <Link2 className="text-neutral-400" size={20} />
                 </div>
@@ -715,7 +716,7 @@ export default function BankReconciliation() {
       {/* Report View */}
       {activeView === 'report' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+          <div className={card('md', 'lg', 'default', 'lg')}>
             <h3 className="text-lg font-semibold text-neutral-900 mb-6">Mutabakat Raporu</h3>
             
             <div className="space-y-6">
