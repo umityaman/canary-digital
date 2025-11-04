@@ -11,6 +11,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react'
+import { card, button, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
@@ -197,11 +198,11 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+      <div className={card('md', 'sm', 'default', 'lg')}>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-neutral-900">GİB Entegrasyonu</h2>
-            <p className="text-sm text-neutral-600 mt-1">
+            <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>GİB Entegrasyonu</h2>
+            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
               e-Fatura ve e-Arşiv Fatura Yönetimi
             </p>
           </div>
@@ -209,7 +210,7 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
           <button
             onClick={testConnection}
             disabled={testingConnection}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className={cx(button('md', 'primary', 'md'), 'gap-2')}
           >
             {testingConnection ? (
               <Loader size={18} className="animate-spin" />
@@ -222,9 +223,11 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
 
         {/* Connection Status */}
         {connectionStatus !== null && (
-          <div className={`flex items-center gap-2 p-4 rounded-xl ${
+          <div className={cx(
+            'flex items-center gap-2',
+            card('sm', 'xs', 'subtle', 'md'),
             connectionStatus ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
-          }`}>
+          )}>
             {connectionStatus ? (
               <>
                 <CheckCircle size={20} />
@@ -246,11 +249,14 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
         <button
           onClick={generateXML}
           disabled={loading}
-          className="p-6 bg-white rounded-2xl border-2 border-neutral-200 hover:border-purple-500 hover:bg-purple-50 transition-all text-left group"
+          className={cx(
+            card('md', 'xs', 'default', 'lg'),
+            'border-2 hover:border-purple-500 hover:bg-purple-50 transition-all text-left group'
+          )}
         >
           <FileText className="text-purple-600 group-hover:scale-110 transition-transform" size={32} />
-          <h3 className="font-semibold text-neutral-900 mt-3">XML Oluştur</h3>
-          <p className="text-xs text-neutral-600 mt-1">
+          <h3 className={`${DESIGN_TOKENS.typography.body.md} font-semibold ${DESIGN_TOKENS.colors.text.primary} mt-3`}>XML Oluştur</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.xs} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
             UBL-TR 1.2 formatında fatura XML'i oluştur
           </p>
         </button>
@@ -259,11 +265,14 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
         <button
           onClick={() => sendToGIB('efatura')}
           disabled={loading}
-          className="p-6 bg-white rounded-2xl border-2 border-neutral-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-left group"
+          className={cx(
+            card('md', 'xs', 'default', 'lg'),
+            'border-2 hover:border-blue-500 hover:bg-blue-50 transition-all text-left group'
+          )}
         >
           <Send className="text-blue-600 group-hover:scale-110 transition-transform" size={32} />
-          <h3 className="font-semibold text-neutral-900 mt-3">e-Fatura Gönder</h3>
-          <p className="text-xs text-neutral-600 mt-1">
+          <h3 className={`${DESIGN_TOKENS.typography.body.md} font-semibold ${DESIGN_TOKENS.colors.text.primary} mt-3`}>e-Fatura Gönder</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.xs} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
             Ticari müşteriye e-Fatura gönder
           </p>
         </button>
@@ -272,11 +281,14 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
         <button
           onClick={() => sendToGIB('earsiv')}
           disabled={loading}
-          className="p-6 bg-white rounded-2xl border-2 border-neutral-200 hover:border-green-500 hover:bg-green-50 transition-all text-left group"
+          className={cx(
+            card('md', 'xs', 'default', 'lg'),
+            'border-2 hover:border-green-500 hover:bg-green-50 transition-all text-left group'
+          )}
         >
           <Send className="text-green-600 group-hover:scale-110 transition-transform" size={32} />
-          <h3 className="font-semibold text-neutral-900 mt-3">e-Arşiv Gönder</h3>
-          <p className="text-xs text-neutral-600 mt-1">
+          <h3 className={`${DESIGN_TOKENS.typography.body.md} font-semibold ${DESIGN_TOKENS.colors.text.primary} mt-3`}>e-Arşiv Gönder</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.xs} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
             Bireysel müşteriye e-Arşiv gönder
           </p>
         </button>
@@ -284,20 +296,20 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
 
       {/* XML Preview */}
       {showXMLPreview && generatedXML && (
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+        <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-neutral-900">XML Önizleme</h3>
+            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>XML Önizleme</h3>
             <button
               onClick={downloadXML}
-              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+              className={cx(button('md', 'dark', 'md'), 'gap-2')}
             >
               <Download size={18} />
               XML İndir
             </button>
           </div>
           
-          <div className="bg-neutral-50 rounded-xl p-4 max-h-96 overflow-auto">
-            <pre className="text-xs text-neutral-700 whitespace-pre-wrap font-mono">
+          <div className={cx(card('sm', 'none', 'subtle', 'md'), 'max-h-96 overflow-auto')}>
+            <pre className={`${DESIGN_TOKENS.typography.body.xs} ${DESIGN_TOKENS.colors.text.secondary} whitespace-pre-wrap font-mono`}>
               {generatedXML}
             </pre>
           </div>
@@ -306,8 +318,8 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
 
       {/* GIB Response */}
       {gibResponse && (
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">GİB Yanıtı</h3>
+        <div className={card('md', 'sm', 'default', 'lg')}>
+          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>GİB Yanıtı</h3>
           
           <div className="space-y-3">
             <div className="flex items-center gap-2">
@@ -325,15 +337,17 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
               <span className="font-mono text-xs text-neutral-700">{gibResponse.uuid}</span>
             </div>
             
-            <div className={`flex items-center gap-2 p-4 rounded-xl ${
+            <div className={cx(
+              'flex items-center gap-2',
+              card('sm', 'xs', 'subtle', 'md'),
               gibResponse.gibResponse.success ? 'bg-green-50' : 'bg-red-50'
-            }`}>
+            )}>
               {gibResponse.gibResponse.success ? (
                 <>
                   <CheckCircle className="text-green-600" size={20} />
                   <div>
                     <p className="font-medium text-green-900">Başarılı</p>
-                    <p className="text-sm text-green-700">{gibResponse.gibResponse.message}</p>
+                    <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-700`}>{gibResponse.gibResponse.message}</p>
                   </div>
                 </>
               ) : (
@@ -341,7 +355,7 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
                   <AlertCircle className="text-red-600" size={20} />
                   <div>
                     <p className="font-medium text-red-900">Başarısız</p>
-                    <p className="text-sm text-red-700">{gibResponse.gibResponse.message}</p>
+                    <p className={`${DESIGN_TOKENS.typography.body.sm} text-red-700`}>{gibResponse.gibResponse.message}</p>
                   </div>
                 </>
               )}
@@ -351,12 +365,12 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
       )}
 
       {/* Info Box */}
-      <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
+      <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-blue-50 border-blue-200')}>
         <div className="flex items-start gap-3">
           <AlertCircle className="text-blue-600 mt-1" size={20} />
           <div>
-            <h4 className="font-semibold text-blue-900 mb-2">Önemli Bilgiler</h4>
-            <ul className="space-y-1 text-sm text-blue-700">
+            <h4 className={`${DESIGN_TOKENS.typography.body.md} font-semibold text-blue-900 mb-2`}>Önemli Bilgiler</h4>
+            <ul className={`space-y-1 ${DESIGN_TOKENS.typography.body.sm} text-blue-700`}>
               <li>• <strong>e-Fatura:</strong> Vergi numarası olan ticari müşteriler için kullanılır</li>
               <li>• <strong>e-Arşiv:</strong> TC kimlik numarası olan bireysel müşteriler için kullanılır</li>
               <li>• <strong>Test Ortamı:</strong> Şu anda GİB test ortamına bağlanıyorsunuz</li>
@@ -370,9 +384,9 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
       {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 text-center">
+          <div className={cx(card('md', 'md', 'default', 'lg'), 'text-center')}>
             <Loader size={48} className="animate-spin text-blue-600 mx-auto mb-4" />
-            <p className="text-neutral-900 font-medium">İşlem yapılıyor...</p>
+            <p className={`${DESIGN_TOKENS.colors.text.primary} font-medium`}>İşlem yapılıyor...</p>
           </div>
         </div>
       )}
