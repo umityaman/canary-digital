@@ -444,49 +444,49 @@ export default function InventoryAccounting() {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+      {/* Stats Cards - Responsive Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
         {/* Total Transactions */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
-            <Package size={18} className="lg:w-5 lg:h-5" />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalTransactions}</span>
+            <Package size={20} />
+            <span className="text-xl lg:text-2xl font-bold">{stats.totalTransactions}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Toplam İşlem</div>
         </div>
 
         {/* Pending */}
-        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
+        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
-            <AlertCircle size={18} className="lg:w-5 lg:h-5" />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.pendingRecords}</span>
+            <AlertCircle size={20} />
+            <span className="text-xl lg:text-2xl font-bold">{stats.pendingRecords}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Bekliyor</div>
         </div>
 
         {/* Recorded */}
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
-            <CheckCircle size={18} className="lg:w-5 lg:h-5" />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.recordedCount}</span>
+            <CheckCircle size={20} />
+            <span className="text-xl lg:text-2xl font-bold">{stats.recordedCount}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Kaydedildi</div>
         </div>
 
         {/* Errors */}
-        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white">
+        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
-            <XCircle size={18} className="lg:w-5 lg:h-5" />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.errorCount}</span>
+            <XCircle size={20} />
+            <span className="text-xl lg:text-2xl font-bold">{stats.errorCount}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Hata</div>
         </div>
 
         {/* Total Value */}
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-white col-span-2 sm:col-span-1">
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 text-white col-span-2 md:col-span-3 lg:col-span-1">
           <div className="flex items-center justify-between mb-2">
-            <DollarSign size={18} className="lg:w-5 lg:h-5" />
-            <span className="text-base lg:text-lg font-bold break-all">{formatCurrency(stats.totalValue)}</span>
+            <DollarSign size={20} />
+            <span className="text-lg lg:text-xl font-bold truncate">{formatCurrency(stats.totalValue)}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Toplam Değer</div>
         </div>

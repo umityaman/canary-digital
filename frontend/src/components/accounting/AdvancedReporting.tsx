@@ -537,54 +537,58 @@ export default function AdvancedReporting() {
             </div>
           </div>
 
-          {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Charts - Responsive Layout */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Revenue Pie */}
             <div className={card('md', 'lg', 'default', 'lg')}>
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gelir Dağılımı</h3>
-              <ResponsiveContainer width="100%" height={260}>
-                <RechartsPie>
-                  <Pie
-                    data={revenueData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={(entry) => `${entry.category}: ${entry.percentage}%`}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="amount"
-                  >
-                    {revenueData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value: any) => formatCurrency(value)} />
-                </RechartsPie>
-              </ResponsiveContainer>
+              <div className="w-full overflow-hidden">
+                <ResponsiveContainer width="100%" height={260}>
+                  <RechartsPie>
+                    <Pie
+                      data={revenueData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={(entry) => `${entry.category}: ${entry.percentage}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="amount"
+                    >
+                      {revenueData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: any) => formatCurrency(value)} />
+                  </RechartsPie>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             {/* Expense Pie */}
             <div className={card('md', 'lg', 'default', 'lg')}>
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Gider Dağılımı</h3>
-              <ResponsiveContainer width="100%" height={260}>
-                <RechartsPie>
-                  <Pie
-                    data={expenseData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={(entry) => `${entry.percentage}%`}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="amount"
-                  >
-                    {expenseData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value: any) => formatCurrency(value)} />
-                </RechartsPie>
-              </ResponsiveContainer>
+              <div className="w-full overflow-hidden">
+                <ResponsiveContainer width="100%" height={260}>
+                  <RechartsPie>
+                    <Pie
+                      data={expenseData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={(entry) => `${entry.percentage}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="amount"
+                    >
+                      {expenseData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: any) => formatCurrency(value)} />
+                  </RechartsPie>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
 
@@ -803,24 +807,28 @@ export default function AdvancedReporting() {
             </div>
           </div>
 
-          {/* Chart */}
+          {/* Chart - Responsive */}
           <div className={card('md', 'lg', 'default', 'lg')}>
             <h3 className="text-lg font-semibold text-neutral-900 mb-6">KDV Trendi</h3>
-            <ResponsiveContainer width="100%" height={320}>
-              <BarChart data={vatData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
-                <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-                  formatter={(value: any) => formatCurrency(value)}
-                />
-                <Legend />
-                <Bar dataKey="outputVAT" name="Hesaplanan KDV" fill="#10b981" />
-                <Bar dataKey="inputVAT" name="İndirilecek KDV" fill="#3b82f6" />
-                <Bar dataKey="netVAT" name="Ödenecek KDV" fill="#f59e0b" />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="overflow-x-auto">
+              <div className="min-w-[600px]">
+                <ResponsiveContainer width="100%" height={320}>
+                  <BarChart data={vatData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
+                    <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                      formatter={(value: any) => formatCurrency(value)}
+                    />
+                    <Legend />
+                    <Bar dataKey="outputVAT" name="Hesaplanan KDV" fill="#10b981" />
+                    <Bar dataKey="inputVAT" name="İndirilecek KDV" fill="#3b82f6" />
+                    <Bar dataKey="netVAT" name="Ödenecek KDV" fill="#f59e0b" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
 
           {/* VAT Table */}
