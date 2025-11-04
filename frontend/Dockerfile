@@ -20,6 +20,9 @@ COPY . .
 ARG VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app
 ENV VITE_API_URL=${VITE_API_URL}
 
+# Cache buster - force rebuild on 2024-11-04 13:45
+RUN echo "Build timestamp: 2024-11-04-13:45:00"
+
 # Build the app
 RUN npm run build
 
