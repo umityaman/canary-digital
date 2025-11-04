@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { promissoryAPI } from '../../services/api';
 import { X } from 'lucide-react';
+import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 
 interface Props {
   open: boolean;
@@ -59,23 +60,23 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl">
-        <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-neutral-900">
+      <div className={cx(card('lg', 'none', 'default', 'xl'), 'w-full max-w-2xl max-h-[90vh] overflow-y-auto')}>
+        <div className={cx('sticky top-0 bg-white border-b border-neutral-200', DESIGN_TOKENS.spacing.padding.md, 'flex items-center justify-between')}>
+          <h3 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
             {initial?.id ? 'Senet Düzenle' : 'Yeni Senet'}
           </h3>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+            className={`p-2 hover:bg-neutral-100 rounded-lg transition-colors`}
           >
-            <X className="w-5 h-5 text-neutral-600" />
+            <X className={`w-5 h-5 ${DESIGN_TOKENS.colors.text.secondary}`} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className={cx(DESIGN_TOKENS.spacing.padding.md, 'space-y-6')}>
           {/* Senet Tipi */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Senet Tipi <span className="text-red-500">*</span>
             </label>
             <select
@@ -83,7 +84,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
               value={form.type}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={input('md', 'default', undefined, 'md')}
             >
               <option value="received">Alınan Senet</option>
               <option value="issued">Verilen Senet</option>
@@ -92,7 +93,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
 
           {/* Senet No */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Senet No <span className="text-red-500">*</span>
             </label>
             <input
@@ -102,14 +103,14 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
               onChange={handleChange}
               placeholder="SN-2025-001"
               required
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={input('md', 'default', undefined, 'md')}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Düzenleyen */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Düzenleyen <span className="text-red-500">*</span>
               </label>
               <input
@@ -119,13 +120,13 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
                 onChange={handleChange}
                 placeholder="Düzenleyen Adı"
                 required
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={input('md', 'default', undefined, 'md')}
               />
             </div>
 
             {/* Lehtar */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Lehtar <span className="text-red-500">*</span>
               </label>
               <input
@@ -135,14 +136,14 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
                 onChange={handleChange}
                 placeholder="Lehtar Adı"
                 required
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={input('md', 'default', undefined, 'md')}
               />
             </div>
           </div>
 
           {/* Tutar */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Tutar (TRY) <span className="text-red-500">*</span>
             </label>
             <input
@@ -154,14 +155,14 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
               placeholder="0.00"
               required
               min="0"
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={input('md', 'default', undefined, 'md')}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Düzenleme Tarihi */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Düzenleme Tarihi <span className="text-red-500">*</span>
               </label>
               <input
@@ -170,13 +171,13 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
                 value={form.issueDate}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={input('md', 'default', undefined, 'md')}
               />
             </div>
 
             {/* Vade Tarihi */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Vade Tarihi <span className="text-red-500">*</span>
               </label>
               <input
@@ -185,7 +186,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
                 value={form.dueDate}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={input('md', 'default', undefined, 'md')}
               />
             </div>
           </div>
@@ -193,7 +194,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Düzenleme Yeri */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Düzenleme Yeri
               </label>
               <input
@@ -202,13 +203,13 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
                 value={form.issuePlace}
                 onChange={handleChange}
                 placeholder="İstanbul"
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={input('md', 'default', undefined, 'md')}
               />
             </div>
 
             {/* Ödeme Yeri */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Ödeme Yeri
               </label>
               <input
@@ -217,21 +218,21 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
                 value={form.paymentPlace}
                 onChange={handleChange}
                 placeholder="İstanbul"
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={input('md', 'default', undefined, 'md')}
               />
             </div>
           </div>
 
           {/* Durum */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Durum
             </label>
             <select
               name="status"
               value={form.status}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={input('md', 'default', undefined, 'md')}
             >
               <option value="pending">Beklemede</option>
               <option value="paid">Ödendi</option>
@@ -242,7 +243,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
 
           {/* Notlar */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Notlar
             </label>
             <textarea
@@ -251,7 +252,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
               onChange={handleChange}
               placeholder="Senet ile ilgili notlar..."
               rows={4}
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className={input('md', 'default', undefined, 'md')}
             />
           </div>
 
@@ -261,14 +262,14 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="px-6 py-2 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 transition-colors font-medium"
+              className={button('md', 'outline', 'md')}
             >
               İptal
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className={button('md', 'primary', 'md')}
             >
               {saving ? 'Kaydediliyor...' : initial?.id ? 'Güncelle' : 'Kaydet'}
             </button>
