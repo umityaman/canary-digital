@@ -27,7 +27,6 @@ const Sidebar: React.FC = () => {
   const menuItems = [
     { to: '/', label: 'Anasayfa', icon: Home },
     { to: '/profile', label: 'Profil', icon: User },
-    { to: '/documents?tab=analytics', label: 'Raporlar & Analiz', icon: TrendingUp },
     { to: '/orders', label: 'Siparişler', icon: ShoppingCart },
     { to: '/inventory', label: 'Envanter', icon: Package },
     { to: '/inspection', label: 'Kalite Kontrol', icon: ClipboardCheck },
@@ -36,8 +35,6 @@ const Sidebar: React.FC = () => {
     { to: '/documents', label: 'Dökümanlar', icon: FileText },
     { to: '/suppliers', label: 'Tedarikçiler', icon: Truck },
     { to: '/accounting', label: 'Muhasebe', icon: Calculator },
-    { to: '/stock', label: 'Stok Yönetimi', icon: Package },
-    { to: '/cost-accounting', label: 'Maliyet Muhasebesi', icon: TrendingUp },
     { to: '/social', label: 'Sosyal Medya', icon: Share2 },
     { to: '/website', label: 'Web Sitesi', icon: Globe },
     { to: '/todo', label: 'Yapılacaklar', icon: CheckSquare },

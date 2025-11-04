@@ -31,8 +31,6 @@ const DeliveryNoteList = lazy(() => import('../components/delivery-notes/Deliver
 const CurrentAccountList = lazy(() => import('../components/current-accounts/CurrentAccountList'))
 const InventoryAccounting = lazy(() => import('../components/accounting/InventoryAccounting'))
 const AdvancedReporting = lazy(() => import('../components/accounting/AdvancedReporting'))
-const GIBIntegration = lazy(() => import('../components/accounting/GIBIntegration'))
-const CostAccountingTab = lazy(() => import('../components/accounting/CostAccountingTab'))
 const CategoryTagManagement = lazy(() => import('../components/accounting/CategoryTagManagement'))
 const CompanyInfo = lazy(() => import('../components/accounting/CompanyInfo'))
 const CashBankManagement = lazy(() => import('../components/accounting/CashBankManagement'))
@@ -44,7 +42,7 @@ const ToolsTab = lazy(() => import('../components/accounting/tabs/ToolsTab'))
 const AdvisorTab = lazy(() => import('../components/accounting/tabs/AdvisorTab'))
 const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab'))
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'gib' | 'cost-accounting' | 'categories' | 'company' | 'cash-bank' | 'integration' | 'reminders' | 'statements' | 'barcode' | 'notifications'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'categories' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications'
 
 interface AccountingStats {
   totalRevenue: number
@@ -1944,8 +1942,6 @@ export default function Accounting() {
             {activeTab === 'reconciliation' && <BankReconciliation />}
 
             {/* Cost Accounting Tab */}
-            {activeTab === 'cost-accounting' && <CostAccountingTab />}
-
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}
 
@@ -1957,36 +1953,6 @@ export default function Accounting() {
 
             {/* Cash & Bank Management Tab */}
             {activeTab === 'cash-bank' && <CashBankManagement />}
-
-            {/* GIB Integration Tab */}
-            {activeTab === 'gib' && <GIBIntegration />}
-
-            {/* Integration Tab */}
-            {activeTab === 'integration' && (
-              <div className="space-y-6">
-                <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>Entegrasyonlar</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {[
-                    { name: 'Banka Entegrasyonu', desc: 'Hesap hareketlerini otomatik aktar', icon: <Building2 size={24} /> },
-                    { name: 'Online Tahsilat', desc: 'Müşterilerden online ödeme al', icon: <CreditCard size={24} /> },
-                    { name: 'Stok Yönetimi', desc: 'Ürün hareketlerini izle', icon: <Package size={24} /> },
-                  ].map((item) => (
-                    <div key={item.name} className={cx(card('md', 'none', 'default', 'lg'), `hover:${DESIGN_TOKENS.shadow.lg}`)}>
-                      <div className="flex items-start space-x-4">
-                        <div className={`w-12 h-12 ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center flex-shrink-0`}>
-                          <div className={DESIGN_TOKENS.colors.text.secondary}>{item.icon}</div>
-                        </div>
-                        <div>
-                          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>{item.name}</h3>
-                          <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>{item.desc}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* Tools Tab */}
             {activeTab === 'tools' && (
