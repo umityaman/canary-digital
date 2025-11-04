@@ -7,6 +7,7 @@ import ActionCard from '../../ui/ActionCard'
 import StatCard from '../../ui/StatCard'
 import CategoryTagManagement from '../CategoryTagManagement'
 import { toast } from 'react-hot-toast'
+import { card, button, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
 
 type ToolView = 'list' | 'categories'
 
@@ -101,7 +102,7 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
         {/* Back Button */}
         <button
           onClick={() => setCurrentView('list')}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className={cx(button('sm', 'ghost'), 'gap-2')}
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Araçlara Dön</span>
@@ -130,8 +131,8 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       </div>
 
       {/* Tools Grid */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">İşletme Kolaylıkları</h2>
+      <div className={card('md', 'sm')}>
+        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>İşletme Kolaylıkları</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tools.map((tool, index) => (
@@ -149,9 +150,9 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       </div>
 
       {/* Tips Section */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">💡 İpucu</h3>
-        <p className="text-gray-700">
+      <div className={cx(card('md', 'sm', 'info'), 'bg-gradient-to-br from-blue-50 to-indigo-50')}>
+        <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-3`}>💡 İpucu</h3>
+        <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary}`}>
           Araçlar sekmesinden tüm muhasebe işlemlerinize hızlıca erişebilirsiniz. 
           Sık kullandığınız araçları favorilere ekleyerek daha verimli çalışabilirsiniz.
         </p>
