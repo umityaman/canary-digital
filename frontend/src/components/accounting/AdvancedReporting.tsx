@@ -1,4 +1,5 @@
-﻿import { useState, useEffect } from 'react'
+﻿// Advanced Reporting Component - Updated 2024-11-04
+import { useState, useEffect } from 'react'
 import { 
   TrendingUp, TrendingDown, DollarSign, Calendar, Download, 
   FileText, BarChart3, PieChart, Building2, CreditCard,
