@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
+import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface IncomeModalProps {
   open: boolean
@@ -108,29 +109,29 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-neutral-900">
+      <div className={cx(card('lg', 'none', 'default', 'xl'), 'w-full max-w-2xl max-h-[90vh] overflow-y-auto')}>
+        <div className={cx('sticky top-0 bg-white border-b border-neutral-200', DESIGN_TOKENS.spacing.padding.md, 'flex items-center justify-between')}>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
             {initial ? 'Gelir Düzenle' : 'Yeni Gelir'}
           </h2>
           <button
             onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-600 transition-colors"
+            className={`${DESIGN_TOKENS.colors.text.muted} hover:text-neutral-600 transition-colors`}
           >
             <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className={cx(DESIGN_TOKENS.spacing.padding.md, 'space-y-4')}>
           {/* Açıklama */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Açıklama *
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className={input('md', 'default', undefined, 'md')}
               rows={3}
               placeholder="Gelir açıklaması..."
               required
@@ -140,7 +141,7 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
           <div className="grid grid-cols-2 gap-4">
             {/* Tutar */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Tutar (₺) *
               </label>
               <input
@@ -149,7 +150,7 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
                 min="0"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) })}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
                 placeholder="0.00"
                 required
               />
@@ -157,13 +158,13 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
 
             {/* Kategori */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Kategori *
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
               >
                 {INCOME_CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
@@ -177,27 +178,27 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
           <div className="grid grid-cols-2 gap-4">
             {/* Tarih */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Tarih *
               </label>
               <input
                 type="date"
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
                 required
               />
             </div>
 
             {/* Ödeme Yöntemi */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Ödeme Yöntemi *
               </label>
               <select
                 value={formData.paymentMethod}
                 onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className={input('md', 'default', undefined, 'md')}
               >
                 {PAYMENT_METHODS.map((method) => (
                   <option key={method} value={method}>
@@ -210,13 +211,13 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
 
           {/* Durum */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Durum *
             </label>
             <select
               value={formData.status}
               onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className={input('md', 'default', undefined, 'md')}
             >
               {STATUSES.map((status) => (
                 <option key={status.value} value={status.value}>
@@ -228,13 +229,13 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
 
           {/* Notlar */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className={`block ${DESIGN_TOKENS.typography.body.sm} font-medium ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
               Notlar
             </label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className={input('md', 'default', undefined, 'md')}
               rows={2}
               placeholder="Ek notlar..."
             />
@@ -245,14 +246,14 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors"
+              className={button('md', 'outline', 'md')}
             >
               İptal
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors disabled:opacity-50"
+              className={button('md', 'dark', 'md')}
             >
               {loading ? 'Kaydediliyor...' : (initial ? 'Güncelle' : 'Kaydet')}
             </button>
