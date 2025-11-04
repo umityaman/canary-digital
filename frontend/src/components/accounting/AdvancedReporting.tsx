@@ -435,8 +435,8 @@ export default function AdvancedReporting() {
 
           {/* Chart */}
           <div className={card('md', 'sm', 'default', 'lg')}>
-            <h3 className="text-base lg:text-lg font-semibold text-neutral-900 mb-4 lg:mb-6">Aylık Nakit Akış Trendi</h3>
-            <ResponsiveContainer width="100%" height={240}>
+            <h3 className="text-base font-semibold text-neutral-900 mb-3">Aylık Nakit Akış Trendi</h3>
+            <ResponsiveContainer width="100%" height={200}>
               <LineChart data={cashflowData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
@@ -454,36 +454,36 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Detailed Table */}
-          <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
-            <div className="p-4 border-b border-neutral-200">
-              <h3 className="font-semibold text-neutral-900">Detaylı Nakit Akış Tablosu</h3>
+          <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
+            <div className="p-3 border-b border-neutral-200">
+              <h3 className="text-sm font-semibold text-neutral-900">Detaylı Nakit Akış Tablosu</h3>
             </div>
             <div className="overflow-x-auto">
               <div className="min-w-[900px]">
                 <table className="w-full">
                   <thead className="bg-neutral-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">İşletme +</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">İşletme -</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Yatırım +</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Yatırım -</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Finansman +</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Finansman -</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Net</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İşletme +</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İşletme -</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Yatırım +</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Yatırım -</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Finansman +</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Finansman -</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Net</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {cashflowData.map((row, index) => (
                       <tr key={index} className="hover:bg-neutral-50">
-                        <td className="px-6 py-4 text-sm font-medium text-neutral-900">{row.period}</td>
-                        <td className="px-6 py-4 text-sm text-right text-green-600 font-semibold">{formatCurrency(row.operatingInflow)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-red-600 font-semibold">{formatCurrency(row.operatingOutflow)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-green-600">{formatCurrency(row.investingInflow)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-red-600">{formatCurrency(row.investingOutflow)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-green-600">{formatCurrency(row.financingInflow)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-red-600">{formatCurrency(row.financingOutflow)}</td>
-                        <td className={`px-6 py-4 text-sm text-right font-bold ${row.netChange >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                        <td className="px-4 py-3 text-sm font-medium text-neutral-900">{row.period}</td>
+                        <td className="px-4 py-3 text-sm text-right text-green-600 font-semibold">{formatCurrency(row.operatingInflow)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-red-600 font-semibold">{formatCurrency(row.operatingOutflow)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-green-600">{formatCurrency(row.investingInflow)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-red-600">{formatCurrency(row.investingOutflow)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-green-600">{formatCurrency(row.financingInflow)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-red-600">{formatCurrency(row.financingOutflow)}</td>
+                        <td className={`px-4 py-3 text-sm text-right font-bold ${row.netChange >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                           {formatCurrency(row.netChange)}
                         </td>
                       </tr>
@@ -804,9 +804,9 @@ export default function AdvancedReporting() {
           </div>
 
           {/* Chart - Responsive */}
-          <div className={card('md', 'lg', 'default', 'lg')}>
-            <h3 className="text-lg font-semibold text-neutral-900 mb-6">KDV Trendi</h3>
-            <ResponsiveContainer width="100%" height={240}>
+          <div className={card('md', 'sm', 'default', 'lg')}>
+            <h3 className="text-base font-semibold text-neutral-900 mb-3">KDV Trendi</h3>
+            <ResponsiveContainer width="100%" height={200}>
               <BarChart data={vatData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                     <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
@@ -824,51 +824,51 @@ export default function AdvancedReporting() {
           </div>
 
           {/* VAT Table */}
-          <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
-            <div className="p-4 border-b border-neutral-200">
-              <h3 className="font-semibold text-neutral-900">KDV Beyanname Detayı</h3>
+          <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
+            <div className="p-3 border-b border-neutral-200">
+              <h3 className="text-sm font-semibold text-neutral-900">KDV Beyanname Detayı</h3>
             </div>
             <div className="overflow-x-auto">
               <div className="min-w-[800px]">
                 <table className="w-full">
                   <thead className="bg-neutral-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Satışlar</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Hesaplanan KDV</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Alışlar</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">İndirilecek KDV</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Ödenecek KDV</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Satışlar</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Hesaplanan KDV</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Alışlar</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İndirilecek KDV</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ödenecek KDV</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {vatData.map((row, index) => (
                       <tr key={index} className="hover:bg-neutral-50">
-                        <td className="px-6 py-4 text-sm font-medium text-neutral-900">{row.period}</td>
-                        <td className="px-6 py-4 text-sm text-right text-neutral-900">{formatCurrency(row.sales)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-green-600 font-semibold">{formatCurrency(row.outputVAT)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-neutral-900">{formatCurrency(row.purchases)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-blue-600 font-semibold">{formatCurrency(row.inputVAT)}</td>
-                        <td className="px-6 py-4 text-sm text-right text-orange-600 font-bold">{formatCurrency(row.netVAT)}</td>
+                        <td className="px-4 py-3 text-sm font-medium text-neutral-900">{row.period}</td>
+                        <td className="px-4 py-3 text-sm text-right text-neutral-900">{formatCurrency(row.sales)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-green-600 font-semibold">{formatCurrency(row.outputVAT)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-neutral-900">{formatCurrency(row.purchases)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-blue-600 font-semibold">{formatCurrency(row.inputVAT)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-orange-600 font-bold">{formatCurrency(row.netVAT)}</td>
                       </tr>
                     ))}
                   </tbody>
                   <tfoot className="bg-neutral-50 border-t-2 border-neutral-300">
                     <tr>
-                      <td className="px-6 py-4 text-sm font-bold text-neutral-900">TOPLAM</td>
-                      <td className="px-6 py-4 text-sm text-right font-bold text-neutral-900">
+                      <td className="px-4 py-3 text-sm font-bold text-neutral-900">TOPLAM</td>
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}
                       </td>
-                      <td className="px-6 py-4 text-sm text-right font-bold text-green-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-green-600">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.outputVAT, 0))}
                       </td>
-                      <td className="px-6 py-4 text-sm text-right font-bold text-neutral-900">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}
                       </td>
-                      <td className="px-6 py-4 text-sm text-right font-bold text-blue-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-blue-600">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))}
                       </td>
-                      <td className="px-6 py-4 text-sm text-right font-bold text-orange-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-orange-600">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.netVAT, 0))}
                       </td>
                     </tr>
