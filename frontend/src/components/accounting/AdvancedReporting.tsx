@@ -433,24 +433,48 @@ export default function AdvancedReporting() {
             </div>
           </div>
 
-          {/* Chart */}
-          <div className={card('md', 'sm', 'default', 'lg')}>
-            <h3 className="text-base font-semibold text-neutral-900 mb-3">Aylık Nakit Akış Trendi</h3>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={cashflowData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
-                <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-                  formatter={(value: any) => formatCurrency(value)}
-                />
-                <Legend />
-                <Line type="monotone" dataKey="operatingInflow" name="Operasyonel Giriş" stroke="#10b981" strokeWidth={2} />
-                <Line type="monotone" dataKey="operatingOutflow" name="Operasyonel Çıkış" stroke="#ef4444" strokeWidth={2} />
-                <Line type="monotone" dataKey="netChange" name="Net Değişim" stroke="#3b82f6" strokeWidth={3} />
-              </LineChart>
-            </ResponsiveContainer>
+          {/* Charts - Responsive Layout */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            {/* Inflow/Outflow Chart */}
+            <div className={card('md', 'sm', 'default', 'lg')}>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">Giriş/Çıkış Trendi</h3>
+              <div className="w-full overflow-hidden">
+                <ResponsiveContainer width="100%" height={180}>
+                  <LineChart data={cashflowData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
+                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                      formatter={(value: any) => formatCurrency(value)}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
+                    <Line type="monotone" dataKey="operatingInflow" name="Giriş" stroke="#10b981" strokeWidth={2} />
+                    <Line type="monotone" dataKey="operatingOutflow" name="Çıkış" stroke="#ef4444" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Net Change Chart */}
+            <div className={card('md', 'sm', 'default', 'lg')}>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">Net Değişim Trendi</h3>
+              <div className="w-full overflow-hidden">
+                <ResponsiveContainer width="100%" height={180}>
+                  <LineChart data={cashflowData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
+                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                      formatter={(value: any) => formatCurrency(value)}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
+                    <Line type="monotone" dataKey="netChange" name="Net Nakit" stroke="#3b82f6" strokeWidth={3} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
 
           {/* Detailed Table */}
@@ -803,24 +827,48 @@ export default function AdvancedReporting() {
             </div>
           </div>
 
-          {/* Chart - Responsive */}
-          <div className={card('md', 'sm', 'default', 'lg')}>
-            <h3 className="text-base font-semibold text-neutral-900 mb-3">KDV Trendi</h3>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={vatData}>
+          {/* Charts - Responsive Layout */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            {/* Output vs Input VAT */}
+            <div className={card('md', 'sm', 'default', 'lg')}>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">KDV Giriş/Çıkış</h3>
+              <div className="w-full overflow-hidden">
+                <ResponsiveContainer width="100%" height={180}>
+                  <BarChart data={vatData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '12px' }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
+                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
+                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
                     <Tooltip 
                       contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
                       formatter={(value: any) => formatCurrency(value)}
                     />
-                    <Legend />
-                    <Bar dataKey="outputVAT" name="Hesaplanan KDV" fill="#10b981" />
-                    <Bar dataKey="inputVAT" name="İndirilecek KDV" fill="#3b82f6" />
-                    <Bar dataKey="netVAT" name="Ödenecek KDV" fill="#f59e0b" />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
+                    <Bar dataKey="outputVAT" name="Hesaplanan" fill="#10b981" />
+                    <Bar dataKey="inputVAT" name="İndirilecek" fill="#3b82f6" />
                   </BarChart>
                 </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Net VAT */}
+            <div className={card('md', 'sm', 'default', 'lg')}>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">Ödenecek KDV</h3>
+              <div className="w-full overflow-hidden">
+                <ResponsiveContainer width="100%" height={180}>
+                  <BarChart data={vatData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
+                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                      formatter={(value: any) => formatCurrency(value)}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
+                    <Bar dataKey="netVAT" name="Net KDV" fill="#f59e0b" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
 
           {/* VAT Table */}
