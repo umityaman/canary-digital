@@ -1120,14 +1120,24 @@ export default function Accounting() {
               <ErrorBoundary fallbackTitle="Fatura Listesi Hatası" fallbackMessage="Fatura listesi yüklenirken bir sorun oluştu.">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Fatura Listesi</h2>
-                  <button 
-                    onClick={() => navigate('/accounting/invoice/new')}
-                    className={cx(button('md', 'primary', 'md'), 'gap-2')}
-                  >
-                    <FileText size={18} />
-                    Yeni Fatura
-                  </button>
+                    <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Fatura Yönetimi</h2>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => setActiveTab('ebelge')}
+                        className={cx(button('md', 'outline', 'md'), 'gap-2')}
+                        title="E-Fatura oluştur ve gönder"
+                      >
+                        <Globe size={18} />
+                        E-Belge
+                      </button>
+                      <button 
+                        onClick={() => navigate('/accounting/invoice/new')}
+                        className={cx(button('md', 'primary', 'md'), 'gap-2')}
+                      >
+                        <FileText size={18} />
+                        Yeni Fatura
+                      </button>
+                    </div>
                 </div>
 
                 {/* Filters */}
@@ -1933,7 +1943,27 @@ export default function Accounting() {
             )}
 
             {/* e-Belge Tab */}
-            {activeTab === 'ebelge' && <EInvoiceList />}
+            {activeTab === 'ebelge' && (
+              <div className="space-y-4">
+                {/* Info Banner */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+                  <Globe className="text-blue-600 flex-shrink-0 mt-0.5" size={20} />
+                  <div className="flex-1">
+                    <p className="text-sm text-blue-900 font-medium">E-Belge ve GIB Entegrasyonu</p>
+                    <p className="text-xs text-blue-700 mt-1">
+                      Buradan e-fatura ve e-arşiv fatura oluşturabilir, GIB'e gönderebilir ve resmileştirebilirsiniz.
+                      <button 
+                        onClick={() => setActiveTab('invoice')}
+                        className="ml-2 text-blue-600 hover:text-blue-800 font-medium underline"
+                      >
+                        Normal faturalara dön →
+                      </button>
+                    </p>
+                  </div>
+                </div>
+                <EInvoiceList />
+              </div>
+            )}
 
             {/* Delivery Note Tab */}
             {activeTab === 'delivery' && <DeliveryNoteList />}
