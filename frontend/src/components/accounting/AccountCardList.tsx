@@ -6,6 +6,7 @@ import {
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
 import AccountCardDetail from './AccountCardDetail'
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface AccountCard {
   customerId: number
@@ -123,12 +124,12 @@ export default function AccountCardList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Cari Hesap Kartları</h2>
-          <p className="text-sm text-neutral-600 mt-1">Müşteri bazlı alacak-borç takibi</p>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Cari Hesap Kartları</h2>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>Müşteri bazlı alacak-borç takibi</p>
         </div>
         <button
           onClick={exportToExcel}
-          className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+          className={cx(button('md', 'dark', 'md'), 'gap-2')}
         >
           <Download size={18} />
           <span className="hidden sm:inline">Dışa Aktar</span>
@@ -137,49 +138,49 @@ export default function AccountCardList() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-5 border border-blue-200">
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
               <Users className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-blue-900 mb-1">{accounts.length}</h3>
-          <p className="text-sm text-blue-700">Toplam Cari</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-blue-900 mb-1`}>{accounts.length}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-blue-700`}>Toplam Cari</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-5 border border-green-200">
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
               <TrendingUp className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-green-900 mb-1">{formatCurrency(calculateTotalDebt())}</h3>
-          <p className="text-sm text-green-700">Toplam Alacak</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-green-900 mb-1`}>{formatCurrency(calculateTotalDebt())}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-700`}>Toplam Alacak</p>
         </div>
 
-        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-5 border border-red-200">
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
               <AlertCircle className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-red-900 mb-1">{formatCurrency(calculateOverdueDebt())}</h3>
-          <p className="text-sm text-red-700">Vadesi Geçmiş</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-red-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-red-700`}>Vadesi Geçmiş</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-5 border border-orange-200">
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
               <Clock className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-orange-900 mb-1">{getOverdueAccountsCount()}</h3>
-          <p className="text-sm text-orange-700">Gecikmiş Hesap</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-orange-900 mb-1`}>{getOverdueAccountsCount()}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-orange-700`}>Gecikmiş Hesap</p>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+      <div className={card('md', 'sm', 'default', 'lg')}>
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
@@ -190,7 +191,7 @@ export default function AccountCardList() {
                 placeholder="Müşteri adı, email veya telefon ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
+                className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
               />
             </div>
           </div>
@@ -199,7 +200,7 @@ export default function AccountCardList() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value as any)}
-            className="px-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
+            className={input('md', 'default', undefined, 'md')}
           >
             <option value="all">Tüm Hesaplar</option>
             <option value="active">Aktif Borçlar</option>
@@ -210,7 +211,7 @@ export default function AccountCardList() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
-            className="px-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
+            className={input('md', 'default', undefined, 'md')}
           >
             <option value="debt">Borca Göre</option>
             <option value="overdue">Vadeye Göre</option>
@@ -220,7 +221,7 @@ export default function AccountCardList() {
       </div>
 
       {/* Account List */}
-      <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+      <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
         {loading ? (
           <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : filteredAccounts.length === 0 ? (
@@ -336,3 +337,4 @@ export default function AccountCardList() {
     </div>
   )
 }
+
