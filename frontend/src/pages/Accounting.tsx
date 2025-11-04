@@ -189,6 +189,9 @@ export default function Accounting() {
 
   // Receivables sub-tab state
   const [receivablesSubTab, setReceivablesSubTab] = useState<'checks' | 'promissory' | 'aging'>('checks')
+  
+  // Cari sub-tab state
+  const [cariSubTab, setCariSubTab] = useState<'list' | 'cards'>('list')
 
   // Navigation and search params
   const navigate = useNavigate()
@@ -924,8 +927,40 @@ export default function Accounting() {
                 {/* Expense Tab */}
                 {activeTab === 'expense' && <ExpenseTab />}
 
-            {/* Cari (Account Cards) Tab */}
-            {activeTab === 'cari' && <CurrentAccountList />}
+            {/* Cari (Current Accounts) Tab with Sub-tabs */}
+            {activeTab === 'cari' && (
+              <div className="space-y-6">
+                {/* Sub-tabs for List and Cards */}
+                <div className={`flex gap-2 ${DESIGN_TOKENS.colors.border.light} border-b`}>
+                  <button
+                    onClick={() => setCariSubTab('list')}
+                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                      cariSubTab === 'list'
+                        ? `border-b-2 ${DESIGN_TOKENS.colors.interactive.default} ${DESIGN_TOKENS.colors.text.primary}`
+                        : `${DESIGN_TOKENS.colors.text.tertiary} hover:${DESIGN_TOKENS.colors.text.primary}`
+                    }`}
+                  >
+                    Cari Hesaplar
+                  </button>
+                  <button
+                    onClick={() => setCariSubTab('cards')}
+                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                      cariSubTab === 'cards'
+                        ? `border-b-2 ${DESIGN_TOKENS.colors.interactive.default} ${DESIGN_TOKENS.colors.text.primary}`
+                        : `${DESIGN_TOKENS.colors.text.tertiary} hover:${DESIGN_TOKENS.colors.text.primary}`
+                    }`}
+                  >
+                    Hesap Kartları
+                  </button>
+                </div>
+
+                {/* Current Account List */}
+                {cariSubTab === 'list' && <CurrentAccountList />}
+
+                {/* Account Cards */}
+                {cariSubTab === 'cards' && <AccountCardList />}
+              </div>
+            )}
 
             {/* Reports Tab - Advanced Reporting */}
             {activeTab === 'reports' && <AdvancedReporting />}
