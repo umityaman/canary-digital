@@ -68,10 +68,18 @@ export default function AccountingDashboard() {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
       
       // Get token from localStorage
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token') || localStorage.getItem('token')
       
       if (!token) {
-        toast.error('Oturum bilgisi bulunamadı')
+        console.warn('⚠️ No auth token found, showing empty dashboard')
+        // Don't show error, just set empty data
+        setStats({
+          currentMonth: { income: 0, expense: 0, profit: 0 },
+          previousMonth: { income: 0, expense: 0, profit: 0 },
+          trends: { incomeChange: 0, expenseChange: 0, profitChange: 0 },
+          monthlyData: [],
+          categoryBreakdown: { income: [], expense: [] }
+        })
         setLoading(false)
         setRefreshing(false)
         return
