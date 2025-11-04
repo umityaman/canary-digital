@@ -87,7 +87,8 @@ jobs:
             --cpu=1 \
             --port=8080 \
             --timeout=900 \
-            --set-build-env-vars="VITE_API_URL=${{ env.BACKEND_URL }}"
+            --set-build-env-vars="VITE_API_URL=${{ env.BACKEND_URL }}" \
+            --clear-base-image
 
       - name: Get Service URL
         id: get-url
