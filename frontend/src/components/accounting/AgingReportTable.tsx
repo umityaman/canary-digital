@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   Download,
   FileText,
@@ -9,6 +9,7 @@ import {
   Clock,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 
 interface CustomerAging {
   customerId: number;
@@ -112,10 +113,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
 
   if (!data || !data.customers || data.customers.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-neutral-200 p-12 text-center">
+      <div className={card('md', 'xl', 'default', 'lg')}>
         <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-lg font-medium text-gray-900 mb-2">Yaşlandırma Verisi Bulunamadı</p>
-        <p className="text-sm text-gray-500">
+        <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>Yaşlandırma Verisi Bulunamadı</p>
+        <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
           Müşterilerinizin borç durumunu görmek için fatura ve tahsilat işlemlerini kaydedin.
         </p>
       </div>
@@ -133,58 +134,58 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
             <TrendingUp className="w-8 h-8 opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>
           </div>
-          <p className="text-2xl font-bold mb-1">{formatCurrency(data.summary.totalDebt)}</p>
-          <p className="text-sm opacity-90">{data.summary.customerCount} Müşteri</p>
+          <p className={`${DESIGN_TOKENS.typography.stat.md} mb-1`}>{formatCurrency(data.summary.totalDebt)}</p>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} opacity-90`}>{data.summary.customerCount} Müşteri</p>
         </div>
 
-        <div className="bg-white border-2 border-green-200 rounded-lg p-6">
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-green-200')}>
           <div className="flex items-center justify-between mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
             <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">0-30 Gün</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">
+          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalCurrent)}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             {formatPercentage(data.summary.totalCurrent, data.summary.totalDebt)}
           </p>
         </div>
 
-        <div className="bg-white border-2 border-yellow-200 rounded-lg p-6">
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-yellow-200')}>
           <div className="flex items-center justify-between mb-4">
             <Clock className="w-8 h-8 text-yellow-600" />
             <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full">31-60 Gün</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">
+          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays30)}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             {formatPercentage(data.summary.totalDays30, data.summary.totalDebt)}
           </p>
         </div>
 
-        <div className="bg-white border-2 border-orange-200 rounded-lg p-6">
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-orange-200')}>
           <div className="flex items-center justify-between mb-4">
             <AlertCircle className="w-8 h-8 text-orange-600" />
             <span className="text-xs bg-orange-50 text-orange-700 px-2 py-1 rounded-full">61-90 Gün</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">
+          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays60)}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             {formatPercentage(data.summary.totalDays60, data.summary.totalDebt)}
           </p>
         </div>
 
-        <div className="bg-white border-2 border-red-200 rounded-lg p-6">
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-red-200')}>
           <div className="flex items-center justify-between mb-4">
             <TrendingDown className="w-8 h-8 text-red-600" />
             <span className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded-full">90+ Gün</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">
+          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays90Plus)}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             {formatPercentage(data.summary.totalDays90Plus, data.summary.totalDebt)}
           </p>
         </div>
@@ -194,14 +195,14 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
       <div className="flex items-center justify-end gap-3">
         <button
           onClick={handleExportExcel}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          className={cx(button('md', 'primary', 'md'), 'gap-2 bg-green-600 hover:bg-green-700')}
         >
           <Download className="w-4 h-4" />
           Excel İndir
         </button>
         <button
           onClick={handleExportPDF}
-          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          className={cx(button('md', 'primary', 'md'), 'gap-2 bg-red-600 hover:bg-red-700')}
         >
           <FileText className="w-4 h-4" />
           PDF İndir
@@ -209,7 +210,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+      <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-neutral-50 border-b border-neutral-200">
@@ -295,7 +296,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div>
-                          <p className="font-medium text-gray-900">{customer.customerName}</p>
+                          <p className={`font-medium ${DESIGN_TOKENS.colors.text.primary}`}>{customer.customerName}</p>
                           {customer.overdueAmount > 0 && (
                             <p className="text-xs text-red-600 flex items-center gap-1">
                               <AlertCircle className="w-3 h-3" />
@@ -306,7 +307,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <p className="font-bold text-gray-900">{formatCurrency(customer.totalDebt)}</p>
+                      <p className={`font-bold ${DESIGN_TOKENS.colors.text.primary}`}>{formatCurrency(customer.totalDebt)}</p>
                       <p className="text-xs text-gray-500">{customer.currency}</p>
                     </td>
                     <td className="px-6 py-4 text-right">
