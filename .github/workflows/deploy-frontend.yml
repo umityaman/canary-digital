@@ -98,8 +98,9 @@ jobs:
             --project ${{ env.PROJECT_ID }} \
             --async
           
-          # Wait for build to complete
-          sleep 30
+          # Wait for build to complete (typically takes 2-3 minutes)
+          echo "Waiting for build to complete..."
+          sleep 180
           
           # Verify build succeeded
           BUILD_STATUS=$(gcloud builds list --limit=1 --filter="images:$IMAGE_TAG" --format="value(status)" --project ${{ env.PROJECT_ID }})

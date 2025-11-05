@@ -22,15 +22,31 @@ $IMAGE_TAG = "$IMAGE_NAME`:$TIMESTAMP"
 Write-Host "Building Docker image..." -ForegroundColor Yellow
 cd frontend
 
+# Create temporary .dockerignore for production build (needs dist)
+$prodDockerIgnore = @"
+node_modules
+.git
+.github
+.vscode
+.DS_Store
+*.md
+.env.local
+.env.development
+coverage
+build.log
+"@
+Set-Content -Path ".dockerignore" -Value $prodDockerIgnore
+
 # Rename Dockerfile.production to Dockerfile temporarily
 Copy-Item Dockerfile Dockerfile.backup -Force
 Copy-Item Dockerfile.production Dockerfile -Force
 
 gcloud builds submit --tag $IMAGE_TAG --project $PROJECT_ID
 
-# Restore original Dockerfile
+# Restore original Dockerfile and .dockerignore
 Copy-Item Dockerfile.backup Dockerfile -Force
 Remove-Item Dockerfile.backup
+git checkout .dockerignore
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Docker build failed!" -ForegroundColor Red
