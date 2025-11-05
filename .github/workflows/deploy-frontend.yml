@@ -87,9 +87,9 @@ jobs:
           IMAGE_TAG="gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
           
           # Build using our Dockerfile which includes cache cleaning
+          # Note: VITE_API_URL is set as default ARG in Dockerfile
           gcloud builds submit \
             --tag "$IMAGE_TAG" \
-            --build-arg VITE_API_URL=${{ env.BACKEND_URL }} \
             --project ${{ env.PROJECT_ID }}
           
           echo "Image built: $IMAGE_TAG"
