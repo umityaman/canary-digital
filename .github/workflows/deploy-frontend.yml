@@ -63,14 +63,6 @@ jobs:
           rm -rf dist
           echo "Cache cleaned"
 
-      - name: Build Frontend
-        run: |
-          cd frontend
-          echo "Building frontend with Vite..."
-          npm run build
-          echo "Build complete"
-          ls -lh dist/assets/*.js | head -5
-
       - name: Prepare .dockerignore
         run: |
           cd frontend
@@ -91,23 +83,24 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           cd frontend
-          IMAGE_NAME="gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}"
-          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          echo "Building Docker image directly (not using buildpacks)..."
+          IMAGE_TAG="gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
           
-          echo "Building Docker image with pre-built dist..."
+          # Build using our Dockerfile which includes cache cleaning
           gcloud builds submit \
-            --tag "$IMAGE_NAME:$TIMESTAMP" \
-            --tag "$IMAGE_NAME:latest" \
-            --file Dockerfile.production \
+            --tag "$IMAGE_TAG" \
+            --build-arg VITE_API_URL=${{ env.BACKEND_URL }} \
             --project ${{ env.PROJECT_ID }}
           
-          echo "IMAGE_TAG=$IMAGE_NAME:$TIMESTAMP" >> $GITHUB_ENV
+          echo "Image built: $IMAGE_TAG"
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+        id: build
 
       - name: Deploy to Cloud Run
         run: |
-          echo "Deploying to Cloud Run..."
+          echo "Deploying Docker image to Cloud Run..."
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image ${{ env.IMAGE_TAG }} \
+            --image=${{ steps.build.outputs.image_tag }} \
             --region=${{ env.REGION }} \
             --platform=managed \
             --allow-unauthenticated \
