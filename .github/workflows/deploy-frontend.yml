@@ -55,30 +55,16 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Clean Build Cache
+      - name: Verify .dockerignore exists
         run: |
           cd frontend
-          echo "Cleaning Vite cache and build artifacts..."
-          rm -rf node_modules/.vite
-          rm -rf dist
-          echo "Cache cleaned"
-
-      - name: Prepare .dockerignore
-        run: |
-          cd frontend
-          cat > .dockerignore << 'EOF'
-          node_modules
-          .git
-          .github
-          .vscode
-          .DS_Store
-          *.md
-          .env.local
-          .env.development
-          coverage
-          build.log
-          EOF
-          echo "Created .dockerignore"
+          if [ ! -f .dockerignore ]; then
+            echo "ERROR: .dockerignore not found!"
+            exit 1
+          fi
+          echo ".dockerignore contents:"
+          cat .dockerignore
+          echo "Verified .dockerignore exists and excludes dist"
 
       - name: Build and Push Docker Image
         run: |
