@@ -405,7 +405,7 @@ export default function AdvancedReporting() {
                 <ArrowUpCircle size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam Giriş</span>
               </div>
-              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
                 {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow + d.investingInflow + d.financingInflow, 0))}
               </div>
               <div className="text-xs opacity-90">Tüm Dönem</div>
@@ -416,7 +416,7 @@ export default function AdvancedReporting() {
                 <ArrowDownCircle size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam Çıkış</span>
               </div>
-              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
                 {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingOutflow + d.investingOutflow + d.financingOutflow, 0))}
               </div>
               <div className="text-xs opacity-90">Tüm Dönem</div>
@@ -427,7 +427,7 @@ export default function AdvancedReporting() {
                 <TrendingUp size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Net Değişim</span>
               </div>
-              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
                 {formatCurrency(cashflowData.reduce((sum, d) => sum + d.netChange, 0))}
               </div>
               <div className="text-xs opacity-90">Tüm Dönem</div>
@@ -799,7 +799,7 @@ export default function AdvancedReporting() {
                 <TrendingUp size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Hesaplanan</span>
               </div>
-              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
                 {formatCurrency(vatData.reduce((sum, d) => sum + d.outputVAT, 0))}
               </div>
               <div className="text-xs opacity-90">Çıkan KDV</div>
@@ -810,7 +810,7 @@ export default function AdvancedReporting() {
                 <TrendingDown size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">İndirilecek</span>
               </div>
-              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
                 {formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))}
               </div>
               <div className="text-xs opacity-90">Giren KDV</div>
@@ -821,7 +821,7 @@ export default function AdvancedReporting() {
                 <DollarSign size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Ödenecek</span>
               </div>
-              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
                 {formatCurrency(vatData.reduce((sum, d) => sum + d.netVAT, 0))}
               </div>
               <div className="text-xs opacity-90">Net KDV</div>
