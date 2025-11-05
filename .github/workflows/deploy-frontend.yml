@@ -88,9 +88,25 @@ jobs:
           
           # Build using our Dockerfile which includes cache cleaning
           # Note: VITE_API_URL is set as default ARG in Dockerfile
+          # Use --suppress-logs to avoid VPC-SC log streaming errors
           gcloud builds submit \
             --tag "$IMAGE_TAG" \
-            --project ${{ env.PROJECT_ID }}
+            --project ${{ env.PROJECT_ID }} \
+            --suppress-logs || \
+          gcloud builds submit \
+            --tag "$IMAGE_TAG" \
+            --project ${{ env.PROJECT_ID }} \
+            --async
+          
+          # Wait for build to complete
+          sleep 30
+          
+          # Verify build succeeded
+          BUILD_STATUS=$(gcloud builds list --limit=1 --filter="images:$IMAGE_TAG" --format="value(status)" --project ${{ env.PROJECT_ID }})
+          if [ "$BUILD_STATUS" != "SUCCESS" ]; then
+            echo "Build failed with status: $BUILD_STATUS"
+            exit 1
+          fi
           
           echo "Image built: $IMAGE_TAG"
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
