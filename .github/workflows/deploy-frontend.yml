@@ -63,6 +63,14 @@ jobs:
           rm -rf dist
           echo "Cache cleaned"
 
+      - name: Build Frontend
+        run: |
+          cd frontend
+          echo "Building frontend with Vite..."
+          npm run build
+          echo "Build complete"
+          ls -lh dist/assets/*.js | head -5
+
       - name: Prepare .dockerignore
         run: |
           cd frontend
@@ -80,12 +88,26 @@ jobs:
           EOF
           echo "Created .dockerignore"
 
-      - name: Deploy to Cloud Run
+      - name: Build and Push Docker Image
         run: |
           cd frontend
-          echo "Deploying to Cloud Run with build args..."
+          IMAGE_NAME="gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}"
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          
+          echo "Building Docker image with pre-built dist..."
+          gcloud builds submit \
+            --tag "$IMAGE_NAME:$TIMESTAMP" \
+            --tag "$IMAGE_NAME:latest" \
+            --file Dockerfile.production \
+            --project ${{ env.PROJECT_ID }}
+          
+          echo "IMAGE_TAG=$IMAGE_NAME:$TIMESTAMP" >> $GITHUB_ENV
+
+      - name: Deploy to Cloud Run
+        run: |
+          echo "Deploying to Cloud Run..."
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --source . \
+            --image ${{ env.IMAGE_TAG }} \
             --region=${{ env.REGION }} \
             --platform=managed \
             --allow-unauthenticated \
@@ -94,9 +116,7 @@ jobs:
             --memory=512Mi \
             --cpu=1 \
             --port=8080 \
-            --timeout=900 \
-            --set-build-env-vars="VITE_API_URL=${{ env.BACKEND_URL }}" \
-            --clear-base-image
+            --timeout=300
 
       - name: Get Service URL
         id: get-url
