@@ -55,6 +55,14 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
+      - name: Clean Build Cache
+        run: |
+          cd frontend
+          echo "Cleaning Vite cache and build artifacts..."
+          rm -rf node_modules/.vite
+          rm -rf dist
+          echo "Cache cleaned"
+
       - name: Prepare .dockerignore
         run: |
           cd frontend

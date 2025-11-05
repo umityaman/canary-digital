@@ -20,10 +20,14 @@ COPY . .
 ARG VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app
 ENV VITE_API_URL=${VITE_API_URL}
 
-# Cache buster - force rebuild on 2024-11-04 13:45
-RUN echo "Build timestamp: 2024-11-04-13:45:00"
+# Force clean build - no cache
+ENV VITE_FORCE_OPTIMIZE=true
+RUN rm -rf node_modules/.vite dist
 
-# Build the app
+# Cache buster - force rebuild on 2025-11-05 11:50
+RUN echo "Build timestamp: 2025-11-05-11:50:00"
+
+# Build the app with fresh cache
 RUN npm run build
 
 # Production stage with nginx
