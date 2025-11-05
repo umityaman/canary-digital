@@ -53,7 +53,7 @@ router.get('/dashboard/stats', authenticateToken, async (req, res) => {
 router.get('/dashboard/trends', authenticateToken, async (req, res) => {
   try {
     const { months = 6 } = req.query;
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const trends = await accountingService.getDashboardTrends(
       companyId,
@@ -82,7 +82,7 @@ router.get('/dashboard/trends', authenticateToken, async (req, res) => {
 router.get('/dashboard/categories', authenticateToken, async (req, res) => {
   try {
     const { type, startDate, endDate } = req.query;
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     if (!type || (type !== 'income' && type !== 'expense')) {
       return res.status(400).json({
@@ -197,7 +197,7 @@ router.get('/accounts', authenticateToken, async (req, res) => {
       sortOrder = 'desc'
     } = req.query;
 
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const accounts = await accountingService.getAccountsList({
       companyId,
@@ -364,7 +364,7 @@ router.get('/cash', authenticateToken, async (req, res) => {
 router.get('/reports/cashflow', authenticateToken, async (req, res) => {
   try {
     const { months = 6 } = req.query;
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const report = await accountingService.getCashflowReport(
       companyId,
@@ -393,7 +393,7 @@ router.get('/reports/cashflow', authenticateToken, async (req, res) => {
 router.get('/reports/profit-loss', authenticateToken, async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const start = startDate ? new Date(startDate as string) : new Date(new Date().setMonth(new Date().getMonth() - 1));
     const end = endDate ? new Date(endDate as string) : new Date();
@@ -422,7 +422,7 @@ router.get('/reports/profit-loss', authenticateToken, async (req, res) => {
 router.get('/reports/balance-sheet', authenticateToken, async (req, res) => {
   try {
     const { asOfDate } = req.query;
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const date = asOfDate ? new Date(asOfDate as string) : new Date();
 
@@ -450,7 +450,7 @@ router.get('/reports/balance-sheet', authenticateToken, async (req, res) => {
 router.get('/reports/vat-declaration', authenticateToken, async (req, res) => {
   try {
     const { months = 6 } = req.query;
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const report = await accountingService.getVATDeclarationReport(
       companyId,
@@ -586,7 +586,7 @@ router.post('/income', authenticateToken, async (req, res) => {
 
     // Note: companyId should come from authenticated user's context
     // For now, we'll use a default or from request
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const income = await accountingService.createIncome({
       companyId,
@@ -751,7 +751,7 @@ router.post('/expense', authenticateToken, async (req, res) => {
       });
     }
 
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
 
     const expense = await accountingService.createExpense({
       companyId,
@@ -849,7 +849,7 @@ router.delete('/expense/:id', authenticateToken, async (req, res) => {
  */
 router.get('/categories', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { type } = req.query;
 
     // Get categories from Income and Expense tables
@@ -910,7 +910,7 @@ router.get('/categories', authenticateToken, async (req, res) => {
  */
 router.post('/categories/rename', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { type, oldName, newName } = req.body;
 
     if (!type || !oldName || !newName) {
@@ -957,7 +957,7 @@ router.post('/categories/rename', authenticateToken, async (req, res) => {
  */
 router.delete('/categories/:type/:name', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { type, name } = req.params;
 
     if (!type || !name) {
@@ -1010,7 +1010,7 @@ router.delete('/categories/:type/:name', authenticateToken, async (req, res) => 
  */
 router.post('/e-invoice', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { orderId, customerId, items, type, notes } = req.body;
 
     if (!orderId || !customerId || !items || !Array.isArray(items)) {
@@ -1258,7 +1258,7 @@ router.post('/e-invoice/:id/download-xml', authenticateToken, async (req, res) =
  */
 router.post('/delivery-note', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { orderId, customerId, items, type, waybillNumber, notes, vehicleInfo } = req.body;
 
     if (!orderId || !customerId || !items || !Array.isArray(items)) {
@@ -1522,7 +1522,7 @@ router.post('/delivery-note/:id/link-invoice/:invoiceId', authenticateToken, asy
  */
 router.get('/bank-accounts', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const accounts = await accountingService.listBankAccounts(companyId);
 
     res.json({
@@ -1545,7 +1545,7 @@ router.get('/bank-accounts', authenticateToken, async (req, res) => {
  */
 router.post('/bank-account', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { bankName, accountType, iban, branch, balance, currency } = req.body;
 
     if (!bankName || !accountType || !iban) {
@@ -1709,7 +1709,7 @@ router.post('/bank-reconciliation', authenticateToken, async (req, res) => {
  */
 router.get('/cash-transactions', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { startDate, endDate, type, page = '1', limit = '50' } = req.query;
 
     const result = await accountingService.listCashTransactions(
@@ -1749,7 +1749,7 @@ router.get('/cash-transactions', authenticateToken, async (req, res) => {
  */
 router.post('/cash-transaction', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const userId = (req as any).user?.id;
     const { type, amount, description, date } = req.body;
 
@@ -1797,7 +1797,7 @@ router.post('/cash-transaction', authenticateToken, async (req, res) => {
  */
 router.get('/cash-balance', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const balance = await accountingService.getCashBalance(companyId);
 
     res.json({
@@ -1858,7 +1858,7 @@ router.post('/parse-mt940', authenticateToken, async (req, res) => {
  */
 router.post('/stock-movement', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const userId = (req as any).user?.id;
     const { equipmentId, type, quantity, unitCost, notes, orderId } = req.body;
 
@@ -1909,7 +1909,7 @@ router.post('/stock-movement', authenticateToken, async (req, res) => {
  */
 router.get('/stock-movements', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const {
       equipmentId,
       type,
@@ -1960,7 +1960,7 @@ router.get('/stock-movements', authenticateToken, async (req, res) => {
  */
 router.get('/stock-valuation', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { method = 'fifo', equipmentId } = req.query;
 
     if (!['fifo', 'lifo'].includes(method as string)) {
@@ -2020,7 +2020,7 @@ router.get('/stock-balance/:equipmentId', authenticateToken, async (req, res) =>
  */
 router.get('/low-stock-alert', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { threshold = '5' } = req.query;
 
     const lowStockItems = await accountingService.getLowStockAlert(
@@ -2052,7 +2052,7 @@ router.get('/low-stock-alert', authenticateToken, async (req, res) => {
  */
 router.post('/check', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const {
       checkNumber,
       type,
@@ -2120,7 +2120,7 @@ router.post('/check', authenticateToken, async (req, res) => {
  */
 router.get('/checks', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const {
       type,
       status,
@@ -2257,7 +2257,7 @@ router.post('/check/:id/bounce', authenticateToken, async (req, res) => {
  */
 router.post('/promissory-note', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const {
       noteNumber,
       type,
@@ -2318,7 +2318,7 @@ router.post('/promissory-note', authenticateToken, async (req, res) => {
  */
 router.get('/promissory-notes', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const {
       type,
       status,
@@ -2369,7 +2369,7 @@ router.get('/promissory-notes', authenticateToken, async (req, res) => {
  */
 router.get('/due-soon', authenticateToken, async (req, res) => {
   try {
-    const companyId = (req as any).user?.companyId || 1;
+    const companyId = (req as any).companyId || 1;
     const { days = '30' } = req.query;
 
     const dueSoon = await accountingService.getDueSoon(
@@ -2563,3 +2563,4 @@ router.get('/gib/test-connection', authenticateToken, async (req, res) => {
 });
 
 export default router;
+
