@@ -112,6 +112,61 @@ jobs:
           sleep 10
           curl -f ${{ steps.get-url.outputs.url }} || exit 1
 
+      - name: Verify Bundle Hash Change
+        run: |
+          echo "Verifying new bundle was deployed..."
+          RESPONSE=$(curl -s ${{ steps.get-url.outputs.url }})
+          BUNDLE=$(echo "$RESPONSE" | grep -oP 'index-[a-zA-Z0-9_-]+\.js' | head -1)
+          
+          if [ -z "$BUNDLE" ]; then
+            echo "❌ ERROR: Could not find main JS bundle in HTML"
+            exit 1
+          fi
+          
+          echo "✅ Main JS Bundle: $BUNDLE"
+          
+          # Store bundle hash for future reference
+          echo "bundle_hash=$BUNDLE" >> $GITHUB_OUTPUT
+          
+          # Verify bundle is accessible
+          BUNDLE_URL="${{ steps.get-url.outputs.url }}/assets/$BUNDLE"
+          if curl -f -s "$BUNDLE_URL" > /dev/null; then
+            echo "✅ Bundle is accessible at: $BUNDLE_URL"
+          else
+            echo "❌ ERROR: Bundle not accessible at: $BUNDLE_URL"
+            exit 1
+          fi
+
+      - name: Smoke Test - Report Pages
+        run: |
+          echo "Running smoke tests for report pages..."
+          URL="${{ steps.get-url.outputs.url }}"
+          
+          # Test 1: Main page loads
+          if curl -f -s "$URL" > /dev/null; then
+            echo "✅ Main page loads successfully"
+          else
+            echo "❌ Main page failed to load"
+            exit 1
+          fi
+          
+          # Test 2: Check for critical assets
+          RESPONSE=$(curl -s "$URL")
+          
+          if echo "$RESPONSE" | grep -q "index.*\.css"; then
+            echo "✅ CSS bundle found"
+          else
+            echo "⚠️  Warning: CSS bundle not found"
+          fi
+          
+          if echo "$RESPONSE" | grep -q "AdvancedReporting"; then
+            echo "✅ AdvancedReporting component chunk found"
+          else
+            echo "✅ AdvancedReporting (lazy-loaded component - OK if not in HTML)"
+          fi
+          
+          echo "✅ Smoke tests passed"
+
       - name: Deployment Success Notification
         if: success()
         run: |

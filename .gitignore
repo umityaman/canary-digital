@@ -107,3 +107,12 @@ gcp-postgres-password.txt
 gcp-deploy.ps1
 gcp-deploy.sh
 
+# Temporary deployment artifacts
+frontend/Dockerfile.backup
+frontend/prod-index.html
+smoke-*.txt
+*-error.txt
+*-response-body.txt
+monitor-report.txt
+proxy-log.txt
+
