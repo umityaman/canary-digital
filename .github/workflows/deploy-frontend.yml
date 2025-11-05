@@ -55,6 +55,14 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
+      - name: Clean Build Artifacts Before Docker Build
+        run: |
+          cd frontend
+          echo "Removing dist and .vite to ensure fresh build..."
+          rm -rf dist
+          rm -rf node_modules/.vite
+          echo "Build artifacts cleaned"
+      
       - name: Verify .dockerignore exists
         run: |
           cd frontend
