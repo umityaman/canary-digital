@@ -20,14 +20,20 @@ COPY . .
 ARG VITE_API_URL=https://canary-backend-672344972017.europe-west1.run.app
 ENV VITE_API_URL=${VITE_API_URL}
 
-# Force clean build - no cache
+# Force clean build - remove all Vite caches
 ENV VITE_FORCE_OPTIMIZE=true
-RUN rm -rf node_modules/.vite dist
 
-# Cache buster - force rebuild on 2025-11-05 11:50
-RUN echo "Build timestamp: 2025-11-05-11:50:00"
+# CRITICAL: Remove Vite's optimization cache to force fresh bundle hash
+# This must happen AFTER npm install but BEFORE npm run build
+RUN rm -rf node_modules/.vite node_modules/.cache
 
-# Build the app with fresh cache
+# Also ensure no dist exists (though .dockerignore should handle this)
+RUN rm -rf dist
+
+# Cache buster - force rebuild with unique timestamp
+RUN echo "Build timestamp: $(date +%Y%m%d-%H%M%S)"
+
+# Build the app with completely fresh cache
 RUN npm run build
 
 # Production stage with nginx
