@@ -98,14 +98,30 @@ jobs:
             --project ${{ env.PROJECT_ID }} \
             --async
           
-          # Wait for build to complete (typically takes 2-3 minutes)
+          # Wait for build to complete (poll until SUCCESS or FAILURE)
           echo "Waiting for build to complete..."
-          sleep 180
+          MAX_WAIT=600  # 10 minutes max
+          ELAPSED=0
+          INTERVAL=15
           
-          # Verify build succeeded
-          BUILD_STATUS=$(gcloud builds list --limit=1 --filter="images:$IMAGE_TAG" --format="value(status)" --project ${{ env.PROJECT_ID }})
+          while [ $ELAPSED -lt $MAX_WAIT ]; do
+            BUILD_STATUS=$(gcloud builds list --limit=1 --filter="images:$IMAGE_TAG" --format="value(status)" --project ${{ env.PROJECT_ID }})
+            echo "Build status after ${ELAPSED}s: $BUILD_STATUS"
+            
+            if [ "$BUILD_STATUS" = "SUCCESS" ]; then
+              echo "Build completed successfully!"
+              break
+            elif [ "$BUILD_STATUS" = "FAILURE" ] || [ "$BUILD_STATUS" = "CANCELLED" ] || [ "$BUILD_STATUS" = "TIMEOUT" ]; then
+              echo "Build failed with status: $BUILD_STATUS"
+              exit 1
+            fi
+            
+            sleep $INTERVAL
+            ELAPSED=$((ELAPSED + INTERVAL))
+          done
+          
           if [ "$BUILD_STATUS" != "SUCCESS" ]; then
-            echo "Build failed with status: $BUILD_STATUS"
+            echo "Build timed out after ${MAX_WAIT}s with status: $BUILD_STATUS"
             exit 1
           fi
           
