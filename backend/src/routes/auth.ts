@@ -29,7 +29,19 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: any) =>
 
   jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
     if (err) return res.status(403).json({ error: 'Invalid token' });
+    // Attach the decoded token payload to the request for downstream handlers
     req.user = user;
+
+    // Populate convenient properties expected elsewhere in the codebase
+    try {
+      const payload: any = user as any;
+      // token is signed with { userId, email, role, companyId }
+      (req as any).userId = payload.userId || payload.userId || payload.id || (payload.user && payload.user.id);
+      (req as any).companyId = payload.companyId || (payload.company && payload.company.id) || undefined;
+    } catch (e) {
+      // ignore if unexpected shape
+    }
+
     next();
   });
 };
@@ -171,6 +183,7 @@ router.post('/login', async (req: Request, res: Response) => {
         email: user.email,
         name: user.name,
         role: user.role,
+        companyId: userCompanyId, // CRITICAL: Frontend needs this
         company: user.company
       },
       token
@@ -199,6 +212,7 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
       email: user.email,
       name: user.name,
       role: user.role,
+      companyId: user.companyId, // CRITICAL: Frontend needs this
       company: user.company,
       createdAt: user.createdAt
     });
