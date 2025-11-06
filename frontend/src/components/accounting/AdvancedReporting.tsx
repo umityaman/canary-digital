@@ -11,6 +11,7 @@ import axios from 'axios'
 import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API_BASE = API_URL.endsWith('/api') ? API_URL : `${API_URL}/api`
 
 type ReportType = 'cashflow' | 'profitloss' | 'balance' | 'vat'
 
@@ -74,13 +75,13 @@ export default function AdvancedReporting() {
     
     try {
       if (activeReport === 'cashflow') {
-        const response = await axios.get(`${API_URL}/api/accounting/reports/cashflow`, {
+        const response = await axios.get(`${API_BASE}/accounting/reports/cashflow`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { months: 6 }
         })
         setCashflowData(response.data.data)
       } else if (activeReport === 'profitloss') {
-        const response = await axios.get(`${API_URL}/api/accounting/reports/profit-loss`, {
+        const response = await axios.get(`${API_BASE}/accounting/reports/profit-loss`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { 
             startDate: dateRange.start,
@@ -90,7 +91,7 @@ export default function AdvancedReporting() {
         setRevenueData(response.data.data.revenue || [])
         setExpenseData(response.data.data.expenses || [])
       } else if (activeReport === 'balance') {
-        const response = await axios.get(`${API_URL}/api/accounting/reports/balance-sheet`, {
+        const response = await axios.get(`${API_BASE}/accounting/reports/balance-sheet`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { asOfDate: dateRange.end }
         })
@@ -143,7 +144,7 @@ export default function AdvancedReporting() {
           }
         ])
       } else if (activeReport === 'vat') {
-        const response = await axios.get(`${API_URL}/api/accounting/reports/vat-declaration`, {
+        const response = await axios.get(`${API_BASE}/accounting/reports/vat-declaration`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { months: 6 }
         })
