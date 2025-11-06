@@ -445,7 +445,7 @@ export default function InventoryAccounting() {
       </div>
 
       {/* Stats Cards - Responsive Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Total Transactions */}
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
@@ -471,24 +471,6 @@ export default function InventoryAccounting() {
             <span className="text-xl lg:text-2xl font-bold">{stats.recordedCount}</span>
           </div>
           <div className="text-xs lg:text-sm opacity-90">Kaydedildi</div>
-        </div>
-
-        {/* Errors */}
-        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white">
-          <div className="flex items-center justify-between mb-2">
-            <XCircle size={20} />
-            <span className="text-xl lg:text-2xl font-bold">{stats.errorCount}</span>
-          </div>
-          <div className="text-xs lg:text-sm opacity-90">Hata</div>
-        </div>
-
-        {/* Total Value */}
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 text-white col-span-2 md:col-span-3 lg:col-span-1">
-          <div className="flex items-center justify-between mb-2">
-            <DollarSign size={20} />
-            <span className="text-lg lg:text-xl font-bold truncate">{formatCurrency(stats.totalValue)}</span>
-          </div>
-          <div className="text-xs lg:text-sm opacity-90">Toplam Değer</div>
         </div>
       </div>
 

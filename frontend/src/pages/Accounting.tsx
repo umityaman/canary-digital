@@ -1741,10 +1741,10 @@ export default function Accounting() {
                               <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Müşteri
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden lg:table-cell px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Tarih
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden md:table-cell px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Geçerlilik
                               </th>
                               <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
@@ -1785,12 +1785,12 @@ export default function Accounting() {
                                     {offer.customer.email}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm text-neutral-900">
                                     {formatDate(offer.offerDate)}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
                                   <div className={`text-sm ${
                                     new Date(offer.validUntil) < new Date() 
                                       ? 'text-red-600 font-medium' 
