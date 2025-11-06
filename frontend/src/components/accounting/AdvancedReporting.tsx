@@ -544,8 +544,7 @@ export default function AdvancedReporting() {
               <h3 className="text-sm font-semibold text-neutral-900">Dönemsel Nakit Akış Detayı</h3>
             </div>
             <div className="overflow-x-auto">
-              <div className="min-w-[900px]">
-                <table className="w-full">
+              <table className="w-full">
                   <thead className="bg-neutral-50">
                     <tr>
                       <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
@@ -596,7 +595,6 @@ export default function AdvancedReporting() {
                     </tr>
                   </tfoot>
                 </table>
-              </div>
             </div>
           </div>
         </div>
@@ -998,8 +996,7 @@ export default function AdvancedReporting() {
               <h3 className="text-sm font-semibold text-neutral-900">Dönemsel KDV Detayı</h3>
             </div>
             <div className="overflow-x-auto">
-              <div className="min-w-[800px]">
-                <table className="w-full">
+              <table className="w-full">
                   <thead className="bg-neutral-50">
                     <tr>
                       <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
@@ -1049,7 +1046,6 @@ export default function AdvancedReporting() {
                     </tr>
                   </tfoot>
                 </table>
-              </div>
             </div>
           </div>
         </div>
