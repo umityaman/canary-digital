@@ -1724,7 +1724,7 @@ export default function Accounting() {
                       )}
 
                       <div className="overflow-x-auto">
-                        <table className="w-full min-w-[800px]">
+                        <table className="w-full">
                           <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
                             <tr>
                               <th className="px-6 py-3 text-left">

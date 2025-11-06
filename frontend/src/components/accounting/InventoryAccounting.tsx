@@ -585,8 +585,7 @@ export default function InventoryAccounting() {
             </div>
 
             <div className="overflow-x-auto">
-              <div className="min-w-[1100px]">
-                <table className="w-full">
+              <table className="w-full">
                   <thead className="bg-neutral-50 border-b border-neutral-200">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
@@ -685,7 +684,6 @@ export default function InventoryAccounting() {
                 <p>Stok hareketi bulunamadı</p>
               </div>
             )}
-          </div>
         </div>
       )}
 
