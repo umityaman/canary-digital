@@ -5,7 +5,7 @@ import {
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
   PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
   Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag, Edit2, Trash2,
-  MoreVertical, Mail, MessageCircle, Printer, Copy, Zap, Heart, HelpCircle
+  MoreVertical, Mail, MessageCircle, Printer, Copy, Zap, Heart, HelpCircle, Store
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
 import { useDebounce } from '../hooks/useDebounce'
@@ -40,8 +40,10 @@ const NotificationsTab = lazy(() => import('../components/accounting/tabs/Notifi
 const ToolsTab = lazy(() => import('../components/accounting/tabs/ToolsTab'))
 const AdvisorTab = lazy(() => import('../components/accounting/tabs/AdvisorTab'))
 const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab'))
+const BankIntegrations = lazy(() => import('../components/banking/BankIntegrations'))
+const ECommerceIntegrations = lazy(() => import('../components/ecommerce/ECommerceIntegrations'))
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'bank-integrations' | 'ecommerce-integrations'
 
 interface AccountingStats {
   totalRevenue: number
@@ -787,6 +789,8 @@ export default function Accounting() {
     { id: 'ebelge' as const, label: 'e-Belge', icon: <CreditCard size={18} /> },
     { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
+    { id: 'bank-integrations' as const, label: 'Banka Entegrasyonları', icon: <Building2 size={18} /> },
+    { id: 'ecommerce-integrations' as const, label: 'E-Ticaret Entegrasyonları', icon: <Store size={18} /> },
     { id: 'gib' as const, label: 'GİB Entegrasyonu', icon: <Globe size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
@@ -2220,6 +2224,20 @@ export default function Accounting() {
             {activeTab === 'support' && (
               <ErrorBoundary>
                 <SupportTab />
+              </ErrorBoundary>
+            )}
+
+            {/* Bank Integrations Tab */}
+            {activeTab === 'bank-integrations' && (
+              <ErrorBoundary>
+                <BankIntegrations />
+              </ErrorBoundary>
+            )}
+
+            {/* E-Commerce Integrations Tab */}
+            {activeTab === 'ecommerce-integrations' && (
+              <ErrorBoundary>
+                <ECommerceIntegrations />
               </ErrorBoundary>
             )}
 
