@@ -404,85 +404,144 @@ export default function AdvancedReporting() {
             <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <ArrowUpCircle size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam Giriş</span>
+                <CheckCircle size={18} />
               </div>
-              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
+              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow + d.investingInflow + d.financingInflow, 0))}
               </div>
-              <div className="text-xs opacity-90">Tüm Dönem</div>
+              <div className="text-xs opacity-90">Toplam Nakit Girişi</div>
             </div>
 
             <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <ArrowDownCircle size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam Çıkış</span>
+                <AlertCircle size={18} />
               </div>
-              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
+              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingOutflow + d.investingOutflow + d.financingOutflow, 0))}
               </div>
-              <div className="text-xs opacity-90">Tüm Dönem</div>
+              <div className="text-xs opacity-90">Toplam Nakit Çıkışı</div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
+            <div className={`bg-gradient-to-br rounded-xl p-4 text-white ${
+              cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'from-blue-500 to-blue-600' : 'from-orange-500 to-orange-600'
+            }`}>
               <div className="flex items-center justify-between mb-2">
                 <TrendingUp size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Net Değişim</span>
+                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                  {cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'POZİTİF' : 'NEGATİF'}
+                </span>
               </div>
-              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
-                {formatCurrency(cashflowData.reduce((sum, d) => sum + d.netChange, 0))}
+              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+                {formatCurrency(Math.abs(cashflowData.reduce((sum, d) => sum + d.netChange, 0)))}
               </div>
-              <div className="text-xs opacity-90">Tüm Dönem</div>
+              <div className="text-xs opacity-90">Net Nakit Değişimi</div>
             </div>
           </div>
 
-          {/* Charts - Responsive Layout */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-            {/* Inflow/Outflow Chart */}
-            <div className={card('md', 'sm', 'default', 'lg')}>
-              <h3 className="text-base font-semibold text-neutral-900 mb-3">Giriş/Çıkış Trendi</h3>
-              <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={180}>
-                  <LineChart data={cashflowData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-                      formatter={(value: any) => formatCurrency(value)}
-                    />
-                    <Legend wrapperStyle={{ fontSize: '11px' }} />
-                    <Line type="monotone" dataKey="operatingInflow" name="Giriş" stroke="#10b981" strokeWidth={2} />
-                    <Line type="monotone" dataKey="operatingOutflow" name="Çıkış" stroke="#ef4444" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
+          {/* Detailed Cashflow Statement */}
+          <div className={card('md', 'sm', 'default', 'lg')}>
+            <h3 className="text-base font-semibold text-neutral-900 mb-4">Nakit Akış Tablosu</h3>
+            
+            <div className="space-y-6">
+              {/* Operating Activities */}
+              <div>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-blue-500">
+                  <h4 className="font-semibold text-blue-900">İŞLETME FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
+                  <span className="font-bold text-blue-900">
+                    {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow - d.operatingOutflow, 0))}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Nakit Girişleri</span>
+                    <span className="font-semibold text-green-600">
+                      {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow, 0))}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Nakit Çıkışları</span>
+                    <span className="font-semibold text-red-600">
+                      ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingOutflow, 0))})
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            {/* Net Change Chart */}
-            <div className={card('md', 'sm', 'default', 'lg')}>
-              <h3 className="text-base font-semibold text-neutral-900 mb-3">Net Değişim Trendi</h3>
-              <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={180}>
-                  <LineChart data={cashflowData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-                      formatter={(value: any) => formatCurrency(value)}
-                    />
-                    <Legend wrapperStyle={{ fontSize: '11px' }} />
-                    <Line type="monotone" dataKey="netChange" name="Net Nakit" stroke="#3b82f6" strokeWidth={3} />
-                  </LineChart>
-                </ResponsiveContainer>
+              {/* Investing Activities */}
+              <div>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-purple-500">
+                  <h4 className="font-semibold text-purple-900">YATIRIM FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
+                  <span className="font-bold text-purple-900">
+                    {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow - d.investingOutflow, 0))}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Yatırım Girişleri</span>
+                    <span className="font-semibold text-green-600">
+                      {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow, 0))}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Yatırım Çıkışları</span>
+                    <span className="font-semibold text-red-600">
+                      ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingOutflow, 0))})
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Financing Activities */}
+              <div>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-indigo-500">
+                  <h4 className="font-semibold text-indigo-900">FİNANSMAN FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
+                  <span className="font-bold text-indigo-900">
+                    {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow - d.financingOutflow, 0))}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Finansman Girişleri</span>
+                    <span className="font-semibold text-green-600">
+                      {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow, 0))}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Finansman Çıkışları</span>
+                    <span className="font-semibold text-red-600">
+                      ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingOutflow, 0))})
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Net Cash Flow */}
+              <div className={`p-4 rounded-lg ${
+                cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 
+                  ? 'bg-blue-50 border border-blue-200' 
+                  : 'bg-orange-50 border border-orange-200'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <h4 className={`text-lg font-bold ${
+                    cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-900' : 'text-orange-900'
+                  }`}>
+                    DÖNEM SONU NAKİT VE NAKİT BENZERLERİNDEKİ NET ARTIŞ (AZALIŞ)
+                  </h4>
+                  <span className={`text-2xl font-bold truncate ${
+                    cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-900' : 'text-orange-900'
+                  }`}>
+                    {formatCurrency(Math.abs(cashflowData.reduce((sum, d) => sum + d.netChange, 0)))}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Detailed Table */}
+          {/* Period Details Table */}
           <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
             <div className="p-3 border-b border-neutral-200">
-              <h3 className="text-sm font-semibold text-neutral-900">Detaylı Nakit Akış Tablosu</h3>
+              <h3 className="text-sm font-semibold text-neutral-900">Dönemsel Nakit Akış Detayı</h3>
             </div>
             <div className="overflow-x-auto">
               <div className="min-w-[900px]">
@@ -490,31 +549,52 @@ export default function AdvancedReporting() {
                   <thead className="bg-neutral-50">
                     <tr>
                       <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İşletme +</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İşletme -</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Yatırım +</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Yatırım -</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Finansman +</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Finansman -</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Net</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İşletme</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Yatırım</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Finansman</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Net Değişim</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {cashflowData.map((row, index) => (
                       <tr key={index} className="hover:bg-neutral-50">
                         <td className="px-4 py-3 text-sm font-medium text-neutral-900">{row.period}</td>
-                        <td className="px-4 py-3 text-sm text-right text-green-600 font-semibold">{formatCurrency(row.operatingInflow)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-red-600 font-semibold">{formatCurrency(row.operatingOutflow)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-green-600">{formatCurrency(row.investingInflow)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-red-600">{formatCurrency(row.investingOutflow)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-green-600">{formatCurrency(row.financingInflow)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-red-600">{formatCurrency(row.financingOutflow)}</td>
-                        <td className={`px-4 py-3 text-sm text-right font-bold ${row.netChange >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-blue-600">
+                          {formatCurrency(row.operatingInflow - row.operatingOutflow)}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-purple-600">
+                          {formatCurrency(row.investingInflow - row.investingOutflow)}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-indigo-600">
+                          {formatCurrency(row.financingInflow - row.financingOutflow)}
+                        </td>
+                        <td className={`px-4 py-3 text-sm text-right font-bold ${
+                          row.netChange >= 0 ? 'text-blue-600' : 'text-red-600'
+                        }`}>
                           {formatCurrency(row.netChange)}
                         </td>
                       </tr>
                     ))}
                   </tbody>
+                  <tfoot className="bg-neutral-50 border-t-2 border-neutral-300">
+                    <tr>
+                      <td className="px-4 py-3 text-sm font-bold text-neutral-900">TOPLAM</td>
+                      <td className="px-4 py-3 text-sm text-right font-bold text-blue-600">
+                        {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow - d.operatingOutflow, 0))}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right font-bold text-purple-600">
+                        {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow - d.investingOutflow, 0))}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right font-bold text-indigo-600">
+                        {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow - d.financingOutflow, 0))}
+                      </td>
+                      <td className={`px-4 py-3 text-sm text-right font-bold ${
+                        cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-600' : 'text-red-600'
+                      }`}>
+                        {formatCurrency(cashflowData.reduce((sum, d) => sum + d.netChange, 0))}
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
             </div>
@@ -798,85 +878,124 @@ export default function AdvancedReporting() {
             <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <TrendingUp size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Hesaplanan</span>
+                <CheckCircle size={18} />
               </div>
-              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
+              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(vatData.reduce((sum, d) => sum + d.outputVAT, 0))}
               </div>
-              <div className="text-xs opacity-90">Çıkan KDV</div>
+              <div className="text-xs opacity-90">Hesaplanan KDV (Çıkan)</div>
             </div>
 
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <TrendingDown size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">İndirilecek</span>
+                <Minus size={18} />
               </div>
-              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
+              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))}
               </div>
-              <div className="text-xs opacity-90">Giren KDV</div>
+              <div className="text-xs opacity-90">İndirilecek KDV (Giren)</div>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white">
+            <div className={`bg-gradient-to-br rounded-xl p-4 text-white ${
+              vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'from-orange-500 to-orange-600' : 'from-green-500 to-green-600'
+            }`}>
               <div className="flex items-center justify-between mb-2">
                 <DollarSign size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Ödenecek</span>
+                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                  {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'ÖDENECEK' : 'İADE'}
+                </span>
               </div>
-              <div className="text-base md:text-lg lg:text-xl font-bold mb-1 break-words">
-                {formatCurrency(vatData.reduce((sum, d) => sum + d.netVAT, 0))}
+              <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
+                {formatCurrency(Math.abs(vatData.reduce((sum, d) => sum + d.netVAT, 0)))}
               </div>
               <div className="text-xs opacity-90">Net KDV</div>
             </div>
           </div>
 
-          {/* Charts - Responsive Layout */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-            {/* Output vs Input VAT */}
-            <div className={card('md', 'sm', 'default', 'lg')}>
-              <h3 className="text-base font-semibold text-neutral-900 mb-3">KDV Giriş/Çıkış</h3>
-              <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={180}>
-                  <BarChart data={vatData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-                      formatter={(value: any) => formatCurrency(value)}
-                    />
-                    <Legend wrapperStyle={{ fontSize: '11px' }} />
-                    <Bar dataKey="outputVAT" name="Hesaplanan" fill="#10b981" />
-                    <Bar dataKey="inputVAT" name="İndirilecek" fill="#3b82f6" />
-                  </BarChart>
-                </ResponsiveContainer>
+          {/* Detailed VAT Declaration */}
+          <div className={card('md', 'sm', 'default', 'lg')}>
+            <h3 className="text-base font-semibold text-neutral-900 mb-4">KDV Beyannamesi</h3>
+            
+            <div className="space-y-6">
+              {/* Taxable Sales Section */}
+              <div>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-green-500">
+                  <h4 className="font-semibold text-green-900">VERGİYE TABİ İŞLEMLER (Satışlar)</h4>
+                  <span className="font-bold text-green-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}</span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Toplam Satış Tutarı (Matrah)</span>
+                    <span className="font-semibold text-neutral-900">
+                      {formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-4 bg-green-50 rounded-lg">
+                    <span className="text-neutral-700 font-medium">Hesaplanan KDV (% 20)</span>
+                    <span className="font-bold text-green-600">
+                      {formatCurrency(vatData.reduce((sum, d) => sum + d.outputVAT, 0))}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            {/* Net VAT */}
-            <div className={card('md', 'sm', 'default', 'lg')}>
-              <h3 className="text-base font-semibold text-neutral-900 mb-3">Ödenecek KDV</h3>
-              <div className="w-full overflow-hidden">
-                <ResponsiveContainer width="100%" height={180}>
-                  <BarChart data={vatData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="period" stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: '11px' }} />
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-                      formatter={(value: any) => formatCurrency(value)}
-                    />
-                    <Legend wrapperStyle={{ fontSize: '11px' }} />
-                    <Bar dataKey="netVAT" name="Net KDV" fill="#f59e0b" />
-                  </BarChart>
-                </ResponsiveContainer>
+              {/* Deductible Purchases Section */}
+              <div>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-blue-500">
+                  <h4 className="font-semibold text-blue-900">İNDİRİLECEK KDV (Alışlar)</h4>
+                  <span className="font-bold text-blue-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}</span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
+                    <span className="text-neutral-700">Toplam Alış Tutarı</span>
+                    <span className="font-semibold text-neutral-900">
+                      {formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-4 bg-blue-50 rounded-lg">
+                    <span className="text-neutral-700 font-medium">İndirilecek KDV</span>
+                    <span className="font-bold text-blue-600">
+                      ({formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))})
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Net VAT Payable/Refundable */}
+              <div className={`p-4 rounded-lg ${
+                vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 
+                  ? 'bg-orange-50 border border-orange-200' 
+                  : 'bg-green-50 border border-green-200'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <h4 className={`text-lg font-bold ${
+                    vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-900' : 'text-green-900'
+                  }`}>
+                    {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'ÖDENECEK KDV' : 'İADE ALINACAK KDV'}
+                  </h4>
+                  <span className={`text-2xl font-bold truncate ${
+                    vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-900' : 'text-green-900'
+                  }`}>
+                    {formatCurrency(Math.abs(vatData.reduce((sum, d) => sum + d.netVAT, 0)))}
+                  </span>
+                </div>
+                <div className="mt-2 text-sm">
+                  <p className={vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-700' : 'text-green-700'}>
+                    {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 
+                      ? 'Hesaplanan KDV > İndirilecek KDV - Hazine\'ye ödenecek'
+                      : 'İndirilecek KDV > Hesaplanan KDV - Hazine\'den iade alınacak'
+                    }
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* VAT Table */}
+          {/* Period Details Table */}
           <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
             <div className="p-3 border-b border-neutral-200">
-              <h3 className="text-sm font-semibold text-neutral-900">KDV Beyanname Detayı</h3>
+              <h3 className="text-sm font-semibold text-neutral-900">Dönemsel KDV Detayı</h3>
             </div>
             <div className="overflow-x-auto">
               <div className="min-w-[800px]">
@@ -884,11 +1003,11 @@ export default function AdvancedReporting() {
                   <thead className="bg-neutral-50">
                     <tr>
                       <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Satışlar</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Satış Matrahı</th>
                       <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Hesaplanan KDV</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Alışlar</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Alış Tutarı</th>
                       <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İndirilecek KDV</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ödenecek KDV</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ödenecek/İade KDV</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
@@ -899,7 +1018,11 @@ export default function AdvancedReporting() {
                         <td className="px-4 py-3 text-sm text-right text-green-600 font-semibold">{formatCurrency(row.outputVAT)}</td>
                         <td className="px-4 py-3 text-sm text-right text-neutral-900">{formatCurrency(row.purchases)}</td>
                         <td className="px-4 py-3 text-sm text-right text-blue-600 font-semibold">{formatCurrency(row.inputVAT)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-orange-600 font-bold">{formatCurrency(row.netVAT)}</td>
+                        <td className={`px-4 py-3 text-sm text-right font-bold ${
+                          row.netVAT >= 0 ? 'text-orange-600' : 'text-green-600'
+                        }`}>
+                          {formatCurrency(Math.abs(row.netVAT))} {row.netVAT >= 0 ? '(Ö)' : '(İ)'}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -918,8 +1041,10 @@ export default function AdvancedReporting() {
                       <td className="px-4 py-3 text-sm text-right font-bold text-blue-600">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))}
                       </td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-orange-600">
-                        {formatCurrency(vatData.reduce((sum, d) => sum + d.netVAT, 0))}
+                      <td className={`px-4 py-3 text-sm text-right font-bold ${
+                        vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-600' : 'text-green-600'
+                      }`}>
+                        {formatCurrency(Math.abs(vatData.reduce((sum, d) => sum + d.netVAT, 0)))}
                       </td>
                     </tr>
                   </tfoot>
