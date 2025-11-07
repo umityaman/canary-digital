@@ -16,7 +16,7 @@ import {
   Edit,
   Trash2
 } from 'lucide-react';
-import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../utils/design-tokens';
+import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 import toast from 'react-hot-toast';
 
 interface CostItem {
