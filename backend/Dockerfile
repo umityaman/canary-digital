@@ -5,8 +5,8 @@ RUN apk add --no-cache openssl libc6-compat
 
 WORKDIR /usr/src/app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files and npmrc
+COPY package*.json .npmrc ./
 
 # Install dependencies (no package-lock.json, use npm install)
 RUN npm install --legacy-peer-deps --no-audit || npm install --force
