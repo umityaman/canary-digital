@@ -16,7 +16,7 @@ import {
   Edit,
   Trash2
 } from 'lucide-react';
-import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
+import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 import toast from 'react-hot-toast';
 
 interface CostItem {
@@ -178,7 +178,7 @@ export default function CostAccounting() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className={card('md', 'lg', 'default', 'xl')}>
+        <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Toplam Maliyet</p>
@@ -191,7 +191,7 @@ export default function CostAccounting() {
           </div>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
+  <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Hammadde</p>
@@ -204,7 +204,7 @@ export default function CostAccounting() {
           </div>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
+  <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">İşçilik</p>
@@ -217,7 +217,7 @@ export default function CostAccounting() {
           </div>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
+  <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Genel Gider</p>
@@ -233,7 +233,7 @@ export default function CostAccounting() {
 
       {/* Profitability Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className={card('md', 'lg', 'default', 'xl')}>
+        <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <DollarSign className="text-blue-600" size={20} />
@@ -246,7 +246,7 @@ export default function CostAccounting() {
           <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
+  <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
               <TrendingUp className="text-green-600" size={20} />
@@ -259,7 +259,7 @@ export default function CostAccounting() {
           <div className="h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
+  <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
               <PieChart className="text-purple-600" size={20} />
@@ -274,7 +274,7 @@ export default function CostAccounting() {
       </div>
 
       {/* Filters */}
-      <div className={card('md', 'lg', 'default', 'xl')}>
+  <div className={card('md', 'lg', 'default', 'lg')}>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <label className={cx(DESIGN_TOKENS.typography.label.lg, DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
@@ -320,7 +320,7 @@ export default function CostAccounting() {
       </div>
 
       {/* Product Cost Analysis Table */}
-      <div className={card('none', 'none', 'default', 'xl')}>
+  <div className={cx(card('md', 'sm', 'default', 'lg'), 'p-0')}>
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center gap-2`}>
             <BarChart3 className="text-blue-600" size={20} />
@@ -369,7 +369,14 @@ export default function CostAccounting() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center hidden lg:table-cell">
-                    <span className={badge('sm', product.profitMargin > 20 ? 'success' : 'warning')}>
+                    <span
+                      className={cx(
+                        'inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-medium',
+                        product.profitMargin > 20
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-orange-100 text-orange-700'
+                      )}
+                    >
                       %{product.profitMargin.toFixed(2)}
                     </span>
                   </td>
@@ -411,7 +418,7 @@ export default function CostAccounting() {
 
       {/* Cost Breakdown Chart Placeholder */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className={card('md', 'lg', 'default', 'xl')}>
+        <div className={card('md', 'lg', 'default', 'lg')}>
           <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
             Maliyet Dağılımı
           </h3>
@@ -455,7 +462,7 @@ export default function CostAccounting() {
           </div>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
+  <div className={card('md', 'lg', 'default', 'lg')}>
           <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
             Öneriler
           </h3>
