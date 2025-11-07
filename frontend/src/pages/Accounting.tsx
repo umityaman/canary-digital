@@ -1,11 +1,12 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
-  Calculator, DollarSign, TrendingUp, TrendingDown, FileText, Users,
+  DollarSign, TrendingUp, TrendingDown, FileText, Users,
   CreditCard, Banknote, Building2, Receipt, Package, BarChart3,
-  PieChart, Settings, Download, Upload, RefreshCw, Clock, Globe,
+  PieChart, Settings, Download, Upload, Clock, Globe,
   Search, Filter, ChevronLeft, ChevronRight, Check, X, Tag, Edit2, Trash2,
-  MoreVertical, Mail, MessageCircle, Printer, Copy, Zap, Heart, HelpCircle, Store, Link2
+  MoreVertical, Mail, MessageCircle, Printer, Copy, Link2, Calendar, Plus,
+  Bell, AlertCircle, XCircle, CheckCircle
 } from 'lucide-react'
 import { accountingAPI, invoiceAPI, offerAPI, checksAPI, promissoryAPI, agingAPI } from '../services/api'
 import { useDebounce } from '../hooks/useDebounce'
@@ -28,7 +29,6 @@ const AccountCardList = lazy(() => import('../components/accounting/AccountCardL
 const EInvoiceList = lazy(() => import('../components/accounting/EInvoiceList'))
 const BankReconciliation = lazy(() => import('../components/accounting/BankReconciliation'))
 const DeliveryNoteList = lazy(() => import('../components/delivery-notes/DeliveryNoteList'))
-const CurrentAccountList = lazy(() => import('../components/current-accounts/CurrentAccountList'))
 const InventoryAccounting = lazy(() => import('../components/accounting/InventoryAccounting'))
 const AdvancedReporting = lazy(() => import('../components/accounting/AdvancedReporting'))
 const CompanyInfo = lazy(() => import('../components/accounting/CompanyInfo'))
@@ -41,8 +41,6 @@ const ToolsTab = lazy(() => import('../components/accounting/tabs/ToolsTab'))
 const AdvisorTab = lazy(() => import('../components/accounting/tabs/AdvisorTab'))
 const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab'))
 const IntegrationsTab = lazy(() => import('../components/accounting/tabs/IntegrationsTab'))
-const BankIntegrations = lazy(() => import('../components/banking/BankIntegrations'))
-const ECommerceIntegrations = lazy(() => import('../components/ecommerce/ECommerceIntegrations'))
 const CostAccounting = lazy(() => import('../components/accounting/CostAccounting'))
 
 type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations'
@@ -894,7 +892,7 @@ export default function Accounting() {
       )}
 
       {/* Tabs - Vertical Layout */}
-      <div className={`${card('none', 'sm', 'default', 'lg')} overflow-hidden`}>
+      <div className={`${card('sm', 'sm', 'default', 'lg')} overflow-hidden`}>
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar Tabs */}
           <nav className={`flex flex-row ${DESIGN_TOKENS.spacing.xs.gap} overflow-x-auto ${DESIGN_TOKENS.colors.border.light} border-b lg:border-b-0 lg:border-r lg:w-56 lg:flex-col lg:gap-0 flex-shrink-0`}>
@@ -986,7 +984,7 @@ export default function Accounting() {
                       </button>
                     </div>
 
-                    <div className={card('none', 'sm', 'default', 'lg')}>
+                    <div className={card('sm', 'sm', 'default', 'lg')}>
                       {checksLoading ? (
                         <div className={`p-12 text-center ${DESIGN_TOKENS.colors.text.tertiary}`}>Çekler yükleniyor...</div>
                       ) : checks.length === 0 ? (
@@ -1143,7 +1141,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className={`${card('sm', 'none', 'default', 'lg')} space-y-4`}>
+                <div className={`${card('sm', 'flat', 'default', 'lg')} space-y-4`}>
                   {/* Basic Filters */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Search */}
@@ -1294,7 +1292,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Invoice Table */}
-                <div className={`${card('none', 'sm', 'default', 'lg')} overflow-hidden`}>
+                <div className={`${card('sm', 'sm', 'default', 'lg')} overflow-hidden`}>
                   {invoicesLoading ? (
                     <TableSkeleton rows={10} columns={8} showHeader={true} />
                   ) : invoices.length === 0 ? (
@@ -1536,7 +1534,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className={card('sm', 'none', 'default', 'lg')}>
+                <div className={card('sm', 'flat', 'default', 'lg')}>
                   {/* Basic Filters */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Search */}
@@ -1688,7 +1686,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Offer Table */}
-                <div className={card('none', 'sm', 'default', 'lg')}>
+                <div className={card('sm', 'sm', 'default', 'lg')}>
                   {offersLoading ? (
                     <TableSkeleton rows={10} columns={7} showHeader={true} />
                   ) : offers.length === 0 ? (
@@ -1998,20 +1996,6 @@ export default function Accounting() {
                 <h2 className="text-xl font-semibold text-neutral-900 mb-4">İşletme Kolaylıkları</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {/* Etiketleme */}
-                  <button
-                    onClick={() => setActiveTab('categories')}
-                    className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
-                        <Tag className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
-                      </div>
-                      <h3 className="font-semibold text-neutral-900 group-hover:text-neutral-900">Etiketleme</h3>
-                    </div>
-                    <p className="text-sm text-neutral-600">Gelir-giderleri kategorilere ayırın ve etiketleyin</p>
-                  </button>
-
                   {/* Hatırlatmalar */}
                   <button
                     onClick={() => setActiveTab('reminders')}
