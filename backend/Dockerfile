@@ -21,8 +21,9 @@ RUN npx prisma generate
 # Copy source code
 COPY src ./src
 
-# Build TypeScript
-RUN npm run build || npx tsc
+# Build TypeScript with increased memory
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+RUN npm run build || npx tsc --incremental false
 
 # Production stage
 FROM node:20-alpine

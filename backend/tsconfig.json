@@ -7,7 +7,10 @@
     "strict": false,
     "noImplicitAny": false,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "incremental": false,
+    "sourceMap": false,
+    "declaration": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "scripts", "tests", "prisma"]
