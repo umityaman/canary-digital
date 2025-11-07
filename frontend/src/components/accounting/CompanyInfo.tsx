@@ -101,8 +101,43 @@ const CompanyInfo: React.FC = () => {
       // Graceful fallback - show empty form instead of error
       if (error.response?.status === 404) {
         console.warn('⚠️ No company data found, showing empty form');
-        setCompanyData(null);
-        setBankAccounts([]);
+        // Set default company data structure
+        setCompanyData({
+          id: 0,
+          name: '',
+          email: null,
+          phone: null,
+          mobilePhone: null,
+          address: null,
+          address2: null,
+          city: null,
+          district: null,
+          postalCode: null,
+          taxNumber: null,
+          taxOffice: null,
+          tradeRegister: null,
+          mersisNo: null,
+          website: null,
+          logo: null,
+          authorizedPerson: null,
+          iban: null,
+          bankName: null,
+          bankBranch: null,
+          accountHolder: null,
+          timezone: null,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
+        setBankAccounts({
+          accounts: [],
+          totals: {
+            totalBalance: 0,
+            totalAvailable: 0,
+            totalBlocked: 0,
+            activeAccounts: 0,
+            totalAccounts: 0,
+          },
+        });
       } else {
         toast.error('Şirket bilgileri yüklenirken hata oluştu');
       }
@@ -154,15 +189,6 @@ const CompanyInfo: React.FC = () => {
       <div className="flex items-center justify-center h-64">
         <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
         <span className="ml-3 text-gray-600">Yükleniyor...</span>
-      </div>
-    );
-  }
-
-  if (!companyData) {
-    return (
-      <div className="flex items-center justify-center h-64 text-red-500">
-        <AlertCircle className="w-6 h-6 mr-2" />
-        Şirket bilgileri yüklenemedi
       </div>
     );
   }
