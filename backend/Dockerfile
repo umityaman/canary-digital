@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 # Copy package files
 COPY package*.json ./
 
-# Install ALL dependencies including dev dependencies (needed for ts-node)
-RUN npm ci || npm install
+# Install dependencies (no package-lock.json, use npm install)
+RUN npm install --legacy-peer-deps --no-audit || npm install --force
 
 # Copy prisma schema and generate client
 COPY prisma ./prisma
