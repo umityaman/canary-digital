@@ -43,6 +43,7 @@ const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab')
 const IntegrationsTab = lazy(() => import('../components/accounting/tabs/IntegrationsTab'))
 const BankIntegrations = lazy(() => import('../components/banking/BankIntegrations'))
 const ECommerceIntegrations = lazy(() => import('../components/ecommerce/ECommerceIntegrations'))
+const CostAccounting = lazy(() => import('../components/accounting/CostAccounting'))
 
 type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations'
 
@@ -1973,6 +1974,8 @@ export default function Accounting() {
             {activeTab === 'reconciliation' && <BankReconciliation />}
 
             {/* Cost Accounting Tab */}
+            {activeTab === 'cost-accounting' && <CostAccounting />}
+
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}
 
