@@ -1,52 +1,29 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
-# Install build dependencies
-RUN apk add --no-cache openssl libc6-compat python3 make g++
+# Install dependencies for Prisma
+RUN apk add --no-cache openssl libc6-compat
 
 WORKDIR /usr/src/app
 
 # Copy package files
 COPY package*.json ./
-COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --include=dev || npm install
-
-# Copy prisma schema first
-COPY prisma ./prisma
-
-# Generate Prisma Client
-RUN npx prisma generate
-
-# Copy source code
-COPY src ./src
-
-# Build TypeScript with increased memory
-ENV NODE_OPTIONS="--max-old-space-size=2048"
-RUN npm run build || npx tsc --incremental false
-
-# Production stage
-FROM node:20-alpine
-
-RUN apk add --no-cache openssl libc6-compat
-
-WORKDIR /usr/src/app
-
-# Copy package files and install production dependencies only
-COPY package*.json ./
-RUN npm ci --omit=dev || npm install --omit=dev
+# Install ALL dependencies including dev dependencies (needed for ts-node)
+RUN npm ci || npm install
 
 # Copy prisma schema and generate client
 COPY prisma ./prisma
 RUN npx prisma generate
 
-# Copy built files from builder
-COPY --from=builder /usr/src/app/dist ./dist
+# Copy source code
+COPY src ./src
+COPY tsconfig.json ./
 
 # Set production environment
 ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=512"
 
 EXPOSE 4000
 
-# Start with compiled JS instead of ts-node
-CMD ["node", "dist/index.js"]
+# Use ts-node to run directly without compilation
+CMD ["npx", "ts-node", "--transpile-only", "src/index.ts"]
