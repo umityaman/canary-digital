@@ -10,34 +10,42 @@ export default function IntegrationsTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
+      <div className="mb-8">
+        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>
           Entegrasyonlar
         </h2>
-        <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+        <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.secondary}`}>
           Banka, e-ticaret ve GİB entegrasyonlarını yönetin
         </p>
       </div>
 
-      {/* Integration Type Selector */}
-      <div className={card('md', 'none', 'default', 'lg')}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+      {/* Integration Type Selector - More Prominent */}
+      <div className={card('lg', 'lg', 'default', 'lg')}>
+        <div className="mb-4">
+          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>
+            Entegrasyon Tipi Seçin
+          </h3>
+          <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+            Yönetmek istediğiniz entegrasyon tipini seçin
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Bank Integrations */}
           <button
             onClick={() => setActiveIntegration('bank')}
-            className={`flex items-center gap-4 p-6 rounded-xl border-2 transition-all text-left ${
+            className={`flex flex-col items-center gap-4 p-8 rounded-2xl border-2 transition-all hover:shadow-lg ${
               activeIntegration === 'bank'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
+                ? 'border-blue-500 bg-blue-50 shadow-lg scale-105'
+                : 'border-neutral-200 hover:border-blue-300 hover:bg-blue-50'
             }`}
           >
-            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-              activeIntegration === 'bank' ? 'bg-blue-500' : 'bg-neutral-200'
+            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all ${
+              activeIntegration === 'bank' ? 'bg-blue-500 shadow-xl' : 'bg-neutral-200'
             }`}>
-              <Building2 className={activeIntegration === 'bank' ? 'text-white' : 'text-neutral-600'} size={24} />
+              <Building2 className={activeIntegration === 'bank' ? 'text-white' : 'text-neutral-600'} size={32} />
             </div>
-            <div>
-              <h3 className={`font-semibold ${activeIntegration === 'bank' ? 'text-blue-900' : 'text-neutral-900'}`}>
+            <div className="text-center">
+              <h3 className={`font-bold text-lg mb-1 ${activeIntegration === 'bank' ? 'text-blue-900' : 'text-neutral-900'}`}>
                 Banka Entegrasyonları
               </h3>
               <p className="text-sm text-neutral-600">
@@ -49,19 +57,19 @@ export default function IntegrationsTab() {
           {/* E-Commerce Integrations */}
           <button
             onClick={() => setActiveIntegration('ecommerce')}
-            className={`flex items-center gap-4 p-6 rounded-xl border-2 transition-all text-left ${
+            className={`flex flex-col items-center gap-4 p-8 rounded-2xl border-2 transition-all hover:shadow-lg ${
               activeIntegration === 'ecommerce'
-                ? 'border-green-500 bg-green-50'
-                : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
+                ? 'border-green-500 bg-green-50 shadow-lg scale-105'
+                : 'border-neutral-200 hover:border-green-300 hover:bg-green-50'
             }`}
           >
-            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-              activeIntegration === 'ecommerce' ? 'bg-green-500' : 'bg-neutral-200'
+            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all ${
+              activeIntegration === 'ecommerce' ? 'bg-green-500 shadow-xl' : 'bg-neutral-200'
             }`}>
-              <Store className={activeIntegration === 'ecommerce' ? 'text-white' : 'text-neutral-600'} size={24} />
+              <Store className={activeIntegration === 'ecommerce' ? 'text-white' : 'text-neutral-600'} size={32} />
             </div>
-            <div>
-              <h3 className={`font-semibold ${activeIntegration === 'ecommerce' ? 'text-green-900' : 'text-neutral-900'}`}>
+            <div className="text-center">
+              <h3 className={`font-bold text-lg mb-1 ${activeIntegration === 'ecommerce' ? 'text-green-900' : 'text-neutral-900'}`}>
                 E-Ticaret Entegrasyonları
               </h3>
               <p className="text-sm text-neutral-600">
@@ -73,19 +81,19 @@ export default function IntegrationsTab() {
           {/* GIB Integration */}
           <button
             onClick={() => setActiveIntegration('gib')}
-            className={`flex items-center gap-4 p-6 rounded-xl border-2 transition-all text-left ${
+            className={`flex flex-col items-center gap-4 p-8 rounded-2xl border-2 transition-all hover:shadow-lg ${
               activeIntegration === 'gib'
-                ? 'border-purple-500 bg-purple-50'
-                : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
+                ? 'border-purple-500 bg-purple-50 shadow-lg scale-105'
+                : 'border-neutral-200 hover:border-purple-300 hover:bg-purple-50'
             }`}
           >
-            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-              activeIntegration === 'gib' ? 'bg-purple-500' : 'bg-neutral-200'
+            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all ${
+              activeIntegration === 'gib' ? 'bg-purple-500 shadow-xl' : 'bg-neutral-200'
             }`}>
-              <Globe className={activeIntegration === 'gib' ? 'text-white' : 'text-neutral-600'} size={24} />
+              <Globe className={activeIntegration === 'gib' ? 'text-white' : 'text-neutral-600'} size={32} />
             </div>
-            <div>
-              <h3 className={`font-semibold ${activeIntegration === 'gib' ? 'text-purple-900' : 'text-neutral-900'}`}>
+            <div className="text-center">
+              <h3 className={`font-bold text-lg mb-1 ${activeIntegration === 'gib' ? 'text-purple-900' : 'text-neutral-900'}`}>
                 GİB Entegrasyonu
               </h3>
               <p className="text-sm text-neutral-600">
@@ -97,14 +105,14 @@ export default function IntegrationsTab() {
       </div>
 
       {/* Integration Content */}
-      <div>
+      <div className="mt-8">
         {activeIntegration === 'bank' && (
-          <div>
+          <div className="[&>div>div:first-child]:hidden">
             <BankIntegrations />
           </div>
         )}
         {activeIntegration === 'ecommerce' && (
-          <div>
+          <div className="[&>div>div:first-child]:hidden">
             <ECommerceIntegrations />
           </div>
         )}
