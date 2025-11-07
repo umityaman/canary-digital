@@ -176,7 +176,7 @@ export default function CashBankManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Kasa ve Banka Yönetimi</h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -185,109 +185,123 @@ export default function CashBankManagement() {
         </div>
         <button
           onClick={() => setShowTransactionForm(true)}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className={cx(button('md', 'primary', 'md'), 'gap-2')}
         >
-          <Plus className="w-4 h-4 mr-2" />
-          Yeni İşlem
+          <Plus className="w-4 h-4" />
+          <span className="hidden sm:inline">Yeni İşlem</span>
         </button>
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 lg:p-6 text-white min-w-0">
+      {/* Summary Stats - Responsive Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Balance */}
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
           <div className="flex items-center justify-between mb-3">
-            <Wallet className="w-6 h-6 lg:w-8 lg:h-8 opacity-80" />
-            <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>
+            <Wallet className="w-8 h-8 opacity-80" />
+            <span className={cx(badge('sm', 'default'), 'bg-white/20 text-white border-0')}>Toplam</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.lg} mb-1 break-all`}>{formatCurrency(totalBalance)}</p>
-          <p className="text-xs lg:text-sm opacity-90">Toplam Bakiye</p>
+          <p className="text-3xl font-bold mb-1">{formatCurrency(totalBalance)}</p>
+          <p className="text-sm opacity-90">Toplam Bakiye</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 min-w-0">
+        {/* Bank Accounts */}
+        <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
-            <Building2 className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
-            <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">Banka</span>
+            <Building2 className="w-8 h-8 text-blue-600" />
+            <span className={badge('sm', 'info')}>Banka</span>
           </div>
-          <p className={cx(DESIGN_TOKENS.typography.stat.lg, DESIGN_TOKENS.colors.text.primary, 'mb-1 break-all')}>
+          <p className="text-3xl font-bold text-gray-900 mb-1">
             {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
           </p>
-          <p className="text-xs lg:text-sm text-gray-600">
+          <p className="text-sm text-gray-600">
             {bankAccounts?.totals.activeAccounts || 0} Aktif Hesap
           </p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 min-w-0">
+        {/* Cash Balance */}
+        <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
-            <Wallet className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">Kasa</span>
+            <Wallet className="w-8 h-8 text-green-600" />
+            <span className={badge('sm', 'success')}>Kasa</span>
           </div>
-          <p className={cx(DESIGN_TOKENS.typography.stat.lg, DESIGN_TOKENS.colors.text.primary, 'mb-1 break-all')}>{formatCurrency(cashBalance)}</p>
-          <p className="text-xs lg:text-sm text-gray-600">Nakit Bakiye</p>
+          <p className="text-3xl font-bold text-gray-900 mb-1">{formatCurrency(cashBalance)}</p>
+          <p className="text-sm text-gray-600">Nakit Bakiye</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 min-w-0 col-span-1 sm:col-span-2 lg:col-span-1">
+        {/* Today's Activity */}
+        <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
-            <Calendar className="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" />
-            <span className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-full">
-              Bugün
-            </span>
+            <Calendar className="w-8 h-8 text-purple-600" />
+            <span className={badge('sm', 'default')}>Bugün</span>
           </div>
           <div className="space-y-2">
-            <div>
-              <p className="text-base lg:text-lg font-bold text-green-600 break-all">
-                +{formatCurrency(cashInToday)}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ArrowUpRight className="w-4 h-4 text-green-600" />
+                <span className="text-sm text-gray-600">Giriş</span>
+              </div>
+              <p className="text-lg font-bold text-green-600">
+                {formatCurrency(cashInToday)}
               </p>
-              <p className="text-xs text-gray-500">Giriş</p>
             </div>
-            <div>
-              <p className="text-base lg:text-lg font-bold text-red-600 break-all">-{formatCurrency(cashOutToday)}</p>
-              <p className="text-xs text-gray-500">Çıkış</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ArrowDownLeft className="w-4 h-4 text-red-600" />
+                <span className="text-sm text-gray-600">Çıkış</span>
+              </div>
+              <p className="text-lg font-bold text-red-600">
+                {formatCurrency(cashOutToday)}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border border-gray-200 rounded-lg">
-        <div className="border-b border-gray-200">
-          <div className="flex space-x-1 p-2">
+      <div className={card('none', 'none', 'default', 'xl')}>
+        <div className="border-b border-gray-200 px-6">
+          <div className="flex space-x-1 -mb-px overflow-x-auto">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={cx(
+                'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'overview'
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+              )}
             >
               Genel Bakış
             </button>
             <button
               onClick={() => setActiveTab('bank')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={cx(
+                'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'bank'
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+              )}
             >
               Banka Hesapları
             </button>
             <button
               onClick={() => setActiveTab('cash')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={cx(
+                'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'cash'
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+              )}
             >
               Kasa Hareketleri
             </button>
             <button
               onClick={() => setActiveTab('cashflow')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={cx(
+                'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'cashflow'
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+              )}
             >
               Nakit Akışı
             </button>
