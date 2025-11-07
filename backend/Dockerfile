@@ -25,5 +25,5 @@ ENV NODE_OPTIONS="--max-old-space-size=512"
 
 EXPOSE 4000
 
-# Use ts-node to run directly without compilation
-CMD ["npx", "ts-node", "--transpile-only", "src/index.ts"]
+# Use ts-node via npm start script
+CMD ["npm", "start"]
