@@ -44,7 +44,7 @@ const IntegrationsTab = lazy(() => import('../components/accounting/tabs/Integra
 const BankIntegrations = lazy(() => import('../components/banking/BankIntegrations'))
 const ECommerceIntegrations = lazy(() => import('../components/ecommerce/ECommerceIntegrations'))
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations'
 
 interface AccountingStats {
   totalRevenue: number
@@ -781,7 +781,6 @@ export default function Accounting() {
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'cost-accounting' as const, label: 'Maliyet Muhasebesi', icon: <DollarSign size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
-    { id: 'categories' as const, label: 'Kategoriler & Etiketler', icon: <Tag size={18} /> },
     { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
     { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
@@ -1726,7 +1725,7 @@ export default function Accounting() {
                         <table className="w-full">
                           <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
                             <tr>
-                              <th className="px-6 py-3 text-left">
+                              <th className="px-3 py-3 text-left">
                                 <input
                                   type="checkbox"
                                   checked={selectedOffers.length === offers.length && offers.length > 0}
@@ -1734,25 +1733,25 @@ export default function Accounting() {
                                   className={`${DESIGN_TOKENS.radius.sm} rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
-                              <th className={`px-4 lg:px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Teklif No
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Müşteri
                               </th>
-                              <th className={`hidden lg:table-cell px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden xl:table-cell px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Tarih
                               </th>
-                              <th className={`hidden md:table-cell px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden lg:table-cell px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Geçerlilik
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Tutar
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Durum
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 İşlemler
                               </th>
                             </tr>
@@ -1760,7 +1759,7 @@ export default function Accounting() {
                           <tbody className="bg-white divide-y divide-neutral-200">
                             {offers.map((offer) => (
                               <tr key={offer.id} className="hover:bg-neutral-50 transition-colors">
-                                <td className="px-6 py-4">
+                                <td className="px-3 py-4">
                                   <input
                                     type="checkbox"
                                     checked={selectedOffers.includes(offer.id)}
@@ -1768,7 +1767,7 @@ export default function Accounting() {
                                     className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
                                   />
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-3 py-4 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.offerNumber}
                                   </div>
@@ -1776,7 +1775,7 @@ export default function Accounting() {
                                     {offer.items?.length || 0} kalem
                                   </div>
                                 </td>
-                                <td className="px-6 py-4">
+                                <td className="px-3 py-4">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.customer.name}
                                   </div>
@@ -1784,12 +1783,12 @@ export default function Accounting() {
                                     {offer.customer.email}
                                   </div>
                                 </td>
-                                <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap">
+                                <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap">
                                   <div className="text-sm text-neutral-900">
                                     {formatDate(offer.offerDate)}
                                   </div>
                                 </td>
-                                <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                                <td className="hidden lg:table-cell px-3 py-4 whitespace-nowrap">
                                   <div className={`text-sm ${
                                     new Date(offer.validUntil) < new Date() 
                                       ? 'text-red-600 font-medium' 
@@ -1801,15 +1800,15 @@ export default function Accounting() {
                                     <div className="text-xs text-red-500">Süresi doldu</div>
                                   )}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-3 py-4 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {formatCurrency(offer.grandTotal)}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-3 py-4 whitespace-nowrap">
                                   {getOfferStatusBadge(offer.status)}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-3 py-4 whitespace-nowrap">
                                   <div className="flex items-center gap-3">
                                     {offer.status === 'draft' && (
                                       <button

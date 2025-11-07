@@ -219,14 +219,14 @@ export default function CurrentAccountList() {
       {/* Balances Table */}
       <Card>
         <TableContainer>
-          <Table>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Müşteri</TableCell>
                 <TableCell align="right">Toplam Borç</TableCell>
                 <TableCell align="right">Toplam Alacak</TableCell>
                 <TableCell align="right">Bakiye</TableCell>
-                <TableCell>Son İşlem</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>Son İşlem</TableCell>
                 <TableCell align="right">İşlemler</TableCell>
               </TableRow>
             </TableHead>
@@ -246,17 +246,17 @@ export default function CurrentAccountList() {
                     onClick={() => navigate(`/current-accounts/${balance.customerId}`)}
                   >
                     <TableCell>
-                      <Typography variant="body1" fontWeight="medium">
+                      <Typography variant="body2" fontWeight="medium">
                         {balance.customerName}
                       </Typography>
                     </TableCell>
-                    <TableCell align="right">
-                      <Typography color="textSecondary">
+                    <TableCell align="right" sx={{ display: { xs: 'none', lg: 'table-cell' } }}>
+                      <Typography variant="body2" color="textSecondary">
                         {formatCurrency(balance.totalDebit)}
                       </Typography>
                     </TableCell>
-                    <TableCell align="right">
-                      <Typography color="textSecondary">
+                    <TableCell align="right" sx={{ display: { xs: 'none', lg: 'table-cell' } }}>
+                      <Typography variant="body2" color="textSecondary">
                         {formatCurrency(balance.totalCredit)}
                       </Typography>
                     </TableCell>
@@ -277,7 +277,7 @@ export default function CurrentAccountList() {
                         </Typography>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
                       <Typography variant="body2">
                         {formatDate(balance.lastTransactionDate)}
                       </Typography>
@@ -291,7 +291,7 @@ export default function CurrentAccountList() {
                           navigate(`/current-accounts/${balance.customerId}`);
                         }}
                       >
-                        Detay
+                        <span style={{ display: window.innerWidth < 768 ? 'none' : 'inline' }}>Detay</span>
                       </Button>
                     </TableCell>
                   </TableRow>
