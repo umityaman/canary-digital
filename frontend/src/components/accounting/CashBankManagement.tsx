@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../../utils/api';
 import toast from 'react-hot-toast';
-import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
+import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 
 interface BankAccount {
   id: number;
@@ -198,7 +198,7 @@ export default function CashBankManagement() {
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
           <div className="flex items-center justify-between mb-3">
             <Wallet className="w-8 h-8 opacity-80" />
-            <span className={cx(badge('sm', 'default'), 'bg-white/20 text-white border-0')}>Toplam</span>
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-white/20 text-white">Toplam</span>
           </div>
           <p className="text-3xl font-bold mb-1">{formatCurrency(totalBalance)}</p>
           <p className="text-sm opacity-90">Toplam Bakiye</p>
@@ -208,7 +208,7 @@ export default function CashBankManagement() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
             <Building2 className="w-8 h-8 text-blue-600" />
-            <span className={badge('sm', 'info')}>Banka</span>
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Banka</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 mb-1">
             {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
@@ -222,7 +222,7 @@ export default function CashBankManagement() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
             <Wallet className="w-8 h-8 text-green-600" />
-            <span className={badge('sm', 'success')}>Kasa</span>
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Kasa</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 mb-1">{formatCurrency(cashBalance)}</p>
           <p className="text-sm text-gray-600">Nakit Bakiye</p>
@@ -232,7 +232,7 @@ export default function CashBankManagement() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
             <Calendar className="w-8 h-8 text-purple-600" />
-            <span className={badge('sm', 'default')}>Bugün</span>
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">Bugün</span>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
@@ -258,7 +258,7 @@ export default function CashBankManagement() {
       </div>
 
       {/* Tabs */}
-      <div className={card('none', 'none', 'default', 'xl')}>
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         <div className="border-b border-gray-200 px-6">
           <div className="flex space-x-1 -mb-px overflow-x-auto">
             <button

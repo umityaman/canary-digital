@@ -5,7 +5,7 @@ import {
 import StatCard from '../../ui/StatCard'
 import ActionCard from '../../ui/ActionCard'
 import { toast } from 'react-hot-toast'
-import { card, button, badge, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
+import { card, button, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
 
 const AdvisorTab: React.FC = () => {
   const stats = [
@@ -116,7 +116,11 @@ const AdvisorTab: React.FC = () => {
               </div>
               
               <div className="flex items-center gap-3">
-                <span className={badge(client.status === 'active' ? 'success' : 'warning', 'sm')}>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                  client.status === 'active' 
+                    ? 'bg-green-100 text-green-700' 
+                    : 'bg-orange-100 text-orange-700'
+                }`}>
                   {client.status === 'active' ? 'Aktif' : 'Beklemede'}
                 </span>
                 

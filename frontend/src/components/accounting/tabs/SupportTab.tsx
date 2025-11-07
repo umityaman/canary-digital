@@ -4,7 +4,7 @@ import {
 } from 'lucide-react'
 import ActionCard from '../../ui/ActionCard'
 import { toast } from 'react-hot-toast'
-import { card, button, badge, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
+import { card, button, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
 
 const SupportTab: React.FC = () => {
   const quickActions = [
@@ -79,23 +79,21 @@ const SupportTab: React.FC = () => {
   ]
 
   const getStatusBadge = (status: string) => {
-    const statusMap: Record<string, { variant: 'info' | 'warning' | 'success'; text: string }> = {
-      'open': { variant: 'info', text: 'Açık' },
-      'in-progress': { variant: 'warning', text: 'Devam Ediyor' },
-      'resolved': { variant: 'success', text: 'Çözüldü' }
+    const statusMap: Record<string, { color: string; text: string }> = {
+      'open': { color: 'bg-blue-100 text-blue-700', text: 'Açık' },
+      'in-progress': { color: 'bg-orange-100 text-orange-700', text: 'Devam Ediyor' },
+      'resolved': { color: 'bg-green-100 text-green-700', text: 'Çözüldü' }
     }
-    const config = statusMap[status] || { variant: 'info' as const, text: status }
-    return { variant: config.variant, text: config.text }
+    return statusMap[status] || { color: 'bg-gray-100 text-gray-700', text: status }
   }
 
   const getPriorityBadge = (priority: string) => {
-    const priorityMap: Record<string, { variant: 'danger' | 'warning' | 'neutral'; text: string }> = {
-      'high': { variant: 'danger', text: 'Yüksek' },
-      'medium': { variant: 'warning', text: 'Orta' },
-      'low': { variant: 'neutral', text: 'Düşük' }
+    const priorityMap: Record<string, { color: string; text: string }> = {
+      'high': { color: 'bg-red-100 text-red-700', text: 'Yüksek' },
+      'medium': { color: 'bg-yellow-100 text-yellow-700', text: 'Orta' },
+      'low': { color: 'bg-gray-100 text-gray-700', text: 'Düşük' }
     }
-    const config = priorityMap[priority] || { variant: 'neutral' as const, text: priority }
-    return { variant: config.variant, text: config.text }
+    return priorityMap[priority] || { color: 'bg-gray-100 text-gray-700', text: priority }
   }
 
   return (
@@ -139,10 +137,10 @@ const SupportTab: React.FC = () => {
                     <span className="font-mono text-sm font-semibold text-gray-900">
                       {ticket.id}
                     </span>
-                    <span className={badge(getStatusBadge(ticket.status).variant, 'sm')}>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(ticket.status).color}`}>
                       {getStatusBadge(ticket.status).text}
                     </span>
-                    <span className={badge(getPriorityBadge(ticket.priority).variant, 'sm')}>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPriorityBadge(ticket.priority).color}`}>
                       {getPriorityBadge(ticket.priority).text}
                     </span>
                   </div>
