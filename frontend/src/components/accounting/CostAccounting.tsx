@@ -328,88 +328,88 @@ export default function CostAccounting() {
           </h3>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px]">
+          <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Ürün</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase hidden lg:table-cell">Hammadde</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase hidden md:table-cell">İşçilik</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase hidden xl:table-cell">Genel Gider</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase">Toplam Maliyet</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase hidden md:table-cell">Satış Fiyatı</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase">Kar</th>
-                <th className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase hidden lg:table-cell">Kar Marjı</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase">İşlem</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">Ürün</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden lg:table-cell">Hammadde</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden md:table-cell">İşçilik</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden xl:table-cell">G.Gider</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase">Maliyet</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden md:table-cell">Fiyat</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase">Kar</th>
+                <th className="px-2 py-2 text-center text-xs font-medium text-gray-700 uppercase hidden lg:table-cell">Marj</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase">İşlem</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {productCosts.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{product.productName}</div>
+                  <td className="px-3 py-3 whitespace-nowrap">
+                    <div className="font-medium text-gray-900 text-sm">{product.productName}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 hidden lg:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden lg:table-cell">
                     {formatCurrency(product.materialCost)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 hidden md:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden md:table-cell">
                     {formatCurrency(product.laborCost)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 hidden xl:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden xl:table-cell">
                     {formatCurrency(product.overheadCost)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right font-medium text-gray-900">
+                  <td className="px-2 py-3 whitespace-nowrap text-right font-medium text-gray-900 text-sm">
                     {formatCurrency(product.totalCost)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 hidden md:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden md:table-cell">
                     {formatCurrency(product.sellingPrice)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                  <td className="px-2 py-3 whitespace-nowrap text-right">
                     <span className={`font-medium ${product.profit > 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {formatCurrency(product.profit)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center hidden lg:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-center hidden lg:table-cell">
                     <span
                       className={cx(
-                        'inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-medium',
+                        'inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-medium',
                         product.profitMargin > 20
                           ? 'bg-green-100 text-green-700'
                           : 'bg-orange-100 text-orange-700'
                       )}
                     >
-                      %{product.profitMargin.toFixed(2)}
+                      %{product.profitMargin.toFixed(1)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="px-2 py-3 whitespace-nowrap text-right">
+                    <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => toast.success('Düzenleme açılıyor...')}
-                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                         title="Düzenle"
                       >
-                        <Edit className="text-gray-600" size={16} />
+                        <Edit className="text-gray-600" size={14} />
                       </button>
                       <button
                         onClick={() => toast.success('Detay görüntüleniyor...')}
-                        className="p-2 hover:bg-blue-100 rounded-lg transition-colors"
+                        className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors"
                         title="Detay"
                       >
-                        <FileText className="text-blue-600" size={16} />
+                        <FileText className="text-blue-600" size={14} />
                       </button>
                     </div>
                   </td>
                 </tr>
               ))}
               <tr className="bg-gray-100 font-bold">
-                <td className="px-6 py-4 text-gray-900">TOPLAM</td>
-                <td className="px-6 py-4 text-right text-gray-900 hidden lg:table-cell">{formatCurrency(totalMaterialCost)}</td>
-                <td className="px-6 py-4 text-right text-gray-900 hidden md:table-cell">{formatCurrency(totalLaborCost)}</td>
-                <td className="px-6 py-4 text-right text-gray-900 hidden xl:table-cell">{formatCurrency(totalOverheadCost)}</td>
-                <td className="px-6 py-4 text-right text-gray-900">{formatCurrency(totalCost)}</td>
-                <td className="px-6 py-4 text-right text-gray-900 hidden md:table-cell">{formatCurrency(totalRevenue)}</td>
-                <td className="px-6 py-4 text-right text-green-600">{formatCurrency(totalProfit)}</td>
-                <td className="px-6 py-4 text-center text-gray-900 hidden lg:table-cell">%{avgProfitMargin}</td>
-                <td className="px-6 py-4"></td>
+                <td className="px-3 py-3 text-gray-900 text-sm">TOPLAM</td>
+                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden lg:table-cell">{formatCurrency(totalMaterialCost)}</td>
+                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden md:table-cell">{formatCurrency(totalLaborCost)}</td>
+                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden xl:table-cell">{formatCurrency(totalOverheadCost)}</td>
+                <td className="px-2 py-3 text-right text-gray-900 text-sm">{formatCurrency(totalCost)}</td>
+                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden md:table-cell">{formatCurrency(totalRevenue)}</td>
+                <td className="px-2 py-3 text-right text-green-600 text-sm">{formatCurrency(totalProfit)}</td>
+                <td className="px-2 py-3 text-center text-gray-900 text-xs hidden lg:table-cell">%{avgProfitMargin}</td>
+                <td className="px-2 py-3"></td>
               </tr>
             </tbody>
           </table>

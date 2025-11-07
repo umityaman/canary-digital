@@ -562,89 +562,89 @@ export default function InventoryAccounting() {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1000px]">
+              <table className="w-full">
                   <thead className="bg-neutral-50 border-b border-neutral-200">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tip</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Ekipman</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Miktar</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">Birim Fiyat</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Toplam</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Müşteri</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700 uppercase">İşlem</th>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
+                      <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tip</th>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Ekipman</th>
+                      <th className="px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Adet</th>
+                      <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">Birim</th>
+                      <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Toplam</th>
+                      <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Müşteri</th>
+                      <th className="px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                      <th className="px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">İşlem</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {filteredTransactions.map((transaction) => (
                       <tr key={transaction.id} className="hover:bg-neutral-50 transition-colors">
-                        <td className="px-4 py-4 text-sm text-neutral-900">
+                        <td className="px-3 py-3 text-xs text-neutral-900">
                           {formatDate(transaction.date)}
                         </td>
-                        <td className="px-4 py-4 hidden lg:table-cell">
-                          <div className="flex items-center gap-2">
+                        <td className="px-2 py-3 hidden lg:table-cell">
+                          <div className="flex items-center gap-1">
                             {getTypeIcon(transaction.type)}
-                            <span className="text-sm text-neutral-900">
+                            <span className="text-xs text-neutral-900">
                               {getTransactionTypeLabel(transaction.type)}
                             </span>
                           </div>
                         </td>
-                        <td className="px-4 py-4">
-                          <div className="text-sm font-medium text-neutral-900">{transaction.equipmentName}</div>
+                        <td className="px-3 py-3">
+                          <div className="text-xs font-medium text-neutral-900">{transaction.equipmentName}</div>
                           {transaction.orderNumber && (
-                            <div className="text-xs text-neutral-500">{transaction.orderNumber}</div>
+                            <div className="text-[10px] text-neutral-500">{transaction.orderNumber}</div>
                           )}
                         </td>
-                        <td className="px-4 py-4 text-center text-sm font-semibold text-neutral-900 hidden md:table-cell">
+                        <td className="px-2 py-3 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell">
                           {transaction.quantity}
                         </td>
-                        <td className="px-4 py-4 text-right text-sm text-neutral-900 hidden xl:table-cell">
+                        <td className="px-2 py-3 text-right text-xs text-neutral-900 hidden xl:table-cell">
                           {formatCurrency(transaction.unitCost)}
                         </td>
-                        <td className="px-4 py-4 text-right text-sm font-bold text-neutral-900">
+                        <td className="px-2 py-3 text-right text-sm font-bold text-neutral-900">
                           {formatCurrency(transaction.totalCost)}
                         </td>
-                        <td className="px-4 py-4 text-sm text-neutral-900 hidden lg:table-cell">
+                        <td className="px-2 py-3 text-xs text-neutral-900 hidden lg:table-cell">
                           {transaction.customerName || '-'}
                         </td>
-                        <td className="px-4 py-4 text-center">
+                        <td className="px-2 py-3 text-center">
                           {getStatusBadge(transaction.accountingStatus)}
                         </td>
-                        <td className="px-4 py-4 text-center">
+                        <td className="px-2 py-3 text-center">
                           {transaction.accountingStatus === 'pending' && (
                             <button
                               onClick={() => handleAutoRecord(transaction.id)}
                               disabled={loading}
-                              className="text-green-600 hover:text-green-700 font-medium text-sm disabled:opacity-50"
+                              className="text-green-600 hover:text-green-700 font-medium text-xs disabled:opacity-50"
                             >
                               Kaydet
                             </button>
                           )}
                           {transaction.accountingStatus === 'recorded' && (
-                            <div className="flex items-center justify-center gap-2">
+                            <div className="flex items-center justify-center gap-1">
                               <button
                                 onClick={() => {/* View entry */}}
                                 className="text-blue-600 hover:text-blue-700"
                                 title="Görüntüle"
                               >
-                                <Eye size={16} />
+                                <Eye size={14} />
                               </button>
                               <button
                                 onClick={() => handleDeleteEntry(transaction.id)}
                                 className="text-red-600 hover:text-red-700"
                                 title="Sil"
                               >
-                                <XCircle size={16} />
+                                <XCircle size={14} />
                               </button>
                             </div>
                           )}
                           {transaction.accountingStatus === 'error' && (
                             <button
                               onClick={() => handleAutoRecord(transaction.id)}
-                              className="text-orange-600 hover:text-orange-700 font-medium text-sm"
+                              className="text-orange-600 hover:text-orange-700 font-medium text-xs"
                             >
-                              Tekrar Dene
+                              Tekrar
                             </button>
                           )}
                         </td>
