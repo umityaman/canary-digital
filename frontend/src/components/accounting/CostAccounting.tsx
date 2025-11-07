@@ -320,7 +320,7 @@ export default function CostAccounting() {
       </div>
 
       {/* Product Cost Analysis Table */}
-  <div className={cx(card('md', 'sm', 'default', 'lg'), 'p-0')}>
+  <div className={cx(card('md', 'sm', 'default', 'lg'), 'p-0 overflow-hidden')}>
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center gap-2`}>
             <BarChart3 className="text-blue-600" size={20} />
@@ -328,7 +328,7 @@ export default function CostAccounting() {
           </h3>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[800px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Ürün</th>

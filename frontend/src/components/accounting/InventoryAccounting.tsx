@@ -562,7 +562,7 @@ export default function InventoryAccounting() {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[1000px]">
                   <thead className="bg-neutral-50 border-b border-neutral-200">
                     <tr>
                       <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
