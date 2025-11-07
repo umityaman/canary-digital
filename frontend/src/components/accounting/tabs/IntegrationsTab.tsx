@@ -98,8 +98,16 @@ export default function IntegrationsTab() {
 
       {/* Integration Content */}
       <div>
-        {activeIntegration === 'bank' && <BankIntegrations />}
-        {activeIntegration === 'ecommerce' && <ECommerceIntegrations />}
+        {activeIntegration === 'bank' && (
+          <div>
+            <BankIntegrations />
+          </div>
+        )}
+        {activeIntegration === 'ecommerce' && (
+          <div>
+            <ECommerceIntegrations />
+          </div>
+        )}
         {activeIntegration === 'gib' && (
           <div className={card('lg', 'lg', 'default', 'lg')}>
             <div className="text-center py-12">
