@@ -17,10 +17,8 @@ __tests__/
 .env.local
 .env.development
 .env.test
-*.md
-README.md
 
-# Build artifacts
+# Build artifacts (will be built inside Docker)
 dist/
 build/
 .next/
@@ -28,7 +26,6 @@ build/
 # Version control
 .git/
 .gitignore
-.github/
 
 # IDE
 .vscode/
@@ -61,17 +58,22 @@ backups/
 *.backup
 *.bak
 
-# Scripts (dev only)
+# Development Scripts
 scripts/
 *.sh
 *.ps1
 *.bat
 
-# Docker
-Dockerfile
+# Docker files (not needed inside image)
+Dockerfile*
 .dockerignore
 docker-compose.yml
 
-# Documentation
+# Documentation - keep important ones, exclude dev docs
 docs/
-*.md
+CONTRIBUTING.md
+CHANGELOG.md
+LICENSE
+
+# GitHub workflows
+.github/

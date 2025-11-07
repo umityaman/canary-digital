@@ -1,31 +1,51 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
-# Install minimal dependencies for Prisma and build tools
+# Install build dependencies
 RUN apk add --no-cache openssl libc6-compat python3 make g++
 
 WORKDIR /usr/src/app
 
 # Copy package files
 COPY package*.json ./
+COPY tsconfig.json ./
 
-# Install ALL dependencies (ts-node needed at runtime)
-# Note: Using npm install instead of npm ci because package-lock.json is not committed
-RUN npm install --production=false && npm cache clean --force
+# Install dependencies
+RUN npm ci --include=dev || npm install
 
-# Copy prisma schema
+# Copy prisma schema first
 COPY prisma ./prisma
 
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Copy source code (uses .dockerignore to exclude unnecessary files)
-COPY . .
+# Copy source code
+COPY src ./src
+
+# Build TypeScript
+RUN npm run build || npx tsc
+
+# Production stage
+FROM node:20-alpine
+
+RUN apk add --no-cache openssl libc6-compat
+
+WORKDIR /usr/src/app
+
+# Copy package files and install production dependencies only
+COPY package*.json ./
+RUN npm ci --omit=dev || npm install --omit=dev
+
+# Copy prisma schema and generate client
+COPY prisma ./prisma
+RUN npx prisma generate
+
+# Copy built files from builder
+COPY --from=builder /usr/src/app/dist ./dist
 
 # Set production environment
 ENV NODE_ENV=production
 
-# Cloud Run sets PORT automatically
 EXPOSE 4000
 
-# Start application with ts-node
-CMD ["npx", "ts-node", "--transpile-only", "src/index.ts"]
+# Start with compiled JS instead of ts-node
+CMD ["node", "dist/index.js"]
