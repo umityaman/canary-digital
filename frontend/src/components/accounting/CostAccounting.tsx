@@ -155,7 +155,7 @@ export default function CostAccounting() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-full overflow-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -177,8 +177,8 @@ export default function CostAccounting() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className={card('md', 'lg', 'default', 'lg')}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Toplam Maliyet</p>
@@ -204,7 +204,7 @@ export default function CostAccounting() {
           </div>
         </div>
 
-  <div className={card('md', 'lg', 'default', 'lg')}>
+  <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">İşçilik</p>
@@ -217,7 +217,7 @@ export default function CostAccounting() {
           </div>
         </div>
 
-  <div className={card('md', 'lg', 'default', 'lg')}>
+  <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Genel Gider</p>
@@ -232,8 +232,8 @@ export default function CostAccounting() {
       </div>
 
       {/* Profitability Overview */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className={card('md', 'lg', 'default', 'lg')}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <DollarSign className="text-blue-600" size={20} />
@@ -246,7 +246,7 @@ export default function CostAccounting() {
           <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>
         </div>
 
-  <div className={card('md', 'lg', 'default', 'lg')}>
+  <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
               <TrendingUp className="text-green-600" size={20} />
@@ -259,7 +259,7 @@ export default function CostAccounting() {
           <div className="h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
         </div>
 
-  <div className={card('md', 'lg', 'default', 'lg')}>
+  <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
               <PieChart className="text-purple-600" size={20} />
@@ -274,7 +274,7 @@ export default function CostAccounting() {
       </div>
 
       {/* Filters */}
-  <div className={card('md', 'lg', 'default', 'lg')}>
+  <div className={cx(card('sm', 'md', 'default', 'lg'), 'max-w-full')}>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <label className={cx(DESIGN_TOKENS.typography.label.lg, DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
