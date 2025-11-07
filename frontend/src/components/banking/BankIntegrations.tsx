@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { 
   Building2, Link2, CheckCircle, XCircle, AlertCircle, 
-  ExternalLink, Settings, Shield, Zap, Clock, Globe,
-  TrendingUp, Users, Lock, Key, Database, RefreshCw
+  ExternalLink, Shield, Zap, Clock,
+  Lock, Key, Database, RefreshCw, Search
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
-import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
 interface Bank {
   id: string
@@ -33,7 +32,6 @@ interface BankConnection {
 export default function BankIntegrations() {
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState('')
-  const [connections, setConnections] = useState<BankConnection[]>([])
   const [showConnectionModal, setShowConnectionModal] = useState(false)
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null)
 
@@ -383,276 +381,240 @@ export default function BankIntegrations() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className={`${DESIGN_TOKENS.typography.h1} ${DESIGN_TOKENS.colors.text.primary}`}>
-          Banka Entegrasyonları
-        </h2>
-        <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary} mt-2`}>
-          Türkiye'deki tüm bankalarınızı tek platformda yönetin
-        </p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className={cx(card('md', 'md', 'default', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
-              <Building2 className="text-white" size={20} />
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <Building2 className="w-8 h-8 text-blue-600" />
+                Banka Entegrasyonları
+              </h1>
+              <p className="text-sm text-gray-600 mt-1">
+                Türkiye'deki tüm bankalarınızı tek platformda yönetin
+              </p>
             </div>
-          </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-blue-900 mb-1`}>{banks.length}</h3>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} text-blue-700`}>Toplam Banka</p>
-        </div>
-
-        <div className={cx(card('md', 'md', 'default', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
-              <Link2 className="text-white" size={20} />
-            </div>
-          </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-green-900 mb-1`}>{connectedBanks.length}</h3>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-700`}>Bağlı Hesap</p>
-        </div>
-
-        <div className={cx(card('md', 'md', 'default', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center">
-              <Zap className="text-white" size={20} />
-            </div>
-          </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-purple-900 mb-1`}>{banks.filter(b => b.status === 'active').length}</h3>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} text-purple-700`}>Aktif Entegrasyon</p>
-        </div>
-
-        <div className={cx(card('md', 'md', 'default', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
-              <Clock className="text-white" size={20} />
-            </div>
-          </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-orange-900 mb-1`}>{banks.filter(b => b.status === 'coming-soon').length}</h3>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} text-orange-700`}>Yakında</p>
-        </div>
-      </div>
-
-      {/* Category Tabs */}
-      <div className={cx(card('md', 'sm', 'default', 'lg'))}>
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={cx(
-                'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
-                activeCategory === cat.id
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              )}
-            >
-              {getCategoryIcon(cat.id)} {cat.label} ({cat.count})
+            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+              <Link2 className="w-4 h-4" />
+              Yeni Banka Bağla
             </button>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      {/* Search */}
-      <div className={card('md', 'sm', 'default', 'lg')}>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
-          <input
-            type="text"
-            placeholder="Banka ara..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
-          />
-        </div>
-      </div>
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-blue-600 font-medium">Toplam Banka</p>
+                  <p className="text-2xl font-bold text-blue-900 mt-1">{banks.length}+</p>
+                </div>
+                <Building2 className="w-10 h-10 text-blue-600 opacity-20" />
+              </div>
+            </div>
 
-      {/* Connected Banks */}
-      {connectedBanks.length > 0 && (
-        <div>
-          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
-            Bağlı Hesaplar ({connectedBanks.length})
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {connectedBanks.map(bank => (
-              <div key={bank.id} className={cx(card('md', 'md', 'default', 'lg'), 'border-2 border-green-200 bg-green-50')}>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">{bank.logo}</div>
-                    <div>
-                      <h4 className={`${DESIGN_TOKENS.typography.h4} ${DESIGN_TOKENS.colors.text.primary}`}>
-                        {bank.name}
-                      </h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <CheckCircle size={14} className="text-green-600" />
-                        <span className="text-xs text-green-700">Bağlı</span>
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-green-600 font-medium">Bağlı Hesap</p>
+                  <p className="text-2xl font-bold text-green-900 mt-1">{connectedBanks.length}</p>
+                </div>
+                <CheckCircle className="w-10 h-10 text-green-600 opacity-20" />
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-purple-600 font-medium">Aktif Entegrasyon</p>
+                  <p className="text-2xl font-bold text-purple-900 mt-1">{banks.filter(b => b.status === 'active').length}</p>
+                </div>
+                <Zap className="w-10 h-10 text-purple-600 opacity-20" />
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-orange-600 font-medium">Yakında</p>
+                  <p className="text-2xl font-bold text-orange-900 mt-1">{banks.filter(b => b.status === 'coming-soon').length}</p>
+                </div>
+                <Clock className="w-10 h-10 text-orange-600 opacity-20" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Connected Banks */}
+        {connectedBanks.length > 0 && (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              Bağlı Hesaplar ({connectedBanks.length})
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {connectedBanks.map(bank => (
+                <div key={bank.id} className="border border-green-200 bg-green-50 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">{bank.logo}</span>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">{bank.name}</h3>
+                        <div className="flex items-center gap-1 mt-1">
+                          <CheckCircle className="w-3 h-3 text-green-600" />
+                          <span className="text-xs text-green-700">Bağlı</span>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  
+                  <div className="space-y-2 mb-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Son Senkronizasyon:</span>
+                      <span className="font-medium text-gray-900">{bank.lastSync}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button className="flex-1 px-3 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-sm">
+                      <RefreshCw className="w-4 h-4" />
+                      Yenile
+                    </button>
+                    <button 
+                      onClick={() => handleDisconnect(bank.id)}
+                      className="px-3 py-2 bg-white border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center gap-2 text-sm"
+                    >
+                      <XCircle className="w-4 h-4" />
+                      Kes
+                    </button>
+                  </div>
                 </div>
-                
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Son Senkronizasyon:</span>
-                    <span className="font-medium text-gray-900">{bank.lastSync}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Category Tabs & Search */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="flex flex-wrap gap-2 mb-6">
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+                  activeCategory === cat.id
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <span>{getCategoryIcon(cat.id)}</span>
+                {cat.label}
+                <span className={`px-2 py-0.5 rounded-full text-xs ${
+                  activeCategory === cat.id
+                    ? 'bg-white/20 text-white'
+                    : 'bg-white text-gray-700'
+                }`}>
+                  {cat.count}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Search */}
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Banka ara..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Available Banks */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredBanks.map(bank => (
+              <div key={bank.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{bank.logo}</span>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{bank.name}</h3>
+                      <div className="mt-1">{getStatusBadge(bank.status)}</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <button className={cx(button('sm', 'outline', 'md'), 'flex-1')}>
-                    <RefreshCw size={14} />
-                    Yenile
-                  </button>
-                  <button 
-                    onClick={() => handleDisconnect(bank.id)}
-                    className={cx(button('sm', 'outline', 'md'), 'text-red-600 hover:bg-red-50')}
-                  >
-                    <XCircle size={14} />
-                    Bağlantıyı Kes
-                  </button>
+                <div className="space-y-2 mb-4">
+                  {bank.features.slice(0, 3).map((feature, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0" />
+                      <span className="text-sm text-gray-600">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                  <span className="text-xs text-gray-500">
+                    {bank.apiType === 'open-banking' ? '🔓 Open Banking' : 
+                     bank.apiType === 'private' ? '🔒 Private API' : '📝 Manuel'}
+                  </span>
+                  {bank.connected ? (
+                    <span className="flex items-center gap-1 text-sm text-green-600 font-medium">
+                      <CheckCircle className="w-4 h-4" />
+                      Bağlı
+                    </span>
+                  ) : bank.status === 'active' ? (
+                    <button
+                      onClick={() => handleConnect(bank)}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm"
+                    >
+                      <Link2 className="w-4 h-4" />
+                      Bağlan
+                    </button>
+                  ) : (
+                    <span className="text-sm text-gray-500">Yakında</span>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
-      )}
 
-      {/* Available Banks */}
-      <div>
-        <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
-          Mevcut Bankalar ({filteredBanks.length})
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredBanks.map(bank => (
-            <div key={bank.id} className={cx(card('md', 'md', 'default', 'lg'), 'hover:shadow-lg transition-shadow')}>
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">{bank.logo}</div>
-                  <div>
-                    <h4 className={`${DESIGN_TOKENS.typography.h4} ${DESIGN_TOKENS.colors.text.primary}`}>
-                      {bank.name}
-                    </h4>
-                    <div className="mt-1">{getStatusBadge(bank.status)}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2 mb-4">
-                {bank.features.slice(0, 3).map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
-                    <CheckCircle size={14} className="text-green-600" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between pt-3 border-t">
-                <span className="text-xs text-gray-500">
-                  {bank.apiType === 'open-banking' ? '🔓 Open Banking' : 
-                   bank.apiType === 'private' ? '🔒 Private API' : '📝 Manuel'}
-                </span>
-                {bank.connected ? (
-                  <span className="flex items-center gap-1 text-sm text-green-600 font-medium">
-                    <CheckCircle size={16} />
-                    Bağlı
-                  </span>
-                ) : bank.status === 'active' ? (
-                  <button
-                    onClick={() => handleConnect(bank)}
-                    className={cx(button('sm', 'primary', 'md'), 'gap-1')}
-                  >
-                    <Link2 size={14} />
-                    Bağlan
-                  </button>
-                ) : (
-                  <span className="text-sm text-gray-500">Yakında</span>
-                )}
-              </div>
+        {/* Info Section */}
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Shield className="text-white w-6 h-6" />
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Info Section */}
-      <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200')}>
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Shield className="text-white" size={24} />
-          </div>
-          <div className="flex-1">
-            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>
-              Güvenli Banka Entegrasyonu
-            </h3>
-            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-3`}>
-              Tüm banka bağlantıları 256-bit SSL şifreleme ile korunmaktadır. Hiçbir şifreniz sistemimizde saklanmaz. 
-              Open Banking standartları ile güvenli API bağlantısı sağlanmaktadır.
-            </p>
-            <div className="flex items-center gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <Lock className="text-blue-600" size={16} />
-                <span className="text-gray-700">256-bit SSL</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Key className="text-blue-600" size={16} />
-                <span className="text-gray-700">OAuth 2.0</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Database className="text-blue-600" size={16} />
-                <span className="text-gray-700">KVKK Uyumlu</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Connection Modal */}
-      {showConnectionModal && selectedBank && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className={cx(card('lg', 'none', 'default', 'xl'), 'w-full max-w-md')}>
-            <div className="p-6 border-b">
-              <h3 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
-                {selectedBank.name} Bağlantısı
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Güvenli Banka Entegrasyonu
               </h3>
-            </div>
-            <div className="p-6">
-              <div className="text-center mb-6">
-                <div className="text-6xl mb-4">{selectedBank.logo}</div>
-                <p className="text-gray-600">
-                  {selectedBank.name} hesabınızı bağlamak için bankanızın internet bankacılığı bilgileriniz ile giriş yapın.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <button className={cx(button('md', 'primary', 'md'), 'w-full')}>
-                  <ExternalLink size={16} />
-                  {selectedBank.name} Giriş Sayfasına Git
-                </button>
-                <button 
-                  onClick={() => setShowConnectionModal(false)}
-                  className={cx(button('md', 'outline', 'md'), 'w-full')}
-                >
-                  İptal
-                </button>
-              </div>
-
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                <div className="flex gap-3">
-                  <AlertCircle className="text-blue-600 flex-shrink-0" size={20} />
-                  <div className="text-sm text-gray-700">
-                    <p className="font-medium mb-1">Güvenlik Notu:</p>
-                    <p>Bağlantı işlemi bankanızın resmi web sitesi üzerinden gerçekleştirilecektir. 
-                    Giriş bilgileriniz bizimle paylaşılmaz.</p>
-                  </div>
+              <p className="text-sm text-gray-600 mb-3">
+                Tüm banka bağlantıları 256-bit SSL şifreleme ile korunmaktadır. Hiçbir şifreniz sistemimizde saklanmaz. 
+                Open Banking standartları ile güvenli API bağlantısı sağlanmaktadır.
+              </p>
+              <div className="flex items-center gap-6 text-sm">
+                <div className="flex items-center gap-2">
+                  <Lock className="text-blue-600 w-4 h-4" />
+                  <span className="text-gray-700">256-bit SSL</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Key className="text-blue-600 w-4 h-4" />
+                  <span className="text-gray-700">OAuth 2.0</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Database className="text-blue-600 w-4 h-4" />
+                  <span className="text-gray-700">KVKK Uyumlu</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )}
+
+      </div>
     </div>
   )
 }

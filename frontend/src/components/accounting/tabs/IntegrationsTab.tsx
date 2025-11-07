@@ -7,6 +7,8 @@ import { card, DESIGN_TOKENS } from '../../../styles/design-tokens'
 export default function IntegrationsTab() {
   const [activeIntegration, setActiveIntegration] = useState<'bank' | 'ecommerce' | 'gib'>('bank')
 
+  console.log('IntegrationsTab rendered, activeIntegration:', activeIntegration)
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -106,17 +108,22 @@ export default function IntegrationsTab() {
 
       {/* Integration Content */}
       <div className="mt-8">
-        {activeIntegration === 'bank' && (
-          <div className="[&>div>div:first-child]:hidden">
-            <BankIntegrations />
-          </div>
-        )}
-        {activeIntegration === 'ecommerce' && (
-          <div className="[&>div>div:first-child]:hidden">
-            <ECommerceIntegrations />
-          </div>
-        )}
-        {activeIntegration === 'gib' && (
+        <div className="bg-white p-8 rounded-xl border border-neutral-200">
+          <p className="text-lg font-semibold text-neutral-900 mb-4">
+            Seçili Entegrasyon: {activeIntegration === 'bank' ? 'Banka' : activeIntegration === 'ecommerce' ? 'E-Ticaret' : 'GİB'}
+          </p>
+          
+          {activeIntegration === 'bank' && (
+            <div className="[&>div>div:first-child]:hidden">
+              <BankIntegrations />
+            </div>
+          )}
+          {activeIntegration === 'ecommerce' && (
+            <div className="[&>div>div:first-child]:hidden">
+              <ECommerceIntegrations />
+            </div>
+          )}
+          {activeIntegration === 'gib' && (
           <div className={card('lg', 'lg', 'default', 'lg')}>
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -145,6 +152,7 @@ export default function IntegrationsTab() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   )
