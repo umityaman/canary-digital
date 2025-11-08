@@ -562,27 +562,27 @@ export default function InventoryAccounting() {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-max">
+              <table className="w-auto min-w-full">
                   <thead className="bg-neutral-50 border-b border-neutral-200">
                     <tr>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Tarih</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Tip</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Ekipman</th>
-                      <th className="px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden md:table-cell">Adet</th>
-                      <th className="px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden xl:table-cell">Birim Fiyat</th>
-                      <th className="px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Toplam</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Müşteri</th>
-                      <th className="px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Durum</th>
-                      <th className="px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">İşlem</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Tarih</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Tip</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Ekipman</th>
+                      <th className="px-4 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden md:table-cell">Adet</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden xl:table-cell">Birim Fiyat</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Toplam</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Müşteri</th>
+                      <th className="px-4 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Durum</th>
+                      <th className="px-4 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">İşlem</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {filteredTransactions.map((transaction) => (
                       <tr key={transaction.id} className="hover:bg-neutral-50 transition-colors">
-                        <td className="px-3 py-2 text-xs text-neutral-900 whitespace-nowrap">
+                        <td className="px-4 py-3 text-xs text-neutral-900 whitespace-nowrap">
                           {formatDate(transaction.date)}
                         </td>
-                        <td className="px-3 py-2 hidden lg:table-cell">
+                        <td className="px-4 py-3 hidden lg:table-cell">
                           <div className="flex items-center gap-2 whitespace-nowrap">
                             {getTypeIcon(transaction.type)}
                             <span className="text-xs text-neutral-900">
@@ -590,30 +590,30 @@ export default function InventoryAccounting() {
                             </span>
                           </div>
                         </td>
-                        <td className="px-3 py-2 max-w-[250px]">
-                          <div className="text-xs font-medium text-neutral-900 truncate" title={transaction.equipmentName}>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="text-xs font-medium text-neutral-900">
                             {transaction.equipmentName}
                           </div>
                           {transaction.orderNumber && (
-                            <div className="text-[10px] text-neutral-500 truncate">{transaction.orderNumber}</div>
+                            <div className="text-[10px] text-neutral-500">{transaction.orderNumber}</div>
                           )}
                         </td>
-                        <td className="px-3 py-2 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell whitespace-nowrap">
+                        <td className="px-4 py-3 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell whitespace-nowrap">
                           {transaction.quantity}
                         </td>
-                        <td className="px-3 py-2 text-right text-xs text-neutral-900 hidden xl:table-cell whitespace-nowrap">
+                        <td className="px-4 py-3 text-right text-xs text-neutral-900 hidden xl:table-cell whitespace-nowrap">
                           {formatCurrency(transaction.unitCost)}
                         </td>
-                        <td className="px-3 py-2 text-right text-xs font-bold text-neutral-900 whitespace-nowrap">
+                        <td className="px-4 py-3 text-right text-xs font-bold text-neutral-900 whitespace-nowrap">
                           {formatCurrency(transaction.totalCost)}
                         </td>
-                        <td className="px-3 py-2 text-xs text-neutral-900 hidden lg:table-cell max-w-[200px] truncate" title={transaction.customerName}>
+                        <td className="px-4 py-3 text-xs text-neutral-900 hidden lg:table-cell whitespace-nowrap">
                           {transaction.customerName || '-'}
                         </td>
-                        <td className="px-3 py-2 text-center whitespace-nowrap">
+                        <td className="px-4 py-3 text-center whitespace-nowrap">
                           {getStatusBadge(transaction.accountingStatus)}
                         </td>
-                        <td className="px-3 py-2 text-center whitespace-nowrap">
+                        <td className="px-4 py-3 text-center whitespace-nowrap">
                           {transaction.accountingStatus === 'pending' && (
                             <button
                               onClick={() => handleAutoRecord(transaction.id)}
