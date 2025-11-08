@@ -555,114 +555,101 @@ export default function InventoryAccounting() {
             </div>
           </div>
 
-          {/* Transactions List */}
-          <div className={cx(card('sm', 'none', 'default', 'lg'))}>
-            <div className="px-4 py-3 border-b border-neutral-200">
-              <h3 className="text-sm font-semibold text-neutral-900">Stok Hareketleri ({filteredTransactions.length})</h3>
-            </div>
+          {/* Transactions List - Card Based */}
+          <div className="space-y-3">
+            {filteredTransactions.map((transaction) => (
+              <div key={transaction.id} className={cx(card('sm', 'md', 'default', 'lg'))}>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                      {getTypeIcon(transaction.type)}
+                      <h3 className="text-base font-semibold text-neutral-900">{transaction.equipmentName}</h3>
+                      {getStatusBadge(transaction.accountingStatus)}
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-neutral-600 mb-2">
+                      <span className="flex items-center gap-1">
+                        <Calendar size={14} />
+                        {formatDate(transaction.date)}
+                      </span>
+                      <span>{getTransactionTypeLabel(transaction.type)}</span>
+                      <span className="font-semibold">{transaction.quantity} adet</span>
+                      <span className="text-neutral-400">•</span>
+                      <span>{formatCurrency(transaction.unitCost)} / adet</span>
+                    </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-auto min-w-full">
-                  <thead className="bg-neutral-50 border-b border-neutral-200">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Tarih</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Tip</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Ekipman</th>
-                      <th className="px-4 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden md:table-cell">Adet</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden xl:table-cell">Birim Fiyat</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Toplam</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Müşteri</th>
-                      <th className="px-4 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Durum</th>
-                      <th className="px-4 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">İşlem</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-100">
-                    {filteredTransactions.map((transaction) => (
-                      <tr key={transaction.id} className="hover:bg-neutral-50 transition-colors">
-                        <td className="px-4 py-3 text-xs text-neutral-900 whitespace-nowrap">
-                          {formatDate(transaction.date)}
-                        </td>
-                        <td className="px-4 py-3 hidden lg:table-cell">
-                          <div className="flex items-center gap-2 whitespace-nowrap">
-                            {getTypeIcon(transaction.type)}
-                            <span className="text-xs text-neutral-900">
-                              {getTransactionTypeLabel(transaction.type)}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <div className="text-xs font-medium text-neutral-900">
-                            {transaction.equipmentName}
-                          </div>
-                          {transaction.orderNumber && (
-                            <div className="text-[10px] text-neutral-500">{transaction.orderNumber}</div>
-                          )}
-                        </td>
-                        <td className="px-4 py-3 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell whitespace-nowrap">
-                          {transaction.quantity}
-                        </td>
-                        <td className="px-4 py-3 text-right text-xs text-neutral-900 hidden xl:table-cell whitespace-nowrap">
-                          {formatCurrency(transaction.unitCost)}
-                        </td>
-                        <td className="px-4 py-3 text-right text-xs font-bold text-neutral-900 whitespace-nowrap">
-                          {formatCurrency(transaction.totalCost)}
-                        </td>
-                        <td className="px-4 py-3 text-xs text-neutral-900 hidden lg:table-cell whitespace-nowrap">
-                          {transaction.customerName || '-'}
-                        </td>
-                        <td className="px-4 py-3 text-center whitespace-nowrap">
-                          {getStatusBadge(transaction.accountingStatus)}
-                        </td>
-                        <td className="px-4 py-3 text-center whitespace-nowrap">
-                          {transaction.accountingStatus === 'pending' && (
-                            <button
-                              onClick={() => handleAutoRecord(transaction.id)}
-                              disabled={loading}
-                              className="text-green-600 hover:text-green-700 font-medium text-xs disabled:opacity-50"
-                            >
-                              Kaydet
-                            </button>
-                          )}
-                          {transaction.accountingStatus === 'recorded' && (
-                            <div className="flex items-center justify-center gap-1">
-                              <button
-                                onClick={() => {/* View entry */}}
-                                className="text-blue-600 hover:text-blue-700"
-                                title="Görüntüle"
-                              >
-                                <Eye size={14} />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteEntry(transaction.id)}
-                                className="text-red-600 hover:text-red-700"
-                                title="Sil"
-                              >
-                                <XCircle size={14} />
-                              </button>
-                            </div>
-                          )}
-                          {transaction.accountingStatus === 'error' && (
-                            <button
-                              onClick={() => handleAutoRecord(transaction.id)}
-                              className="text-orange-600 hover:text-orange-700 font-medium text-xs"
-                            >
-                              Tekrar
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                    {transaction.customerName && (
+                      <div className="text-sm text-neutral-500">
+                        Müşteri: <span className="font-medium text-neutral-700">{transaction.customerName}</span>
+                      </div>
+                    )}
+                    
+                    {transaction.orderNumber && (
+                      <div className="text-xs text-neutral-400 mt-1">
+                        Sipariş: {transaction.orderNumber}
+                      </div>
+                    )}
 
-            {filteredTransactions.length === 0 && (
-              <div className="p-12 text-center text-neutral-600">
-                <Package className="mx-auto mb-4 text-neutral-400" size={48} />
-                <p>Stok hareketi bulunamadı</p>
+                    {transaction.notes && (
+                      <div className="mt-2 text-sm text-neutral-500 italic">{transaction.notes}</div>
+                    )}
+                  </div>
+
+                  <div className="text-right flex-shrink-0">
+                    <div className="text-2xl font-bold text-neutral-900 mb-1">
+                      {formatCurrency(transaction.totalCost)}
+                    </div>
+                    
+                    <div className="flex items-center justify-end gap-2 mt-2">
+                      {transaction.accountingStatus === 'pending' && (
+                        <button
+                          onClick={() => handleAutoRecord(transaction.id)}
+                          disabled={loading}
+                          className="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                        >
+                          Kaydet
+                        </button>
+                      )}
+                      {transaction.accountingStatus === 'recorded' && transaction.accountingEntryId && (
+                        <>
+                          <button
+                            onClick={() => {/* View entry */}}
+                            className="text-blue-600 hover:text-blue-700 p-1"
+                            title="Görüntüle"
+                          >
+                            <Eye size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteEntry(transaction.id)}
+                            className="text-red-600 hover:text-red-700 p-1"
+                            title="Sil"
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        </>
+                      )}
+                      {transaction.accountingStatus === 'error' && (
+                        <button
+                          onClick={() => handleAutoRecord(transaction.id)}
+                          className="text-xs px-3 py-1.5 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                        >
+                          Tekrar Dene
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
+            ))}
+          </div>
+
+          {filteredTransactions.length === 0 && (
+            <div className={cx(card('sm', 'lg', 'default', 'lg'), 'text-center')}>
+              <Package className="mx-auto mb-4 text-neutral-400" size={48} />
+              <p className="text-lg font-medium text-neutral-900">Stok hareketi bulunamadı</p>
+              <p className="text-sm text-neutral-600 mt-2">Filtrelerinizi değiştirmeyi deneyin</p>
+            </div>
+          )}
         </div>
       )}
 
