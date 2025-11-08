@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
+import { exportCurrentAccountTransactionsToExcel } from '../../utils/excelExport';
 
 interface CurrentAccountTransaction {
   id: number;
@@ -154,7 +155,13 @@ export default function CurrentAccountDetail() {
   };
 
   const handleExportStatement = () => {
-    toast.success('Ekstre export özelliği yakında eklenecek');
+    if (!account) return;
+    try {
+      exportCurrentAccountTransactionsToExcel(account, transactions);
+      toast.success('Cari ekstre Excel olarak indirildi');
+    } catch (error) {
+      toast.error('Excel export başarısız oldu');
+    }
   };
 
   const handleSendStatement = () => {

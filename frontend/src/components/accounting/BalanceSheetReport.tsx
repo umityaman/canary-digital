@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, DESIGN_TOKENS } from '../../styles/design-tokens';
+import { exportBalanceSheetToExcel } from '../../utils/excelExport';
 
 interface BalanceSheetItem {
   accountCode: string;
@@ -88,7 +89,18 @@ export default function BalanceSheetReport() {
   };
 
   const handleExport = () => {
-    toast.success('Excel export özelliği yakında eklenecek');
+    try {
+      exportBalanceSheetToExcel(
+        data.assets,
+        data.liabilities,
+        data.equity,
+        data.summary,
+        reportDate
+      );
+      toast.success('Bilanço Excel olarak indirildi');
+    } catch (error) {
+      toast.error('Excel export başarısız oldu');
+    }
   };
 
   const handlePrint = () => {

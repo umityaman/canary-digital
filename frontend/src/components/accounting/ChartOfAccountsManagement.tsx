@@ -17,6 +17,7 @@ import {
 import toast from 'react-hot-toast';
 import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 import AccountFormModal from './AccountFormModal';
+import { exportChartOfAccountsToExcel } from '../../utils/excelExport';
 
 interface ChartOfAccount {
   id: number;
@@ -293,16 +294,32 @@ export default function ChartOfAccountsManagement() {
           </p>
         </div>
 
-        <button
-          className={button('primary', 'md', 'md')}
-          onClick={() => {
-            setEditingAccount(null);
-            setShowCreateModal(true);
-          }}
-        >
-          <Plus className="w-4 h-4" />
-          Yeni Hesap
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            className={button('secondary', 'md', 'md')}
+            onClick={() => {
+              try {
+                exportChartOfAccountsToExcel(flatAccounts);
+                toast.success('Hesap planı Excel olarak indirildi');
+              } catch (error) {
+                toast.error('Excel export başarısız oldu');
+              }
+            }}
+          >
+            <Download className="w-4 h-4" />
+            Excel İndir
+          </button>
+          <button
+            className={button('primary', 'md', 'md')}
+            onClick={() => {
+              setEditingAccount(null);
+              setShowCreateModal(true);
+            }}
+          >
+            <Plus className="w-4 h-4" />
+            Yeni Hesap
+          </button>
+        </div>
       </div>
 
       {/* Summary Cards */}

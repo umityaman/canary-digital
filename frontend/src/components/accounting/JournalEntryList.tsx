@@ -17,6 +17,7 @@ import {
 import toast from 'react-hot-toast';
 import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
 import JournalEntryFormModal from './JournalEntryFormModal';
+import { exportJournalEntriesToExcel } from '../../utils/excelExport';
 
 interface JournalEntryItem {
   id: number;
@@ -160,16 +161,32 @@ export default function JournalEntryList() {
           </p>
         </div>
 
-        <button
-          className={button('primary', 'md', 'md')}
-          onClick={() => {
-            setEditingEntry(null);
-            setShowFormModal(true);
-          }}
-        >
-          <Plus className="w-4 h-4" />
-          Yeni Fiş
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            className={button('secondary', 'md', 'md')}
+            onClick={() => {
+              try {
+                exportJournalEntriesToExcel(entries);
+                toast.success('Yevmiye fişleri Excel olarak indirildi');
+              } catch (error) {
+                toast.error('Excel export başarısız oldu');
+              }
+            }}
+          >
+            <Download className="w-4 h-4" />
+            Excel İndir
+          </button>
+          <button
+            className={button('primary', 'md', 'md')}
+            onClick={() => {
+              setEditingEntry(null);
+              setShowFormModal(true);
+            }}
+          >
+            <Plus className="w-4 h-4" />
+            Yeni Fiş
+          </button>
+        </div>
       </div>
 
       {/* Filters */}

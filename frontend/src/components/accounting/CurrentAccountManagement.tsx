@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
+import { exportCurrentAccountsToExcel } from '../../utils/excelExport';
 
 interface CurrentAccountTransaction {
   id: number;
@@ -202,13 +203,29 @@ export default function CurrentAccountManagement() {
           </p>
         </div>
 
-        <button
-          className={button('primary', 'md', 'md')}
-          onClick={() => toast.success('Yeni cari hesap ekleme özelliği yakında eklenecek')}
-        >
-          <Plus className="w-4 h-4" />
-          Yeni Cari Hesap
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            className={button('secondary', 'md', 'md')}
+            onClick={() => {
+              try {
+                exportCurrentAccountsToExcel(accounts);
+                toast.success('Cari hesaplar Excel olarak indirildi');
+              } catch (error) {
+                toast.error('Excel export başarısız oldu');
+              }
+            }}
+          >
+            <Download className="w-4 h-4" />
+            Excel İndir
+          </button>
+          <button
+            className={button('primary', 'md', 'md')}
+            onClick={() => toast.success('Yeni cari hesap ekleme özelliği yakında eklenecek')}
+          >
+            <Plus className="w-4 h-4" />
+            Yeni Cari Hesap
+          </button>
+        </div>
       </div>
 
       {/* Summary Cards */}

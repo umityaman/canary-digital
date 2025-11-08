@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, DESIGN_TOKENS } from '../../styles/design-tokens';
+import { exportTrialBalanceToExcel } from '../../utils/excelExport';
 
 interface TrialBalanceItem {
   accountCode: string;
@@ -84,7 +85,15 @@ export default function TrialBalanceReport() {
   };
 
   const handleExport = () => {
-    toast.success('Excel export özelliği yakında eklenecek');
+    try {
+      exportTrialBalanceToExcel(items, summary, {
+        from: dateFrom,
+        to: dateTo,
+      });
+      toast.success('Mizan raporu Excel olarak indirildi');
+    } catch (error) {
+      toast.error('Excel export başarısız oldu');
+    }
   };
 
   const handlePrint = () => {

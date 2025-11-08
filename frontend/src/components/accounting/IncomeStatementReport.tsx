@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, DESIGN_TOKENS } from '../../styles/design-tokens';
+import { exportIncomeStatementToExcel } from '../../utils/excelExport';
 
 interface IncomeStatementItem {
   accountCode: string;
@@ -86,7 +87,17 @@ export default function IncomeStatementReport() {
   };
 
   const handleExport = () => {
-    toast.success('Excel export özelliği yakında eklenecek');
+    try {
+      exportIncomeStatementToExcel(
+        data.revenues,
+        data.expenses,
+        data.summary,
+        { from: dateFrom, to: dateTo }
+      );
+      toast.success('Gelir-Gider tablosu Excel olarak indirildi');
+    } catch (error) {
+      toast.error('Excel export başarısız oldu');
+    }
   };
 
   const handlePrint = () => {
