@@ -199,6 +199,7 @@ safeLoadRoute('/api/statements', './routes/statements', 'Account Statements & Sh
 safeLoadRoute('/api/account-cards', './routes/account-cards', 'Account Cards (Cari Hesap)');
 safeLoadRoute('/api/einvoice', './routes/einvoice', 'E-Invoice');
 safeLoadRoute('/api/earchive', './routes/earchive', 'E-Archive Invoice');
+safeLoadRoute('/api/gib', './routes/gib', 'GIB e-Invoice Integration');
 safeLoadRoute('/api/delivery-notes', './routes/deliveryNotes', 'Delivery Notes');
 safeLoadRoute('/api/current-accounts', './routes/currentAccounts', 'Current Accounts');
 // Accounting sub-resources mounted at root paths expected by frontend

@@ -1130,17 +1130,23 @@ model EInvoice {
   invoice      Invoice   @relation(fields: [invoiceId], references: [id])
   uuid         String    @unique
   ettn         String?
+  status       String    @default("PENDING") // PENDING, SENT, RECEIVED, APPROVED, REJECTED, CANCELLED
   gibStatus    String    @default("draft")
   gibResponse  Json?
   xmlContent   String    @db.Text
   xmlHash      String?
+  sentAt       DateTime?
+  receivedAt   DateTime?
   sentDate     DateTime?
   responseDate DateTime?
+  errorMessage String?
+  errorCode    String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
   @@index([gibStatus])
   @@index([uuid])
+  @@index([status])
 }
 
 model EArchiveInvoice {
