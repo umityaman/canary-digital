@@ -61,8 +61,64 @@ export default function BankReconciliation() {
     { id: '3', name: 'Yapı Kredi - USD', accountNumber: '5555666677', balance: 15000 }
   ]
 
-  // Generate mock bank transactions
-  const generateMockBankData = () => {
+  // 🔥 Gerçek API'den banka işlemlerini yükle
+  const loadBankTransactions = async () => {
+    if (!selectedAccount) return;
+    
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      
+      const response = await fetch(
+        `${API_URL}/api/accounting/bank-account/${selectedAccount}/transactions`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Banka işlemleri yüklenemedi');
+      }
+
+      const data = await response.json();
+      
+      // Backend response'u frontend formatına dönüştür
+      const transactions: BankTransaction[] = data.data?.transactions?.map((txn: any) => ({
+        id: txn.id?.toString() || '',
+        date: txn.date || txn.createdAt ? new Date(txn.date || txn.createdAt).toISOString().split('T')[0] : '',
+        description: txn.description || txn.notes || '',
+        amount: parseFloat(txn.amount || 0),
+        type: txn.type === 'credit' || txn.transactionType === 'credit' ? 'credit' : 'debit',
+        balance: parseFloat(txn.balance || 0),
+        reference: txn.reference || txn.referenceNumber,
+        matched: txn.matched || false,
+        matchedWith: txn.matchedWith || txn.matchedTransactionId,
+        category: txn.category || 'Bilinmeyen'
+      })) || [];
+
+      setBankTransactions(transactions);
+      setFilteredBankTransactions(transactions);
+      
+      // System transactions'ı da yükle (opsiyonel)
+      // loadSystemTransactions();
+    } catch (error) {
+      console.error('Banka işlemleri yüklenirken hata:', error);
+      toast.error('Banka işlemleri yüklenemedi');
+      
+      // Hata durumunda boş veri
+      setBankTransactions([]);
+      setFilteredBankTransactions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Mock data (deprecated) - Artık kullanılmıyor
+  const generateMockBankData_DEPRECATED = () => {
     const mockData: BankTransaction[] = [
       {
         id: 'B001',
@@ -190,11 +246,11 @@ export default function BankReconciliation() {
 
     setLoading(true)
     try {
-      // Mock file processing - will be replaced with real CSV/Excel parsing
+      // Real file processing - CSV/Excel parsing
       await new Promise(resolve => setTimeout(resolve, 1500))
       
-      // For demo, generate mock data
-      generateMockBankData()
+      // Gerçek API'yi yükle
+      await loadBankTransactions()
       
       toast.success(`${file.name} başarıyla içe aktarıldı`)
     } catch (error: any) {

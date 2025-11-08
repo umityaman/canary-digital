@@ -47,6 +47,23 @@ export default function CostAccounting() {
   const [costs, setCosts] = useState<CostItem[]>([]);
   const [productCosts, setProductCosts] = useState<ProductCost[]>([]);
 
+  // Category mapping helper
+  const mapCostCategory = (backendCategory: string): 'material' | 'labor' | 'overhead' | 'other' => {
+    const categoryMap: Record<string, 'material' | 'labor' | 'overhead' | 'other'> = {
+      'material': 'material',
+      'hammadde': 'material',
+      'malzeme': 'material',
+      'labor': 'labor',
+      'işçilik': 'labor',
+      'personel': 'labor',
+      'overhead': 'overhead',
+      'genel': 'overhead',
+      'other': 'other',
+      'diğer': 'other',
+    };
+    return categoryMap[backendCategory?.toLowerCase()] || 'other';
+  };
+
   useEffect(() => {
     loadData();
   }, [selectedPeriod]);
@@ -54,56 +71,62 @@ export default function CostAccounting() {
   const loadData = async () => {
     setLoading(true);
     try {
-      // Simulated data - replace with actual API call
-      setTimeout(() => {
-        setCosts([
-          { id: '1', name: 'Hammadde A', category: 'material', amount: 15000, date: '2025-11-05', project: 'Proje A' },
-          { id: '2', name: 'İşçilik', category: 'labor', amount: 8500, date: '2025-11-04', project: 'Proje A' },
-          { id: '3', name: 'Elektrik', category: 'overhead', amount: 2300, date: '2025-11-03', project: 'Proje B' },
-          { id: '4', name: 'Hammadde B', category: 'material', amount: 12000, date: '2025-11-02', project: 'Proje B' },
-          { id: '5', name: 'Nakliye', category: 'other', amount: 1800, date: '2025-11-01', project: 'Proje A' },
-        ]);
+      const token = localStorage.getItem('token');
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-        setProductCosts([
-          {
-            id: '1',
-            productName: 'Ürün A',
-            materialCost: 15000,
-            laborCost: 8500,
-            overheadCost: 3200,
-            totalCost: 26700,
-            sellingPrice: 35000,
-            profit: 8300,
-            profitMargin: 23.71
-          },
-          {
-            id: '2',
-            productName: 'Ürün B',
-            materialCost: 12000,
-            laborCost: 6200,
-            overheadCost: 2800,
-            totalCost: 21000,
-            sellingPrice: 28500,
-            profit: 7500,
-            profitMargin: 26.32
-          },
-          {
-            id: '3',
-            productName: 'Ürün C',
-            materialCost: 9500,
-            laborCost: 5100,
-            overheadCost: 2200,
-            totalCost: 16800,
-            sellingPrice: 22000,
-            profit: 5200,
-            profitMargin: 23.64
-          },
-        ]);
+      // 🔥 Gerçek API'den maliyet verilerini yükle
+      const costResponse = await fetch(`${API_URL}/api/cost-accounting/reports/cost`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        setLoading(false);
-      }, 500);
+      if (costResponse.ok) {
+        const costData = await costResponse.json();
+        
+        // Backend response'u frontend formatına dönüştür
+        if (costData.success && costData.data) {
+          const formattedCosts: CostItem[] = costData.data.costs?.map((cost: any) => ({
+            id: cost.id?.toString() || '',
+            name: cost.name || cost.description || 'İsimsiz Maliyet',
+            category: mapCostCategory(cost.category || cost.type),
+            amount: parseFloat(cost.amount || cost.totalAmount || 0),
+            date: cost.date || cost.createdAt ? new Date(cost.date || cost.createdAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+            project: cost.project || cost.projectName,
+          })) || [];
+
+          const formattedProductCosts: ProductCost[] = costData.data.products?.map((product: any) => ({
+            id: product.id?.toString() || '',
+            productName: product.name || product.productName || 'İsimsiz Ürün',
+            materialCost: parseFloat(product.materialCost || 0),
+            laborCost: parseFloat(product.laborCost || 0),
+            overheadCost: parseFloat(product.overheadCost || 0),
+            totalCost: parseFloat(product.totalCost || 0),
+            sellingPrice: parseFloat(product.sellingPrice || 0),
+            profit: parseFloat(product.profit || 0),
+            profitMargin: parseFloat(product.profitMargin || 0),
+          })) || [];
+
+          setCosts(formattedCosts);
+          setProductCosts(formattedProductCosts);
+        } else {
+          // API'den veri gelmezse boş array
+          setCosts([]);
+          setProductCosts([]);
+        }
+      } else {
+        throw new Error('Maliyet verileri yüklenemedi');
+      }
+
+      setLoading(false);
     } catch (error) {
-      console.error('Failed to load cost data:', error);
+      console.error('Maliyet verileri yüklenirken hata:', error);
+      
+      // Hata durumunda boş veri göster
+      setCosts([]);
+      setProductCosts([]);
+      
       toast.error('Maliyet verileri yüklenemedi');
       setLoading(false);
     }
