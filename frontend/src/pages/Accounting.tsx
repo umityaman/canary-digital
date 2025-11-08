@@ -797,7 +797,7 @@ export default function Accounting() {
   ]
 
   return (
-    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pb-10">
+    <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6 space-y-4 pb-10 overflow-hidden">
       {/* Keyboard Shortcuts Info */}
       <div className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.spacing.sm.padding} flex items-center ${DESIGN_TOKENS.spacing.md.gap} ${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
         <div className="flex items-center gap-2">
@@ -822,7 +822,7 @@ export default function Accounting() {
       {loading ? (
         <CardSkeleton count={4} />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
           {/* Bu Ay Gelir */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
@@ -1721,10 +1721,10 @@ export default function Accounting() {
                       )}
 
                       <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-max">
                           <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
                             <tr>
-                              <th className="px-3 py-3 text-left">
+                              <th className="px-2 py-2 text-left">
                                 <input
                                   type="checkbox"
                                   checked={selectedOffers.length === offers.length && offers.length > 0}
@@ -1732,25 +1732,25 @@ export default function Accounting() {
                                   className={`${DESIGN_TOKENS.radius.sm} rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
-                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Teklif No
                               </th>
-                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Müşteri
                               </th>
-                              <th className={`hidden xl:table-cell px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden xl:table-cell px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Tarih
                               </th>
-                              <th className={`hidden lg:table-cell px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden lg:table-cell px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Geçerlilik
                               </th>
-                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Tutar
                               </th>
-                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Durum
                               </th>
-                              <th className={`px-3 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 İşlemler
                               </th>
                             </tr>
@@ -1758,7 +1758,7 @@ export default function Accounting() {
                           <tbody className="bg-white divide-y divide-neutral-200">
                             {offers.map((offer) => (
                               <tr key={offer.id} className="hover:bg-neutral-50 transition-colors">
-                                <td className="px-3 py-4">
+                                <td className="px-2 py-3">
                                   <input
                                     type="checkbox"
                                     checked={selectedOffers.includes(offer.id)}
@@ -1766,7 +1766,7 @@ export default function Accounting() {
                                     className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
                                   />
                                 </td>
-                                <td className="px-3 py-4 whitespace-nowrap">
+                                <td className="px-2 py-3 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.offerNumber}
                                   </div>
@@ -1774,7 +1774,7 @@ export default function Accounting() {
                                     {offer.items?.length || 0} kalem
                                   </div>
                                 </td>
-                                <td className="px-3 py-4">
+                                <td className="px-2 py-3">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.customer.name}
                                   </div>
@@ -1782,12 +1782,12 @@ export default function Accounting() {
                                     {offer.customer.email}
                                   </div>
                                 </td>
-                                <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap">
+                                <td className="hidden xl:table-cell px-2 py-3 whitespace-nowrap">
                                   <div className="text-sm text-neutral-900">
                                     {formatDate(offer.offerDate)}
                                   </div>
                                 </td>
-                                <td className="hidden lg:table-cell px-3 py-4 whitespace-nowrap">
+                                <td className="hidden lg:table-cell px-2 py-3 whitespace-nowrap">
                                   <div className={`text-sm ${
                                     new Date(offer.validUntil) < new Date() 
                                       ? 'text-red-600 font-medium' 
@@ -1799,15 +1799,15 @@ export default function Accounting() {
                                     <div className="text-xs text-red-500">Süresi doldu</div>
                                   )}
                                 </td>
-                                <td className="px-3 py-4 whitespace-nowrap">
+                                <td className="px-2 py-3 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {formatCurrency(offer.grandTotal)}
                                   </div>
                                 </td>
-                                <td className="px-3 py-4 whitespace-nowrap">
+                                <td className="px-2 py-3 whitespace-nowrap">
                                   {getOfferStatusBadge(offer.status)}
                                 </td>
-                                <td className="px-3 py-4 whitespace-nowrap">
+                                <td className="px-2 py-3 whitespace-nowrap">
                                   <div className="flex items-center gap-3">
                                     {offer.status === 'draft' && (
                                       <button
