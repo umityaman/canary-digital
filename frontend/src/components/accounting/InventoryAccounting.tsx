@@ -86,11 +86,81 @@ export default function InventoryAccounting() {
   }
 
   useEffect(() => {
-    loadMockData()
+    loadInventoryTransactions(); // Gerçek API kullan
   }, [])
 
-  const loadMockData = () => {
-    // Mock inventory transactions
+  // 🔥 Gerçek API'den stok hareketlerini yükle
+  const loadInventoryTransactions = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      
+      const response = await fetch(`${API_URL}/api/stock/movements`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Stok hareketleri yüklenemedi');
+      }
+
+      const data = await response.json();
+      
+      // Backend response'u frontend formatına dönüştür
+      const transactions: InventoryTransaction[] = data.movements?.map((movement: any) => ({
+        id: movement.id.toString(),
+        date: new Date(movement.createdAt).toISOString().split('T')[0],
+        type: mapMovementType(movement.movementType, movement.movementReason),
+        equipmentId: movement.equipmentId?.toString() || '',
+        equipmentName: movement.equipment?.name || 'Bilinmeyen Ekipman',
+        quantity: movement.quantity,
+        unitCost: movement.equipment?.dailyRate || 0,
+        totalCost: movement.quantity * (movement.equipment?.dailyRate || 0),
+        orderId: movement.orderId?.toString(),
+        orderNumber: movement.order?.orderNumber,
+        customerId: movement.order?.customerId?.toString(),
+        customerName: movement.order?.customer?.fullName,
+        accountingStatus: movement.invoiceId ? 'recorded' : 'pending',
+        accountingEntryId: movement.id.toString(),
+        notes: movement.notes || ''
+      })) || [];
+
+      setInventoryTransactions(transactions);
+    } catch (error) {
+      console.error('Stok hareketleri yüklenirken hata:', error);
+      toast({
+        title: 'Hata',
+        description: 'Stok hareketleri yüklenemedi',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Movement type mapping
+  const mapMovementType = (movementType: string, movementReason: string): 'purchase' | 'sale' | 'rental_out' | 'rental_return' | 'adjustment' | 'transfer' => {
+    if (movementType === 'in') {
+      if (movementReason === 'purchase') return 'purchase';
+      if (movementReason === 'return') return 'rental_return';
+      return 'adjustment';
+    }
+    if (movementType === 'out') {
+      if (movementReason === 'sale') return 'sale';
+      return 'rental_out';
+    }
+    if (movementType === 'adjustment') return 'adjustment';
+    if (movementType === 'transfer') return 'transfer';
+    return 'adjustment';
+  };
+
+  // Mock data kaldırıldı - artık gerçek API kullanılıyor
+  const loadMockData_DEPRECATED = () => {
+    // Bu fonksiyon artık kullanılmıyor
+    // Gerçek API: loadInventoryTransactions()
     const mockTransactions: InventoryTransaction[] = [
       {
         id: 'IT001',
@@ -426,8 +496,18 @@ export default function InventoryAccounting() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Stok Muhasebesi</h2>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => loadInventoryTransactions()}
+            disabled={loading}
+            className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-50"
+            title="Yenile"
+          >
+            <RefreshCw className={loading ? 'animate-spin' : ''} size={18} />
+            <span className="hidden sm:inline">Yenile</span>
+          </button>
           <button
             onClick={handleBulkRecord}
             disabled={loading || stats.pendingRecords === 0}
