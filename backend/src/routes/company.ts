@@ -15,7 +15,11 @@ router.get('/', async (req: Request, res: Response) => {
     const companyId = req.user?.companyId;
     
     if (!companyId) {
-      return res.status(400).json({ message: 'Company ID is required' });
+      console.warn('⚠️ GET /api/company - No companyId in token. User:', req.user?.id);
+      return res.status(400).json({ 
+        message: 'Company ID not found in authentication token',
+        error: 'MISSING_COMPANY_ID'
+      });
     }
 
     const company = await prisma.company.findUnique({
@@ -168,7 +172,11 @@ router.get('/bank-accounts', async (req: Request, res: Response) => {
     const companyId = req.user?.companyId;
     
     if (!companyId) {
-      return res.status(400).json({ message: 'Company ID is required' });
+      console.warn('⚠️ GET /api/company/bank-accounts - No companyId in token. User:', req.user?.id);
+      return res.status(400).json({ 
+        message: 'Company ID not found in authentication token',
+        error: 'MISSING_COMPANY_ID'
+      });
     }
 
     const { isActive } = req.query;
