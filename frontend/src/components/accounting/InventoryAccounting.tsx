@@ -440,9 +440,9 @@ export default function InventoryAccounting() {
       </div>
 
       {/* Stats Cards - Responsive Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-full">
         {/* Total Transactions */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 text-white min-w-0">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 text-white min-w-0 overflow-hidden">
           <div className="flex items-center justify-between mb-2">
             <Package size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.totalTransactions}</span>
@@ -451,7 +451,7 @@ export default function InventoryAccounting() {
         </div>
 
         {/* Pending */}
-        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-3 text-white min-w-0">
+        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-3 text-white min-w-0 overflow-hidden">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.pendingRecords}</span>
@@ -460,7 +460,7 @@ export default function InventoryAccounting() {
         </div>
 
         {/* Recorded */}
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-3 text-white min-w-0">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-3 text-white min-w-0 overflow-hidden">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.recordedCount}</span>
@@ -470,10 +470,10 @@ export default function InventoryAccounting() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className={cx(card('sm', 'xs', 'default', 'lg'), 'flex gap-1 overflow-x-auto max-w-full')}>
+      <div className={cx(card('sm', 'xs', 'default', 'lg'), 'flex gap-1 overflow-x-auto')}>
         <button
           onClick={() => setActiveView('overview')}
-          className={`flex-1 min-w-[100px] px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             activeView === 'overview'
               ? 'bg-neutral-900 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
@@ -483,7 +483,7 @@ export default function InventoryAccounting() {
         </button>
         <button
           onClick={() => setActiveView('pending')}
-          className={`flex-1 min-w-[120px] px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             activeView === 'pending'
               ? 'bg-neutral-900 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
@@ -493,7 +493,7 @@ export default function InventoryAccounting() {
         </button>
         <button
           onClick={() => setActiveView('recorded')}
-          className={`flex-1 min-w-[110px] px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             activeView === 'recorded'
               ? 'bg-neutral-900 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
@@ -503,7 +503,7 @@ export default function InventoryAccounting() {
         </button>
         <button
           onClick={() => setActiveView('settings')}
-          className={`flex-1 min-w-[90px] px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             activeView === 'settings'
               ? 'bg-neutral-900 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
@@ -518,12 +518,12 @@ export default function InventoryAccounting() {
       {activeView === 'overview' && (
         <div className="space-y-4">
           {/* Filters */}
-          <div className={cx(card('sm', 'sm', 'default', 'lg'), 'max-w-full')}>
+          <div className={cx(card('sm', 'sm', 'default', 'lg'))}>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className={input('md', 'default', undefined, 'md')}
+                className={cx(input('md', 'default', undefined, 'md'), 'w-full')}
               >
                 <option value="all">Tüm İşlem Tipleri</option>
                 <option value="purchase">Satın Alma</option>
@@ -537,7 +537,7 @@ export default function InventoryAccounting() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className={input('md', 'default', undefined, 'md')}
+                className={cx(input('md', 'default', undefined, 'md'), 'w-full')}
               >
                 <option value="all">Tüm Durumlar</option>
                 <option value="pending">Bekliyor</option>
@@ -556,62 +556,64 @@ export default function InventoryAccounting() {
           </div>
 
           {/* Transactions List */}
-          <div className={cx(card('sm', 'none', 'default', 'lg'), 'overflow-hidden max-w-full min-w-0')}>
+          <div className={cx(card('sm', 'none', 'default', 'lg'), 'overflow-hidden')}>
             <div className="px-4 py-3 border-b border-neutral-200">
               <h3 className="text-sm font-semibold text-neutral-900">Stok Hareketleri ({filteredTransactions.length})</h3>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="min-w-full">
+              <table className="w-full table-fixed">
                   <thead className="bg-neutral-50 border-b border-neutral-200">
                     <tr>
-                      <th className="w-24 px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
-                      <th className="w-32 px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tip</th>
-                      <th className="min-w-[200px] px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Ekipman</th>
-                      <th className="w-20 px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Adet</th>
-                      <th className="w-28 px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">Birim</th>
-                      <th className="w-28 px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Toplam</th>
-                      <th className="w-36 px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Müşteri</th>
-                      <th className="w-28 px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                      <th className="w-24 px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase">İşlem</th>
+                      <th className="w-20 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
+                      <th className="w-20 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tip</th>
+                      <th className="w-40 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Ekipman</th>
+                      <th className="w-14 px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Adet</th>
+                      <th className="w-24 px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">Birim</th>
+                      <th className="w-24 px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Toplam</th>
+                      <th className="w-28 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Müşteri</th>
+                      <th className="w-24 px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                      <th className="w-20 px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">İşlem</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {filteredTransactions.map((transaction) => (
                       <tr key={transaction.id} className="hover:bg-neutral-50 transition-colors">
-                        <td className="px-3 py-2 text-xs text-neutral-900">
+                        <td className="px-2 py-2 text-xs text-neutral-900 truncate">
                           {formatDate(transaction.date)}
                         </td>
-                        <td className="px-3 py-2 hidden lg:table-cell">
+                        <td className="px-2 py-2 hidden lg:table-cell">
                           <div className="flex items-center gap-1">
                             {getTypeIcon(transaction.type)}
-                            <span className="text-xs text-neutral-900">
+                            <span className="text-xs text-neutral-900 truncate">
                               {getTransactionTypeLabel(transaction.type)}
                             </span>
                           </div>
                         </td>
-                        <td className="px-3 py-2">
-                          <div className="text-xs font-medium text-neutral-900">{transaction.equipmentName}</div>
+                        <td className="px-2 py-2">
+                          <div className="text-xs font-medium text-neutral-900 truncate" title={transaction.equipmentName}>
+                            {transaction.equipmentName}
+                          </div>
                           {transaction.orderNumber && (
-                            <div className="text-[10px] text-neutral-500">{transaction.orderNumber}</div>
+                            <div className="text-[10px] text-neutral-500 truncate">{transaction.orderNumber}</div>
                           )}
                         </td>
-                        <td className="px-3 py-2 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell">
+                        <td className="px-2 py-2 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell">
                           {transaction.quantity}
                         </td>
-                        <td className="px-3 py-2 text-right text-xs text-neutral-900 hidden xl:table-cell">
+                        <td className="px-2 py-2 text-right text-xs text-neutral-900 hidden xl:table-cell truncate">
                           {formatCurrency(transaction.unitCost)}
                         </td>
-                        <td className="px-3 py-2 text-right text-xs font-bold text-neutral-900">
+                        <td className="px-2 py-2 text-right text-xs font-bold text-neutral-900 truncate">
                           {formatCurrency(transaction.totalCost)}
                         </td>
-                        <td className="px-3 py-2 text-xs text-neutral-900 hidden lg:table-cell">
+                        <td className="px-2 py-2 text-xs text-neutral-900 hidden lg:table-cell truncate" title={transaction.customerName}>
                           {transaction.customerName || '-'}
                         </td>
-                        <td className="px-3 py-2 text-center">
+                        <td className="px-2 py-2 text-center">
                           {getStatusBadge(transaction.accountingStatus)}
                         </td>
-                        <td className="px-3 py-2 text-center">
+                        <td className="px-2 py-2 text-center">
                           {transaction.accountingStatus === 'pending' && (
                             <button
                               onClick={() => handleAutoRecord(transaction.id)}
@@ -668,22 +670,22 @@ export default function InventoryAccounting() {
       {activeView === 'pending' && (
         <div className="space-y-3">
           {filteredTransactions.filter(t => t.accountingStatus === 'pending').map((transaction) => (
-            <div key={transaction.id} className={cx(card('sm', 'md', 'default', 'lg'), 'max-w-full')}>
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
+            <div key={transaction.id} className={cx(card('sm', 'md', 'default', 'lg'))}>
+              <div className="flex items-start justify-between mb-3 gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-2 flex-wrap">
                     {getTypeIcon(transaction.type)}
-                    <h3 className="text-lg font-semibold text-neutral-900">{transaction.equipmentName}</h3>
+                    <h3 className="text-lg font-semibold text-neutral-900 truncate">{transaction.equipmentName}</h3>
                     {getStatusBadge(transaction.accountingStatus)}
                   </div>
                   <div className="text-sm text-neutral-600">
                     {formatDate(transaction.date)} • {getTransactionTypeLabel(transaction.type)} • {transaction.quantity} adet
                   </div>
                   {transaction.notes && (
-                    <div className="mt-2 text-sm text-neutral-500 italic">{transaction.notes}</div>
+                    <div className="mt-2 text-sm text-neutral-500 italic line-clamp-2">{transaction.notes}</div>
                   )}
                 </div>
-                <div className="text-right ml-4">
+                <div className="text-right flex-shrink-0">
                   <div className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>{formatCurrency(transaction.totalCost)}</div>
                   <div className="text-sm text-neutral-600">{formatCurrency(transaction.unitCost)} / adet</div>
                 </div>
@@ -735,7 +737,7 @@ export default function InventoryAccounting() {
           ))}
 
           {filteredTransactions.filter(t => t.accountingStatus === 'pending').length === 0 && (
-            <div className={cx(card('sm', 'lg', 'default', 'lg'), 'text-center max-w-full')}>
+            <div className={cx(card('sm', 'lg', 'default', 'lg'), 'text-center')}>
               <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
               <p className="text-lg font-medium text-neutral-900">Tüm işlemler kaydedildi!</p>
               <p className="text-sm text-neutral-600 mt-2">Bekleyen stok hareketi yok</p>
@@ -746,7 +748,7 @@ export default function InventoryAccounting() {
 
       {/* Recorded View */}
       {activeView === 'recorded' && (
-        <div className={cx(card('sm', 'none', 'default', 'lg'), 'max-w-full')}>
+        <div className={cx(card('sm', 'none', 'default', 'lg'))}>
           <div className="px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-900">Muhasebe Kayıtları ({accountingEntries.length})</h3>
           </div>
@@ -804,7 +806,7 @@ export default function InventoryAccounting() {
       {/* Settings View */}
       {activeView === 'settings' && (
         <div className="space-y-4">
-          <div className={cx(card('sm', 'md', 'default', 'lg'), 'max-w-full')}>
+          <div className={cx(card('sm', 'md', 'default', 'lg'))}>
             <h3 className="text-base font-semibold text-neutral-900 mb-3">Otomatik Kayıt Ayarları</h3>
             
             <div className="space-y-3">
@@ -826,7 +828,7 @@ export default function InventoryAccounting() {
             </div>
           </div>
 
-          <div className={cx(card('sm', 'md', 'default', 'lg'), 'max-w-full')}>
+          <div className={cx(card('sm', 'md', 'default', 'lg'))}>
             <h3 className="text-base font-semibold text-neutral-900 mb-3">Hesap Eşleştirmeleri</h3>
             
             <div className="space-y-3">
@@ -837,7 +839,7 @@ export default function InventoryAccounting() {
                     {getTransactionTypeLabel(type)}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
+                    <div className="min-w-0">
                       <label className="block text-xs text-neutral-600 mb-2">Borç Hesabı</label>
                       <input
                         type="text"
@@ -846,7 +848,7 @@ export default function InventoryAccounting() {
                         readOnly
                       />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <label className="block text-xs text-neutral-600 mb-2">Alacak Hesabı</label>
                       <input
                         type="text"
