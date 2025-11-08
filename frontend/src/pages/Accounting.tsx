@@ -15,6 +15,7 @@ import PromissoryNoteFormModal from '../components/accounting/PromissoryNoteForm
 import AgingReportTable from '../components/accounting/AgingReportTable'
 import JournalEntryList from '../components/accounting/JournalEntryList'
 import ChartOfAccountsManagement from '../components/accounting/ChartOfAccountsManagement'
+import CurrentAccountManagement from '../components/accounting/CurrentAccountManagement'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
 import LoadingFallback from '../components/ui/LoadingFallback'
@@ -45,7 +46,7 @@ const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab')
 const IntegrationsTab = lazy(() => import('../components/accounting/tabs/IntegrationsTab'))
 const CostAccounting = lazy(() => import('../components/accounting/CostAccounting'))
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations' | 'journal-entries' | 'chart-of-accounts'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations' | 'journal-entries' | 'chart-of-accounts' | 'current-accounts'
 
 interface AccountingStats {
   totalRevenue: number
@@ -782,6 +783,7 @@ export default function Accounting() {
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'journal-entries' as const, label: 'Muhasebe Fişleri', icon: <FileText size={18} /> },
     { id: 'chart-of-accounts' as const, label: 'Hesap Planı', icon: <BarChart3 size={18} /> },
+    { id: 'current-accounts' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
     { id: 'cost-accounting' as const, label: 'Maliyet Muhasebesi', icon: <DollarSign size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
     { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
@@ -934,6 +936,9 @@ export default function Accounting() {
 
                 {/* Chart of Accounts Tab */}
                 {activeTab === 'chart-of-accounts' && <ChartOfAccountsManagement />}
+
+                {/* Current Accounts Tab */}
+                {activeTab === 'current-accounts' && <CurrentAccountManagement />}
 
             {/* Cari (Current Accounts) Tab - Direct to Account Cards */}
             {activeTab === 'cari' && <AccountCardList />}
