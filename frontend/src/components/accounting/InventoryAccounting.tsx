@@ -562,27 +562,27 @@ export default function InventoryAccounting() {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full table-fixed">
+              <table className="min-w-full">
                   <thead className="bg-neutral-50 border-b border-neutral-200">
                     <tr>
-                      <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
-                      <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tip</th>
-                      <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Ekipman</th>
-                      <th className="px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Adet</th>
-                      <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">Birim</th>
-                      <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Toplam</th>
-                      <th className="px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Müşteri</th>
-                      <th className="px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                      <th className="px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">İşlem</th>
+                      <th className="w-24 px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
+                      <th className="w-32 px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tip</th>
+                      <th className="min-w-[200px] px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Ekipman</th>
+                      <th className="w-20 px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Adet</th>
+                      <th className="w-28 px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">Birim</th>
+                      <th className="w-28 px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Toplam</th>
+                      <th className="w-36 px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Müşteri</th>
+                      <th className="w-28 px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                      <th className="w-24 px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase">İşlem</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {filteredTransactions.map((transaction) => (
                       <tr key={transaction.id} className="hover:bg-neutral-50 transition-colors">
-                        <td className="px-2 py-2 text-xs text-neutral-900">
+                        <td className="px-3 py-2 text-xs text-neutral-900">
                           {formatDate(transaction.date)}
                         </td>
-                        <td className="px-2 py-2 hidden lg:table-cell">
+                        <td className="px-3 py-2 hidden lg:table-cell">
                           <div className="flex items-center gap-1">
                             {getTypeIcon(transaction.type)}
                             <span className="text-xs text-neutral-900">
@@ -590,28 +590,28 @@ export default function InventoryAccounting() {
                             </span>
                           </div>
                         </td>
-                        <td className="px-2 py-2 max-w-[220px]">
-                          <div className="text-xs font-medium text-neutral-900 truncate">{transaction.equipmentName}</div>
+                        <td className="px-3 py-2">
+                          <div className="text-xs font-medium text-neutral-900">{transaction.equipmentName}</div>
                           {transaction.orderNumber && (
-                            <div className="text-[10px] text-neutral-500 truncate">{transaction.orderNumber}</div>
+                            <div className="text-[10px] text-neutral-500">{transaction.orderNumber}</div>
                           )}
                         </td>
-                        <td className="px-2 py-2 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell">
+                        <td className="px-3 py-2 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell">
                           {transaction.quantity}
                         </td>
-                        <td className="px-2 py-2 text-right text-xs text-neutral-900 hidden xl:table-cell">
+                        <td className="px-3 py-2 text-right text-xs text-neutral-900 hidden xl:table-cell">
                           {formatCurrency(transaction.unitCost)}
                         </td>
-                        <td className="px-2 py-2 text-right text-xs font-bold text-neutral-900">
+                        <td className="px-3 py-2 text-right text-xs font-bold text-neutral-900">
                           {formatCurrency(transaction.totalCost)}
                         </td>
-                        <td className="px-2 py-2 text-xs text-neutral-900 hidden lg:table-cell">
+                        <td className="px-3 py-2 text-xs text-neutral-900 hidden lg:table-cell">
                           {transaction.customerName || '-'}
                         </td>
-                        <td className="px-2 py-2 text-center">
+                        <td className="px-3 py-2 text-center">
                           {getStatusBadge(transaction.accountingStatus)}
                         </td>
-                        <td className="px-2 py-2 text-center">
+                        <td className="px-3 py-2 text-center">
                           {transaction.accountingStatus === 'pending' && (
                             <button
                               onClick={() => handleAutoRecord(transaction.id)}

@@ -1721,10 +1721,10 @@ export default function Accounting() {
                       )}
 
                       <div className="overflow-x-auto">
-                        <table className="w-full table-fixed">
+                        <table className="min-w-full">
                           <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
                             <tr>
-                              <th className="px-2 py-2 text-left">
+                              <th className="w-12 px-2 py-2 text-left">
                                 <input
                                   type="checkbox"
                                   checked={selectedOffers.length === offers.length && offers.length > 0}
@@ -1732,25 +1732,25 @@ export default function Accounting() {
                                   className={`${DESIGN_TOKENS.radius.sm} rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
-                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-32 px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Teklif No
                               </th>
-                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`min-w-[200px] px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Müşteri
                               </th>
-                              <th className={`hidden xl:table-cell px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden xl:table-cell w-28 px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Tarih
                               </th>
-                              <th className={`hidden lg:table-cell px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden lg:table-cell w-28 px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Geçerlilik
                               </th>
-                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-28 px-3 py-2 text-right ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Tutar
                               </th>
-                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-28 px-3 py-2 text-center ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 Durum
                               </th>
-                              <th className={`px-2 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-40 px-3 py-2 text-center ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
                                 İşlemler
                               </th>
                             </tr>
@@ -1766,7 +1766,7 @@ export default function Accounting() {
                                     className="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
                                   />
                                 </td>
-                                <td className="px-2 py-3 whitespace-nowrap">
+                                <td className="px-3 py-3 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.offerNumber}
                                   </div>
@@ -1774,20 +1774,20 @@ export default function Accounting() {
                                     {offer.items?.length || 0} kalem
                                   </div>
                                 </td>
-                                <td className="px-2 py-2 max-w-[180px]">
-                                  <div className="text-sm font-medium text-neutral-900 truncate">
+                                <td className="px-3 py-3">
+                                  <div className="text-sm font-medium text-neutral-900">
                                     {offer.customer.name}
                                   </div>
-                                  <div className="text-xs text-neutral-500 truncate">
+                                  <div className="text-xs text-neutral-500">
                                     {offer.customer.email}
                                   </div>
                                 </td>
-                                <td className="hidden xl:table-cell px-2 py-3 whitespace-nowrap">
+                                <td className="hidden xl:table-cell px-3 py-3 whitespace-nowrap">
                                   <div className="text-sm text-neutral-900">
                                     {formatDate(offer.offerDate)}
                                   </div>
                                 </td>
-                                <td className="hidden lg:table-cell px-2 py-3 whitespace-nowrap">
+                                <td className="hidden lg:table-cell px-3 py-3 whitespace-nowrap">
                                   <div className={`text-sm ${
                                     new Date(offer.validUntil) < new Date() 
                                       ? 'text-red-600 font-medium' 
@@ -1799,15 +1799,15 @@ export default function Accounting() {
                                     <div className="text-xs text-red-500">Süresi doldu</div>
                                   )}
                                 </td>
-                                <td className="px-2 py-2 whitespace-nowrap">
+                                <td className="px-3 py-3 whitespace-nowrap text-right">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {formatCurrency(offer.grandTotal)}
                                   </div>
                                 </td>
-                                <td className="px-2 py-3 whitespace-nowrap">
+                                <td className="px-3 py-3 whitespace-nowrap text-center">
                                   {getOfferStatusBadge(offer.status)}
                                 </td>
-                                <td className="px-2 py-3 whitespace-nowrap">
+                                <td className="px-3 py-3 whitespace-nowrap">
                                   <div className="flex items-center gap-3">
                                     {offer.status === 'draft' && (
                                       <button
