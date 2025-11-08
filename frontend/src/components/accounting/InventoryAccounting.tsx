@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+ï»¿import { useState, useEffect } from 'react'
 import { 
   Package, TrendingUp, TrendingDown, DollarSign, AlertCircle, 
   CheckCircle, ArrowRight, Settings, Filter, Calendar, FileText,
@@ -61,35 +61,35 @@ export default function InventoryAccounting() {
   const accountMappings = {
     purchase: {
       debit: '153 - Ticari Mallar',
-      credit: '320 - Satýcýlar'
+      credit: '320 - SatÄ±cÄ±lar'
     },
     sale: {
       debit: '100 - Kasa',
-      credit: '600 - Satýþ Geliri'
+      credit: '600 - SatÄ±ÅŸ Geliri'
     },
     rental_out: {
-      debit: '121 - Alýcýlar',
+      debit: '121 - AlÄ±cÄ±lar',
       credit: '602 - Kiralama Geliri'
     },
     rental_return: {
       debit: '153 - Ticari Mallar',
-      credit: '153 - Ticari Mallar (Çýkýþ)'
+      credit: '153 - Ticari Mallar (Ã‡Ä±kÄ±ÅŸ)'
     },
     adjustment: {
-      debit: '622 - Stok Deðer Düþüklüðü',
+      debit: '622 - Stok DeÄŸer DÃ¼ÅŸÃ¼klÃ¼ÄŸÃ¼',
       credit: '153 - Ticari Mallar'
     },
     transfer: {
-      debit: '153 - Ticari Mallar (Þube A)',
-      credit: '153 - Ticari Mallar (Þube B)'
+      debit: '153 - Ticari Mallar (Åžube A)',
+      credit: '153 - Ticari Mallar (Åžube B)'
     }
   }
 
   useEffect(() => {
-    loadInventoryTransactions(); // Gerçek API kullan
+    loadInventoryTransactions(); // GerÃ§ek API kullan
   }, [])
 
-  // ?? Gerçek API'den stok hareketlerini yükle
+  // ðŸ”¥ GerÃ§ek API'den stok hareketlerini yÃ¼kle
   const loadInventoryTransactions = async () => {
     setLoading(true);
     try {
@@ -104,12 +104,12 @@ export default function InventoryAccounting() {
       });
 
       if (!response.ok) {
-        throw new Error('Stok hareketleri yüklenemedi');
+        throw new Error('Stok hareketleri yÃ¼klenemedi');
       }
 
       const data = await response.json();
       
-      // Backend response'u frontend formatýna dönüþtür
+      // Backend response'u frontend formatÄ±na dÃ¶nÃ¼ÅŸtÃ¼r
       const transactions: InventoryTransaction[] = data.movements?.map((movement: any) => ({
         id: movement.id.toString(),
         date: new Date(movement.createdAt).toISOString().split('T')[0],
@@ -130,10 +130,10 @@ export default function InventoryAccounting() {
 
       setInventoryTransactions(transactions);
     } catch (error) {
-      console.error('Stok hareketleri yüklenirken hata:', error);
+      console.error('Stok hareketleri yÃ¼klenirken hata:', error);
       toast({
         title: 'Hata',
-        description: 'Stok hareketleri yüklenemedi',
+        description: 'Stok hareketleri yÃ¼klenemedi',
         variant: 'destructive',
       });
     } finally {
@@ -157,36 +157,36 @@ export default function InventoryAccounting() {
     return 'adjustment';
   };
 
-  // Mock data kaldýrýldý - artýk gerçek API kullanýlýyor
+  // Mock data kaldÄ±rÄ±ldÄ± - artÄ±k gerÃ§ek API kullanÄ±lÄ±yor
   const loadMockData_DEPRECATED = () => {
-    // Bu fonksiyon artýk kullanýlmýyor
-    // Gerçek API: loadInventoryTransactions()
+    // Bu fonksiyon artÄ±k kullanÄ±lmÄ±yor
+    // GerÃ§ek API: loadInventoryTransactions()
     const mockTransactions: InventoryTransaction[] = [
       {
         id: 'IT001',
         date: '2024-10-30',
         type: 'purchase',
         equipmentId: 'EQ001',
-        equipmentName: 'HILTI TE 6-A36 Kýrýcý Delici',
+        equipmentName: 'HILTI TE 6-A36 KÄ±rÄ±cÄ± Delici',
         quantity: 2,
         unitCost: 15000,
         totalCost: 30000,
         accountingStatus: 'pending',
-        notes: 'Yeni alým - fatura bekliyor'
+        notes: 'Yeni alÄ±m - fatura bekliyor'
       },
       {
         id: 'IT002',
         date: '2024-10-29',
         type: 'rental_out',
         equipmentId: 'EQ002',
-        equipmentName: 'Makita HR2470 Kýrýcý Delici',
+        equipmentName: 'Makita HR2470 KÄ±rÄ±cÄ± Delici',
         quantity: 3,
         unitCost: 8000,
         totalCost: 24000,
         orderId: 'ORD-2024-123',
         orderNumber: 'KIR-2024-123',
         customerId: 'C001',
-        customerName: 'ACME Ýnþaat Ltd.',
+        customerName: 'ACME Ä°nÅŸaat Ltd.',
         accountingStatus: 'recorded',
         accountingEntryId: 'AE001'
       },
@@ -195,29 +195,29 @@ export default function InventoryAccounting() {
         date: '2024-10-28',
         type: 'sale',
         equipmentId: 'EQ003',
-        equipmentName: 'Bosch GBH 2-28 F Kýrýcý',
+        equipmentName: 'Bosch GBH 2-28 F KÄ±rÄ±cÄ±',
         quantity: 1,
         unitCost: 6000,
         totalCost: 7500,
         customerId: 'C002',
-        customerName: 'Tech Solutions A.Þ.',
+        customerName: 'Tech Solutions A.Åž.',
         accountingStatus: 'recorded',
         accountingEntryId: 'AE002',
-        notes: 'Eski ekipman satýþý'
+        notes: 'Eski ekipman satÄ±ÅŸÄ±'
       },
       {
         id: 'IT004',
         date: '2024-10-27',
         type: 'rental_return',
         equipmentId: 'EQ004',
-        equipmentName: 'DeWalt D25263K Kýrýcý',
+        equipmentName: 'DeWalt D25263K KÄ±rÄ±cÄ±',
         quantity: 2,
         unitCost: 7500,
         totalCost: 15000,
         orderId: 'ORD-2024-110',
         orderNumber: 'KIR-2024-110',
         customerId: 'C003',
-        customerName: 'XYZ Müteahhitlik',
+        customerName: 'XYZ MÃ¼teahhitlik',
         accountingStatus: 'recorded',
         accountingEntryId: 'AE003'
       },
@@ -231,7 +231,7 @@ export default function InventoryAccounting() {
         unitCost: 9000,
         totalCost: 9000,
         accountingStatus: 'pending',
-        notes: 'Hasar nedeniyle deðer düþüþü'
+        notes: 'Hasar nedeniyle deÄŸer dÃ¼ÅŸÃ¼ÅŸÃ¼'
       },
       {
         id: 'IT006',
@@ -245,9 +245,9 @@ export default function InventoryAccounting() {
         orderId: 'ORD-2024-125',
         orderNumber: 'KIR-2024-125',
         customerId: 'C004',
-        customerName: 'ABC Yapý Ltd.',
+        customerName: 'ABC YapÄ± Ltd.',
         accountingStatus: 'error',
-        notes: 'Muhasebe hesabý bulunamadý'
+        notes: 'Muhasebe hesabÄ± bulunamadÄ±'
       }
     ]
 
@@ -256,10 +256,10 @@ export default function InventoryAccounting() {
         id: 'AE001',
         date: '2024-10-29',
         inventoryTransactionId: 'IT002',
-        debitAccount: '121 - Alýcýlar',
+        debitAccount: '121 - AlÄ±cÄ±lar',
         creditAccount: '602 - Kiralama Geliri',
         amount: 24000,
-        description: 'Makita HR2470 kiralama - ACME Ýnþaat',
+        description: 'Makita HR2470 kiralama - ACME Ä°nÅŸaat',
         status: 'posted'
       },
       {
@@ -267,9 +267,9 @@ export default function InventoryAccounting() {
         date: '2024-10-28',
         inventoryTransactionId: 'IT003',
         debitAccount: '100 - Kasa',
-        creditAccount: '600 - Satýþ Geliri',
+        creditAccount: '600 - SatÄ±ÅŸ Geliri',
         amount: 7500,
-        description: 'Bosch GBH 2-28 F satýþý - Tech Solutions',
+        description: 'Bosch GBH 2-28 F satÄ±ÅŸÄ± - Tech Solutions',
         status: 'posted'
       },
       {
@@ -277,9 +277,9 @@ export default function InventoryAccounting() {
         date: '2024-10-27',
         inventoryTransactionId: 'IT004',
         debitAccount: '153 - Ticari Mallar',
-        creditAccount: '153 - Ticari Mallar (Çýkýþ)',
+        creditAccount: '153 - Ticari Mallar (Ã‡Ä±kÄ±ÅŸ)',
         amount: 15000,
-        description: 'DeWalt D25263K iade - XYZ Müteahhitlik',
+        description: 'DeWalt D25263K iade - XYZ MÃ¼teahhitlik',
         status: 'posted'
       }
     ]
@@ -327,10 +327,10 @@ export default function InventoryAccounting() {
           : t
       ))
 
-      toast.success('Muhasebe kaydý oluþturuldu')
+      toast.success('Muhasebe kaydÄ± oluÅŸturuldu')
     } catch (error: any) {
       console.error('Failed to create accounting record:', error)
-      toast.error('Kayýt oluþturulamadý')
+      toast.error('KayÄ±t oluÅŸturulamadÄ±')
     } finally {
       setLoading(false)
     }
@@ -340,7 +340,7 @@ export default function InventoryAccounting() {
     const pendingTransactions = inventoryTransactions.filter(t => t.accountingStatus === 'pending')
     
     if (pendingTransactions.length === 0) {
-      toast.info('Bekleyen kayýt yok')
+      toast.info('Bekleyen kayÄ±t yok')
       return
     }
 
@@ -381,10 +381,10 @@ export default function InventoryAccounting() {
       setAccountingEntries([...accountingEntries, ...newEntries])
       setInventoryTransactions(updatedTransactions)
       
-      toast.success(`${successCount} iþlem kaydedildi`)
+      toast.success(`${successCount} iÅŸlem kaydedildi`)
     } catch (error: any) {
       console.error('Bulk record failed:', error)
-      toast.error('Toplu kayýt baþarýsýz')
+      toast.error('Toplu kayÄ±t baÅŸarÄ±sÄ±z')
     } finally {
       setLoading(false)
     }
@@ -394,7 +394,7 @@ export default function InventoryAccounting() {
     const transaction = inventoryTransactions.find(t => t.id === transactionId)
     if (!transaction || !transaction.accountingEntryId) return
 
-    if (!confirm('Bu muhasebe kaydýný silmek istediðinizden emin misiniz?')) return
+    if (!confirm('Bu muhasebe kaydÄ±nÄ± silmek istediÄŸinizden emin misiniz?')) return
 
     // Remove entry
     setAccountingEntries(accountingEntries.filter(e => e.id !== transaction.accountingEntryId))
@@ -406,16 +406,16 @@ export default function InventoryAccounting() {
         : t
     ))
 
-    toast.success('Muhasebe kaydý silindi')
+    toast.success('Muhasebe kaydÄ± silindi')
   }
 
   const getTransactionTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
-      purchase: 'Satýn Alma',
-      sale: 'Satýþ',
+      purchase: 'SatÄ±n Alma',
+      sale: 'SatÄ±ÅŸ',
       rental_out: 'Kiralama',
-      rental_return: 'Ýade',
-      adjustment: 'Düzeltme',
+      rental_return: 'Ä°ade',
+      adjustment: 'DÃ¼zeltme',
       transfer: 'Transfer'
     }
     return labels[type] || type
@@ -527,7 +527,7 @@ export default function InventoryAccounting() {
             <Package size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.totalTransactions}</span>
           </div>
-          <div className="text-xs lg:text-sm opacity-90">Toplam Ýþlem</div>
+          <div className="text-xs lg:text-sm opacity-90">Toplam Ä°ÅŸlem</div>
         </div>
 
         {/* Pending */}
@@ -559,7 +559,7 @@ export default function InventoryAccounting() {
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
         >
-          Genel Bakýþ
+          Genel BakÄ±ÅŸ
         </button>
         <button
           onClick={() => setActiveView('pending')}
@@ -579,7 +579,7 @@ export default function InventoryAccounting() {
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
         >
-          Kayýtlar ({stats.recordedCount})
+          KayÄ±tlar ({stats.recordedCount})
         </button>
         <button
           onClick={() => setActiveView('settings')}
@@ -605,12 +605,12 @@ export default function InventoryAccounting() {
                 onChange={(e) => setSelectedType(e.target.value)}
                 className={cx(input('md', 'default', undefined, 'md'), 'w-full')}
               >
-                <option value="all">Tüm Ýþlem Tipleri</option>
-                <option value="purchase">Satýn Alma</option>
-                <option value="sale">Satýþ</option>
+                <option value="all">TÃ¼m Ä°ÅŸlem Tipleri</option>
+                <option value="purchase">SatÄ±n Alma</option>
+                <option value="sale">SatÄ±ÅŸ</option>
                 <option value="rental_out">Kiralama</option>
-                <option value="rental_return">Ýade</option>
-                <option value="adjustment">Düzeltme</option>
+                <option value="rental_return">Ä°ade</option>
+                <option value="adjustment">DÃ¼zeltme</option>
                 <option value="transfer">Transfer</option>
               </select>
 
@@ -619,7 +619,7 @@ export default function InventoryAccounting() {
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className={cx(input('md', 'default', undefined, 'md'), 'w-full')}
               >
-                <option value="all">Tüm Durumlar</option>
+                <option value="all">TÃ¼m Durumlar</option>
                 <option value="pending">Bekliyor</option>
                 <option value="recorded">Kaydedildi</option>
                 <option value="error">Hata</option>
@@ -655,19 +655,19 @@ export default function InventoryAccounting() {
                       </span>
                       <span>{getTransactionTypeLabel(transaction.type)}</span>
                       <span className="font-semibold">{transaction.quantity} adet</span>
-                      <span className="text-neutral-400">•</span>
+                      <span className="text-neutral-400">â€¢</span>
                       <span>{formatCurrency(transaction.unitCost)} / adet</span>
                     </div>
 
                     {transaction.customerName && (
                       <div className="text-sm text-neutral-500">
-                        Müþteri: <span className="font-medium text-neutral-700">{transaction.customerName}</span>
+                        MÃ¼ÅŸteri: <span className="font-medium text-neutral-700">{transaction.customerName}</span>
                       </div>
                     )}
                     
                     {transaction.orderNumber && (
                       <div className="text-xs text-neutral-400 mt-1">
-                        Sipariþ: {transaction.orderNumber}
+                        SipariÅŸ: {transaction.orderNumber}
                       </div>
                     )}
 
@@ -696,7 +696,7 @@ export default function InventoryAccounting() {
                           <button
                             onClick={() => {/* View entry */}}
                             className="text-blue-600 hover:text-blue-700 p-1"
-                            title="Görüntüle"
+                            title="GÃ¶rÃ¼ntÃ¼le"
                           >
                             <Eye size={16} />
                           </button>
@@ -727,8 +727,8 @@ export default function InventoryAccounting() {
           {filteredTransactions.length === 0 && (
             <div className={cx(card('sm', 'lg', 'default', 'lg'), 'text-center')}>
               <Package className="mx-auto mb-4 text-neutral-400" size={48} />
-              <p className="text-lg font-medium text-neutral-900">Stok hareketi bulunamadý</p>
-              <p className="text-sm text-neutral-600 mt-2">Filtrelerinizi deðiþtirmeyi deneyin</p>
+              <p className="text-lg font-medium text-neutral-900">Stok hareketi bulunamadÄ±</p>
+              <p className="text-sm text-neutral-600 mt-2">Filtrelerinizi deÄŸiÅŸtirmeyi deneyin</p>
             </div>
           )}
         </div>
@@ -747,28 +747,28 @@ export default function InventoryAccounting() {
                     {getStatusBadge(transaction.accountingStatus)}
                   </div>
                   <div className="text-sm text-neutral-600">
-                    {formatDate(transaction.date)} • {getTransactionTypeLabel(transaction.type)} • {transaction.quantity} adet
+                    {formatDate(transaction.date)} â€¢ {getTransactionTypeLabel(transaction.type)} â€¢ {transaction.quantity} adet
                   </div>
                   {transaction.notes && (
                     <div className="mt-2 text-sm text-neutral-500 italic line-clamp-2">{transaction.notes}</div>
                   )}
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <div className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>{formatCurrency(transaction.totalCost)}</div>
+                  <div className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>{formatCurrency(transaction.totalCost)}</div>
                   <div className="text-sm text-neutral-600">{formatCurrency(transaction.unitCost)} / adet</div>
                 </div>
               </div>
 
               {/* Accounting Preview */}
               <div className="bg-neutral-50 rounded-lg p-3 mb-3">
-                <div className="text-xs font-medium text-neutral-700 mb-2">Muhasebe Kaydý Önizlemesi:</div>
+                <div className="text-xs font-medium text-neutral-700 mb-2">Muhasebe KaydÄ± Ã–nizlemesi:</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                       <TrendingUp className="text-green-600" size={20} />
                     </div>
                     <div className="flex-1">
-                      <div className="text-xs text-neutral-600">Borç</div>
+                      <div className="text-xs text-neutral-600">BorÃ§</div>
                       <div className="text-sm font-medium text-neutral-900">
                         {accountMappings[transaction.type].debit}
                       </div>
@@ -807,7 +807,7 @@ export default function InventoryAccounting() {
           {filteredTransactions.filter(t => t.accountingStatus === 'pending').length === 0 && (
             <div className={cx(card('sm', 'lg', 'default', 'lg'), 'text-center')}>
               <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
-              <p className="text-lg font-medium text-neutral-900">Tüm iþlemler kaydedildi!</p>
+              <p className="text-lg font-medium text-neutral-900">TÃ¼m iÅŸlemler kaydedildi!</p>
               <p className="text-sm text-neutral-600 mt-2">Bekleyen stok hareketi yok</p>
             </div>
           )}
@@ -818,7 +818,7 @@ export default function InventoryAccounting() {
       {activeView === 'recorded' && (
         <div className={cx(card('sm', 'none', 'default', 'lg'))}>
           <div className="px-4 py-3 border-b border-neutral-200">
-            <h3 className="text-sm font-semibold text-neutral-900">Muhasebe Kayýtlarý ({accountingEntries.length})</h3>
+            <h3 className="text-sm font-semibold text-neutral-900">Muhasebe KayÄ±tlarÄ± ({accountingEntries.length})</h3>
           </div>
 
           <div className="divide-y divide-neutral-100">
@@ -834,7 +834,7 @@ export default function InventoryAccounting() {
                     <div className="text-right ml-4">
                       <div className="text-lg font-bold text-neutral-900">{formatCurrency(entry.amount)}</div>
                       <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
-                        {entry.status === 'posted' ? 'Aktarýldý' : 'Taslak'}
+                        {entry.status === 'posted' ? 'AktarÄ±ldÄ±' : 'Taslak'}
                       </span>
                     </div>
                   </div>
@@ -842,7 +842,7 @@ export default function InventoryAccounting() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div className="flex items-center gap-2 text-sm">
                       <TrendingUp className="text-green-600" size={16} />
-                      <span className="text-neutral-600">Borç:</span>
+                      <span className="text-neutral-600">BorÃ§:</span>
                       <span className="font-medium text-neutral-900">{entry.debitAccount}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
@@ -854,7 +854,7 @@ export default function InventoryAccounting() {
 
                   {transaction && (
                     <div className="mt-3 pt-3 border-t border-neutral-100 text-xs text-neutral-500">
-                      Ýþlem Ref: {transaction.id} • {transaction.equipmentName}
+                      Ä°ÅŸlem Ref: {transaction.id} â€¢ {transaction.equipmentName}
                     </div>
                   )}
                 </div>
@@ -865,7 +865,7 @@ export default function InventoryAccounting() {
           {accountingEntries.length === 0 && (
             <div className="p-12 text-center text-neutral-600">
               <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
-              <p>Henüz muhasebe kaydý yok</p>
+              <p>HenÃ¼z muhasebe kaydÄ± yok</p>
             </div>
           )}
         </div>
@@ -875,13 +875,13 @@ export default function InventoryAccounting() {
       {activeView === 'settings' && (
         <div className="space-y-4">
           <div className={cx(card('sm', 'md', 'default', 'lg'))}>
-            <h3 className="text-base font-semibold text-neutral-900 mb-3">Otomatik Kayýt Ayarlarý</h3>
+            <h3 className="text-base font-semibold text-neutral-900 mb-3">Otomatik KayÄ±t AyarlarÄ±</h3>
             
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                 <div>
-                  <div className="font-medium text-neutral-900">Otomatik Kayýt</div>
-                  <div className="text-sm text-neutral-600">Stok hareketleri otomatik olarak muhasebe kayýtlarýna dönüþtürülsün</div>
+                  <div className="font-medium text-neutral-900">Otomatik KayÄ±t</div>
+                  <div className="text-sm text-neutral-600">Stok hareketleri otomatik olarak muhasebe kayÄ±tlarÄ±na dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lsÃ¼n</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -897,7 +897,7 @@ export default function InventoryAccounting() {
           </div>
 
           <div className={cx(card('sm', 'md', 'default', 'lg'))}>
-            <h3 className="text-base font-semibold text-neutral-900 mb-3">Hesap Eþleþtirmeleri</h3>
+            <h3 className="text-base font-semibold text-neutral-900 mb-3">Hesap EÅŸleÅŸtirmeleri</h3>
             
             <div className="space-y-3">
               {Object.entries(accountMappings).map(([type, mapping]) => (
@@ -908,7 +908,7 @@ export default function InventoryAccounting() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="min-w-0">
-                      <label className="block text-xs text-neutral-600 mb-2">Borç Hesabý</label>
+                      <label className="block text-xs text-neutral-600 mb-2">BorÃ§ HesabÄ±</label>
                       <input
                         type="text"
                         value={mapping.debit}
@@ -917,7 +917,7 @@ export default function InventoryAccounting() {
                       />
                     </div>
                     <div className="min-w-0">
-                      <label className="block text-xs text-neutral-600 mb-2">Alacak Hesabý</label>
+                      <label className="block text-xs text-neutral-600 mb-2">Alacak HesabÄ±</label>
                       <input
                         type="text"
                         value={mapping.credit}

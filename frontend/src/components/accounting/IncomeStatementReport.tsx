@@ -123,12 +123,12 @@ export default function IncomeStatementReport() {
       <div className="flex justify-between items-center">
         <div>
           <h2
-            className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}
+            className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary}`}
           >
             Gelir-Gider Tablosu (Income Statement)
           </h2>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
+            className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}
           >
             Dönemsel gelir ve gider analizi
           </p>
@@ -155,11 +155,11 @@ export default function IncomeStatementReport() {
           <div className="flex items-center justify-between mb-3">
             <TrendingUp className="w-8 h-8 text-green-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-green-600 mb-1`}>
             {formatCurrency(data.summary.totalRevenue)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Toplam Gelir
           </p>
@@ -169,11 +169,11 @@ export default function IncomeStatementReport() {
           <div className="flex items-center justify-between mb-3">
             <TrendingDown className="w-8 h-8 text-red-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-red-600 mb-1`}>
             {formatCurrency(data.summary.totalExpense)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Toplam Gider
           </p>
@@ -184,14 +184,14 @@ export default function IncomeStatementReport() {
             <BarChart3 className="w-8 h-8 text-blue-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
+            className={`${DESIGN_TOKENS.typography.stat.lg} ${
               data.summary.grossProfit >= 0 ? 'text-green-600' : 'text-red-600'
             } mb-1`}
           >
             {formatCurrency(Math.abs(data.summary.grossProfit))}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Brüt Kar/Zarar
           </p>
@@ -202,14 +202,14 @@ export default function IncomeStatementReport() {
             <DollarSign className="w-8 h-8 text-purple-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
+            className={`${DESIGN_TOKENS.typography.stat.lg} ${
               isProfitable ? 'text-green-600' : 'text-red-600'
             } mb-1`}
           >
             {formatCurrency(Math.abs(data.summary.netProfit))}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Net Kar/Zarar
           </p>
@@ -220,14 +220,14 @@ export default function IncomeStatementReport() {
             <PieChart className="w-8 h-8 text-orange-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
+            className={`${DESIGN_TOKENS.typography.stat.lg} ${
               data.summary.profitMargin >= 0 ? 'text-green-600' : 'text-red-600'
             } mb-1`}
           >
             {formatPercentage(data.summary.profitMargin)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Kar Marjı
           </p>
@@ -239,7 +239,7 @@ export default function IncomeStatementReport() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
               Başlangıç Tarihi
@@ -254,7 +254,7 @@ export default function IncomeStatementReport() {
 
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
               Bitiş Tarihi
@@ -269,7 +269,7 @@ export default function IncomeStatementReport() {
 
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               Görünüm Tipi
             </label>
@@ -295,7 +295,7 @@ export default function IncomeStatementReport() {
           <div className={card('md', 'md', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <h3
-                className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary}`}
               >
                 Gelirler (Revenue)
               </h3>
@@ -346,7 +346,7 @@ export default function IncomeStatementReport() {
           <div className={card('md', 'md', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <h3
-                className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary}`}
               >
                 Giderler (Expenses)
               </h3>

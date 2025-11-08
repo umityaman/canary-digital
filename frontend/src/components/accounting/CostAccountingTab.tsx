@@ -19,7 +19,7 @@ export default function CostAccountingTab() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Maliyet Muhasebesi</h2>
+        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Maliyet Muhasebesi</h2>
       </div>
 
       {/* Sub Tabs */}

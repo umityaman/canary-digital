@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+ï»¿import { useState, useRef } from 'react'
 import { 
   Building2, Upload, Download, CheckCircle, AlertCircle, 
   Filter, Search, RefreshCw, Link2, XCircle, Eye, FileText,
@@ -56,12 +56,12 @@ export default function BankReconciliation() {
 
   // Mock data - will be replaced with real API
   const bankAccounts = [
-    { id: '1', name: 'Ýþ Bankasý - Ticari', accountNumber: '1234567890', balance: 125000 },
+    { id: '1', name: 'Ä°ÅŸ BankasÄ± - Ticari', accountNumber: '1234567890', balance: 125000 },
     { id: '2', name: 'Garanti BBVA - Vadesiz', accountNumber: '9876543210', balance: 85000 },
-    { id: '3', name: 'Yapý Kredi - USD', accountNumber: '5555666677', balance: 15000 }
+    { id: '3', name: 'YapÄ± Kredi - USD', accountNumber: '5555666677', balance: 15000 }
   ]
 
-  // ?? Gerçek API'den banka iþlemlerini yükle
+  // ðŸ”¥ GerÃ§ek API'den banka iÅŸlemlerini yÃ¼kle
   const loadBankTransactions = async () => {
     if (!selectedAccount) return;
     
@@ -81,12 +81,12 @@ export default function BankReconciliation() {
       );
 
       if (!response.ok) {
-        throw new Error('Banka iþlemleri yüklenemedi');
+        throw new Error('Banka iÅŸlemleri yÃ¼klenemedi');
       }
 
       const data = await response.json();
       
-      // Backend response'u frontend formatýna dönüþtür
+      // Backend response'u frontend formatÄ±na dÃ¶nÃ¼ÅŸtÃ¼r
       const transactions: BankTransaction[] = data.data?.transactions?.map((txn: any) => ({
         id: txn.id?.toString() || '',
         date: txn.date || txn.createdAt ? new Date(txn.date || txn.createdAt).toISOString().split('T')[0] : '',
@@ -103,13 +103,13 @@ export default function BankReconciliation() {
       setBankTransactions(transactions);
       setFilteredBankTransactions(transactions);
       
-      // System transactions'ý da yükle (opsiyonel)
+      // System transactions'Ä± da yÃ¼kle (opsiyonel)
       // loadSystemTransactions();
     } catch (error) {
-      console.error('Banka iþlemleri yüklenirken hata:', error);
-      toast.error('Banka iþlemleri yüklenemedi');
+      console.error('Banka iÅŸlemleri yÃ¼klenirken hata:', error);
+      toast.error('Banka iÅŸlemleri yÃ¼klenemedi');
       
-      // Hata durumunda boþ veri
+      // Hata durumunda boÅŸ veri
       setBankTransactions([]);
       setFilteredBankTransactions([]);
     } finally {
@@ -117,36 +117,36 @@ export default function BankReconciliation() {
     }
   };
 
-  // Mock data (deprecated) - Artýk kullanýlmýyor
+  // Mock data (deprecated) - ArtÄ±k kullanÄ±lmÄ±yor
   const generateMockBankData_DEPRECATED = () => {
     const mockData: BankTransaction[] = [
       {
         id: 'B001',
         date: '2024-10-28',
-        description: 'ACME Ltd. - Fatura Ödemesi',
+        description: 'ACME Ltd. - Fatura Ã–demesi',
         amount: 15000,
         type: 'credit',
         balance: 125000,
         reference: 'INV-2024-001',
         matched: true,
         matchedWith: 'S001',
-        category: 'Müþteri Ödemesi'
+        category: 'MÃ¼ÅŸteri Ã–demesi'
       },
       {
         id: 'B002',
         date: '2024-10-27',
-        description: 'Elektrik Faturasý - BEDAÞ',
+        description: 'Elektrik FaturasÄ± - BEDAÅž',
         amount: 2500,
         type: 'debit',
         balance: 110000,
         matched: true,
         matchedWith: 'S002',
-        category: 'Ýþletme Giderleri'
+        category: 'Ä°ÅŸletme Giderleri'
       },
       {
         id: 'B003',
         date: '2024-10-26',
-        description: 'XYZ A.Þ. Ödeme',
+        description: 'XYZ A.Åž. Ã–deme',
         amount: 8500,
         type: 'credit',
         balance: 112500,
@@ -156,12 +156,12 @@ export default function BankReconciliation() {
       {
         id: 'B004',
         date: '2024-10-25',
-        description: 'Personel Maaþ - Toplu',
+        description: 'Personel MaaÅŸ - Toplu',
         amount: 45000,
         type: 'debit',
         balance: 104000,
         matched: false,
-        category: 'Maaþ Ödemesi'
+        category: 'MaaÅŸ Ã–demesi'
       },
       {
         id: 'B005',
@@ -172,7 +172,7 @@ export default function BankReconciliation() {
         balance: 149000,
         matched: true,
         matchedWith: 'S003',
-        category: 'Müþteri Ödemesi'
+        category: 'MÃ¼ÅŸteri Ã–demesi'
       },
       {
         id: 'B006',
@@ -182,7 +182,7 @@ export default function BankReconciliation() {
         type: 'debit',
         balance: 137000,
         matched: false,
-        category: 'Ýþletme Giderleri'
+        category: 'Ä°ÅŸletme Giderleri'
       }
     ]
     
@@ -190,10 +190,10 @@ export default function BankReconciliation() {
       {
         id: 'S001',
         date: '2024-10-28',
-        description: 'Fatura Tahsilatý - ACME Ltd.',
+        description: 'Fatura TahsilatÄ± - ACME Ltd.',
         amount: 15000,
         type: 'income',
-        category: 'Satýþ Geliri',
+        category: 'SatÄ±ÅŸ Geliri',
         reference: 'INV-2024-001',
         matched: true
       },
@@ -209,7 +209,7 @@ export default function BankReconciliation() {
       {
         id: 'S003',
         date: '2024-10-24',
-        description: 'Tech Solutions - Kiralama Ödemesi',
+        description: 'Tech Solutions - Kiralama Ã–demesi',
         amount: 12000,
         type: 'income',
         category: 'Kiralama Geliri',
@@ -227,7 +227,7 @@ export default function BankReconciliation() {
       {
         id: 'S005',
         date: '2024-10-21',
-        description: 'Danýþmanlýk Geliri',
+        description: 'DanÄ±ÅŸmanlÄ±k Geliri',
         amount: 5000,
         type: 'income',
         category: 'Hizmet Geliri',
@@ -237,7 +237,7 @@ export default function BankReconciliation() {
 
     setBankTransactions(mockData)
     setSystemTransactions(mockSystemData)
-    toast.success('Örnek veriler yüklendi')
+    toast.success('Ã–rnek veriler yÃ¼klendi')
   }
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -249,13 +249,13 @@ export default function BankReconciliation() {
       // Real file processing - CSV/Excel parsing
       await new Promise(resolve => setTimeout(resolve, 1500))
       
-      // Gerçek API'yi yükle
+      // GerÃ§ek API'yi yÃ¼kle
       await loadBankTransactions()
       
-      toast.success(`${file.name} baþarýyla içe aktarýldý`)
+      toast.success(`${file.name} baÅŸarÄ±yla iÃ§e aktarÄ±ldÄ±`)
     } catch (error: any) {
       console.error('Failed to upload file:', error)
-      toast.error('Dosya yüklenemedi')
+      toast.error('Dosya yÃ¼klenemedi')
     } finally {
       setLoading(false)
       if (fileInputRef.current) {
@@ -305,10 +305,10 @@ export default function BankReconciliation() {
       setBankTransactions(updatedBankTxs)
       setSystemTransactions(updatedSystemTxs)
       
-      toast.success(`${matchedCount} iþlem otomatik eþleþtirildi`)
+      toast.success(`${matchedCount} iÅŸlem otomatik eÅŸleÅŸtirildi`)
     } catch (error: any) {
       console.error('Auto match failed:', error)
-      toast.error('Otomatik eþleþtirme baþarýsýz')
+      toast.error('Otomatik eÅŸleÅŸtirme baÅŸarÄ±sÄ±z')
     } finally {
       setLoading(false)
     }
@@ -325,7 +325,7 @@ export default function BankReconciliation() {
     
     setBankTransactions(updatedBankTxs)
     setSystemTransactions(updatedSystemTxs)
-    toast.success('Ýþlemler manuel olarak eþleþtirildi')
+    toast.success('Ä°ÅŸlemler manuel olarak eÅŸleÅŸtirildi')
   }
 
   const handleUnmatch = (bankTxId: string) => {
@@ -342,7 +342,7 @@ export default function BankReconciliation() {
     
     setBankTransactions(updatedBankTxs)
     setSystemTransactions(updatedSystemTxs)
-    toast.success('Eþleþtirme kaldýrýldý')
+    toast.success('EÅŸleÅŸtirme kaldÄ±rÄ±ldÄ±')
   }
 
   const calculateStats = (): ReconciliationStats => {
@@ -412,8 +412,8 @@ export default function BankReconciliation() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Banka Mutabakat</h2>
-          <p className="text-sm text-neutral-600 mt-1">Banka ekstresi ile sistem kayýtlarýný karþýlaþtýr</p>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Banka Mutabakat</h2>
+          <p className="text-sm text-neutral-600 mt-1">Banka ekstresi ile sistem kayÄ±tlarÄ±nÄ± karÅŸÄ±laÅŸtÄ±r</p>
         </div>
         
         <div className="flex items-center gap-2">
@@ -429,14 +429,14 @@ export default function BankReconciliation() {
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
           >
             <Upload size={18} />
-            <span className="hidden sm:inline">Ekstre Yükle</span>
+            <span className="hidden sm:inline">Ekstre YÃ¼kle</span>
           </button>
           <button
             onClick={generateMockBankData_DEPRECATED}
             className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
           >
             <RefreshCw size={18} />
-            <span className="hidden sm:inline">Örnek Veri</span>
+            <span className="hidden sm:inline">Ã–rnek Veri</span>
           </button>
         </div>
       </div>
@@ -447,45 +447,45 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <Building2 size={20} />
-            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.totalBankTransactions}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalBankTransactions}</span>
           </div>
-          <div className="text-sm opacity-90">Banka Ýþlemi</div>
+          <div className="text-sm opacity-90">Banka Ä°ÅŸlemi</div>
         </div>
 
         {/* Total System Transactions */}
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <FileText size={20} />
-            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.totalSystemTransactions}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalSystemTransactions}</span>
           </div>
-          <div className="text-sm opacity-90">Sistem Kaydý</div>
+          <div className="text-sm opacity-90">Sistem KaydÄ±</div>
         </div>
 
         {/* Matched */}
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={20} />
-            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.matchedCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.matchedCount}</span>
           </div>
-          <div className="text-sm opacity-90">Eþleþti</div>
+          <div className="text-sm opacity-90">EÅŸleÅŸti</div>
         </div>
 
         {/* Unmatched Bank */}
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
-            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.unmatchedBankCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.unmatchedBankCount}</span>
           </div>
-          <div className="text-sm opacity-90">Banka (Eþleþmedi)</div>
+          <div className="text-sm opacity-90">Banka (EÅŸleÅŸmedi)</div>
         </div>
 
         {/* Unmatched System */}
         <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
-            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.unmatchedSystemCount}</span>
+            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.unmatchedSystemCount}</span>
           </div>
-          <div className="text-sm opacity-90">Sistem (Eþleþmedi)</div>
+          <div className="text-sm opacity-90">Sistem (EÅŸleÅŸmedi)</div>
         </div>
 
         {/* Difference */}
@@ -512,7 +512,7 @@ export default function BankReconciliation() {
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
         >
-          Genel Bakýþ
+          Genel BakÄ±ÅŸ
         </button>
         <button
           onClick={() => setActiveView('match')}
@@ -522,7 +522,7 @@ export default function BankReconciliation() {
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
         >
-          Eþleþtirme
+          EÅŸleÅŸtirme
         </button>
         <button
           onClick={() => setActiveView('report')}
@@ -546,7 +546,7 @@ export default function BankReconciliation() {
                 <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
                 <input
                   type="text"
-                  placeholder="Ýþlem ara..."
+                  placeholder="Ä°ÅŸlem ara..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
@@ -558,7 +558,7 @@ export default function BankReconciliation() {
                 onChange={(e) => setSelectedBankAccount(e.target.value)}
                 className={input('md', 'default', undefined, 'md')}
               >
-                <option value="all">Tüm Hesaplar</option>
+                <option value="all">TÃ¼m Hesaplar</option>
                 {bankAccounts.map(acc => (
                   <option key={acc.id} value={acc.id}>{acc.name}</option>
                 ))}
@@ -569,9 +569,9 @@ export default function BankReconciliation() {
                 onChange={(e) => setFilterStatus(e.target.value as any)}
                 className={input('md', 'default', undefined, 'md')}
               >
-                <option value="all">Tüm Durumlar</option>
-                <option value="matched">Eþleþenler</option>
-                <option value="unmatched">Eþleþmeyenler</option>
+                <option value="all">TÃ¼m Durumlar</option>
+                <option value="matched">EÅŸleÅŸenler</option>
+                <option value="unmatched">EÅŸleÅŸmeyenler</option>
               </select>
 
               <button
@@ -580,7 +580,7 @@ export default function BankReconciliation() {
                 className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
               >
                 <Link2 size={18} />
-                <span>Otomatik Eþleþtir</span>
+                <span>Otomatik EÅŸleÅŸtir</span>
               </button>
             </div>
           </div>
@@ -592,7 +592,7 @@ export default function BankReconciliation() {
               <div className="p-4 border-b border-neutral-200">
                 <h3 className="font-semibold text-neutral-900 flex items-center gap-2">
                   <Building2 size={20} />
-                  Banka Ýþlemleri ({filteredBankTransactions.length})
+                  Banka Ä°ÅŸlemleri ({filteredBankTransactions.length})
                 </h3>
               </div>
               
@@ -600,8 +600,8 @@ export default function BankReconciliation() {
                 {filteredBankTransactions.length === 0 ? (
                   <div className="p-8 text-center text-neutral-600">
                     <Building2 className="mx-auto mb-4 text-neutral-400" size={48} />
-                    <p>Banka iþlemi bulunamadý</p>
-                    <p className="text-sm mt-2">Ekstre dosyasý yükleyin</p>
+                    <p>Banka iÅŸlemi bulunamadÄ±</p>
+                    <p className="text-sm mt-2">Ekstre dosyasÄ± yÃ¼kleyin</p>
                   </div>
                 ) : (
                   <div className="divide-y divide-neutral-100">
@@ -614,7 +614,7 @@ export default function BankReconciliation() {
                               {tx.matched && (
                                 <span className="flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs">
                                   <CheckCircle size={12} />
-                                  Eþleþti
+                                  EÅŸleÅŸti
                                 </span>
                               )}
                             </div>
@@ -635,7 +635,7 @@ export default function BankReconciliation() {
                                 onClick={() => handleUnmatch(tx.id)}
                                 className="mt-1 text-xs text-red-600 hover:underline"
                               >
-                                Eþleþtirmeyi Kaldýr
+                                EÅŸleÅŸtirmeyi KaldÄ±r
                               </button>
                             )}
                           </div>
@@ -658,7 +658,7 @@ export default function BankReconciliation() {
               <div className="p-4 border-b border-neutral-200">
                 <h3 className="font-semibold text-neutral-900 flex items-center gap-2">
                   <FileText size={20} />
-                  Sistem Kayýtlarý ({filteredSystemTransactions.length})
+                  Sistem KayÄ±tlarÄ± ({filteredSystemTransactions.length})
                 </h3>
               </div>
               
@@ -666,7 +666,7 @@ export default function BankReconciliation() {
                 {filteredSystemTransactions.length === 0 ? (
                   <div className="p-8 text-center text-neutral-600">
                     <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
-                    <p>Sistem kaydý bulunamadý</p>
+                    <p>Sistem kaydÄ± bulunamadÄ±</p>
                   </div>
                 ) : (
                   <div className="divide-y divide-neutral-100">
@@ -679,7 +679,7 @@ export default function BankReconciliation() {
                               {tx.matched && (
                                 <span className="flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs">
                                   <CheckCircle size={12} />
-                                  Eþleþti
+                                  EÅŸleÅŸti
                                 </span>
                               )}
                             </div>
@@ -714,9 +714,9 @@ export default function BankReconciliation() {
       {/* Match View */}
       {activeView === 'match' && (
         <div className={card('md', 'lg', 'default', 'lg')}>
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Manuel Eþleþtirme</h3>
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Manuel EÅŸleÅŸtirme</h3>
           <p className="text-sm text-neutral-600 mb-6">
-            Eþleþmeyen iþlemleri manuel olarak birbirine baðlayýn
+            EÅŸleÅŸmeyen iÅŸlemleri manuel olarak birbirine baÄŸlayÄ±n
           </p>
           
           <div className="space-y-4">
@@ -725,13 +725,13 @@ export default function BankReconciliation() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex-1">
                     <div className="font-medium text-neutral-900">{bankTx.description}</div>
-                    <div className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>{formatDate(bankTx.date)} • {formatCurrency(bankTx.amount)}</div>
+                    <div className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>{formatDate(bankTx.date)} â€¢ {formatCurrency(bankTx.amount)}</div>
                   </div>
                   <Link2 className="text-neutral-400" size={20} />
                 </div>
                 
                 <div className="space-y-2">
-                  <div className="text-sm font-medium text-neutral-700 mb-2">Olasý Eþleþmeler:</div>
+                  <div className="text-sm font-medium text-neutral-700 mb-2">OlasÄ± EÅŸleÅŸmeler:</div>
                   {filteredSystemTransactions
                     .filter(st => !st.matched && Math.abs(st.amount - bankTx.amount) < 0.01)
                     .map(systemTx => (
@@ -742,7 +742,7 @@ export default function BankReconciliation() {
                       >
                         <div className="flex-1">
                           <div className="text-sm font-medium text-neutral-900">{systemTx.description}</div>
-                          <div className="text-xs text-neutral-600">{formatDate(systemTx.date)} • {systemTx.category}</div>
+                          <div className="text-xs text-neutral-600">{formatDate(systemTx.date)} â€¢ {systemTx.category}</div>
                         </div>
                         <div className="text-sm font-bold text-green-600">
                           {formatCurrency(systemTx.amount)}
@@ -751,7 +751,7 @@ export default function BankReconciliation() {
                     ))}
                   {filteredSystemTransactions.filter(st => !st.matched && Math.abs(st.amount - bankTx.amount) < 0.01).length === 0 && (
                     <div className="text-sm text-neutral-500 italic p-3 bg-neutral-50 rounded-lg">
-                      Uygun eþleþme bulunamadý
+                      Uygun eÅŸleÅŸme bulunamadÄ±
                     </div>
                   )}
                 </div>
@@ -761,8 +761,8 @@ export default function BankReconciliation() {
             {filteredBankTransactions.filter(bt => !bt.matched).length === 0 && (
               <div className="text-center py-12">
                 <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
-                <p className="text-lg font-medium text-neutral-900">Tüm iþlemler eþleþtirildi!</p>
-                <p className="text-sm text-neutral-600 mt-2">Eþleþmeyen banka iþlemi kalmadý</p>
+                <p className="text-lg font-medium text-neutral-900">TÃ¼m iÅŸlemler eÅŸleÅŸtirildi!</p>
+                <p className="text-sm text-neutral-600 mt-2">EÅŸleÅŸmeyen banka iÅŸlemi kalmadÄ±</p>
               </div>
             )}
           </div>
@@ -779,16 +779,16 @@ export default function BankReconciliation() {
               {/* Summary */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <h4 className="font-medium text-neutral-900">Banka Özeti</h4>
+                  <h4 className="font-medium text-neutral-900">Banka Ã–zeti</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-neutral-600">Toplam Giriþ:</span>
+                      <span className="text-neutral-600">Toplam GiriÅŸ:</span>
                       <span className="font-semibold text-green-600">
                         {formatCurrency(bankTransactions.filter(t => t.type === 'credit').reduce((sum, t) => sum + t.amount, 0))}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-neutral-600">Toplam Çýkýþ:</span>
+                      <span className="text-neutral-600">Toplam Ã‡Ä±kÄ±ÅŸ:</span>
                       <span className="font-semibold text-red-600">
                         {formatCurrency(bankTransactions.filter(t => t.type === 'debit').reduce((sum, t) => sum + t.amount, 0))}
                       </span>
@@ -805,7 +805,7 @@ export default function BankReconciliation() {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-medium text-neutral-900">Sistem Özeti</h4>
+                  <h4 className="font-medium text-neutral-900">Sistem Ã–zeti</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-neutral-600">Toplam Gelir:</span>
@@ -842,14 +842,14 @@ export default function BankReconciliation() {
                     <h4 className={`text-lg font-semibold ${
                       Math.abs(stats.differenceAmount) < 0.01 ? 'text-green-900' : 'text-red-900'
                     }`}>
-                      {Math.abs(stats.differenceAmount) < 0.01 ? 'Mutabakat Saðlandý ?' : 'Mutabakat Farký Var!'}
+                      {Math.abs(stats.differenceAmount) < 0.01 ? 'Mutabakat SaÄŸlandÄ± âœ“' : 'Mutabakat FarkÄ± Var!'}
                     </h4>
                     <p className={`text-sm mt-1 ${
                       Math.abs(stats.differenceAmount) < 0.01 ? 'text-green-700' : 'text-red-700'
                     }`}>
                       {Math.abs(stats.differenceAmount) < 0.01 
-                        ? 'Banka ve sistem kayýtlarý tam olarak eþleþiyor'
-                        : `Fark tutarý: ${formatCurrency(stats.differenceAmount)}`
+                        ? 'Banka ve sistem kayÄ±tlarÄ± tam olarak eÅŸleÅŸiyor'
+                        : `Fark tutarÄ±: ${formatCurrency(stats.differenceAmount)}`
                       }
                     </p>
                   </div>
@@ -865,7 +865,7 @@ export default function BankReconciliation() {
               <div className="flex items-center justify-end gap-3">
                 <button className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors">
                   <Download size={18} />
-                  <span>Excel Ýndir</span>
+                  <span>Excel Ä°ndir</span>
                 </button>
                 <button className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors">
                   <FileText size={18} />

@@ -195,10 +195,10 @@ export default function CurrentAccountManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+          <h2 className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
             Cari Hesap Yönetimi
           </h2>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
             Müşteri ve tedarikçi cari hesaplarını yönetin
           </p>
         </div>
@@ -234,13 +234,13 @@ export default function CurrentAccountManagement() {
           <div className="flex items-center justify-between mb-2">
             <Users className="w-8 h-8 text-blue-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary}`}>
             {filteredAccounts.length}
           </p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             Toplam Cari
           </p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.xs} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>
+          <p className={`${DESIGN_TOKENS.typography.body.xs} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
             {customerCount} Müşteri, {supplierCount} Tedarikçi
           </p>
         </div>
@@ -249,10 +249,10 @@ export default function CurrentAccountManagement() {
           <div className="flex items-center justify-between mb-2">
             <TrendingUp className="w-8 h-8 text-green-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600`}>
             {formatCurrency(totalDebit)}
           </p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             Toplam Borç
           </p>
         </div>
@@ -261,10 +261,10 @@ export default function CurrentAccountManagement() {
           <div className="flex items-center justify-between mb-2">
             <TrendingDown className="w-8 h-8 text-red-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-600`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.md} text-red-600`}>
             {formatCurrency(totalCredit)}
           </p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             Toplam Alacak
           </p>
         </div>
@@ -273,10 +273,10 @@ export default function CurrentAccountManagement() {
           <div className="flex items-center justify-between mb-2">
             <DollarSign className="w-8 h-8 text-purple-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${getBalanceColor(totalBalance)}`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.md} ${getBalanceColor(totalBalance)}`}>
             {formatCurrency(totalBalance)}
           </p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             Net Bakiye
           </p>
         </div>
@@ -285,10 +285,10 @@ export default function CurrentAccountManagement() {
           <div className="flex items-center justify-between mb-2">
             <Clock className="w-8 h-8 text-orange-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary}`}>
             {filteredAccounts.filter((a) => Math.abs(a.balance) > 0).length}
           </p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             Açık Bakiye
           </p>
         </div>
@@ -370,10 +370,10 @@ export default function CurrentAccountManagement() {
         ) : filteredAccounts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
             <Users className="w-16 h-16 text-gray-300 mb-4" />
-            <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
+            <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>
               Cari Hesap Bulunamadı
             </p>
-            <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
+            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
               {searchQuery || typeFilter !== 'ALL' || balanceFilter !== 'ALL'
                 ? 'Arama kriterlerinize uygun cari hesap bulunamadı'
                 : 'Henüz cari hesap eklenmemiş'}
@@ -413,18 +413,18 @@ export default function CurrentAccountManagement() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <Users className="w-4 h-4 text-gray-400 mr-2" />
-                        <span className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.primary} font-medium font-mono`}>
+                        <span className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.primary} font-medium font-mono`}>
                           {account.code}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.primary} font-medium`}>
+                        <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.primary} font-medium`}>
                           {account.name}
                         </p>
                         {account.taxNumber && (
-                          <p className={`${DESIGN_TOKENS?.typography?.body.xs} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
+                          <p className={`${DESIGN_TOKENS.typography.body.xs} ${DESIGN_TOKENS.colors.text.tertiary}`}>
                             VKN: {account.taxNumber}
                           </p>
                         )}
@@ -434,17 +434,17 @@ export default function CurrentAccountManagement() {
                       {getAccountTypeBadge(account.type)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS.typography.body.sm} text-green-600 font-medium`}>
                         {formatCurrency(account.totalDebit)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS.typography.body.sm} text-red-600 font-medium`}>
                         {formatCurrency(account.totalCredit)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} font-bold ${getBalanceColor(account.balance)}`}>
+                      <span className={`${DESIGN_TOKENS.typography.body.sm} font-bold ${getBalanceColor(account.balance)}`}>
                         {formatCurrency(account.balance)}
                       </span>
                     </td>
@@ -489,10 +489,10 @@ export default function CurrentAccountManagement() {
             <div className="border-b border-gray-200 p-6">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+                  <h3 className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}>
                     Cari Hesap Detayı
                   </h3>
-                  <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
+                  <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
                     {selectedAccount.code} - {selectedAccount.name}
                   </p>
                 </div>
@@ -510,32 +510,32 @@ export default function CurrentAccountManagement() {
               {/* Account Info */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
                     Tip
                   </p>
                   {getAccountTypeBadge(selectedAccount.type)}
                 </div>
                 <div>
-                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
                     Vergi No
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+                  <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}>
                     {selectedAccount.taxNumber || '-'}
                   </p>
                 </div>
                 <div>
-                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
                     Telefon
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+                  <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}>
                     {selectedAccount.phone || '-'}
                   </p>
                 </div>
                 <div>
-                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
                     Email
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+                  <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}>
                     {selectedAccount.email || '-'}
                   </p>
                 </div>
@@ -544,26 +544,26 @@ export default function CurrentAccountManagement() {
               {/* Balance Summary */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className={card('md', 'md', 'default', 'lg')}>
-                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-2`}>
+                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-2`}>
                     Toplam Borç
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
+                  <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600`}>
                     {formatCurrency(selectedAccount.totalDebit)}
                   </p>
                 </div>
                 <div className={card('md', 'md', 'default', 'lg')}>
-                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-2`}>
+                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-2`}>
                     Toplam Alacak
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-600`}>
+                  <p className={`${DESIGN_TOKENS.typography.stat.md} text-red-600`}>
                     {formatCurrency(selectedAccount.totalCredit)}
                   </p>
                 </div>
                 <div className={card('md', 'md', 'default', 'lg')}>
-                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-2`}>
+                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-2`}>
                     Net Bakiye
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${getBalanceColor(selectedAccount.balance)}`}>
+                  <p className={`${DESIGN_TOKENS.typography.stat.md} ${getBalanceColor(selectedAccount.balance)}`}>
                     {formatCurrency(selectedAccount.balance)}
                   </p>
                 </div>
@@ -571,7 +571,7 @@ export default function CurrentAccountManagement() {
 
               {/* Transactions */}
               <div>
-                <h4 className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>
+                <h4 className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
                   Hesap Hareketleri
                 </h4>
                 

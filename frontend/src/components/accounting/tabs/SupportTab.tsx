@@ -115,7 +115,7 @@ const SupportTab: React.FC = () => {
       {/* Support Tickets */}
       <div className={card('md', 'sm')}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Destek Talepleri</h2>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Destek Talepleri</h2>
           <button
             onClick={() => toast.success('Yeni destek talebi oluşturuluyor...')}
             className={cx(button('md', 'primary'), 'gap-2')}
@@ -166,7 +166,7 @@ const SupportTab: React.FC = () => {
       <div className={card('md', 'sm')}>
         <div className="flex items-center gap-3 mb-6">
           <HelpCircle className="text-blue-600" size={24} />
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Sık Sorulan Sorular</h2>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Sık Sorulan Sorular</h2>
         </div>
 
         <div className="space-y-4">

@@ -384,23 +384,23 @@ export const badge = (
  * @example getStatGradient('profit', 1000) // Returns gradient classes
  */
 export const getStatGradient = (type: 'revenue' | 'expense' | 'profit' | 'overdue', value?: number) => {
-  if (type === 'revenue') return DESIGN_TOKENS?.colors?.semantic.success.gradient
-  if (type === 'expense') return DESIGN_TOKENS?.colors?.semantic.error.gradient
-  if (type === 'overdue') return DESIGN_TOKENS?.colors?.semantic.error.gradient
+  if (type === 'revenue') return DESIGN_TOKENS.colors.semantic.success.gradient
+  if (type === 'expense') return DESIGN_TOKENS.colors.semantic.error.gradient
+  if (type === 'overdue') return DESIGN_TOKENS.colors.semantic.error.gradient
   if (type === 'profit') {
     return value && value >= 0 
-      ? DESIGN_TOKENS?.colors?.semantic.info.gradient 
-      : DESIGN_TOKENS?.colors?.semantic.error.gradient
+      ? DESIGN_TOKENS.colors.semantic.info.gradient 
+      : DESIGN_TOKENS.colors.semantic.error.gradient
   }
-  return DESIGN_TOKENS?.colors?.semantic.neutral.gradient
+  return DESIGN_TOKENS.colors.semantic.neutral.gradient
 }
 
 /**
  * Get semantic color classes
  * @example getSemanticColor('success') // Returns success color classes
  */
-export const getSemanticColor = (type: keyof typeof DESIGN_TOKENS?.colors?.semantic) => {
-  return DESIGN_TOKENS?.colors?.semantic[type]
+export const getSemanticColor = (type: keyof typeof DESIGN_TOKENS.colors.semantic) => {
+  return DESIGN_TOKENS.colors.semantic[type]
 }
 
 // Export individual tokens for direct usage

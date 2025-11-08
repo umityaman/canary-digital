@@ -124,8 +124,8 @@ export default function AccountCardList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Cari Hesap Kartları</h2>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>Müşteri bazlı alacak-borç takibi</p>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Cari Hesap Kartları</h2>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>Müşteri bazlı alacak-borç takibi</p>
         </div>
         <button
           onClick={exportToExcel}
@@ -144,8 +144,8 @@ export default function AccountCardList() {
               <Users className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900 mb-1`}>{accounts.length}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-blue-700`}>Toplam Cari</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-blue-900 mb-1`}>{accounts.length}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-blue-700`}>Toplam Cari</p>
         </div>
 
         <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
@@ -154,8 +154,8 @@ export default function AccountCardList() {
               <TrendingUp className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-900 mb-1`}>{formatCurrency(calculateTotalDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-700`}>Toplam Alacak</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-green-900 mb-1`}>{formatCurrency(calculateTotalDebt())}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-700`}>Toplam Alacak</p>
         </div>
 
         <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
@@ -164,8 +164,8 @@ export default function AccountCardList() {
               <AlertCircle className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-700`}>Vadesi Geçmiş</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-red-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-red-700`}>Vadesi Geçmiş</p>
         </div>
 
         <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
@@ -174,8 +174,8 @@ export default function AccountCardList() {
               <Clock className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-900 mb-1`}>{getOverdueAccountsCount()}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-orange-700`}>Gecikmiş Hesap</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-orange-900 mb-1`}>{getOverdueAccountsCount()}</h3>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} text-orange-700`}>Gecikmiş Hesap</p>
         </div>
       </div>
 

@@ -135,12 +135,12 @@ export default function TrialBalanceReport() {
       <div className="flex justify-between items-center">
         <div>
           <h2
-            className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}
+            className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary}`}
           >
             Mizan Raporu (Trial Balance)
           </h2>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
+            className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}
           >
             Hesap bazında borç-alacak dengesi
           </p>
@@ -167,11 +167,11 @@ export default function TrialBalanceReport() {
           <div className="flex items-center justify-between mb-3">
             <TrendingUp className="w-8 h-8 text-green-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-green-600 mb-1`}>
             {formatCurrency(summary.totalDebit)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Toplam Borç
           </p>
@@ -181,11 +181,11 @@ export default function TrialBalanceReport() {
           <div className="flex items-center justify-between mb-3">
             <TrendingDown className="w-8 h-8 text-red-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-red-600 mb-1`}>
             {formatCurrency(summary.totalCredit)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Toplam Alacak
           </p>
@@ -196,14 +196,14 @@ export default function TrialBalanceReport() {
             <DollarSign className="w-8 h-8 text-purple-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
+            className={`${DESIGN_TOKENS.typography.stat.lg} ${
               summary.difference === 0 ? 'text-green-600' : 'text-red-600'
             } mb-1`}
           >
             {formatCurrency(Math.abs(summary.difference))}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Fark
           </p>
@@ -214,14 +214,14 @@ export default function TrialBalanceReport() {
             <Scale className="w-8 h-8 text-blue-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
+            className={`${DESIGN_TOKENS.typography.stat.lg} ${
               summary.isBalanced ? 'text-green-600' : 'text-red-600'
             } mb-1`}
           >
             {summary.isBalanced ? '✓' : '✗'}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             {summary.isBalanced ? 'Dengede' : 'Dengesiz'}
           </p>
@@ -233,7 +233,7 @@ export default function TrialBalanceReport() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
               Başlangıç Tarihi
@@ -248,7 +248,7 @@ export default function TrialBalanceReport() {
 
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
               Bitiş Tarihi
@@ -263,7 +263,7 @@ export default function TrialBalanceReport() {
 
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               <Filter className="w-4 h-4 inline mr-1" />
               Hesap Tipi
@@ -290,7 +290,7 @@ export default function TrialBalanceReport() {
                 onChange={(e) => setShowZeroBalances(e.target.checked)}
                 className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
               />
-              <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>
+              <span className={`${DESIGN_TOKENS.typography.body.sm}`}>
                 Sıfır bakiye göster
               </span>
             </label>
@@ -302,7 +302,7 @@ export default function TrialBalanceReport() {
       <div className={card('md', 'md', 'default', 'lg')}>
         <div className="flex justify-between items-center mb-4">
           <h3
-            className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}
+            className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary}`}
           >
             Hesap Detayları
           </h3>

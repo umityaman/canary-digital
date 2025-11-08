@@ -233,7 +233,7 @@ export default function CurrentAccountDetail() {
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-1">
             <h1
-              className={`${DESIGN_TOKENS?.typography?.heading.h1} ${DESIGN_TOKENS?.colors?.text.primary}`}
+              className={`${DESIGN_TOKENS.typography.heading.h1} ${DESIGN_TOKENS.colors.text.primary}`}
             >
               {account.name}
             </h1>
@@ -245,7 +245,7 @@ export default function CurrentAccountDetail() {
             )}
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Cari Kodu: {account.code}
           </p>
@@ -275,12 +275,12 @@ export default function CurrentAccountDetail() {
             <TrendingUp className="w-8 h-8 text-green-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}
+            className={`${DESIGN_TOKENS.typography.stat.lg} text-green-600 mb-1`}
           >
             {formatCurrency(account.totalDebit)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Toplam Borç
           </p>
@@ -290,11 +290,11 @@ export default function CurrentAccountDetail() {
           <div className="flex items-center justify-between mb-3">
             <TrendingDown className="w-8 h-8 text-red-500" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-red-600 mb-1`}>
             {formatCurrency(account.totalCredit)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Toplam Alacak
           </p>
@@ -305,14 +305,14 @@ export default function CurrentAccountDetail() {
             <DollarSign className="w-8 h-8 text-purple-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${getBalanceColor(
+            className={`${DESIGN_TOKENS.typography.stat.lg} ${getBalanceColor(
               account.balance
             )} mb-1`}
           >
             {formatCurrency(account.balance)}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Net Bakiye
           </p>
@@ -329,12 +329,12 @@ export default function CurrentAccountDetail() {
             <CreditCard className="w-8 h-8 text-blue-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+            className={`${DESIGN_TOKENS.typography.stat.lg} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
           >
             {account.creditLimit ? formatCurrency(account.creditLimit) : '∞'}
           </p>
           <p
-            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
           >
             Kredi Limiti
           </p>
@@ -351,7 +351,7 @@ export default function CurrentAccountDetail() {
         {/* Contact Information */}
         <div className={card('md', 'md', 'default', 'lg')}>
           <h3
-            className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}
+            className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary} mb-4`}
           >
             İletişim Bilgileri
           </h3>
@@ -360,17 +360,17 @@ export default function CurrentAccountDetail() {
               <Building className="w-5 h-5 text-gray-400 mt-0.5" />
               <div>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
+                  className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}
                 >
                   Vergi Bilgileri
                 </p>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                  className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
                 >
                   VKN: {account.taxNumber || '-'}
                 </p>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+                  className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
                 >
                   {account.taxOffice || '-'}
                 </p>
@@ -381,12 +381,12 @@ export default function CurrentAccountDetail() {
               <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
               <div>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
+                  className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}
                 >
                   Telefon
                 </p>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                  className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
                 >
                   {account.phone || '-'}
                 </p>
@@ -397,12 +397,12 @@ export default function CurrentAccountDetail() {
               <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
               <div>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
+                  className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}
                 >
                   Email
                 </p>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                  className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
                 >
                   {account.email || '-'}
                 </p>
@@ -413,17 +413,17 @@ export default function CurrentAccountDetail() {
               <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
               <div>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
+                  className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}
                 >
                   Adres
                 </p>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                  className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
                 >
                   {account.address || '-'}
                 </p>
                 <p
-                  className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
+                  className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
                 >
                   {account.city || '-'}, {account.country || '-'}
                 </p>
@@ -435,19 +435,19 @@ export default function CurrentAccountDetail() {
         {/* Account Info */}
         <div className={card('md', 'md', 'default', 'lg')}>
           <h3
-            className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}
+            className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary} mb-4`}
           >
             Hesap Bilgileri
           </h3>
           <div className="space-y-3">
             <div>
               <p
-                className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
+                className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}
               >
                 Ödeme Vadesi
               </p>
               <p
-                className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
               >
                 {account.paymentTerm ? `${account.paymentTerm} gün` : 'Tanımsız'}
               </p>
@@ -455,12 +455,12 @@ export default function CurrentAccountDetail() {
 
             <div>
               <p
-                className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
+                className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}
               >
                 Hesap Açılış Tarihi
               </p>
               <p
-                className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
               >
                 {formatDate(account.createdAt)}
               </p>
@@ -468,12 +468,12 @@ export default function CurrentAccountDetail() {
 
             <div>
               <p
-                className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
+                className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}
               >
                 Son İşlem Tarihi
               </p>
               <p
-                className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
               >
                 {account.lastTransactionDate
                   ? formatDate(account.lastTransactionDate)
@@ -483,12 +483,12 @@ export default function CurrentAccountDetail() {
 
             <div>
               <p
-                className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
+                className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}
               >
                 Durum
               </p>
               <p
-                className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}
               >
                 {account.isActive ? (
                   <span className="text-green-600 font-medium">✓ Aktif</span>
@@ -505,7 +505,7 @@ export default function CurrentAccountDetail() {
       <div className={card('md', 'md', 'default', 'lg')}>
         <div className="flex justify-between items-center mb-4">
           <h3
-            className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
+            className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}
           >
             Hesap Hareketleri
           </h3>
@@ -522,7 +522,7 @@ export default function CurrentAccountDetail() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               Başlangıç Tarihi
             </label>
@@ -535,7 +535,7 @@ export default function CurrentAccountDetail() {
           </div>
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               Bitiş Tarihi
             </label>
@@ -548,7 +548,7 @@ export default function CurrentAccountDetail() {
           </div>
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
             >
               İşlem Tipi
             </label>

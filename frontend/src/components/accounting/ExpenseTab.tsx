@@ -195,10 +195,10 @@ export default function ExpenseTab() {
             <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <TrendingDown size={24} />
             </div>
-            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Bu Ay</span>
+            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Bu Ay</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{formatCurrency(monthlyExpense)}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Aylık Gider</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{formatCurrency(monthlyExpense)}</h3>
+          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Aylık Gider</p>
         </div>
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-orange-500 to-orange-600 text-white')}>
@@ -206,10 +206,10 @@ export default function ExpenseTab() {
             <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <DollarSign size={24} />
             </div>
-            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam</span>
+            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Toplam</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{formatCurrency(totalExpense)}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam Gider</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{formatCurrency(totalExpense)}</h3>
+          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Toplam Gider</p>
         </div>
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-purple-500 to-purple-600 text-white')}>
@@ -217,10 +217,10 @@ export default function ExpenseTab() {
             <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <FileText size={24} />
             </div>
-            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Kayıt</span>
+            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Kayıt</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{expenses.length}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Gider Kaydı</p>
+          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{expenses.length}</h3>
+          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Gider Kaydı</p>
         </div>
       </div>
 
@@ -228,7 +228,7 @@ export default function ExpenseTab() {
       {categoryStats.length > 0 && (
         <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-4">
-            <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-2`}>
+            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center gap-2`}>
               <PieChart size={20} />
               Kategori Dağılımı
             </h3>
@@ -242,11 +242,11 @@ export default function ExpenseTab() {
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <div className={`w-3 h-3 ${DESIGN_TOKENS.radius.full} ${stat.color}`} />
-                      <span className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary}`}>{stat.category}</span>
+                      <span className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary}`}>{stat.category}</span>
                     </div>
-                    <span className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{stat.percentage.toFixed(1)}%</span>
+                    <span className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>{stat.percentage.toFixed(1)}%</span>
                   </div>
-                  <div className={`w-full ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.full} h-2`}>
+                  <div className={`w-full ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.full} h-2`}>
                     <div
                       className={`${stat.color} h-2 ${DESIGN_TOKENS.radius.full} transition-all`}
                       style={{ width: `${stat.percentage}%` }}
@@ -258,18 +258,18 @@ export default function ExpenseTab() {
             
             {/* Top Categories */}
             <div className="space-y-2">
-              <h4 className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-3`}>En Yüksek Giderler</h4>
+              <h4 className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-3`}>En Yüksek Giderler</h4>
               {categoryStats.slice(0, 5).map((stat) => (
-                <div key={stat.category} className={`flex items-center justify-between p-3 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md}`}>
+                <div key={stat.category} className={`flex items-center justify-between p-3 ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.md}`}>
                   <div>
-                    <div className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.primary}`}>{stat.category}</div>
-                    <div className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{stat.count} kayıt</div>
+                    <div className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.primary}`}>{stat.category}</div>
+                    <div className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>{stat.count} kayıt</div>
                   </div>
                   <div className="text-right">
-                    <div className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+                    <div className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.primary}`}>
                       {formatCurrency(stat.total)}
                     </div>
-                    <div className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{stat.percentage.toFixed(1)}%</div>
+                    <div className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>{stat.percentage.toFixed(1)}%</div>
                   </div>
                 </div>
               ))}
@@ -284,7 +284,7 @@ export default function ExpenseTab() {
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS.colors.text.muted}`} size={18} />
               <input
                 type="text"
                 placeholder="Gider ara..."

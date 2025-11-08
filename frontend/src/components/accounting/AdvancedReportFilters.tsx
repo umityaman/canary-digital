@@ -163,7 +163,7 @@ export default function AdvancedReportFilters({
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Date From */}
         <div>
-          <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-1`}>
+          <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-1`}>
             Başlangıç Tarihi
           </label>
           <div className="relative">
@@ -179,7 +179,7 @@ export default function AdvancedReportFilters({
 
         {/* Date To */}
         <div>
-          <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-1`}>
+          <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-1`}>
             Bitiş Tarihi
           </label>
           <div className="relative">
@@ -195,7 +195,7 @@ export default function AdvancedReportFilters({
 
         {/* Report Type */}
         <div>
-          <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-1`}>
+          <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-1`}>
             Rapor Tipi
           </label>
           <select
@@ -232,7 +232,7 @@ export default function AdvancedReportFilters({
       {showAdvanced && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+            <h3 className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary}`}>
               Gelişmiş Filtreleme Seçenekleri
             </h3>
             <button
@@ -246,7 +246,7 @@ export default function AdvancedReportFilters({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Customers Multi-Select */}
             <div>
-              <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+              <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 <Users className="w-4 h-4 inline mr-1" />
                 Müşteriler
               </label>
@@ -273,7 +273,7 @@ export default function AdvancedReportFilters({
                         onChange={() => handleMultiSelect('customers', customer.id)}
                         className="mr-2 rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>{customer.name}</span>
+                      <span className={`${DESIGN_TOKENS.typography.body.sm}`}>{customer.name}</span>
                     </label>
                   ))}
                 </div>
@@ -301,7 +301,7 @@ export default function AdvancedReportFilters({
 
             {/* Suppliers Multi-Select */}
             <div>
-              <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+              <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 <Users className="w-4 h-4 inline mr-1" />
                 Tedarikçiler
               </label>
@@ -328,7 +328,7 @@ export default function AdvancedReportFilters({
                         onChange={() => handleMultiSelect('suppliers', supplier.id)}
                         className="mr-2 rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>{supplier.name}</span>
+                      <span className={`${DESIGN_TOKENS.typography.body.sm}`}>{supplier.name}</span>
                     </label>
                   ))}
                 </div>
@@ -356,7 +356,7 @@ export default function AdvancedReportFilters({
 
             {/* Categories */}
             <div>
-              <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+              <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 <Tag className="w-4 h-4 inline mr-1" />
                 Kategoriler
               </label>
@@ -382,7 +382,7 @@ export default function AdvancedReportFilters({
 
             {/* Status */}
             <div>
-              <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+              <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Durum
               </label>
               <div className="flex flex-wrap gap-2">
@@ -407,7 +407,7 @@ export default function AdvancedReportFilters({
 
             {/* Amount Range */}
             <div>
-              <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+              <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 <DollarSign className="w-4 h-4 inline mr-1" />
                 Tutar Aralığı
               </label>
@@ -431,7 +431,7 @@ export default function AdvancedReportFilters({
 
             {/* Group By */}
             <div>
-              <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+              <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                 Gruplandırma
               </label>
               <select
@@ -450,7 +450,7 @@ export default function AdvancedReportFilters({
             {/* Sort */}
             <div className="md:col-span-2 grid grid-cols-2 gap-4">
               <div>
-                <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+                <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                   Sıralama Kriteri
                 </label>
                 <select
@@ -465,7 +465,7 @@ export default function AdvancedReportFilters({
                 </select>
               </div>
               <div>
-                <label className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
+                <label className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
                   Sıralama Yönü
                 </label>
                 <select
@@ -519,7 +519,7 @@ export default function AdvancedReportFilters({
         )}
 
         {activeFilterCount > 0 && (
-          <span className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
+          <span className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
             {activeFilterCount} filtre aktif
           </span>
         )}

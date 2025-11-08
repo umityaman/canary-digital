@@ -196,12 +196,12 @@ export default function AccountFormModal({
           <div className="flex justify-between items-center">
             <div>
               <h3
-                className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
+                className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}
               >
                 {initialData ? 'Hesap Düzenle' : 'Yeni Hesap Ekle'}
               </h3>
               <p
-                className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
+                className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}
               >
                 Muhasebe hesap planına hesap ekleyin veya düzenleyin
               </p>
@@ -221,7 +221,7 @@ export default function AccountFormModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label
-                className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
+                className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
               >
                 Hesap Kodu <span className="text-red-500">*</span>
               </label>
@@ -240,7 +240,7 @@ export default function AccountFormModal({
 
             <div>
               <label
-                className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
+                className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
               >
                 Hesap Tipi <span className="text-red-500">*</span>
               </label>
@@ -266,7 +266,7 @@ export default function AccountFormModal({
 
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
+              className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
             >
               Hesap Adı <span className="text-red-500">*</span>
             </label>
@@ -283,7 +283,7 @@ export default function AccountFormModal({
           {/* Parent Account Picker */}
           <div className="relative">
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
+              className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
             >
               Üst Hesap (Parent Account)
             </label>
@@ -357,7 +357,7 @@ export default function AccountFormModal({
           {/* Description */}
           <div>
             <label
-              className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
+              className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
             >
               Açıklama
             </label>
@@ -381,7 +381,7 @@ export default function AccountFormModal({
             />
             <label
               htmlFor="isActive"
-              className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary} cursor-pointer`}
+              className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary} cursor-pointer`}
             >
               Hesap Aktif
             </label>

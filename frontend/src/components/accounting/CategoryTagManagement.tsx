@@ -165,8 +165,8 @@ export default function CategoryTagManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Kategori ve Etiket Yönetimi</h2>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>
+          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Kategori ve Etiket Yönetimi</h2>
+          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
             Gelir/gider kategorilerini ve etiketleri yönetin
           </p>
         </div>
@@ -177,27 +177,27 @@ export default function CategoryTagManagement() {
         <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center`}>
-                <Filter className={`w-5 h-5 mr-2 ${DESIGN_TOKENS?.colors?.text.tertiary}`} />
+              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center`}>
+                <Filter className={`w-5 h-5 mr-2 ${DESIGN_TOKENS.colors.text.tertiary}`} />
                 Kategoriler
               </h3>
             </div>
 
             {/* Category Stats */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-green-50`}>
+              <div className={`p-4 ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-green-50`}>
                 <div className="flex items-center justify-between">
                   <TrendingUp className="w-6 h-6 text-green-600" />
-                  <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600`}>{incomeCount}</span>
+                  <span className={`${DESIGN_TOKENS.typography.stat.lg} text-green-600`}>{incomeCount}</span>
                 </div>
-                <p className={`${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-2`}>Gelir Kategorisi</p>
+                <p className={`${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.tertiary} mt-2`}>Gelir Kategorisi</p>
               </div>
-              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-red-50`}>
+              <div className={`p-4 ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-red-50`}>
                 <div className="flex items-center justify-between">
                   <TrendingDown className="w-6 h-6 text-red-600" />
-                  <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600`}>{expenseCount}</span>
+                  <span className={`${DESIGN_TOKENS.typography.stat.lg} text-red-600`}>{expenseCount}</span>
                 </div>
-                <p className={`${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-2`}>Gider Kategorisi</p>
+                <p className={`${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.tertiary} mt-2`}>Gider Kategorisi</p>
               </div>
             </div>
 
@@ -331,8 +331,8 @@ export default function CategoryTagManagement() {
         <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center`}>
-                <Tag className={`w-5 h-5 mr-2 ${DESIGN_TOKENS?.colors?.text.tertiary}`} />
+              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center`}>
+                <Tag className={`w-5 h-5 mr-2 ${DESIGN_TOKENS.colors.text.tertiary}`} />
                 Etiketler
               </h3>
               <button
@@ -351,12 +351,12 @@ export default function CategoryTagManagement() {
             {/* Tag Form */}
             {showTagForm && (
               <div className={`mb-6 p-4 bg-blue-50 ${DESIGN_TOKENS.radius.md} border border-blue-200`}>
-                <h4 className={`${DESIGN_TOKENS?.typography?.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-3`}>
+                <h4 className={`${DESIGN_TOKENS.typography.h4} ${DESIGN_TOKENS.colors.text.primary} mb-3`}>
                   {editingTagId ? 'Etiket Düzenle' : 'Yeni Etiket'}
                 </h4>
                 <div className="space-y-3">
                   <div>
-                    <label className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} mb-1`}>
+                    <label className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} mb-1`}>
                       Etiket Adı
                     </label>
                     <input
@@ -368,13 +368,13 @@ export default function CategoryTagManagement() {
                     />
                   </div>
                   <div>
-                    <label className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} mb-1`}>Renk</label>
+                    <label className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} mb-1`}>Renk</label>
                     <div className="flex items-center gap-2">
                       <input
                         type="color"
                         value={tagFormData.color}
                         onChange={(e) => setTagFormData({ ...tagFormData, color: e.target.value })}
-                        className={`w-12 h-10 border ${DESIGN_TOKENS?.colors?.border.default} ${DESIGN_TOKENS.radius.sm} cursor-pointer`}
+                        className={`w-12 h-10 border ${DESIGN_TOKENS.colors.border.default} ${DESIGN_TOKENS.radius.sm} cursor-pointer`}
                       />
                       <input
                         type="text"
