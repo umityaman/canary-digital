@@ -91,17 +91,15 @@ const CompanyInfo: React.FC = () => {
     try {
       setLoading(true);
       const [companyResponse, bankResponse] = await Promise.all([
-        apiClient.get('/company'),
-        apiClient.get('/company/bank-accounts'),
+        apiClient.get('/company').catch(() => ({ data: null })),
+        apiClient.get('/company/bank-accounts').catch(() => ({ data: null })),
       ]);
-      setCompanyData(companyResponse.data);
-      setBankAccounts(bankResponse.data);
-    } catch (error: any) {
-      console.error('Error loading company data:', error);
-      // Graceful fallback - show empty form instead of error
-      if (error.response?.status === 404) {
+      
+      // Set company data or default
+      if (companyResponse.data) {
+        setCompanyData(companyResponse.data);
+      } else {
         console.warn('⚠️ No company data found, showing empty form');
-        // Set default company data structure
         setCompanyData({
           id: 0,
           name: '',
@@ -128,6 +126,12 @@ const CompanyInfo: React.FC = () => {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
+      }
+      
+      // Set bank accounts or default
+      if (bankResponse.data) {
+        setBankAccounts(bankResponse.data);
+      } else {
         setBankAccounts({
           accounts: [],
           totals: {
@@ -138,9 +142,10 @@ const CompanyInfo: React.FC = () => {
             totalAccounts: 0,
           },
         });
-      } else {
-        toast.error('Şirket bilgileri yüklenirken hata oluştu');
       }
+    } catch (error: any) {
+      console.error('Error loading company data:', error);
+      toast.error('Şirket bilgileri yüklenirken hata oluştu');
     } finally {
       setLoading(false);
     }
@@ -189,6 +194,23 @@ const CompanyInfo: React.FC = () => {
       <div className="flex items-center justify-center h-64">
         <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
         <span className="ml-3 text-gray-600">Yükleniyor...</span>
+      </div>
+    );
+  }
+
+  if (!companyData) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64">
+        <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Şirket Bilgileri Yüklenemedi</h3>
+        <p className="text-gray-600 mb-4">Veriler yüklenirken bir hata oluştu</p>
+        <button
+          onClick={loadData}
+          className={cx(button('md', 'primary', 'md'), 'gap-2')}
+        >
+          <RefreshCw className="w-4 h-4" />
+          Tekrar Dene
+        </button>
       </div>
     );
   }
