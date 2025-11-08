@@ -626,10 +626,11 @@ export default function InventoryAccounting() {
               </select>
 
               <button
-                onClick={loadMockData}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
+                onClick={() => loadInventoryTransactions()}
+                disabled={loading}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors disabled:opacity-50"
               >
-                <RefreshCw size={18} />
+                <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
                 <span>Yenile</span>
               </button>
             </div>
