@@ -1021,7 +1021,7 @@ export default function Accounting() {
             {/* Receivables Management Tab - Çekler, Senetler, Yaşlandırma */}
             {activeTab === 'receivables' && (
               <div className="space-y-6">
-                <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>Alacak Yönetimi</h2>
+                <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'} mb-6`}>Alacak Yönetimi</h2>
                 
                 {/* Sub-tabs for Checks, Promissory, Aging */}
                 <div className={`flex gap-2 ${DESIGN_TOKENS.colors.border.light} border-b mb-6`}>
@@ -1207,7 +1207,7 @@ export default function Accounting() {
               <ErrorBoundary fallbackTitle="Fatura Listesi Hatası" fallbackMessage="Fatura listesi yüklenirken bir sorun oluştu.">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Fatura Yönetimi</h2>
+                    <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Fatura Yönetimi</h2>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => setActiveTab('ebelge')}
@@ -1610,7 +1610,7 @@ export default function Accounting() {
               <ErrorBoundary fallbackTitle="Teklif Listesi Hatası" fallbackMessage="Teklif listesi yüklenirken bir sorun oluştu.">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Teklif Listesi</h2>
+                    <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Teklif Listesi</h2>
                   <button 
                     onClick={() => navigate('/accounting/quote/new')}
                     className={cx(button('md', 'primary', 'md'), 'gap-2')}
