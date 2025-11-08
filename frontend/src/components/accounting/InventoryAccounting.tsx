@@ -424,7 +424,7 @@ export default function InventoryAccounting() {
   })
 
   return (
-    <div className="space-y-6 max-w-full overflow-hidden">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-end">
         <div className="flex items-center gap-2">
@@ -440,9 +440,9 @@ export default function InventoryAccounting() {
       </div>
 
       {/* Stats Cards - Responsive Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Total Transactions */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 text-white min-w-0 overflow-hidden">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 text-white">
           <div className="flex items-center justify-between mb-2">
             <Package size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.totalTransactions}</span>
@@ -451,7 +451,7 @@ export default function InventoryAccounting() {
         </div>
 
         {/* Pending */}
-        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-3 text-white min-w-0 overflow-hidden">
+        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-3 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.pendingRecords}</span>
@@ -460,7 +460,7 @@ export default function InventoryAccounting() {
         </div>
 
         {/* Recorded */}
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-3 text-white min-w-0 overflow-hidden">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-3 text-white">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.recordedCount}</span>
@@ -556,41 +556,41 @@ export default function InventoryAccounting() {
           </div>
 
           {/* Transactions List */}
-          <div className={cx(card('sm', 'none', 'default', 'lg'), 'overflow-hidden')}>
+          <div className={cx(card('sm', 'none', 'default', 'lg'))}>
             <div className="px-4 py-3 border-b border-neutral-200">
               <h3 className="text-sm font-semibold text-neutral-900">Stok Hareketleri ({filteredTransactions.length})</h3>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full table-fixed">
+              <table className="w-full min-w-max">
                   <thead className="bg-neutral-50 border-b border-neutral-200">
                     <tr>
-                      <th className="w-20 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
-                      <th className="w-20 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tip</th>
-                      <th className="w-40 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Ekipman</th>
-                      <th className="w-14 px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Adet</th>
-                      <th className="w-24 px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">Birim</th>
-                      <th className="w-24 px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Toplam</th>
-                      <th className="w-28 px-2 py-2 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Müşteri</th>
-                      <th className="w-24 px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                      <th className="w-20 px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase">İşlem</th>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Tarih</th>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Tip</th>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Ekipman</th>
+                      <th className="px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden md:table-cell">Adet</th>
+                      <th className="px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden xl:table-cell">Birim Fiyat</th>
+                      <th className="px-3 py-2 text-right text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Toplam</th>
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase whitespace-nowrap hidden lg:table-cell">Müşteri</th>
+                      <th className="px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">Durum</th>
+                      <th className="px-3 py-2 text-center text-xs font-medium text-neutral-700 uppercase whitespace-nowrap">İşlem</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {filteredTransactions.map((transaction) => (
                       <tr key={transaction.id} className="hover:bg-neutral-50 transition-colors">
-                        <td className="px-2 py-2 text-xs text-neutral-900 truncate">
+                        <td className="px-3 py-2 text-xs text-neutral-900 whitespace-nowrap">
                           {formatDate(transaction.date)}
                         </td>
-                        <td className="px-2 py-2 hidden lg:table-cell">
-                          <div className="flex items-center gap-1">
+                        <td className="px-3 py-2 hidden lg:table-cell">
+                          <div className="flex items-center gap-2 whitespace-nowrap">
                             {getTypeIcon(transaction.type)}
-                            <span className="text-xs text-neutral-900 truncate">
+                            <span className="text-xs text-neutral-900">
                               {getTransactionTypeLabel(transaction.type)}
                             </span>
                           </div>
                         </td>
-                        <td className="px-2 py-2">
+                        <td className="px-3 py-2 max-w-[250px]">
                           <div className="text-xs font-medium text-neutral-900 truncate" title={transaction.equipmentName}>
                             {transaction.equipmentName}
                           </div>
@@ -598,22 +598,22 @@ export default function InventoryAccounting() {
                             <div className="text-[10px] text-neutral-500 truncate">{transaction.orderNumber}</div>
                           )}
                         </td>
-                        <td className="px-2 py-2 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell">
+                        <td className="px-3 py-2 text-center text-xs font-semibold text-neutral-900 hidden md:table-cell whitespace-nowrap">
                           {transaction.quantity}
                         </td>
-                        <td className="px-2 py-2 text-right text-xs text-neutral-900 hidden xl:table-cell truncate">
+                        <td className="px-3 py-2 text-right text-xs text-neutral-900 hidden xl:table-cell whitespace-nowrap">
                           {formatCurrency(transaction.unitCost)}
                         </td>
-                        <td className="px-2 py-2 text-right text-xs font-bold text-neutral-900 truncate">
+                        <td className="px-3 py-2 text-right text-xs font-bold text-neutral-900 whitespace-nowrap">
                           {formatCurrency(transaction.totalCost)}
                         </td>
-                        <td className="px-2 py-2 text-xs text-neutral-900 hidden lg:table-cell truncate" title={transaction.customerName}>
+                        <td className="px-3 py-2 text-xs text-neutral-900 hidden lg:table-cell max-w-[200px] truncate" title={transaction.customerName}>
                           {transaction.customerName || '-'}
                         </td>
-                        <td className="px-2 py-2 text-center">
+                        <td className="px-3 py-2 text-center whitespace-nowrap">
                           {getStatusBadge(transaction.accountingStatus)}
                         </td>
-                        <td className="px-2 py-2 text-center">
+                        <td className="px-3 py-2 text-center whitespace-nowrap">
                           {transaction.accountingStatus === 'pending' && (
                             <button
                               onClick={() => handleAutoRecord(transaction.id)}
