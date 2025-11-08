@@ -797,7 +797,7 @@ export default function Accounting() {
   ]
 
   return (
-    <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6 space-y-4 pb-10 overflow-hidden">
+    <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6 space-y-4 pb-10">
       {/* Keyboard Shortcuts Info */}
       <div className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.spacing.sm.padding} flex items-center ${DESIGN_TOKENS.spacing.md.gap} ${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
         <div className="flex items-center gap-2">
