@@ -2,6 +2,7 @@ import { parasutClient, formatDate } from '../config/parasut';
 import { prisma } from '../index';
 import { log } from '../config/logger';
 import stockMovementService from './stockMovementService';
+import journalEntryService from './journalEntryService';
 
 // Use the generated Prisma client types (avoid broad `as any` casts)
 const p = prisma;
@@ -324,6 +325,27 @@ export class InvoiceService {
         totalPaid: paidAmount,
         status: isPaid ? 'paid' : 'partial_paid',
       });
+
+      // 🔥 CRITICAL: Muhasebe fişi oluştur (otomatik)
+      try {
+        await journalEntryService.createPaymentEntry(
+          payment.id,
+          invoiceId,
+          invoice.companyId,
+          invoice.customerId,
+          paymentData.amount,
+          paymentData.paymentMethod,
+          invoice.invoiceNumber
+        );
+
+        log.info('Invoice Service: Ödeme muhasebe fişi oluşturuldu', {
+          paymentId: payment.id,
+          invoiceNumber: invoice.invoiceNumber,
+        });
+      } catch (journalError: any) {
+        log.error('Invoice Service: Muhasebe fişi oluşturulamadı:', journalError);
+        // Ödeme kaydedildi ama muhasebe fişi oluşturulamadı, hata logla ama devam et
+      }
 
       return payment;
     } catch (error) {
