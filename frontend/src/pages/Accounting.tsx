@@ -815,21 +815,21 @@ export default function Accounting() {
   return (
     <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6 space-y-4 pb-10">
       {/* Keyboard Shortcuts Info */}
-      <div className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.spacing.sm.padding} flex items-center ${DESIGN_TOKENS.spacing.md.gap} ${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
+      <div className={`${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.colors?.border.light} border ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.spacing.sm.padding} flex items-center ${DESIGN_TOKENS.spacing.md.gap} ${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS.colors.bg.base} ${DESIGN_TOKENS.colors.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+N</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+N</kbd>
           <span>Yeni Oluştur</span>
         </div>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS.colors.bg.base} ${DESIGN_TOKENS.colors.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+F</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+F</kbd>
           <span>Ara</span>
         </div>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS.colors.bg.base} ${DESIGN_TOKENS.colors.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+P</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+P</kbd>
           <span>Yazdır</span>
         </div>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS.colors.bg.base} ${DESIGN_TOKENS.colors.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Esc</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Esc</kbd>
           <span>Kapat</span>
         </div>
       </div>
@@ -843,63 +843,63 @@ export default function Accounting() {
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('revenue')} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
-                <TrendingUp className={DESIGN_TOKENS.colors.semantic.success.text} size={24} />
+                <TrendingUp className={DESIGN_TOKENS?.colors?.semantic.success.text} size={24} />
               </div>
               {stats && stats.invoiceCount > 0 && (
-                <span className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+                <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
                   {stats.invoiceCount} fatura
                 </span>
               )}
             </div>
-            <h3 className={`${DESIGN_TOKENS.typography.stat.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+            <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
               {stats ? formatCurrency(stats.totalRevenue) : '₺0'}
             </h3>
-            <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>Bu Ay Gelir</p>
+            <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Bu Ay Gelir</p>
           </div>
 
           {/* Bu Ay Gider */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('expense')} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
-                <TrendingDown className={DESIGN_TOKENS.colors.semantic.error.text} size={24} />
+                <TrendingDown className={DESIGN_TOKENS?.colors?.semantic.error.text} size={24} />
               </div>
             </div>
-            <h3 className={`${DESIGN_TOKENS.typography.stat.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+            <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
               {stats ? formatCurrency(stats.totalExpenses) : '₺0'}
             </h3>
-            <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>Bu Ay Gider</p>
+            <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Bu Ay Gider</p>
           </div>
 
           {/* Net Kâr */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('profit', stats?.netProfit)} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
-                <DollarSign className={stats && stats.netProfit >= 0 ? DESIGN_TOKENS.colors.semantic.info.text : DESIGN_TOKENS.colors.semantic.error.text} size={24} />
+                <DollarSign className={stats && stats.netProfit >= 0 ? DESIGN_TOKENS?.colors?.semantic.info.text : DESIGN_TOKENS?.colors?.semantic.error.text} size={24} />
               </div>
-              <span className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>Net</span>
+              <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Net</span>
             </div>
-            <h3 className={`${DESIGN_TOKENS.typography.stat.sm} mb-1 ${
+            <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} mb-1 ${
               stats && stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
             }`}>
               {stats ? formatCurrency(stats.netProfit) : '₺0'}
             </h3>
-            <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>Net Kâr</p>
+            <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Net Kâr</p>
           </div>
 
           {/* Tahsilat / Bekleyen */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('overdue')} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
-                <Clock className={DESIGN_TOKENS.colors.semantic.error.text} size={24} />
+                <Clock className={DESIGN_TOKENS?.colors?.semantic.error.text} size={24} />
               </div>
-              <span className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>Bekleyen</span>
+              <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Bekleyen</span>
             </div>
-            <h3 className={`${DESIGN_TOKENS.typography.stat.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+            <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
               {stats ? formatCurrency(stats.totalOverdue) : '₺0'}
             </h3>
-            <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>Vade Geçmiş</p>
+            <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Vade Geçmiş</p>
             {stats && stats.totalCollections > 0 && (
-              <p className={`text-xs ${DESIGN_TOKENS.colors.semantic.success.text} mt-2`}>
+              <p className={`text-xs ${DESIGN_TOKENS?.colors?.semantic.success.text} mt-2`}>
                 Bu ay: {formatCurrency(stats.totalCollections)}
               </p>
             )}
@@ -911,15 +911,15 @@ export default function Accounting() {
       <div className={`${card('sm', 'sm', 'default', 'lg')} overflow-hidden`}>
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar Tabs */}
-          <nav className={`flex flex-row ${DESIGN_TOKENS.spacing.xs.gap} overflow-x-auto ${DESIGN_TOKENS.colors.border.light} border-b lg:border-b-0 lg:border-r lg:w-56 lg:flex-col lg:gap-0 flex-shrink-0`}>
+          <nav className={`flex flex-row ${DESIGN_TOKENS.spacing.xs.gap} overflow-x-auto ${DESIGN_TOKENS?.colors?.border.light} border-b lg:border-b-0 lg:border-r lg:w-56 lg:flex-col lg:gap-0 flex-shrink-0`}>
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex min-w-[9rem] items-center space-x-2 px-3 py-2.5 ${DESIGN_TOKENS.typography.label.lg} transition-colors lg:min-w-0 lg:w-full ${
+                className={`flex min-w-[9rem] items-center space-x-2 px-3 py-2.5 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors lg:min-w-0 lg:w-full ${
                   activeTab === tab.id
-                    ? `${DESIGN_TOKENS.colors.interactive.default}`
-                    : `${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle}`
+                    ? `${DESIGN_TOKENS?.colors?.interactive.default}`
+                    : `${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle}`
                 }`}
               >
                 {tab.icon}
@@ -962,7 +962,7 @@ export default function Accounting() {
             {/* Reports Tab - Advanced Reporting with Sub-tabs */}
             {activeTab === 'reports' && (
               <div className="space-y-6">
-                <h2 className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>
+                <h2 className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary} mb-6`}>
                   Raporlar
                 </h2>
                 
@@ -970,7 +970,7 @@ export default function Accounting() {
                 <div className={`flex gap-2 border-b border-gray-200 mb-6`}>
                   <button
                     onClick={() => setReportsSubTab('advanced')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors ${
                       reportsSubTab === 'advanced'
                         ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
                         : 'text-gray-600 hover:text-gray-900'
@@ -980,7 +980,7 @@ export default function Accounting() {
                   </button>
                   <button
                     onClick={() => setReportsSubTab('trial-balance')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors ${
                       reportsSubTab === 'trial-balance'
                         ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
                         : 'text-gray-600 hover:text-gray-900'
@@ -990,7 +990,7 @@ export default function Accounting() {
                   </button>
                   <button
                     onClick={() => setReportsSubTab('income-statement')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors ${
                       reportsSubTab === 'income-statement'
                         ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
                         : 'text-gray-600 hover:text-gray-900'
@@ -1000,7 +1000,7 @@ export default function Accounting() {
                   </button>
                   <button
                     onClick={() => setReportsSubTab('balance-sheet')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors ${
                       reportsSubTab === 'balance-sheet'
                         ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
                         : 'text-gray-600 hover:text-gray-900'
@@ -1024,33 +1024,33 @@ export default function Accounting() {
                 <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'} mb-6`}>Alacak Yönetimi</h2>
                 
                 {/* Sub-tabs for Checks, Promissory, Aging */}
-                <div className={`flex gap-2 ${DESIGN_TOKENS.colors.border.light} border-b mb-6`}>
+                <div className={`flex gap-2 ${DESIGN_TOKENS?.colors?.border.light} border-b mb-6`}>
                   <button
                     onClick={() => setReceivablesSubTab('checks')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors ${
                       receivablesSubTab === 'checks'
-                        ? `border-b-2 ${DESIGN_TOKENS.colors.interactive.default} ${DESIGN_TOKENS.colors.text.primary}`
-                        : `${DESIGN_TOKENS.colors.text.tertiary} hover:${DESIGN_TOKENS.colors.text.primary}`
+                        ? `border-b-2 ${DESIGN_TOKENS?.colors?.interactive.default} ${DESIGN_TOKENS?.colors?.text.primary}`
+                        : `${DESIGN_TOKENS?.colors?.text.tertiary} hover:${DESIGN_TOKENS?.colors?.text.primary}`
                     }`}
                   >
                     Çekler
                   </button>
                   <button
                     onClick={() => setReceivablesSubTab('promissory')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors ${
                       receivablesSubTab === 'promissory'
-                        ? `border-b-2 ${DESIGN_TOKENS.colors.interactive.default} ${DESIGN_TOKENS.colors.text.primary}`
-                        : `${DESIGN_TOKENS.colors.text.tertiary} hover:${DESIGN_TOKENS.colors.text.primary}`
+                        ? `border-b-2 ${DESIGN_TOKENS?.colors?.interactive.default} ${DESIGN_TOKENS?.colors?.text.primary}`
+                        : `${DESIGN_TOKENS?.colors?.text.tertiary} hover:${DESIGN_TOKENS?.colors?.text.primary}`
                     }`}
                   >
                     Senetler
                   </button>
                   <button
                     onClick={() => setReceivablesSubTab('aging')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label.lg} transition-colors ${
                       receivablesSubTab === 'aging'
-                        ? `border-b-2 ${DESIGN_TOKENS.colors.interactive.default} ${DESIGN_TOKENS.colors.text.primary}`
-                        : `${DESIGN_TOKENS.colors.text.tertiary} hover:${DESIGN_TOKENS.colors.text.primary}`
+                        ? `border-b-2 ${DESIGN_TOKENS?.colors?.interactive.default} ${DESIGN_TOKENS?.colors?.text.primary}`
+                        : `${DESIGN_TOKENS?.colors?.text.tertiary} hover:${DESIGN_TOKENS?.colors?.text.primary}`
                     }`}
                   >
                     Yaşlandırma Raporu
@@ -1061,7 +1061,7 @@ export default function Accounting() {
                 {receivablesSubTab === 'checks' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Çekler</h3>
+                      <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Çekler</h3>
                       <button
                         onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
                         className={cx(button('md', 'primary', 'md'), 'gap-2')}
@@ -1073,20 +1073,20 @@ export default function Accounting() {
 
                     <div className={card('sm', 'sm', 'default', 'lg')}>
                       {checksLoading ? (
-                        <div className={`p-12 text-center ${DESIGN_TOKENS.colors.text.tertiary}`}>Çekler yükleniyor...</div>
+                        <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Çekler yükleniyor...</div>
                       ) : checks.length === 0 ? (
-                        <div className={`p-12 text-center ${DESIGN_TOKENS.colors.text.tertiary}`}>Çek bulunamadı</div>
+                        <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Çek bulunamadı</div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="w-full">
-                            <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
+                            <thead className={`${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.colors?.border.light} border-b`}>
                               <tr>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase`}>No</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase`}>Müşteri</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase`}>Tutar</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase`}>Vade</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase`}>Durum</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase`}>İşlemler</th>
+                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase`}>No</th>
+                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase`}>Müşteri</th>
+                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase`}>Tutar</th>
+                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase`}>Vade</th>
+                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase`}>Durum</th>
+                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase`}>İşlemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-200">
@@ -1233,7 +1233,7 @@ export default function Accounting() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {/* Search */}
                     <div className="relative">
-                      <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS.colors.text.muted}`} size={18} />
+                      <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
                       <input
                         type="text"
                         placeholder="Fatura no veya müşteri ara..."
@@ -1246,7 +1246,7 @@ export default function Accounting() {
 
                     {/* Status Filter */}
                     <div className="relative">
-                      <Filter className={`absolute left-3 top-3 ${DESIGN_TOKENS.colors.text.muted}`} size={18} />
+                      <Filter className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
                       <select
                         value={invoiceStatusFilter}
                         onChange={(e) => {
@@ -1284,11 +1284,11 @@ export default function Accounting() {
 
                   {/* Advanced Filters */}
                   {showAdvancedFilters && (
-                    <div className={`pt-4 ${DESIGN_TOKENS.colors.border.light} border-t space-y-4`}>
+                    <div className={`pt-4 ${DESIGN_TOKENS?.colors?.border.light} border-t space-y-4`}>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Date Range Preset */}
                         <div>
-                          <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                          <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                             Tarih Aralığı
                           </label>
                           <select
@@ -1305,7 +1305,7 @@ export default function Accounting() {
 
                         {/* Min Amount */}
                         <div>
-                          <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                          <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                             Min. Tutar (₺)
                           </label>
                           <input
@@ -1321,7 +1321,7 @@ export default function Accounting() {
 
                         {/* Max Amount */}
                         <div>
-                          <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                          <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                             Max. Tutar (₺)
                           </label>
                           <input
@@ -1340,7 +1340,7 @@ export default function Accounting() {
                       {dateRange === 'custom' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                            <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                               Başlangıç Tarihi
                             </label>
                             <input
@@ -1351,7 +1351,7 @@ export default function Accounting() {
                             />
                           </div>
                           <div>
-                            <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                            <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                               Bitiş Tarihi
                             </label>
                             <input
@@ -1383,21 +1383,21 @@ export default function Accounting() {
                   {invoicesLoading ? (
                     <TableSkeleton rows={10} columns={8} showHeader={true} />
                   ) : invoices.length === 0 ? (
-                    <div className={`p-12 text-center ${DESIGN_TOKENS.colors.text.tertiary}`}>
-                      <FileText className={`mx-auto mb-4 ${DESIGN_TOKENS.colors.text.muted}`} size={48} />
-                      <p className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.secondary}`}>Fatura bulunamadı</p>
-                      <p className={`${DESIGN_TOKENS.typography.body.md} mt-2`}>Yeni fatura oluşturarak başlayın</p>
+                    <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
+                      <FileText className={`mx-auto mb-4 ${DESIGN_TOKENS?.colors?.text.muted}`} size={48} />
+                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Fatura bulunamadı</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.body.md} mt-2`}>Yeni fatura oluşturarak başlayın</p>
                     </div>
                   ) : (
                     <>
                       {/* Bulk Actions Bar */}
                       {selectedInvoices.length > 0 && (
-                        <div className={`${DESIGN_TOKENS.colors.interactive.default} px-6 py-3 flex items-center justify-between ${DESIGN_TOKENS.radius.lg} rounded-b-none`}>
+                        <div className={`${DESIGN_TOKENS?.colors?.interactive.default} px-6 py-3 flex items-center justify-between ${DESIGN_TOKENS.radius.lg} rounded-b-none`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS.typography.label.lg}>{selectedInvoices.length} fatura seçildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label.lg}>{selectedInvoices.length} fatura seçildi</span>
                             <button
                               onClick={() => setSelectedInvoices([])}
-                              className={`${DESIGN_TOKENS.typography.body.md} text-neutral-300 hover:text-white`}
+                              className={`${DESIGN_TOKENS?.typography?.body.md} text-neutral-300 hover:text-white`}
                             >
                               Seçimi Temizle
                             </button>
@@ -1415,7 +1415,7 @@ export default function Accounting() {
 
                       <div className="overflow-x-auto">
                         <table className="w-full">
-                          <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
+                          <thead className={`${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.colors?.border.light} border-b`}>
                             <tr>
                               <th className={`px-6 py-3 text-left`}>
                                 <input
@@ -1425,28 +1425,28 @@ export default function Accounting() {
                                   className={`${DESIGN_TOKENS.radius.sm} border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Fatura No
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Müşteri
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Ekipman
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Tarih
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Tutar
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Ödenen
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Durum
                               </th>
-                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 İşlemler
                               </th>
                             </tr>
@@ -1518,9 +1518,9 @@ export default function Accounting() {
                                     <div className="relative">
                                       <button
                                         onClick={() => setOpenInvoiceDropdown(openInvoiceDropdown === invoice.id ? null : invoice.id)}
-                                        className={`p-1 hover:${DESIGN_TOKENS.colors.bg.muted} ${DESIGN_TOKENS.radius.md} transition-colors`}
+                                        className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.muted} ${DESIGN_TOKENS.radius.md} transition-colors`}
                                       >
-                                        <MoreVertical size={18} className={DESIGN_TOKENS.colors.text.tertiary} />
+                                        <MoreVertical size={18} className={DESIGN_TOKENS?.colors?.text.tertiary} />
                                       </button>
                                       {openInvoiceDropdown === invoice.id && (
                                         <>
@@ -1528,38 +1528,38 @@ export default function Accounting() {
                                             className="fixed inset-0 z-10" 
                                             onClick={() => setOpenInvoiceDropdown(null)}
                                           />
-                                          <div className={`absolute right-0 mt-2 w-48 ${DESIGN_TOKENS.colors.bg.base} ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS.colors.border.light} border py-1 z-20`}>
+                                          <div className={`absolute right-0 mt-2 w-48 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS?.colors?.border.light} border py-1 z-20`}>
                                             <button
                                               onClick={() => handleDownloadPDF(invoice)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Download size={16} />
                                               PDF İndir
                                             </button>
                                             <button
                                               onClick={() => handleSendEmail(invoice)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Mail size={16} />
                                               Email Gönder
                                             </button>
                                             <button
                                               onClick={() => handleSendWhatsApp(invoice)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <MessageCircle size={16} />
                                               WhatsApp Gönder
                                             </button>
                                             <button
                                               onClick={() => handlePrint(invoice)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Printer size={16} />
                                               Yazdır
                                             </button>
                                             <button
                                               onClick={() => handleCopyInvoice(invoice)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Copy size={16} />
                                               Kopyala
@@ -1577,8 +1577,8 @@ export default function Accounting() {
                       </div>
 
                       {/* Pagination */}
-                      <div className={`${DESIGN_TOKENS.colors.bg.subtle} px-6 py-4 flex items-center justify-between ${DESIGN_TOKENS.colors.border.light} border-t`}>
-                        <div className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>
+                      <div className={`${DESIGN_TOKENS?.colors?.bg.subtle} px-6 py-4 flex items-center justify-between ${DESIGN_TOKENS?.colors?.border.light} border-t`}>
+                        <div className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
                           Sayfa {currentPage} / {totalPages}
                         </div>
                         <div className="flex gap-2">
@@ -1626,7 +1626,7 @@ export default function Accounting() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                     {/* Search */}
                     <div className="relative">
-                      <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS.colors.text.muted}`} size={18} />
+                      <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
                       <input
                         type="text"
                         placeholder="Teklif no veya müşteri ara..."
@@ -1639,7 +1639,7 @@ export default function Accounting() {
 
                     {/* Status Filter */}
                     <div className="relative">
-                      <Filter className={`absolute left-3 top-3 ${DESIGN_TOKENS.colors.text.muted}`} size={18} />
+                      <Filter className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
                       <select
                         value={offerStatusFilter}
                         onChange={(e) => {
@@ -1678,11 +1678,11 @@ export default function Accounting() {
 
                   {/* Advanced Filters */}
                   {showOfferAdvancedFilters && (
-                    <div className={`pt-4 ${DESIGN_TOKENS.colors.border.light} border-t space-y-4 max-w-full`}>
+                    <div className={`pt-4 ${DESIGN_TOKENS?.colors?.border.light} border-t space-y-4 max-w-full`}>
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                         {/* Date Range Preset */}
                         <div>
-                          <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                          <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                             Tarih Aralığı
                           </label>
                           <select
@@ -1699,7 +1699,7 @@ export default function Accounting() {
 
                         {/* Min Amount */}
                         <div>
-                          <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                          <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                             Min. Tutar (₺)
                           </label>
                           <input
@@ -1715,7 +1715,7 @@ export default function Accounting() {
 
                         {/* Max Amount */}
                         <div>
-                          <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                          <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                             Max. Tutar (₺)
                           </label>
                           <input
@@ -1734,7 +1734,7 @@ export default function Accounting() {
                       {offerDateRange === 'custom' && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                            <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                               Başlangıç Tarihi
                             </label>
                             <input
@@ -1745,7 +1745,7 @@ export default function Accounting() {
                             />
                           </div>
                           <div>
-                            <label className={`block ${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary} mb-2`}>
+                            <label className={`block ${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
                               Bitiş Tarihi
                             </label>
                             <input
@@ -1777,21 +1777,21 @@ export default function Accounting() {
                   {offersLoading ? (
                     <TableSkeleton rows={10} columns={7} showHeader={true} />
                   ) : offers.length === 0 ? (
-                    <div className={`p-12 text-center ${DESIGN_TOKENS.colors.text.tertiary}`}>
-                      <Receipt className={`mx-auto mb-4 ${DESIGN_TOKENS.colors.text.muted}`} size={48} />
-                      <p className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.secondary}`}>Teklif bulunamadı</p>
-                      <p className={`${DESIGN_TOKENS.typography.body.md} mt-2`}>Yeni teklif oluşturarak başlayın</p>
+                    <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
+                      <Receipt className={`mx-auto mb-4 ${DESIGN_TOKENS?.colors?.text.muted}`} size={48} />
+                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Teklif bulunamadı</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.body.md} mt-2`}>Yeni teklif oluşturarak başlayın</p>
                     </div>
                   ) : (
                     <>
                       {/* Bulk Actions Bar */}
                       {selectedOffers.length > 0 && (
-                        <div className={`${DESIGN_TOKENS.colors.interactive.default} text-white px-6 py-3 flex items-center justify-between rounded-t-${DESIGN_TOKENS.radius.lg}`}>
+                        <div className={`${DESIGN_TOKENS?.colors?.interactive.default} text-white px-6 py-3 flex items-center justify-between rounded-t-${DESIGN_TOKENS.radius.lg}`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS.typography.label.lg}>{selectedOffers.length} teklif seçildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label.lg}>{selectedOffers.length} teklif seçildi</span>
                             <button
                               onClick={() => setSelectedOffers([])}
-                              className={`${DESIGN_TOKENS.typography.label.md} text-neutral-300 hover:text-white`}
+                              className={`${DESIGN_TOKENS?.typography?.label.md} text-neutral-300 hover:text-white`}
                             >
                               Seçimi Temizle
                             </button>
@@ -1809,7 +1809,7 @@ export default function Accounting() {
 
                       <div className="overflow-x-auto">
                         <table className="min-w-full">
-                          <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
+                          <thead className={`${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.colors?.border.light} border-b`}>
                             <tr>
                               <th className="w-12 px-2 py-2 text-left">
                                 <input
@@ -1819,25 +1819,25 @@ export default function Accounting() {
                                   className={`${DESIGN_TOKENS.radius.sm} rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
-                              <th className={`w-32 px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-32 px-3 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Teklif No
                               </th>
-                              <th className={`min-w-[200px] px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`min-w-[200px] px-3 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Müşteri
                               </th>
-                              <th className={`hidden xl:table-cell w-28 px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden xl:table-cell w-28 px-3 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Tarih
                               </th>
-                              <th className={`hidden lg:table-cell w-28 px-3 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`hidden lg:table-cell w-28 px-3 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Geçerlilik
                               </th>
-                              <th className={`w-28 px-3 py-2 text-right ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-28 px-3 py-2 text-right ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Tutar
                               </th>
-                              <th className={`w-28 px-3 py-2 text-center ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-28 px-3 py-2 text-center ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 Durum
                               </th>
-                              <th className={`w-40 px-3 py-2 text-center ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} uppercase tracking-wider`}>
+                              <th className={`w-40 px-3 py-2 text-center ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
                                 İşlemler
                               </th>
                             </tr>
@@ -1935,9 +1935,9 @@ export default function Accounting() {
                                     <div className="relative">
                                       <button
                                         onClick={() => setOpenOfferDropdown(openOfferDropdown === offer.id ? null : offer.id)}
-                                        className={`p-1 hover:${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.md} rounded transition-colors`}
+                                        className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md} rounded transition-colors`}
                                       >
-                                        <MoreVertical size={18} className={DESIGN_TOKENS.colors.text.tertiary} />
+                                        <MoreVertical size={18} className={DESIGN_TOKENS?.colors?.text.tertiary} />
                                       </button>
                                       {openOfferDropdown === offer.id && (
                                         <>
@@ -1945,45 +1945,45 @@ export default function Accounting() {
                                             className="fixed inset-0 z-10" 
                                             onClick={() => setOpenOfferDropdown(null)}
                                           />
-                                          <div className={`absolute right-0 mt-2 w-48 bg-white ${DESIGN_TOKENS.radius.md} rounded ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS.colors.border.light} border py-1 z-20`}>
+                                          <div className={`absolute right-0 mt-2 w-48 bg-white ${DESIGN_TOKENS.radius.md} rounded ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS?.colors?.border.light} border py-1 z-20`}>
                                             <button
                                               onClick={() => navigate(`/accounting/quote/${offer.id}`)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <FileText size={16} />
                                               Detay Görüntüle
                                             </button>
                                             <button
                                               onClick={() => handleDownloadOfferPDF(offer)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Download size={16} />
                                               PDF İndir
                                             </button>
                                             <button
                                               onClick={() => handleSendOfferEmail(offer)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Mail size={16} />
                                               Email Gönder
                                             </button>
                                             <button
                                               onClick={() => handleSendOfferWhatsApp(offer)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <MessageCircle size={16} />
                                               WhatsApp Gönder
                                             </button>
                                             <button
                                               onClick={() => handlePrintOffer(offer)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Printer size={16} />
                                               Yazdır
                                             </button>
                                             <button
                                               onClick={() => handleCopyOffer(offer)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.secondary} hover:${DESIGN_TOKENS.colors.bg.subtle} flex items-center gap-2`}
+                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
                                             >
                                               <Copy size={16} />
                                               Kopyala
@@ -2001,8 +2001,8 @@ export default function Accounting() {
                       </div>
 
                       {/* Pagination */}
-                      <div className={`${DESIGN_TOKENS.colors.bg.subtle} px-6 py-4 flex items-center justify-between ${DESIGN_TOKENS.colors.border.light} border-t`}>
-                        <div className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>
+                      <div className={`${DESIGN_TOKENS?.colors?.bg.subtle} px-6 py-4 flex items-center justify-between ${DESIGN_TOKENS?.colors?.border.light} border-t`}>
+                        <div className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
                           Sayfa {offerCurrentPage} / {offerTotalPages}
                         </div>
                         <div className="flex gap-2">

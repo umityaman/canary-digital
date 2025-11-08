@@ -1,4 +1,4 @@
-ï»¿// Advanced Reporting Component - Updated 2025-11-05 10:20
+// Advanced Reporting Component - Updated 2025-11-05 10:20
 import { useState, useEffect } from 'react'
 import { 
   TrendingUp, TrendingDown, DollarSign, Calendar, Download, 
@@ -79,7 +79,7 @@ export default function AdvancedReporting() {
     const token = localStorage.getItem('token')
 
     if (!token) {
-      toast.error('Oturum bilgisi bulunamadÄ±. LÃ¼tfen tekrar giriÅŸ yapÄ±n.')
+      toast.error('Oturum bilgisi bulunamadý. Lütfen tekrar giriþ yapýn.')
       applyFallbackData(reportType)
       setLoading(false)
       return
@@ -121,7 +121,7 @@ export default function AdvancedReporting() {
         if (assetsData && liabilitiesData && equityData) {
           const transformedAssets: BalanceSheetData[] = [
             {
-              category: 'DÃ¶nen VarlÄ±klar',
+              category: 'Dönen Varlýklar',
               subcategories: [
                 { name: 'Nakit ve Benzerleri', amount: safeNumber(assetsData.currentAssets?.cash) },
                 { name: 'Ticari Alacaklar', amount: safeNumber(assetsData.currentAssets?.receivables) },
@@ -130,10 +130,10 @@ export default function AdvancedReporting() {
               total: safeNumber(assetsData.currentAssets?.total)
             },
             {
-              category: 'Duran VarlÄ±klar',
+              category: 'Duran Varlýklar',
               subcategories: [
-                { name: 'Maddi Duran VarlÄ±klar', amount: safeNumber(assetsData.fixedAssets?.equipment) },
-                { name: 'BirikmiÅŸ Amortisman', amount: -safeNumber(assetsData.fixedAssets?.accumulated_depreciation) }
+                { name: 'Maddi Duran Varlýklar', amount: safeNumber(assetsData.fixedAssets?.equipment) },
+                { name: 'Birikmiþ Amortisman', amount: -safeNumber(assetsData.fixedAssets?.accumulated_depreciation) }
               ],
               total: safeNumber(assetsData.fixedAssets?.total)
             }
@@ -141,25 +141,25 @@ export default function AdvancedReporting() {
 
           const transformedLiabilities: BalanceSheetData[] = [
             {
-              category: 'KÄ±sa Vadeli YÃ¼kÃ¼mlÃ¼lÃ¼kler',
+              category: 'Kýsa Vadeli Yükümlülükler',
               subcategories: [
-                { name: 'Ticari BorÃ§lar', amount: safeNumber(liabilitiesData.currentLiabilities?.payables) },
-                { name: 'KÄ±sa Vadeli Krediler', amount: safeNumber(liabilitiesData.currentLiabilities?.shortTermLoans) }
+                { name: 'Ticari Borçlar', amount: safeNumber(liabilitiesData.currentLiabilities?.payables) },
+                { name: 'Kýsa Vadeli Krediler', amount: safeNumber(liabilitiesData.currentLiabilities?.shortTermLoans) }
               ],
               total: safeNumber(liabilitiesData.currentLiabilities?.total)
             },
             {
-              category: 'Uzun Vadeli YÃ¼kÃ¼mlÃ¼lÃ¼kler',
+              category: 'Uzun Vadeli Yükümlülükler',
               subcategories: [
                 { name: 'Uzun Vadeli Krediler', amount: safeNumber(liabilitiesData.longTermLiabilities?.longTermLoans) }
               ],
               total: safeNumber(liabilitiesData.longTermLiabilities?.total)
             },
             {
-              category: 'Ã–zkaynaklar',
+              category: 'Özkaynaklar',
               subcategories: [
                 { name: 'Sermaye', amount: safeNumber(equityData.capital) },
-                { name: 'GeÃ§miÅŸ YÄ±l KarlarÄ±', amount: safeNumber(equityData.retainedEarnings) }
+                { name: 'Geçmiþ Yýl Karlarý', amount: safeNumber(equityData.retainedEarnings) }
               ],
               total: safeNumber(equityData.totalEquity)
             }
@@ -187,7 +187,7 @@ export default function AdvancedReporting() {
       }
     } catch (error: any) {
       console.error('Failed to load report data:', error)
-      toast.error(error.response?.data?.message || 'Rapor verileri yÃ¼klenemedi')
+      toast.error(error.response?.data?.message || 'Rapor verileri yüklenemedi')
       applyFallbackData(reportType)
     } finally {
       setLoading(false)
@@ -207,7 +207,7 @@ export default function AdvancedReporting() {
       netChange: 85000
     },
     {
-      period: 'Åžubat 2024',
+      period: 'Þubat 2024',
       operatingInflow: 180000,
       operatingOutflow: 90000,
       investingInflow: 10000,
@@ -237,7 +237,7 @@ export default function AdvancedReporting() {
       netChange: 99000
     },
     {
-      period: 'MayÄ±s 2024',
+      period: 'Mayýs 2024',
       operatingInflow: 220000,
       operatingOutflow: 100000,
       investingInflow: 0,
@@ -259,10 +259,10 @@ export default function AdvancedReporting() {
   ]
 
   const mockRevenueData: ProfitLossData[] = [
-    { category: 'ÃœrÃ¼n SatÄ±ÅŸlarÄ±', amount: 320000, percentage: 55 },
+    { category: 'Ürün Satýþlarý', amount: 320000, percentage: 55 },
     { category: 'Hizmet Gelirleri', amount: 150000, percentage: 26 },
     { category: 'Abonelik Gelirleri', amount: 80000, percentage: 14 },
-    { category: 'DiÄŸer Gelirler', amount: 30000, percentage: 5 }
+    { category: 'Diðer Gelirler', amount: 30000, percentage: 5 }
   ]
 
   const mockExpenseData: ProfitLossData[] = [
@@ -270,12 +270,12 @@ export default function AdvancedReporting() {
     { category: 'Genel Giderler', amount: 90000, percentage: 20 },
     { category: 'Pazarlama', amount: 70000, percentage: 16 },
     { category: 'Ar-Ge', amount: 50000, percentage: 11 },
-    { category: 'DiÄŸer Giderler', amount: 40000, percentage: 13 }
+    { category: 'Diðer Giderler', amount: 40000, percentage: 13 }
   ]
 
   const mockAssetsData: BalanceSheetData[] = [
     {
-      category: 'DÃ¶nen VarlÄ±klar',
+      category: 'Dönen Varlýklar',
       subcategories: [
         { name: 'Nakit ve Benzerleri', amount: 250000 },
         { name: 'Ticari Alacaklar', amount: 180000 },
@@ -284,10 +284,10 @@ export default function AdvancedReporting() {
       total: 550000
     },
     {
-      category: 'Duran VarlÄ±klar',
+      category: 'Duran Varlýklar',
       subcategories: [
-        { name: 'Maddi Duran VarlÄ±klar', amount: 420000 },
-        { name: 'BirikmiÅŸ Amortisman', amount: -80000 }
+        { name: 'Maddi Duran Varlýklar', amount: 420000 },
+        { name: 'Birikmiþ Amortisman', amount: -80000 }
       ],
       total: 340000
     }
@@ -295,25 +295,25 @@ export default function AdvancedReporting() {
 
   const mockLiabilitiesData: BalanceSheetData[] = [
     {
-      category: 'KÄ±sa Vadeli YÃ¼kÃ¼mlÃ¼lÃ¼kler',
+      category: 'Kýsa Vadeli Yükümlülükler',
       subcategories: [
-        { name: 'Ticari BorÃ§lar', amount: 160000 },
-        { name: 'KÄ±sa Vadeli Krediler', amount: 90000 }
+        { name: 'Ticari Borçlar', amount: 160000 },
+        { name: 'Kýsa Vadeli Krediler', amount: 90000 }
       ],
       total: 250000
     },
     {
-      category: 'Uzun Vadeli YÃ¼kÃ¼mlÃ¼lÃ¼kler',
+      category: 'Uzun Vadeli Yükümlülükler',
       subcategories: [
         { name: 'Uzun Vadeli Krediler', amount: 220000 }
       ],
       total: 220000
     },
     {
-      category: 'Ã–zkaynaklar',
+      category: 'Özkaynaklar',
       subcategories: [
         { name: 'Sermaye', amount: 300000 },
-        { name: 'GeÃ§miÅŸ YÄ±l KarlarÄ±', amount: 120000 }
+        { name: 'Geçmiþ Yýl Karlarý', amount: 120000 }
       ],
       total: 420000
     }
@@ -353,7 +353,7 @@ export default function AdvancedReporting() {
       netVAT: 14000
     },
     {
-      period: 'Åžubat 2024',
+      period: 'Þubat 2024',
       sales: 180000,
       outputVAT: 36000,
       purchases: 90000,
@@ -377,7 +377,7 @@ export default function AdvancedReporting() {
       netVAT: 17400
     },
     {
-      period: 'MayÄ±s 2024',
+      period: 'Mayýs 2024',
       sales: 220000,
       outputVAT: 44000,
       purchases: 100000,
@@ -404,11 +404,11 @@ export default function AdvancedReporting() {
   }
 
   const handleExportPDF = () => {
-    toast.info('PDF export Ã¶zelliÄŸi yakÄ±nda eklenecek')
+    toast.info('PDF export özelliði yakýnda eklenecek')
   }
 
   const handleExportExcel = () => {
-    toast.info('Excel export Ã¶zelliÄŸi yakÄ±nda eklenecek')
+    toast.info('Excel export özelliði yakýnda eklenecek')
   }
 
   const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1']
@@ -419,7 +419,7 @@ export default function AdvancedReporting() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-neutral-600">Rapor yÃ¼kleniyor...</p>
+          <p className="text-neutral-600">Rapor yükleniyor...</p>
         </div>
       </div>
     )
@@ -430,8 +430,8 @@ export default function AdvancedReporting() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>GeliÅŸmiÅŸ Raporlama</h2>
-          <p className="text-sm text-neutral-600 mt-1">DetaylÄ± finansal analiz ve raporlar</p>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Geliþmiþ Raporlama</h2>
+          <p className="text-sm text-neutral-600 mt-1">Detaylý finansal analiz ve raporlar</p>
         </div>
         
         <div className="flex items-center gap-2">
@@ -463,7 +463,7 @@ export default function AdvancedReporting() {
           }`}
         >
           <TrendingUp className={activeReport === 'cashflow' ? 'text-blue-600' : 'text-neutral-600'} size={32} />
-          <h3 className="font-semibold text-neutral-900 mt-3">Nakit AkÄ±ÅŸ</h3>
+          <h3 className="font-semibold text-neutral-900 mt-3">Nakit Akýþ</h3>
           <p className="text-xs text-neutral-600 mt-1">Cashflow Raporu</p>
         </button>
 
@@ -489,7 +489,7 @@ export default function AdvancedReporting() {
           }`}
         >
           <Building2 className={activeReport === 'balance' ? 'text-purple-600' : 'text-neutral-600'} size={32} />
-          <h3 className="font-semibold text-neutral-900 mt-3">BilanÃ§o</h3>
+          <h3 className="font-semibold text-neutral-900 mt-3">Bilanço</h3>
           <p className="text-xs text-neutral-600 mt-1">Aktif/Pasif</p>
         </button>
 
@@ -503,7 +503,7 @@ export default function AdvancedReporting() {
         >
           <CreditCard className={activeReport === 'vat' ? 'text-orange-600' : 'text-neutral-600'} size={32} />
           <h3 className="font-semibold text-neutral-900 mt-3">KDV Raporu</h3>
-          <p className="text-xs text-neutral-600 mt-1">Beyanname HazÄ±rlÄ±k</p>
+          <p className="text-xs text-neutral-600 mt-1">Beyanname Hazýrlýk</p>
         </button>
       </div>
 
@@ -520,7 +520,7 @@ export default function AdvancedReporting() {
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow + d.investingInflow + d.financingInflow, 0))}
               </div>
-              <div className="text-xs opacity-90">Toplam Nakit GiriÅŸi</div>
+              <div className="text-xs opacity-90">Toplam Nakit Giriþi</div>
             </div>
 
             <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white">
@@ -531,7 +531,7 @@ export default function AdvancedReporting() {
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingOutflow + d.investingOutflow + d.financingOutflow, 0))}
               </div>
-              <div className="text-xs opacity-90">Toplam Nakit Ã‡Ä±kÄ±ÅŸÄ±</div>
+              <div className="text-xs opacity-90">Toplam Nakit Çýkýþý</div>
             </div>
 
             <div className={`bg-gradient-to-br rounded-xl p-4 text-white ${
@@ -540,38 +540,38 @@ export default function AdvancedReporting() {
               <div className="flex items-center justify-between mb-2">
                 <TrendingUp size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
-                  {cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'POZÄ°TÄ°F' : 'NEGATÄ°F'}
+                  {cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'POZÝTÝF' : 'NEGATÝF'}
                 </span>
               </div>
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(Math.abs(cashflowData.reduce((sum, d) => sum + d.netChange, 0)))}
               </div>
-              <div className="text-xs opacity-90">Net Nakit DeÄŸiÅŸimi</div>
+              <div className="text-xs opacity-90">Net Nakit Deðiþimi</div>
             </div>
           </div>
 
           {/* Detailed Cashflow Statement */}
           <div className={card('md', 'sm', 'default', 'lg')}>
-            <h3 className="text-base font-semibold text-neutral-900 mb-4">Nakit AkÄ±ÅŸ Tablosu</h3>
+            <h3 className="text-base font-semibold text-neutral-900 mb-4">Nakit Akýþ Tablosu</h3>
             
             <div className="space-y-6">
               {/* Operating Activities */}
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-blue-500">
-                  <h4 className="font-semibold text-blue-900">Ä°ÅžLETME FAALÄ°YETLERÄ°NDEN NAKÄ°T AKIÅžLARI</h4>
+                  <h4 className="font-semibold text-blue-900">ÝÞLETME FAALÝYETLERÝNDEN NAKÝT AKIÞLARI</h4>
                   <span className="font-bold text-blue-900">
                     {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow - d.operatingOutflow, 0))}
                   </span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">Nakit GiriÅŸleri</span>
+                    <span className="text-neutral-700">Nakit Giriþleri</span>
                     <span className="font-semibold text-green-600">
                       {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow, 0))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">Nakit Ã‡Ä±kÄ±ÅŸlarÄ±</span>
+                    <span className="text-neutral-700">Nakit Çýkýþlarý</span>
                     <span className="font-semibold text-red-600">
                       ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingOutflow, 0))})
                     </span>
@@ -582,20 +582,20 @@ export default function AdvancedReporting() {
               {/* Investing Activities */}
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-purple-500">
-                  <h4 className="font-semibold text-purple-900">YATIRIM FAALÄ°YETLERÄ°NDEN NAKÄ°T AKIÅžLARI</h4>
+                  <h4 className="font-semibold text-purple-900">YATIRIM FAALÝYETLERÝNDEN NAKÝT AKIÞLARI</h4>
                   <span className="font-bold text-purple-900">
                     {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow - d.investingOutflow, 0))}
                   </span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">YatÄ±rÄ±m GiriÅŸleri</span>
+                    <span className="text-neutral-700">Yatýrým Giriþleri</span>
                     <span className="font-semibold text-green-600">
                       {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow, 0))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">YatÄ±rÄ±m Ã‡Ä±kÄ±ÅŸlarÄ±</span>
+                    <span className="text-neutral-700">Yatýrým Çýkýþlarý</span>
                     <span className="font-semibold text-red-600">
                       ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingOutflow, 0))})
                     </span>
@@ -606,20 +606,20 @@ export default function AdvancedReporting() {
               {/* Financing Activities */}
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-indigo-500">
-                  <h4 className="font-semibold text-indigo-900">FÄ°NANSMAN FAALÄ°YETLERÄ°NDEN NAKÄ°T AKIÅžLARI</h4>
+                  <h4 className="font-semibold text-indigo-900">FÝNANSMAN FAALÝYETLERÝNDEN NAKÝT AKIÞLARI</h4>
                   <span className="font-bold text-indigo-900">
                     {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow - d.financingOutflow, 0))}
                   </span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">Finansman GiriÅŸleri</span>
+                    <span className="text-neutral-700">Finansman Giriþleri</span>
                     <span className="font-semibold text-green-600">
                       {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow, 0))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">Finansman Ã‡Ä±kÄ±ÅŸlarÄ±</span>
+                    <span className="text-neutral-700">Finansman Çýkýþlarý</span>
                     <span className="font-semibold text-red-600">
                       ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingOutflow, 0))})
                     </span>
@@ -637,7 +637,7 @@ export default function AdvancedReporting() {
                   <h4 className={`text-lg font-bold ${
                     cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-900' : 'text-orange-900'
                   }`}>
-                    DÃ–NEM SONU NAKÄ°T VE NAKÄ°T BENZERLERÄ°NDEKÄ° NET ARTIÅž (AZALIÅž)
+                    DÖNEM SONU NAKÝT VE NAKÝT BENZERLERÝNDEKÝ NET ARTIÞ (AZALIÞ)
                   </h4>
                   <span className={`text-2xl font-bold truncate ${
                     cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-900' : 'text-orange-900'
@@ -652,17 +652,17 @@ export default function AdvancedReporting() {
           {/* Period Details Table */}
           <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
             <div className="p-3 border-b border-neutral-200">
-              <h3 className="text-sm font-semibold text-neutral-900">DÃ¶nemsel Nakit AkÄ±ÅŸ DetayÄ±</h3>
+              <h3 className="text-sm font-semibold text-neutral-900">Dönemsel Nakit Akýþ Detayý</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                   <thead className="bg-neutral-50">
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">DÃ¶nem</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ä°ÅŸletme</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">YatÄ±rÄ±m</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ýþletme</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Yatýrým</th>
                       <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Finansman</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Net DeÄŸiÅŸim</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Net Deðiþim</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
@@ -752,7 +752,7 @@ export default function AdvancedReporting() {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {/* Revenue Pie */}
             <div className={card('md', 'sm', 'default', 'lg')}>
-              <h3 className="text-base font-semibold text-neutral-900 mb-3">Gelir DaÄŸÄ±lÄ±mÄ±</h3>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">Gelir Daðýlýmý</h3>
               <div className="w-full overflow-hidden">
                 <ResponsiveContainer width="100%" height={180}>
                   <RechartsPie>
@@ -778,7 +778,7 @@ export default function AdvancedReporting() {
 
             {/* Expense Pie */}
             <div className={card('md', 'sm', 'default', 'lg')}>
-              <h3 className="text-base font-semibold text-neutral-900 mb-3">Gider DaÄŸÄ±lÄ±mÄ±</h3>
+              <h3 className="text-base font-semibold text-neutral-900 mb-3">Gider Daðýlýmý</h3>
               <div className="w-full overflow-hidden">
                 <ResponsiveContainer width="100%" height={180}>
                   <RechartsPie>
@@ -811,7 +811,7 @@ export default function AdvancedReporting() {
               {/* Revenue Section */}
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-green-500">
-                  <h4 className="font-semibold text-green-900">GELÄ°RLER</h4>
+                  <h4 className="font-semibold text-green-900">GELÝRLER</h4>
                   <span className="font-bold text-green-900">{formatCurrency(totalRevenue)}</span>
                 </div>
                 {revenueData.map((item, index) => (
@@ -825,7 +825,7 @@ export default function AdvancedReporting() {
               {/* Expense Section */}
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-red-500">
-                  <h4 className="font-semibold text-red-900">GÄ°DERLER</h4>
+                  <h4 className="font-semibold text-red-900">GÝDERLER</h4>
                   <span className="font-bold text-red-900">({formatCurrency(totalExpense)})</span>
                 </div>
                 {expenseData.map((item, index) => (
@@ -862,16 +862,16 @@ export default function AdvancedReporting() {
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <Building2 size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">AKTÄ°F</span>
+                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">AKTÝF</span>
               </div>
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">{formatCurrency(totalAssets)}</div>
-              <div className="text-xs opacity-90">Toplam VarlÄ±klar</div>
+              <div className="text-xs opacity-90">Toplam Varlýklar</div>
             </div>
 
             <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <CreditCard size={20} />
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">PASÄ°F</span>
+                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">PASÝF</span>
               </div>
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">{formatCurrency(totalLiabilities)}</div>
               <div className="text-xs opacity-90">Kaynak Toplam</div>
@@ -883,7 +883,7 @@ export default function AdvancedReporting() {
             {/* Assets */}
             <div className={card('md', 'none', 'default', 'lg')}>
               <div className="p-3 border-b border-neutral-200 bg-blue-50">
-                <h3 className="text-sm font-semibold text-blue-900">AKTÄ°FLER (VarlÄ±klar)</h3>
+                <h3 className="text-sm font-semibold text-blue-900">AKTÝFLER (Varlýklar)</h3>
               </div>
               <div className="p-4 space-y-4">
                 {assets.map((section, index) => (
@@ -905,8 +905,8 @@ export default function AdvancedReporting() {
                 
                 <div className="pt-4 border-t-2 border-blue-500">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-bold text-blue-900">TOPLAM AKTÄ°F</h4>
-                    <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-blue-900')}>{formatCurrency(totalAssets)}</span>
+                    <h4 className="text-lg font-bold text-blue-900">TOPLAM AKTÝF</h4>
+                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-blue-900')}>{formatCurrency(totalAssets)}</span>
                   </div>
                 </div>
               </div>
@@ -915,7 +915,7 @@ export default function AdvancedReporting() {
             {/* Liabilities */}
             <div className={card('md', 'none', 'default', 'lg')}>
               <div className="p-3 border-b border-neutral-200 bg-purple-50">
-                <h3 className="text-sm font-semibold text-purple-900">PASÄ°FLER (Kaynaklar)</h3>
+                <h3 className="text-sm font-semibold text-purple-900">PASÝFLER (Kaynaklar)</h3>
               </div>
               <div className="p-4 space-y-4">
                 {liabilities.map((section, index) => (
@@ -937,8 +937,8 @@ export default function AdvancedReporting() {
                 
                 <div className="pt-4 border-t-2 border-purple-500">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-bold text-purple-900">TOPLAM PASÄ°F</h4>
-                    <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-purple-900')}>{formatCurrency(totalLiabilities)}</span>
+                    <h4 className="text-lg font-bold text-purple-900">TOPLAM PASÝF</h4>
+                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-purple-900')}>{formatCurrency(totalLiabilities)}</span>
                   </div>
                 </div>
               </div>
@@ -962,13 +962,13 @@ export default function AdvancedReporting() {
                   <h4 className={`text-lg font-bold ${
                     Math.abs(totalAssets - totalLiabilities) < 0.01 ? 'text-green-900' : 'text-red-900'
                   }`}>
-                    {Math.abs(totalAssets - totalLiabilities) < 0.01 ? 'BilanÃ§o Dengede âœ“' : 'BilanÃ§o FarkÄ± Var!'}
+                    {Math.abs(totalAssets - totalLiabilities) < 0.01 ? 'Bilanço Dengede ?' : 'Bilanço Farký Var!'}
                   </h4>
                   <p className={`text-sm ${
                     Math.abs(totalAssets - totalLiabilities) < 0.01 ? 'text-green-700' : 'text-red-700'
                   }`}>
                     {Math.abs(totalAssets - totalLiabilities) < 0.01
-                      ? 'Aktif ve Pasif toplamlarÄ± eÅŸittir'
+                      ? 'Aktif ve Pasif toplamlarý eþittir'
                       : `Fark: ${formatCurrency(Math.abs(totalAssets - totalLiabilities))}`
                     }
                   </p>
@@ -992,7 +992,7 @@ export default function AdvancedReporting() {
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(vatData.reduce((sum, d) => sum + d.outputVAT, 0))}
               </div>
-              <div className="text-xs opacity-90">Hesaplanan KDV (Ã‡Ä±kan)</div>
+              <div className="text-xs opacity-90">Hesaplanan KDV (Çýkan)</div>
             </div>
 
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
@@ -1003,7 +1003,7 @@ export default function AdvancedReporting() {
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
                 {formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))}
               </div>
-              <div className="text-xs opacity-90">Ä°ndirilecek KDV (Giren)</div>
+              <div className="text-xs opacity-90">Ýndirilecek KDV (Giren)</div>
             </div>
 
             <div className={`bg-gradient-to-br rounded-xl p-4 text-white ${
@@ -1012,7 +1012,7 @@ export default function AdvancedReporting() {
               <div className="flex items-center justify-between mb-2">
                 <DollarSign size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
-                  {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'Ã–DENECEK' : 'Ä°ADE'}
+                  {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'ÖDENECEK' : 'ÝADE'}
                 </span>
               </div>
               <div className="text-xl lg:text-2xl font-bold mb-1 truncate">
@@ -1030,12 +1030,12 @@ export default function AdvancedReporting() {
               {/* Taxable Sales Section */}
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-green-500">
-                  <h4 className="font-semibold text-green-900">VERGÄ°YE TABÄ° Ä°ÅžLEMLER (SatÄ±ÅŸlar)</h4>
+                  <h4 className="font-semibold text-green-900">VERGÝYE TABÝ ÝÞLEMLER (Satýþlar)</h4>
                   <span className="font-bold text-green-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">Toplam SatÄ±ÅŸ TutarÄ± (Matrah)</span>
+                    <span className="text-neutral-700">Toplam Satýþ Tutarý (Matrah)</span>
                     <span className="font-semibold text-neutral-900">
                       {formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}
                     </span>
@@ -1052,18 +1052,18 @@ export default function AdvancedReporting() {
               {/* Deductible Purchases Section */}
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-blue-500">
-                  <h4 className="font-semibold text-blue-900">Ä°NDÄ°RÄ°LECEK KDV (AlÄ±ÅŸlar)</h4>
+                  <h4 className="font-semibold text-blue-900">ÝNDÝRÝLECEK KDV (Alýþlar)</h4>
                   <span className="font-bold text-blue-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-700">Toplam AlÄ±ÅŸ TutarÄ±</span>
+                    <span className="text-neutral-700">Toplam Alýþ Tutarý</span>
                     <span className="font-semibold text-neutral-900">
                       {formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-4 bg-blue-50 rounded-lg">
-                    <span className="text-neutral-700 font-medium">Ä°ndirilecek KDV</span>
+                    <span className="text-neutral-700 font-medium">Ýndirilecek KDV</span>
                     <span className="font-bold text-blue-600">
                       ({formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))})
                     </span>
@@ -1081,7 +1081,7 @@ export default function AdvancedReporting() {
                   <h4 className={`text-lg font-bold ${
                     vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-900' : 'text-green-900'
                   }`}>
-                    {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'Ã–DENECEK KDV' : 'Ä°ADE ALINACAK KDV'}
+                    {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'ÖDENECEK KDV' : 'ÝADE ALINACAK KDV'}
                   </h4>
                   <span className={`text-2xl font-bold truncate ${
                     vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-900' : 'text-green-900'
@@ -1092,8 +1092,8 @@ export default function AdvancedReporting() {
                 <div className="mt-2 text-sm">
                   <p className={vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-700' : 'text-green-700'}>
                     {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 
-                      ? 'Hesaplanan KDV > Ä°ndirilecek KDV - Hazine\'ye Ã¶denecek'
-                      : 'Ä°ndirilecek KDV > Hesaplanan KDV - Hazine\'den iade alÄ±nacak'
+                      ? 'Hesaplanan KDV > Ýndirilecek KDV - Hazine\'ye ödenecek'
+                      : 'Ýndirilecek KDV > Hesaplanan KDV - Hazine\'den iade alýnacak'
                     }
                   </p>
                 </div>
@@ -1104,18 +1104,18 @@ export default function AdvancedReporting() {
           {/* Period Details Table */}
           <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
             <div className="p-3 border-b border-neutral-200">
-              <h3 className="text-sm font-semibold text-neutral-900">DÃ¶nemsel KDV DetayÄ±</h3>
+              <h3 className="text-sm font-semibold text-neutral-900">Dönemsel KDV Detayý</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                   <thead className="bg-neutral-50">
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">DÃ¶nem</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">SatÄ±ÅŸ MatrahÄ±</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Dönem</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Satýþ Matrahý</th>
                       <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Hesaplanan KDV</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">AlÄ±ÅŸ TutarÄ±</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ä°ndirilecek KDV</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ã–denecek/Ä°ade KDV</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Alýþ Tutarý</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ýndirilecek KDV</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Ödenecek/Ýade KDV</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
@@ -1129,7 +1129,7 @@ export default function AdvancedReporting() {
                         <td className={`px-4 py-3 text-sm text-right font-bold ${
                           row.netVAT >= 0 ? 'text-orange-600' : 'text-green-600'
                         }`}>
-                          {formatCurrency(Math.abs(row.netVAT))} {row.netVAT >= 0 ? '(Ã–)' : '(Ä°)'}
+                          {formatCurrency(Math.abs(row.netVAT))} {row.netVAT >= 0 ? '(Ö)' : '(Ý)'}
                         </td>
                       </tr>
                     ))}

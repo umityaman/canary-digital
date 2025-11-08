@@ -135,11 +135,11 @@ export default function DeliveryNoteList() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className={`${DESIGN_TOKENS.typography.h1} ${DESIGN_TOKENS.colors.text.primary} flex items-center gap-3`}>
+          <h1 className={`${DESIGN_TOKENS?.typography?.h1} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-3`}>
             <Package className="w-8 h-8 text-blue-600" />
             İrsaliyeler
           </h1>
-          <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
             Sevk ve tahsilat irsaliyelerini yönetin
           </p>
         </div>
@@ -219,7 +219,7 @@ export default function DeliveryNoteList() {
       <div className={card('md', 'lg', 'default', 'xl')}>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
-            <label className={cx(DESIGN_TOKENS.typography.label.lg, DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+            <label className={cx(DESIGN_TOKENS?.typography?.label.lg, DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
               Durum Filtrele
             </label>
             <select
@@ -345,7 +345,7 @@ export default function DeliveryNoteList() {
       {convertDialogOpen && selectedNote && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6">
-            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
+            <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>
               Faturaya Dönüştür
             </h3>
             <p className="text-gray-600 mb-4">

@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Building2,
   Phone,
@@ -99,7 +99,7 @@ const CompanyInfo: React.FC = () => {
       if (companyResponse.data) {
         setCompanyData(companyResponse.data);
       } else {
-        console.warn('âš ï¸ No company data found, showing empty form');
+        console.warn('?? No company data found, showing empty form');
         setCompanyData({
           id: 0,
           name: '',
@@ -145,7 +145,7 @@ const CompanyInfo: React.FC = () => {
       }
     } catch (error: any) {
       console.error('Error loading company data:', error);
-      toast.error('Åžirket bilgileri yÃ¼klenirken hata oluÅŸtu');
+      toast.error('Þirket bilgileri yüklenirken hata oluþtu');
     } finally {
       setLoading(false);
     }
@@ -159,10 +159,10 @@ const CompanyInfo: React.FC = () => {
       const response = await apiClient.put('/company', companyData);
       setCompanyData(response.data);
       setIsEditing(false);
-      toast.success('Åžirket bilgileri gÃ¼ncellendi');
+      toast.success('Þirket bilgileri güncellendi');
     } catch (error: any) {
       console.error('Error saving company data:', error);
-      toast.error('Åžirket bilgileri kaydedilirken hata oluÅŸtu');
+      toast.error('Þirket bilgileri kaydedilirken hata oluþtu');
     } finally {
       setSaving(false);
     }
@@ -193,7 +193,7 @@ const CompanyInfo: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
-        <span className="ml-3 text-gray-600">YÃ¼kleniyor...</span>
+        <span className="ml-3 text-gray-600">Yükleniyor...</span>
       </div>
     );
   }
@@ -202,8 +202,8 @@ const CompanyInfo: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center h-64">
         <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Åžirket Bilgileri YÃ¼klenemedi</h3>
-        <p className="text-gray-600 mb-4">Veriler yÃ¼klenirken bir hata oluÅŸtu</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Þirket Bilgileri Yüklenemedi</h3>
+        <p className="text-gray-600 mb-4">Veriler yüklenirken bir hata oluþtu</p>
         <button
           onClick={loadData}
           className={cx(button('md', 'primary', 'md'), 'gap-2')}
@@ -222,8 +222,8 @@ const CompanyInfo: React.FC = () => {
         <div className="flex items-center space-x-3">
           <Building2 className="w-8 h-8 text-blue-600" />
           <div>
-            <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Åžirket Bilgileri</h2>
-            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>Åžirket ve banka hesap bilgilerinizi yÃ¶netin</p>
+            <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Þirket Bilgileri</h2>
+            <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Þirket ve banka hesap bilgilerinizi yönetin</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -233,7 +233,7 @@ const CompanyInfo: React.FC = () => {
                 onClick={() => setIsEditing(false)}
                 className={button('md', 'outline', 'md')}
               >
-                Ä°ptal
+                Ýptal
               </button>
               <button
                 onClick={handleSave}
@@ -249,7 +249,7 @@ const CompanyInfo: React.FC = () => {
               onClick={() => setIsEditing(true)}
               className={button('md', 'outline', 'md')}
             >
-              DÃ¼zenle
+              Düzenle
             </button>
           )}
         </div>
@@ -258,7 +258,7 @@ const CompanyInfo: React.FC = () => {
       {/* Company Information */}
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
-          <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold', DESIGN_TOKENS.colors.text.primary, 'flex items-center')}>
+          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
             <Building2 className="w-5 h-5 mr-2 text-gray-600" />
             Genel Bilgiler
           </h3>
@@ -266,8 +266,8 @@ const CompanyInfo: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Company Name */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
-                Åžirket AdÄ± *
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
+                Þirket Adý *
               </label>
               {isEditing ? (
                 <input
@@ -283,7 +283,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Email */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2 flex items-center')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2 flex items-center')}>
                 <Mail className="w-4 h-4 mr-1" />
                 E-posta
               </label>
@@ -301,7 +301,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Phone */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2 flex items-center')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2 flex items-center')}>
                 <Phone className="w-4 h-4 mr-1" />
                 Telefon
               </label>
@@ -319,7 +319,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Mobile Phone */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2 flex items-center')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2 flex items-center')}>
                 <Phone className="w-4 h-4 mr-1" />
                 Mobil Telefon
               </label>
@@ -337,7 +337,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Website */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2 flex items-center')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2 flex items-center')}>
                 <Globe className="w-4 h-4 mr-1" />
                 Web Sitesi
               </label>
@@ -355,9 +355,9 @@ const CompanyInfo: React.FC = () => {
 
             {/* Authorized Person */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2 flex items-center')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2 flex items-center')}>
                 <User className="w-4 h-4 mr-1" />
-                Yetkili KiÅŸi
+                Yetkili Kiþi
               </label>
               {isEditing ? (
                 <input
@@ -377,7 +377,7 @@ const CompanyInfo: React.FC = () => {
       {/* Address Information */}
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
-          <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold', DESIGN_TOKENS.colors.text.primary, 'flex items-center')}>
+          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
             <MapPin className="w-5 h-5 mr-2 text-gray-600" />
             Adres Bilgileri
           </h3>
@@ -385,7 +385,7 @@ const CompanyInfo: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Address */}
             <div className="md:col-span-2">
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 Adres
               </label>
               {isEditing ? (
@@ -402,7 +402,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Address 2 */}
             <div className="md:col-span-2">
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 Adres 2
               </label>
               {isEditing ? (
@@ -419,8 +419,8 @@ const CompanyInfo: React.FC = () => {
 
             {/* City */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
-                Ä°l
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
+                Ýl
               </label>
               {isEditing ? (
                 <input
@@ -436,8 +436,8 @@ const CompanyInfo: React.FC = () => {
 
             {/* District */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
-                Ä°lÃ§e
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
+                Ýlçe
               </label>
               {isEditing ? (
                 <input
@@ -453,7 +453,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Postal Code */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 Posta Kodu
               </label>
               {isEditing ? (
@@ -474,7 +474,7 @@ const CompanyInfo: React.FC = () => {
       {/* Tax Information */}
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
-          <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold', DESIGN_TOKENS.colors.text.primary, 'flex items-center')}>
+          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
             <FileText className="w-5 h-5 mr-2 text-gray-600" />
             Vergi ve Ticari Bilgiler
           </h3>
@@ -482,8 +482,8 @@ const CompanyInfo: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Tax Number */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
-                Vergi NumarasÄ±
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
+                Vergi Numarasý
               </label>
               {isEditing ? (
                 <input
@@ -499,7 +499,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Tax Office */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 Vergi Dairesi
               </label>
               {isEditing ? (
@@ -516,7 +516,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Trade Register */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 Ticaret Sicil No
               </label>
               {isEditing ? (
@@ -533,7 +533,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Mersis No */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 Mersis No
               </label>
               {isEditing ? (
@@ -554,16 +554,16 @@ const CompanyInfo: React.FC = () => {
       {/* Default Bank Information */}
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
-          <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold', DESIGN_TOKENS.colors.text.primary, 'flex items-center')}>
+          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
             <CreditCard className="w-5 h-5 mr-2 text-gray-600" />
-            VarsayÄ±lan Banka Bilgileri
+            Varsayýlan Banka Bilgileri
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Bank Name */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
-                Banka AdÄ±
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
+                Banka Adý
               </label>
               {isEditing ? (
                 <input
@@ -579,8 +579,8 @@ const CompanyInfo: React.FC = () => {
 
             {/* Bank Branch */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
-                Åžube
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
+                Þube
               </label>
               {isEditing ? (
                 <input
@@ -596,7 +596,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* IBAN */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 IBAN
               </label>
               {isEditing ? (
@@ -613,7 +613,7 @@ const CompanyInfo: React.FC = () => {
 
             {/* Account Holder */}
             <div>
-              <label className={cx(DESIGN_TOKENS.typography.body.sm, 'font-medium', DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+              <label className={cx(DESIGN_TOKENS?.typography?.body.sm, 'font-medium', DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
                 Hesap Sahibi
               </label>
               {isEditing ? (
@@ -635,34 +635,34 @@ const CompanyInfo: React.FC = () => {
       {bankAccounts && (
         <div className={card('md', 'md', 'default', 'md')}>
           <div className="p-6 space-y-6">
-            <h3 className={cx(DESIGN_TOKENS.typography.body.lg, 'font-semibold', DESIGN_TOKENS.colors.text.primary, 'flex items-center')}>
+            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
               <Building className="w-5 h-5 mr-2 text-gray-600" />
-              Banka HesaplarÄ±
+              Banka Hesaplarý
             </h3>
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-gray-600">Toplam Bakiye</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600`}>
                   {formatCurrency(bankAccounts.totals.totalBalance)}
                 </p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg">
-                <p className="text-sm text-gray-600">KullanÄ±labilir</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600`}>
+                <p className="text-sm text-gray-600">Kullanýlabilir</p>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
                   {formatCurrency(bankAccounts.totals.totalAvailable)}
                 </p>
               </div>
               <div className="p-4 bg-orange-50 rounded-lg">
                 <p className="text-sm text-gray-600">Bloke</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-orange-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-600`}>
                   {formatCurrency(bankAccounts.totals.totalBlocked)}
                 </p>
               </div>
               <div className="p-4 bg-purple-50 rounded-lg">
                 <p className="text-sm text-gray-600">Aktif Hesap</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-purple-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-600`}>
                   {bankAccounts.totals.activeAccounts} / {bankAccounts.totals.totalAccounts}
                 </p>
               </div>
@@ -697,7 +697,7 @@ const CompanyInfo: React.FC = () => {
                         <div>
                           <p className="font-medium text-gray-900">{account.bankName}</p>
                           {account.branch && (
-                            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>{account.branch}</p>
+                            <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{account.branch}</p>
                           )}
                         </div>
                       </td>

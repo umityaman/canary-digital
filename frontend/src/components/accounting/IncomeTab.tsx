@@ -178,10 +178,10 @@ export default function IncomeTab() {
             <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
               <TrendingUp size={24} />
             </div>
-            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Bu Ay</span>
+            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Bu Ay</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{formatCurrency(monthlyIncome)}</h3>
-          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Aylık Gelir</p>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{formatCurrency(monthlyIncome)}</h3>
+          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Aylık Gelir</p>
         </div>
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-blue-500 to-blue-600 text-white')}>
@@ -189,10 +189,10 @@ export default function IncomeTab() {
             <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
               <DollarSign size={24} />
             </div>
-            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Toplam</span>
+            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{formatCurrency(totalIncome)}</h3>
-          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Toplam Gelir</p>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{formatCurrency(totalIncome)}</h3>
+          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam Gelir</p>
         </div>
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-purple-500 to-purple-600 text-white')}>
@@ -200,30 +200,30 @@ export default function IncomeTab() {
             <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
               <FileText size={24} />
             </div>
-            <span className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Kayıt</span>
+            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Kayıt</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1`}>{incomes.length}</h3>
-          <p className={`${DESIGN_TOKENS.typography.label.md} opacity-90`}>Gelir Kaydı</p>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{incomes.length}</h3>
+          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Gelir Kaydı</p>
         </div>
       </div>
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
         <div className={card('md', 'sm', 'default', 'lg')}>
-          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>Kategori Dağılımı</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>Kategori Dağılımı</h3>
           <div className="space-y-3">
             {categoryStats.map((stat) => (
               <div key={stat.category}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.secondary}`}>{stat.category}</span>
+                  <span className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary}`}>{stat.category}</span>
                   <div className="flex items-center gap-3">
-                    <span className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.tertiary}`}>{stat.count} kayıt</span>
-                    <span className={`${DESIGN_TOKENS.typography.label.lg} ${DESIGN_TOKENS.colors.text.primary}`}>
+                    <span className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{stat.count} kayıt</span>
+                    <span className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.primary}`}>
                       {formatCurrency(stat.total)}
                     </span>
                   </div>
                 </div>
-                <div className={`w-full ${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.radius.full} rounded-full h-2`}>
+                <div className={`w-full ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.full} rounded-full h-2`}>
                   <div
                     className={`bg-green-500 h-2 ${DESIGN_TOKENS.radius.full} rounded-full transition-all`}
                     style={{ width: `${stat.percentage}%` }}
@@ -241,7 +241,7 @@ export default function IncomeTab() {
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS.colors.text.muted}`} size={18} />
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
               <input
                 type="text"
                 placeholder="Gelir ara..."

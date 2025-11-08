@@ -59,7 +59,7 @@ export default function CheckFormModal({ open, onClose, onSaved, initial }: Prop
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className={cx(card('lg', 'sm', 'elevated'), 'w-full max-w-3xl max-h-[90vh] overflow-y-auto')}>
-        <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>{initial?.id ? 'Çek Düzenle' : 'Yeni Çek'}</h3>
+        <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-6`}>{initial?.id ? 'Çek Düzenle' : 'Yeni Çek'}</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input name="checkNumber" value={form.checkNumber} onChange={handleChange} placeholder="Çek No" className={input('md')} />

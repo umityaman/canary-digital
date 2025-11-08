@@ -1,4 +1,4 @@
-ï»¿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Download,
   FileText,
@@ -94,12 +94,12 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
   };
 
   const handleExportExcel = () => {
-    toast.success('Excel dÄ±ÅŸa aktarma Ã¶zelliÄŸi yakÄ±nda eklenecek');
+    toast.success('Excel dýþa aktarma özelliði yakýnda eklenecek');
     // TODO: Implement Excel export
   };
 
   const handleExportPDF = () => {
-    toast.success('PDF dÄ±ÅŸa aktarma Ã¶zelliÄŸi yakÄ±nda eklenecek');
+    toast.success('PDF dýþa aktarma özelliði yakýnda eklenecek');
     // TODO: Implement PDF export
   };
 
@@ -115,9 +115,9 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
     return (
       <div className={card('md', 'xl', 'default', 'lg')}>
         <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>YaÅŸlandÄ±rma Verisi BulunamadÄ±</p>
-        <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
-          MÃ¼ÅŸterilerinizin borÃ§ durumunu gÃ¶rmek iÃ§in fatura ve tahsilat iÅŸlemlerini kaydedin.
+        <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>Yaþlandýrma Verisi Bulunamadý</p>
+        <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
+          Müþterilerinizin borç durumunu görmek için fatura ve tahsilat iþlemlerini kaydedin.
         </p>
       </div>
     );
@@ -134,19 +134,19 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
             <TrendingUp className="w-8 h-8 opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} mb-1`}>{formatCurrency(data.summary.totalDebt)}</p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} opacity-90`}>{data.summary.customerCount} MÃ¼ÅŸteri</p>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} mb-1`}>{formatCurrency(data.summary.totalDebt)}</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} opacity-90`}>{data.summary.customerCount} Müþteri</p>
         </div>
 
         <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-green-200')}>
           <div className="flex items-center justify-between mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">0-30 GÃ¼n</span>
+            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">0-30 Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalCurrent)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalCurrent, data.summary.totalDebt)}
           </p>
         </div>
@@ -154,12 +154,12 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
         <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-yellow-200')}>
           <div className="flex items-center justify-between mb-4">
             <Clock className="w-8 h-8 text-yellow-600" />
-            <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full">31-60 GÃ¼n</span>
+            <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full">31-60 Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays30)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalDays30, data.summary.totalDebt)}
           </p>
         </div>
@@ -167,12 +167,12 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
         <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-orange-200')}>
           <div className="flex items-center justify-between mb-4">
             <AlertCircle className="w-8 h-8 text-orange-600" />
-            <span className="text-xs bg-orange-50 text-orange-700 px-2 py-1 rounded-full">61-90 GÃ¼n</span>
+            <span className="text-xs bg-orange-50 text-orange-700 px-2 py-1 rounded-full">61-90 Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays60)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalDays60, data.summary.totalDebt)}
           </p>
         </div>
@@ -180,12 +180,12 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
         <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-red-200')}>
           <div className="flex items-center justify-between mb-4">
             <TrendingDown className="w-8 h-8 text-red-600" />
-            <span className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded-full">90+ GÃ¼n</span>
+            <span className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded-full">90+ Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays90Plus)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalDays90Plus, data.summary.totalDebt)}
           </p>
         </div>
@@ -198,14 +198,14 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
           className={cx(button('md', 'primary', 'md'), 'gap-2 bg-green-600 hover:bg-green-700')}
         >
           <Download className="w-4 h-4" />
-          Excel Ä°ndir
+          Excel Ýndir
         </button>
         <button
           onClick={handleExportPDF}
           className={cx(button('md', 'primary', 'md'), 'gap-2 bg-red-600 hover:bg-red-700')}
         >
           <FileText className="w-4 h-4" />
-          PDF Ä°ndir
+          PDF Ýndir
         </button>
       </div>
 
@@ -219,54 +219,54 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                   onClick={() => handleSort('customerName')}
                   className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase cursor-pointer hover:bg-neutral-100"
                 >
-                  MÃ¼ÅŸteri
+                  Müþteri
                   {sortField === 'customerName' && (
-                    <span className="ml-1">{sortDirection === 'asc' ? 'â†‘' : 'â†“'}</span>
+                    <span className="ml-1">{sortDirection === 'asc' ? '^' : 'v'}</span>
                   )}
                 </th>
                 <th
                   onClick={() => handleSort('totalDebt')}
                   className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase cursor-pointer hover:bg-neutral-100"
                 >
-                  Toplam BorÃ§
+                  Toplam Borç
                   {sortField === 'totalDebt' && (
-                    <span className="ml-1">{sortDirection === 'asc' ? 'â†‘' : 'â†“'}</span>
+                    <span className="ml-1">{sortDirection === 'asc' ? '^' : 'v'}</span>
                   )}
                 </th>
                 <th
                   onClick={() => handleSort('current')}
                   className="px-6 py-3 text-right text-xs font-medium text-green-700 uppercase cursor-pointer hover:bg-green-50"
                 >
-                  0-30 GÃ¼n
+                  0-30 Gün
                   {sortField === 'current' && (
-                    <span className="ml-1">{sortDirection === 'asc' ? 'â†‘' : 'â†“'}</span>
+                    <span className="ml-1">{sortDirection === 'asc' ? '^' : 'v'}</span>
                   )}
                 </th>
                 <th
                   onClick={() => handleSort('days30')}
                   className="px-6 py-3 text-right text-xs font-medium text-yellow-700 uppercase cursor-pointer hover:bg-yellow-50"
                 >
-                  31-60 GÃ¼n
+                  31-60 Gün
                   {sortField === 'days30' && (
-                    <span className="ml-1">{sortDirection === 'asc' ? 'â†‘' : 'â†“'}</span>
+                    <span className="ml-1">{sortDirection === 'asc' ? '^' : 'v'}</span>
                   )}
                 </th>
                 <th
                   onClick={() => handleSort('days60')}
                   className="px-6 py-3 text-right text-xs font-medium text-orange-700 uppercase cursor-pointer hover:bg-orange-50"
                 >
-                  61-90 GÃ¼n
+                  61-90 Gün
                   {sortField === 'days60' && (
-                    <span className="ml-1">{sortDirection === 'asc' ? 'â†‘' : 'â†“'}</span>
+                    <span className="ml-1">{sortDirection === 'asc' ? '^' : 'v'}</span>
                   )}
                 </th>
                 <th
                   onClick={() => handleSort('days90Plus')}
                   className="px-6 py-3 text-right text-xs font-medium text-red-700 uppercase cursor-pointer hover:bg-red-50"
                 >
-                  90+ GÃ¼n
+                  90+ Gün
                   {sortField === 'days90Plus' && (
-                    <span className="ml-1">{sortDirection === 'asc' ? 'â†‘' : 'â†“'}</span>
+                    <span className="ml-1">{sortDirection === 'asc' ? '^' : 'v'}</span>
                   )}
                 </th>
               </tr>
@@ -296,18 +296,18 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div>
-                          <p className={`font-medium ${DESIGN_TOKENS.colors.text.primary}`}>{customer.customerName}</p>
+                          <p className={`font-medium ${DESIGN_TOKENS?.colors?.text.primary}`}>{customer.customerName}</p>
                           {customer.overdueAmount > 0 && (
                             <p className="text-xs text-red-600 flex items-center gap-1">
                               <AlertCircle className="w-3 h-3" />
-                              {formatCurrency(customer.overdueAmount)} vadesi geÃ§miÅŸ
+                              {formatCurrency(customer.overdueAmount)} vadesi geçmiþ
                             </p>
                           )}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <p className={`font-bold ${DESIGN_TOKENS.colors.text.primary}`}>{formatCurrency(customer.totalDebt)}</p>
+                      <p className={`font-bold ${DESIGN_TOKENS?.colors?.text.primary}`}>{formatCurrency(customer.totalDebt)}</p>
                       <p className="text-xs text-gray-500">{customer.currency}</p>
                     </td>
                     <td className="px-6 py-4 text-right">

@@ -221,7 +221,7 @@ const NotificationsTab: React.FC = () => {
       <div className={card('md', 'sm')}>
         <div className="flex items-center gap-3 mb-4">
           <Settings className="text-blue-600" size={24} />
-          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Bildirim Tercihleri</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Bildirim Tercihleri</h3>
         </div>
 
         <div className="space-y-4">

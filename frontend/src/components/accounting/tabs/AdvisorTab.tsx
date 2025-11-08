@@ -84,7 +84,7 @@ const AdvisorTab: React.FC = () => {
 
       {/* Quick Actions */}
       <div className={card('md', 'sm')}>
-        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>Hızlı İşlemler</h2>
+        <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary} mb-6`}>Hızlı İşlemler</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {actions.map((action, index) => (
@@ -102,7 +102,7 @@ const AdvisorTab: React.FC = () => {
 
       {/* Client List */}
       <div className={card('md', 'sm')}>
-        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>Müşteri Listesi</h2>
+        <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary} mb-6`}>Müşteri Listesi</h2>
         
         <div className="space-y-3">
           {clients.map((client, index) => (

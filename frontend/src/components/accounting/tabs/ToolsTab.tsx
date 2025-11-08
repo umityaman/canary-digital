@@ -132,7 +132,7 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
 
       {/* Tools Grid */}
       <div className={card('md', 'sm')}>
-        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>İşletme Kolaylıkları</h2>
+        <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary} mb-6`}>İşletme Kolaylıkları</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tools.map((tool, index) => (
@@ -151,8 +151,8 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
 
       {/* Tips Section */}
       <div className={cx(card('md', 'sm', 'info'), 'bg-gradient-to-br from-blue-50 to-indigo-50')}>
-        <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-3`}>💡 İpucu</h3>
-        <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary}`}>
+        <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-3`}>💡 İpucu</h3>
+        <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
           Araçlar sekmesinden tüm muhasebe işlemlerinize hızlıca erişebilirsiniz. 
           Sık kullandığınız araçları favorilere ekleyerek daha verimli çalışabilirsiniz.
         </p>

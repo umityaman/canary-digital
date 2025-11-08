@@ -1,4 +1,4 @@
-ï»¿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Wallet,
   Building2,
@@ -151,7 +151,7 @@ export default function CashBankManagement() {
 
   const handleSaveTransaction = async () => {
     if (!transactionForm.amount || !transactionForm.description) {
-      toast.error('Tutar ve aÃ§Ä±klama zorunludur');
+      toast.error('Tutar ve açıklama zorunludur');
       return;
     }
 
@@ -163,7 +163,7 @@ export default function CashBankManagement() {
         date: transactionForm.date,
       });
       
-      toast.success('Ä°ÅŸlem kaydedildi');
+      toast.success('İşlem kaydedildi');
       setShowTransactionForm(false);
       setTransactionForm({
         amount: '',
@@ -176,7 +176,7 @@ export default function CashBankManagement() {
       loadData();
     } catch (error: any) {
       console.error('Error saving transaction:', error);
-      toast.error(error.response?.data?.message || 'Ä°ÅŸlem kaydedilemedi');
+      toast.error(error.response?.data?.message || 'İşlem kaydedilemedi');
     }
   };
 
@@ -195,9 +195,9 @@ export default function CashBankManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Kasa ve Banka YÃ¶netimi</h2>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Kasa ve Banka Yönetimi</h2>
           <p className="text-sm text-gray-500 mt-1">
-            Nakit akÄ±ÅŸÄ±, kasa ve banka hesaplarÄ±nÄ±zÄ± takip edin
+            Nakit akışı, kasa ve banka hesaplarınızı takip edin
           </p>
         </div>
         <button
@@ -205,7 +205,7 @@ export default function CashBankManagement() {
           className={cx(button('md', 'primary', 'md'), 'gap-2')}
         >
           <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">Yeni Ä°ÅŸlem</span>
+          <span className="hidden sm:inline">Yeni İşlem</span>
         </button>
       </div>
 
@@ -249,13 +249,13 @@ export default function CashBankManagement() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
             <Calendar className="w-8 h-8 text-purple-600" />
-            <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">BugÃ¼n</span>
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">Bugün</span>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <ArrowUpRight className="w-4 h-4 text-green-600" />
-                <span className="text-sm text-gray-600">GiriÅŸ</span>
+                <span className="text-sm text-gray-600">Giriş</span>
               </div>
               <p className="text-lg font-bold text-green-600">
                 {formatCurrency(cashInToday)}
@@ -264,7 +264,7 @@ export default function CashBankManagement() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <ArrowDownLeft className="w-4 h-4 text-red-600" />
-                <span className="text-sm text-gray-600">Ã‡Ä±kÄ±ÅŸ</span>
+                <span className="text-sm text-gray-600">Çıkış</span>
               </div>
               <p className="text-lg font-bold text-red-600">
                 {formatCurrency(cashOutToday)}
@@ -287,7 +287,7 @@ export default function CashBankManagement() {
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               )}
             >
-              Genel BakÄ±ÅŸ
+              Genel Bakış
             </button>
             <button
               onClick={() => setActiveTab('bank')}
@@ -298,7 +298,7 @@ export default function CashBankManagement() {
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               )}
             >
-              Banka HesaplarÄ±
+              Banka Hesapları
             </button>
             <button
               onClick={() => setActiveTab('cash')}
@@ -320,7 +320,7 @@ export default function CashBankManagement() {
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               )}
             >
-              Nakit AkÄ±ÅŸÄ±
+              Nakit Akışı
             </button>
           </div>
         </div>
@@ -330,14 +330,14 @@ export default function CashBankManagement() {
           {activeTab === 'overview' && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Hesap DaÄŸÄ±lÄ±mÄ±</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Hesap Dağılımı</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-gray-700">Banka HesaplarÄ±</span>
+                      <span className="text-sm font-medium text-gray-700">Banka Hesapları</span>
                       <Building2 className="w-5 h-5 text-blue-600" />
                     </div>
-                    <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600 mb-2`}>
+                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600 mb-2`}>
                       {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
@@ -355,7 +355,7 @@ export default function CashBankManagement() {
                       <span className="text-sm font-medium text-gray-700">Kasa</span>
                       <Wallet className="w-5 h-5 text-green-600" />
                     </div>
-                    <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600 mb-2`}>
+                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600 mb-2`}>
                       {formatCurrency(cashBalance)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
@@ -371,12 +371,12 @@ export default function CashBankManagement() {
                 <div className="space-y-2">
                   {cashTransactions.length === 0 ? (
                     <div className="text-center py-8 text-gray-500">
-                      <p>HenÃ¼z kasa hareketi bulunmuyor</p>
+                      <p>Henüz kasa hareketi bulunmuyor</p>
                       <button
                         onClick={() => setShowTransactionForm(true)}
                         className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
                       >
-                        Ä°lk iÅŸleminizi ekleyin
+                        İlk işleminizi ekleyin
                       </button>
                     </div>
                   ) : (
@@ -421,7 +421,7 @@ export default function CashBankManagement() {
           {/* Bank Accounts Tab */}
           {activeTab === 'bank' && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Banka HesaplarÄ±</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Banka Hesapları</h3>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -442,7 +442,7 @@ export default function CashBankManagement() {
                         Durum
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Ä°ÅŸlemler
+                        İşlemler
                       </th>
                     </tr>
                   </thead>
@@ -508,14 +508,14 @@ export default function CashBankManagement() {
                   </button>
                   <button className="flex items-center px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
                     <Download className="w-4 h-4 mr-1" />
-                    Ä°ndir
+                    İndir
                   </button>
                 </div>
               </div>
               <div className="text-center py-12 text-gray-500">
                 <Wallet className="w-16 h-16 mx-auto mb-4 opacity-30" />
                 <p className="text-lg font-medium">Kasa hareketi yok</p>
-                <p className="text-sm mt-1">Yeni bir iÅŸlem ekleyerek baÅŸlayÄ±n</p>
+                <p className="text-sm mt-1">Yeni bir işlem ekleyerek başlayın</p>
               </div>
             </div>
           )}
@@ -524,20 +524,20 @@ export default function CashBankManagement() {
           {activeTab === 'cashflow' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Nakit AkÄ±ÅŸÄ± Raporu</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Nakit Akışı Raporu</h3>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setCashFlowYear(cashFlowYear - 1)}
                     className="p-2 hover:bg-gray-100 rounded-lg"
                   >
-                    â†
+                    ‹
                   </button>
                   <span className="text-sm font-medium px-4">{cashFlowYear}</span>
                   <button
                     onClick={() => setCashFlowYear(cashFlowYear + 1)}
                     className="p-2 hover:bg-gray-100 rounded-lg"
                   >
-                    â†’
+                    ›
                   </button>
                 </div>
               </div>
@@ -545,8 +545,8 @@ export default function CashBankManagement() {
               {cashFlowData.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
                   <Calendar className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg font-medium">Bu yÄ±l iÃ§in veri bulunamadÄ±</p>
-                  <p className="text-sm mt-1">Ä°ÅŸlem eklediÄŸinizde burada gÃ¶rÃ¼necektir</p>
+                  <p className="text-lg font-medium">Bu yıl için veri bulunamadı</p>
+                  <p className="text-sm mt-1">İşlem eklediğinizde burada görünecektir</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -555,40 +555,40 @@ export default function CashBankManagement() {
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-center gap-2 mb-2">
                         <TrendingUp className="w-5 h-5 text-green-600" />
-                        <span className="text-sm font-medium text-gray-700">Toplam GiriÅŸ</span>
+                        <span className="text-sm font-medium text-gray-700">Toplam Giriş</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.income, 0)
                         )}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yÄ±lÄ±</p>
+                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
 
                     <div className="p-4 bg-red-50 rounded-lg border border-red-200">
                       <div className="flex items-center gap-2 mb-2">
                         <TrendingDown className="w-5 h-5 text-red-600" />
-                        <span className="text-sm font-medium text-gray-700">Toplam Ã‡Ä±kÄ±ÅŸ</span>
+                        <span className="text-sm font-medium text-gray-700">Toplam Çıkış</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-red-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.expense, 0)
                         )}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yÄ±lÄ±</p>
+                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
 
                     <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                       <div className="flex items-center gap-2 mb-2">
                         <Wallet className="w-5 h-5 text-blue-600" />
-                        <span className="text-sm font-medium text-gray-700">Net AkÄ±ÅŸ</span>
+                        <span className="text-sm font-medium text-gray-700">Net Akış</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.net, 0)
                         )}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yÄ±lÄ±</p>
+                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
                   </div>
 
@@ -601,10 +601,10 @@ export default function CashBankManagement() {
                             Ay
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                            GiriÅŸ
+                            Giriş
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                            Ã‡Ä±kÄ±ÅŸ
+                            Çıkış
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                             Net
@@ -652,7 +652,7 @@ export default function CashBankManagement() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className={cx(card('md', 'lg', 'default', 'md'), 'w-full max-w-md')}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Yeni Ä°ÅŸlem</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Yeni İşlem</h3>
               <button
                 onClick={() => setShowTransactionForm(false)}
                 className="p-2 text-gray-400 hover:text-gray-600"
@@ -664,7 +664,7 @@ export default function CashBankManagement() {
             <div className="space-y-4">
               {/* Type Selection */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Ä°ÅŸlem Tipi</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">İşlem Tipi</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setTransactionType('in')}
@@ -679,7 +679,7 @@ export default function CashBankManagement() {
                         transactionType === 'in' ? 'text-green-600' : 'text-gray-400'
                       }`}
                     />
-                    <span className="text-sm font-medium">GiriÅŸ</span>
+                    <span className="text-sm font-medium">Giriş</span>
                   </button>
                   <button
                     onClick={() => setTransactionType('out')}
@@ -694,14 +694,14 @@ export default function CashBankManagement() {
                         transactionType === 'out' ? 'text-red-600' : 'text-gray-400'
                       }`}
                     />
-                    <span className="text-sm font-medium">Ã‡Ä±kÄ±ÅŸ</span>
+                    <span className="text-sm font-medium">Çıkış</span>
                   </button>
                 </div>
               </div>
 
               {/* Amount */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tutar (â‚º)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tutar (?)</label>
                 <input
                   type="number"
                   value={transactionForm.amount}
@@ -715,7 +715,7 @@ export default function CashBankManagement() {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">AÃ§Ä±klama</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Açıklama</label>
                 <input
                   type="text"
                   value={transactionForm.description}
@@ -723,7 +723,7 @@ export default function CashBankManagement() {
                     setTransactionForm({ ...transactionForm, description: e.target.value })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Ä°ÅŸlem aÃ§Ä±klamasÄ±"
+                  placeholder="İşlem açıklaması"
                 />
               </div>
 
@@ -737,11 +737,11 @@ export default function CashBankManagement() {
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="">SeÃ§iniz</option>
+                  <option value="">Seçiniz</option>
                   <option value="income">Gelir</option>
                   <option value="expense">Gider</option>
                   <option value="transfer">Transfer</option>
-                  <option value="other">DiÄŸer</option>
+                  <option value="other">Diğer</option>
                 </select>
               </div>
 
@@ -771,7 +771,7 @@ export default function CashBankManagement() {
                   onClick={() => setShowTransactionForm(false)}
                   className={button('md', 'outline', 'md')}
                 >
-                  Ä°ptal
+                  İptal
                 </button>
               </div>
             </div>
