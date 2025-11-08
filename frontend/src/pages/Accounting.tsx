@@ -1721,7 +1721,7 @@ export default function Accounting() {
                       )}
 
                       <div className="overflow-x-auto">
-                        <table className="w-full min-w-max">
+                        <table className="w-full table-fixed">
                           <thead className={`${DESIGN_TOKENS.colors.bg.subtle} ${DESIGN_TOKENS.colors.border.light} border-b`}>
                             <tr>
                               <th className="px-2 py-2 text-left">
@@ -1774,11 +1774,11 @@ export default function Accounting() {
                                     {offer.items?.length || 0} kalem
                                   </div>
                                 </td>
-                                <td className="px-2 py-3">
-                                  <div className="text-sm font-medium text-neutral-900">
+                                <td className="px-2 py-2 max-w-[180px]">
+                                  <div className="text-sm font-medium text-neutral-900 truncate">
                                     {offer.customer.name}
                                   </div>
-                                  <div className="text-xs text-neutral-500">
+                                  <div className="text-xs text-neutral-500 truncate">
                                     {offer.customer.email}
                                   </div>
                                 </td>
@@ -1799,7 +1799,7 @@ export default function Accounting() {
                                     <div className="text-xs text-red-500">Süresi doldu</div>
                                   )}
                                 </td>
-                                <td className="px-2 py-3 whitespace-nowrap">
+                                <td className="px-2 py-2 whitespace-nowrap">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {formatCurrency(offer.grandTotal)}
                                   </div>
