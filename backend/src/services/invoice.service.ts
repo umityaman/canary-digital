@@ -1,6 +1,7 @@
 import { parasutClient, formatDate } from '../config/parasut';
 import { prisma } from '../index';
 import { log } from '../config/logger';
+import stockMovementService from './stockMovementService';
 
 // Use the generated Prisma client types (avoid broad `as any` casts)
 const p = prisma;
@@ -152,6 +153,37 @@ export class InvoiceService {
 
       log.info('Invoice Service: Fatura veritabanına kaydedildi:', dbInvoice.id);
 
+      // 🔥 CRITICAL: Stok hareketi kayıtlarını oluştur (otomatik)
+      log.info('Invoice Service: Stok hareketleri kaydediliyor...', { 
+        invoiceId: dbInvoice.id, 
+        itemCount: items.length 
+      });
+
+      try {
+        for (const item of items) {
+          await stockMovementService.recordSale({
+            equipmentId: item.equipmentId,
+            quantity: item.quantity,
+            invoiceId: dbInvoice.id,
+            orderId: orderId,
+            companyId: order.companyId,
+            performedBy: customerId, // TODO: Gerçek user ID'yi al
+            notes: `Fatura #${dbInvoice.invoiceNumber} - ${item.description}`,
+          });
+
+          log.info('Invoice Service: Stok hareketi kaydedildi', {
+            equipmentId: item.equipmentId,
+            quantity: item.quantity,
+          });
+        }
+
+        log.info('Invoice Service: Tüm stok hareketleri başarıyla kaydedildi');
+      } catch (stockError: any) {
+        log.error('Invoice Service: Stok hareketleri kaydedilemedi:', stockError);
+        // Stok hatası fatura işlemini iptal etmemeli, sadece logla
+        // Fatura oluşturuldu ama stok güncellenmedi durumu
+      }
+
       // e-Fatura/e-Arşiv gönder
       try {
         await parasutClient.sendInvoice(parasutInvoice.id, customer.email);
@@ -171,6 +203,65 @@ export class InvoiceService {
       return dbInvoice;
     } catch (error) {
       log.error('Invoice Service: Fatura oluşturulamadı:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Siparişten Otomatik Fatura Oluşturma
+   * Order confirm edildiğinde otomatik çağrılır
+   */
+  async createFromOrder(orderId: number) {
+    try {
+      log.info('Invoice Service: Siparişten fatura oluşturuluyor...', { orderId });
+
+      // Sipariş bilgilerini al
+      const order = await p.order.findUnique({
+        where: { id: orderId },
+        include: {
+          orderItems: { include: { equipment: true } },
+          customer: true,
+        },
+      });
+
+      if (!order) {
+        throw new Error('Order not found');
+      }
+
+      if (order.status !== 'CONFIRMED') {
+        throw new Error('Order must be confirmed before creating invoice');
+      }
+
+      // OrderItems'dan InvoiceItems'a dönüşüm
+      const items = order.orderItems.map((orderItem) => ({
+        equipmentId: orderItem.equipmentId,
+        description: orderItem.equipment.name,
+        quantity: orderItem.quantity,
+        unitPrice: orderItem.dailyRate,
+        days: Math.ceil(
+          (order.endDate.getTime() - order.startDate.getTime()) / (1000 * 60 * 60 * 24)
+        ),
+        discountPercentage: 0,
+      }));
+
+      // createRentalInvoice metodunu kullan (stok entegrasyonu otomatik çalışacak)
+      const invoice = await this.createRentalInvoice({
+        orderId: order.id,
+        customerId: order.customerId,
+        items,
+        startDate: order.startDate,
+        endDate: order.endDate,
+        notes: order.notes || `Otomatik fatura - Sipariş #${order.orderNumber}`,
+      });
+
+      log.info('Invoice Service: Siparişten fatura başarıyla oluşturuldu', {
+        invoiceId: invoice.id,
+        orderId: order.id,
+      });
+
+      return invoice;
+    } catch (error) {
+      log.error('Invoice Service: Siparişten fatura oluşturulamadı:', error);
       throw error;
     }
   }

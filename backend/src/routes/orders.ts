@@ -612,6 +612,64 @@ router.put('/:id', authenticateToken, async (req: any, res) => {
   }
 })
 
+// 🔥 Sipariş onaylama ve otomatik fatura oluşturma
+router.post('/:id/confirm', authenticateToken, async (req: any, res) => {
+  try {
+    const { id } = req.params;
+    const { createInvoice = true } = req.body; // Varsayılan: otomatik fatura oluştur
+
+    // Siparişi CONFIRMED durumuna güncelle
+    const order = await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { status: 'CONFIRMED' },
+      include: {
+        customer: true,
+        orderItems: {
+          include: {
+            equipment: true,
+          },
+        },
+      },
+    }) as any;
+
+    // Otomatik fatura oluştur (isteğe bağlı)
+    let invoice = null;
+    if (createInvoice) {
+      try {
+        const { invoiceService } = await import('../services/invoice.service');
+        invoice = await invoiceService.createFromOrder(parseInt(id));
+        
+        console.log('Sipariş onaylandı ve fatura oluşturuldu:', {
+          orderId: order.id,
+          invoiceId: invoice.id,
+        });
+      } catch (invoiceError) {
+        console.error('Fatura oluşturulamadı:', invoiceError);
+        // Sipariş onaylandı ama fatura oluşturulamadı, hata logla ama devam et
+      }
+    }
+
+    // Calendar sync
+    await syncOrderToCanaryCalendar(order, req.companyId, 'update');
+    await syncOrderToCalendar(order, req.userId, 'update');
+
+    res.json({
+      success: true,
+      message: 'Sipariş onaylandı' + (invoice ? ' ve fatura oluşturuldu' : ''),
+      data: {
+        order,
+        invoice,
+      },
+    });
+  } catch (error) {
+    console.error('Sipariş onaylanamadı:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Sipariş onaylanamadı' 
+    });
+  }
+});
+
 // Sipariş sil
 router.delete('/:id', authenticateToken, async (req: any, res) => {
   try {
