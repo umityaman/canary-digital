@@ -15,10 +15,11 @@ router.get('/', async (req: Request, res: Response) => {
     const companyId = req.user?.companyId;
     
     if (!companyId) {
-      console.warn('⚠️ GET /api/company - No companyId in token. User:', req.user?.id);
-      return res.status(400).json({ 
-        message: 'Company ID not found in authentication token',
-        error: 'MISSING_COMPANY_ID'
+      console.warn('⚠️ GET /api/company - No companyId in token. Returning empty company data. User:', req.user?.id);
+      return res.json({ 
+        success: true,
+        data: null,
+        message: 'No company assigned to user'
       });
     }
 
@@ -172,10 +173,11 @@ router.get('/bank-accounts', async (req: Request, res: Response) => {
     const companyId = req.user?.companyId;
     
     if (!companyId) {
-      console.warn('⚠️ GET /api/company/bank-accounts - No companyId in token. User:', req.user?.id);
-      return res.status(400).json({ 
-        message: 'Company ID not found in authentication token',
-        error: 'MISSING_COMPANY_ID'
+      console.warn('⚠️ GET /api/company/bank-accounts - No companyId in token. Returning empty array. User:', req.user?.id);
+      return res.json({ 
+        success: true,
+        data: [],
+        message: 'No company assigned to user'
       });
     }
 
