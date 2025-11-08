@@ -920,50 +920,19 @@ export class AccountingService {
     search?: string;
   }) {
     try {
-      const { page, limit, category, status, startDate, endDate, search } = params;
-      const skip = (page - 1) * limit;
-
-      const where: any = {};
-
-      if (category) {
-        where.category = category;
-      }
-
-      if (status) {
-        where.status = status;
-      }
-
-      if (startDate && endDate) {
-        where.date = {
-          gte: startDate,
-          lte: endDate,
-        };
-      }
-
-      if (search) {
-        where.OR = [
-          { description: { contains: search, mode: 'insensitive' } },
-          { notes: { contains: search, mode: 'insensitive' } },
-        ];
-      }
-
-      const [total, data] = await Promise.all([
-        prisma.expense.count({ where }), // Note: Using Expense model as Income model doesn't exist yet
-        prisma.expense.findMany({
-          where,
-          skip,
-          take: limit,
-          orderBy: { date: 'desc' },
-        }),
-      ]);
-
+      const { page, limit } = params;
+      
+      // TODO: Income table doesn't exist yet in schema
+      // Return empty data for now instead of crashing
+      log.warn('Income table not implemented yet, returning empty data');
+      
       return {
-        data,
+        data: [],
         pagination: {
-          total,
+          total: 0,
           page,
           limit,
-          totalPages: Math.ceil(total / limit),
+          totalPages: 0,
         },
       };
     } catch (error) {

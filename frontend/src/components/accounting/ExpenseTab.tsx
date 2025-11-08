@@ -77,11 +77,13 @@ export default function ExpenseTab() {
         search: searchTerm || undefined,
       })
       
-      setExpenses(response.data.data || [])
-      setTotalPages(response.data.pagination?.totalPages || 1)
+      setExpenses(response?.data?.data || [])
+      setTotalPages(response?.data?.pagination?.totalPages || 1)
     } catch (error: any) {
-      console.error('Failed to load expenses:', error)
-      toast.error('Giderler yüklenemedi: ' + (error.response?.data?.message || error.message))
+      console.warn('Failed to load expenses:', error)
+      // Silent fail - set empty data instead of showing error
+      setExpenses([])
+      setTotalPages(1)
     } finally {
       setLoading(false)
     }

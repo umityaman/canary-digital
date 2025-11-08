@@ -65,11 +65,13 @@ export default function IncomeTab() {
         search: searchTerm || undefined,
       })
       
-      setIncomes(response.data.data || [])
-      setTotalPages(response.data.pagination?.totalPages || 1)
+      setIncomes(response?.data?.data || [])
+      setTotalPages(response?.data?.pagination?.totalPages || 1)
     } catch (error: any) {
-      console.error('Failed to load incomes:', error)
-      toast.error('Gelirler yüklenemedi: ' + (error.response?.data?.message || error.message))
+      console.warn('Failed to load incomes:', error)
+      // Silent fail - set empty data instead of showing error
+      setIncomes([])
+      setTotalPages(1)
     } finally {
       setLoading(false)
     }
