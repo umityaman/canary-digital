@@ -66,6 +66,13 @@ export const useNotificationAPI = () => {
         throw new Error('Failed to fetch notifications');
       }
 
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.warn('Notifications API returned non-JSON response');
+        return [];
+      }
+
       const data = await response.json();
       
       if (data.success) {
@@ -88,10 +95,11 @@ export const useNotificationAPI = () => {
         return notifications;
       }
       
-      throw new Error(data.message || 'Failed to fetch notifications');
+      console.warn('Notifications API returned unsuccessful response');
+      return [];
     } catch (error) {
-      console.error('Error fetching notifications:', error);
-      throw error;
+      console.warn('Error fetching notifications:', error);
+      return [];
     }
   }, []);
 
@@ -103,7 +111,15 @@ export const useNotificationAPI = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch unread count');
+        console.warn('Unread count API not available');
+        return 0;
+      }
+
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.warn('Unread count API returned non-JSON response');
+        return 0;
       }
 
       const data = await response.json();
@@ -112,9 +128,10 @@ export const useNotificationAPI = () => {
         return data.data.count;
       }
       
-      throw new Error(data.message || 'Failed to fetch unread count');
+      console.warn('Unread count API returned unsuccessful response');
+      return 0;
     } catch (error) {
-      console.error('Error fetching unread count:', error);
+      console.warn('Error fetching unread count:', error);
       return 0;
     }
   }, []);

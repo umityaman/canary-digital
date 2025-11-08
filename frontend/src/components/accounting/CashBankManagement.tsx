@@ -87,21 +87,37 @@ export default function CashBankManagement() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [bankResponse, cashBalanceResponse, cashSummaryResponse, cashTransactionsResponse] = await Promise.all([
-        apiClient.get('/company/bank-accounts'),
-        apiClient.get('/cash/balance'),
-        apiClient.get('/cash/summary'),
-        apiClient.get('/cash/transactions?limit=10'),
-      ]);
       
-      setBankAccounts(bankResponse.data);
-      setCashBalance(cashBalanceResponse.data.data.balance);
-      setCashInToday(cashSummaryResponse.data.data.todayIn);
-      setCashOutToday(cashSummaryResponse.data.data.todayOut);
-      setCashTransactions(cashTransactionsResponse.data.data);
+      // Try to load bank accounts
+      try {
+        const bankResponse = await apiClient.get('/company/bank-accounts');
+        setBankAccounts(bankResponse.data);
+      } catch (error) {
+        console.warn('Bank accounts not available, using defaults');
+        setBankAccounts({ accounts: [], totals: { totalBalance: 0, totalAvailable: 0, totalBlocked: 0, activeAccounts: 0, totalAccounts: 0 } });
+      }
+
+      // Try to load cash data (currently not implemented in backend)
+      try {
+        const [cashBalanceResponse, cashSummaryResponse, cashTransactionsResponse] = await Promise.all([
+          apiClient.get('/cash/balance'),
+          apiClient.get('/cash/summary'),
+          apiClient.get('/cash/transactions?limit=10'),
+        ]);
+        setCashBalance(cashBalanceResponse.data.data.balance);
+        setCashInToday(cashSummaryResponse.data.data.todayIn);
+        setCashOutToday(cashSummaryResponse.data.data.todayOut);
+        setCashTransactions(cashTransactionsResponse.data.data);
+      } catch (error) {
+        console.warn('Cash data not available, using defaults');
+        setCashBalance(0);
+        setCashInToday(0);
+        setCashOutToday(0);
+        setCashTransactions([]);
+      }
     } catch (error: any) {
       console.error('Error loading data:', error);
-      toast.error('Veriler yüklenirken hata oluştu');
+      // Silent fail - component will show with empty data
     } finally {
       setLoading(false);
     }
@@ -112,8 +128,9 @@ export default function CashBankManagement() {
       const response = await apiClient.get(`/cash/cash-flow?year=${cashFlowYear}`);
       setCashFlowData(response.data.data);
     } catch (error: any) {
-      console.error('Error loading cash flow:', error);
-      toast.error('Nakit akışı verileri yüklenemedi');
+      console.warn('Cash flow data not available, using defaults');
+      // Silent fail - component will show with empty data
+      setCashFlowData([]);
     }
   };
 

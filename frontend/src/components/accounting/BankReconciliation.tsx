@@ -432,7 +432,7 @@ export default function BankReconciliation() {
             <span className="hidden sm:inline">Ekstre Yükle</span>
           </button>
           <button
-            onClick={generateMockBankData}
+            onClick={generateMockBankData_DEPRECATED}
             className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
           >
             <RefreshCw size={18} />
