@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
+import JournalEntryFormModal from './JournalEntryFormModal';
 
 interface JournalEntryItem {
   id: number;
@@ -48,6 +49,8 @@ export default function JournalEntryList() {
   const [dateTo, setDateTo] = useState('');
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showFormModal, setShowFormModal] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
 
   useEffect(() => {
     loadJournalEntries();
@@ -160,8 +163,8 @@ export default function JournalEntryList() {
         <button
           className={button('primary', 'md', 'md')}
           onClick={() => {
-            // Navigate to create form
-            toast.success('Yeni fiş oluşturma özelliği yakında eklenecek');
+            setEditingEntry(null);
+            setShowFormModal(true);
           }}
         >
           <Plus className="w-4 h-4" />
@@ -348,7 +351,10 @@ export default function JournalEntryList() {
                         {entry.status === 'DRAFT' && (
                           <>
                             <button
-                              onClick={() => toast.success('Düzenleme özelliği yakında eklenecek')}
+                              onClick={() => {
+                                setEditingEntry(entry);
+                                setShowFormModal(true);
+                              }}
                               className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                               title="Düzenle"
                             >
@@ -542,6 +548,21 @@ export default function JournalEntryList() {
           </div>
         </div>
       )}
+
+      {/* Form Modal */}
+      <JournalEntryFormModal
+        open={showFormModal}
+        onClose={() => {
+          setShowFormModal(false);
+          setEditingEntry(null);
+        }}
+        onSaved={() => {
+          loadJournalEntries();
+          setShowFormModal(false);
+          setEditingEntry(null);
+        }}
+        initialData={editingEntry}
+      />
     </div>
   );
 }

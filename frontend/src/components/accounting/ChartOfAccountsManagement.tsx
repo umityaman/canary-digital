@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
+import AccountFormModal from './AccountFormModal';
 
 interface ChartOfAccount {
   id: number;
@@ -468,27 +469,20 @@ export default function ChartOfAccountsManagement() {
         )}
       </div>
 
-      {/* Create/Edit Modal Placeholder */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6">
-            <h3 className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
-              {editingAccount ? 'Hesap Düzenle' : 'Yeni Hesap Ekle'}
-            </h3>
-            <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mb-6`}>
-              Hesap ekleme/düzenleme formu yakında eklenecek.
-            </p>
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className={button('secondary', 'md', 'md')}
-              >
-                Kapat
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Create/Edit Modal */}
+      <AccountFormModal
+        open={showCreateModal}
+        onClose={() => {
+          setShowCreateModal(false);
+          setEditingAccount(null);
+        }}
+        onSaved={() => {
+          loadAccounts();
+          setShowCreateModal(false);
+          setEditingAccount(null);
+        }}
+        initialData={editingAccount}
+      />
     </div>
   );
 }

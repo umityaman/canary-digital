@@ -3828,6 +3828,330 @@ export class AccountingService {
       throw error;
     }
   }
+
+  /**
+   * Trial Balance Report (Mizan)
+   */
+  async getTrialBalanceReport(params: {
+    companyId: number;
+    startDate?: Date;
+    endDate: Date;
+    accountType?: string;
+    includeZeroBalance: boolean;
+  }) {
+    try {
+      log.info('Generating trial balance report...');
+
+      const { companyId, startDate, endDate, accountType, includeZeroBalance } = params;
+
+      // Get all accounts with transactions
+      const accounts = await prisma.account.findMany({
+        where: {
+          companyId,
+          ...(accountType && accountType !== 'ALL' ? { type: accountType } : {}),
+        },
+        include: {
+          journalEntryItems: {
+            where: {
+              journalEntry: {
+                date: {
+                  ...(startDate ? { gte: startDate } : {}),
+                  lte: endDate,
+                },
+                status: 'POSTED',
+              },
+            },
+          },
+        },
+      });
+
+      const items = accounts
+        .map((account) => {
+          const debit = account.journalEntryItems.reduce(
+            (sum, item) => sum + (item.debit || 0),
+            0
+          );
+          const credit = account.journalEntryItems.reduce(
+            (sum, item) => sum + (item.credit || 0),
+            0
+          );
+
+          return {
+            accountCode: account.code,
+            accountName: account.name,
+            accountType: account.type,
+            debit: Math.round(debit * 100) / 100,
+            credit: Math.round(credit * 100) / 100,
+          };
+        })
+        .filter((item) => includeZeroBalance || item.debit !== 0 || item.credit !== 0);
+
+      const totalDebit = items.reduce((sum, item) => sum + item.debit, 0);
+      const totalCredit = items.reduce((sum, item) => sum + item.credit, 0);
+      const difference = totalDebit - totalCredit;
+
+      log.info('Trial balance report generated');
+
+      return {
+        items,
+        summary: {
+          totalDebit: Math.round(totalDebit * 100) / 100,
+          totalCredit: Math.round(totalCredit * 100) / 100,
+          difference: Math.round(difference * 100) / 100,
+          isBalanced: Math.abs(difference) < 0.01,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to generate trial balance report:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Income Statement Report (Gelir-Gider Tablosu)
+   */
+  async getIncomeStatementReport(params: {
+    companyId: number;
+    startDate: Date;
+    endDate: Date;
+  }) {
+    try {
+      log.info('Generating income statement report...');
+
+      const { companyId, startDate, endDate } = params;
+
+      // Get revenue accounts (6xx)
+      const revenueAccounts = await prisma.account.findMany({
+        where: {
+          companyId,
+          code: { startsWith: '6' },
+        },
+        include: {
+          journalEntryItems: {
+            where: {
+              journalEntry: {
+                date: { gte: startDate, lte: endDate },
+                status: 'POSTED',
+              },
+            },
+          },
+        },
+      });
+
+      // Get expense accounts (7xx)
+      const expenseAccounts = await prisma.account.findMany({
+        where: {
+          companyId,
+          code: { startsWith: '7' },
+        },
+        include: {
+          journalEntryItems: {
+            where: {
+              journalEntry: {
+                date: { gte: startDate, lte: endDate },
+                status: 'POSTED',
+              },
+            },
+          },
+        },
+      });
+
+      const revenues = revenueAccounts.map((account) => {
+        const amount = account.journalEntryItems.reduce(
+          (sum, item) => sum + (item.credit || 0) - (item.debit || 0),
+          0
+        );
+        return {
+          accountCode: account.code,
+          accountName: account.name,
+          amount: Math.round(amount * 100) / 100,
+          percentage: 0, // Will calculate after totals
+        };
+      });
+
+      const expenses = expenseAccounts.map((account) => {
+        const amount = account.journalEntryItems.reduce(
+          (sum, item) => sum + (item.debit || 0) - (item.credit || 0),
+          0
+        );
+        return {
+          accountCode: account.code,
+          accountName: account.name,
+          amount: Math.round(amount * 100) / 100,
+          percentage: 0, // Will calculate after totals
+        };
+      });
+
+      const totalRevenue = revenues.reduce((sum, r) => sum + r.amount, 0);
+      const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
+      const grossProfit = totalRevenue - totalExpense;
+      const netProfit = grossProfit; // Simplified, can add other income/expenses
+      const profitMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
+
+      // Calculate percentages
+      revenues.forEach((r) => {
+        r.percentage = totalRevenue > 0 ? (r.amount / totalRevenue) * 100 : 0;
+      });
+      expenses.forEach((e) => {
+        e.percentage = totalExpense > 0 ? (e.amount / totalExpense) * 100 : 0;
+      });
+
+      log.info('Income statement report generated');
+
+      return {
+        revenues,
+        expenses,
+        summary: {
+          totalRevenue: Math.round(totalRevenue * 100) / 100,
+          totalExpense: Math.round(totalExpense * 100) / 100,
+          grossProfit: Math.round(grossProfit * 100) / 100,
+          netProfit: Math.round(netProfit * 100) / 100,
+          profitMargin: Math.round(profitMargin * 100) / 100,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to generate income statement report:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Balance Sheet Report (Bilanço) - Enhanced Version
+   */
+  async getBalanceSheetReport(params: { companyId: number; date: Date }) {
+    try {
+      log.info('Generating balance sheet report...');
+
+      const { companyId, date } = params;
+
+      // Helper function to build account tree
+      const buildAccountTree = (accounts: any[], type: string) => {
+        const filtered = accounts.filter((acc) => acc.type === type);
+        const tree: any[] = [];
+
+        // Get root accounts (no parent)
+        const roots = filtered.filter((acc) => !acc.parentId);
+
+        roots.forEach((root) => {
+          const item: any = {
+            accountCode: root.code,
+            accountName: root.name,
+            amount: root.balance,
+            percentage: 0, // Will calculate after
+            children: [],
+          };
+
+          // Get children recursively
+          const children = filtered.filter((acc) => acc.parentId === root.id);
+          children.forEach((child) => {
+            item.children.push({
+              accountCode: child.code,
+              accountName: child.name,
+              amount: child.balance,
+              percentage: 0,
+            });
+          });
+
+          tree.push(item);
+        });
+
+        return tree;
+      };
+
+      // Get all accounts with balances
+      const accounts = await prisma.account.findMany({
+        where: { companyId },
+        include: {
+          journalEntryItems: {
+            where: {
+              journalEntry: {
+                date: { lte: date },
+                status: 'POSTED',
+              },
+            },
+          },
+        },
+      });
+
+      // Calculate balances for each account
+      const accountsWithBalances = accounts.map((account) => {
+        const debit = account.journalEntryItems.reduce(
+          (sum, item) => sum + (item.debit || 0),
+          0
+        );
+        const credit = account.journalEntryItems.reduce(
+          (sum, item) => sum + (item.credit || 0),
+          0
+        );
+
+        // Balance sign depends on account type
+        let balance = 0;
+        if (account.type === 'ASSET' || account.type === 'EXPENSE') {
+          balance = debit - credit; // Debit increases
+        } else if (account.type === 'LIABILITY' || account.type === 'EQUITY' || account.type === 'REVENUE') {
+          balance = credit - debit; // Credit increases
+        }
+
+        return {
+          ...account,
+          balance: Math.round(balance * 100) / 100,
+        };
+      });
+
+      // Build trees
+      const assets = buildAccountTree(accountsWithBalances, 'ASSET');
+      const liabilities = buildAccountTree(accountsWithBalances, 'LIABILITY');
+      const equity = buildAccountTree(accountsWithBalances, 'EQUITY');
+
+      const totalAssets = accountsWithBalances
+        .filter((acc) => acc.type === 'ASSET')
+        .reduce((sum, acc) => sum + acc.balance, 0);
+
+      const totalLiabilities = accountsWithBalances
+        .filter((acc) => acc.type === 'LIABILITY')
+        .reduce((sum, acc) => sum + acc.balance, 0);
+
+      const totalEquity = accountsWithBalances
+        .filter((acc) => acc.type === 'EQUITY')
+        .reduce((sum, acc) => sum + acc.balance, 0);
+
+      const totalLiabilitiesAndEquity = totalLiabilities + totalEquity;
+      const difference = totalAssets - totalLiabilitiesAndEquity;
+
+      // Calculate percentages
+      const calcPercentage = (items: any[], total: number) => {
+        items.forEach((item) => {
+          item.percentage = total > 0 ? (item.amount / total) * 100 : 0;
+          if (item.children) {
+            calcPercentage(item.children, total);
+          }
+        });
+      };
+
+      calcPercentage(assets, totalAssets);
+      calcPercentage(liabilities, totalLiabilitiesAndEquity);
+      calcPercentage(equity, totalLiabilitiesAndEquity);
+
+      log.info('Balance sheet report generated');
+
+      return {
+        assets,
+        liabilities,
+        equity,
+        summary: {
+          totalAssets: Math.round(totalAssets * 100) / 100,
+          totalLiabilities: Math.round(totalLiabilities * 100) / 100,
+          totalEquity: Math.round(totalEquity * 100) / 100,
+          totalLiabilitiesAndEquity: Math.round(totalLiabilitiesAndEquity * 100) / 100,
+          isBalanced: Math.abs(difference) < 0.01,
+          difference: Math.round(difference * 100) / 100,
+        },
+      };
+    } catch (error) {
+      log.error('Failed to generate balance sheet report:', error);
+      throw error;
+    }
+  }
 }
 
 export const accountingService = new AccountingService();

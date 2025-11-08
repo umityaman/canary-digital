@@ -17,6 +17,10 @@ import JournalEntryList from '../components/accounting/JournalEntryList'
 import ChartOfAccountsManagement from '../components/accounting/ChartOfAccountsManagement'
 import CurrentAccountManagement from '../components/accounting/CurrentAccountManagement'
 import EInvoiceManagement from '../components/accounting/EInvoiceManagement'
+import BankAccountManagement from '../components/accounting/BankAccountManagement'
+import TrialBalanceReport from '../components/accounting/TrialBalanceReport'
+import IncomeStatementReport from '../components/accounting/IncomeStatementReport'
+import BalanceSheetReport from '../components/accounting/BalanceSheetReport'
 import CardSkeleton from '../components/ui/CardSkeleton'
 import TableSkeleton from '../components/ui/TableSkeleton'
 import LoadingFallback from '../components/ui/LoadingFallback'
@@ -47,7 +51,7 @@ const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab')
 const IntegrationsTab = lazy(() => import('../components/accounting/tabs/IntegrationsTab'))
 const CostAccounting = lazy(() => import('../components/accounting/CostAccounting'))
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations' | 'journal-entries' | 'chart-of-accounts' | 'current-accounts' | 'gib-einvoice'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'bank-integration' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations' | 'journal-entries' | 'chart-of-accounts' | 'current-accounts' | 'gib-einvoice'
 
 interface AccountingStats {
   totalRevenue: number
@@ -195,6 +199,9 @@ export default function Accounting() {
 
   // Receivables sub-tab state
   const [receivablesSubTab, setReceivablesSubTab] = useState<'checks' | 'promissory' | 'aging'>('checks')
+  
+  // Reports sub-tab state
+  const [reportsSubTab, setReportsSubTab] = useState<'advanced' | 'trial-balance' | 'income-statement' | 'balance-sheet'>('advanced')
 
   // Navigation and search params
   const navigate = useNavigate()
@@ -789,6 +796,7 @@ export default function Accounting() {
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
     { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
     { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
+    { id: 'bank-integration' as const, label: 'Banka Entegrasyonu', icon: <Building2 size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
     { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
@@ -945,11 +953,70 @@ export default function Accounting() {
                 {/* GIB e-Invoice Management Tab */}
                 {activeTab === 'gib-einvoice' && <EInvoiceManagement />}
 
+                {/* Bank Integration Tab */}
+                {activeTab === 'bank-integration' && <BankAccountManagement />}
+
             {/* Cari (Current Accounts) Tab - Direct to Account Cards */}
             {activeTab === 'cari' && <AccountCardList />}
 
-            {/* Reports Tab - Advanced Reporting */}
-            {activeTab === 'reports' && <AdvancedReporting />}
+            {/* Reports Tab - Advanced Reporting with Sub-tabs */}
+            {activeTab === 'reports' && (
+              <div className="space-y-6">
+                <h2 className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary} mb-6`}>
+                  Raporlar
+                </h2>
+                
+                {/* Sub-tabs for Reports */}
+                <div className={`flex gap-2 border-b border-gray-200 mb-6`}>
+                  <button
+                    onClick={() => setReportsSubTab('advanced')}
+                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                      reportsSubTab === 'advanced'
+                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Gelişmiş Raporlar
+                  </button>
+                  <button
+                    onClick={() => setReportsSubTab('trial-balance')}
+                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                      reportsSubTab === 'trial-balance'
+                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Mizan
+                  </button>
+                  <button
+                    onClick={() => setReportsSubTab('income-statement')}
+                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                      reportsSubTab === 'income-statement'
+                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Gelir-Gider Tablosu
+                  </button>
+                  <button
+                    onClick={() => setReportsSubTab('balance-sheet')}
+                    className={`px-6 py-3 ${DESIGN_TOKENS.typography.label.lg} transition-colors ${
+                      reportsSubTab === 'balance-sheet'
+                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Bilanço
+                  </button>
+                </div>
+
+                {/* Sub-tab content */}
+                {reportsSubTab === 'advanced' && <AdvancedReporting />}
+                {reportsSubTab === 'trial-balance' && <TrialBalanceReport />}
+                {reportsSubTab === 'income-statement' && <IncomeStatementReport />}
+                {reportsSubTab === 'balance-sheet' && <BalanceSheetReport />}
+              </div>
+            )}
 
             {/* Receivables Management Tab - Çekler, Senetler, Yaşlandırma */}
             {activeTab === 'receivables' && (

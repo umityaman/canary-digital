@@ -27,6 +27,7 @@ const InvoiceForm = lazy(() => import('./pages/InvoiceForm'))
 const InvoiceDetail = lazy(() => import('./pages/InvoiceDetail'))
 const QuoteForm = lazy(() => import('./pages/QuoteForm'))
 const QuoteDetail = lazy(() => import('./pages/QuoteDetail'))
+const CurrentAccountDetail = lazy(() => import('./components/accounting/CurrentAccountDetail'))
 const AccountCardList = lazy(() => import('./pages/AccountCardList'))
 const AccountCardDetail = lazy(() => import('./pages/AccountCardDetail'))
 const Social = lazy(() => import('./pages/Social'))
@@ -109,6 +110,7 @@ export default function App(){
               <Route path='/accounting/quote/new' element={<QuoteForm />} />
               <Route path='/accounting/quote/:id/edit' element={<QuoteForm />} />
               <Route path='/accounting/quote/:id' element={<QuoteDetail />} />
+              <Route path='/accounting/current-account/:id' element={<CurrentAccountDetail />} />
               <Route path='/account-cards' element={<AccountCardList />} />
               <Route path='/account-cards/:id' element={<AccountCardDetail />} />
               <Route path='/social' element={<Social />} />

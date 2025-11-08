@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Users,
   Plus,
@@ -48,6 +49,7 @@ interface CurrentAccount {
 }
 
 export default function CurrentAccountManagement() {
+  const navigate = useNavigate();
   const [accounts, setAccounts] = useState<CurrentAccount[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -115,10 +117,8 @@ export default function CurrentAccountManagement() {
     }
   };
 
-  const handleViewDetail = async (account: CurrentAccount) => {
-    setSelectedAccount(account);
-    setShowDetailModal(true);
-    await loadAccountTransactions(account.id);
+  const handleViewDetail = (account: CurrentAccount) => {
+    navigate(`/accounting/current-account/${account.id}`);
   };
 
   const handleDeleteAccount = async (accountId: number) => {

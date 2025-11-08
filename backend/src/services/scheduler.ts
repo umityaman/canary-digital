@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import { PrismaClient } from '@prisma/client';
 import { sendPickupReminder, sendReturnReminder } from '../utils/emailService';
 import logger from '../config/logger';
+import { bankSyncService } from './bankAPI/bankSyncService';
 
 const prisma = new PrismaClient();
 
@@ -205,16 +206,87 @@ export const startLatePaymentCheckJob = () => {
 };
 
 /**
+ * Bank Sync Job - Banka hesapları otomatik senkronizasyon
+ * Her gün saat 02:00'da çalışır (düşük yoğunlukta)
+ */
+export const startBankSyncJob = () => {
+  // Daily full sync at 2 AM
+  cron.schedule('0 2 * * *', async () => {
+    try {
+      logger.info('🏦 Daily bank sync job started');
+
+      // Get all companies (in multi-tenant scenario, loop through all)
+      const companies = await prisma.company.findMany({
+        select: { id: true, name: true }
+      });
+
+      for (const company of companies) {
+        try {
+          logger.info(`Syncing banks for company: ${company.name} (ID: ${company.id})`);
+          await bankSyncService.scheduledSync(company.id);
+        } catch (error: any) {
+          logger.error(`Bank sync failed for company ${company.id}:`, error.message);
+        }
+      }
+
+      logger.info('🏦 Daily bank sync job completed');
+    } catch (error: any) {
+      logger.error('❌ Bank sync job failed:', error.message);
+    }
+  });
+
+  logger.info('✅ Bank sync cron job started (runs daily at 02:00)');
+};
+
+/**
+ * Hourly Bank Transaction Sync - Sadece işlemler (daha hızlı)
+ * İş saatleri içinde her saat başı (09:00 - 18:00)
+ */
+export const startHourlyBankTransactionSync = () => {
+  // Hourly transaction sync during business hours (9 AM - 6 PM)
+  cron.schedule('0 9-18 * * *', async () => {
+    try {
+      logger.info('🏦 Hourly bank transaction sync started');
+
+      const companies = await prisma.company.findMany({
+        select: { id: true, name: true }
+      });
+
+      for (const company of companies) {
+        try {
+          // Only sync transactions (last 1 day), not accounts
+          await bankSyncService.syncAllTransactions(company.id, 1);
+          logger.info(`✅ Transactions synced for company ${company.name}`);
+        } catch (error: any) {
+          logger.error(`Transaction sync failed for company ${company.id}:`, error.message);
+        }
+      }
+
+      logger.info('🏦 Hourly transaction sync completed');
+    } catch (error: any) {
+      logger.error('❌ Hourly transaction sync failed:', error.message);
+    }
+  });
+
+  logger.info('✅ Hourly bank transaction sync started (runs 9 AM - 6 PM)');
+};
+
+/**
  * Tüm scheduler'ları başlat
  */
 export const startAllSchedulers = () => {
-  logger.info('🚀 Starting all email schedulers...');
+  logger.info('🚀 Starting all schedulers...');
   
+  // Email reminders
   startPickupReminderJob();
   startReturnReminderJob();
   startLatePaymentCheckJob();
   
-  logger.info('✅ All email schedulers started successfully');
+  // Bank synchronization
+  startBankSyncJob();
+  startHourlyBankTransactionSync();
+  
+  logger.info('✅ All schedulers started successfully');
 };
 
 /**

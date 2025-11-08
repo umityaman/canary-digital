@@ -414,19 +414,91 @@ router.get('/reports/profit-loss', authenticateToken, async (req, res) => {
 });
 
 /**
- * @route   GET /api/accounting/reports/balance-sheet
- * @desc    Bilanço raporu (assets, liabilities, equity)
+ * @route   GET /api/accounting/reports/trial-balance
+ * @desc    Mizan raporu (Trial Balance)
  * @access  Private
- * @query   asOfDate (default: today)
+ * @query   startDate, endDate, accountType, includeZeroBalance
+ */
+router.get('/reports/trial-balance', authenticateToken, async (req, res) => {
+  try {
+    const { startDate, endDate, accountType, includeZeroBalance } = req.query;
+    const companyId = (req as any).companyId || 1;
+
+    const report = await accountingService.getTrialBalanceReport({
+      companyId,
+      startDate: startDate ? new Date(startDate as string) : undefined,
+      endDate: endDate ? new Date(endDate as string) : new Date(),
+      accountType: accountType as string | undefined,
+      includeZeroBalance: includeZeroBalance === 'true',
+    });
+
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error: any) {
+    log.error('Failed to get trial balance report:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get trial balance report',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/reports/income-statement
+ * @desc    Gelir-Gider Tablosu (Income Statement)
+ * @access  Private
+ * @query   startDate, endDate
+ */
+router.get('/reports/income-statement', authenticateToken, async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    const companyId = (req as any).companyId || 1;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        message: 'startDate and endDate are required',
+      });
+    }
+
+    const report = await accountingService.getIncomeStatementReport({
+      companyId,
+      startDate: new Date(startDate as string),
+      endDate: new Date(endDate as string),
+    });
+
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error: any) {
+    log.error('Failed to get income statement report:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get income statement report',
+    });
+  }
+});
+
+/**
+ * @route   GET /api/accounting/reports/balance-sheet
+ * @desc    Bilanço raporu (Balance Sheet)
+ * @access  Private
+ * @query   date (default: today)
  */
 router.get('/reports/balance-sheet', authenticateToken, async (req, res) => {
   try {
-    const { asOfDate } = req.query;
+    const { date } = req.query;
     const companyId = (req as any).companyId || 1;
 
-    const date = asOfDate ? new Date(asOfDate as string) : new Date();
+    const reportDate = date ? new Date(date as string) : new Date();
 
-    const report = await accountingService.getBalanceSheetReport(companyId, date);
+    const report = await accountingService.getBalanceSheetReport({
+      companyId,
+      date: reportDate,
+    });
 
     res.json({
       success: true,

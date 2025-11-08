@@ -238,6 +238,9 @@ safeLoadRoute('/api/cms/menus', './routes/cms-menus', 'CMS Menus');
 // AI Chatbot Module Routes
 safeLoadRoute('/api/chatbot', './routes/chatbot', 'AI Chatbot');
 
+// Bank API Integration Routes
+safeLoadRoute('/api/bank', './routes/bankIntegration', 'Bank API Integration');
+
 logger.info('🎯 All routes loaded successfully');
 
 // Sentry error handler (must be before other error handlers) - TEMPORARILY DISABLED
