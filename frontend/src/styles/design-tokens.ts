@@ -403,5 +403,8 @@ export const getSemanticColor = (type: keyof typeof DESIGN_TOKENS.colors.semanti
   return DESIGN_TOKENS.colors.semantic[type]
 }
 
+// Export as default for better bundling
+export default DESIGN_TOKENS
+
 // Export individual tokens for direct usage
 export const { spacing, radius, shadow, colors, typography } = DESIGN_TOKENS
