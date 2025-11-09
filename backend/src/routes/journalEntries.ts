@@ -54,28 +54,22 @@ router.get('/', authenticateToken, async (req, res) => {
       };
     }
 
+    // Optimize: Remove heavy joins for performance on db-f1-micro
     const [entries, total] = await Promise.all([
       prisma.journalEntry.findMany({
         where,
-        include: {
-          journalEntryItems: {
-            include: {
-              account: {
-                select: {
-                  code: true,
-                  name: true,
-                  type: true,
-                },
-              },
-            },
-          },
-          creator: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
+        select: {
+          id: true,
+          entryNumber: true,
+          entryDate: true,
+          entryType: true,
+          description: true,
+          reference: true,
+          totalDebit: true,
+          totalCredit: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
         },
         orderBy: {
           [sortBy as string]: sortOrder as string,

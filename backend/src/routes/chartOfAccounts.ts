@@ -12,7 +12,7 @@ const router = express.Router();
  */
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const { type, search } = req.query;
+    const { type, search, limit = '1000' } = req.query;
 
     const where: any = {};
 
@@ -42,6 +42,7 @@ router.get('/', authenticateToken, async (req, res) => {
       orderBy: {
         code: 'asc',
       },
+      take: parseInt(limit as string),
     });
 
     res.json({
