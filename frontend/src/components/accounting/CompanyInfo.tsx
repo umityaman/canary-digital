@@ -645,13 +645,13 @@ const CompanyInfo: React.FC = () => {
               <div className="p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-gray-600">Toplam Bakiye</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600`}>
-                  {formatCurrency(bankAccounts.totals.totalBalance)}
+                  {formatCurrency(bankAccounts?.totals?.totalBalance || 0)}
                 </p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg">
                 <p className="text-sm text-gray-600">Kullanılabilir</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
-                  {formatCurrency(bankAccounts.totals.totalAvailable)}
+                  {formatCurrency(bankAccounts?.totals?.totalAvailable || 0)}
                 </p>
               </div>
               <div className="p-4 bg-orange-50 rounded-lg">
