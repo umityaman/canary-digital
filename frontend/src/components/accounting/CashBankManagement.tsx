@@ -180,7 +180,7 @@ export default function CashBankManagement() {
     }
   };
 
-  const totalBalance = (bankAccounts?.totals.totalBalance || 0) + cashBalance;
+  const totalBalance = (bankAccounts?.totals?.totalBalance || 0) + cashBalance;
 
   if (loading) {
     return (
@@ -228,10 +228,10 @@ export default function CashBankManagement() {
             <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Banka</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 mb-1">
-            {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
+            {formatCurrency(bankAccounts?.totals?.totalBalance || 0)}
           </p>
           <p className="text-sm text-gray-600">
-            {bankAccounts?.totals.activeAccounts || 0} Aktif Hesap
+            {bankAccounts?.totals?.activeAccounts || 0} Aktif Hesap
           </p>
         </div>
 
@@ -338,14 +338,14 @@ export default function CashBankManagement() {
                       <Building2 className="w-5 h-5 text-blue-600" />
                     </div>
                     <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600 mb-2`}>
-                      {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
+                      {formatCurrency(bankAccounts?.totals?.totalBalance || 0)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">
-                        {bankAccounts?.totals.totalAccounts || 0} Hesap
+                        {bankAccounts?.totals?.totalAccounts || 0} Hesap
                       </span>
                       <span className="text-green-600">
-                        {bankAccounts?.totals.activeAccounts || 0} Aktif
+                        {bankAccounts?.totals?.activeAccounts || 0} Aktif
                       </span>
                     </div>
                   </div>
@@ -380,7 +380,7 @@ export default function CashBankManagement() {
                       </button>
                     </div>
                   ) : (
-                    cashTransactions.map((transaction) => (
+                    (cashTransactions || []).map((transaction) => (
                     <div
                       key={transaction.id}
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -447,7 +447,7 @@ export default function CashBankManagement() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {bankAccounts?.accounts.map((account) => (
+                    {(bankAccounts?.accounts || []).map((account) => (
                       <tr key={account.id} className="hover:bg-gray-50">
                         <td className="px-4 py-3">
                           <div>
@@ -612,7 +612,7 @@ export default function CashBankManagement() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
-                        {cashFlowData.map((monthData) => (
+                        {(cashFlowData || []).map((monthData) => (
                           <tr key={monthData.month} className="hover:bg-gray-50">
                             <td className="px-4 py-3 text-sm font-medium text-gray-900">
                               {new Date(cashFlowYear, monthData.month - 1).toLocaleDateString(
