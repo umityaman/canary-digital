@@ -15,7 +15,7 @@ router.get('/', authenticateToken, async (req, res) => {
     const {
       page = '1',
       limit = '20',
-      sortBy = 'date',
+      sortBy = 'entryDate',
       sortOrder = 'desc',
       startDate,
       endDate,
@@ -54,16 +54,22 @@ router.get('/', authenticateToken, async (req, res) => {
       prisma.journalEntry.findMany({
         where,
         include: {
-          debitAccount: {
-            select: {
-              code: true,
-              name: true,
+          journalEntryItems: {
+            include: {
+              account: {
+                select: {
+                  code: true,
+                  name: true,
+                  type: true,
+                },
+              },
             },
           },
-          creditAccount: {
+          creator: {
             select: {
-              code: true,
+              id: true,
               name: true,
+              email: true,
             },
           },
         },
@@ -109,65 +115,78 @@ router.get('/', authenticateToken, async (req, res) => {
 router.post('/', authenticateToken, async (req, res) => {
   try {
     const {
-      date,
+      entryDate,
       description,
-      debitAccountCode,
-      creditAccountCode,
-      amount,
+      items, // Array of { accountCode, debit, credit }
       reference,
+      companyId,
     } = req.body;
 
     // Validation
-    if (!date || !description || !debitAccountCode || !creditAccountCode || !amount) {
+    if (!entryDate || !description || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields',
+        message: 'Missing required fields: entryDate, description, items',
       });
     }
 
-    // Verify accounts exist
-    const [debitAccount, creditAccount] = await Promise.all([
-      prisma.chartOfAccounts.findUnique({
-        where: { code: debitAccountCode },
-      }),
-      prisma.chartOfAccounts.findUnique({
-        where: { code: creditAccountCode },
-      }),
-    ]);
+    // Verify balanced (total debit = total credit)
+    const totalDebit = items.reduce((sum: number, item: any) => sum + (parseFloat(item.debit) || 0), 0);
+    const totalCredit = items.reduce((sum: number, item: any) => sum + (parseFloat(item.credit) || 0), 0);
 
-    if (!debitAccount || !creditAccount) {
-      return res.status(404).json({
+    if (Math.abs(totalDebit - totalCredit) > 0.01) {
+      return res.status(400).json({
         success: false,
-        message: 'One or both account codes not found',
+        message: `Journal entry not balanced. Debit: ${totalDebit}, Credit: ${totalCredit}`,
       });
     }
+
+    // Get next entry number
+    const lastEntry = await prisma.journalEntry.findFirst({
+      where: { companyId: companyId || 1 },
+      orderBy: { entryNumber: 'desc' },
+    });
+
+    const year = new Date().getFullYear();
+    const nextNum = lastEntry ? parseInt(lastEntry.entryNumber.split('-')[1]) + 1 : 1;
+    const entryNumber = `${year}-${String(nextNum).padStart(4, '0')}`;
 
     const entry = await prisma.journalEntry.create({
       data: {
-        date: new Date(date),
+        entryNumber,
+        entryDate: new Date(entryDate),
         description,
-        debitAccountCode,
-        creditAccountCode,
-        amount: parseFloat(amount),
         reference,
+        totalDebit,
+        totalCredit,
+        companyId: companyId || 1,
+        createdBy: (req as any).user?.id || 1,
+        status: 'posted',
+        journalEntryItems: {
+          create: items.map((item: any) => ({
+            accountCode: item.accountCode,
+            debit: parseFloat(item.debit) || 0,
+            credit: parseFloat(item.credit) || 0,
+            description: item.description || description,
+          })),
+        },
       },
       include: {
-        debitAccount: {
-          select: {
-            code: true,
-            name: true,
-          },
-        },
-        creditAccount: {
-          select: {
-            code: true,
-            name: true,
+        journalEntryItems: {
+          include: {
+            account: {
+              select: {
+                code: true,
+                name: true,
+                type: true,
+              },
+            },
           },
         },
       },
     });
 
-    log.info('Journal entry created:', { entryId: entry.id });
+    log.info('Journal entry created:', { entryId: entry.id, entryNumber });
 
     res.status(201).json({
       success: true,
@@ -195,16 +214,29 @@ router.get('/:id', authenticateToken, async (req, res) => {
     const entry = await prisma.journalEntry.findUnique({
       where: { id: parseInt(id) },
       include: {
-        debitAccount: {
-          select: {
-            code: true,
-            name: true,
+        journalEntryItems: {
+          include: {
+            account: {
+              select: {
+                code: true,
+                name: true,
+                type: true,
+              },
+            },
           },
         },
-        creditAccount: {
+        creator: {
           select: {
-            code: true,
+            id: true,
             name: true,
+            email: true,
+          },
+        },
+        poster: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
           },
         },
       },
