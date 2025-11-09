@@ -100,8 +100,26 @@ router.get('/', authenticateToken, async (req, res) => {
               paymentMethod: true,
             },
           },
-          eInvoice: true,
-          eArchiveInvoice: true,
+          eInvoice: {
+            select: {
+              id: true,
+              uuid: true,
+              ettn: true,
+              // status: true, // TODO: Add migration for Cloud SQL
+              gibStatus: true,
+              sentAt: true,
+              receivedAt: true,
+              errorMessage: true,
+            },
+          },
+          eArchiveInvoice: {
+            select: {
+              id: true,
+              archiveId: true,
+              portalStatus: true,
+              pdfUrl: true,
+            },
+          },
         },
         orderBy: {
           [sortBy as string]: sortOrder as string,
