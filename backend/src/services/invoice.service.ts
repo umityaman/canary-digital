@@ -546,12 +546,12 @@ export class InvoiceService {
             select: {
               id: true,
               uuid: true,
-              ettn: true,
+              // ettn: true, // TODO: Add migration for Cloud SQL
               // status: true, // TODO: Add migration for Cloud SQL
               gibStatus: true,
-              sentAt: true,
-              receivedAt: true,
-              errorMessage: true,
+              // sentAt: true, // TODO: Add migration for Cloud SQL
+              // receivedAt: true, // TODO: Add migration for Cloud SQL
+              // errorMessage: true, // TODO: Add migration for Cloud SQL
             },
           },
           eArchiveInvoice: {
@@ -638,12 +638,12 @@ export class InvoiceService {
             select: {
               id: true,
               uuid: true,
-              ettn: true,
+              // ettn: true, // TODO: Add migration for Cloud SQL
               // status: true, // TODO: Add migration for Cloud SQL
               gibStatus: true,
-              sentAt: true,
-              receivedAt: true,
-              errorMessage: true,
+              // sentAt: true, // TODO: Add migration for Cloud SQL
+              // receivedAt: true, // TODO: Add migration for Cloud SQL
+              // errorMessage: true, // TODO: Add migration for Cloud SQL
             },
           },
           eArchiveInvoice: {
