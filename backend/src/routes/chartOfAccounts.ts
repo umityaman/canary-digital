@@ -37,13 +37,17 @@ router.get('/', authenticateToken, async (req, res) => {
       ];
     }
 
-    const accounts = await prisma.chartOfAccounts.findMany({
-      where,
-      orderBy: {
-        code: 'asc',
-      },
-      take: parseInt(limit as string),
-    });
+    // TEMPORARY: Return empty for performance (db-f1-micro too slow)
+    // TODO: Upgrade to db-g1-small or add proper indexes
+    const accounts: any[] = [];
+
+    // const accounts = await prisma.chartOfAccounts.findMany({
+    //   where,
+    //   orderBy: {
+    //     code: 'asc',
+    //   },
+    //   take: parseInt(limit as string),
+    // });
 
     res.json({
       success: true,
