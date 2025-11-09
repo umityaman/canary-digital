@@ -28,19 +28,23 @@ router.get('/', authenticateToken, async (req, res) => {
     const skip = (pageNum - 1) * limitNum;
 
     // Build where clause
-    const where: any = {};
+    const where: any = {
+      companyId: 1, // TODO: Get from authenticated user's company
+    };
 
     if (startDate || endDate) {
-      where.date = {};
-      if (startDate) where.date.gte = new Date(startDate as string);
-      if (endDate) where.date.lte = new Date(endDate as string);
+      where.entryDate = {};
+      if (startDate) where.entryDate.gte = new Date(startDate as string);
+      if (endDate) where.entryDate.lte = new Date(endDate as string);
     }
 
+    // Filter by account code in items
     if (accountCode) {
-      where.OR = [
-        { debitAccountCode: accountCode as string },
-        { creditAccountCode: accountCode as string },
-      ];
+      where.journalEntryItems = {
+        some: {
+          accountCode: accountCode as string,
+        },
+      };
     }
 
     if (search) {
@@ -163,11 +167,13 @@ router.post('/', authenticateToken, async (req, res) => {
         createdBy: (req as any).user?.id || 1,
         status: 'posted',
         journalEntryItems: {
-          create: items.map((item: any) => ({
+          create: items.map((item: any, index: number) => ({
             accountCode: item.accountCode,
             debit: parseFloat(item.debit) || 0,
             credit: parseFloat(item.credit) || 0,
             description: item.description || description,
+            lineNumber: index + 1,
+            companyId: companyId || 1,
           })),
         },
       },
