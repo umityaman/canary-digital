@@ -266,7 +266,7 @@ model Customer {
   parasutId         String?
   companyId         Int?
   companyName       String?
-  accountCardId     Int?             // Cari hesap ba��lant�s�
+  // accountCardId     Int?             // TODO: Add migration for Cloud SQL
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   calendarEvents    CalendarEvent[]
@@ -276,10 +276,10 @@ model Customer {
   // Accounting relations
   checks            Check[]
   promissoryNotes   PromissoryNote[]
-  accountCard       AccountCard?     @relation("CustomerAccountCard", fields: [accountCardId], references: [id])
+  // accountCard       AccountCard?     @relation("CustomerAccountCard", fields: [accountCardId], references: [id])
   reminders         Reminder[]       @relation("CustomerReminders")
 
-  @@index([accountCardId])
+  // @@index([accountCardId])
 }
 
 model Order {
@@ -1089,12 +1089,12 @@ model Invoice {
   type             String            @default("rental")
   currency         String            @default("TRY")
   companyId        Int?
-  accountCardId    Int?
+  // accountCardId    Int?  // TODO: Add migration for Cloud SQL
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   customer         User              @relation(fields: [customerId], references: [id])
   order            Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  accountCard      AccountCard?      @relation("AccountCardInvoices", fields: [accountCardId], references: [id])
+  // accountCard      AccountCard?      @relation("AccountCardInvoices", fields: [accountCardId], references: [id])
   items            InvoiceItem[]
   payments         Payment[]
   transactions     Transaction[]
@@ -1284,9 +1284,9 @@ model Expense {
   bankTransactions BankTransaction[]
   // Supplier relation
   supplier         Supplier?         @relation(fields: [supplierId], references: [id])
-  // Account Card relation
-  accountCardId    Int?
-  accountCard      AccountCard?      @relation("AccountCardExpenses", fields: [accountCardId], references: [id])
+  // Account Card relation - TODO: Add migration for Cloud SQL
+  // accountCardId    Int?
+  // accountCard      AccountCard?      @relation("AccountCardExpenses", fields: [accountCardId], references: [id])
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   company          Company           @relation(fields: [companyId], references: [id])
@@ -1296,7 +1296,7 @@ model Expense {
   @@index([date])
   @@index([costCenterId])
   @@index([supplierId])
-  @@index([accountCardId])
+  // @@index([accountCardId])
 }
 
 // Account Card (Cari Hesap) Models
@@ -1640,16 +1640,16 @@ model Supplier {
   taxOffice     String?
   parasutId     String?
   companyId     Int
-  accountCardId Int?         // Cari hesap ba��lant�s�
+  // accountCardId Int?         // TODO: Add migration for Cloud SQL
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   company       Company      @relation(fields: [companyId], references: [id])
   expenses      Expense[]
-  accountCard   AccountCard? @relation("SupplierAccountCard", fields: [accountCardId], references: [id])
+  // accountCard   AccountCard? @relation("SupplierAccountCard", fields: [accountCardId], references: [id])
 
   @@index([companyId])
   @@index([name])
-  @@index([accountCardId])
+  // @@index([accountCardId])
 }
 
 model SavedSearch {
