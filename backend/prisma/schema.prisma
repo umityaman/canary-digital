@@ -1331,10 +1331,11 @@ model AccountCard {
   company         Company                   @relation("CompanyAccountCards", fields: [companyId], references: [id])
   user            User                      @relation("AccountCardCreator", fields: [createdBy], references: [id])
   transactions    AccountCardTransaction[]
-  invoices        Invoice[]                 @relation("AccountCardInvoices")
-  expenses        Expense[]                 @relation("AccountCardExpenses")
-  customers       Customer[]                @relation("CustomerAccountCard")
-  suppliers       Supplier[]                @relation("SupplierAccountCard")
+  // TODO: Re-enable after Cloud SQL migration
+  // invoices        Invoice[]                 @relation("AccountCardInvoices")
+  // expenses        Expense[]                 @relation("AccountCardExpenses")
+  // customers       Customer[]                @relation("CustomerAccountCard")
+  // suppliers       Supplier[]                @relation("SupplierAccountCard")
 
   @@index([companyId])
   @@index([type])
