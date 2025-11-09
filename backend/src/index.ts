@@ -1,3 +1,4 @@
+// Trigger deploy with schema fix
 import dotenv from 'dotenv';
 dotenv.config();
 import app from './app';
@@ -32,3 +33,4 @@ app.listen(PORT, ()=>{
     logger.info('📧 Email schedulers disabled (ENABLE_EMAIL_SCHEDULERS=false)');
   }
 });
+
