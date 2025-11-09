@@ -36,12 +36,24 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Manual chunking for better caching
-        manualChunks: {
+        manualChunks(id) {
+          // Design tokens in main chunk to avoid undefined errors
+          if (id.includes('design-tokens')) {
+            return 'index'
+          }
           // Vendor chunks
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['lucide-react'],
-          'chart-vendor': ['chart.js', 'react-chartjs-2'],
-          'state-vendor': ['zustand'],
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
+            return 'react-vendor'
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'ui-vendor'
+          }
+          if (id.includes('node_modules/chart.js') || id.includes('node_modules/react-chartjs-2')) {
+            return 'chart-vendor'
+          }
+          if (id.includes('node_modules/zustand')) {
+            return 'state-vendor'
+          }
         },
       },
     },
