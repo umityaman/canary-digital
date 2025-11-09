@@ -657,13 +657,13 @@ const CompanyInfo: React.FC = () => {
               <div className="p-4 bg-orange-50 rounded-lg">
                 <p className="text-sm text-gray-600">Bloke</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-600`}>
-                  {formatCurrency(bankAccounts.totals.totalBlocked)}
+                  {formatCurrency(bankAccounts?.totals?.totalBlocked || 0)}
                 </p>
               </div>
               <div className="p-4 bg-purple-50 rounded-lg">
                 <p className="text-sm text-gray-600">Aktif Hesap</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-600`}>
-                  {bankAccounts.totals.activeAccounts} / {bankAccounts.totals.totalAccounts}
+                  {bankAccounts?.totals?.activeAccounts || 0} / {bankAccounts?.totals?.totalAccounts || 0}
                 </p>
               </div>
             </div>
