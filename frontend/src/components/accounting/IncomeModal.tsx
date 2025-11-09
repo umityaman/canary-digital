@@ -110,7 +110,7 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className={cx(card('lg', 'none', 'default', 'xl'), 'w-full max-w-2xl max-h-[90vh] overflow-y-auto')}>
-        <div className={cx('sticky top-0 bg-white border-b border-neutral-200', DESIGN_TOKENS.spacing.padding.md, 'flex items-center justify-between')}>
+        <div className={cx('sticky top-0 bg-white border-b border-neutral-200', DESIGN_TOKENS?.spacing?.padding.md, 'flex items-center justify-between')}>
           <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {initial ? 'Gelir Düzenle' : 'Yeni Gelir'}
           </h2>
@@ -122,7 +122,7 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className={cx(DESIGN_TOKENS.spacing.padding.md, 'space-y-4')}>
+        <form onSubmit={handleSubmit} className={cx(DESIGN_TOKENS?.spacing?.padding.md, 'space-y-4')}>
           {/* Açıklama */}
           <div>
             <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>

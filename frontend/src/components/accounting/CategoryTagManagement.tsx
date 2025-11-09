@@ -185,14 +185,14 @@ export default function CategoryTagManagement() {
 
             {/* Category Stats */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-green-50`}>
+              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.md} bg-green-50`}>
                 <div className="flex items-center justify-between">
                   <TrendingUp className="w-6 h-6 text-green-600" />
                   <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600`}>{incomeCount}</span>
                 </div>
                 <p className={`${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-2`}>Gelir Kategorisi</p>
               </div>
-              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md} bg-red-50`}>
+              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.md} bg-red-50`}>
                 <div className="flex items-center justify-between">
                   <TrendingDown className="w-6 h-6 text-red-600" />
                   <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600`}>{expenseCount}</span>
@@ -350,7 +350,7 @@ export default function CategoryTagManagement() {
 
             {/* Tag Form */}
             {showTagForm && (
-              <div className={`mb-6 p-4 bg-blue-50 ${DESIGN_TOKENS.radius.md} border border-blue-200`}>
+              <div className={`mb-6 p-4 bg-blue-50 ${DESIGN_TOKENS?.radius?.md} border border-blue-200`}>
                 <h4 className={`${DESIGN_TOKENS?.typography?.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-3`}>
                   {editingTagId ? 'Etiket Düzenle' : 'Yeni Etiket'}
                 </h4>
@@ -374,7 +374,7 @@ export default function CategoryTagManagement() {
                         type="color"
                         value={tagFormData.color}
                         onChange={(e) => setTagFormData({ ...tagFormData, color: e.target.value })}
-                        className={`w-12 h-10 border ${DESIGN_TOKENS?.colors?.border.default} ${DESIGN_TOKENS.radius.sm} cursor-pointer`}
+                        className={`w-12 h-10 border ${DESIGN_TOKENS?.colors?.border.default} ${DESIGN_TOKENS?.radius?.sm} cursor-pointer`}
                       />
                       <input
                         type="text"

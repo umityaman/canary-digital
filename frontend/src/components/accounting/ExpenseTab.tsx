@@ -192,7 +192,7 @@ export default function ExpenseTab() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className={cx(card('md', 'sm', 'default', 'lg'), getStatGradient('expense'), 'text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
               <TrendingDown size={24} />
             </div>
             <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Bu Ay</span>
@@ -203,7 +203,7 @@ export default function ExpenseTab() {
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-orange-500 to-orange-600 text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
               <DollarSign size={24} />
             </div>
             <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam</span>
@@ -214,7 +214,7 @@ export default function ExpenseTab() {
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-purple-500 to-purple-600 text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
               <FileText size={24} />
             </div>
             <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Kayıt</span>
@@ -241,14 +241,14 @@ export default function ExpenseTab() {
                 <div key={stat.category}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 ${DESIGN_TOKENS.radius.full} ${stat.color}`} />
+                      <div className={`w-3 h-3 ${DESIGN_TOKENS?.radius?.full} ${stat.color}`} />
                       <span className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary}`}>{stat.category}</span>
                     </div>
                     <span className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{stat.percentage.toFixed(1)}%</span>
                   </div>
-                  <div className={`w-full ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.full} h-2`}>
+                  <div className={`w-full ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.full} h-2`}>
                     <div
-                      className={`${stat.color} h-2 ${DESIGN_TOKENS.radius.full} transition-all`}
+                      className={`${stat.color} h-2 ${DESIGN_TOKENS?.radius?.full} transition-all`}
                       style={{ width: `${stat.percentage}%` }}
                     />
                   </div>
@@ -260,7 +260,7 @@ export default function ExpenseTab() {
             <div className="space-y-2">
               <h4 className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary} mb-3`}>En Yüksek Giderler</h4>
               {categoryStats.slice(0, 5).map((stat) => (
-                <div key={stat.category} className={`flex items-center justify-between p-3 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md}`}>
+                <div key={stat.category} className={`flex items-center justify-between p-3 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.md}`}>
                   <div>
                     <div className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.primary}`}>{stat.category}</div>
                     <div className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{stat.count} kayıt</div>

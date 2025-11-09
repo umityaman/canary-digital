@@ -843,7 +843,7 @@ export default function Accounting() {
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('revenue')} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
-                <TrendingUp className={DESIGN_TOKENS.colors.semantic.success.text} size={24} />
+                <TrendingUp className={DESIGN_TOKENS?.colors?.semantic?.success?.text} size={24} />
               </div>
               {stats && stats.invoiceCount > 0 && (
                 <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
@@ -861,7 +861,7 @@ export default function Accounting() {
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('expense')} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
-                <TrendingDown className={DESIGN_TOKENS.colors.semantic.error.text} size={24} />
+                <TrendingDown className={DESIGN_TOKENS?.colors?.semantic?.error?.text} size={24} />
               </div>
             </div>
             <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
@@ -874,7 +874,7 @@ export default function Accounting() {
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('profit', stats?.netProfit)} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
-                <DollarSign className={stats && stats.netProfit >= 0 ? DESIGN_TOKENS.colors.semantic.info.text : DESIGN_TOKENS.colors.semantic.error.text} size={24} />
+                <DollarSign className={stats && stats.netProfit >= 0 ? DESIGN_TOKENS?.colors?.semantic?.info?.text : DESIGN_TOKENS?.colors?.semantic?.error?.text} size={24} />
               </div>
               <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Net</span>
             </div>
@@ -890,7 +890,7 @@ export default function Accounting() {
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 ${getStatGradient('overdue')} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
-                <Clock className={DESIGN_TOKENS.colors.semantic.error.text} size={24} />
+                <Clock className={DESIGN_TOKENS?.colors?.semantic?.error?.text} size={24} />
               </div>
               <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Bekleyen</span>
             </div>
@@ -1520,7 +1520,7 @@ export default function Accounting() {
                                         onClick={() => setOpenInvoiceDropdown(openInvoiceDropdown === invoice.id ? null : invoice.id)}
                                         className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.muted} ${DESIGN_TOKENS?.radius.md} transition-colors`}
                                       >
-                                        <MoreVertical size={18} className={DESIGN_TOKENS.colors.text.tertiary} />
+                                        <MoreVertical size={18} className={DESIGN_TOKENS?.colors?.text.tertiary} />
                                       </button>
                                       {openInvoiceDropdown === invoice.id && (
                                         <>
@@ -1937,7 +1937,7 @@ export default function Accounting() {
                                         onClick={() => setOpenOfferDropdown(openOfferDropdown === offer.id ? null : offer.id)}
                                         className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius.md} rounded transition-colors`}
                                       >
-                                        <MoreVertical size={18} className={DESIGN_TOKENS.colors.text.tertiary} />
+                                        <MoreVertical size={18} className={DESIGN_TOKENS?.colors?.text.tertiary} />
                                       </button>
                                       {openOfferDropdown === offer.id && (
                                         <>

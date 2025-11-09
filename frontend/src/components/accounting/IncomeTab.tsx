@@ -175,7 +175,7 @@ export default function IncomeTab() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className={cx(card('md', 'sm', 'default', 'lg'), getStatGradient('revenue'), 'text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} rounded flex items-center justify-center`}>
               <TrendingUp size={24} />
             </div>
             <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Bu Ay</span>
@@ -186,7 +186,7 @@ export default function IncomeTab() {
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-blue-500 to-blue-600 text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} rounded flex items-center justify-center`}>
               <DollarSign size={24} />
             </div>
             <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam</span>
@@ -197,7 +197,7 @@ export default function IncomeTab() {
 
         <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-purple-500 to-purple-600 text-white')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS.radius.md} rounded flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} rounded flex items-center justify-center`}>
               <FileText size={24} />
             </div>
             <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Kayıt</span>
@@ -223,9 +223,9 @@ export default function IncomeTab() {
                     </span>
                   </div>
                 </div>
-                <div className={`w-full ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.full} rounded-full h-2`}>
+                <div className={`w-full ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.full} rounded-full h-2`}>
                   <div
-                    className={`bg-green-500 h-2 ${DESIGN_TOKENS.radius.full} rounded-full transition-all`}
+                    className={`bg-green-500 h-2 ${DESIGN_TOKENS?.radius?.full} rounded-full transition-all`}
                     style={{ width: `${stat.percentage}%` }}
                   />
                 </div>

@@ -387,7 +387,7 @@ export default function AccountingDashboard() {
               <Download size={16} />
               <span className="hidden sm:inline">Dışa Aktar</span>
             </button>
-            <div className={`hidden group-hover:block absolute right-0 top-full mt-1 ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS?.colors?.bg.primary} border ${DESIGN_TOKENS?.colors?.border.default} py-2 min-w-[160px] z-10`}>
+            <div className={`hidden group-hover:block absolute right-0 top-full mt-1 ${DESIGN_TOKENS?.shadow?.lg} ${DESIGN_TOKENS?.radius?.md} ${DESIGN_TOKENS?.colors?.bg.primary} border ${DESIGN_TOKENS?.colors?.border.default} py-2 min-w-[160px] z-10`}>
               <button
                 onClick={handleExportPDF}
                 disabled={exporting}
@@ -445,7 +445,7 @@ export default function AccountingDashboard() {
         {/* Income Card */}
         <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-green-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-green-500 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
               <TrendingUp className="text-white" size={24} />
             </div>
             <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
@@ -467,7 +467,7 @@ export default function AccountingDashboard() {
         {/* Expense Card */}
         <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-red-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-red-500 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
               <TrendingDown className="text-white" size={24} />
             </div>
             <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
@@ -493,7 +493,7 @@ export default function AccountingDashboard() {
             : 'from-orange-50 to-orange-100 border-orange-200'
         }`)}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 ${DESIGN_TOKENS.radius.md} flex items-center justify-center ${
+            <div className={`w-12 h-12 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center ${
               stats.currentMonth.profit >= 0 ? 'bg-blue-500' : 'bg-orange-500'
             }`}>
               <DollarSign className="text-white" size={24} />
@@ -525,7 +525,7 @@ export default function AccountingDashboard() {
         {/* Cash Flow Card */}
         <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-purple-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-purple-500 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
               <Calendar className="text-white" size={24} />
             </div>
             <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-purple-700 font-medium`}>Bu Ay</span>
