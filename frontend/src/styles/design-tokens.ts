@@ -1,11 +1,11 @@
-// ============================================
+﻿// ============================================
 // 🎨 CANARY DESIGN SYSTEM - Design Tokens
 // ============================================
 // Version: 1.0.0
 // Date: November 3, 2025
 // Purpose: Centralized design tokens for consistent UI
 
-export const DESIGN_TOKENS = {
+const DESIGN_TOKENS_RAW = {
   // ========== SPACING ==========
   spacing: {
     xs: {
@@ -270,15 +270,15 @@ export const cx = (...classes: (string | boolean | undefined | null)[]) => {
  * @example button('md', 'primary') // Returns complete button classes
  */
 export const button = (
-  size: keyof typeof DESIGN_TOKENS.button.size = 'md',
-  variant: keyof typeof DESIGN_TOKENS.button.variant = 'primary',
-  radius: keyof typeof DESIGN_TOKENS.radius = 'md'
+  size: keyof typeof DESIGN_TOKENS_RAW.button.size = 'md',
+  variant: keyof typeof DESIGN_TOKENS_RAW.button.variant = 'primary',
+  radius: keyof typeof DESIGN_TOKENS_RAW.radius = 'md'
 ) => {
   return cx(
-    DESIGN_TOKENS.button.base,
-    DESIGN_TOKENS.button.size[size],
-    DESIGN_TOKENS.button.variant[variant],
-    DESIGN_TOKENS.radius[radius]
+    DESIGN_TOKENS_RAW.button.base,
+    DESIGN_TOKENS_RAW.button.size[size],
+    DESIGN_TOKENS_RAW.button.variant[variant],
+    DESIGN_TOKENS_RAW.radius[radius]
   )
 }
 
@@ -287,9 +287,9 @@ export const button = (
  * @example iconButton('md') // Returns icon button classes
  */
 export const iconButton = (
-  size: keyof typeof DESIGN_TOKENS.button.icon = 'md',
+  size: keyof typeof DESIGN_TOKENS_RAW.button.icon = 'md',
   variant: 'ghost' | 'subtle' = 'ghost',
-  radius: keyof typeof DESIGN_TOKENS.radius = 'md'
+  radius: keyof typeof DESIGN_TOKENS_RAW.radius = 'md'
 ) => {
   const baseHover = variant === 'ghost' 
     ? 'hover:bg-neutral-100' 
@@ -297,9 +297,9 @@ export const iconButton = (
   
   return cx(
     'inline-flex items-center justify-center transition-colors',
-    DESIGN_TOKENS.button.icon[size],
+    DESIGN_TOKENS_RAW.button.icon[size],
     baseHover,
-    DESIGN_TOKENS.radius[radius]
+    DESIGN_TOKENS_RAW.radius[radius]
   )
 }
 
@@ -308,17 +308,17 @@ export const iconButton = (
  * @example card('md', 'sm', 'default') // Returns complete card classes
  */
 export const card = (
-  size: keyof typeof DESIGN_TOKENS.card.size = 'md',
-  elevation: keyof typeof DESIGN_TOKENS.card.elevation = 'sm',
-  variant: keyof typeof DESIGN_TOKENS.card.variant = 'default',
-  radius: keyof typeof DESIGN_TOKENS.radius = 'lg'
+  size: keyof typeof DESIGN_TOKENS_RAW.card.size = 'md',
+  elevation: keyof typeof DESIGN_TOKENS_RAW.card.elevation = 'sm',
+  variant: keyof typeof DESIGN_TOKENS_RAW.card.variant = 'default',
+  radius: keyof typeof DESIGN_TOKENS_RAW.radius = 'lg'
 ) => {
   return cx(
-    DESIGN_TOKENS.card.base,
-    DESIGN_TOKENS.card.size[size],
-    DESIGN_TOKENS.card.elevation[elevation],
-    DESIGN_TOKENS.card.variant[variant],
-    DESIGN_TOKENS.radius[radius]
+    DESIGN_TOKENS_RAW.card.base,
+    DESIGN_TOKENS_RAW.card.size[size],
+    DESIGN_TOKENS_RAW.card.elevation[elevation],
+    DESIGN_TOKENS_RAW.card.variant[variant],
+    DESIGN_TOKENS_RAW.radius[radius]
   )
 }
 
@@ -327,17 +327,17 @@ export const card = (
  * @example input('md', 'default') // Returns complete input classes
  */
 export const input = (
-  size: keyof typeof DESIGN_TOKENS.input.size = 'md',
-  variant: keyof typeof DESIGN_TOKENS.input.variant = 'default',
-  state?: keyof typeof DESIGN_TOKENS.input.state,
-  radius: keyof typeof DESIGN_TOKENS.radius = 'md'
+  size: keyof typeof DESIGN_TOKENS_RAW.input.size = 'md',
+  variant: keyof typeof DESIGN_TOKENS_RAW.input.variant = 'default',
+  state?: keyof typeof DESIGN_TOKENS_RAW.input.state,
+  radius: keyof typeof DESIGN_TOKENS_RAW.radius = 'md'
 ) => {
   return cx(
-    DESIGN_TOKENS.input.base,
-    DESIGN_TOKENS.input.size[size],
-    DESIGN_TOKENS.input.variant[variant],
-    state && DESIGN_TOKENS.input.state[state],
-    DESIGN_TOKENS.radius[radius]
+    DESIGN_TOKENS_RAW.input.base,
+    DESIGN_TOKENS_RAW.input.size[size],
+    DESIGN_TOKENS_RAW.input.variant[variant],
+    state && DESIGN_TOKENS_RAW.input.state[state],
+    DESIGN_TOKENS_RAW.radius[radius]
   )
 }
 
@@ -348,19 +348,19 @@ export const input = (
 export const badge = (
   status: string,
   type: 'invoice' | 'offer' = 'invoice',
-  size: keyof typeof DESIGN_TOKENS.badge.size = 'md',
-  variant: keyof typeof DESIGN_TOKENS.badge.variant = 'solid'
+  size: keyof typeof DESIGN_TOKENS_RAW.badge.size = 'md',
+  variant: keyof typeof DESIGN_TOKENS_RAW.badge.variant = 'solid'
 ) => {
-  const statusConfig = DESIGN_TOKENS.status[type][status as keyof typeof DESIGN_TOKENS.status.invoice]
+  const statusConfig = DESIGN_TOKENS_RAW.status[type][status as keyof typeof DESIGN_TOKENS_RAW.status.invoice]
   
   if (!statusConfig) {
     // Fallback for unknown status
     return {
       className: cx(
-        DESIGN_TOKENS.badge.base,
-        DESIGN_TOKENS.badge.size[size],
-        DESIGN_TOKENS.badge.variant[variant],
-        DESIGN_TOKENS.radius.full,
+        DESIGN_TOKENS_RAW.badge.base,
+        DESIGN_TOKENS_RAW.badge.size[size],
+        DESIGN_TOKENS_RAW.badge.variant[variant],
+        DESIGN_TOKENS_RAW.radius.full,
         'bg-gray-100 text-gray-700'
       ),
       label: status
@@ -369,10 +369,10 @@ export const badge = (
   
   return {
     className: cx(
-      DESIGN_TOKENS.badge.base,
-      DESIGN_TOKENS.badge.size[size],
-      DESIGN_TOKENS.badge.variant[variant],
-      DESIGN_TOKENS.radius.full,
+      DESIGN_TOKENS_RAW.badge.base,
+      DESIGN_TOKENS_RAW.badge.size[size],
+      DESIGN_TOKENS_RAW.badge.variant[variant],
+      DESIGN_TOKENS_RAW.radius.full,
       statusConfig.color
     ),
     label: statusConfig.label
@@ -384,23 +384,23 @@ export const badge = (
  * @example getStatGradient('profit', 1000) // Returns gradient classes
  */
 export const getStatGradient = (type: 'revenue' | 'expense' | 'profit' | 'overdue', value?: number) => {
-  if (type === 'revenue') return DESIGN_TOKENS.colors.semantic.success.gradient
-  if (type === 'expense') return DESIGN_TOKENS.colors.semantic.error.gradient
-  if (type === 'overdue') return DESIGN_TOKENS.colors.semantic.error.gradient
+  if (type === 'revenue') return DESIGN_TOKENS_RAW.colors.semantic.success.gradient
+  if (type === 'expense') return DESIGN_TOKENS_RAW.colors.semantic.error.gradient
+  if (type === 'overdue') return DESIGN_TOKENS_RAW.colors.semantic.error.gradient
   if (type === 'profit') {
     return value && value >= 0 
-      ? DESIGN_TOKENS.colors.semantic.info.gradient 
-      : DESIGN_TOKENS.colors.semantic.error.gradient
+      ? DESIGN_TOKENS_RAW.colors.semantic.info.gradient 
+      : DESIGN_TOKENS_RAW.colors.semantic.error.gradient
   }
-  return DESIGN_TOKENS.colors.semantic.neutral.gradient
+  return DESIGN_TOKENS_RAW.colors.semantic.neutral.gradient
 }
 
 /**
  * Get semantic color classes
  * @example getSemanticColor('success') // Returns success color classes
  */
-export const getSemanticColor = (type: keyof typeof DESIGN_TOKENS.colors.semantic) => {
-  return DESIGN_TOKENS.colors.semantic[type]
+export const getSemanticColor = (type: keyof typeof DESIGN_TOKENS_RAW.colors.semantic) => {
+  return DESIGN_TOKENS_RAW.colors.semantic[type]
 }
 
 // Safe getter with fallback for undefined values
@@ -419,18 +419,18 @@ const createSafeProxy = (obj: any, fallback: string = ''): any => {
   })
 }
 
-// Create safe proxied version FIRST
-const SAFE_DESIGN_TOKENS = createSafeProxy(DESIGN_TOKENS)
+// Create safe proxied version
+const SAFE_DESIGN_TOKENS = createSafeProxy(DESIGN_TOKENS_RAW)
 
-// Export as default for better bundling (with Proxy protection)
+// Export as DESIGN_TOKENS (the name everyone imports)
+export const DESIGN_TOKENS = SAFE_DESIGN_TOKENS
+
+// Export as default for better bundling
 export default SAFE_DESIGN_TOKENS
 
-// Re-export DESIGN_TOKENS as the safe version (this replaces all imports)
-export { SAFE_DESIGN_TOKENS as DESIGN_TOKENS }
-
 // Export individual tokens for direct usage (with Proxy protection)
-export const spacing = createSafeProxy(DESIGN_TOKENS.spacing)
-export const radius = createSafeProxy(DESIGN_TOKENS.radius)
-export const shadow = createSafeProxy(DESIGN_TOKENS.shadow)
-export const colors = createSafeProxy(DESIGN_TOKENS.colors)
-export const typography = createSafeProxy(DESIGN_TOKENS.typography)
+export const spacing = createSafeProxy(DESIGN_TOKENS_RAW.spacing)
+export const radius = createSafeProxy(DESIGN_TOKENS_RAW.radius)
+export const shadow = createSafeProxy(DESIGN_TOKENS_RAW.shadow)
+export const colors = createSafeProxy(DESIGN_TOKENS_RAW.colors)
+export const typography = createSafeProxy(DESIGN_TOKENS_RAW.typography)
