@@ -447,7 +447,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <Building2 size={20} />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalBankTransactions}</span>
+            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.totalBankTransactions}</span>
           </div>
           <div className="text-sm opacity-90">Banka İşlemi</div>
         </div>
@@ -456,7 +456,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <FileText size={20} />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.totalSystemTransactions}</span>
+            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.totalSystemTransactions}</span>
           </div>
           <div className="text-sm opacity-90">Sistem Kaydı</div>
         </div>
@@ -465,7 +465,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={20} />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.matchedCount}</span>
+            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.matchedCount}</span>
           </div>
           <div className="text-sm opacity-90">Eşleşti</div>
         </div>
@@ -474,7 +474,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.unmatchedBankCount}</span>
+            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.unmatchedBankCount}</span>
           </div>
           <div className="text-sm opacity-90">Banka (Eşleşmedi)</div>
         </div>
@@ -483,7 +483,7 @@ export default function BankReconciliation() {
         <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
-            <span className={DESIGN_TOKENS.typography.stat.md}>{stats.unmatchedSystemCount}</span>
+            <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.unmatchedSystemCount}</span>
           </div>
           <div className="text-sm opacity-90">Sistem (Eşleşmedi)</div>
         </div>

@@ -300,7 +300,7 @@ export default function CostAccounting() {
   <div className={cx(card('sm', 'md', 'default', 'lg'), 'max-w-full')}>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
-            <label className={cx(DESIGN_TOKENS.typography.label.lg, DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+            <label className={cx(DESIGN_TOKENS?.typography?.label.lg, DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
               Dönem
             </label>
             <select
@@ -315,7 +315,7 @@ export default function CostAccounting() {
             </select>
           </div>
           <div className="flex-1">
-            <label className={cx(DESIGN_TOKENS.typography.label.lg, DESIGN_TOKENS.colors.text.secondary, 'block mb-2')}>
+            <label className={cx(DESIGN_TOKENS?.typography?.label.lg, DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
               Kategori
             </label>
             <select

@@ -906,7 +906,7 @@ export default function AdvancedReporting() {
                 <div className="pt-4 border-t-2 border-blue-500">
                   <div className="flex items-center justify-between">
                     <h4 className="text-lg font-bold text-blue-900">TOPLAM AKTİF</h4>
-                    <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-blue-900')}>{formatCurrency(totalAssets)}</span>
+                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-blue-900')}>{formatCurrency(totalAssets)}</span>
                   </div>
                 </div>
               </div>
@@ -938,7 +938,7 @@ export default function AdvancedReporting() {
                 <div className="pt-4 border-t-2 border-purple-500">
                   <div className="flex items-center justify-between">
                     <h4 className="text-lg font-bold text-purple-900">TOPLAM PASİF</h4>
-                    <span className={cx(DESIGN_TOKENS.typography.stat.md, 'text-purple-900')}>{formatCurrency(totalLiabilities)}</span>
+                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-purple-900')}>{formatCurrency(totalLiabilities)}</span>
                   </div>
                 </div>
               </div>
