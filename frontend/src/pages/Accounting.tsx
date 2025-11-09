@@ -815,21 +815,21 @@ export default function Accounting() {
   return (
     <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6 space-y-4 pb-10">
       {/* Keyboard Shortcuts Info */}
-      <div className={`${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.colors?.border.light} border ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.spacing.sm.padding} flex items-center ${DESIGN_TOKENS.spacing.md.gap} ${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
+      <div className={`${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.colors?.border.light} border ${DESIGN_TOKENS?.radius.md} ${DESIGN_TOKENS?.spacing.sm.padding} flex items-center ${DESIGN_TOKENS?.spacing.md.gap} ${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+N</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS?.radius.sm} ${DESIGN_TOKENS?.shadow.sm} font-mono`}>Ctrl+N</kbd>
           <span>Yeni Oluştur</span>
         </div>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+F</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS?.radius.sm} ${DESIGN_TOKENS?.shadow.sm} font-mono`}>Ctrl+F</kbd>
           <span>Ara</span>
         </div>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Ctrl+P</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS?.radius.sm} ${DESIGN_TOKENS?.shadow.sm} font-mono`}>Ctrl+P</kbd>
           <span>Yazdır</span>
         </div>
         <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS.radius.sm} ${DESIGN_TOKENS.shadow.sm} font-mono`}>Esc</kbd>
+          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.colors?.border.dark} border ${DESIGN_TOKENS?.radius.sm} ${DESIGN_TOKENS?.shadow.sm} font-mono`}>Esc</kbd>
           <span>Kapat</span>
         </div>
       </div>
@@ -842,7 +842,7 @@ export default function Accounting() {
           {/* Bu Ay Gelir */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 ${getStatGradient('revenue')} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+              <div className={`w-12 h-12 ${getStatGradient('revenue')} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
                 <TrendingUp className={DESIGN_TOKENS.colors.semantic.success.text} size={24} />
               </div>
               {stats && stats.invoiceCount > 0 && (
@@ -860,7 +860,7 @@ export default function Accounting() {
           {/* Bu Ay Gider */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 ${getStatGradient('expense')} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+              <div className={`w-12 h-12 ${getStatGradient('expense')} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
                 <TrendingDown className={DESIGN_TOKENS.colors.semantic.error.text} size={24} />
               </div>
             </div>
@@ -873,7 +873,7 @@ export default function Accounting() {
           {/* Net Kâr */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 ${getStatGradient('profit', stats?.netProfit)} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+              <div className={`w-12 h-12 ${getStatGradient('profit', stats?.netProfit)} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
                 <DollarSign className={stats && stats.netProfit >= 0 ? DESIGN_TOKENS.colors.semantic.info.text : DESIGN_TOKENS.colors.semantic.error.text} size={24} />
               </div>
               <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Net</span>
@@ -889,7 +889,7 @@ export default function Accounting() {
           {/* Tahsilat / Bekleyen */}
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 ${getStatGradient('overdue')} ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
+              <div className={`w-12 h-12 ${getStatGradient('overdue')} ${DESIGN_TOKENS?.radius.md} flex items-center justify-center`}>
                 <Clock className={DESIGN_TOKENS.colors.semantic.error.text} size={24} />
               </div>
               <span className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>Bekleyen</span>
@@ -911,7 +911,7 @@ export default function Accounting() {
       <div className={`${card('sm', 'sm', 'default', 'lg')} overflow-hidden`}>
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar Tabs */}
-          <nav className={`flex flex-row ${DESIGN_TOKENS.spacing.xs.gap} overflow-x-auto ${DESIGN_TOKENS?.colors?.border.light} border-b lg:border-b-0 lg:border-r lg:w-56 lg:flex-col lg:gap-0 flex-shrink-0`}>
+          <nav className={`flex flex-row ${DESIGN_TOKENS?.spacing.xs.gap} overflow-x-auto ${DESIGN_TOKENS?.colors?.border.light} border-b lg:border-b-0 lg:border-r lg:w-56 lg:flex-col lg:gap-0 flex-shrink-0`}>
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -929,7 +929,7 @@ export default function Accounting() {
           </nav>
 
           {/* Content Area */}
-          <div className={`flex-1 ${DESIGN_TOKENS.spacing.md.padding} lg:${DESIGN_TOKENS.spacing.lg.padding}`}>
+          <div className={`flex-1 ${DESIGN_TOKENS?.spacing.md.padding} lg:${DESIGN_TOKENS?.spacing.lg.padding}`}>
             <ErrorBoundary fallbackTitle="Muhasebe Modülü Hatası" fallbackMessage="Muhasebe modülünde bir sorun oluştu. Lütfen sayfayı yenileyin.">
               <Suspense fallback={<LoadingFallback message="İçerik yükleniyor..." />}>
                 {/* Dashboard Tab */}
@@ -1392,7 +1392,7 @@ export default function Accounting() {
                     <>
                       {/* Bulk Actions Bar */}
                       {selectedInvoices.length > 0 && (
-                        <div className={`${DESIGN_TOKENS?.colors?.interactive.default} px-6 py-3 flex items-center justify-between ${DESIGN_TOKENS.radius.lg} rounded-b-none`}>
+                        <div className={`${DESIGN_TOKENS?.colors?.interactive.default} px-6 py-3 flex items-center justify-between ${DESIGN_TOKENS?.radius.lg} rounded-b-none`}>
                           <div className="flex items-center gap-4">
                             <span className={DESIGN_TOKENS.typography.label.lg}>{selectedInvoices.length} fatura seçildi</span>
                             <button
@@ -1422,7 +1422,7 @@ export default function Accounting() {
                                   type="checkbox"
                                   checked={selectedInvoices.length === invoices.length && invoices.length > 0}
                                   onChange={handleSelectAllInvoices}
-                                  className={`${DESIGN_TOKENS.radius.sm} border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
+                                  className={`${DESIGN_TOKENS?.radius.sm} border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
                               <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
@@ -1518,7 +1518,7 @@ export default function Accounting() {
                                     <div className="relative">
                                       <button
                                         onClick={() => setOpenInvoiceDropdown(openInvoiceDropdown === invoice.id ? null : invoice.id)}
-                                        className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.muted} ${DESIGN_TOKENS.radius.md} transition-colors`}
+                                        className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.muted} ${DESIGN_TOKENS?.radius.md} transition-colors`}
                                       >
                                         <MoreVertical size={18} className={DESIGN_TOKENS.colors.text.tertiary} />
                                       </button>
@@ -1528,7 +1528,7 @@ export default function Accounting() {
                                             className="fixed inset-0 z-10" 
                                             onClick={() => setOpenInvoiceDropdown(null)}
                                           />
-                                          <div className={`absolute right-0 mt-2 w-48 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS?.colors?.border.light} border py-1 z-20`}>
+                                          <div className={`absolute right-0 mt-2 w-48 ${DESIGN_TOKENS?.colors?.bg.base} ${DESIGN_TOKENS?.radius.md} ${DESIGN_TOKENS?.shadow.lg} ${DESIGN_TOKENS?.colors?.border.light} border py-1 z-20`}>
                                             <button
                                               onClick={() => handleDownloadPDF(invoice)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
@@ -1786,7 +1786,7 @@ export default function Accounting() {
                     <>
                       {/* Bulk Actions Bar */}
                       {selectedOffers.length > 0 && (
-                        <div className={`${DESIGN_TOKENS?.colors?.interactive.default} text-white px-6 py-3 flex items-center justify-between rounded-t-${DESIGN_TOKENS.radius.lg}`}>
+                        <div className={`${DESIGN_TOKENS?.colors?.interactive.default} text-white px-6 py-3 flex items-center justify-between rounded-t-${DESIGN_TOKENS?.radius.lg}`}>
                           <div className="flex items-center gap-4">
                             <span className={DESIGN_TOKENS.typography.label.lg}>{selectedOffers.length} teklif seçildi</span>
                             <button
@@ -1816,7 +1816,7 @@ export default function Accounting() {
                                   type="checkbox"
                                   checked={selectedOffers.length === offers.length && offers.length > 0}
                                   onChange={handleSelectAllOffers}
-                                  className={`${DESIGN_TOKENS.radius.sm} rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
+                                  className={`${DESIGN_TOKENS?.radius.sm} rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
                               <th className={`w-32 px-3 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} uppercase tracking-wider`}>
@@ -1935,7 +1935,7 @@ export default function Accounting() {
                                     <div className="relative">
                                       <button
                                         onClick={() => setOpenOfferDropdown(openOfferDropdown === offer.id ? null : offer.id)}
-                                        className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS.radius.md} rounded transition-colors`}
+                                        className={`p-1 hover:${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius.md} rounded transition-colors`}
                                       >
                                         <MoreVertical size={18} className={DESIGN_TOKENS.colors.text.tertiary} />
                                       </button>
@@ -1945,7 +1945,7 @@ export default function Accounting() {
                                             className="fixed inset-0 z-10" 
                                             onClick={() => setOpenOfferDropdown(null)}
                                           />
-                                          <div className={`absolute right-0 mt-2 w-48 bg-white ${DESIGN_TOKENS.radius.md} rounded ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS?.colors?.border.light} border py-1 z-20`}>
+                                          <div className={`absolute right-0 mt-2 w-48 bg-white ${DESIGN_TOKENS?.radius.md} rounded ${DESIGN_TOKENS?.shadow.lg} ${DESIGN_TOKENS?.colors?.border.light} border py-1 z-20`}>
                                             <button
                                               onClick={() => navigate(`/accounting/quote/${offer.id}`)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.secondary} hover:${DESIGN_TOKENS?.colors?.bg.subtle} flex items-center gap-2`}
