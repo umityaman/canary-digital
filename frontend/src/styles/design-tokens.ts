@@ -403,8 +403,28 @@ export const getSemanticColor = (type: keyof typeof DESIGN_TOKENS.colors.semanti
   return DESIGN_TOKENS.colors.semantic[type]
 }
 
-// Export as default for better bundling
-export default DESIGN_TOKENS
+// Safe getter with fallback for undefined values
+const createSafeProxy = (obj: any, fallback: string = ''): any => {
+  if (typeof obj !== 'object' || obj === null) return fallback
+  
+  return new Proxy(obj, {
+    get(target, prop) {
+      const value = target[prop as keyof typeof target]
+      if (value === undefined) return fallback
+      if (typeof value === 'object' && value !== null) {
+        return createSafeProxy(value, fallback)
+      }
+      return value
+    }
+  })
+}
 
-// Export individual tokens for direct usage
-export const { spacing, radius, shadow, colors, typography } = DESIGN_TOKENS
+// Export as default for better bundling (with Proxy protection)
+export default createSafeProxy(DESIGN_TOKENS)
+
+// Export individual tokens for direct usage (with Proxy protection)
+export const spacing = createSafeProxy(DESIGN_TOKENS.spacing)
+export const radius = createSafeProxy(DESIGN_TOKENS.radius)
+export const shadow = createSafeProxy(DESIGN_TOKENS.shadow)
+export const colors = createSafeProxy(DESIGN_TOKENS.colors)
+export const typography = createSafeProxy(DESIGN_TOKENS.typography)
