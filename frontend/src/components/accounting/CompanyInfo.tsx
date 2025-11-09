@@ -691,7 +691,7 @@ const CompanyInfo: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {bankAccounts.accounts.map((account) => (
+                  {(bankAccounts?.accounts || []).map((account) => (
                     <tr key={account.id} className="hover:bg-gray-50">
                       <td className="px-4 py-3">
                         <div>
