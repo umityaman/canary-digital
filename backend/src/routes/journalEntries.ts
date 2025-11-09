@@ -54,35 +54,31 @@ router.get('/', authenticateToken, async (req, res) => {
       };
     }
 
-    // TEMPORARY: Return empty for performance (db-f1-micro too slow)
-    // TODO: Upgrade to db-g1-small or add proper indexes
-    const entries: any[] = [];
-    const total = 0;
-
-    // const [entries, total] = await Promise.all([
-    //   prisma.journalEntry.findMany({
-    //     where,
-    //     select: {
-    //       id: true,
-    //       entryNumber: true,
-    //       entryDate: true,
-    //       entryType: true,
-    //       description: true,
-    //       reference: true,
-    //       totalDebit: true,
-    //       totalCredit: true,
-    //       status: true,
-    //       createdAt: true,
-    //       updatedAt: true,
-    //     },
-    //     orderBy: {
-    //       [sortBy as string]: sortOrder as string,
-    //     },
-    //     skip,
-    //     take: limitNum,
-    //   }),
-    //   prisma.journalEntry.count({ where }),
-    // ]);
+    // Query with optimized select (no heavy joins)
+    const [entries, total] = await Promise.all([
+      prisma.journalEntry.findMany({
+        where,
+        select: {
+          id: true,
+          entryNumber: true,
+          entryDate: true,
+          entryType: true,
+          description: true,
+          reference: true,
+          totalDebit: true,
+          totalCredit: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        orderBy: {
+          [sortBy as string]: sortOrder as string,
+        },
+        skip,
+        take: limitNum,
+      }),
+      prisma.journalEntry.count({ where }),
+    ]);
 
     const totalPages = Math.ceil(total / limitNum);
 
