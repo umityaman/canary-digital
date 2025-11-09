@@ -201,7 +201,7 @@ safeLoadRoute('/api/einvoice', './routes/einvoice', 'E-Invoice');
 safeLoadRoute('/api/earchive', './routes/earchive', 'E-Archive Invoice');
 safeLoadRoute('/api/gib', './routes/gib', 'GIB e-Invoice Integration');
 safeLoadRoute('/api/delivery-notes', './routes/deliveryNotes', 'Delivery Notes');
-safeLoadRoute('/api/current-accounts', './routes/currentAccounts', 'Current Accounts');
+safeLoadRoute('/api/accounting/current-accounts', './routes/currentAccounts', 'Current Accounts');
 // Accounting sub-resources mounted at root paths expected by frontend
 safeLoadRoute('/api/checks', './routes/checks', 'Checks');
 safeLoadRoute('/api/seed', './routes/seed', 'Database Seeding (Admin only)');
@@ -222,8 +222,8 @@ safeLoadRoute('/api/stock', './routes/stock', 'Stock Management');
 safeLoadRoute('/api/cost-accounting', './routes/costAccounting', 'Cost Accounting');
 
 // Accounting Core Routes
-safeLoadRoute('/api/journal-entries', './routes/journalEntries', 'Journal Entries');
-safeLoadRoute('/api/chart-of-accounts', './routes/chartOfAccounts', 'Chart of Accounts');
+safeLoadRoute('/api/accounting/journal-entries', './routes/journalEntries', 'Journal Entries');
+safeLoadRoute('/api/accounting/chart-of-accounts', './routes/chartOfAccounts', 'Chart of Accounts');
 
 // Company & Bank Account Routes
 safeLoadRoute('/api/company', './routes/company', 'Company Management');
