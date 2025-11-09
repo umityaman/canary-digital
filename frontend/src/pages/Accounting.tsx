@@ -1394,7 +1394,7 @@ export default function Accounting() {
                       {selectedInvoices.length > 0 && (
                         <div className={`${DESIGN_TOKENS?.colors?.interactive.default} px-6 py-3 flex items-center justify-between ${DESIGN_TOKENS?.radius.lg} rounded-b-none`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS.typography.label.lg}>{selectedInvoices.length} fatura seçildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedInvoices.length} fatura seçildi</span>
                             <button
                               onClick={() => setSelectedInvoices([])}
                               className={`${DESIGN_TOKENS?.typography?.body.md} text-neutral-300 hover:text-white`}
@@ -1788,7 +1788,7 @@ export default function Accounting() {
                       {selectedOffers.length > 0 && (
                         <div className={`${DESIGN_TOKENS?.colors?.interactive.default} text-white px-6 py-3 flex items-center justify-between rounded-t-${DESIGN_TOKENS?.radius.lg}`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS.typography.label.lg}>{selectedOffers.length} teklif seçildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedOffers.length} teklif seçildi</span>
                             <button
                               onClick={() => setSelectedOffers([])}
                               className={`${DESIGN_TOKENS?.typography?.label.md} text-neutral-300 hover:text-white`}
