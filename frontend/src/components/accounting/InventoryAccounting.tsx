@@ -754,7 +754,7 @@ export default function InventoryAccounting() {
                   )}
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <div className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>{formatCurrency(transaction.totalCost)}</div>
+                  <div className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>{formatCurrency(transaction.totalCost)}</div>
                   <div className="text-sm text-neutral-600">{formatCurrency(transaction.unitCost)} / adet</div>
                 </div>
               </div>

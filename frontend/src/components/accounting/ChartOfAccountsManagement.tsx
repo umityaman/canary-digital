@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   BookOpen,
   Plus,
@@ -199,14 +199,14 @@ export default function ChartOfAccountsManagement() {
                 <span className="mr-2 w-4" />
               )}
               <BookOpen className="w-4 h-4 text-gray-400 mr-2" />
-              <span className={`${DESIGN_TOKENS.typography.body.sm} font-mono font-medium ${DESIGN_TOKENS.colors.text.primary}`}>
+              <span className={`${DESIGN_TOKENS?.typography?.body.sm} font-mono font-medium ${DESIGN_TOKENS?.colors?.text.primary}`}>
                 {account.code}
               </span>
             </div>
           </td>
           <td className="px-6 py-4">
             <div>
-              <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.primary} font-medium`}>
+              <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.primary} font-medium`}>
                 {account.name}
               </p>
               {!account.isActive && (
@@ -218,7 +218,7 @@ export default function ChartOfAccountsManagement() {
             {getAccountTypeBadge(account.type)}
           </td>
           <td className="px-6 py-4 whitespace-nowrap text-right">
-            <span className={`${DESIGN_TOKENS.typography.body.sm} font-medium ${
+            <span className={`${DESIGN_TOKENS?.typography?.body.sm} font-medium ${
               account.balance >= 0 ? 'text-green-600' : 'text-red-600'
             }`}>
               {formatCurrency(account.balance)}
@@ -286,10 +286,10 @@ export default function ChartOfAccountsManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
+          <h2 className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             Hesap Planı Yönetimi
           </h2>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
             Muhasebe hesaplarını görüntüleyin ve yönetin
           </p>
         </div>
@@ -328,10 +328,10 @@ export default function ChartOfAccountsManagement() {
           <div className="flex items-center justify-between mb-2">
             <BookOpen className="w-8 h-8 text-blue-500" />
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {flatAccounts.length}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             Toplam Hesap
           </p>
         </div>
@@ -340,10 +340,10 @@ export default function ChartOfAccountsManagement() {
           <div className="flex items-center justify-between mb-2">
             <TrendingUp className="w-8 h-8 text-green-500" />
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {flatAccounts.filter((a) => a.balance > 0).length}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             Pozitif Bakiye
           </p>
         </div>
@@ -352,10 +352,10 @@ export default function ChartOfAccountsManagement() {
           <div className="flex items-center justify-between mb-2">
             <TrendingDown className="w-8 h-8 text-red-500" />
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {flatAccounts.filter((a) => a.balance < 0).length}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             Negatif Bakiye
           </p>
         </div>
@@ -364,10 +364,10 @@ export default function ChartOfAccountsManagement() {
           <div className="flex items-center justify-between mb-2">
             <DollarSign className="w-8 h-8 text-purple-500" />
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${totalBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${totalBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {formatCurrency(totalBalance)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             Net Bakiye
           </p>
         </div>
@@ -449,10 +449,10 @@ export default function ChartOfAccountsManagement() {
         ) : accounts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
             <BookOpen className="w-16 h-16 text-gray-300 mb-4" />
-            <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>
+            <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
               Hesap Bulunamadı
             </p>
-            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
+            <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
               Henüz hesap eklenmemiş
             </p>
           </div>

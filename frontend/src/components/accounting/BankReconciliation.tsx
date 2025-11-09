@@ -412,7 +412,7 @@ export default function BankReconciliation() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Banka Mutabakat</h2>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Banka Mutabakat</h2>
           <p className="text-sm text-neutral-600 mt-1">Banka ekstresi ile sistem kayıtlarını karşılaştır</p>
         </div>
         
@@ -725,7 +725,7 @@ export default function BankReconciliation() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex-1">
                     <div className="font-medium text-neutral-900">{bankTx.description}</div>
-                    <div className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>{formatDate(bankTx.date)} • {formatCurrency(bankTx.amount)}</div>
+                    <div className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>{formatDate(bankTx.date)} • {formatCurrency(bankTx.amount)}</div>
                   </div>
                   <Link2 className="text-neutral-400" size={20} />
                 </div>

@@ -115,8 +115,8 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
     return (
       <div className={card('md', 'xl', 'default', 'lg')}>
         <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>Yaşlandırma Verisi Bulunamadı</p>
-        <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
+        <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>Yaşlandırma Verisi Bulunamadı</p>
+        <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
           Müşterilerinizin borç durumunu görmek için fatura ve tahsilat işlemlerini kaydedin.
         </p>
       </div>
@@ -134,8 +134,8 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
             <TrendingUp className="w-8 h-8 opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} mb-1`}>{formatCurrency(data.summary.totalDebt)}</p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} opacity-90`}>{data.summary.customerCount} Müşteri</p>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} mb-1`}>{formatCurrency(data.summary.totalDebt)}</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} opacity-90`}>{data.summary.customerCount} Müşteri</p>
         </div>
 
         <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-green-200')}>
@@ -143,10 +143,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
             <CheckCircle className="w-8 h-8 text-green-600" />
             <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">0-30 Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalCurrent)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalCurrent, data.summary.totalDebt)}
           </p>
         </div>
@@ -156,10 +156,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
             <Clock className="w-8 h-8 text-yellow-600" />
             <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full">31-60 Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays30)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalDays30, data.summary.totalDebt)}
           </p>
         </div>
@@ -169,10 +169,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
             <AlertCircle className="w-8 h-8 text-orange-600" />
             <span className="text-xs bg-orange-50 text-orange-700 px-2 py-1 rounded-full">61-90 Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays60)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalDays60, data.summary.totalDebt)}
           </p>
         </div>
@@ -182,10 +182,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
             <TrendingDown className="w-8 h-8 text-red-600" />
             <span className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded-full">90+ Gün</span>
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.md} ${DESIGN_TOKENS.colors.text.primary} mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays90Plus)}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
             {formatPercentage(data.summary.totalDays90Plus, data.summary.totalDebt)}
           </p>
         </div>
@@ -296,7 +296,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div>
-                          <p className={`font-medium ${DESIGN_TOKENS.colors.text.primary}`}>{customer.customerName}</p>
+                          <p className={`font-medium ${DESIGN_TOKENS?.colors?.text.primary}`}>{customer.customerName}</p>
                           {customer.overdueAmount > 0 && (
                             <p className="text-xs text-red-600 flex items-center gap-1">
                               <AlertCircle className="w-3 h-3" />
@@ -307,7 +307,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <p className={`font-bold ${DESIGN_TOKENS.colors.text.primary}`}>{formatCurrency(customer.totalDebt)}</p>
+                      <p className={`font-bold ${DESIGN_TOKENS?.colors?.text.primary}`}>{formatCurrency(customer.totalDebt)}</p>
                       <p className="text-xs text-gray-500">{customer.currency}</p>
                     </td>
                     <td className="px-6 py-4 text-right">

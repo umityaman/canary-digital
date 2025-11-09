@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   X,
   Plus,
@@ -284,12 +284,12 @@ export default function JournalEntryFormModal({
           <div className="flex justify-between items-center">
             <div>
               <h3
-                className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}
+                className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
               >
                 {initialData ? 'Muhasebe Fişini Düzenle' : 'Yeni Muhasebe Fişi'}
               </h3>
               <p
-                className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}
+                className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
               >
                 Muhasebe kaydı oluşturun (Borç ve Alacak denk olmalı)
               </p>
@@ -309,7 +309,7 @@ export default function JournalEntryFormModal({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label
-                className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
+                className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
               >
                 Tarih <span className="text-red-500">*</span>
               </label>
@@ -326,7 +326,7 @@ export default function JournalEntryFormModal({
 
             <div>
               <label
-                className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
+                className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
               >
                 Durum
               </label>
@@ -348,7 +348,7 @@ export default function JournalEntryFormModal({
             {initialData && (
               <div>
                 <label
-                  className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
+                  className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
                 >
                   Fiş No
                 </label>
@@ -364,7 +364,7 @@ export default function JournalEntryFormModal({
 
           <div>
             <label
-              className={`block ${DESIGN_TOKENS.typography.label.md} ${DESIGN_TOKENS.colors.text.primary} mb-2`}
+              className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
             >
               Genel Açıklama <span className="text-red-500">*</span>
             </label>
@@ -384,7 +384,7 @@ export default function JournalEntryFormModal({
           <div>
             <div className="flex justify-between items-center mb-4">
               <h4
-                className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary}`}
+                className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}
               >
                 Kayıt Satırları
               </h4>
@@ -406,7 +406,7 @@ export default function JournalEntryFormModal({
                 >
                   <div className="flex justify-between items-center mb-2">
                     <span
-                      className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}
+                      className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
                     >
                       Satır {index + 1}
                     </span>
@@ -425,7 +425,7 @@ export default function JournalEntryFormModal({
                     {/* Account Picker */}
                     <div className="md:col-span-2 relative">
                       <label
-                        className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
+                        className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
                       >
                         Hesap <span className="text-red-500">*</span>
                       </label>
@@ -494,7 +494,7 @@ export default function JournalEntryFormModal({
                     {/* Description */}
                     <div className="md:col-span-2">
                       <label
-                        className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
+                        className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
                       >
                         Açıklama
                       </label>
@@ -512,7 +512,7 @@ export default function JournalEntryFormModal({
                     {/* Debit */}
                     <div>
                       <label
-                        className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
+                        className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
                       >
                         Borç (₺)
                       </label>
@@ -538,7 +538,7 @@ export default function JournalEntryFormModal({
                     {/* Credit */}
                     <div>
                       <label
-                        className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
+                        className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
                       >
                         Alacak (₺)
                       </label>
@@ -570,29 +570,29 @@ export default function JournalEntryFormModal({
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p
-                    className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}
+                    className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
                   >
                     Toplam Borç
                   </p>
                   <p
-                    className={`${DESIGN_TOKENS.typography.heading.h4} text-green-600`}
+                    className={`${DESIGN_TOKENS?.typography?.heading.h4} text-green-600`}
                   >
                     {formatCurrency(getTotalDebit())}
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}
+                    className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
                   >
                     Toplam Alacak
                   </p>
-                  <p className={`${DESIGN_TOKENS.typography.heading.h4} text-red-600`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.heading.h4} text-red-600`}>
                     {formatCurrency(getTotalCredit())}
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}
+                    className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
                   >
                     Durum
                   </p>

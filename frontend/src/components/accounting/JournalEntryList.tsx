@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   FileText,
   Plus,
@@ -153,10 +153,10 @@ export default function JournalEntryList() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary}`}>
+          <h2 className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             Muhasebe Fişleri
           </h2>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
             Tüm muhasebe kayıtlarını görüntüleyin ve yönetin
           </p>
         </div>
@@ -280,10 +280,10 @@ export default function JournalEntryList() {
         ) : filteredEntries.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
             <FileText className="w-16 h-16 text-gray-300 mb-4" />
-            <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>
+            <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
               Muhasebe Fişi Bulunamadı
             </p>
-            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>
+            <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
               {searchQuery || statusFilter !== 'ALL' || dateFrom || dateTo
                 ? 'Arama kriterlerinize uygun fiş bulunamadı'
                 : 'Henüz muhasebe fişi oluşturulmamış'}
@@ -323,33 +323,33 @@ export default function JournalEntryList() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <FileText className="w-4 h-4 text-gray-400 mr-2" />
-                        <span className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.primary} font-medium`}>
+                        <span className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.primary} font-medium`}>
                           {entry.entryNumber}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}>
+                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
                         {formatDate(entry.entryDate)}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="max-w-xs">
-                        <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.primary} truncate`}>
+                        <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.primary} truncate`}>
                           {entry.description}
                         </p>
-                        <p className={`${DESIGN_TOKENS.typography.body.xs} ${DESIGN_TOKENS.colors.text.tertiary}`}>
+                        <p className={`${DESIGN_TOKENS?.typography?.body.xs} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
                           {entry.items.length} kayıt
                         </p>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS.typography.body.sm} text-green-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-600 font-medium`}>
                         {formatCurrency(entry.totalDebit)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS.typography.body.sm} text-red-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-600 font-medium`}>
                         {formatCurrency(entry.totalCredit)}
                       </span>
                     </td>
@@ -404,10 +404,10 @@ export default function JournalEntryList() {
             <div className="border-b border-gray-200 p-6">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}>
+                  <h3 className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>
                     Muhasebe Fişi Detayı
                   </h3>
-                  <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
                     {selectedEntry.entryNumber}
                   </p>
                 </div>
@@ -425,32 +425,32 @@ export default function JournalEntryList() {
               {/* Entry Info */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
                     Tarih
                   </p>
-                  <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
                     {formatDate(selectedEntry.entryDate)}
                   </p>
                 </div>
                 <div>
-                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
                     Durum
                   </p>
                   {getStatusBadge(selectedEntry.status)}
                 </div>
                 <div>
-                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
                     Oluşturan
                   </p>
-                  <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
                     {selectedEntry.createdBy}
                   </p>
                 </div>
                 <div>
-                  <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
                     Oluşturma Tarihi
                   </p>
-                  <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
                     {formatDate(selectedEntry.createdAt)}
                   </p>
                 </div>
@@ -458,17 +458,17 @@ export default function JournalEntryList() {
 
               {/* Description */}
               <div>
-                <p className={`${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.tertiary} mb-1`}>
+                <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}>
                   Açıklama
                 </p>
-                <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.primary}`}>
+                <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
                   {selectedEntry.description}
                 </p>
               </div>
 
               {/* Entry Items */}
               <div>
-                <h4 className={`${DESIGN_TOKENS.typography.heading.h4} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
+                <h4 className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>
                   Kayıt Detayları
                 </h4>
                 <div className="overflow-x-auto">

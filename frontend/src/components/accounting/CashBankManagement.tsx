@@ -195,7 +195,7 @@ export default function CashBankManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Kasa ve Banka Yönetimi</h2>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Kasa ve Banka Yönetimi</h2>
           <p className="text-sm text-gray-500 mt-1">
             Nakit akışı, kasa ve banka hesaplarınızı takip edin
           </p>
@@ -337,7 +337,7 @@ export default function CashBankManagement() {
                       <span className="text-sm font-medium text-gray-700">Banka Hesapları</span>
                       <Building2 className="w-5 h-5 text-blue-600" />
                     </div>
-                    <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600 mb-2`}>
+                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600 mb-2`}>
                       {formatCurrency(bankAccounts?.totals.totalBalance || 0)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
@@ -355,7 +355,7 @@ export default function CashBankManagement() {
                       <span className="text-sm font-medium text-gray-700">Kasa</span>
                       <Wallet className="w-5 h-5 text-green-600" />
                     </div>
-                    <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600 mb-2`}>
+                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600 mb-2`}>
                       {formatCurrency(cashBalance)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
@@ -557,7 +557,7 @@ export default function CashBankManagement() {
                         <TrendingUp className="w-5 h-5 text-green-600" />
                         <span className="text-sm font-medium text-gray-700">Toplam Giriş</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.income, 0)
                         )}
@@ -570,7 +570,7 @@ export default function CashBankManagement() {
                         <TrendingDown className="w-5 h-5 text-red-600" />
                         <span className="text-sm font-medium text-gray-700">Toplam Çıkış</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-red-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.expense, 0)
                         )}
@@ -583,7 +583,7 @@ export default function CashBankManagement() {
                         <Wallet className="w-5 h-5 text-blue-600" />
                         <span className="text-sm font-medium text-gray-700">Net Akış</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.net, 0)
                         )}

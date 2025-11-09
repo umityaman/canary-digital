@@ -222,8 +222,8 @@ const CompanyInfo: React.FC = () => {
         <div className="flex items-center space-x-3">
           <Building2 className="w-8 h-8 text-blue-600" />
           <div>
-            <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Şirket Bilgileri</h2>
-            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>Şirket ve banka hesap bilgilerinizi yönetin</p>
+            <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Şirket Bilgileri</h2>
+            <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Şirket ve banka hesap bilgilerinizi yönetin</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -644,25 +644,25 @@ const CompanyInfo: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-gray-600">Toplam Bakiye</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600`}>
                   {formatCurrency(bankAccounts.totals.totalBalance)}
                 </p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg">
                 <p className="text-sm text-gray-600">Kullanılabilir</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
                   {formatCurrency(bankAccounts.totals.totalAvailable)}
                 </p>
               </div>
               <div className="p-4 bg-orange-50 rounded-lg">
                 <p className="text-sm text-gray-600">Bloke</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-orange-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-600`}>
                   {formatCurrency(bankAccounts.totals.totalBlocked)}
                 </p>
               </div>
               <div className="p-4 bg-purple-50 rounded-lg">
                 <p className="text-sm text-gray-600">Aktif Hesap</p>
-                <p className={`${DESIGN_TOKENS.typography.stat.md} text-purple-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-600`}>
                   {bankAccounts.totals.activeAccounts} / {bankAccounts.totals.totalAccounts}
                 </p>
               </div>
@@ -697,7 +697,7 @@ const CompanyInfo: React.FC = () => {
                         <div>
                           <p className="font-medium text-gray-900">{account.bankName}</p>
                           {account.branch && (
-                            <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary}`}>{account.branch}</p>
+                            <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{account.branch}</p>
                           )}
                         </div>
                       </td>

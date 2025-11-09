@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Tag, TrendingUp, TrendingDown, Save, X } from 'lucide-react'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
@@ -115,8 +115,8 @@ export default function CategoryManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Kategori Yönetimi</h2>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Kategori Yönetimi</h2>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>
             Gelir ve gider kategorilerinizi düzenleyin
           </p>
         </div>
@@ -127,8 +127,8 @@ export default function CategoryManagement() {
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-700`}>Gelir Kategorileri</p>
-              <p className={`${DESIGN_TOKENS.typography.stat.md} text-green-900 mt-1`}>{incomeCount}</p>
+              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-700`}>Gelir Kategorileri</p>
+              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-900 mt-1`}>{incomeCount}</p>
             </div>
             <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
               <TrendingUp className="text-white" size={24} />
@@ -139,8 +139,8 @@ export default function CategoryManagement() {
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`${DESIGN_TOKENS.typography.body.sm} text-red-700`}>Gider Kategorileri</p>
-              <p className={`${DESIGN_TOKENS.typography.stat.md} text-red-900 mt-1`}>{expenseCount}</p>
+              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-700`}>Gider Kategorileri</p>
+              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-900 mt-1`}>{expenseCount}</p>
             </div>
             <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
               <TrendingDown className="text-white" size={24} />
@@ -151,8 +151,8 @@ export default function CategoryManagement() {
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`${DESIGN_TOKENS.typography.body.sm} text-blue-700`}>Toplam Kategori</p>
-              <p className={`${DESIGN_TOKENS.typography.stat.md} text-blue-900 mt-1`}>{categories.length}</p>
+              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-blue-700`}>Toplam Kategori</p>
+              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900 mt-1`}>{categories.length}</p>
             </div>
             <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
               <Tag className="text-white" size={24} />

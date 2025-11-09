@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   Building2,
   TrendingUp,
@@ -190,12 +190,12 @@ export default function BalanceSheetReport() {
       <div className="flex justify-between items-center">
         <div>
           <h2
-            className={`${DESIGN_TOKENS.typography.heading.h2} ${DESIGN_TOKENS.colors.text.primary}`}
+            className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}
           >
             Bilanço (Balance Sheet)
           </h2>
           <p
-            className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}
+            className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
           >
             Varlık, borç ve özkaynak durumu
           </p>
@@ -222,11 +222,11 @@ export default function BalanceSheetReport() {
           <div className="flex items-center justify-between mb-3">
             <Building2 className="w-8 h-8 text-green-500" />
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-green-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
             {formatCurrency(data.summary.totalAssets)}
           </p>
           <p
-            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
+            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
             Toplam Varlıklar
           </p>
@@ -236,11 +236,11 @@ export default function BalanceSheetReport() {
           <div className="flex items-center justify-between mb-3">
             <TrendingDown className="w-8 h-8 text-red-500" />
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
             {formatCurrency(data.summary.totalLiabilities)}
           </p>
           <p
-            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
+            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
             Toplam Borçlar
           </p>
@@ -250,11 +250,11 @@ export default function BalanceSheetReport() {
           <div className="flex items-center justify-between mb-3">
             <TrendingUp className="w-8 h-8 text-blue-500" />
           </div>
-          <p className={`${DESIGN_TOKENS.typography.stat.lg} text-blue-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-blue-600 mb-1`}>
             {formatCurrency(data.summary.totalEquity)}
           </p>
           <p
-            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
+            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
             Özkaynak
           </p>
@@ -265,14 +265,14 @@ export default function BalanceSheetReport() {
             <Scale className="w-8 h-8 text-purple-500" />
           </div>
           <p
-            className={`${DESIGN_TOKENS.typography.stat.lg} ${
+            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
               data.summary.isBalanced ? 'text-green-600' : 'text-red-600'
             } mb-1`}
           >
             {data.summary.isBalanced ? '✓' : '✗'}
           </p>
           <p
-            className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.secondary}`}
+            className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
             {data.summary.isBalanced ? 'Dengede' : 'Dengesiz'}
           </p>
@@ -284,7 +284,7 @@ export default function BalanceSheetReport() {
         <div className="flex items-center gap-4">
           <div className="flex-1">
             <label
-              className={`block ${DESIGN_TOKENS.typography.label.sm} ${DESIGN_TOKENS.colors.text.primary} mb-1`}
+              className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
               Rapor Tarihi
@@ -316,7 +316,7 @@ export default function BalanceSheetReport() {
             <div className="border-b border-gray-200 pb-3 mb-4">
               <div className="flex items-center justify-between">
                 <h3
-                  className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}
+                  className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
                 >
                   Varlıklar (Assets)
                 </h3>
@@ -357,7 +357,7 @@ export default function BalanceSheetReport() {
               <div className="border-b border-gray-200 pb-3 mb-4">
                 <div className="flex items-center justify-between">
                   <h3
-                    className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}
+                    className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
                   >
                     Borçlar (Liabilities)
                   </h3>
@@ -396,7 +396,7 @@ export default function BalanceSheetReport() {
               <div className="border-b border-gray-200 pb-3 mb-4">
                 <div className="flex items-center justify-between">
                   <h3
-                    className={`${DESIGN_TOKENS.typography.heading.h3} ${DESIGN_TOKENS.colors.text.primary}`}
+                    className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
                   >
                     Özkaynak (Equity)
                   </h3>

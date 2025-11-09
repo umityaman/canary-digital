@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Building2, Store, Globe, Link2 } from 'lucide-react'
 import BankIntegrations from '../../banking/BankIntegrations'
 import ECommerceIntegrations from '../../ecommerce/ECommerceIntegrations'
@@ -13,10 +13,10 @@ export default function IntegrationsTab() {
     <div className="space-y-6">
       {/* Header */}
       <div className="mb-8">
-        <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>
+        <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
           Entegrasyonlar
         </h2>
-        <p className={`${DESIGN_TOKENS.typography.body.lg} ${DESIGN_TOKENS.colors.text.secondary}`}>
+        <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
           Banka, e-ticaret ve GİB entegrasyonlarını yönetin
         </p>
       </div>
@@ -24,10 +24,10 @@ export default function IntegrationsTab() {
       {/* Integration Type Selector - More Prominent */}
       <div className={card('lg', 'lg', 'default', 'lg')}>
         <div className="mb-4">
-          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>
+          <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             Entegrasyon Tipi Seçin
           </h3>
-          <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
             Yönetmek istediğiniz entegrasyon tipini seçin
           </p>
         </div>
@@ -132,10 +132,10 @@ export default function IntegrationsTab() {
                     <Globe className="text-purple-600" size={32} />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-2`}>
+                    <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
                       Gelir İdaresi Başkanlığı (GİB) Entegrasyonu
                     </h3>
-                    <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary}`}>
+                    <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
                       e-Fatura, e-Arşiv Fatura ve e-İrsaliye sistemlerine otomatik entegrasyon sağlayarak,
                       yasal belgelerinizi kolayca oluşturun ve GİB'e iletin.
                     </p>

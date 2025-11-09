@@ -459,7 +459,7 @@ export default function EInvoiceList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>E-Fatura & E-Arşiv</h2>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>E-Fatura & E-Arşiv</h2>
           <p className="text-sm text-neutral-600 mt-1">Elektronik belge yönetimi</p>
         </div>
         <div className="flex gap-2">
@@ -486,7 +486,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-blue-600" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-blue-900`}>{stats.total}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900`}>{stats.total}</h3>
           <p className="text-xs text-blue-700">Toplam Fatura</p>
         </div>
 
@@ -494,7 +494,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <Zap className="text-purple-600" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-purple-900`}>{stats.eFatura}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-900`}>{stats.eFatura}</h3>
           <p className="text-xs text-purple-700">E-Fatura</p>
         </div>
 
@@ -502,7 +502,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <Archive className="text-indigo-600" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-indigo-900`}>{stats.eArsiv}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-indigo-900`}>{stats.eArsiv}</h3>
           <p className="text-xs text-indigo-700">E-Arşiv</p>
         </div>
 
@@ -510,7 +510,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <DollarSign className="text-green-600" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.sm} font-bold text-green-900`}>{formatCurrency(stats.totalAmount)}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} font-bold text-green-900`}>{formatCurrency(stats.totalAmount)}</h3>
           <p className="text-xs text-green-700">Toplam Tutar</p>
         </div>
 
@@ -518,7 +518,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <CheckCircle className="text-emerald-600" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.sm} font-bold text-emerald-900`}>{formatCurrency(stats.paidAmount)}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} font-bold text-emerald-900`}>{formatCurrency(stats.paidAmount)}</h3>
           <p className="text-xs text-emerald-700">Tahsil Edilen</p>
         </div>
 
@@ -526,7 +526,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <Clock className="text-orange-600" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.md} text-orange-900`}>{stats.unpaid}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-900`}>{stats.unpaid}</h3>
           <p className="text-xs text-orange-700">Ödenmemiş</p>
         </div>
       </div>

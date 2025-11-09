@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { 
   Calculator, 
   Package, 
@@ -182,11 +182,11 @@ export default function CostAccounting() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className={`${DESIGN_TOKENS.typography.h1} ${DESIGN_TOKENS.colors.text.primary} flex items-center gap-3`}>
+          <h1 className={`${DESIGN_TOKENS?.typography?.h1} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-3`}>
             <Calculator className="w-8 h-8 text-blue-600" />
             Maliyet Muhasebesi
           </h1>
-          <p className={`${DESIGN_TOKENS.typography.body.md} ${DESIGN_TOKENS.colors.text.secondary} mt-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
             Üretim maliyetlerini takip edin ve karlılık analizi yapın
           </p>
         </div>
@@ -345,7 +345,7 @@ export default function CostAccounting() {
       {/* Product Cost Analysis Table */}
   <div className={cx(card('md', 'sm', 'default', 'lg'), 'p-0 overflow-hidden')}>
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} flex items-center gap-2`}>
+          <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-2`}>
             <BarChart3 className="text-blue-600" size={20} />
             Ürün Bazlı Maliyet Analizi
           </h3>
@@ -442,7 +442,7 @@ export default function CostAccounting() {
       {/* Cost Breakdown Chart Placeholder */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className={card('md', 'lg', 'default', 'lg')}>
-          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
+          <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>
             Maliyet Dağılımı
           </h3>
           <div className="space-y-3">
@@ -486,7 +486,7 @@ export default function CostAccounting() {
         </div>
 
   <div className={card('md', 'lg', 'default', 'lg')}>
-          <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary} mb-4`}>
+          <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>
             Öneriler
           </h3>
           <div className="space-y-3">

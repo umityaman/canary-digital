@@ -352,8 +352,8 @@ export default function AccountingDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Muhasebe Dashboard</h2>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} ${DESIGN_TOKENS.colors.text.tertiary} mt-1`}>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Muhasebe Dashboard</h2>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>
             Son güncelleme: {new Date().toLocaleString('tr-TR')}
           </p>
         </div>
@@ -368,7 +368,7 @@ export default function AccountingDashboard() {
             <span className="hidden sm:inline">{refreshing ? 'Yenileniyor...' : 'Yenile'}</span>
           </button>
           
-          <div className={`h-8 w-px ${DESIGN_TOKENS.colors.border.default} hidden sm:block`} />
+          <div className={`h-8 w-px ${DESIGN_TOKENS?.colors?.border.default} hidden sm:block`} />
           
           <button
             onClick={() => setShowComparison(!showComparison)}
@@ -387,7 +387,7 @@ export default function AccountingDashboard() {
               <Download size={16} />
               <span className="hidden sm:inline">Dışa Aktar</span>
             </button>
-            <div className={`hidden group-hover:block absolute right-0 top-full mt-1 ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS.colors.bg.primary} border ${DESIGN_TOKENS.colors.border.default} py-2 min-w-[160px] z-10`}>
+            <div className={`hidden group-hover:block absolute right-0 top-full mt-1 ${DESIGN_TOKENS.shadow.lg} ${DESIGN_TOKENS.radius.md} ${DESIGN_TOKENS?.colors?.bg.primary} border ${DESIGN_TOKENS?.colors?.border.default} py-2 min-w-[160px] z-10`}>
               <button
                 onClick={handleExportPDF}
                 disabled={exporting}
@@ -448,18 +448,18 @@ export default function AccountingDashboard() {
             <div className={`w-12 h-12 bg-green-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <TrendingUp className="text-white" size={24} />
             </div>
-            <div className={`flex items-center gap-1 ${DESIGN_TOKENS.typography.label.sm} font-semibold ${
+            <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
               stats.trends.incomeChange >= 0 ? 'text-green-600' : 'text-red-600'
             }`}>
               {stats.trends.incomeChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
               {formatPercentage(stats.trends.incomeChange)}
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} text-green-900 mb-1`}>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-900 mb-1`}>
             {formatCurrency(stats.currentMonth.income)}
           </h3>
-          <p className={`${DESIGN_TOKENS.typography.label.md} text-green-700`}>Bu Ay Gelir</p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} text-green-600 mt-2`}>
+          <p className={`${DESIGN_TOKENS?.typography?.label.md} text-green-700`}>Bu Ay Gelir</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-600 mt-2`}>
             Geçen ay: {formatCurrency(stats.previousMonth.income)}
           </p>
         </div>
@@ -470,18 +470,18 @@ export default function AccountingDashboard() {
             <div className={`w-12 h-12 bg-red-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <TrendingDown className="text-white" size={24} />
             </div>
-            <div className={`flex items-center gap-1 ${DESIGN_TOKENS.typography.label.sm} font-semibold ${
+            <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
               stats.trends.expenseChange >= 0 ? 'text-red-600' : 'text-green-600'
             }`}>
               {stats.trends.expenseChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
               {formatPercentage(stats.trends.expenseChange)}
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} text-red-900 mb-1`}>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-900 mb-1`}>
             {formatCurrency(stats.currentMonth.expense)}
           </h3>
-          <p className={`${DESIGN_TOKENS.typography.label.md} text-red-700`}>Bu Ay Gider</p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} text-red-600 mt-2`}>
+          <p className={`${DESIGN_TOKENS?.typography?.label.md} text-red-700`}>Bu Ay Gider</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-600 mt-2`}>
             Geçen ay: {formatCurrency(stats.previousMonth.expense)}
           </p>
         </div>
@@ -498,24 +498,24 @@ export default function AccountingDashboard() {
             }`}>
               <DollarSign className="text-white" size={24} />
             </div>
-            <div className={`flex items-center gap-1 ${DESIGN_TOKENS.typography.label.sm} font-semibold ${
+            <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
               stats.trends.profitChange >= 0 ? 'text-green-600' : 'text-red-600'
             }`}>
               {stats.trends.profitChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
               {formatPercentage(stats.trends.profitChange)}
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} mb-1 ${
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1 ${
             stats.currentMonth.profit >= 0 ? 'text-blue-900' : 'text-orange-900'
           }`}>
             {formatCurrency(Math.abs(stats.currentMonth.profit))}
           </h3>
-          <p className={`${DESIGN_TOKENS.typography.label.md} ${
+          <p className={`${DESIGN_TOKENS?.typography?.label.md} ${
             stats.currentMonth.profit >= 0 ? 'text-blue-700' : 'text-orange-700'
           }`}>
             {stats.currentMonth.profit >= 0 ? 'Net Kâr' : 'Net Zarar'}
           </p>
-          <p className={`${DESIGN_TOKENS.typography.body.sm} mt-2 ${
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} mt-2 ${
             stats.currentMonth.profit >= 0 ? 'text-blue-600' : 'text-orange-600'
           }`}>
             Geçen ay: {formatCurrency(Math.abs(stats.previousMonth.profit))}
@@ -528,12 +528,12 @@ export default function AccountingDashboard() {
             <div className={`w-12 h-12 bg-purple-500 ${DESIGN_TOKENS.radius.md} flex items-center justify-center`}>
               <Calendar className="text-white" size={24} />
             </div>
-            <span className={`${DESIGN_TOKENS.typography.body.sm} text-purple-700 font-medium`}>Bu Ay</span>
+            <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-purple-700 font-medium`}>Bu Ay</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS.typography.stat.lg} text-purple-900 mb-1`}>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} text-purple-900 mb-1`}>
             {formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}
           </h3>
-          <p className={`${DESIGN_TOKENS.typography.label.md} text-purple-700`}>Nakit Akışı</p>
+          <p className={`${DESIGN_TOKENS?.typography?.label.md} text-purple-700`}>Nakit Akışı</p>
           <div className="mt-3 flex items-center gap-2 text-xs">
             <span className="text-green-600">↑ {formatCurrency(stats.currentMonth.income)}</span>
             <span className="text-neutral-400">|</span>
@@ -890,7 +890,7 @@ export default function AccountingDashboard() {
         {/* Monthly Trend Chart */}
         <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-6">
-            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Aylık Trend</h3>
+            <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Aylık Trend</h3>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setChartType('line')}
@@ -1008,7 +1008,7 @@ export default function AccountingDashboard() {
         {/* Income vs Expense Bar Chart */}
         <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-6">
-            <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Gelir vs Gider</h3>
+            <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Gelir vs Gider</h3>
             <BarChart3 className="text-neutral-400" size={20} />
           </div>
           <ResponsiveContainer width="100%" height={260}>
@@ -1035,7 +1035,7 @@ export default function AccountingDashboard() {
         {stats.categoryBreakdown.income.length > 0 && (
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Gelir Kategorileri</h3>
+              <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Gelir Kategorileri</h3>
               <PieChartIcon className="text-neutral-400" size={20} />
             </div>
             <ResponsiveContainer width="100%" height={260}>
@@ -1064,7 +1064,7 @@ export default function AccountingDashboard() {
         {stats.categoryBreakdown.expense.length > 0 && (
           <div className={card('md', 'sm', 'default', 'lg')}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className={`${DESIGN_TOKENS.typography.h3} ${DESIGN_TOKENS.colors.text.primary}`}>Gider Kategorileri</h3>
+              <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Gider Kategorileri</h3>
               <PieChartIcon className="text-neutral-400" size={20} />
             </div>
             <ResponsiveContainer width="100%" height={260}>

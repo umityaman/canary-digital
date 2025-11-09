@@ -430,7 +430,7 @@ export default function AdvancedReporting() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS.typography.h2} ${DESIGN_TOKENS.colors.text.primary}`}>Gelişmiş Raporlama</h2>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Gelişmiş Raporlama</h2>
           <p className="text-sm text-neutral-600 mt-1">Detaylı finansal analiz ve raporlar</p>
         </div>
         
