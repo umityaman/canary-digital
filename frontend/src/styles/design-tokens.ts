@@ -419,8 +419,14 @@ const createSafeProxy = (obj: any, fallback: string = ''): any => {
   })
 }
 
+// Create safe proxied version FIRST
+const SAFE_DESIGN_TOKENS = createSafeProxy(DESIGN_TOKENS)
+
 // Export as default for better bundling (with Proxy protection)
-export default createSafeProxy(DESIGN_TOKENS)
+export default SAFE_DESIGN_TOKENS
+
+// Re-export DESIGN_TOKENS as the safe version (this replaces all imports)
+export { SAFE_DESIGN_TOKENS as DESIGN_TOKENS }
 
 // Export individual tokens for direct usage (with Proxy protection)
 export const spacing = createSafeProxy(DESIGN_TOKENS.spacing)
