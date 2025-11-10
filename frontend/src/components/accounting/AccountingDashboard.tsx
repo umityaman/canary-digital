@@ -351,9 +351,6 @@ export default function AccountingDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Muhasebe Dashboard</h2>
-        </div>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => loadDashboardData(true)}
