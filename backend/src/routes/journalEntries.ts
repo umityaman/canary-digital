@@ -55,31 +55,21 @@ router.get('/', authenticateToken, async (req, res) => {
       };
     }
 
-    // Query with optimized select (no heavy joins)
-    const [entries, total] = await Promise.all([
-      prisma.journalEntry.findMany({
-        where,
-        select: {
-          id: true,
-          entryNumber: true,
-          entryDate: true,
-          entryType: true,
-          description: true,
-          reference: true,
-          totalDebit: true,
-          totalCredit: true,
-          status: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-        orderBy: {
-          [sortBy as string]: sortOrder as string,
-        },
-        skip,
-        take: limitNum,
-      }),
-      prisma.journalEntry.count({ where }),
-    ]);
+    // TEMPORARY FIX: Use raw query to bypass Prisma query builder hang
+    console.log('🔍 [JOURNAL-DEBUG] Using $queryRaw to fetch journal entries');
+    const entries = await prisma.$queryRaw`
+      SELECT id, "entryNumber", "entryDate", "entryType", description, reference,
+             "totalDebit", "totalCredit", status, "createdAt", "updatedAt"
+      FROM "JournalEntry"
+      ORDER BY "entryDate" DESC
+      LIMIT ${limitNum}
+      OFFSET ${skip}
+    `;
+    
+    const totalResult = await prisma.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(*) as count FROM "JournalEntry"
+    `;
+    const total = Number(totalResult[0].count);
 
     const totalPages = Math.ceil(total / limitNum);
 

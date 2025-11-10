@@ -37,14 +37,15 @@ router.get('/', authenticateToken, async (req, res) => {
       ];
     }
 
-    // Query with limit for performance
-    const accounts = await prisma.chartOfAccounts.findMany({
-      where,
-      orderBy: {
-        code: 'asc',
-      },
-      take: parseInt(limit as string),
-    });
+    // TEMPORARY FIX: Use raw query to bypass Prisma query builder hang
+    console.log('🔍 [COA-DEBUG] Using $queryRaw to fetch chart of accounts');
+    const accounts = await prisma.$queryRaw`
+      SELECT id, code, name, type, category, "parentId", description,
+             "isActive", balance, "companyId", "createdAt", "updatedAt"
+      FROM "ChartOfAccounts"
+      ORDER BY code ASC
+      LIMIT ${parseInt(limit as string)}
+    `;
 
     res.json({
       success: true,
