@@ -37,14 +37,23 @@ router.get('/', authenticateToken, async (req, res) => {
       ];
     }
 
-    // TEMPORARY FIX: Use raw query to bypass Prisma query builder hang
-    console.log('🔍 [COA-DEBUG] Using $queryRaw to fetch chart of accounts');
-    const accounts = await prisma.$queryRaw`
-      SELECT id, code, name, type, category, description, "isActive"
-      FROM "ChartOfAccounts"
-      ORDER BY code ASC
-      LIMIT ${parseInt(limit as string)}
-    `;
+    // Query with limit for performance
+    const accounts = await prisma.chartOfAccounts.findMany({
+      where,
+      select: {
+        id: true,
+        code: true,
+        name: true,
+        type: true,
+        category: true,
+        description: true,
+        isActive: true,
+      },
+      orderBy: {
+        code: 'asc',
+      },
+      take: parseInt(limit as string),
+    });
 
     res.json({
       success: true,
