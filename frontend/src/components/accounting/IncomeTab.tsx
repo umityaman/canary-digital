@@ -172,38 +172,38 @@ export default function IncomeTab() {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-900 rounded-lg flex items-center justify-center">
-              <TrendingUp className="text-white" size={20} />
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
+              <TrendingUp className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(monthlyIncome)}</h3>
-          <p className="text-sm font-medium text-neutral-600">Aylık Gelir</p>
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{formatCurrency(monthlyIncome)}</h3>
+          <p className="text-xs font-medium text-neutral-600">Aylık Gelir</p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-700 rounded-lg flex items-center justify-center">
-              <DollarSign className="text-white" size={20} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-8 h-8 bg-neutral-700 rounded-lg flex items-center justify-center">
+              <DollarSign className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Toplam</span>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(totalIncome)}</h3>
-          <p className="text-sm font-medium text-neutral-600">Toplam Gelir</p>
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{formatCurrency(totalIncome)}</h3>
+          <p className="text-xs font-medium text-neutral-600">Toplam Gelir</p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center">
-              <FileText className="text-white" size={20} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
+              <FileText className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Kayıt</span>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{incomes.length}</h3>
-          <p className="text-sm font-medium text-neutral-600">Gelir Kaydı</p>
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{incomes.length}</h3>
+          <p className="text-xs font-medium text-neutral-600">Gelir Kaydı</p>
         </div>
       </div>
 

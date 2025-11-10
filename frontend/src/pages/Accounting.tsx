@@ -779,12 +779,12 @@ export default function Accounting() {
       {loading ? (
         <CardSkeleton count={4} />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Bu Ay Gelir */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-neutral-900 rounded-lg flex items-center justify-center">
-                <TrendingUp className="text-white" size={24} />
+          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-2">
+              <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
+                <TrendingUp className="text-white" size={16} />
               </div>
               {stats && stats.invoiceCount > 0 && (
                 <span className="text-xs font-medium text-neutral-600">
@@ -792,53 +792,53 @@ export default function Accounting() {
                 </span>
               )}
             </div>
-            <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
               {stats ? formatCurrency(stats.totalRevenue) : '₺0'}
             </h3>
-            <p className="text-sm font-medium text-neutral-600">Bu Ay Gelir</p>
+            <p className="text-xs font-medium text-neutral-600">Bu Ay Gelir</p>
           </div>
 
           {/* Bu Ay Gider */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-neutral-700 rounded-lg flex items-center justify-center">
-                <TrendingDown className="text-white" size={24} />
+          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-2">
+              <div className="w-8 h-8 bg-neutral-700 rounded-lg flex items-center justify-center">
+                <TrendingDown className="text-white" size={16} />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
               {stats ? formatCurrency(stats.totalExpenses) : '₺0'}
             </h3>
-            <p className="text-sm font-medium text-neutral-600">Bu Ay Gider</p>
+            <p className="text-xs font-medium text-neutral-600">Bu Ay Gider</p>
           </div>
 
           {/* Net Kâr */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-neutral-800 rounded-lg flex items-center justify-center">
-                <DollarSign className="text-white" size={24} />
+          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-2">
+              <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
+                <DollarSign className="text-white" size={16} />
               </div>
               <span className="text-xs font-medium text-neutral-600">Net</span>
             </div>
-            <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
               {stats ? formatCurrency(stats.netProfit) : '₺0'}
             </h3>
-            <p className="text-sm font-medium text-neutral-600">Net Kâr</p>
+            <p className="text-xs font-medium text-neutral-600">Net Kâr</p>
           </div>
 
           {/* Tahsilat / Bekleyen */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-neutral-600 rounded-lg flex items-center justify-center">
-                <Clock className="text-white" size={24} />
+          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-2">
+              <div className="w-8 h-8 bg-neutral-600 rounded-lg flex items-center justify-center">
+                <Clock className="text-white" size={16} />
               </div>
               <span className="text-xs font-medium text-neutral-600">Bekleyen</span>
             </div>
-            <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
               {stats ? formatCurrency(stats.totalOverdue) : '₺0'}
             </h3>
-            <p className="text-sm font-medium text-neutral-600">Vade Geçmiş</p>
+            <p className="text-xs font-medium text-neutral-600">Vade Geçmiş</p>
             {stats && stats.totalCollections > 0 && (
-              <p className="text-xs text-neutral-500 mt-2">
+              <p className="text-xs text-neutral-500 mt-1">
                 Bu ay: {formatCurrency(stats.totalCollections)}
               </p>
             )}
