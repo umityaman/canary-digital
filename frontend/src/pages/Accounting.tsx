@@ -1157,9 +1157,9 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className={`${card('sm', 'flat', 'default', 'lg')} space-y-4`}>
+                <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm space-y-4">
                   {/* Basic Filters */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                     {/* Search */}
                     <div className="relative">
                       <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
@@ -1308,7 +1308,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Invoice Table */}
-                <div className={`${card('sm', 'sm', 'default', 'lg')} overflow-hidden`}>
+                <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden">
                   {invoicesLoading ? (
                     <TableSkeleton rows={10} columns={8} showHeader={true} />
                   ) : invoices.length === 0 ? (
@@ -1550,7 +1550,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className={cx(card('sm', 'flat', 'default', 'lg'), 'max-w-full')}>
+                <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm max-w-full">
                   {/* Basic Filters */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                     {/* Search */}
@@ -1702,7 +1702,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Offer Table */}
-                <div className={cx(card('sm', 'sm', 'default', 'lg'), 'overflow-hidden max-w-full')}>
+                <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden max-w-full">
                   {offersLoading ? (
                     <TableSkeleton rows={10} columns={7} showHeader={true} />
                   ) : offers.length === 0 ? (
