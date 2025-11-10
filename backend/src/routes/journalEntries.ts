@@ -28,9 +28,10 @@ router.get('/', authenticateToken, async (req, res) => {
     const skip = (pageNum - 1) * limitNum;
 
     // Build where clause
-    const where: any = {
-      companyId: 1, // TODO: Get from authenticated user's company
-    };
+    const where: any = {};
+    
+    // TODO: Add companyId filter from authenticated user's company
+    // Temporarily removed to avoid query planner issues with empty tables
 
     if (startDate || endDate) {
       where.entryDate = {};
