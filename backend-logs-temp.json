@@ -1,0 +1,1231 @@
+﻿[
+  {
+    "httpRequest": {
+      "latency": "0.004533120s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.236.221.2",
+      "requestMethod": "GET",
+      "requestSize": "410",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.79.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e6be00032ffeffc7e25a",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:08:46.212742778Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "dada28c1fce345a7",
+    "timestamp": "2025-11-09T19:08:46.202666Z",
+    "trace": "projects/canary-digital-475319/traces/a02d156006abfb7896358bbd83adcd95",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003026470s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.198.36.209",
+      "requestMethod": "GET",
+      "requestSize": "410",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1084",
+      "serverIp": "34.143.72.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e6a20007b5c49967ac22",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:08:18.507924104Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "7686c1b7119800dd",
+    "timestamp": "2025-11-09T19:08:18.501126Z",
+    "trace": "projects/canary-digital-475319/traces/d659b34132ae6825525a8fd7f9433d01",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003566599s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.233.206.171",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.73.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e6830009029145aa45e0",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:07:47.594355869Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "d402c69ee2dc3d92",
+    "timestamp": "2025-11-09T19:07:47.585513Z",
+    "trace": "projects/canary-digital-475319/traces/bec3684a9ee50d92756978df4658a350",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003106590s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.192.92.84",
+      "requestMethod": "GET",
+      "requestSize": "410",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1084",
+      "serverIp": "34.143.78.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e669000ac701a7e7beeb",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:07:22.040047981Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "11439de02f5f92e8",
+    "timestamp": "2025-11-09T19:07:21.698372Z",
+    "trace": "projects/canary-digital-475319/traces/c862dff7fb06dfc45417b58999f02d8e",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003022260s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.186.159.51",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.74.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e61600024dc24c839abb",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:05:58.154109779Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "55810efad4385ee2",
+    "timestamp": "2025-11-09T19:05:58.143150Z",
+    "trace": "projects/canary-digital-475319/traces/aa34a963efd98371adcaa5fc281303dd",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003673080s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.205.72.231",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.77.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e5e0000cc4c8ffa0e147",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:05:04.840586462Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "d16b384ff74d3503",
+    "timestamp": "2025-11-09T19:05:04.827526Z",
+    "trace": "projects/canary-digital-475319/traces/8cd14bc37fc1bbfa97303f83b1f86d61",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.002821699s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.186.167.85",
+      "requestMethod": "GET",
+      "requestSize": "410",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.77.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e59200044c6a5a6ac532",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:03:46.287114924Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "6db594c00b45c06b",
+    "timestamp": "2025-11-09T19:03:46.278078Z",
+    "trace": "projects/canary-digital-475319/traces/07af10b567fa28f14830739c29a2b4ca",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.005365570s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.199.123.150",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1084",
+      "serverIp": "34.143.79.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e576000ab76436266314",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:03:18.903029023Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "5a2d7acb46e4ec9f",
+    "timestamp": "2025-11-09T19:03:18.695530Z",
+    "trace": "projects/canary-digital-475319/traces/332419c85ce2c29282f5bd1cdd6f163a"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.171078056s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "88.244.89.59",
+      "requestMethod": "GET",
+      "requestSize": "615",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/invoices?page=1&limit=5",
+      "responseSize": "3352",
+      "serverIp": "34.143.77.2",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; tr-TR) WindowsPowerShell/5.1.26100.6899"
+    },
+    "insertId": "6910e57600038e320d1320b5",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:03:18.237397862Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "a5356ded7fc45122",
+    "timestamp": "2025-11-09T19:03:18.060567Z",
+    "trace": "projects/canary-digital-475319/traces/968bea667a0efaae61f7d53c2f419ab8",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "300.001136211s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "88.244.89.59",
+      "requestMethod": "GET",
+      "requestSize": "620",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/accounting/chart-of-accounts",
+      "responseSize": "72",
+      "serverIp": "34.143.77.2",
+      "status": 504,
+      "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; tr-TR) WindowsPowerShell/5.1.26100.6899"
+    },
+    "insertId": "6910e683000ef1ec7b0ed498",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:07:48.259859232Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "ERROR",
+    "spanId": "12a19a207a9f136b",
+    "timestamp": "2025-11-09T19:02:47.977046Z",
+    "trace": "projects/canary-digital-475319/traces/3ceddf59cd33049de731e313581e6dbe"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003228230s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.233.165.146",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.76.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e5560008d865970e8b25",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:02:46.618953681Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "c0796afa9cdc55ce",
+    "timestamp": "2025-11-09T19:02:46.575464Z",
+    "trace": "projects/canary-digital-475319/traces/56546a97917088898f20e94a7c68811d",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003097390s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.224.249.156",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1084",
+      "serverIp": "34.143.76.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e53d000abf2b43c7ad8c",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:02:21.939345901Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "d2a4357b0db0a98c",
+    "timestamp": "2025-11-09T19:02:21.699880Z",
+    "trace": "projects/canary-digital-475319/traces/b8c6f233fdcd9fd77e5e2d1900f51541"
+  },
+  {
+    "httpRequest": {
+      "latency": "300.000235979s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "88.244.89.59",
+      "requestMethod": "GET",
+      "requestSize": "633",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/accounting/journal-entries?page=1&limit=5",
+      "responseSize": "72",
+      "serverIp": "34.143.77.2",
+      "status": 504,
+      "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; tr-TR) WindowsPowerShell/5.1.26100.6899"
+    },
+    "insertId": "6910e665000acc03ad5bd0a5",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:07:17.712059987Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "ERROR",
+    "spanId": "19d8c49442a42bd8",
+    "timestamp": "2025-11-09T19:02:17.706084Z",
+    "trace": "projects/canary-digital-475319/traces/8da232658e4b957fcaf2f39473ac92f8"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.699227804s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "88.244.89.59",
+      "requestMethod": "POST",
+      "requestSize": "482",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/auth/login",
+      "responseSize": "1903",
+      "serverIp": "34.143.77.2",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; tr-TR) WindowsPowerShell/5.1.26100.6899"
+    },
+    "insertId": "6910e53900042c8c25be728f",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:02:17.275711120Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "207503a04c6c8b7c",
+    "timestamp": "2025-11-09T19:02:16.569373Z",
+    "trace": "projects/canary-digital-475319/traces/bcaa798932aa4095caf2f39473ac9cd8",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003650260s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.198.194.122",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.79.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e4ea000267b6d4098c25",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:00:58.160458673Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "022155c2dd571c5a",
+    "timestamp": "2025-11-09T19:00:58.148821Z",
+    "trace": "projects/canary-digital-475319/traces/32f8c9681b5452593bea852332ba9b2d",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.015342809s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.205.234.10",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.79.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e4b4000d08bb383dd492",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T19:00:04.959830222Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "55280a0ccf31009a",
+    "timestamp": "2025-11-09T19:00:04.833746Z",
+    "trace": "projects/canary-digital-475319/traces/db4a069ba3923d7ab7b98b747b7b131f",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.004179269s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.186.167.85",
+      "requestMethod": "GET",
+      "requestSize": "410",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.75.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e46600041f91fb8ed55b",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T18:58:46.276679626Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "d4e8894781ce52f5",
+    "timestamp": "2025-11-09T18:58:46.264911Z",
+    "trace": "projects/canary-digital-475319/traces/2b9e490fecb0d4a00239bd40ad78905a",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.014640949s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.199.126.168",
+      "requestMethod": "GET",
+      "requestSize": "411",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1084",
+      "serverIp": "34.143.77.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e44a000894b426d934de",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T18:58:18.566753937Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "2dcb9435f0baafe6",
+    "timestamp": "2025-11-09T18:58:18.546363Z",
+    "trace": "projects/canary-digital-475319/traces/81b2e0b0364560052e1af1fd74b03335",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "0.295689681s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.233.206.171",
+      "requestMethod": "GET",
+      "requestSize": "410",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.74.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e42a000d4adc5091d1f8",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T18:57:46.875826387Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "e46bdc2c8d569348",
+    "timestamp": "2025-11-09T18:57:46.573630Z",
+    "trace": "projects/canary-digital-475319/traces/b856601d7ac34b99854c4715a92845cc",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "2.992781125s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "35.238.3.7",
+      "requestMethod": "GET",
+      "requestSize": "410",
+      "requestUrl": "https://canary-backend-672344972017.europe-west1.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.74.2",
+      "status": 200,
+      "userAgent": "GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)"
+    },
+    "insertId": "6910e414000a9c6257c2c621",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T18:57:24.701376463Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "f689fae55ba314c7",
+    "timestamp": "2025-11-09T18:57:21.696445Z",
+    "trace": "projects/canary-digital-475319/traces/afa0d398214b4056a9650ca4d032bae8",
+    "traceSampled": true
+  },
+  {
+    "httpRequest": {
+      "latency": "1.181385196s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "145.132.99.132",
+      "requestMethod": "GET",
+      "requestSize": "278",
+      "requestUrl": "https://canary-backend-dw25vffosa-ew.a.run.app/api/health",
+      "responseSize": "1085",
+      "serverIp": "34.143.77.2",
+      "status": 200,
+      "userAgent": "curl/8.5.0"
+    },
+    "insertId": "6910e3e5000d6a9f5cdc674c",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2025-11-09T18:56:37.881848908Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "953a1bb292988b01",
+    "timestamp": "2025-11-09T18:56:36.691700Z",
+    "trace": "projects/canary-digital-475319/traces/711756d6283d49c0bb2bdf509a529a15",
+    "traceSampled": true
+  },
+  {
+    "insertId": "-m4wrbaclg6",
+    "logName": "projects/canary-digital-475319/logs/cloudaudit.googleapis.com%2Fsystem_event",
+    "protoPayload": {
+      "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+      "methodName": "/Services.ReplaceService",
+      "resourceName": "namespaces/canary-digital-475319/services/canary-backend",
+      "response": {
+        "@type": "type.googleapis.com/google.cloud.run.v1.Service",
+        "apiVersion": "serving.knative.dev/v1",
+        "kind": "Service",
+        "metadata": {
+          "annotations": {
+            "run.googleapis.com/build-base-image": "europe-west1-docker.pkg.dev/serverless-runtimes/google-22/run/universal:public-image-next",
+            "run.googleapis.com/build-enable-automatic-updates": "false",
+            "run.googleapis.com/build-id": "63961b8e-e1b2-4306-a7ab-3312bfcd0a0e",
+            "run.googleapis.com/build-image-uri": "europe-west1-docker.pkg.dev/canary-digital-475319/cloud-run-source-deploy/canary-backend",
+            "run.googleapis.com/build-name": "projects/672344972017/locations/europe-west1/builds/63961b8e-e1b2-4306-a7ab-3312bfcd0a0e",
+            "run.googleapis.com/build-source-location": "gs://run-sources-canary-digital-475319-europe-west1/services/canary-backend/1762625009.132555-4d2670bc09164107a0acdb90400b70b0.zip#1762625053057170",
+            "run.googleapis.com/client-name": "gcloud",
+            "run.googleapis.com/client-version": "545.0.0",
+            "run.googleapis.com/ingress": "all",
+            "run.googleapis.com/ingress-status": "all",
+            "run.googleapis.com/operation-id": "6e760b7a-72b4-43e5-8297-abeed7bbbfe5",
+            "run.googleapis.com/urls": "[\"https://canary-backend-672344972017.europe-west1.run.app\",\"https://canary-backend-dw25vffosa-ew.a.run.app\"]",
+            "serving.knative.dev/creator": "Seyyahyaman@gmail.com",
+            "serving.knative.dev/lastModifier": "github-actions@canary-digital-475319.iam.gserviceaccount.com"
+          },
+          "creationTimestamp": "2025-10-16T22:05:15.889976Z",
+          "generation": 578,
+          "labels": {
+            "cloud.googleapis.com/location": "europe-west1"
+          },
+          "name": "canary-backend",
+          "namespace": "672344972017",
+          "resourceVersion": "AAZDLfg88Ug",
+          "selfLink": "/apis/serving.knative.dev/v1/namespaces/672344972017/services/canary-backend",
+          "uid": "7e5257b3-cc42-4e65-96dd-216e54d8efb3"
+        },
+        "spec": {
+          "template": {
+            "metadata": {
+              "annotations": {
+                "autoscaling.knative.dev/maxScale": "10",
+                "autoscaling.knative.dev/minScale": "1",
+                "run.googleapis.com/client-name": "gcloud",
+                "run.googleapis.com/client-version": "545.0.0",
+                "run.googleapis.com/cloudsql-instances": "canary-digital-475319:europe-west1:canary-postgres",
+                "run.googleapis.com/startup-cpu-boost": "true"
+              },
+              "labels": {
+                "client.knative.dev/nonce": "aqdoumwbca",
+                "run.googleapis.com/startupProbeType": "Default"
+              }
+            },
+            "spec": {
+              "containerConcurrency": 80,
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "JWT_SECRET",
+                      "valueFrom": {
+                        "secretKeyRef": {
+                          "key": "latest",
+                          "name": "jwt-secret"
+                        }
+                      }
+                    },
+                    {
+                      "name": "JWT_REFRESH_SECRET",
+                      "valueFrom": {
+                        "secretKeyRef": {
+                          "key": "latest",
+                          "name": "jwt-secret"
+                        }
+                      }
+                    },
+                    {
+                      "name": "DATABASE_URL",
+                      "valueFrom": {
+                        "secretKeyRef": {
+                          "key": "latest",
+                          "name": "database-url"
+                        }
+                      }
+                    },
+                    {
+                      "name": "NODE_ENV",
+                      "value": "production"
+                    }
+                  ],
+                  "image": "europe-west1-docker.pkg.dev/canary-digital-475319/canary/backend:7ae5aa628d52bb6fc9ca00ba9053e27de8dace0e",
+                  "ports": [
+                    {
+                      "containerPort": 4000,
+                      "name": "http1"
+                    }
+                  ],
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    }
+                  },
+                  "startupProbe": {
+                    "failureThreshold": 1,
+                    "periodSeconds": 240,
+                    "tcpSocket": {
+                      "port": 4000
+                    },
+                    "timeoutSeconds": 240
+                  }
+                }
+              ],
+              "serviceAccountName": "672344972017-compute@developer.gserviceaccount.com",
+              "timeoutSeconds": 300
+            }
+          },
+          "traffic": [
+            {
+              "latestRevision": true,
+              "percent": 100
+            }
+          ]
+        },
+        "status": {
+          "address": {
+            "url": "https://canary-backend-dw25vffosa-ew.a.run.app"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2025-11-09T18:56:17.596744Z",
+              "status": "True",
+              "type": "Ready"
+            },
+            {
+              "lastTransitionTime": "2025-11-09T18:55:53.143889Z",
+              "status": "True",
+              "type": "ConfigurationsReady"
+            },
+            {
+              "lastTransitionTime": "2025-11-09T18:56:17.564804Z",
+              "status": "True",
+              "type": "RoutesReady"
+            }
+          ],
+          "latestCreatedRevisionName": "canary-backend-00578-mgd",
+          "latestReadyRevisionName": "canary-backend-00578-mgd",
+          "observedGeneration": 578,
+          "traffic": [
+            {
+              "latestRevision": true,
+              "percent": 100,
+              "revisionName": "canary-backend-00578-mgd"
+            }
+          ],
+          "url": "https://canary-backend-dw25vffosa-ew.a.run.app"
+        }
+      },
+      "serviceName": "run.googleapis.com",
+      "status": {
+        "message": "Ready condition status changed to True for Service canary-backend."
+      }
+    },
+    "receiveTimestamp": "2025-11-09T18:56:18.563573981Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "timestamp": "2025-11-09T18:56:17.610060Z"
+  },
+  {
+    "insertId": "-1w9m9gcmiu",
+    "logName": "projects/canary-digital-475319/logs/cloudaudit.googleapis.com%2Fsystem_event",
+    "protoPayload": {
+      "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+      "methodName": "/Services.ReplaceService",
+      "resourceName": "namespaces/canary-digital-475319/revisions/canary-backend-00578-mgd",
+      "response": {
+        "@type": "type.googleapis.com/google.cloud.run.v1.Revision",
+        "apiVersion": "serving.knative.dev/v1",
+        "kind": "Revision",
+        "metadata": {
+          "annotations": {
+            "autoscaling.knative.dev/maxScale": "10",
+            "autoscaling.knative.dev/minScale": "1",
+            "run.googleapis.com/client-name": "gcloud",
+            "run.googleapis.com/client-version": "545.0.0",
+            "run.googleapis.com/cloudsql-instances": "canary-digital-475319:europe-west1:canary-postgres",
+            "run.googleapis.com/operation-id": "6e760b7a-72b4-43e5-8297-abeed7bbbfe5",
+            "run.googleapis.com/startup-cpu-boost": "true",
+            "serving.knative.dev/creator": "github-actions@canary-digital-475319.iam.gserviceaccount.com"
+          },
+          "creationTimestamp": "2025-11-09T18:55:11.855006Z",
+          "generation": 1,
+          "labels": {
+            "client.knative.dev/nonce": "aqdoumwbca",
+            "cloud.googleapis.com/location": "europe-west1",
+            "run.googleapis.com/startupProbeType": "Default",
+            "serving.knative.dev/configuration": "canary-backend",
+            "serving.knative.dev/configurationGeneration": "578",
+            "serving.knative.dev/route": "canary-backend",
+            "serving.knative.dev/service": "canary-backend",
+            "serving.knative.dev/serviceUid": "7e5257b3-cc42-4e65-96dd-216e54d8efb3"
+          },
+          "name": "canary-backend-00578-mgd",
+          "namespace": "672344972017",
+          "ownerReferences": [
+            {
+              "apiVersion": "serving.knative.dev/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Configuration",
+              "name": "canary-backend",
+              "uid": "d6e03ea6-b934-448e-9498-299e0596b178"
+            }
+          ],
+          "resourceVersion": "AAZDLfgpESM",
+          "selfLink": "/apis/serving.knative.dev/v1/namespaces/672344972017/revisions/canary-backend-00578-mgd",
+          "uid": "427b1425-770b-426d-9f3e-0cef2eabeaf0"
+        },
+        "spec": {
+          "containerConcurrency": 80,
+          "containers": [
+            {
+              "env": [
+                {
+                  "name": "JWT_SECRET",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "key": "latest",
+                      "name": "jwt-secret"
+                    }
+                  }
+                },
+                {
+                  "name": "JWT_REFRESH_SECRET",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "key": "latest",
+                      "name": "jwt-secret"
+                    }
+                  }
+                },
+                {
+                  "name": "DATABASE_URL",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "key": "latest",
+                      "name": "database-url"
+                    }
+                  }
+                },
+                {
+                  "name": "NODE_ENV",
+                  "value": "production"
+                }
+              ],
+              "image": "europe-west1-docker.pkg.dev/canary-digital-475319/canary/backend@sha256:0650e4d92dee999e9fc50b2b316684cd722e0e11430ba020fd807cb4eafc9cf5",
+              "name": "backend-1",
+              "ports": [
+                {
+                  "containerPort": 4000,
+                  "name": "http1"
+                }
+              ],
+              "resources": {
+                "limits": {
+                  "cpu": "1",
+                  "memory": "1Gi"
+                }
+              },
+              "startupProbe": {
+                "failureThreshold": 1,
+                "periodSeconds": 240,
+                "tcpSocket": {
+                  "port": 4000
+                },
+                "timeoutSeconds": 240
+              }
+            }
+          ],
+          "serviceAccountName": "672344972017-compute@developer.gserviceaccount.com",
+          "timeoutSeconds": 300
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2025-11-09T18:56:16.294179Z",
+              "message": "Deploying revision succeeded in 1m4.44s.",
+              "status": "True",
+              "type": "Ready"
+            },
+            {
+              "lastTransitionTime": "2025-11-09T18:56:14.980959Z",
+              "message": "Containers became healthy.",
+              "status": "True",
+              "type": "ContainerHealthy"
+            },
+            {
+              "lastTransitionTime": "2025-11-09T18:55:53.057305Z",
+              "message": "Container image import completed in 40.65s.",
+              "status": "True",
+              "type": "ContainerReady"
+            },
+            {
+              "lastTransitionTime": "2025-11-09T18:56:16.242489Z",
+              "message": "Min instances provisioned successfully  in 23.03s.",
+              "status": "True",
+              "type": "MinInstancesProvisioned"
+            },
+            {
+              "lastTransitionTime": "2025-11-09T18:55:55.622422Z",
+              "message": "Provisioning imported containers completed in 2.56s. Checking container health. This will wait for up to 4m for the configured startup probe, including an initial delay of 0s.",
+              "status": "True",
+              "type": "ResourcesAvailable"
+            }
+          ],
+          "containerStatuses": [
+            {
+              "imageDigest": "europe-west1-docker.pkg.dev/canary-digital-475319/canary/backend@sha256:0650e4d92dee999e9fc50b2b316684cd722e0e11430ba020fd807cb4eafc9cf5",
+              "name": "backend-1"
+            }
+          ],
+          "desiredReplicas": 1,
+          "imageDigest": "europe-west1-docker.pkg.dev/canary-digital-475319/canary/backend@sha256:0650e4d92dee999e9fc50b2b316684cd722e0e11430ba020fd807cb4eafc9cf5",
+          "logUrl": "https://console.cloud.google.com/logs/viewer?project=canary-digital-475319&resource=cloud_run_revision/service_name/canary-backend/revision_name/canary-backend-00578-mgd&advancedFilter=resource.type%3D%22cloud_run_revision%22%0Aresource.labels.service_name%3D%22canary-backend%22%0Aresource.labels.revision_name%3D%22canary-backend-00578-mgd%22",
+          "observedGeneration": 1
+        }
+      },
+      "serviceName": "run.googleapis.com",
+      "status": {
+        "message": "Ready condition status changed to True for Revision canary-backend-00578-mgd with message: Deploying revision succeeded in 1m4.44s."
+      }
+    },
+    "receiveTimestamp": "2025-11-09T18:56:16.545633833Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "timestamp": "2025-11-09T18:56:16.305375Z"
+  },
+  {
+    "insertId": "6910e3ce000eeb3352ed182b",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2025-11-09T18:56:15.095658946Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "2025-11-09 18:56:14:5614 \u001b[33mwarn\u001b[39m: \u001b[33m??  Twilio credentials not found. WhatsApp features disabled.\u001b[39m",
+    "timestamp": "2025-11-09T18:56:14.977715Z"
+  },
+  {
+    "insertId": "6910e3ce000eeb2db8797851",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2025-11-09T18:56:15.095658946Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "? Backend listening on port 4000",
+    "timestamp": "2025-11-09T18:56:14.977709Z"
+  },
+  {
+    "insertId": "6910e3ce000ee26084bbb16d",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fvarlog%2Fsystem",
+    "receiveTimestamp": "2025-11-09T18:56:14.979014965Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "textPayload": "Default STARTUP TCP probe succeeded after 1 attempt for container \"backend-1\" on port 4000.",
+    "timestamp": "2025-11-09T18:56:14.975456Z"
+  },
+  {
+    "insertId": "6910e3ce000a99caa1966a2d",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2025-11-09T18:56:14.862580245Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "??  OPENAI_API_KEY not found in environment variables. Chatbot will not work.",
+    "timestamp": "2025-11-09T18:56:14.694730Z"
+  },
+  {
+    "insertId": "6910e3cc000d3229ef267542",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2025-11-09T18:56:13.194781414Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "??  Parasut credentials not found. Accounting features disabled.",
+    "timestamp": "2025-11-09T18:56:12.864809Z"
+  },
+  {
+    "insertId": "6910e3cc000ad6b257b61ec9",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2025-11-09T18:56:12.862513955Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "Sharp not available - thumbnail generation will be disabled",
+    "timestamp": "2025-11-09T18:56:12.710322Z"
+  },
+  {
+    "insertId": "6910e3cc0002ec5fd962e249",
+    "labels": {
+      "instanceId": "001477829629b62783a819f398c5b5993b887639ae5797e8b9a78447265c035f4ba1ce821d07c82eed8925e8d8424b645caaa35b781c941fee7498e0d979caefbb0648120505f9edee8ecf03"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2025-11-09T18:56:12.198011995Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00578-mgd",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "??  Iyzico credentials not found. Payment features disabled.",
+    "timestamp": "2025-11-09T18:56:12.191583Z"
+  }
+]
