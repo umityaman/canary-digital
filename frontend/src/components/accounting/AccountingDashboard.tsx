@@ -40,7 +40,7 @@ interface DashboardStats {
   }
 }
 
-const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+const COLORS = ['#171717', '#404040', '#525252', '#737373', '#a3a3a3', '#d4d4d4']
 
 export default function AccountingDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
@@ -431,104 +431,100 @@ export default function AccountingDashboard() {
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      {/* KPI Cards - Minimal B&W Design */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {/* Income Card */}
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
-          <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-green-500 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
-              <TrendingUp className="text-white" size={24} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 bg-neutral-900 rounded-lg flex items-center justify-center">
+              <TrendingUp className="text-white" size={20} />
             </div>
-            <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
-              stats.trends.incomeChange >= 0 ? 'text-green-600' : 'text-red-600'
+            <div className={`flex items-center gap-1 text-xs font-semibold ${
+              stats.trends.incomeChange >= 0 ? 'text-neutral-900' : 'text-neutral-500'
             }`}>
-              {stats.trends.incomeChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
+              {stats.trends.incomeChange >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
               {formatPercentage(stats.trends.incomeChange)}
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-900 mb-1`}>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
             {formatCurrency(stats.currentMonth.income)}
           </h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} text-green-700`}>Bu Ay Gelir</p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-600 mt-2`}>
+          <p className="text-sm font-medium text-neutral-600">Bu Ay Gelir</p>
+          <p className="text-xs text-neutral-400 mt-2">
             Geçen ay: {formatCurrency(stats.previousMonth.income)}
           </p>
         </div>
 
         {/* Expense Card */}
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
-          <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-red-500 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
-              <TrendingDown className="text-white" size={24} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 bg-neutral-700 rounded-lg flex items-center justify-center">
+              <TrendingDown className="text-white" size={20} />
             </div>
-            <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
-              stats.trends.expenseChange >= 0 ? 'text-red-600' : 'text-green-600'
+            <div className={`flex items-center gap-1 text-xs font-semibold ${
+              stats.trends.expenseChange >= 0 ? 'text-neutral-500' : 'text-neutral-900'
             }`}>
-              {stats.trends.expenseChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
+              {stats.trends.expenseChange >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
               {formatPercentage(stats.trends.expenseChange)}
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-900 mb-1`}>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
             {formatCurrency(stats.currentMonth.expense)}
           </h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} text-red-700`}>Bu Ay Gider</p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-600 mt-2`}>
+          <p className="text-sm font-medium text-neutral-600">Bu Ay Gider</p>
+          <p className="text-xs text-neutral-400 mt-2">
             Geçen ay: {formatCurrency(stats.previousMonth.expense)}
           </p>
         </div>
 
         {/* Profit Card */}
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), `bg-gradient-to-br ${
-          stats.currentMonth.profit >= 0
-            ? 'from-blue-50 to-blue-100 border-blue-200'
-            : 'from-orange-50 to-orange-100 border-orange-200'
-        }`)}>
-          <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center ${
-              stats.currentMonth.profit >= 0 ? 'bg-blue-500' : 'bg-orange-500'
+        <div className={`bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow ${
+          stats.currentMonth.profit >= 0 ? 'border-neutral-900' : 'border-neutral-300'
+        }`}>
+          <div className="flex items-center justify-between mb-3">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+              stats.currentMonth.profit >= 0 ? 'bg-neutral-900' : 'bg-neutral-400'
             }`}>
-              <DollarSign className="text-white" size={24} />
+              <DollarSign className="text-white" size={20} />
             </div>
-            <div className={`flex items-center gap-1 ${DESIGN_TOKENS?.typography?.label.sm} font-semibold ${
-              stats.trends.profitChange >= 0 ? 'text-green-600' : 'text-red-600'
+            <div className={`flex items-center gap-1 text-xs font-semibold ${
+              stats.trends.profitChange >= 0 ? 'text-neutral-900' : 'text-neutral-500'
             }`}>
-              {stats.trends.profitChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
+              {stats.trends.profitChange >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
               {formatPercentage(stats.trends.profitChange)}
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1 ${
-            stats.currentMonth.profit >= 0 ? 'text-blue-900' : 'text-orange-900'
+          <h3 className={`text-2xl font-bold mb-1 ${
+            stats.currentMonth.profit >= 0 ? 'text-neutral-900' : 'text-neutral-600'
           }`}>
             {formatCurrency(Math.abs(stats.currentMonth.profit))}
           </h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} ${
-            stats.currentMonth.profit >= 0 ? 'text-blue-700' : 'text-orange-700'
+          <p className={`text-sm font-medium ${
+            stats.currentMonth.profit >= 0 ? 'text-neutral-900' : 'text-neutral-600'
           }`}>
             {stats.currentMonth.profit >= 0 ? 'Net Kâr' : 'Net Zarar'}
           </p>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} mt-2 ${
-            stats.currentMonth.profit >= 0 ? 'text-blue-600' : 'text-orange-600'
-          }`}>
+          <p className="text-xs text-neutral-400 mt-2">
             Geçen ay: {formatCurrency(Math.abs(stats.previousMonth.profit))}
           </p>
         </div>
 
         {/* Cash Flow Card */}
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
-          <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-purple-500 ${DESIGN_TOKENS?.radius?.md} flex items-center justify-center`}>
-              <Calendar className="text-white" size={24} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center">
+              <Calendar className="text-white" size={20} />
             </div>
-            <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-purple-700 font-medium`}>Bu Ay</span>
+            <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} text-purple-900 mb-1`}>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
             {formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}
           </h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} text-purple-700`}>Nakit Akışı</p>
-          <div className="mt-3 flex items-center gap-2 text-xs">
-            <span className="text-green-600">↑ {formatCurrency(stats.currentMonth.income)}</span>
-            <span className="text-neutral-400">|</span>
-            <span className="text-red-600">↓ {formatCurrency(stats.currentMonth.expense)}</span>
+          <p className="text-sm font-medium text-neutral-600">Nakit Akışı</p>
+          <div className="mt-3 flex items-center gap-2 text-xs text-neutral-500">
+            <span>↑ {formatCurrency(stats.currentMonth.income)}</span>
+            <span className="text-neutral-300">|</span>
+            <span>↓ {formatCurrency(stats.currentMonth.expense)}</span>
           </div>
         </div>
       </div>
@@ -930,18 +926,18 @@ export default function AccountingDashboard() {
                 <Line
                   type="monotone"
                   dataKey="income"
-                  stroke="#10b981"
+                  stroke="#171717"
                   strokeWidth={2}
                   name="Gelir"
-                  dot={{ fill: '#10b981', r: 4 }}
+                  dot={{ fill: '#171717', r: 4 }}
                 />
                 <Line
                   type="monotone"
                   dataKey="expense"
-                  stroke="#ef4444"
+                  stroke="#737373"
                   strokeWidth={2}
                   name="Gider"
-                  dot={{ fill: '#ef4444', r: 4 }}
+                  dot={{ fill: '#737373', r: 4 }}
                 />
               </LineChart>
             ) : chartType === 'bar' ? (
@@ -958,8 +954,8 @@ export default function AccountingDashboard() {
                   }}
                 />
                 <Legend />
-                <Bar dataKey="income" fill="#10b981" name="Gelir" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="expense" fill="#ef4444" name="Gider" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="income" fill="#171717" name="Gelir" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="expense" fill="#737373" name="Gider" radius={[8, 8, 0, 0]} />
               </BarChart>
             ) : (
               <AreaChart data={stats.monthlyData}>
@@ -978,16 +974,16 @@ export default function AccountingDashboard() {
                 <Area
                   type="monotone"
                   dataKey="income"
-                  stroke="#10b981"
-                  fill="#10b981"
+                  stroke="#171717"
+                  fill="#171717"
                   fillOpacity={0.3}
                   name="Gelir"
                 />
                 <Area
                   type="monotone"
                   dataKey="expense"
-                  stroke="#ef4444"
-                  fill="#ef4444"
+                  stroke="#737373"
+                  fill="#737373"
                   fillOpacity={0.3}
                   name="Gider"
                 />
@@ -1016,8 +1012,8 @@ export default function AccountingDashboard() {
                 }}
               />
               <Legend />
-              <Bar dataKey="income" fill="#10b981" name="Gelir" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="expense" fill="#ef4444" name="Gider" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="income" fill="#171717" name="Gelir" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="expense" fill="#737373" name="Gider" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
