@@ -282,57 +282,6 @@ export default function Accounting() {
     }
   }, [activeTab, receivablesSubTab])
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Ctrl+N - New invoice/offer
-      if (e.ctrlKey && e.key === 'n') {
-        e.preventDefault()
-        if (activeTab === 'invoice') {
-          navigate('/accounting/invoice/new')
-          toast.success('Yeni fatura oluşturuluyor...')
-        } else if (activeTab === 'offer') {
-          navigate('/accounting/quote/new')
-          toast.success('Yeni teklif oluşturuluyor...')
-        }
-      }
-      
-      // Ctrl+F - Focus search input
-      if (e.ctrlKey && e.key === 'f') {
-        e.preventDefault()
-        if (activeTab === 'invoice') {
-          const searchInput = document.querySelector('input[placeholder*="Fatura no veya müşteri ara"]') as HTMLInputElement
-          searchInput?.focus()
-          toast('Arama kutusuna odaklandı', { icon: '🔍', duration: 1500 })
-        } else if (activeTab === 'offer') {
-          const searchInput = document.querySelector('input[placeholder*="Teklif no veya müşteri ara"]') as HTMLInputElement
-          searchInput?.focus()
-          toast('Arama kutusuna odaklandı', { icon: '🔍', duration: 1500 })
-        }
-      }
-      
-      // Ctrl+P - Print
-      if (e.ctrlKey && e.key === 'p') {
-        e.preventDefault()
-        window.print()
-        toast.success('Yazdırma penceresi açılıyor...')
-      }
-      
-      // Esc - Close dropdowns and deselect
-      if (e.key === 'Escape') {
-        setOpenInvoiceDropdown(null)
-        setOpenOfferDropdown(null)
-        setSelectedInvoices([])
-        setSelectedOffers([])
-        setShowAdvancedFilters(false)
-        setShowOfferAdvancedFilters(false)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [activeTab, navigate])
-
   const loadStats = async () => {
     try {
       setLoading(true)
@@ -808,51 +757,24 @@ export default function Accounting() {
     { id: 'dashboard' as const, label: 'Ana Sayfa', icon: <BarChart3 size={18} /> },
     { id: 'income' as const, label: 'Gelirler', icon: <TrendingUp size={18} /> },
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
-    { id: 'journal-entries' as const, label: 'Muhasebe Fişleri', icon: <FileText size={18} /> },
-    { id: 'chart-of-accounts' as const, label: 'Hesap Planı', icon: <BarChart3 size={18} /> },
-    { id: 'current-accounts' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
-    { id: 'cost-accounting' as const, label: 'Maliyet Muhasebesi', icon: <DollarSign size={18} /> },
-    { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
-    { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
-    { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
-    { id: 'bank-integration' as const, label: 'Banka Entegrasyonu', icon: <Building2 size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
     { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
-    { id: 'ebelge' as const, label: 'e-Belge', icon: <CreditCard size={18} /> },
-    { id: 'gib-einvoice' as const, label: 'GIB e-Fatura', icon: <FileText size={18} /> },
+    { id: 'current-accounts' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
+    { id: 'receivables' as const, label: 'Alacak Yönetimi', icon: <DollarSign size={18} /> },
+    { id: 'chart-of-accounts' as const, label: 'Hesap Planı', icon: <BarChart3 size={18} /> },
+    { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
+    { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
+    { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
     { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
-    { id: 'integrations' as const, label: 'Entegrasyonlar', icon: <Link2 size={18} /> },
     { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'advisor' as const, label: 'Mali Müşavir', icon: <Users size={18} /> },
     { id: 'support' as const, label: 'Yardım & Araçlar', icon: <Globe size={18} /> },
-    { id: 'cari' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
-    { id: 'receivables' as const, label: 'Alacak Yönetimi', icon: <DollarSign size={18} /> },
   ]
 
   return (
-    <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6 space-y-4 pb-10">
-      {/* Keyboard Shortcuts Info */}
-      <div className={`${DESIGN_TOKENS?.colors?.bg?.subtle} ${DESIGN_TOKENS?.colors?.border?.light} border ${DESIGN_TOKENS?.radius?.md} ${DESIGN_TOKENS?.spacing?.sm?.padding} flex items-center ${DESIGN_TOKENS?.spacing?.md?.gap} ${DESIGN_TOKENS?.typography?.body?.sm} ${DESIGN_TOKENS?.colors?.text?.tertiary}`}>
-        <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg?.base} ${DESIGN_TOKENS?.colors?.border?.dark} border ${DESIGN_TOKENS?.radius?.sm} ${DESIGN_TOKENS?.shadow?.sm} font-mono`}>Ctrl+N</kbd>
-          <span>Yeni Oluştur</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg?.base} ${DESIGN_TOKENS?.colors?.border?.dark} border ${DESIGN_TOKENS?.radius?.sm} ${DESIGN_TOKENS?.shadow?.sm} font-mono`}>Ctrl+F</kbd>
-          <span>Ara</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg?.base} ${DESIGN_TOKENS?.colors?.border?.dark} border ${DESIGN_TOKENS?.radius?.sm} ${DESIGN_TOKENS?.shadow?.sm} font-mono`}>Ctrl+P</kbd>
-          <span>Yazdır</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <kbd className={`px-2 py-1 ${DESIGN_TOKENS?.colors?.bg?.base} ${DESIGN_TOKENS?.colors?.border?.dark} border ${DESIGN_TOKENS?.radius?.sm} ${DESIGN_TOKENS?.shadow?.sm} font-mono`}>Esc</kbd>
-          <span>Kapat</span>
-        </div>
-      </div>
-
+    <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 space-y-4 pb-10">
       {/* Quick Stats */}
       {loading ? (
         <CardSkeleton count={4} />
@@ -960,23 +882,11 @@ export default function Accounting() {
                 {/* Expense Tab */}
                 {activeTab === 'expense' && <ExpenseTab />}
 
-                {/* Journal Entries Tab */}
-                {activeTab === 'journal-entries' && <JournalEntryList />}
-
                 {/* Chart of Accounts Tab */}
                 {activeTab === 'chart-of-accounts' && <ChartOfAccountsManagement />}
 
                 {/* Current Accounts Tab */}
                 {activeTab === 'current-accounts' && <CurrentAccountManagement />}
-
-                {/* GIB e-Invoice Management Tab */}
-                {activeTab === 'gib-einvoice' && <EInvoiceManagement />}
-
-                {/* Bank Integration Tab */}
-                {activeTab === 'bank-integration' && <BankAccountManagement />}
-
-            {/* Cari (Current Accounts) Tab - Direct to Account Cards */}
-            {activeTab === 'cari' && <AccountCardList />}
 
             {/* Reports Tab - Advanced Reporting with Sub-tabs */}
             {activeTab === 'reports' && (
@@ -2048,37 +1958,11 @@ export default function Accounting() {
               </ErrorBoundary>
             )}
 
-            {/* e-Belge Tab */}
-            {activeTab === 'ebelge' && (
-              <div className="space-y-4">
-                {/* Info Banner */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
-                  <Globe className="text-blue-600 flex-shrink-0 mt-0.5" size={20} />
-                  <div className="flex-1">
-                    <p className="text-sm text-blue-900 font-medium">E-Belge ve GIB Entegrasyonu</p>
-                    <p className="text-xs text-blue-700 mt-1">
-                      Buradan e-fatura ve e-arşiv fatura oluşturabilir, GIB'e gönderebilir ve resmileştirebilirsiniz.
-                      <button 
-                        onClick={() => setActiveTab('invoice')}
-                        className="ml-2 text-blue-600 hover:text-blue-800 font-medium underline"
-                      >
-                        Normal faturalara dön →
-                      </button>
-                    </p>
-                  </div>
-                </div>
-                <EInvoiceList />
-              </div>
-            )}
-
             {/* Delivery Note Tab */}
             {activeTab === 'delivery' && <DeliveryNoteList />}
 
             {/* Bank Reconciliation Tab */}
             {activeTab === 'reconciliation' && <BankReconciliation />}
-
-            {/* Cost Accounting Tab */}
-            {activeTab === 'cost-accounting' && <CostAccounting />}
 
             {/* Inventory Accounting Tab */}
             {activeTab === 'inventory' && <InventoryAccounting />}
@@ -2315,13 +2199,6 @@ export default function Accounting() {
             {activeTab === 'support' && (
               <ErrorBoundary>
                 <SupportTab />
-              </ErrorBoundary>
-            )}
-
-            {/* Integrations Tab - Combined Bank, E-Commerce and GIB */}
-            {activeTab === 'integrations' && (
-              <ErrorBoundary>
-                <IntegrationsTab />
               </ErrorBoundary>
             )}
 
