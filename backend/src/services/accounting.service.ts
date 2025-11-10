@@ -3822,44 +3822,55 @@ export class AccountingService {
 
       const { companyId, startDate, endDate, accountType, includeZeroBalance } = params;
 
-      // Get all accounts with transactions
-      const accounts = await prisma.account.findMany({
+      // Get all chart of accounts
+      const accounts = await prisma.chartOfAccounts.findMany({
         where: {
-          companyId,
           ...(accountType && accountType !== 'ALL' ? { type: accountType } : {}),
+          isActive: true,
         },
-        include: {
-          journalEntryItems: {
-            where: {
-              journalEntry: {
-                date: {
-                  ...(startDate ? { gte: startDate } : {}),
-                  lte: endDate,
-                },
-                status: 'POSTED',
-              },
+        orderBy: { code: 'asc' },
+      });
+
+      // Get all journal entry items in the date range
+      const journalEntryItems = await prisma.journalEntryItem.findMany({
+        where: {
+          journalEntry: {
+            ...(companyId ? { companyId } : {}),
+            entryDate: {
+              ...(startDate ? { gte: startDate } : {}),
+              lte: endDate,
             },
+            status: 'POSTED',
           },
+        },
+        select: {
+          accountCode: true,
+          debit: true,
+          credit: true,
         },
       });
 
+      // Group by account code
+      const accountBalances = new Map<string, { debit: number; credit: number }>();
+      for (const item of journalEntryItems) {
+        const existing = accountBalances.get(item.accountCode) || { debit: 0, credit: 0 };
+        accountBalances.set(item.accountCode, {
+          debit: existing.debit + (item.debit || 0),
+          credit: existing.credit + (item.credit || 0),
+        });
+      }
+
+      // Map to report items
       const items = accounts
         .map((account) => {
-          const debit = account.journalEntryItems.reduce(
-            (sum, item) => sum + (item.debit || 0),
-            0
-          );
-          const credit = account.journalEntryItems.reduce(
-            (sum, item) => sum + (item.credit || 0),
-            0
-          );
+          const balance = accountBalances.get(account.code) || { debit: 0, credit: 0 };
 
           return {
             accountCode: account.code,
             accountName: account.name,
             accountType: account.type,
-            debit: Math.round(debit * 100) / 100,
-            credit: Math.round(credit * 100) / 100,
+            debit: Math.round(balance.debit * 100) / 100,
+            credit: Math.round(balance.credit * 100) / 100,
           };
         })
         .filter((item) => includeZeroBalance || item.debit !== 0 || item.credit !== 0);
@@ -3871,7 +3882,7 @@ export class AccountingService {
       log.info('Trial balance report generated');
 
       return {
-        items,
+        accounts: items,
         summary: {
           totalDebit: Math.round(totalDebit * 100) / 100,
           totalCredit: Math.round(totalCredit * 100) / 100,
@@ -3899,46 +3910,52 @@ export class AccountingService {
       const { companyId, startDate, endDate } = params;
 
       // Get revenue accounts (6xx)
-      const revenueAccounts = await prisma.account.findMany({
+      const revenueAccounts = await prisma.chartOfAccounts.findMany({
         where: {
-          companyId,
           code: { startsWith: '6' },
+          isActive: true,
         },
-        include: {
-          journalEntryItems: {
-            where: {
-              journalEntry: {
-                date: { gte: startDate, lte: endDate },
-                status: 'POSTED',
-              },
-            },
-          },
-        },
+        orderBy: { code: 'asc' },
       });
 
       // Get expense accounts (7xx)
-      const expenseAccounts = await prisma.account.findMany({
+      const expenseAccounts = await prisma.chartOfAccounts.findMany({
         where: {
-          companyId,
           code: { startsWith: '7' },
+          isActive: true,
         },
-        include: {
-          journalEntryItems: {
-            where: {
-              journalEntry: {
-                date: { gte: startDate, lte: endDate },
-                status: 'POSTED',
-              },
-            },
+        orderBy: { code: 'asc' },
+      });
+
+      // Get all journal entry items in date range
+      const journalEntryItems = await prisma.journalEntryItem.findMany({
+        where: {
+          journalEntry: {
+            ...(companyId ? { companyId } : {}),
+            entryDate: { gte: startDate, lte: endDate },
+            status: 'POSTED',
           },
+        },
+        select: {
+          accountCode: true,
+          debit: true,
+          credit: true,
         },
       });
 
+      // Group by account code
+      const accountBalances = new Map<string, { debit: number; credit: number }>();
+      for (const item of journalEntryItems) {
+        const existing = accountBalances.get(item.accountCode) || { debit: 0, credit: 0 };
+        accountBalances.set(item.accountCode, {
+          debit: existing.debit + (item.debit || 0),
+          credit: existing.credit + (item.credit || 0),
+        });
+      }
+
       const revenues = revenueAccounts.map((account) => {
-        const amount = account.journalEntryItems.reduce(
-          (sum, item) => sum + (item.credit || 0) - (item.debit || 0),
-          0
-        );
+        const balance = accountBalances.get(account.code) || { debit: 0, credit: 0 };
+        const amount = balance.credit - balance.debit; // Revenue accounts are credit normal
         return {
           accountCode: account.code,
           accountName: account.name,
@@ -3948,10 +3965,8 @@ export class AccountingService {
       });
 
       const expenses = expenseAccounts.map((account) => {
-        const amount = account.journalEntryItems.reduce(
-          (sum, item) => sum + (item.debit || 0) - (item.credit || 0),
-          0
-        );
+        const balance = accountBalances.get(account.code) || { debit: 0, credit: 0 };
+        const amount = balance.debit - balance.credit; // Expense accounts are debit normal
         return {
           accountCode: account.code,
           accountName: account.name,
@@ -4002,113 +4017,102 @@ export class AccountingService {
 
       const { companyId, date } = params;
 
-      // Helper function to build account tree
-      const buildAccountTree = (accounts: any[], type: string) => {
-        const filtered = accounts.filter((acc) => acc.type === type);
-        const tree: any[] = [];
+      // Get all chart of accounts
+      const accounts = await prisma.chartOfAccounts.findMany({
+        where: { isActive: true },
+        orderBy: { code: 'asc' },
+      });
 
-        // Get root accounts (no parent)
-        const roots = filtered.filter((acc) => !acc.parentId);
-
-        roots.forEach((root) => {
-          const item: any = {
-            accountCode: root.code,
-            accountName: root.name,
-            amount: root.balance,
-            percentage: 0, // Will calculate after
-            children: [],
-          };
-
-          // Get children recursively
-          const children = filtered.filter((acc) => acc.parentId === root.id);
-          children.forEach((child) => {
-            item.children.push({
-              accountCode: child.code,
-              accountName: child.name,
-              amount: child.balance,
-              percentage: 0,
-            });
-          });
-
-          tree.push(item);
-        });
-
-        return tree;
-      };
-
-      // Get all accounts with balances
-      const accounts = await prisma.account.findMany({
-        where: { companyId },
-        include: {
-          journalEntryItems: {
-            where: {
-              journalEntry: {
-                date: { lte: date },
-                status: 'POSTED',
-              },
-            },
+      // Get all journal entry items up to the date
+      const journalEntryItems = await prisma.journalEntryItem.findMany({
+        where: {
+          journalEntry: {
+            ...(companyId ? { companyId } : {}),
+            entryDate: { lte: date },
+            status: 'POSTED',
           },
+        },
+        select: {
+          accountCode: true,
+          debit: true,
+          credit: true,
         },
       });
 
+      // Group by account code
+      const accountBalances = new Map<string, { debit: number; credit: number }>();
+      for (const item of journalEntryItems) {
+        const existing = accountBalances.get(item.accountCode) || { debit: 0, credit: 0 };
+        accountBalances.set(item.accountCode, {
+          debit: existing.debit + (item.debit || 0),
+          credit: existing.credit + (item.credit || 0),
+        });
+      }
+
       // Calculate balances for each account
       const accountsWithBalances = accounts.map((account) => {
-        const debit = account.journalEntryItems.reduce(
-          (sum, item) => sum + (item.debit || 0),
-          0
-        );
-        const credit = account.journalEntryItems.reduce(
-          (sum, item) => sum + (item.credit || 0),
-          0
-        );
+        const balance = accountBalances.get(account.code) || { debit: 0, credit: 0 };
 
         // Balance sign depends on account type
-        let balance = 0;
-        if (account.type === 'ASSET' || account.type === 'EXPENSE') {
-          balance = debit - credit; // Debit increases
-        } else if (account.type === 'LIABILITY' || account.type === 'EQUITY' || account.type === 'REVENUE') {
-          balance = credit - debit; // Credit increases
+        let amount = 0;
+        if (account.type === 'asset' || account.type === 'expense') {
+          amount = balance.debit - balance.credit; // Debit increases
+        } else if (account.type === 'liability' || account.type === 'equity' || account.type === 'revenue') {
+          amount = balance.credit - balance.debit; // Credit increases
         }
 
         return {
-          ...account,
-          balance: Math.round(balance * 100) / 100,
+          accountCode: account.code,
+          accountName: account.name,
+          type: account.type,
+          balance: Math.round(amount * 100) / 100,
         };
       });
 
-      // Build trees
-      const assets = buildAccountTree(accountsWithBalances, 'ASSET');
-      const liabilities = buildAccountTree(accountsWithBalances, 'LIABILITY');
-      const equity = buildAccountTree(accountsWithBalances, 'EQUITY');
+      // Group by type
+      const assets = accountsWithBalances
+        .filter((acc) => acc.type === 'asset')
+        .map((acc) => ({
+          accountCode: acc.accountCode,
+          accountName: acc.accountName,
+          amount: acc.balance,
+          percentage: 0,
+        }));
 
-      const totalAssets = accountsWithBalances
-        .filter((acc) => acc.type === 'ASSET')
-        .reduce((sum, acc) => sum + acc.balance, 0);
+      const liabilities = accountsWithBalances
+        .filter((acc) => acc.type === 'liability')
+        .map((acc) => ({
+          accountCode: acc.accountCode,
+          accountName: acc.accountName,
+          amount: acc.balance,
+          percentage: 0,
+        }));
 
-      const totalLiabilities = accountsWithBalances
-        .filter((acc) => acc.type === 'LIABILITY')
-        .reduce((sum, acc) => sum + acc.balance, 0);
+      const equity = accountsWithBalances
+        .filter((acc) => acc.type === 'equity')
+        .map((acc) => ({
+          accountCode: acc.accountCode,
+          accountName: acc.accountName,
+          amount: acc.balance,
+          percentage: 0,
+        }));
 
-      const totalEquity = accountsWithBalances
-        .filter((acc) => acc.type === 'EQUITY')
-        .reduce((sum, acc) => sum + acc.balance, 0);
-
+      const totalAssets = assets.reduce((sum, acc) => sum + acc.amount, 0);
+      const totalLiabilities = liabilities.reduce((sum, acc) => sum + acc.amount, 0);
+      const totalEquity = equity.reduce((sum, acc) => sum + acc.amount, 0);
       const totalLiabilitiesAndEquity = totalLiabilities + totalEquity;
       const difference = totalAssets - totalLiabilitiesAndEquity;
 
       // Calculate percentages
-      const calcPercentage = (items: any[], total: number) => {
-        items.forEach((item) => {
-          item.percentage = total > 0 ? (item.amount / total) * 100 : 0;
-          if (item.children) {
-            calcPercentage(item.children, total);
-          }
-        });
-      };
-
-      calcPercentage(assets, totalAssets);
-      calcPercentage(liabilities, totalLiabilitiesAndEquity);
-      calcPercentage(equity, totalLiabilitiesAndEquity);
+      assets.forEach((item) => {
+        item.percentage = totalAssets > 0 ? (item.amount / totalAssets) * 100 : 0;
+      });
+      liabilities.forEach((item) => {
+        item.percentage = totalLiabilitiesAndEquity > 0 ? (item.amount / totalLiabilitiesAndEquity) * 100 : 0;
+      });
+      equity.forEach((item) => {
+        item.percentage = totalLiabilitiesAndEquity > 0 ? (item.amount / totalLiabilitiesAndEquity) * 100 : 0;
+      });
 
       log.info('Balance sheet report generated');
 
