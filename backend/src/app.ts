@@ -199,7 +199,7 @@ safeLoadRoute('/api/promissory-notes', './routes/promissory-notes', 'Promissory 
 safeLoadRoute('/api/aging', './routes/aging', 'Aging reports');
 safeLoadRoute('/api/invoices', './routes/invoice', 'Invoicing');
 safeLoadRoute('/api/offers', './routes/offer', 'Offers & Quotes');
-safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
+// MOVED: /api/accounting route moved AFTER specific accounting/* routes to avoid routing conflicts
 safeLoadRoute('/api/accounting/tags', './routes/accounting-tags', 'Accounting Tags');
 safeLoadRoute('/api/reminders', './routes/reminders', 'Payment & Due Date Reminders');
 safeLoadRoute('/api/statements', './routes/statements', 'Account Statements & Sharing');
@@ -228,9 +228,11 @@ safeLoadRoute('/api/social-media', './routes/social-media', 'Social Media');
 safeLoadRoute('/api/stock', './routes/stock', 'Stock Management');
 safeLoadRoute('/api/cost-accounting', './routes/costAccounting', 'Cost Accounting');
 
-// Accounting Core Routes
+// Accounting Core Routes (MUST BE BEFORE /api/accounting base route)
 safeLoadRoute('/api/accounting/journal-entries', './routes/journalEntries', 'Journal Entries');
 safeLoadRoute('/api/accounting/chart-of-accounts', './routes/chartOfAccounts', 'Chart of Accounts');
+// NOW load general /api/accounting route (catches remaining /api/accounting/* requests)
+safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
 
 // Company & Bank Account Routes
 safeLoadRoute('/api/company', './routes/company', 'Company Management');
