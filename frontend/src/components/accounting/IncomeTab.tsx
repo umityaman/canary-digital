@@ -172,60 +172,60 @@ export default function IncomeTab() {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className={cx(card('md', 'sm', 'default', 'lg'), getStatGradient('revenue'), 'text-white')}>
-          <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} rounded flex items-center justify-center`}>
-              <TrendingUp size={24} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 bg-neutral-900 rounded-lg flex items-center justify-center">
+              <TrendingUp className="text-white" size={20} />
             </div>
-            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Bu Ay</span>
+            <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{formatCurrency(monthlyIncome)}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Aylık Gelir</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(monthlyIncome)}</h3>
+          <p className="text-sm font-medium text-neutral-600">Aylık Gelir</p>
         </div>
 
-        <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-blue-500 to-blue-600 text-white')}>
-          <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} rounded flex items-center justify-center`}>
-              <DollarSign size={24} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 bg-neutral-700 rounded-lg flex items-center justify-center">
+              <DollarSign className="text-white" size={20} />
             </div>
-            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam</span>
+            <span className="text-xs font-medium text-neutral-600">Toplam</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{formatCurrency(totalIncome)}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Toplam Gelir</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(totalIncome)}</h3>
+          <p className="text-sm font-medium text-neutral-600">Toplam Gelir</p>
         </div>
 
-        <div className={cx(card('md', 'sm', 'default', 'lg'), 'bg-gradient-to-br from-purple-500 to-purple-600 text-white')}>
-          <div className="flex items-center justify-between mb-4">
-            <div className={`w-12 h-12 bg-white/20 ${DESIGN_TOKENS?.radius?.md} rounded flex items-center justify-center`}>
-              <FileText size={24} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center">
+              <FileText className="text-white" size={20} />
             </div>
-            <span className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Kayıt</span>
+            <span className="text-xs font-medium text-neutral-600">Kayıt</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.lg} mb-1`}>{incomes.length}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.label.md} opacity-90`}>Gelir Kaydı</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{incomes.length}</h3>
+          <p className="text-sm font-medium text-neutral-600">Gelir Kaydı</p>
         </div>
       </div>
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
-        <div className={card('md', 'sm', 'default', 'lg')}>
-          <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>Kategori Dağılımı</h3>
+        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm">
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Dağılımı</h3>
           <div className="space-y-3">
             {categoryStats.map((stat) => (
               <div key={stat.category}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.secondary}`}>{stat.category}</span>
+                  <span className="text-sm font-medium text-neutral-700">{stat.category}</span>
                   <div className="flex items-center gap-3">
-                    <span className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{stat.count} kayıt</span>
-                    <span className={`${DESIGN_TOKENS?.typography?.label.lg} ${DESIGN_TOKENS?.colors?.text.primary}`}>
+                    <span className="text-xs text-neutral-500">{stat.count} kayıt</span>
+                    <span className="text-sm font-semibold text-neutral-900">
                       {formatCurrency(stat.total)}
                     </span>
                   </div>
                 </div>
-                <div className={`w-full ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.full} rounded-full h-2`}>
+                <div className="w-full bg-neutral-100 rounded-full h-2">
                   <div
-                    className={`bg-green-500 h-2 ${DESIGN_TOKENS?.radius?.full} rounded-full transition-all`}
+                    className="bg-neutral-900 h-2 rounded-full transition-all"
                     style={{ width: `${stat.percentage}%` }}
                   />
                 </div>
