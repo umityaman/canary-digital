@@ -1,15 +1,16 @@
 ﻿import React, { useState } from 'react'
 import { 
   FileText, Bell, BarChart, Users, Package, Calendar,
-  CreditCard, Mail, Calculator, FolderOpen, ArrowLeft
+  CreditCard, Mail, Calculator, FolderOpen, ArrowLeft, Globe
 } from 'lucide-react'
 import ActionCard from '../../ui/ActionCard'
 import StatCard from '../../ui/StatCard'
 import CategoryTagManagement from '../CategoryTagManagement'
+import IntegrationsTab from './IntegrationsTab'
 import { toast } from 'react-hot-toast'
 import { card, button, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
 
-type ToolView = 'list' | 'categories'
+type ToolView = 'list' | 'categories' | 'integrations'
 
 interface ToolsTabProps {
   onNavigate: (tab: string) => void
@@ -40,6 +41,13 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
   ]
 
   const tools = [
+    {
+      title: 'Entegrasyonlar',
+      description: 'Banka, e-ticaret ve GİB entegrasyonlarını yönetin',
+      icon: Globe,
+      gradient: 'from-cyan-500 to-cyan-600',
+      onClick: () => setCurrentView('integrations'),
+    },
     {
       title: 'Kategori ve Etiket Yönetimi',
       description: 'Gelir/gider kategorileri ve etiketleri yönetin',
@@ -94,6 +102,25 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       },
     },
   ]
+
+  // Show Integrations view
+  if (currentView === 'integrations') {
+    return (
+      <div className="space-y-4">
+        {/* Back Button */}
+        <button
+          onClick={() => setCurrentView('list')}
+          className={cx(button('sm', 'ghost'), 'gap-2')}
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-medium">Araçlara Dön</span>
+        </button>
+
+        {/* Integrations Component */}
+        <IntegrationsTab />
+      </div>
+    )
+  }
 
   // Show Category Management view
   if (currentView === 'categories') {
