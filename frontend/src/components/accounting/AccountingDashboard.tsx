@@ -45,7 +45,7 @@ const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
 export default function AccountingDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
-  const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'quarter' | 'year'>('month')
+  const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month' | 'quarter' | 'halfyear' | 'year'>('month')
   const [refreshing, setRefreshing] = useState(false)
   const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line')
   const [showComparison, setShowComparison] = useState(false)
@@ -353,9 +353,6 @@ export default function AccountingDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Muhasebe Dashboard</h2>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>
-            Son güncelleme: {new Date().toLocaleString('tr-TR')}
-          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -368,50 +365,34 @@ export default function AccountingDashboard() {
             <span className="hidden sm:inline">{refreshing ? 'Yenileniyor...' : 'Yenile'}</span>
           </button>
           
-          <div className={`h-8 w-px ${DESIGN_TOKENS?.colors?.border.default} hidden sm:block`} />
-          
-          <button
-            onClick={() => setShowComparison(!showComparison)}
-            className={cx(button('sm', 'outline', 'md'), 'gap-2')}
-            title={showComparison ? 'Karşılaştırmayı Gizle' : 'Karşılaştırmayı Göster'}
-          >
-            {showComparison ? <EyeOff size={16} /> : <Eye size={16} />}
-            <span className="hidden sm:inline">Karşılaştır</span>
-          </button>
-          
-          <div className="relative group">
-            <button
-              disabled={exporting}
-              className={cx(button('sm', 'outline', 'md'), 'gap-2')}
-            >
-              <Download size={16} />
-              <span className="hidden sm:inline">Dışa Aktar</span>
-            </button>
-            <div className={`hidden group-hover:block absolute right-0 top-full mt-1 ${DESIGN_TOKENS?.shadow?.lg} ${DESIGN_TOKENS?.radius?.md} ${DESIGN_TOKENS?.colors?.bg.primary} border ${DESIGN_TOKENS?.colors?.border.default} py-2 min-w-[160px] z-10`}>
-              <button
-                onClick={handleExportPDF}
-                disabled={exporting}
-                className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 transition-colors disabled:opacity-50"
-              >
-                PDF olarak indir
-              </button>
-              <button
-                onClick={handleExportExcel}
-                disabled={exporting}
-                className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 transition-colors disabled:opacity-50"
-              >
-                Excel olarak indir
-              </button>
-            </div>
-          </div>
-          
           <div className="h-8 w-px bg-neutral-300 hidden sm:block" />
           
+          {/* Period Filter Buttons */}
+          <button
+            onClick={() => setSelectedPeriod('day')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              selectedPeriod === 'day'
+                ? 'bg-neutral-900 text-white shadow-sm'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+            }`}
+          >
+            Bugün
+          </button>
+          <button
+            onClick={() => setSelectedPeriod('week')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              selectedPeriod === 'week'
+                ? 'bg-neutral-900 text-white shadow-sm'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+            }`}
+          >
+            Bu Hafta
+          </button>
           <button
             onClick={() => setSelectedPeriod('month')}
-            className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedPeriod === 'month'
-                ? 'bg-neutral-900 text-white'
+                ? 'bg-neutral-900 text-white shadow-sm'
                 : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
             }`}
           >
@@ -419,19 +400,29 @@ export default function AccountingDashboard() {
           </button>
           <button
             onClick={() => setSelectedPeriod('quarter')}
-            className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedPeriod === 'quarter'
-                ? 'bg-neutral-900 text-white'
+                ? 'bg-neutral-900 text-white shadow-sm'
                 : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
             }`}
           >
-            Çeyrek
+            Son 3 Ay
+          </button>
+          <button
+            onClick={() => setSelectedPeriod('halfyear')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              selectedPeriod === 'halfyear'
+                ? 'bg-neutral-900 text-white shadow-sm'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+            }`}
+          >
+            Son 6 Ay
           </button>
           <button
             onClick={() => setSelectedPeriod('year')}
-            className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedPeriod === 'year'
-                ? 'bg-neutral-900 text-white'
+                ? 'bg-neutral-900 text-white shadow-sm'
                 : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
             }`}
           >
