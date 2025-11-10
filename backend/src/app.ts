@@ -145,17 +145,24 @@ app.get('/api/health', (req, res)=> res.json({ok:true, timestamp: new Date().toI
 
 // Helper function to safely load routes
 const safeLoadRoute = (path: string, routeFile: string, description: string) => {
+  console.log(`🔍 [ROUTE-DEBUG] Attempting to load: ${path} from ${routeFile}`);
   try {
+    console.log(`🔍 [ROUTE-DEBUG] require('${routeFile}')...`);
     const route = require(routeFile);
+    console.log(`🔍 [ROUTE-DEBUG] Required successfully. Has default: ${!!route?.default}`);
     if (route && route.default) {
       app.use(path, route.default);
       logger.info(`✅ Loaded route: ${path}`);
+      console.log(`✅ [ROUTE-DEBUG] Successfully registered: ${path}`);
     } else {
       logger.warn(`⚠️  Route ${routeFile} has no default export, skipping`);
+      console.log(`⚠️ [ROUTE-DEBUG] No default export for: ${routeFile}`);
     }
   } catch (error: any) {
     logger.error(`❌ Failed to load route ${path}: ${error.message}`);
     logger.error(error.stack);
+    console.log(`❌ [ROUTE-DEBUG] FAILED: ${path} - ${error.message}`);
+    console.log(`❌ [ROUTE-DEBUG] Stack: ${error.stack?.substring(0, 200)}`);
   }
 };
 
