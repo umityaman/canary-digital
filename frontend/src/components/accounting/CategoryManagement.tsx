@@ -124,7 +124,7 @@ export default function CategoryManagement() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-neutral-50 to-neutral-100 border-neutral-200')}>
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-200')}>
           <div className="flex items-center justify-between">
             <div>
               <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gelir Kategorileri</p>
@@ -136,7 +136,7 @@ export default function CategoryManagement() {
           </div>
         </div>
 
-        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-neutral-100 to-neutral-200 border-neutral-300')}>
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-300')}>
           <div className="flex items-center justify-between">
             <div>
               <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gider Kategorileri</p>
@@ -148,7 +148,7 @@ export default function CategoryManagement() {
           </div>
         </div>
 
-        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-neutral-200 to-neutral-300 border-neutral-400')}>
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-400')}>
           <div className="flex items-center justify-between">
             <div>
               <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Toplam Kategori</p>

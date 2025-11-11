@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { ArrowLeft, Download, Send, X, CheckCircle, FileText, Calendar, User, DollarSign, RefreshCw, File, Hash } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -341,7 +341,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
         {/* Left Column - Info Cards */}
         <div className="space-y-6">
           {/* Customer Info */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <User size={20} />
               Müşteri Bilgileri
@@ -384,7 +384,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
           </div>
 
           {/* Invoice Info */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <FileText size={20} />
               Fatura Bilgileri
@@ -428,7 +428,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
           </div>
 
           {/* Payment Info */}
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center gap-2">
               <DollarSign size={20} />
               Ödeme Bilgileri
@@ -444,7 +444,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
                 <span className="text-lg font-semibold text-neutral-800">{formatCurrency(invoice.paidAmount)}</span>
               </div>
               
-              <div className="pt-3 border-t border-blue-200">
+              <div className="pt-3 border-t border-neutral-200">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-neutral-800">Kalan:</span>
                   <span className="text-xl font-bold text-neutral-800">
@@ -459,7 +459,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
         {/* Right Column - Items & Totals */}
         <div className="lg:col-span-2 space-y-6">
           {/* Invoice Items */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Fatura Kalemleri</h3>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[600px]">
@@ -502,7 +502,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
           </div>
 
           {/* Totals Summary */}
-          <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Fatura Özeti</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between text-neutral-700">
@@ -533,7 +533,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
           {/* Notes */}
           {(invoice.description || invoice.notes) && (
-            <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+            <div className="bg-white rounded-lg p-6 border border-neutral-200">
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Notlar</h3>
               <div className="space-y-3">
                 {invoice.description && (

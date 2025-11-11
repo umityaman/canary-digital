@@ -104,7 +104,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-200"></div>
       </div>
     );
   }
@@ -127,7 +127,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+        <div className="bg-white rounded-lg p-5 text-white bg-neutral-800">
           <div className="flex items-center justify-between mb-4">
             <TrendingUp className="w-8 h-8 opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Toplam</span>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { ArrowLeft, Package, User, MapPin, FileText, CheckCircle, Truck, Clock, Download, Receipt, X, Edit2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -143,7 +143,7 @@ export default function DeliveryNoteDetail({
         {/* Left Column - Info Cards */}
         <div className="lg:col-span-1 space-y-6">
           {/* Status Card */}
-          <div className={`bg-gradient-to-br from-${statusInfo.color}-500 to-${statusInfo.color}-600 rounded-2xl p-6 text-white`}>
+          <div className={`bg-gradient-to-br from-${statusInfo.color}-500 to-${statusInfo.color}-600 rounded-lg p-5 text-white bg-neutral-800`}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Durum</h3>
               <StatusIcon size={24} />
@@ -159,7 +159,7 @@ export default function DeliveryNoteDetail({
           </div>
 
           {/* Customer Info */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <User size={20} />
               Müşteri Bilgileri
@@ -180,7 +180,7 @@ export default function DeliveryNoteDetail({
           </div>
 
           {/* Delivery Info */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <Truck size={20} />
               Teslimat Bilgileri
@@ -211,7 +211,7 @@ export default function DeliveryNoteDetail({
 
           {/* Invoice Info */}
           {note.invoiceId && (
-            <div className="bg-purple-50 rounded-2xl p-6 border border-purple-200">
+            <div className="bg-purple-50 rounded-lg p-6 border border-neutral-200">
               <h3 className="text-lg font-semibold text-purple-900 mb-4 flex items-center gap-2">
                 <Receipt size={20} />
                 Fatura Bilgisi
@@ -234,7 +234,7 @@ export default function DeliveryNoteDetail({
         {/* Right Column - Items & Actions */}
         <div className="lg:col-span-2 space-y-6">
           {/* Items Table */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <Package size={20} />
               Sevk Edilen Malzemeler
@@ -277,7 +277,7 @@ export default function DeliveryNoteDetail({
 
           {/* Notes */}
           {note.notes && (
-            <div className="bg-amber-50 rounded-2xl p-6 border border-amber-200">
+            <div className="bg-amber-50 rounded-lg p-6 border border-neutral-200">
               <h3 className="text-lg font-semibold text-amber-900 mb-3 flex items-center gap-2">
                 <FileText size={20} />
                 Notlar
@@ -288,7 +288,7 @@ export default function DeliveryNoteDetail({
 
           {/* Status Timeline */}
           {note.status !== 'cancelled' && (
-            <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+            <div className="bg-white rounded-lg p-6 border border-neutral-200">
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">Durum Takibi</h3>
 
               <div className="relative">
@@ -365,7 +365,7 @@ export default function DeliveryNoteDetail({
           )}
 
           {/* Actions */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">İşlemler</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

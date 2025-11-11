@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { ArrowLeft, Plus, Trash2, Save, Send, User, FileText } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -314,7 +314,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
         {/* Left Column - Customer & Dates */}
         <div className="lg:col-span-1 space-y-6">
           {/* Customer Selection */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <User size={20} />
               Müşteri Bilgileri
@@ -378,7 +378,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
           </div>
 
           {/* Dates */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Tarihler</h3>
             <div className="space-y-4">
               <div>
@@ -410,7 +410,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
           </div>
 
           {/* Notes */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Notlar</h3>
             <div className="space-y-4">
               <div>
@@ -445,7 +445,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
         {/* Right Column - Items & Totals */}
         <div className="lg:col-span-2 space-y-6">
           {/* Items */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
                 <FileText size={20} />
@@ -555,7 +555,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
           </div>
 
           {/* Totals */}
-          <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Fatura Özeti</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between text-neutral-700">

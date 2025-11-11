@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { ArrowLeft, Plus, Trash2, Save, Truck, User, MapPin, Package, Calendar } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -237,7 +237,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
         {/* Left Column - Customer & Order */}
         <div className="lg:col-span-1 space-y-6">
           {/* Order Selection */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <Package size={20} />
               Sipariş (Opsiyonel)
@@ -277,7 +277,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
           </div>
 
           {/* Customer Selection */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <User size={20} />
               Müşteri Bilgileri
@@ -321,7 +321,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
           </div>
 
           {/* Delivery Info */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <Truck size={20} />
               Teslimat Bilgileri
@@ -375,7 +375,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
         {/* Right Column - Items */}
         <div className="lg:col-span-2 space-y-6">
           {/* Items */}
-          <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
                 <Package size={20} />
@@ -448,7 +448,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
           </div>
 
           {/* Summary */}
-          <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 border border-neutral-200">
+          <div className="bg-white rounded-lg p-6 border border-neutral-200">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">İrsaliye Özeti</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between text-neutral-700">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+ï»¿import { useState, useEffect } from 'react'
 import {
   Search, Download, FileText, Send, X, CheckCircle,
   Clock, AlertCircle, Eye, Plus, RefreshCw, ExternalLink, File,
@@ -52,7 +52,7 @@ export default function EInvoiceList() {
   const buildHeaders = (withJson = false) => {
     const token = localStorage.getItem('token')
     if (!token) {
-      toast.error('Oturum bilgisi bulunamadý')
+      toast.error('Oturum bilgisi bulunamadï¿½')
       return null
     }
 
@@ -121,7 +121,7 @@ export default function EInvoiceList() {
       setInvoices(mappedInvoices)
     } catch (error: any) {
       console.error('Failed to load invoices:', error)
-      toast.error('Faturalar yüklenemedi')
+      toast.error('Faturalar yï¿½klenemedi')
     } finally {
       setLoading(false)
     }
@@ -184,7 +184,7 @@ export default function EInvoiceList() {
         })
         const generatePayload = await generateResponse.json().catch(() => ({}))
         if (!generateResponse.ok) {
-          throw new Error(generatePayload?.message || 'E-Fatura XML oluþturulamadý')
+          throw new Error(generatePayload?.message || 'E-Fatura XML oluï¿½turulamadï¿½')
         }
 
         const sendResponse = await fetch(`/api/einvoice/send/${invoice.id}`, {
@@ -193,14 +193,14 @@ export default function EInvoiceList() {
         })
         const sendPayload = await sendResponse.json().catch(() => ({}))
         if (!sendResponse.ok) {
-          throw new Error(sendPayload?.message || 'E-Fatura gönderilemedi')
+          throw new Error(sendPayload?.message || 'E-Fatura gï¿½nderilemedi')
         }
 
-        toast.success('E-Fatura GÝB\'e gönderildi')
+        toast.success('E-Fatura Gï¿½B\'e gï¿½nderildi')
         loadInvoices()
       } catch (error: any) {
         console.error('Failed to send e-invoice:', error)
-        toast.error(error.message || 'E-Fatura gönderilemedi')
+        toast.error(error.message || 'E-Fatura gï¿½nderilemedi')
       } finally {
         setActionInvoiceId(null)
       }
@@ -209,7 +209,7 @@ export default function EInvoiceList() {
     }
 
     if (!invoice.parasutId) {
-      toast.error('Paraþüt fatura ID bulunamadý')
+      toast.error('Paraï¿½ï¿½t fatura ID bulunamadï¿½')
       return
     }
 
@@ -226,14 +226,14 @@ export default function EInvoiceList() {
 
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}))
-        throw new Error(payload?.message || 'E-Arþiv gönderilemedi')
+        throw new Error(payload?.message || 'E-Arï¿½iv gï¿½nderilemedi')
       }
 
-      toast.success('E-Arþiv baþarýyla oluþturuldu')
+      toast.success('E-Arï¿½iv baï¿½arï¿½yla oluï¿½turuldu')
       loadInvoices()
     } catch (error: any) {
       console.error('Failed to send e-archive:', error)
-      toast.error(error.message || 'E-Arþiv gönderilemedi')
+      toast.error(error.message || 'E-Arï¿½iv gï¿½nderilemedi')
     } finally {
       setActionInvoiceId(null)
     }
@@ -257,14 +257,14 @@ export default function EInvoiceList() {
       const payload = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        throw new Error(payload?.message || 'Durum sorgulanamadý')
+        throw new Error(payload?.message || 'Durum sorgulanamadï¿½')
       }
 
-      toast.success(`GÝB durumu: ${payload?.data?.status || 'bilinmiyor'}`)
+      toast.success(`Gï¿½B durumu: ${payload?.data?.status || 'bilinmiyor'}`)
       loadInvoices()
     } catch (error: any) {
       console.error('Failed to check e-invoice status:', error)
-      toast.error(error.message || 'Durum sorgulanamadý')
+      toast.error(error.message || 'Durum sorgulanamadï¿½')
     } finally {
       setActionInvoiceId(null)
     }
@@ -312,7 +312,7 @@ export default function EInvoiceList() {
   }
 
   const handleCancelInvoice = async (invoice: EInvoice) => {
-    if (!confirm(`${invoice.invoiceNumber} numaralý faturayý iptal etmek istediðinize emin misiniz?`)) {
+    if (!confirm(`${invoice.invoiceNumber} numaralï¿½ faturayï¿½ iptal etmek istediï¿½inize emin misiniz?`)) {
       return
     }
 
@@ -337,7 +337,7 @@ export default function EInvoiceList() {
 
   const handleDownloadPDF = async (invoice: EInvoice) => {
     try {
-      toast.info('PDF indirme özelliði yakýnda eklenecek')
+      toast.info('PDF indirme ï¿½zelliï¿½i yakï¿½nda eklenecek')
       // TODO: Implement PDF download
     } catch (error: any) {
       console.error('Failed to download PDF:', error)
@@ -348,11 +348,11 @@ export default function EInvoiceList() {
   const getStatusBadge = (status: string) => {
     const badges = {
       draft: { label: 'Taslak', color: 'bg-gray-100 text-gray-700', icon: <File size={14} /> },
-      sent: { label: 'Gönderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={14} /> },
-      approved: { label: 'Onaylandý', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={14} /> },
+      sent: { label: 'Gï¿½nderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={14} /> },
+      approved: { label: 'Onaylandï¿½', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={14} /> },
       rejected: { label: 'Reddedildi', color: 'bg-neutral-100 text-neutral-800', icon: <X size={14} /> },
-      cancelled: { label: 'Ýptal', color: 'bg-neutral-100 text-neutral-800', icon: <AlertCircle size={14} /> },
-      paid: { label: 'Ödendi', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={14} /> },
+      cancelled: { label: 'ï¿½ptal', color: 'bg-neutral-100 text-neutral-800', icon: <AlertCircle size={14} /> },
+      paid: { label: 'ï¿½dendi', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={14} /> },
     }
     const badge = badges[status as keyof typeof badges] || badges.draft
     return (
@@ -368,8 +368,8 @@ export default function EInvoiceList() {
       const status = invoice.eInvoiceMeta?.gibStatus || 'draft'
       const badges = {
         draft: { label: 'XML Taslak', color: 'bg-gray-100 text-gray-700', icon: <File size={12} /> },
-        sent: { label: 'GÝB Gönderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={12} /> },
-        delivered: { label: 'Yanýt Alýndý', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={12} /> },
+        sent: { label: 'Gï¿½B Gï¿½nderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={12} /> },
+        delivered: { label: 'Yanï¿½t Alï¿½ndï¿½', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={12} /> },
         failed: { label: 'Hata', color: 'bg-neutral-100 text-neutral-800', icon: <AlertCircle size={12} /> },
       }
       const badge = badges[status as keyof typeof badges] || badges.draft
@@ -401,9 +401,9 @@ export default function EInvoiceList() {
 
     const badges = {
       pending: { label: 'Bekliyor', color: 'bg-neutral-100 text-neutral-800', icon: <Clock size={12} /> },
-      sent: { label: 'Gönderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={12} /> },
+      sent: { label: 'Gï¿½nderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={12} /> },
       delivered: { label: 'Teslim Edildi', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={12} /> },
-      failed: { label: 'Baþarýsýz', color: 'bg-neutral-100 text-neutral-800', icon: <AlertCircle size={12} /> },
+      failed: { label: 'Baï¿½arï¿½sï¿½z', color: 'bg-neutral-100 text-neutral-800', icon: <AlertCircle size={12} /> },
     }
     const badge = badges[status as keyof typeof badges] || badges.pending
 
@@ -459,8 +459,8 @@ export default function EInvoiceList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>E-Fatura & E-Arþiv</h2>
-          <p className="text-sm text-neutral-600 mt-1">Elektronik belge yönetimi</p>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>E-Fatura & E-Arï¿½iv</h2>
+          <p className="text-sm text-neutral-600 mt-1">Elektronik belge yï¿½netimi</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -482,7 +482,7 @@ export default function EInvoiceList() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-200')}>
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-neutral-900" size={20} />
           </div>
@@ -490,7 +490,7 @@ export default function EInvoiceList() {
           <p className="text-xs text-neutral-800">Toplam Fatura</p>
         </div>
 
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-200')}>
           <div className="flex items-center justify-between mb-2">
             <Zap className="text-neutral-900" size={20} />
           </div>
@@ -498,15 +498,15 @@ export default function EInvoiceList() {
           <p className="text-xs text-neutral-800">E-Fatura</p>
         </div>
 
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200')}>
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-200')}>
           <div className="flex items-center justify-between mb-2">
             <Archive className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-indigo-900`}>{stats.eArsiv}</h3>
-          <p className="text-xs text-neutral-800">E-Arþiv</p>
+          <p className="text-xs text-neutral-800">E-Arï¿½iv</p>
         </div>
 
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-200')}>
           <div className="flex items-center justify-between mb-2">
             <DollarSign className="text-neutral-900" size={20} />
           </div>
@@ -514,7 +514,7 @@ export default function EInvoiceList() {
           <p className="text-xs text-neutral-800">Toplam Tutar</p>
         </div>
 
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200')}>
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-200')}>
           <div className="flex items-center justify-between mb-2">
             <CheckCircle className="text-emerald-600" size={20} />
           </div>
@@ -522,12 +522,12 @@ export default function EInvoiceList() {
           <p className="text-xs text-emerald-700">Tahsil Edilen</p>
         </div>
 
-        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
+        <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-white border-neutral-200')}>
           <div className="flex items-center justify-between mb-2">
             <Clock className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-900`}>{stats.unpaid}</h3>
-          <p className="text-xs text-neutral-800">Ödenmemiþ</p>
+          <p className="text-xs text-neutral-800">ï¿½denmemiï¿½</p>
         </div>
       </div>
 
@@ -540,7 +540,7 @@ export default function EInvoiceList() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
               <input
                 type="text"
-                placeholder="Fatura no, müþteri, vergi no ara..."
+                placeholder="Fatura no, mï¿½ï¿½teri, vergi no ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
@@ -554,9 +554,9 @@ export default function EInvoiceList() {
             onChange={(e) => setFilterType(e.target.value as any)}
             className={input('md', 'default', undefined, 'md')}
           >
-            <option value="all">Tüm Tipler</option>
+            <option value="all">Tï¿½m Tipler</option>
             <option value="e-fatura">E-Fatura</option>
-            <option value="e-arsiv">E-Arþiv</option>
+            <option value="e-arsiv">E-Arï¿½iv</option>
           </select>
 
           {/* Status Filter */}
@@ -565,11 +565,11 @@ export default function EInvoiceList() {
             onChange={(e) => setFilterStatus(e.target.value as any)}
             className={input('md', 'default', undefined, 'md')}
           >
-            <option value="all">Tüm Durumlar</option>
+            <option value="all">Tï¿½m Durumlar</option>
             <option value="draft">Taslak</option>
-            <option value="sent">Gönderildi</option>
-            <option value="approved">Onaylandý</option>
-            <option value="cancelled">Ýptal</option>
+            <option value="sent">Gï¿½nderildi</option>
+            <option value="approved">Onaylandï¿½</option>
+            <option value="cancelled">ï¿½ptal</option>
           </select>
         </div>
       </div>
@@ -577,20 +577,20 @@ export default function EInvoiceList() {
       {/* Invoice List */}
       <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yï¿½kleniyor...</div>
         ) : filteredInvoices.length === 0 ? (
           <div className="p-12 text-center">
             <FileText className="mx-auto text-neutral-400 mb-3" size={48} />
             <p className="text-neutral-600">
               {searchTerm || filterType !== 'all' || filterStatus !== 'all'
-                ? 'Arama kriterlerine uygun fatura bulunamadý'
-                : 'Henüz fatura bulunmuyor'}
+                ? 'Arama kriterlerine uygun fatura bulunamadï¿½'
+                : 'Henï¿½z fatura bulunmuyor'}
             </p>
             <button
               onClick={() => setShowForm(true)}
               className="mt-4 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
             >
-              Ýlk Faturayý Oluþtur
+              ï¿½lk Faturayï¿½ Oluï¿½tur
             </button>
           </div>
         ) : (
@@ -602,7 +602,7 @@ export default function EInvoiceList() {
                     Fatura Bilgileri
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Müþteri
+                    Mï¿½ï¿½teri
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-neutral-700 uppercase tracking-wider">
                     Tip
@@ -617,7 +617,7 @@ export default function EInvoiceList() {
                     E-Belge
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Ýþlemler
+                    ï¿½ï¿½lemler
                   </th>
                 </tr>
               </thead>
@@ -643,7 +643,7 @@ export default function EInvoiceList() {
                         {invoice.parasutInvoiceNo && (
                           <div className="text-xs text-neutral-900 mt-1 flex items-center gap-1">
                             <ExternalLink size={12} />
-                            Paraþüt: {invoice.parasutInvoiceNo}
+                            Paraï¿½ï¿½t: {invoice.parasutInvoiceNo}
                           </div>
                         )}
                       </div>
@@ -665,14 +665,14 @@ export default function EInvoiceList() {
                           : 'bg-indigo-100 text-neutral-800'
                       }`}>
                         {invoice.invoiceType === 'e-fatura' ? <Zap size={12} /> : <Archive size={12} />}
-                        {invoice.invoiceType === 'e-fatura' ? 'E-Fatura' : 'E-Arþiv'}
+                        {invoice.invoiceType === 'e-fatura' ? 'E-Fatura' : 'E-Arï¿½iv'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="font-bold text-neutral-900">{formatCurrency(invoice.grandTotal)}</div>
                       {invoice.paidAmount > 0 && (
                         <div className="text-xs text-neutral-900 mt-1">
-                          Ödenen: {formatCurrency(invoice.paidAmount)}
+                          ï¿½denen: {formatCurrency(invoice.paidAmount)}
                         </div>
                       )}
                     </td>
@@ -700,7 +700,7 @@ export default function EInvoiceList() {
                             onClick={() => handleSendEDocument(invoice)}
                             disabled={actionInvoiceId === invoice.id}
                             className="p-2 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
-                            title="E-Belge Gönder"
+                            title="E-Belge Gï¿½nder"
                           >
                             <Send size={18} className="text-neutral-900" />
                           </button>
@@ -712,7 +712,7 @@ export default function EInvoiceList() {
                               onClick={() => handleCheckEInvoiceStatus(invoice)}
                               disabled={actionInvoiceId === invoice.id}
                               className="p-2 hover:bg-neutral-100 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
-                              title="GÝB Durumunu Sorgula"
+                              title="Gï¿½B Durumunu Sorgula"
                             >
                               <RefreshCw size={18} className="text-neutral-600" />
                             </button>
@@ -720,7 +720,7 @@ export default function EInvoiceList() {
                               onClick={() => handleDownloadXML(invoice)}
                               disabled={actionInvoiceId === invoice.id}
                               className="p-2 hover:bg-purple-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
-                              title="E-Fatura XML Ýndir"
+                              title="E-Fatura XML ï¿½ndir"
                             >
                               <File size={18} className="text-neutral-900" />
                             </button>
@@ -732,7 +732,7 @@ export default function EInvoiceList() {
                             onClick={() => handleDownloadPDF(invoice)}
                             disabled={actionInvoiceId === invoice.id}
                             className="p-2 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
-                            title="PDF Ýndir"
+                            title="PDF ï¿½ndir"
                           >
                             <Download size={18} className="text-neutral-900" />
                           </button>
@@ -743,7 +743,7 @@ export default function EInvoiceList() {
                             onClick={() => handleCancelInvoice(invoice)}
                             disabled={actionInvoiceId === invoice.id}
                             className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
-                            title="Ýptal Et"
+                            title="ï¿½ptal Et"
                           >
                             <X size={18} className="text-red-600" />
                           </button>
@@ -761,7 +761,7 @@ export default function EInvoiceList() {
       {/* Results Info */}
       {!loading && filteredInvoices.length > 0 && (
         <div className="text-sm text-neutral-600 text-center">
-          {filteredInvoices.length} fatura gösteriliyor
+          {filteredInvoices.length} fatura gï¿½steriliyor
           {invoices.length !== filteredInvoices.length && ` (toplam ${invoices.length} fatura)`}
         </div>
       )}
