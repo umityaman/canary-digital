@@ -945,14 +945,10 @@ export default function AdvancedReporting() {
                   <AlertCircle className="text-neutral-700" size={32} />
                 )}
                 <div>
-                  <h4 className={`text-lg font-bold ${
-                    Math.abs(totalAssets - totalLiabilities) < 0.01 ? 'text-green-900' : 'text-red-900'
-                  }`}>
+                  <h4 className="text-lg font-bold text-neutral-900">
                     {Math.abs(totalAssets - totalLiabilities) < 0.01 ? 'Bilanço Dengede ✓' : 'Bilanço Farkı Var!'}
                   </h4>
-                  <p className={`text-sm ${
-                    Math.abs(totalAssets - totalLiabilities) < 0.01 ? 'text-green-700' : 'text-red-700'
-                  }`}>
+                  <p className="text-sm text-neutral-700">
                     {Math.abs(totalAssets - totalLiabilities) < 0.01
                       ? 'Aktif ve Pasif toplamları eşittir'
                       : `Fark: ${formatCurrency(Math.abs(totalAssets - totalLiabilities))}`

@@ -612,7 +612,7 @@ export default function BankReconciliation() {
                             <div className="flex items-center gap-2 mb-1">
                               <span className="font-medium text-neutral-900">{tx.description}</span>
                               {tx.matched && (
-                                <span className="flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs">
+                                <span className="flex items-center gap-1 px-2 py-0.5 bg-neutral-100 text-neutral-800 rounded-full text-xs">
                                   <CheckCircle size={12} />
                                   Eşleşti
                                 </span>
@@ -625,9 +625,7 @@ export default function BankReconciliation() {
                           </div>
                           
                           <div className="text-right ml-4">
-                            <div className={`font-bold ${
-                              tx.type === 'credit' ? 'text-green-600' : 'text-red-600'
-                            }`}>
+                            <div className="font-bold text-neutral-900">
                               {tx.type === 'credit' ? '+' : '-'}{formatCurrency(tx.amount)}
                             </div>
                             {tx.matched && (
@@ -677,7 +675,7 @@ export default function BankReconciliation() {
                             <div className="flex items-center gap-2 mb-1">
                               <span className="font-medium text-neutral-900">{tx.description}</span>
                               {tx.matched && (
-                                <span className="flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs">
+                                <span className="flex items-center gap-1 px-2 py-0.5 bg-neutral-100 text-neutral-800 rounded-full text-xs">
                                   <CheckCircle size={12} />
                                   Eşleşti
                                 </span>
@@ -690,9 +688,7 @@ export default function BankReconciliation() {
                           </div>
                           
                           <div className="text-right ml-4">
-                            <div className={`font-bold ${
-                              tx.type === 'income' ? 'text-green-600' : 'text-red-600'
-                            }`}>
+                            <div className="font-bold text-neutral-900">
                               {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                             </div>
                           </div>
@@ -744,7 +740,7 @@ export default function BankReconciliation() {
                           <div className="text-sm font-medium text-neutral-900">{systemTx.description}</div>
                           <div className="text-xs text-neutral-600">{formatDate(systemTx.date)} • {systemTx.category}</div>
                         </div>
-                        <div className="text-sm font-bold text-green-600">
+                        <div className="text-sm font-bold text-neutral-900">
                           {formatCurrency(systemTx.amount)}
                         </div>
                       </button>
@@ -760,7 +756,7 @@ export default function BankReconciliation() {
             
             {filteredBankTransactions.filter(bt => !bt.matched).length === 0 && (
               <div className="text-center py-12">
-                <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
+                <CheckCircle className="mx-auto mb-4 text-neutral-900" size={48} />
                 <p className="text-lg font-medium text-neutral-900">Tüm işlemler eşleştirildi!</p>
                 <p className="text-sm text-neutral-600 mt-2">Eşleşmeyen banka işlemi kalmadı</p>
               </div>
@@ -809,13 +805,13 @@ export default function BankReconciliation() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-neutral-600">Toplam Gelir:</span>
-                      <span className="font-semibold text-green-600">
+                      <span className="font-semibold text-neutral-900">
                         {formatCurrency(systemTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0))}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-neutral-600">Toplam Gider:</span>
-                      <span className="font-semibold text-red-600">
+                      <span className="font-semibold text-neutral-900">
                         {formatCurrency(systemTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0))}
                       </span>
                     </div>
@@ -838,9 +834,7 @@ export default function BankReconciliation() {
                     <h4 className="text-lg font-semibold text-neutral-900">
                       {Math.abs(stats.differenceAmount) < 0.01 ? 'Mutabakat Sağlandı ✓' : 'Mutabakat Farkı Var!'}
                     </h4>
-                    <p className={`text-sm mt-1 ${
-                      Math.abs(stats.differenceAmount) < 0.01 ? 'text-green-700' : 'text-red-700'
-                    }`}>
+                    <p className="text-sm mt-1 text-neutral-700">
                       {Math.abs(stats.differenceAmount) < 0.01 
                         ? 'Banka ve sistem kayıtları tam olarak eşleşiyor'
                         : `Fark tutarı: ${formatCurrency(stats.differenceAmount)}`
@@ -848,9 +842,9 @@ export default function BankReconciliation() {
                     </p>
                   </div>
                   {Math.abs(stats.differenceAmount) < 0.01 ? (
-                    <CheckCircle className="text-green-600" size={48} />
+                    <CheckCircle className="text-neutral-900" size={48} />
                   ) : (
-                    <AlertCircle className="text-red-600" size={48} />
+                    <AlertCircle className="text-neutral-700" size={48} />
                   )}
                 </div>
               </div>
