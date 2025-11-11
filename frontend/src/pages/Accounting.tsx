@@ -1764,16 +1764,10 @@ export default function Accounting() {
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.offerNumber}
                                   </div>
-                                  <div className="text-xs text-neutral-500">
-                                    {offer.items?.length || 0} kalem
-                                  </div>
                                 </td>
                                 <td className="px-3 py-3">
                                   <div className="text-sm font-medium text-neutral-900">
                                     {offer.customer.name}
-                                  </div>
-                                  <div className="text-xs text-neutral-500">
-                                    {offer.customer.email}
                                   </div>
                                 </td>
                                 <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
