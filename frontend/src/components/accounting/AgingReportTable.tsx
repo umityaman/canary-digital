@@ -136,10 +136,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} opacity-90`}>{data.summary.customerCount} Müşteri</p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-green-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-neutral-200')}>
           <div className="flex items-center justify-between mb-4">
-            <CheckCircle className="w-8 h-8 text-green-600" />
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full">0-30 Gün</span>
+            <CheckCircle className="w-8 h-8 text-neutral-900" />
+            <span className="text-xs bg-neutral-100 text-neutral-800 px-2 py-1 rounded-full">0-30 Gün</span>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalCurrent)}
@@ -149,10 +149,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
           </p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-yellow-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-neutral-300')}>
           <div className="flex items-center justify-between mb-4">
-            <Clock className="w-8 h-8 text-yellow-600" />
-            <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full">31-60 Gün</span>
+            <Clock className="w-8 h-8 text-neutral-800" />
+            <span className="text-xs bg-neutral-200 text-neutral-800 px-2 py-1 rounded-full">31-60 Gün</span>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays30)}
@@ -162,10 +162,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
           </p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-orange-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-neutral-400')}>
           <div className="flex items-center justify-between mb-4">
-            <AlertCircle className="w-8 h-8 text-orange-600" />
-            <span className="text-xs bg-orange-50 text-orange-700 px-2 py-1 rounded-full">61-90 Gün</span>
+            <AlertCircle className="w-8 h-8 text-neutral-700" />
+            <span className="text-xs bg-neutral-300 text-neutral-800 px-2 py-1 rounded-full">61-90 Gün</span>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays60)}

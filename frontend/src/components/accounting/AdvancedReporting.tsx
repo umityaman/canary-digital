@@ -798,9 +798,9 @@ export default function AdvancedReporting() {
             <div className="space-y-6">
               {/* Revenue Section */}
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-green-500">
-                  <h4 className="font-semibold text-green-900">GELİRLER</h4>
-                  <span className="font-bold text-green-900">{formatCurrency(totalRevenue)}</span>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-neutral-900">
+                  <h4 className="font-semibold text-neutral-900">GELİRLER</h4>
+                  <span className="font-bold text-neutral-900">{formatCurrency(totalRevenue)}</span>
                 </div>
                 {revenueData.map((item, index) => (
                   <div key={index} className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
@@ -812,9 +812,9 @@ export default function AdvancedReporting() {
 
               {/* Expense Section */}
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-red-500">
-                  <h4 className="font-semibold text-red-900">GİDERLER</h4>
-                  <span className="font-bold text-red-900">({formatCurrency(totalExpense)})</span>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-neutral-700">
+                  <h4 className="font-semibold text-neutral-900">GİDERLER</h4>
+                  <span className="font-bold text-neutral-900">({formatCurrency(totalExpense)})</span>
                 </div>
                 {expenseData.map((item, index) => (
                   <div key={index} className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
@@ -876,7 +876,7 @@ export default function AdvancedReporting() {
                   <div key={index}>
                     <div className="flex items-center justify-between mb-3 pb-2 border-b border-neutral-200">
                       <h4 className="font-semibold text-neutral-900">{section.category}</h4>
-                      <span className="font-bold text-blue-600">{formatCurrency(section.total)}</span>
+                      <span className="font-bold text-neutral-900">{formatCurrency(section.total)}</span>
                     </div>
                     <div className="space-y-2">
                       {section.subcategories.map((item, idx) => (
@@ -1015,9 +1015,9 @@ export default function AdvancedReporting() {
             <div className="space-y-6">
               {/* Taxable Sales Section */}
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-green-500">
-                  <h4 className="font-semibold text-green-900">VERGİYE TABİ İŞLEMLER (Satışlar)</h4>
-                  <span className="font-bold text-green-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}</span>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-neutral-900">
+                  <h4 className="font-semibold text-neutral-900">VERGİYE TABİ İŞLEMLER (Satışlar)</h4>
+                  <span className="font-bold text-neutral-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
@@ -1101,12 +1101,10 @@ export default function AdvancedReporting() {
                       <tr key={index} className="hover:bg-neutral-50">
                         <td className="px-4 py-3 text-sm font-medium text-neutral-900">{row.period}</td>
                         <td className="px-4 py-3 text-sm text-right text-neutral-900">{formatCurrency(row.sales)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-green-600 font-semibold">{formatCurrency(row.outputVAT)}</td>
+                        <td className="px-4 py-3 text-sm text-right text-neutral-900 font-semibold">{formatCurrency(row.outputVAT)}</td>
                         <td className="px-4 py-3 text-sm text-right text-neutral-900">{formatCurrency(row.purchases)}</td>
-                        <td className="px-4 py-3 text-sm text-right text-blue-600 font-semibold">{formatCurrency(row.inputVAT)}</td>
-                        <td className={`px-4 py-3 text-sm text-right font-bold ${
-                          row.netVAT >= 0 ? 'text-orange-600' : 'text-green-600'
-                        }`}>
+                        <td className="px-4 py-3 text-sm text-right text-neutral-900 font-semibold">{formatCurrency(row.inputVAT)}</td>
+                        <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                           {formatCurrency(Math.abs(row.netVAT))} {row.netVAT >= 0 ? '(Ö)' : '(İ)'}
                         </td>
                       </tr>
@@ -1118,18 +1116,16 @@ export default function AdvancedReporting() {
                       <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}
                       </td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-green-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.outputVAT, 0))}
                       </td>
                       <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}
                       </td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-blue-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))}
                       </td>
-                      <td className={`px-4 py-3 text-sm text-right font-bold ${
-                        vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-600' : 'text-green-600'
-                      }`}>
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(Math.abs(vatData.reduce((sum, d) => sum + d.netVAT, 0)))}
                       </td>
                     </tr>

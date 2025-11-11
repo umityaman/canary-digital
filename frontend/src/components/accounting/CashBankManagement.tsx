@@ -548,12 +548,12 @@ export default function CashBankManagement() {
                 <div className="space-y-4">
                   {/* Monthly Summary Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
                       <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp className="w-5 h-5 text-green-600" />
+                        <TrendingUp className="w-5 h-5 text-neutral-900" />
                         <span className="text-sm font-medium text-gray-700">Toplam Giriş</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.income, 0)
                         )}
@@ -561,12 +561,12 @@ export default function CashBankManagement() {
                       <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
 
-                    <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                    <div className="p-4 bg-neutral-100 rounded-lg border border-neutral-300">
                       <div className="flex items-center gap-2 mb-2">
-                        <TrendingDown className="w-5 h-5 text-red-600" />
+                        <TrendingDown className="w-5 h-5 text-neutral-800" />
                         <span className="text-sm font-medium text-gray-700">Toplam Çıkış</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.expense, 0)
                         )}
@@ -574,12 +574,12 @@ export default function CashBankManagement() {
                       <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
 
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="p-4 bg-neutral-200 rounded-lg border border-neutral-400">
                       <div className="flex items-center gap-2 mb-2">
-                        <Wallet className="w-5 h-5 text-blue-600" />
+                        <Wallet className="w-5 h-5 text-neutral-700" />
                         <span className="text-sm font-medium text-gray-700">Net Akış</span>
                       </div>
-                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600`}>
+                      <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                         {formatCurrency(
                           cashFlowData.reduce((sum, month) => sum + month.net, 0)
                         )}
@@ -616,20 +616,14 @@ export default function CashBankManagement() {
                                 { month: 'long' }
                               )}
                             </td>
-                            <td className="px-4 py-3 text-sm text-right text-green-600 font-medium">
+                            <td className="px-4 py-3 text-sm text-right text-neutral-900 font-medium">
                               {formatCurrency(monthData.income)}
                             </td>
-                            <td className="px-4 py-3 text-sm text-right text-red-600 font-medium">
+                            <td className="px-4 py-3 text-sm text-right text-neutral-900 font-medium">
                               {formatCurrency(monthData.expense)}
                             </td>
-                            <td className="px-4 py-3 text-sm text-right font-bold">
-                              <span
-                                className={
-                                  monthData.net >= 0 ? 'text-blue-600' : 'text-red-600'
-                                }
-                              >
-                                {formatCurrency(monthData.net)}
-                              </span>
+                            <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
+                              {formatCurrency(monthData.net)}
                             </td>
                           </tr>
                         ))}
