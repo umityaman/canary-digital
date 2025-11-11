@@ -201,7 +201,7 @@ const CompanyInfo: React.FC = () => {
   if (!companyData) {
     return (
       <div className="flex flex-col items-center justify-center h-64">
-        <AlertCircle className="w-12 h-12 text-neutral-700" mb-4" />
+        <AlertCircle className="w-12 h-12 text-neutral-700 mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Şirket Bilgileri Yüklenemedi</h3>
         <p className="text-gray-600 mb-4">Veriler yüklenirken bir hata oluştu</p>
         <button
