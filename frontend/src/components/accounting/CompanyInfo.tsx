@@ -642,27 +642,27 @@ const CompanyInfo: React.FC = () => {
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
+              <div className="p-4 bg-neutral-50 rounded-lg">
                 <p className="text-sm text-gray-600">Toplam Bakiye</p>
-                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {formatCurrency(bankAccounts?.totals?.totalBalance || 0)}
                 </p>
               </div>
-              <div className="p-4 bg-green-50 rounded-lg">
+              <div className="p-4 bg-neutral-50 rounded-lg">
                 <p className="text-sm text-gray-600">Kullanılabilir</p>
-                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {formatCurrency(bankAccounts?.totals?.totalAvailable || 0)}
                 </p>
               </div>
-              <div className="p-4 bg-orange-50 rounded-lg">
+              <div className="p-4 bg-neutral-50 rounded-lg">
                 <p className="text-sm text-gray-600">Bloke</p>
-                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {formatCurrency(bankAccounts?.totals?.totalBlocked || 0)}
                 </p>
               </div>
-              <div className="p-4 bg-purple-50 rounded-lg">
+              <div className="p-4 bg-neutral-50 rounded-lg">
                 <p className="text-sm text-gray-600">Aktif Hesap</p>
-                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-600`}>
+                <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {bankAccounts?.totals?.activeAccounts || 0} / {bankAccounts?.totals?.totalAccounts || 0}
                 </p>
               </div>

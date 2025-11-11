@@ -825,14 +825,12 @@ export default function AdvancedReporting() {
               </div>
 
               {/* Net Profit */}
-              <div className={`p-4 rounded-lg ${
-                netProfit >= 0 ? 'bg-blue-50 border border-blue-200' : 'bg-orange-50 border border-orange-200'
-              }`}>
+              <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200">
                 <div className="flex items-center justify-between">
-                  <h4 className={`text-lg font-bold ${netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'}`}>
+                  <h4 className="text-lg font-bold text-neutral-900">
                     NET {netProfit >= 0 ? 'KAR' : 'ZARAR'}
                   </h4>
-                  <span className={`text-2xl font-bold ${netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'} truncate`}>
+                  <span className="text-2xl font-bold text-neutral-900 truncate">
                     {formatCurrency(Math.abs(netProfit))}
                   </span>
                 </div>
@@ -1028,9 +1026,9 @@ export default function AdvancedReporting() {
                       {formatCurrency(vatData.reduce((sum, d) => sum + d.sales, 0))}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between py-2 px-4 bg-green-50 rounded-lg">
+                  <div className="flex items-center justify-between py-2 px-4 bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700 font-medium">Hesaplanan KDV (% 20)</span>
-                    <span className="font-bold text-green-600">
+                    <span className="font-bold text-neutral-900">
                       {formatCurrency(vatData.reduce((sum, d) => sum + d.outputVAT, 0))}
                     </span>
                   </div>
@@ -1039,9 +1037,9 @@ export default function AdvancedReporting() {
 
               {/* Deductible Purchases Section */}
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-blue-500">
-                  <h4 className="font-semibold text-blue-900">İNDİRİLECEK KDV (Alışlar)</h4>
-                  <span className="font-bold text-blue-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}</span>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-neutral-900">
+                  <h4 className="font-semibold text-neutral-900">İNDİRİLECEK KDV (Alışlar)</h4>
+                  <span className="font-bold text-neutral-900">{formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
@@ -1050,9 +1048,9 @@ export default function AdvancedReporting() {
                       {formatCurrency(vatData.reduce((sum, d) => sum + d.purchases, 0))}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between py-2 px-4 bg-blue-50 rounded-lg">
+                  <div className="flex items-center justify-between py-2 px-4 bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700 font-medium">İndirilecek KDV</span>
-                    <span className="font-bold text-blue-600">
+                    <span className="font-bold text-neutral-900">
                       ({formatCurrency(vatData.reduce((sum, d) => sum + d.inputVAT, 0))})
                     </span>
                   </div>
@@ -1060,25 +1058,17 @@ export default function AdvancedReporting() {
               </div>
 
               {/* Net VAT Payable/Refundable */}
-              <div className={`p-4 rounded-lg ${
-                vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 
-                  ? 'bg-orange-50 border border-orange-200' 
-                  : 'bg-green-50 border border-green-200'
-              }`}>
+              <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200">
                 <div className="flex items-center justify-between">
-                  <h4 className={`text-lg font-bold ${
-                    vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-900' : 'text-green-900'
-                  }`}>
+                  <h4 className="text-lg font-bold text-neutral-900">
                     {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'ÖDENECEK KDV' : 'İADE ALINACAK KDV'}
                   </h4>
-                  <span className={`text-2xl font-bold truncate ${
-                    vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-900' : 'text-green-900'
-                  }`}>
+                  <span className="text-2xl font-bold truncate text-neutral-900">
                     {formatCurrency(Math.abs(vatData.reduce((sum, d) => sum + d.netVAT, 0)))}
                   </span>
                 </div>
                 <div className="mt-2 text-sm">
-                  <p className={vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'text-orange-700' : 'text-green-700'}>
+                  <p className="text-neutral-700">
                     {vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 
                       ? 'Hesaplanan KDV > İndirilecek KDV - Hazine\'ye ödenecek'
                       : 'İndirilecek KDV > Hesaplanan KDV - Hazine\'den iade alınacak'

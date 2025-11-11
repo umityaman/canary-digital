@@ -362,7 +362,7 @@ export default function IncomeTab() {
                           </button>
                           <button
                             onClick={() => handleDelete(income.id)}
-                            className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-2 text-neutral-900 hover:text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors"
                             title="Sil"
                           >
                             <Trash2 size={16} />

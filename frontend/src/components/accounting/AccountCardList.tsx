@@ -289,10 +289,10 @@ export default function AccountCardList() {
                     <td className="px-6 py-4 text-right">
                       {account.overdueDebt > 0 ? (
                         <div className="flex flex-col items-end">
-                          <span className="text-lg font-bold text-red-600">
+                          <span className="text-lg font-bold text-neutral-900">
                             {formatCurrency(account.overdueDebt)}
                           </span>
-                          <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full font-medium">
+                          <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full font-medium">
                             Gecikmiş
                           </span>
                         </div>
@@ -301,7 +301,7 @@ export default function AccountCardList() {
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-neutral-100 text-neutral-800 rounded-full text-sm font-medium">
                         <FileText size={14} />
                         {account.invoiceCount}
                       </span>
