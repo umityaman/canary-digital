@@ -224,8 +224,8 @@ export default function CashBankManagement() {
         {/* Bank Accounts */}
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
-            <Building2 className="w-8 h-8 text-blue-600" />
-            <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Banka</span>
+            <Building2 className="w-8 h-8 text-neutral-900" />
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-neutral-100 text-neutral-800">Banka</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 mb-1">
             {formatCurrency(bankAccounts?.totals?.totalBalance || 0)}
@@ -238,8 +238,8 @@ export default function CashBankManagement() {
         {/* Cash Balance */}
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between mb-3">
-            <Wallet className="w-8 h-8 text-green-600" />
-            <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Kasa</span>
+            <Wallet className="w-8 h-8 text-neutral-900" />
+            <span className="px-2 py-1 text-xs font-medium rounded-full bg-neutral-100 text-neutral-800">Kasa</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 mb-1">{formatCurrency(cashBalance)}</p>
           <p className="text-sm text-gray-600">Nakit Bakiye</p>
@@ -254,10 +254,10 @@ export default function CashBankManagement() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <ArrowUpRight className="w-4 h-4 text-green-600" />
+                <ArrowUpRight className="w-4 h-4 text-neutral-900" />
                 <span className="text-sm text-gray-600">Giriş</span>
               </div>
-              <p className="text-lg font-bold text-green-600">
+              <p className="text-lg font-bold text-neutral-900">
                 {formatCurrency(cashInToday)}
               </p>
             </div>
@@ -332,35 +332,35 @@ export default function CashBankManagement() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Hesap Dağılımı</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-medium text-gray-700">Banka Hesapları</span>
-                      <Building2 className="w-5 h-5 text-blue-600" />
+                      <Building2 className="w-5 h-5 text-neutral-900" />
                     </div>
-                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-600 mb-2`}>
+                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-2`}>
                       {formatCurrency(bankAccounts?.totals?.totalBalance || 0)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">
                         {bankAccounts?.totals?.totalAccounts || 0} Hesap
                       </span>
-                      <span className="text-green-600">
+                      <span className="text-neutral-900">
                         {bankAccounts?.totals?.activeAccounts || 0} Aktif
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-medium text-gray-700">Kasa</span>
-                      <Wallet className="w-5 h-5 text-green-600" />
+                      <Wallet className="w-5 h-5 text-neutral-900" />
                     </div>
-                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600 mb-2`}>
+                    <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-2`}>
                       {formatCurrency(cashBalance)}
                     </p>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Nakit</span>
-                      <span className="text-blue-600">TRY</span>
+                      <span className="text-neutral-900">TRY</span>
                     </div>
                   </div>
                 </div>
