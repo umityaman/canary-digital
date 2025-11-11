@@ -87,10 +87,8 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
   };
 
   const getAgeGroupColor = (days: number): string => {
-    if (days === 0) return 'bg-green-100 text-green-800'; // 0-30 days
-    if (days === 30) return 'bg-yellow-100 text-yellow-800'; // 31-60 days
-    if (days === 60) return 'bg-orange-100 text-orange-800'; // 61-90 days
-    return 'bg-red-100 text-red-800'; // 90+ days
+    // All age groups use neutral colors now
+    return 'bg-neutral-100 text-neutral-800';
   };
 
   const handleExportExcel = () => {
@@ -177,10 +175,10 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
           </p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-red-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'md'), 'border-2 border-neutral-500')}>
           <div className="flex items-center justify-between mb-4">
-            <TrendingDown className="w-8 h-8 text-red-600" />
-            <span className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded-full">90+ Gün</span>
+            <TrendingDown className="w-8 h-8 text-neutral-600" />
+            <span className="text-xs bg-neutral-300 text-neutral-800 px-2 py-1 rounded-full">90+ Gün</span>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}>
             {formatCurrency(data.summary.totalDays90Plus)}
@@ -195,14 +193,14 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
       <div className="flex items-center justify-end gap-3">
         <button
           onClick={handleExportExcel}
-          className={cx(button('md', 'primary', 'md'), 'gap-2 bg-green-600 hover:bg-green-700')}
+          className={cx(button('md', 'primary', 'md'), 'gap-2 bg-neutral-900 hover:bg-neutral-800')}
         >
           <Download className="w-4 h-4" />
           Excel İndir
         </button>
         <button
           onClick={handleExportPDF}
-          className={cx(button('md', 'primary', 'md'), 'gap-2 bg-red-600 hover:bg-red-700')}
+          className={cx(button('md', 'primary', 'md'), 'gap-2 bg-neutral-900 hover:bg-neutral-800')}
         >
           <FileText className="w-4 h-4" />
           PDF İndir
@@ -235,7 +233,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                 </th>
                 <th
                   onClick={() => handleSort('current')}
-                  className="px-6 py-3 text-right text-xs font-medium text-green-700 uppercase cursor-pointer hover:bg-green-50"
+                  className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase cursor-pointer hover:bg-neutral-50"
                 >
                   0-30 Gün
                   {sortField === 'current' && (
@@ -244,7 +242,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                 </th>
                 <th
                   onClick={() => handleSort('days30')}
-                  className="px-6 py-3 text-right text-xs font-medium text-yellow-700 uppercase cursor-pointer hover:bg-yellow-50"
+                  className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase cursor-pointer hover:bg-neutral-50"
                 >
                   31-60 Gün
                   {sortField === 'days30' && (
@@ -253,7 +251,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                 </th>
                 <th
                   onClick={() => handleSort('days60')}
-                  className="px-6 py-3 text-right text-xs font-medium text-orange-700 uppercase cursor-pointer hover:bg-orange-50"
+                  className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase cursor-pointer hover:bg-neutral-50"
                 >
                   61-90 Gün
                   {sortField === 'days60' && (
@@ -262,7 +260,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                 </th>
                 <th
                   onClick={() => handleSort('days90Plus')}
-                  className="px-6 py-3 text-right text-xs font-medium text-red-700 uppercase cursor-pointer hover:bg-red-50"
+                  className="px-6 py-3 text-right text-xs font-medium text-neutral-700 uppercase cursor-pointer hover:bg-neutral-50"
                 >
                   90+ Gün
                   {sortField === 'days90Plus' && (
@@ -285,20 +283,14 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                 return (
                   <tr
                     key={customer.customerId}
-                    className={`hover:bg-neutral-50 transition-colors ${
-                      riskLevel === 'critical'
-                        ? 'bg-red-50/30'
-                        : riskLevel === 'high'
-                        ? 'bg-orange-50/30'
-                        : ''
-                    }`}
+                    className="hover:bg-neutral-50 transition-colors"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div>
                           <p className={`font-medium ${DESIGN_TOKENS?.colors?.text.primary}`}>{customer.customerName}</p>
                           {customer.overdueAmount > 0 && (
-                            <p className="text-xs text-red-600 flex items-center gap-1">
+                            <p className="text-xs text-neutral-900 flex items-center gap-1">
                               <AlertCircle className="w-3 h-3" />
                               {formatCurrency(customer.overdueAmount)} vadesi geçmiş
                             </p>
