@@ -263,10 +263,10 @@ export default function CashBankManagement() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <ArrowDownLeft className="w-4 h-4 text-red-600" />
+                <ArrowDownLeft className="w-4 h-4 text-neutral-800" />
                 <span className="text-sm text-gray-600">Çıkış</span>
               </div>
-              <p className="text-lg font-bold text-red-600">
+              <p className="text-lg font-bold text-neutral-900">
                 {formatCurrency(cashOutToday)}
               </p>
             </div>
@@ -398,11 +398,7 @@ export default function CashBankManagement() {
                           <p className="text-sm text-gray-500">{formatDate(transaction.date)}</p>
                         </div>
                       </div>
-                      <p
-                        className={`text-lg font-bold ${
-                          transaction.type === 'in' ? 'text-green-600' : 'text-red-600'
-                        }`}
-                      >
+                      <p className="text-lg font-bold text-neutral-900">
                         {transaction.type === 'in' ? '+' : '-'}
                         {formatCurrency(transaction.amount)}
                       </p>
@@ -469,7 +465,7 @@ export default function CashBankManagement() {
                           <span
                             className={`px-2 py-1 text-xs rounded-full ${
                               account.isActive
-                                ? 'bg-green-100 text-green-800'
+                                ? 'bg-neutral-100 text-neutral-800'
                                 : 'bg-gray-100 text-gray-800'
                             }`}
                           >
@@ -478,7 +474,7 @@ export default function CashBankManagement() {
                         </td>
                         <td className="px-4 py-3">
                           <button
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                            className="p-2 text-neutral-900 hover:bg-neutral-50 rounded"
                             title="Detaylar"
                           >
                             <Eye className="w-4 h-4" />
@@ -660,13 +656,13 @@ export default function CashBankManagement() {
                     onClick={() => setTransactionType('in')}
                     className={`p-3 rounded-lg border-2 transition-colors ${
                       transactionType === 'in'
-                        ? 'border-green-500 bg-green-50'
+                        ? 'border-neutral-500 bg-neutral-50'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <ArrowDownLeft
                       className={`w-6 h-6 mx-auto mb-1 ${
-                        transactionType === 'in' ? 'text-green-600' : 'text-gray-400'
+                        transactionType === 'in' ? 'text-neutral-900' : 'text-gray-400'
                       }`}
                     />
                     <span className="text-sm font-medium">Giriş</span>
@@ -675,13 +671,13 @@ export default function CashBankManagement() {
                     onClick={() => setTransactionType('out')}
                     className={`p-3 rounded-lg border-2 transition-colors ${
                       transactionType === 'out'
-                        ? 'border-red-500 bg-red-50'
+                        ? 'border-neutral-600 bg-neutral-100'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <ArrowUpRight
                       className={`w-6 h-6 mx-auto mb-1 ${
-                        transactionType === 'out' ? 'text-red-600' : 'text-gray-400'
+                        transactionType === 'out' ? 'text-neutral-800' : 'text-gray-400'
                       }`}
                     />
                     <span className="text-sm font-medium">Çıkış</span>
