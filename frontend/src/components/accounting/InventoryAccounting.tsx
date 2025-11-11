@@ -425,21 +425,21 @@ export default function InventoryAccounting() {
     switch (status) {
       case 'pending':
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">
+          <span className="flex items-center gap-1 px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs">
             <AlertCircle size={12} />
             Bekliyor
           </span>
         )
       case 'recorded':
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">
+          <span className="flex items-center gap-1 px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs">
             <CheckCircle size={12} />
             Kaydedildi
           </span>
         )
       case 'error':
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">
+          <span className="flex items-center gap-1 px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs">
             <XCircle size={12} />
             Hata
           </span>
@@ -452,11 +452,11 @@ export default function InventoryAccounting() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'purchase':
-        return <TrendingDown className="text-blue-600" size={16} />
+        return <TrendingDown className="text-neutral-900" size={16} />
       case 'sale':
-        return <TrendingUp className="text-green-600" size={16} />
+        return <TrendingUp className="text-neutral-900" size={16} />
       case 'rental_out':
-        return <ArrowRight className="text-purple-600" size={16} />
+        return <ArrowRight className="text-neutral-900" size={16} />
       case 'rental_return':
         return <ArrowRight className="text-orange-600 transform rotate-180" size={16} />
       case 'adjustment':
@@ -511,7 +511,7 @@ export default function InventoryAccounting() {
           <button
             onClick={handleBulkRecord}
             disabled={loading || stats.pendingRecords === 0}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors disabled:opacity-50"
           >
             {loading ? <RefreshCw className="animate-spin" size={18} /> : <CheckCircle size={18} />}
             <span className="hidden sm:inline">Toplu Kaydet ({stats.pendingRecords})</span>
@@ -686,7 +686,7 @@ export default function InventoryAccounting() {
                         <button
                           onClick={() => handleAutoRecord(transaction.id)}
                           disabled={loading}
-                          className="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                          className="text-xs px-3 py-1.5 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors disabled:opacity-50"
                         >
                           Kaydet
                         </button>
@@ -695,14 +695,14 @@ export default function InventoryAccounting() {
                         <>
                           <button
                             onClick={() => {/* View entry */}}
-                            className="text-blue-600 hover:text-blue-700 p-1"
+                            className="text-neutral-900 hover:text-neutral-700 p-1"
                             title="Görüntüle"
                           >
                             <Eye size={16} />
                           </button>
                           <button
                             onClick={() => handleDeleteEntry(transaction.id)}
-                            className="text-red-600 hover:text-red-700 p-1"
+                            className="text-neutral-900 hover:text-neutral-700 p-1"
                             title="Sil"
                           >
                             <XCircle size={16} />
@@ -764,8 +764,8 @@ export default function InventoryAccounting() {
                 <div className="text-xs font-medium text-neutral-700 mb-2">Muhasebe Kaydı Önizlemesi:</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="text-green-600" size={20} />
+                    <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="text-neutral-900" size={20} />
                     </div>
                     <div className="flex-1">
                       <div className="text-xs text-neutral-600">Borç</div>
@@ -773,12 +773,12 @@ export default function InventoryAccounting() {
                         {accountMappings[transaction.type].debit}
                       </div>
                     </div>
-                    <div className="font-bold text-green-600">{formatCurrency(transaction.totalCost)}</div>
+                    <div className="font-bold text-neutral-900">{formatCurrency(transaction.totalCost)}</div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <TrendingDown className="text-red-600" size={20} />
+                    <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+                      <TrendingDown className="text-neutral-900" size={20} />
                     </div>
                     <div className="flex-1">
                       <div className="text-xs text-neutral-600">Alacak</div>
@@ -786,7 +786,7 @@ export default function InventoryAccounting() {
                         {accountMappings[transaction.type].credit}
                       </div>
                     </div>
-                    <div className="font-bold text-red-600">{formatCurrency(transaction.totalCost)}</div>
+                    <div className="font-bold text-neutral-900">{formatCurrency(transaction.totalCost)}</div>
                   </div>
                 </div>
               </div>
@@ -795,7 +795,7 @@ export default function InventoryAccounting() {
                 <button
                   onClick={() => handleAutoRecord(transaction.id)}
                   disabled={loading}
-                  className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-6 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors disabled:opacity-50"
                 >
                   <CheckCircle size={18} />
                   <span>Kaydet</span>
@@ -833,7 +833,7 @@ export default function InventoryAccounting() {
                     </div>
                     <div className="text-right ml-4">
                       <div className="text-lg font-bold text-neutral-900">{formatCurrency(entry.amount)}</div>
-                      <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
+                      <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full">
                         {entry.status === 'posted' ? 'Aktarıldı' : 'Taslak'}
                       </span>
                     </div>
@@ -841,12 +841,12 @@ export default function InventoryAccounting() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div className="flex items-center gap-2 text-sm">
-                      <TrendingUp className="text-green-600" size={16} />
+                      <TrendingUp className="text-neutral-900" size={16} />
                       <span className="text-neutral-600">Borç:</span>
                       <span className="font-medium text-neutral-900">{entry.debitAccount}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <TrendingDown className="text-red-600" size={16} />
+                      <TrendingDown className="text-neutral-900" size={16} />
                       <span className="text-neutral-600">Alacak:</span>
                       <span className="font-medium text-neutral-900">{entry.creditAccount}</span>
                     </div>
@@ -890,7 +890,7 @@ export default function InventoryAccounting() {
                     onChange={(e) => setAutoRecordEnabled(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-neutral-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-neutral-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                  <div className="w-11 h-6 bg-neutral-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-neutral-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-neutral-900"></div>
                 </label>
               </div>
             </div>

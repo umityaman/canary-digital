@@ -262,11 +262,11 @@ const EInvoiceManagement: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const badges: Record<string, { color: string; text: string }> = {
-      PENDING: { color: 'bg-yellow-100 text-yellow-800', text: 'Beklemede' },
-      SENT: { color: 'bg-blue-100 text-blue-800', text: 'Gönderildi' },
-      RECEIVED: { color: 'bg-purple-100 text-purple-800', text: 'Alındı' },
-      APPROVED: { color: 'bg-green-100 text-green-800', text: 'Onaylandı' },
-      REJECTED: { color: 'bg-red-100 text-red-800', text: 'Reddedildi' },
+      PENDING: { color: 'bg-neutral-100 text-neutral-800', text: 'Beklemede' },
+      SENT: { color: 'bg-neutral-100 text-neutral-800', text: 'Gönderildi' },
+      RECEIVED: { color: 'bg-neutral-100 text-neutral-800', text: 'Alındı' },
+      APPROVED: { color: 'bg-neutral-100 text-neutral-800', text: 'Onaylandı' },
+      REJECTED: { color: 'bg-neutral-100 text-neutral-800', text: 'Reddedildi' },
       CANCELLED: { color: 'bg-gray-100 text-gray-800', text: 'İptal Edildi' },
     };
 
@@ -303,21 +303,21 @@ const EInvoiceManagement: React.FC = () => {
         <div className="flex gap-2">
           <button
             onClick={handleFetchIncoming}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            className="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800"
           >
             📥 Gelen Faturalar
           </button>
           <button
             onClick={handleRetryFailed}
             disabled={failedCount === 0}
-            className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:bg-gray-300"
+            className="px-4 py-2 bg-neutral-800 text-white rounded-lg hover:bg-neutral-700 disabled:bg-gray-300"
           >
             🔄 Başarısız Olanları Yeniden Gönder ({failedCount})
           </button>
           <button
             onClick={handleBatchSend}
             disabled={selectedInvoices.length === 0}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300"
+            className="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 disabled:bg-gray-300"
           >
             📤 Toplu Gönder ({selectedInvoices.length})
           </button>
@@ -536,11 +536,11 @@ const EInvoiceManagement: React.FC = () => {
               </div>
 
               {selectedEInvoice.errorMessage && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-sm font-semibold text-red-800">Hata</p>
-                  <p className="text-sm text-red-700">{selectedEInvoice.errorMessage}</p>
+                <div className="p-4 bg-neutral-50 border border-neutral-200 rounded-lg">
+                  <p className="text-sm font-semibold text-neutral-900">Hata</p>
+                  <p className="text-sm text-neutral-800">{selectedEInvoice.errorMessage}</p>
                   {selectedEInvoice.errorCode && (
-                    <p className="text-xs text-red-600 mt-1">Kod: {selectedEInvoice.errorCode}</p>
+                    <p className="text-xs text-neutral-700 mt-1">Kod: {selectedEInvoice.errorCode}</p>
                   )}
                 </div>
               )}
@@ -553,13 +553,13 @@ const EInvoiceManagement: React.FC = () => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleDownloadReport(selectedEInvoice.invoice.id, 'PDF')}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="flex-1 px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800"
                   >
                     📄 PDF İndir
                   </button>
                   <button
                     onClick={() => handleDownloadReport(selectedEInvoice.invoice.id, 'HTML')}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="flex-1 px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800"
                   >
                     🌐 HTML İndir
                   </button>
@@ -590,7 +590,7 @@ const EInvoiceManagement: React.FC = () => {
                     )}
                     <button
                       onClick={() => handleSendResponse(selectedEInvoice.uuid)}
-                      className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      className="w-full px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800"
                     >
                       Yanıt Gönder
                     </button>
@@ -612,7 +612,7 @@ const EInvoiceManagement: React.FC = () => {
                     />
                     <button
                       onClick={() => handleCancelInvoice(selectedEInvoice.invoice.id)}
-                      className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                      className="w-full px-4 py-2 border-2 border-neutral-900 text-neutral-900 rounded-lg hover:bg-neutral-50"
                     >
                       İptal Et
                     </button>
