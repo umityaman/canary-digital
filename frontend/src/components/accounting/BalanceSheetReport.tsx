@@ -220,9 +220,9 @@ export default function BalanceSheetReport() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <Building2 className="w-8 h-8 text-green-500" />
+            <Building2 className="w-8 h-8 text-neutral-900" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {formatCurrency(data.summary.totalAssets)}
           </p>
           <p
@@ -234,9 +234,9 @@ export default function BalanceSheetReport() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingDown className="w-8 h-8 text-red-500" />
+            <TrendingDown className="w-8 h-8 text-neutral-800" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {formatCurrency(data.summary.totalLiabilities)}
           </p>
           <p
@@ -248,9 +248,9 @@ export default function BalanceSheetReport() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingUp className="w-8 h-8 text-blue-500" />
+            <TrendingUp className="w-8 h-8 text-neutral-700" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-blue-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {formatCurrency(data.summary.totalEquity)}
           </p>
           <p
@@ -262,13 +262,9 @@ export default function BalanceSheetReport() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <Scale className="w-8 h-8 text-purple-500" />
+            <Scale className="w-8 h-8 text-neutral-600" />
           </div>
-          <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
-              data.summary.isBalanced ? 'text-green-600' : 'text-red-600'
-            } mb-1`}
-          >
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {data.summary.isBalanced ? '✓' : '✗'}
           </p>
           <p
@@ -331,7 +327,7 @@ export default function BalanceSheetReport() {
                   )}
                 </button>
               </div>
-              <p className="text-green-600 font-bold text-xl mt-1">
+              <p className="text-neutral-900 font-bold text-xl mt-1">
                 {formatCurrency(data.summary.totalAssets)}
               </p>
             </div>
@@ -372,7 +368,7 @@ export default function BalanceSheetReport() {
                     )}
                   </button>
                 </div>
-                <p className="text-red-600 font-bold text-xl mt-1">
+                <p className="text-neutral-900 font-bold text-xl mt-1">
                   {formatCurrency(data.summary.totalLiabilities)}
                 </p>
               </div>
@@ -411,7 +407,7 @@ export default function BalanceSheetReport() {
                     )}
                   </button>
                 </div>
-                <p className="text-blue-600 font-bold text-xl mt-1">
+                <p className="text-neutral-900 font-bold text-xl mt-1">
                   {formatCurrency(data.summary.totalEquity)}
                 </p>
               </div>
@@ -434,38 +430,16 @@ export default function BalanceSheetReport() {
       )}
 
       {/* Balance Equation Verification */}
-      <div
-        className={`${card('md', 'md', 'default', 'lg')} ${
-          data.summary.isBalanced
-            ? 'bg-green-50 border-green-200'
-            : 'bg-red-50 border-red-200'
-        }`}
-      >
+      <div className={`${card('md', 'md', 'default', 'lg')} bg-neutral-50 border-neutral-200`}>
         <div className="flex items-center gap-4">
-          <div
-            className={`w-12 h-12 rounded-full flex items-center justify-center ${
-              data.summary.isBalanced ? 'bg-green-100' : 'bg-red-100'
-            }`}
-          >
-            <Scale
-              className={`w-6 h-6 ${
-                data.summary.isBalanced ? 'text-green-600' : 'text-red-600'
-              }`}
-            />
+          <div className="w-12 h-12 rounded-full flex items-center justify-center bg-neutral-100">
+            <Scale className="w-6 h-6 text-neutral-900" />
           </div>
           <div className="flex-1">
-            <h4
-              className={`text-lg font-bold mb-1 ${
-                data.summary.isBalanced ? 'text-green-900' : 'text-red-900'
-              }`}
-            >
+            <h4 className="text-lg font-bold mb-1 text-neutral-900">
               {data.summary.isBalanced ? 'Bilanço Dengede' : 'Bilanço Dengesiz'}
             </h4>
-            <div
-              className={`flex items-center gap-4 text-sm ${
-                data.summary.isBalanced ? 'text-green-700' : 'text-red-700'
-              }`}
-            >
+            <div className="flex items-center gap-4 text-sm text-neutral-700">
               <span>Varlıklar: {formatCurrency(data.summary.totalAssets)}</span>
               <span>=</span>
               <span>
@@ -484,16 +458,16 @@ export default function BalanceSheetReport() {
 
       {/* Warning if unbalanced */}
       {!data.summary.isBalanced && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-neutral-900 mt-0.5" />
             <div>
-              <h4 className="text-red-900 font-semibold mb-1">Bilanço Dengesi Uyuşmuyor</h4>
-              <p className="text-red-700 text-sm mb-2">
+              <h4 className="text-neutral-900 font-semibold mb-1">Bilanço Dengesi Uyuşmuyor</h4>
+              <p className="text-neutral-700 text-sm mb-2">
                 Varlıklar toplamı, borçlar ve özkaynak toplamına eşit değil. Fark:{' '}
                 {formatCurrency(Math.abs(data.summary.difference))}
               </p>
-              <p className="text-red-600 text-xs">
+              <p className="text-neutral-600 text-xs">
                 Lütfen hesap kayıtlarınızı ve yevmiye defterini kontrol edin. Muhasebenin
                 temel denklemi: Varlıklar = Borçlar + Özkaynak
               </p>
@@ -503,19 +477,19 @@ export default function BalanceSheetReport() {
       )}
 
       {/* Report Date Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-neutral-900 mt-0.5" />
           <div>
-            <h4 className="text-blue-900 font-semibold mb-1">Rapor Tarihi</h4>
-            <p className="text-blue-700 text-sm">
+            <h4 className="text-neutral-900 font-semibold mb-1">Rapor Tarihi</h4>
+            <p className="text-neutral-700 text-sm">
               {new Date(reportDate).toLocaleDateString('tr-TR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
             </p>
-            <p className="text-blue-600 text-xs mt-1">
+            <p className="text-neutral-600 text-xs mt-1">
               Bu bilanço, belirtilen tarih itibariyle şirketin finansal durumunu gösterir.
             </p>
           </div>

@@ -391,9 +391,9 @@ export default function AccountFormModal({
           </div>
 
           {/* Helpful Info Box */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-semibold text-blue-900 mb-2">💡 Hesap Planı Hiyerarşisi</h4>
-            <ul className="text-sm text-blue-800 space-y-1">
+          <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+            <h4 className="font-semibold text-neutral-900 mb-2">💡 Hesap Planı Hiyerarşisi</h4>
+            <ul className="text-sm text-neutral-800 space-y-1">
               <li>• <strong>1xx:</strong> Varlık Hesapları (Dönen/Duran Varlıklar)</li>
               <li>• <strong>2xx:</strong> Borç Hesapları (Kısa/Uzun Vadeli Yükümlülükler)</li>
               <li>• <strong>3xx:</strong> Özkaynak Hesapları (Sermaye, Yedekler)</li>

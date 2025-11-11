@@ -220,7 +220,7 @@ export default function AdvancedReportFilters({
             <Filter className="w-4 h-4" />
             Gelişmiş Filtreler
             {activeFilterCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-neutral-900 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {activeFilterCount}
               </span>
             )}
@@ -284,7 +284,7 @@ export default function AdvancedReportFilters({
                       return (
                         <span
                           key={id}
-                          className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs"
+                          className="inline-flex items-center gap-1 px-2 py-1 bg-neutral-100 text-neutral-800 rounded text-xs"
                         >
                           {customer?.name}
                           <X
@@ -326,7 +326,7 @@ export default function AdvancedReportFilters({
                         type="checkbox"
                         checked={filters.suppliers.includes(supplier.id)}
                         onChange={() => handleMultiSelect('suppliers', supplier.id)}
-                        className="mr-2 rounded text-blue-600 focus:ring-blue-500"
+                        className="mr-2 rounded text-neutral-900 focus:ring-neutral-900"
                       />
                       <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>{supplier.name}</span>
                     </label>
@@ -339,7 +339,7 @@ export default function AdvancedReportFilters({
                       return (
                         <span
                           key={id}
-                          className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs"
+                          className="inline-flex items-center gap-1 px-2 py-1 bg-neutral-100 text-neutral-800 rounded text-xs"
                         >
                           {supplier?.name}
                           <X
@@ -367,7 +367,7 @@ export default function AdvancedReportFilters({
                     onClick={() => handleMultiSelect('categories', cat.id)}
                     className={`px-3 py-1 rounded-full text-sm transition-colors ${
                       filters.categories.includes(cat.id)
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-neutral-900 text-white'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
                   >
@@ -392,7 +392,7 @@ export default function AdvancedReportFilters({
                     onClick={() => handleMultiSelect('status', status.id)}
                     className={`px-3 py-1 rounded-full text-sm transition-colors ${
                       filters.status.includes(status.id)
-                        ? 'bg-green-600 text-white'
+                        ? 'bg-neutral-900 text-white'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
                   >
