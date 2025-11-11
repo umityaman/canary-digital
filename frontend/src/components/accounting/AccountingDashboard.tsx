@@ -429,12 +429,12 @@ export default function AccountingDashboard() {
       </div>
 
       {/* KPI Cards - Minimal B&W Design */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Income Card */}
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-900 rounded-lg flex items-center justify-center">
-              <TrendingUp className="text-white" size={20} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
+              <TrendingUp className="text-white" size={16} />
             </div>
             <div className={`flex items-center gap-1 text-xs font-semibold ${
               stats.trends.incomeChange >= 0 ? 'text-neutral-900' : 'text-neutral-500'
@@ -443,20 +443,17 @@ export default function AccountingDashboard() {
               {formatPercentage(stats.trends.incomeChange)}
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
             {formatCurrency(stats.currentMonth.income)}
           </h3>
-          <p className="text-sm font-medium text-neutral-600">Bu Ay Gelir</p>
-          <p className="text-xs text-neutral-400 mt-2">
-            Geçen ay: {formatCurrency(stats.previousMonth.income)}
-          </p>
+          <p className="text-xs font-medium text-neutral-600">Bu Ay Gelir</p>
         </div>
 
         {/* Expense Card */}
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-700 rounded-lg flex items-center justify-center">
-              <TrendingDown className="text-white" size={20} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-8 h-8 bg-neutral-700 rounded-lg flex items-center justify-center">
+              <TrendingDown className="text-white" size={16} />
             </div>
             <div className={`flex items-center gap-1 text-xs font-semibold ${
               stats.trends.expenseChange >= 0 ? 'text-neutral-500' : 'text-neutral-900'
@@ -465,24 +462,21 @@ export default function AccountingDashboard() {
               {formatPercentage(stats.trends.expenseChange)}
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
             {formatCurrency(stats.currentMonth.expense)}
           </h3>
-          <p className="text-sm font-medium text-neutral-600">Bu Ay Gider</p>
-          <p className="text-xs text-neutral-400 mt-2">
-            Geçen ay: {formatCurrency(stats.previousMonth.expense)}
-          </p>
+          <p className="text-xs font-medium text-neutral-600">Bu Ay Gider</p>
         </div>
 
         {/* Profit Card */}
-        <div className={`bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow ${
+        <div className={`bg-white border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow ${
           stats.currentMonth.profit >= 0 ? 'border-neutral-900' : 'border-neutral-300'
         }`}>
-          <div className="flex items-center justify-between mb-3">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+          <div className="flex items-center justify-between mb-2">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
               stats.currentMonth.profit >= 0 ? 'bg-neutral-900' : 'bg-neutral-400'
             }`}>
-              <DollarSign className="text-white" size={20} />
+              <DollarSign className="text-white" size={16} />
             </div>
             <div className={`flex items-center gap-1 text-xs font-semibold ${
               stats.trends.profitChange >= 0 ? 'text-neutral-900' : 'text-neutral-500'
@@ -491,38 +485,30 @@ export default function AccountingDashboard() {
               {formatPercentage(stats.trends.profitChange)}
             </div>
           </div>
-          <h3 className={`text-2xl font-bold mb-1 ${
+          <h3 className={`text-lg font-bold mb-0.5 ${
             stats.currentMonth.profit >= 0 ? 'text-neutral-900' : 'text-neutral-600'
           }`}>
             {formatCurrency(Math.abs(stats.currentMonth.profit))}
           </h3>
-          <p className={`text-sm font-medium ${
+          <p className={`text-xs font-medium ${
             stats.currentMonth.profit >= 0 ? 'text-neutral-900' : 'text-neutral-600'
           }`}>
             {stats.currentMonth.profit >= 0 ? 'Net Kâr' : 'Net Zarar'}
           </p>
-          <p className="text-xs text-neutral-400 mt-2">
-            Geçen ay: {formatCurrency(Math.abs(stats.previousMonth.profit))}
-          </p>
         </div>
 
         {/* Cash Flow Card */}
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center">
-              <Calendar className="text-white" size={20} />
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
+              <Calendar className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-1">
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
             {formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}
           </h3>
-          <p className="text-sm font-medium text-neutral-600">Nakit Akışı</p>
-          <div className="mt-3 flex items-center gap-2 text-xs text-neutral-500">
-            <span>↑ {formatCurrency(stats.currentMonth.income)}</span>
-            <span className="text-neutral-300">|</span>
-            <span>↓ {formatCurrency(stats.currentMonth.expense)}</span>
-          </div>
+          <p className="text-xs font-medium text-neutral-600">Nakit Akışı</p>
         </div>
       </div>
 
