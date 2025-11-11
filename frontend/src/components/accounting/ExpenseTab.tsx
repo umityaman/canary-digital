@@ -339,7 +339,6 @@ export default function ExpenseTab() {
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Tutar</th>
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">Ödeme</th>
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">Durum</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">Makbuz</th>
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">İşlemler</th>
                   </tr>
                 </thead>
@@ -368,19 +367,6 @@ export default function ExpenseTab() {
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
                         {getStatusBadge(expense.status)}
-                      </td>
-                      <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
-                        {expense.receiptUrl ? (
-                          <button
-                            onClick={() => handleViewReceipt(expense.receiptUrl)}
-                            className="text-neutral-900 hover:text-neutral-700 flex items-center gap-1"
-                          >
-                            <Eye size={14} />
-                            <span className="text-xs">Görüntüle</span>
-                          </button>
-                        ) : (
-                          <span className="text-xs text-neutral-400">-</span>
-                        )}
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap">
                         <div className="flex items-center gap-2">
