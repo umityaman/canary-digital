@@ -226,27 +226,27 @@ export default function ExpenseTab() {
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-4">
-            <PieChart size={20} className="text-neutral-900" />
-            <h3 className="text-lg font-semibold text-neutral-900">Kategori Dağılımı</h3>
+        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm">
+          <div className="flex items-center gap-2 mb-3">
+            <PieChart size={16} className="text-neutral-900" />
+            <h3 className="text-base font-semibold text-neutral-900">Kategori Dağılımı</h3>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* Chart Visualization */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               {categoryStats.slice(0, 5).map((stat, index) => (
                 <div key={stat.category}>
                   <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-neutral-900' : index === 1 ? 'bg-neutral-700' : index === 2 ? 'bg-neutral-600' : index === 3 ? 'bg-neutral-500' : 'bg-neutral-400'}`} />
-                      <span className="text-sm font-medium text-neutral-700">{stat.category}</span>
+                    <div className="flex items-center gap-1">
+                      <div className={`w-2 h-2 rounded-full ${index === 0 ? 'bg-neutral-900' : index === 1 ? 'bg-neutral-700' : index === 2 ? 'bg-neutral-600' : index === 3 ? 'bg-neutral-500' : 'bg-neutral-400'}`} />
+                      <span className="text-xs font-medium text-neutral-700">{stat.category}</span>
                     </div>
                     <span className="text-xs text-neutral-500">{stat.percentage.toFixed(1)}%</span>
                   </div>
-                  <div className="w-full bg-neutral-100 rounded-full h-2">
+                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
                     <div
-                      className={`h-2 rounded-full transition-all ${index === 0 ? 'bg-neutral-900' : index === 1 ? 'bg-neutral-700' : index === 2 ? 'bg-neutral-600' : index === 3 ? 'bg-neutral-500' : 'bg-neutral-400'}`}
+                      className={`h-1.5 rounded-full transition-all ${index === 0 ? 'bg-neutral-900' : index === 1 ? 'bg-neutral-700' : index === 2 ? 'bg-neutral-600' : index === 3 ? 'bg-neutral-500' : 'bg-neutral-400'}`}
                       style={{ width: `${stat.percentage}%` }}
                     />
                   </div>
@@ -256,15 +256,15 @@ export default function ExpenseTab() {
             
             {/* Top Categories */}
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-neutral-700 mb-3">En Yüksek Giderler</h4>
+              <h4 className="text-xs font-medium text-neutral-700 mb-2">En Yüksek Giderler</h4>
               {categoryStats.slice(0, 5).map((stat) => (
-                <div key={stat.category} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+                <div key={stat.category} className="flex items-center justify-between p-2 bg-neutral-50 rounded-lg">
                   <div>
-                    <div className="text-sm font-semibold text-neutral-900">{stat.category}</div>
+                    <div className="text-xs font-semibold text-neutral-900">{stat.category}</div>
                     <div className="text-xs text-neutral-500">{stat.count} kayıt</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-semibold text-neutral-900">
+                    <div className="text-xs font-semibold text-neutral-900">
                       {formatCurrency(stat.total)}
                     </div>
                     <div className="text-xs text-neutral-500">{stat.percentage.toFixed(1)}%</div>

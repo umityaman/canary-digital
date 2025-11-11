@@ -1528,56 +1528,47 @@ export default function Accounting() {
                 </div>
 
                 {/* Filters */}
-                <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm max-w-full">
+                <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm">
                   {/* Basic Filters */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     {/* Search */}
-                    <div className="relative">
-                      <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
+                    <div className="relative col-span-2">
+                      <Search className={`absolute left-2 top-2 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={16} />
                       <input
                         type="text"
-                        placeholder="Teklif no veya müşteri ara..."
+                        placeholder="Teklif ara..."
                         value={offerSearch}
                         onChange={(e) => setOfferSearch(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSearchOffers()}
-                        className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
+                        className={cx(input('sm', 'default', undefined, 'md'), 'pl-8 text-sm')}
                       />
                     </div>
 
                     {/* Status Filter */}
                     <div className="relative">
-                      <Filter className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
+                      <Filter className={`absolute left-2 top-2 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={16} />
                       <select
                         value={offerStatusFilter}
                         onChange={(e) => {
                           setOfferStatusFilter(e.target.value)
                           setOfferCurrentPage(1)
                         }}
-                        className={cx(input('md', 'default', undefined, 'md'), 'pl-10 appearance-none')}
+                        className={cx(input('sm', 'default', undefined, 'md'), 'pl-8 appearance-none text-sm')}
                       >
                         <option value="">Tüm Durumlar</option>
                         <option value="draft">Taslak</option>
                         <option value="sent">Gönderildi</option>
-                        <option value="accepted">Kabul Edildi</option>
-                        <option value="rejected">Reddedildi</option>
-                        <option value="converted">Faturaya Dönüştü</option>
-                        <option value="expired">Süresi Doldu</option>
+                        <option value="accepted">Kabul</option>
+                        <option value="rejected">Red</option>
+                        <option value="converted">Fatura</option>
+                        <option value="expired">Süre Doldu</option>
                       </select>
                     </div>
-
-                    {/* Advanced Filters Toggle */}
-                    <button
-                      onClick={() => setShowOfferAdvancedFilters(!showOfferAdvancedFilters)}
-                      className={cx(button('md', 'outline', 'md'), 'gap-2 justify-center')}
-                    >
-                      <Filter size={18} />
-                      {showOfferAdvancedFilters ? 'Filtreleri Gizle' : 'Gelişmiş Filtre'}
-                    </button>
 
                     {/* Search Button */}
                     <button
                       onClick={handleSearchOffers}
-                      className={button('md', 'primary', 'md')}
+                      className={cx(button('sm', 'primary', 'md'), 'text-sm px-3')}
                     >
                       Ara
                     </button>
