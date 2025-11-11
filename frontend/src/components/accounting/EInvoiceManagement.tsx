@@ -435,14 +435,14 @@ const EInvoiceManagement: React.FC = () => {
                           setSelectedEInvoice(eInvoice);
                           setShowDetailModal(true);
                         }}
-                        className="text-blue-600 hover:text-blue-900 mr-3"
+                        className="text-neutral-900 hover:text-neutral-700 mr-3"
                       >
                         Detay
                       </button>
                       {eInvoice.status === 'PENDING' && (
                         <button
                           onClick={() => handleSendInvoice(eInvoice.invoice.id)}
-                          className="text-green-600 hover:text-green-900 mr-3"
+                          className="text-neutral-900 hover:text-neutral-700 mr-3"
                         >
                           Gönder
                         </button>
@@ -450,7 +450,7 @@ const EInvoiceManagement: React.FC = () => {
                       {(eInvoice.status === 'SENT' || eInvoice.status === 'RECEIVED') && (
                         <button
                           onClick={() => handleCheckStatus(eInvoice.invoice.id)}
-                          className="text-purple-600 hover:text-purple-900 mr-3"
+                          className="text-neutral-900 hover:text-neutral-700 mr-3"
                         >
                           Durum
                         </button>

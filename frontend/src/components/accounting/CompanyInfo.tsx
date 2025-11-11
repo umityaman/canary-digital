@@ -192,7 +192,7 @@ const CompanyInfo: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
+        <RefreshCw className="w-8 h-8 animate-spin text-neutral-900" />
         <span className="ml-3 text-gray-600">Yükleniyor...</span>
       </div>
     );
@@ -201,7 +201,7 @@ const CompanyInfo: React.FC = () => {
   if (!companyData) {
     return (
       <div className="flex flex-col items-center justify-center h-64">
-        <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+        <AlertCircle className="w-12 h-12 text-neutral-700" mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Şirket Bilgileri Yüklenemedi</h3>
         <p className="text-gray-600 mb-4">Veriler yüklenirken bir hata oluştu</p>
         <button
@@ -220,7 +220,7 @@ const CompanyInfo: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Building2 className="w-8 h-8 text-blue-600" />
+          <Building2 className="w-8 h-8 text-neutral-900" />
           <div>
             <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Şirket Bilgileri</h2>
             <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>Şirket ve banka hesap bilgilerinizi yönetin</p>

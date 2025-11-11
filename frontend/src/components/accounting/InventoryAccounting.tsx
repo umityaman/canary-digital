@@ -458,11 +458,11 @@ export default function InventoryAccounting() {
       case 'rental_out':
         return <ArrowRight className="text-neutral-900" size={16} />
       case 'rental_return':
-        return <ArrowRight className="text-orange-600 transform rotate-180" size={16} />
+        return <ArrowRight className="text-neutral-800 transform rotate-180" size={16} />
       case 'adjustment':
-        return <Settings className="text-yellow-600" size={16} />
+        return <Settings className="text-neutral-900" size={16} />
       case 'transfer':
-        return <Link2 className="text-indigo-600" size={16} />
+        return <Link2 className="text-neutral-900" size={16} />
       default:
         return <Package className="text-neutral-600" size={16} />
     }
@@ -806,7 +806,7 @@ export default function InventoryAccounting() {
 
           {filteredTransactions.filter(t => t.accountingStatus === 'pending').length === 0 && (
             <div className={cx(card('sm', 'lg', 'default', 'lg'), 'text-center')}>
-              <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
+              <CheckCircle className="mx-auto mb-4 text-neutral-900" size={48} />
               <p className="text-lg font-medium text-neutral-900">Tüm işlemler kaydedildi!</p>
               <p className="text-sm text-neutral-600 mt-2">Bekleyen stok hareketi yok</p>
             </div>
