@@ -307,7 +307,7 @@ export default function AccountFormModal({
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, parentId: null })}
-                className="text-sm text-blue-600 hover:text-blue-700 mt-1"
+                className="text-sm text-neutral-900 hover:text-neutral-700 mt-1"
               >
                 Üst hesabı kaldır (ana hesap yap)
               </button>
@@ -377,7 +377,7 @@ export default function AccountFormModal({
               id="isActive"
               checked={formData.isActive}
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              className="w-5 h-5 text-neutral-900 rounded focus:ring-2 focus:ring-neutral-500"
             />
             <label
               htmlFor="isActive"

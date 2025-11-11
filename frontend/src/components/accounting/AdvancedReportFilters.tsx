@@ -271,7 +271,7 @@ export default function AdvancedReportFilters({
                         type="checkbox"
                         checked={filters.customers.includes(customer.id)}
                         onChange={() => handleMultiSelect('customers', customer.id)}
-                        className="mr-2 rounded text-blue-600 focus:ring-blue-500"
+                        className="mr-2 rounded text-neutral-900 focus:ring-neutral-500"
                       />
                       <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>{customer.name}</span>
                     </label>
