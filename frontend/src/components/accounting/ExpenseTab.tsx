@@ -354,59 +354,59 @@ export default function ExpenseTab() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1000px]">
+              <table className="w-full">
                 <thead className="bg-neutral-50 border-b border-neutral-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Açıklama</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Kategori</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Ödeme</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Makbuz</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">İşlemler</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Tarih</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Açıklama</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">Kategori</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Tutar</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">Ödeme</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">Durum</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">Makbuz</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">İşlemler</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-neutral-200">
                   {expenses.map((expense) => (
                     <tr key={expense.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <Calendar size={16} className="text-neutral-400" />
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <div className="flex items-center gap-1">
+                          <Calendar size={14} className="text-neutral-400" />
                           <span className="text-sm text-neutral-900">{formatDate(expense.date)}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-3">
                         <div className="text-sm font-medium text-neutral-900">{expense.description}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
                         <span className="text-sm text-neutral-600">{expense.category}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-semibold text-red-600">
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <span className="text-sm font-semibold text-neutral-900">
                           {formatCurrency(expense.amount)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
                         <span className="text-sm text-neutral-600">{expense.paymentMethod}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
                         {getStatusBadge(expense.status)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
                         {expense.receiptUrl ? (
                           <button
                             onClick={() => handleViewReceipt(expense.receiptUrl)}
-                            className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                            className="text-neutral-900 hover:text-neutral-700 flex items-center gap-1"
                           >
-                            <Eye size={16} />
+                            <Eye size={14} />
                             <span className="text-xs">Görüntüle</span>
                           </button>
                         ) : (
                           <span className="text-xs text-neutral-400">-</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleEdit(expense)}

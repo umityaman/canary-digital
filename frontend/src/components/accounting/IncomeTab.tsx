@@ -313,45 +313,45 @@ export default function IncomeTab() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[900px]">
+              <table className="w-full">
                 <thead className="bg-neutral-50 border-b border-neutral-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tarih</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Açıklama</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Kategori</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Ödeme</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">İşlemler</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Tarih</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Açıklama</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">Kategori</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Tutar</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">Ödeme</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">Durum</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">İşlemler</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-neutral-200">
                   {incomes.map((income) => (
                     <tr key={income.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <Calendar size={16} className="text-neutral-400" />
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <div className="flex items-center gap-1">
+                          <Calendar size={14} className="text-neutral-400" />
                           <span className="text-sm text-neutral-900">{formatDate(income.date)}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-3">
                         <div className="text-sm font-medium text-neutral-900">{income.description}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
                         <span className="text-sm text-neutral-600">{income.category}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-semibold text-green-600">
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <span className="text-sm font-semibold text-neutral-900">
                           {formatCurrency(income.amount)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
                         <span className="text-sm text-neutral-600">{income.paymentMethod}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
                         {getStatusBadge(income.status)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleEdit(income)}
