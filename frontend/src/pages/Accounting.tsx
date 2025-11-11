@@ -1801,44 +1801,14 @@ export default function Accounting() {
                                 <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
                                   {getOfferStatusBadge(offer.status)}
                                 </td>
-                                <td className="px-3 py-3 whitespace-nowrap">
-                                  <div className="flex items-center gap-3">
-                                    {offer.status === 'draft' && (
-                                      <button
-                                        onClick={() => handleOfferStatusUpdate(offer.id, 'sent')}
-                                        className="text-blue-600 hover:text-blue-800"
-                                        title="Gönder"
-                                      >
-                                        <Upload size={16} />
-                                      </button>
-                                    )}
-                                    {offer.status === 'sent' && (
-                                      <>
-                                        <button
-                                          onClick={() => handleOfferStatusUpdate(offer.id, 'accepted')}
-                                          className="text-green-600 hover:text-green-800"
-                                          title="Kabul Et"
-                                        >
-                                          <Check size={16} />
-                                        </button>
-                                        <button
-                                          onClick={() => handleOfferStatusUpdate(offer.id, 'rejected')}
-                                          className="text-red-600 hover:text-red-800"
-                                          title="Reddet"
-                                        >
-                                          <X size={16} />
-                                        </button>
-                                      </>
-                                    )}
-                                    {(offer.status === 'accepted' || offer.status === 'sent') && (
-                                      <button
-                                        onClick={() => handleConvertToInvoice(offer.id)}
-                                        className="text-neutral-900 hover:text-neutral-700 font-medium text-sm hover:underline transition-all"
-                                        title="Faturaya Dönüştür"
-                                      >
-                                        Faturala
-                                      </button>
-                                    )}
+                                <td className="px-3 py-3 whitespace-nowrap text-sm">
+                                  <div className="flex items-center gap-2">
+                                    <button 
+                                      onClick={() => navigate(`/accounting/quote/${offer.id}`)}
+                                      className="text-neutral-900 hover:text-neutral-700 font-medium hover:underline transition-all"
+                                    >
+                                      Detay
+                                    </button>
                                     <div className="relative">
                                       <button
                                         onClick={() => setOpenOfferDropdown(openOfferDropdown === offer.id ? null : offer.id)}
@@ -1853,13 +1823,42 @@ export default function Accounting() {
                                             onClick={() => setOpenOfferDropdown(null)}
                                           />
                                           <div className={`absolute right-0 mt-2 w-48 bg-white ${DESIGN_TOKENS?.radius?.md} rounded ${DESIGN_TOKENS?.shadow?.lg} ${DESIGN_TOKENS?.colors?.border?.light} border py-1 z-20`}>
-                                            <button
-                                              onClick={() => navigate(`/accounting/quote/${offer.id}`)}
-                                              className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
-                                            >
-                                              <FileText size={16} />
-                                              Detay Görüntüle
-                                            </button>
+                                            {offer.status === 'draft' && (
+                                              <button
+                                                onClick={() => { handleOfferStatusUpdate(offer.id, 'sent'); setOpenOfferDropdown(null); }}
+                                                className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-blue-600 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
+                                              >
+                                                <Upload size={16} />
+                                                Gönder
+                                              </button>
+                                            )}
+                                            {offer.status === 'sent' && (
+                                              <>
+                                                <button
+                                                  onClick={() => { handleOfferStatusUpdate(offer.id, 'accepted'); setOpenOfferDropdown(null); }}
+                                                  className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-green-600 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
+                                                >
+                                                  <Check size={16} />
+                                                  Kabul Et
+                                                </button>
+                                                <button
+                                                  onClick={() => { handleOfferStatusUpdate(offer.id, 'rejected'); setOpenOfferDropdown(null); }}
+                                                  className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-red-600 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
+                                                >
+                                                  <X size={16} />
+                                                  Reddet
+                                                </button>
+                                              </>
+                                            )}
+                                            {(offer.status === 'accepted' || offer.status === 'sent') && (
+                                              <button
+                                                onClick={() => { handleConvertToInvoice(offer.id); setOpenOfferDropdown(null); }}
+                                                className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-neutral-900 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2 font-medium`}
+                                              >
+                                                <FileText size={16} />
+                                                Faturaya Dönüştür
+                                              </button>
+                                            )}
                                             <button
                                               onClick={() => handleDownloadOfferPDF(offer)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
