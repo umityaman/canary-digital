@@ -241,7 +241,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
     return (
       <div className="text-center py-12">
         <p className="text-neutral-600">Müşteri bilgisi bulunamadı</p>
-        <button onClick={onBack} className="mt-4 text-blue-600 hover:underline">
+        <button onClick={onBack} className="mt-4 text-neutral-900 hover:underline">
           Geri Dön
         </button>
       </div>
@@ -281,8 +281,8 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
       <div className="bg-white rounded-2xl p-6 border border-neutral-200">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <User className="text-blue-600" size={20} />
+            <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <User className="text-neutral-900" size={20} />
             </div>
             <div>
               <p className="text-xs text-neutral-600 mb-1">Müşteri Adı</p>
@@ -292,8 +292,8 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
 
           {customer.email && (
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Mail className="text-green-600" size={20} />
+              <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Mail className="text-neutral-900" size={20} />
               </div>
               <div>
                 <p className="text-xs text-neutral-600 mb-1">E-posta</p>
@@ -304,8 +304,8 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
 
           {customer.phone && (
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Phone className="text-purple-600" size={20} />
+              <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Phone className="text-neutral-900" size={20} />
               </div>
               <div>
                 <p className="text-xs text-neutral-600 mb-1">Telefon</p>
@@ -316,8 +316,8 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
 
           {customer.taxNumber && (
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Building2 className="text-orange-600" size={20} />
+              <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Building2 className="text-neutral-900" size={20} />
               </div>
               <div>
                 <p className="text-xs text-neutral-600 mb-1">Vergi No</p>
@@ -474,24 +474,24 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
                           <td className="px-4 py-3 font-medium text-neutral-900">#{invoice.invoiceNumber}</td>
                           <td className="px-4 py-3 text-sm text-neutral-600">{formatDate(invoice.issueDate)}</td>
                           <td className="px-4 py-3 text-sm">
-                            <span className={isOverdue ? 'text-red-600 font-medium' : 'text-neutral-600'}>
+                            <span className={isOverdue ? 'text-neutral-900 font-medium' : 'text-neutral-600'}>
                               {formatDate(invoice.dueDate)}
                             </span>
                           </td>
                           <td className="px-4 py-3 text-right font-semibold">{formatCurrency(invoice.grandTotal)}</td>
-                          <td className="px-4 py-3 text-right text-green-600">{formatCurrency(invoice.paidAmount)}</td>
+                          <td className="px-4 py-3 text-right text-neutral-900">{formatCurrency(invoice.paidAmount)}</td>
                           <td className="px-4 py-3 text-right font-semibold">{formatCurrency(remaining)}</td>
                           <td className="px-4 py-3 text-center">
                             {invoice.status === 'paid' ? (
-                              <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                              <span className="px-3 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs font-medium">
                                 Ödendi
                               </span>
                             ) : isOverdue ? (
-                              <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                              <span className="px-3 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs font-medium">
                                 Vadesi Geçti
                               </span>
                             ) : (
-                              <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">
+                              <span className="px-3 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs font-medium">
                                 Bekliyor
                               </span>
                             )}
@@ -526,19 +526,19 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             {txn.type === 'invoice' ? (
-                              <FileText className="text-blue-600" size={16} />
+                              <FileText className="text-neutral-900" size={16} />
                             ) : txn.type === 'payment' ? (
-                              <CheckCircle className="text-green-600" size={16} />
+                              <CheckCircle className="text-neutral-900" size={16} />
                             ) : (
-                              <CreditCard className="text-orange-600" size={16} />
+                              <CreditCard className="text-neutral-900" size={16} />
                             )}
                             <span className="text-sm text-neutral-900">{txn.description}</span>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-right font-semibold text-red-600">
+                        <td className="px-4 py-3 text-right font-semibold text-neutral-900">
                           {txn.debit > 0 ? formatCurrency(txn.debit) : '—'}
                         </td>
-                        <td className="px-4 py-3 text-right font-semibold text-green-600">
+                        <td className="px-4 py-3 text-right font-semibold text-neutral-900">
                           {txn.credit > 0 ? formatCurrency(txn.credit) : '—'}
                         </td>
                         <td className="px-4 py-3 text-right font-bold text-neutral-900">
