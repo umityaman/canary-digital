@@ -540,10 +540,10 @@ export default function AccountingDashboard() {
                   {formatPercentage(advancedStats.growthRate)}
                 </span>
               </div>
-              <div className="h-px bg-indigo-300 my-2" />
+              <div className="h-px bg-neutral-300 my-2" />
               <div className="flex justify-between items-center">
-                <span className="text-xs text-indigo-600">Ort. Gelir</span>
-                <span className="text-sm font-semibold text-indigo-900">{formatCurrency(advancedStats.avgIncome)}</span>
+                <span className="text-xs text-neutral-600">Ort. Gelir</span>
+                <span className="text-sm font-semibold text-neutral-900">{formatCurrency(advancedStats.avgIncome)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-indigo-600">Ort. Gider</span>
@@ -554,12 +554,12 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Forecast */}
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200">
+        <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <BarChart2 className="text-white" size={20} />
             </div>
-            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-amber-900')}>Gelecek Ay Tahmini</h3>
+            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900')}>Gelecek Ay Tahmini</h3>
           </div>
           {advancedStats && (
             <div className="space-y-3">
@@ -625,18 +625,16 @@ export default function AccountingDashboard() {
                 </div>
                 <div className="bg-white rounded-full h-3 overflow-hidden">
                   <div 
-                    className={`h-full transition-all duration-500 ${
-                      advancedStats.targetAchievement >= 100 ? 'bg-green-500' : 'bg-amber-500'
-                    }`}
+                    className="h-full transition-all duration-500 bg-neutral-900"
                     style={{ width: `${Math.min(advancedStats.targetAchievement, 100)}%` }}
                   />
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-teal-600">Hedef: {formatCurrency(monthlyTarget)}</span>
-                  <span className="text-teal-600">Kalan: {formatCurrency(Math.max(0, monthlyTarget - stats.currentMonth.income))}</span>
+                  <span className="text-neutral-600">Hedef: {formatCurrency(monthlyTarget)}</span>
+                  <span className="text-neutral-600">Kalan: {formatCurrency(Math.max(0, monthlyTarget - stats.currentMonth.income))}</span>
                 </div>
                 {advancedStats.targetAchievement >= 100 && (
-                  <div className="bg-green-100 text-green-800 text-xs px-3 py-2 rounded-lg text-center font-medium">
+                  <div className="bg-neutral-100 text-neutral-800 text-xs px-3 py-2 rounded-lg text-center font-medium">
                     🎉 Hedef aşıldı!
                   </div>
                 )}
@@ -752,19 +750,13 @@ export default function AccountingDashboard() {
                 </div>
                 <div className="h-px bg-slate-200 my-2" />
                 <div className="flex justify-between items-center">
+                <div className="h-px bg-slate-200 my-2" />
+                <div className="flex justify-between items-center">
                   <span className="text-xs text-slate-600">Performans</span>
-                  <span className={`text-xs font-bold px-2 py-1 rounded ${
-                    advancedStats.profitabilityRatio >= 20 
-                      ? 'bg-green-100 text-green-700'
-                      : advancedStats.profitabilityRatio >= 10
-                      ? 'bg-amber-100 text-amber-700'
-                      : 'bg-red-100 text-red-700'
-                  }`}>
+                  <span className="text-xs font-bold px-2 py-1 rounded bg-neutral-100 text-neutral-800">
                     {advancedStats.profitabilityRatio >= 20 ? 'Mükemmel' : advancedStats.profitabilityRatio >= 10 ? 'İyi' : 'Geliştirilmeli'}
                   </span>
                 </div>
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -1066,53 +1058,53 @@ export default function AccountingDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <button
             onClick={() => window.location.hash = '#income'}
-            className="flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors text-left"
+            className="flex items-center gap-3 p-4 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-xl transition-colors text-left"
           >
-            <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-neutral-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <Plus className="text-white" size={20} />
             </div>
             <div>
-              <h4 className="font-semibold text-green-900 text-sm">Gelir Ekle</h4>
-              <p className="text-xs text-green-700">Yeni gelir kaydı</p>
+              <h4 className="font-semibold text-neutral-900 text-sm">Gelir Ekle</h4>
+              <p className="text-xs text-neutral-600">Yeni gelir kaydı</p>
             </div>
           </button>
 
           <button
             onClick={() => window.location.hash = '#expense'}
-            className="flex items-center gap-3 p-4 bg-red-50 hover:bg-red-100 rounded-xl transition-colors text-left"
+            className="flex items-center gap-3 p-4 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-xl transition-colors text-left"
           >
-            <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
               <Plus className="text-white" size={20} />
             </div>
             <div>
-              <h4 className="font-semibold text-red-900 text-sm">Gider Ekle</h4>
-              <p className="text-xs text-red-700">Yeni gider kaydı</p>
+              <h4 className="font-semibold text-neutral-900 text-sm">Gider Ekle</h4>
+              <p className="text-xs text-neutral-600">Yeni gider kaydı</p>
             </div>
           </button>
 
           <button
             onClick={() => window.location.hash = '#invoice'}
-            className="flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors text-left"
+            className="flex items-center gap-3 p-4 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-xl transition-colors text-left"
           >
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-neutral-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <FileText className="text-white" size={20} />
             </div>
             <div>
-              <h4 className="font-semibold text-blue-900 text-sm">Fatura Kes</h4>
-              <p className="text-xs text-blue-700">Yeni fatura oluştur</p>
+              <h4 className="font-semibold text-neutral-900 text-sm">Fatura Kes</h4>
+              <p className="text-xs text-neutral-600">Yeni fatura oluştur</p>
             </div>
           </button>
 
           <button
             onClick={() => window.location.hash = '#reports'}
-            className="flex items-center gap-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors text-left"
+            className="flex items-center gap-3 p-4 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-xl transition-colors text-left"
           >
-            <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
               <BarChart3 className="text-white" size={20} />
             </div>
             <div>
-              <h4 className="font-semibold text-purple-900 text-sm">Raporlar</h4>
-              <p className="text-xs text-purple-700">Detaylı raporlar</p>
+              <h4 className="font-semibold text-neutral-900 text-sm">Raporlar</h4>
+              <p className="text-xs text-neutral-600">Detaylı raporlar</p>
             </div>
           </button>
         </div>

@@ -37,17 +37,17 @@ export default function IntegrationsTab() {
             onClick={() => setActiveIntegration('bank')}
             className={`flex flex-col items-center gap-4 p-8 rounded-2xl border-2 transition-all hover:shadow-lg ${
               activeIntegration === 'bank'
-                ? 'border-blue-500 bg-blue-50 shadow-lg scale-105'
-                : 'border-neutral-200 hover:border-blue-300 hover:bg-blue-50'
+                ? 'border-neutral-900 bg-neutral-50 shadow-lg scale-105'
+                : 'border-neutral-200 hover:border-neutral-400 hover:bg-neutral-50'
             }`}
           >
             <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all ${
-              activeIntegration === 'bank' ? 'bg-blue-500 shadow-xl' : 'bg-neutral-200'
+              activeIntegration === 'bank' ? 'bg-neutral-900 shadow-xl' : 'bg-neutral-200'
             }`}>
               <Building2 className={activeIntegration === 'bank' ? 'text-white' : 'text-neutral-600'} size={32} />
             </div>
             <div className="text-center">
-              <h3 className={`font-bold text-lg mb-1 ${activeIntegration === 'bank' ? 'text-blue-900' : 'text-neutral-900'}`}>
+              <h3 className={`font-bold text-lg mb-1 text-neutral-900`}>
                 Banka Entegrasyonları
               </h3>
               <p className="text-sm text-neutral-600">
@@ -61,17 +61,17 @@ export default function IntegrationsTab() {
             onClick={() => setActiveIntegration('ecommerce')}
             className={`flex flex-col items-center gap-4 p-8 rounded-2xl border-2 transition-all hover:shadow-lg ${
               activeIntegration === 'ecommerce'
-                ? 'border-green-500 bg-green-50 shadow-lg scale-105'
-                : 'border-neutral-200 hover:border-green-300 hover:bg-green-50'
+                ? 'border-neutral-900 bg-neutral-50 shadow-lg scale-105'
+                : 'border-neutral-200 hover:border-neutral-400 hover:bg-neutral-50'
             }`}
           >
             <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all ${
-              activeIntegration === 'ecommerce' ? 'bg-green-500 shadow-xl' : 'bg-neutral-200'
+              activeIntegration === 'ecommerce' ? 'bg-neutral-900 shadow-xl' : 'bg-neutral-200'
             }`}>
               <Store className={activeIntegration === 'ecommerce' ? 'text-white' : 'text-neutral-600'} size={32} />
             </div>
             <div className="text-center">
-              <h3 className={`font-bold text-lg mb-1 ${activeIntegration === 'ecommerce' ? 'text-green-900' : 'text-neutral-900'}`}>
+              <h3 className={`font-bold text-lg mb-1 text-neutral-900`}>
                 E-Ticaret Entegrasyonları
               </h3>
               <p className="text-sm text-neutral-600">
@@ -85,17 +85,17 @@ export default function IntegrationsTab() {
             onClick={() => setActiveIntegration('gib')}
             className={`flex flex-col items-center gap-4 p-8 rounded-2xl border-2 transition-all hover:shadow-lg ${
               activeIntegration === 'gib'
-                ? 'border-purple-500 bg-purple-50 shadow-lg scale-105'
-                : 'border-neutral-200 hover:border-purple-300 hover:bg-purple-50'
+                ? 'border-neutral-900 bg-neutral-50 shadow-lg scale-105'
+                : 'border-neutral-200 hover:border-neutral-400 hover:bg-neutral-50'
             }`}
           >
             <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all ${
-              activeIntegration === 'gib' ? 'bg-purple-500 shadow-xl' : 'bg-neutral-200'
+              activeIntegration === 'gib' ? 'bg-neutral-900 shadow-xl' : 'bg-neutral-200'
             }`}>
               <Globe className={activeIntegration === 'gib' ? 'text-white' : 'text-neutral-600'} size={32} />
             </div>
             <div className="text-center">
-              <h3 className={`font-bold text-lg mb-1 ${activeIntegration === 'gib' ? 'text-purple-900' : 'text-neutral-900'}`}>
+              <h3 className={`font-bold text-lg mb-1 text-neutral-900`}>
                 GİB Entegrasyonu
               </h3>
               <p className="text-sm text-neutral-600">
@@ -128,8 +128,8 @@ export default function IntegrationsTab() {
               {/* Header */}
               <div className={card('lg', 'lg', 'default', 'xl')}>
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Globe className="text-purple-600" size={32} />
+                  <div className="w-16 h-16 bg-neutral-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Globe className="text-neutral-900" size={32} />
                   </div>
                   <div className="flex-1">
                     <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
@@ -148,29 +148,29 @@ export default function IntegrationsTab() {
                 {/* e-Fatura */}
                 <div className={card('md', 'lg', 'default', 'xl')}>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Link2 className="text-blue-600" size={24} />
+                    <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+                      <Link2 className="text-neutral-900" size={24} />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">e-Fatura</h4>
-                      <span className="text-xs text-orange-600 font-medium">Yakında</span>
+                      <span className="text-xs text-neutral-600 font-medium">Yakında</span>
                     </div>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Otomatik fatura oluşturma</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>GİB'e anlık iletim</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Fatura sorgulama ve takip</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>e-İmza entegrasyonu</span>
                     </li>
                   </ul>
@@ -179,29 +179,29 @@ export default function IntegrationsTab() {
                 {/* e-Arşiv */}
                 <div className={card('md', 'lg', 'default', 'xl')}>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                      <Link2 className="text-green-600" size={24} />
+                    <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+                      <Link2 className="text-neutral-900" size={24} />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">e-Arşiv Fatura</h4>
-                      <span className="text-xs text-orange-600 font-medium">Yakında</span>
+                      <span className="text-xs text-neutral-600 font-medium">Yakında</span>
                     </div>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Bireysel müşteri faturaları</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>PDF ve HTML oluşturma</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>SMS ve e-posta gönderimi</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>İptal ve düzeltme</span>
                     </li>
                   </ul>
@@ -210,29 +210,29 @@ export default function IntegrationsTab() {
                 {/* e-İrsaliye */}
                 <div className={card('md', 'lg', 'default', 'xl')}>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <Link2 className="text-purple-600" size={24} />
+                    <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+                      <Link2 className="text-neutral-900" size={24} />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">e-İrsaliye</h4>
-                      <span className="text-xs text-orange-600 font-medium">Yakında</span>
+                      <span className="text-xs text-neutral-600 font-medium">Yakında</span>
                     </div>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Sevkiyat irsaliyesi</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>GİB onayı ve izleme</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Stok entegrasyonu</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Fatura dönüşümü</span>
                     </li>
                   </ul>
@@ -244,8 +244,8 @@ export default function IntegrationsTab() {
                 <h4 className="font-semibold text-gray-900 mb-4">Avantajlar</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-blue-600 font-bold">⚡</span>
+                    <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-neutral-900 font-bold">⚡</span>
                     </div>
                     <div>
                       <h5 className="font-medium text-gray-900 text-sm mb-1">Hız ve Verimlilik</h5>
@@ -253,8 +253,8 @@ export default function IntegrationsTab() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-green-600 font-bold">✓</span>
+                    <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-neutral-900 font-bold">✓</span>
                     </div>
                     <div>
                       <h5 className="font-medium text-gray-900 text-sm mb-1">Yasal Uyumluluk</h5>
@@ -262,8 +262,8 @@ export default function IntegrationsTab() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-purple-600 font-bold">🔒</span>
+                    <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-neutral-900 font-bold">🔒</span>
                     </div>
                     <div>
                       <h5 className="font-medium text-gray-900 text-sm mb-1">Güvenli İmzalama</h5>
@@ -271,8 +271,8 @@ export default function IntegrationsTab() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-orange-600 font-bold">💰</span>
+                    <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-neutral-900 font-bold">💰</span>
                     </div>
                     <div>
                       <h5 className="font-medium text-gray-900 text-sm mb-1">Maliyet Tasarrufu</h5>
@@ -283,9 +283,9 @@ export default function IntegrationsTab() {
               </div>
 
               {/* Coming Soon Notice */}
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6">
+              <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-2xl">🚀</span>
                   </div>
                   <div className="flex-1">
@@ -294,7 +294,7 @@ export default function IntegrationsTab() {
                       GİB entegrasyonu şu anda geliştirme aşamasındadır. Yakında kullanıma sunulacaktır.
                       Bilgilendirilmek için e-posta adresinizi bırakabilirsiniz.
                     </p>
-                    <button className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium">
+                    <button className="px-6 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors text-sm font-medium">
                       Beni Bilgilendir
                     </button>
                   </div>

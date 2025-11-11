@@ -458,11 +458,11 @@ export default function AdvancedReporting() {
           onClick={() => setActiveReport('cashflow')}
           className={`p-6 rounded-2xl border-2 transition-all min-w-0 ${
             activeReport === 'cashflow'
-              ? 'border-blue-500 bg-blue-50'
+              ? 'border-neutral-900 bg-neutral-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'
           }`}
         >
-          <TrendingUp className={activeReport === 'cashflow' ? 'text-blue-600' : 'text-neutral-600'} size={32} />
+          <TrendingUp className={activeReport === 'cashflow' ? 'text-neutral-900' : 'text-neutral-600'} size={32} />
           <h3 className="font-semibold text-neutral-900 mt-3">Nakit Akış</h3>
           <p className="text-xs text-neutral-600 mt-1">Cashflow Raporu</p>
         </button>
@@ -471,11 +471,11 @@ export default function AdvancedReporting() {
           onClick={() => setActiveReport('profitloss')}
           className={`p-6 rounded-2xl border-2 transition-all min-w-0 ${
             activeReport === 'profitloss'
-              ? 'border-green-500 bg-green-50'
+              ? 'border-neutral-900 bg-neutral-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'
           }`}
         >
-          <BarChart3 className={activeReport === 'profitloss' ? 'text-green-600' : 'text-neutral-600'} size={32} />
+          <BarChart3 className={activeReport === 'profitloss' ? 'text-neutral-900' : 'text-neutral-600'} size={32} />
           <h3 className="font-semibold text-neutral-900 mt-3">Kar-Zarar</h3>
           <p className="text-xs text-neutral-600 mt-1">Gelir Tablosu</p>
         </button>
@@ -484,11 +484,11 @@ export default function AdvancedReporting() {
           onClick={() => setActiveReport('balance')}
           className={`p-6 rounded-2xl border-2 transition-all min-w-0 ${
             activeReport === 'balance'
-              ? 'border-purple-500 bg-purple-50'
+              ? 'border-neutral-900 bg-neutral-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'
           }`}
         >
-          <Building2 className={activeReport === 'balance' ? 'text-purple-600' : 'text-neutral-600'} size={32} />
+          <Building2 className={activeReport === 'balance' ? 'text-neutral-900' : 'text-neutral-600'} size={32} />
           <h3 className="font-semibold text-neutral-900 mt-3">Bilanço</h3>
           <p className="text-xs text-neutral-600 mt-1">Aktif/Pasif</p>
         </button>
@@ -497,11 +497,11 @@ export default function AdvancedReporting() {
           onClick={() => setActiveReport('vat')}
           className={`p-6 rounded-2xl border-2 transition-all min-w-0 col-span-2 lg:col-span-1 ${
             activeReport === 'vat'
-              ? 'border-orange-500 bg-orange-50'
+              ? 'border-neutral-900 bg-neutral-50'
               : 'border-neutral-200 bg-white hover:border-neutral-300'
           }`}
         >
-          <CreditCard className={activeReport === 'vat' ? 'text-orange-600' : 'text-neutral-600'} size={32} />
+          <CreditCard className={activeReport === 'vat' ? 'text-neutral-900' : 'text-neutral-600'} size={32} />
           <h3 className="font-semibold text-neutral-900 mt-3">KDV Raporu</h3>
           <p className="text-xs text-neutral-600 mt-1">Beyanname Hazırlık</p>
         </button>
@@ -557,22 +557,22 @@ export default function AdvancedReporting() {
             <div className="space-y-6">
               {/* Operating Activities */}
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-blue-500">
-                  <h4 className="font-semibold text-blue-900">İŞLETME FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
-                  <span className="font-bold text-blue-900">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-neutral-900">
+                  <h4 className="font-semibold text-neutral-900">İŞLETME FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
+                  <span className="font-bold text-neutral-900">
                     {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow - d.operatingOutflow, 0))}
                   </span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700">Nakit Girişleri</span>
-                    <span className="font-semibold text-green-600">
+                    <span className="font-semibold text-neutral-900">
                       {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow, 0))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700">Nakit Çıkışları</span>
-                    <span className="font-semibold text-red-600">
+                    <span className="font-semibold text-neutral-900">
                       ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingOutflow, 0))})
                     </span>
                   </div>
@@ -581,22 +581,22 @@ export default function AdvancedReporting() {
 
               {/* Investing Activities */}
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-purple-500">
-                  <h4 className="font-semibold text-purple-900">YATIRIM FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
-                  <span className="font-bold text-purple-900">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-neutral-900">
+                  <h4 className="font-semibold text-neutral-900">YATIRIM FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
+                  <span className="font-bold text-neutral-900">
                     {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow - d.investingOutflow, 0))}
                   </span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700">Yatırım Girişleri</span>
-                    <span className="font-semibold text-green-600">
+                    <span className="font-semibold text-neutral-900">
                       {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow, 0))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700">Yatırım Çıkışları</span>
-                    <span className="font-semibold text-red-600">
+                    <span className="font-semibold text-neutral-900">
                       ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingOutflow, 0))})
                     </span>
                   </div>
@@ -605,22 +605,22 @@ export default function AdvancedReporting() {
 
               {/* Financing Activities */}
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-indigo-500">
-                  <h4 className="font-semibold text-indigo-900">FİNANSMAN FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
-                  <span className="font-bold text-indigo-900">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-neutral-900">
+                  <h4 className="font-semibold text-neutral-900">FİNANSMAN FAALİYETLERİNDEN NAKİT AKIŞLARI</h4>
+                  <span className="font-bold text-neutral-900">
                     {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow - d.financingOutflow, 0))}
                   </span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700">Finansman Girişleri</span>
-                    <span className="font-semibold text-green-600">
+                    <span className="font-semibold text-neutral-900">
                       {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow, 0))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50 rounded-lg">
                     <span className="text-neutral-700">Finansman Çıkışları</span>
-                    <span className="font-semibold text-red-600">
+                    <span className="font-semibold text-neutral-900">
                       ({formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingOutflow, 0))})
                     </span>
                   </div>
@@ -628,20 +628,12 @@ export default function AdvancedReporting() {
               </div>
 
               {/* Net Cash Flow */}
-              <div className={`p-4 rounded-lg ${
-                cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 
-                  ? 'bg-blue-50 border border-blue-200' 
-                  : 'bg-orange-50 border border-orange-200'
-              }`}>
+              <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200">
                 <div className="flex items-center justify-between">
-                  <h4 className={`text-lg font-bold ${
-                    cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-900' : 'text-orange-900'
-                  }`}>
+                  <h4 className="text-lg font-bold text-neutral-900">
                     DÖNEM SONU NAKİT VE NAKİT BENZERLERİNDEKİ NET ARTIŞ (AZALIŞ)
                   </h4>
-                  <span className={`text-2xl font-bold truncate ${
-                    cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-900' : 'text-orange-900'
-                  }`}>
+                  <span className="text-2xl font-bold truncate text-neutral-900">
                     {formatCurrency(Math.abs(cashflowData.reduce((sum, d) => sum + d.netChange, 0)))}
                   </span>
                 </div>
@@ -669,18 +661,16 @@ export default function AdvancedReporting() {
                     {cashflowData.map((row, index) => (
                       <tr key={index} className="hover:bg-neutral-50">
                         <td className="px-4 py-3 text-sm font-medium text-neutral-900">{row.period}</td>
-                        <td className="px-4 py-3 text-sm text-right font-semibold text-blue-600">
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-neutral-900">
                           {formatCurrency(row.operatingInflow - row.operatingOutflow)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-right font-semibold text-purple-600">
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-neutral-900">
                           {formatCurrency(row.investingInflow - row.investingOutflow)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-right font-semibold text-indigo-600">
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-neutral-900">
                           {formatCurrency(row.financingInflow - row.financingOutflow)}
                         </td>
-                        <td className={`px-4 py-3 text-sm text-right font-bold ${
-                          row.netChange >= 0 ? 'text-blue-600' : 'text-red-600'
-                        }`}>
+                        <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                           {formatCurrency(row.netChange)}
                         </td>
                       </tr>
@@ -689,18 +679,16 @@ export default function AdvancedReporting() {
                   <tfoot className="bg-neutral-50 border-t-2 border-neutral-300">
                     <tr>
                       <td className="px-4 py-3 text-sm font-bold text-neutral-900">TOPLAM</td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-blue-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(cashflowData.reduce((sum, d) => sum + d.operatingInflow - d.operatingOutflow, 0))}
                       </td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-purple-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(cashflowData.reduce((sum, d) => sum + d.investingInflow - d.investingOutflow, 0))}
                       </td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-indigo-600">
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(cashflowData.reduce((sum, d) => sum + d.financingInflow - d.financingOutflow, 0))}
                       </td>
-                      <td className={`px-4 py-3 text-sm text-right font-bold ${
-                        cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'text-blue-600' : 'text-red-600'
-                      }`}>
+                      <td className="px-4 py-3 text-sm text-right font-bold text-neutral-900">
                         {formatCurrency(cashflowData.reduce((sum, d) => sum + d.netChange, 0))}
                       </td>
                     </tr>

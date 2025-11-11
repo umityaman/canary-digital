@@ -26,14 +26,14 @@ interface CategoryStat {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'Personel Maaşları': 'bg-blue-500',
-  'Kira': 'bg-purple-500',
-  'Elektrik/Su/Doğalgaz': 'bg-yellow-500',
-  'İnternet/Telefon': 'bg-green-500',
-  'Malzeme Alımı': 'bg-red-500',
-  'Ekipman Bakım/Onarım': 'bg-orange-500',
-  'Pazarlama/Reklam': 'bg-pink-500',
-  'Diğer': 'bg-gray-500'
+  'Personel Maaşları': 'bg-neutral-900',
+  'Kira': 'bg-neutral-800',
+  'Elektrik/Su/Doğalgaz': 'bg-neutral-700',
+  'İnternet/Telefon': 'bg-neutral-900',
+  'Malzeme Alımı': 'bg-neutral-800',
+  'Ekipman Bakım/Onarım': 'bg-neutral-700',
+  'Pazarlama/Reklam': 'bg-neutral-600',
+  'Diğer': 'bg-neutral-500'
 }
 
 export default function ExpenseTab() {
