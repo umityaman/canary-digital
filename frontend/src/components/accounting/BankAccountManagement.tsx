@@ -273,7 +273,7 @@ const BankAccountManagement: React.FC = () => {
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold flex items-center gap-2">
-            <FaUniversity className="text-blue-600" />
+            <FaUniversity className="text-neutral-900" />
             Banka Hesapları
           </h2>
           <div className="flex gap-2">
@@ -310,8 +310,8 @@ const BankAccountManagement: React.FC = () => {
                 onClick={() => setSelectedAccount(account.id)}
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   selectedAccount === account.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
+                    ? 'border-neutral-500 bg-neutral-50'
+                    : 'border-gray-200 hover:border-neutral-300'
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -320,9 +320,9 @@ const BankAccountManagement: React.FC = () => {
                     <p className="text-sm text-gray-500">{account.bankName}</p>
                   </div>
                   {account.isActive ? (
-                    <FaCheckCircle className="text-green-500" />
+                    <FaCheckCircle className="text-neutral-900" />
                   ) : (
-                    <FaTimesCircle className="text-red-500" />
+                    <FaTimesCircle className="text-neutral-700" />
                   )}
                 </div>
                 <div className="space-y-1 text-sm">
@@ -356,7 +356,7 @@ const BankAccountManagement: React.FC = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <FaExchangeAlt className="text-green-600" />
+              <FaExchangeAlt className="text-neutral-900" />
               Hesap Hareketleri
             </h2>
             <div className="flex gap-2">

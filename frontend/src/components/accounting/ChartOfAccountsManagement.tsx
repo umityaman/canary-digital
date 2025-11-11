@@ -147,11 +147,11 @@ export default function ChartOfAccountsManagement() {
 
   const getAccountTypeBadge = (type: string) => {
     const typeConfig: Record<string, { color: string }> = {
-      ASSET: { color: 'bg-blue-100 text-blue-700' },
-      LIABILITY: { color: 'bg-red-100 text-red-700' },
-      EQUITY: { color: 'bg-purple-100 text-purple-700' },
-      REVENUE: { color: 'bg-green-100 text-green-700' },
-      EXPENSE: { color: 'bg-orange-100 text-orange-700' },
+      ASSET: { color: 'bg-neutral-100 text-neutral-800' },
+      LIABILITY: { color: 'bg-neutral-100 text-neutral-800' },
+      EQUITY: { color: 'bg-neutral-100 text-neutral-800' },
+      REVENUE: { color: 'bg-neutral-100 text-neutral-800' },
+      EXPENSE: { color: 'bg-neutral-100 text-neutral-800' },
     };
 
     const config = typeConfig[type] || { color: 'bg-gray-100 text-gray-700' };
@@ -218,9 +218,7 @@ export default function ChartOfAccountsManagement() {
             {getAccountTypeBadge(account.type)}
           </td>
           <td className="px-6 py-4 whitespace-nowrap text-right">
-            <span className={`${DESIGN_TOKENS?.typography?.body.sm} font-medium ${
-              account.balance >= 0 ? 'text-green-600' : 'text-red-600'
-            }`}>
+            <span className={`${DESIGN_TOKENS?.typography?.body.sm} font-medium text-neutral-900`}>
               {formatCurrency(account.balance)}
             </span>
           </td>
@@ -228,7 +226,7 @@ export default function ChartOfAccountsManagement() {
             <div className="flex items-center justify-end gap-2">
               <button
                 onClick={() => toast.success('Detay görüntüleme özelliği yakında eklenecek')}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                 title="Detayları Görüntüle"
               >
                 <Eye className="w-4 h-4" />
@@ -238,14 +236,14 @@ export default function ChartOfAccountsManagement() {
                   setEditingAccount(account);
                   setShowCreateModal(true);
                 }}
-                className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                 title="Düzenle"
               >
                 <Edit2 className="w-4 h-4" />
               </button>
               <button
                 onClick={() => handleDeleteAccount(account.id)}
-                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                className="p-2 text-neutral-800 hover:bg-neutral-50 rounded-lg transition-colors"
                 title="Sil"
               >
                 <Trash2 className="w-4 h-4" />
@@ -326,7 +324,7 @@ export default function ChartOfAccountsManagement() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <BookOpen className="w-8 h-8 text-blue-500" />
+            <BookOpen className="w-8 h-8 text-neutral-900" />
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {flatAccounts.length}
@@ -338,7 +336,7 @@ export default function ChartOfAccountsManagement() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="w-8 h-8 text-green-500" />
+            <TrendingUp className="w-8 h-8 text-neutral-900" />
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {flatAccounts.filter((a) => a.balance > 0).length}
@@ -350,7 +348,7 @@ export default function ChartOfAccountsManagement() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <TrendingDown className="w-8 h-8 text-red-500" />
+            <TrendingDown className="w-8 h-8 text-neutral-800" />
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {flatAccounts.filter((a) => a.balance < 0).length}
@@ -362,9 +360,9 @@ export default function ChartOfAccountsManagement() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <DollarSign className="w-8 h-8 text-purple-500" />
+            <DollarSign className="w-8 h-8 text-neutral-900" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${totalBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
             {formatCurrency(totalBalance)}
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>

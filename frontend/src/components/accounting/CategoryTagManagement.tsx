@@ -185,17 +185,17 @@ export default function CategoryTagManagement() {
 
             {/* Category Stats */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.md} bg-green-50`}>
+              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.md} bg-neutral-50`}>
                 <div className="flex items-center justify-between">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
-                  <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600`}>{incomeCount}</span>
+                  <TrendingUp className="w-6 h-6 text-neutral-900" />
+                  <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900`}>{incomeCount}</span>
                 </div>
                 <p className={`${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-2`}>Gelir Kategorisi</p>
               </div>
-              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.md} bg-red-50`}>
+              <div className={`p-4 ${DESIGN_TOKENS?.colors?.bg.subtle} ${DESIGN_TOKENS?.radius?.md} bg-neutral-100`}>
                 <div className="flex items-center justify-between">
-                  <TrendingDown className="w-6 h-6 text-red-600" />
-                  <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600`}>{expenseCount}</span>
+                  <TrendingDown className="w-6 h-6 text-neutral-900" />
+                  <span className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900`}>{expenseCount}</span>
                 </div>
                 <p className={`${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-2`}>Gider Kategorisi</p>
               </div>
@@ -260,7 +260,7 @@ export default function CategoryTagManagement() {
                       />
                       <button
                         onClick={() => handleRenameCategory(category)}
-                        className="p-2 text-green-600 hover:bg-green-50 rounded"
+                        className="p-2 text-neutral-900 hover:bg-neutral-50 rounded"
                       >
                         <Save size={16} />
                       </button>
@@ -278,9 +278,9 @@ export default function CategoryTagManagement() {
                     <>
                       <div className="flex items-center gap-3">
                         {category.type === 'income' ? (
-                          <TrendingUp className="w-5 h-5 text-green-600" />
+                          <TrendingUp className="w-5 h-5 text-neutral-900" />
                         ) : (
-                          <TrendingDown className="w-5 h-5 text-red-600" />
+                          <TrendingDown className="w-5 h-5 text-neutral-800" />
                         )}
                         <span className="font-medium text-gray-900">{category.name}</span>
                         <span
@@ -299,14 +299,14 @@ export default function CategoryTagManagement() {
                             setEditingCategoryId(`${category.type}-${category.name}`);
                             setEditCategoryValue(category.name);
                           }}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                          className="p-2 text-neutral-900 hover:bg-neutral-50 rounded"
                           title="Düzenle"
                         >
                           <Edit2 size={16} />
                         </button>
                         <button
                           onClick={() => handleDeleteCategory(category)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded"
+                          className="p-2 text-neutral-800 hover:bg-neutral-50 rounded"
                           title="Sil"
                         >
                           <Trash2 size={16} />
@@ -424,14 +424,14 @@ export default function CategoryTagManagement() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => handleEditTag(tag)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                      className="p-2 text-neutral-900 hover:bg-neutral-50 rounded"
                       title="Düzenle"
                     >
                       <Edit2 size={16} />
                     </button>
                     <button
                       onClick={() => handleDeleteTag(tag.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded"
+                      className="p-2 text-neutral-800 hover:bg-neutral-50 rounded"
                       title="Sil"
                     >
                       <Trash2 size={16} />

@@ -124,35 +124,35 @@ export default function CategoryManagement() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-neutral-50 to-neutral-100 border-neutral-200')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-700`}>Gelir Kategorileri</p>
-              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-900 mt-1`}>{incomeCount}</p>
+              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gelir Kategorileri</p>
+              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mt-1`}>{incomeCount}</p>
             </div>
-            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-neutral-500 rounded-xl flex items-center justify-center">
               <TrendingUp className="text-white" size={24} />
             </div>
           </div>
         </div>
 
-        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-neutral-100 to-neutral-200 border-neutral-300')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-700`}>Gider Kategorileri</p>
-              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-900 mt-1`}>{expenseCount}</p>
+              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gider Kategorileri</p>
+              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mt-1`}>{expenseCount}</p>
             </div>
-            <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-neutral-600 rounded-xl flex items-center justify-center">
               <TrendingDown className="text-white" size={24} />
             </div>
           </div>
         </div>
 
-        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
+        <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-neutral-200 to-neutral-300 border-neutral-400')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-blue-700`}>Toplam Kategori</p>
-              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900 mt-1`}>{categories.length}</p>
+              <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Toplam Kategori</p>
+              <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mt-1`}>{categories.length}</p>
             </div>
             <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
               <Tag className="text-white" size={24} />
@@ -238,7 +238,7 @@ export default function CategoryManagement() {
                         />
                         <button
                           onClick={() => handleRename(category)}
-                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                           title="Kaydet"
                         >
                           <Save size={18} />
@@ -273,14 +273,14 @@ export default function CategoryManagement() {
                           setEditingId(category.id)
                           setEditValue(category.name)
                         }}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                         title="Düzenle"
                       >
                         <Edit2 size={18} />
                       </button>
                       <button
                         onClick={() => handleDelete(category)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 text-neutral-800 hover:bg-neutral-50 rounded-lg transition-colors"
                         title="Sil"
                       >
                         <Trash2 size={18} />
@@ -295,12 +295,12 @@ export default function CategoryManagement() {
       </div>
 
       {/* Info Note */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+      <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4">
         <div className="flex gap-3">
-          <Tag className="text-blue-600 flex-shrink-0 mt-0.5" size={20} />
+          <Tag className="text-neutral-900 flex-shrink-0 mt-0.5" size={20} />
           <div>
-            <h4 className="font-medium text-blue-900 mb-1">Kategori Bilgisi</h4>
-            <p className="text-sm text-blue-700">
+            <h4 className="font-medium text-neutral-900 mb-1">Kategori Bilgisi</h4>
+            <p className="text-sm text-neutral-700">
               • Kategoriler gelir ve gider kayıtlarından otomatik oluşturulur<br />
               • Bir kategoriyi yeniden adlandırdığınızda, o kategorideki tüm kayıtlar güncellenir<br />
               • Bir kategoriyi sildiğinizde, kayıtlar "Diğer" kategorisine taşınır<br />
