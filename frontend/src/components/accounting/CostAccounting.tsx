@@ -183,7 +183,7 @@ export default function CostAccounting() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className={`${DESIGN_TOKENS?.typography?.h1} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-3`}>
-            <Calculator className="w-8 h-8 text-blue-600" />
+            <Calculator className="w-8 h-8 text-neutral-900" />
             Maliyet Muhasebesi
           </h1>
           <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
@@ -218,11 +218,11 @@ export default function CostAccounting() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Hammadde</p>
-              <p className="text-2xl font-bold text-purple-600 mt-1">{formatCurrency(totalMaterialCost)}</p>
+              <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalMaterialCost)}</p>
               <p className="text-xs text-gray-500 mt-1">{((totalMaterialCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-              <Package className="text-purple-600" size={24} />
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <Package className="text-neutral-900" size={24} />
             </div>
           </div>
         </div>
@@ -231,11 +231,11 @@ export default function CostAccounting() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">İşçilik</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(totalLaborCost)}</p>
+              <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalLaborCost)}</p>
               <p className="text-xs text-gray-500 mt-1">{((totalLaborCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-              <Users className="text-green-600" size={24} />
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <Users className="text-neutral-900" size={24} />
             </div>
           </div>
         </div>
@@ -244,11 +244,11 @@ export default function CostAccounting() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Genel Gider</p>
-              <p className="text-2xl font-bold text-orange-600 mt-1">{formatCurrency(totalOverheadCost)}</p>
+              <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalOverheadCost)}</p>
               <p className="text-xs text-gray-500 mt-1">{((totalOverheadCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-              <Zap className="text-orange-600" size={24} />
+            <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+              <Zap className="text-neutral-900" size={24} />
             </div>
           </div>
         </div>
@@ -258,8 +258,8 @@ export default function CostAccounting() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
         <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="text-blue-600" size={20} />
+            <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+              <DollarSign className="text-neutral-900" size={20} />
             </div>
             <div>
               <p className="text-sm text-gray-600">Toplam Gelir</p>
@@ -346,7 +346,7 @@ export default function CostAccounting() {
   <div className={cx(card('md', 'sm', 'default', 'lg'), 'p-0 overflow-hidden')}>
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-2`}>
-            <BarChart3 className="text-blue-600" size={20} />
+            <BarChart3 className="text-neutral-900" size={20} />
             Ürün Bazlı Maliyet Analizi
           </h3>
         </div>
@@ -387,19 +387,12 @@ export default function CostAccounting() {
                     {formatCurrency(product.sellingPrice)}
                   </td>
                   <td className="px-2 py-3 whitespace-nowrap text-right">
-                    <span className={`font-medium ${product.profit > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className="font-medium text-neutral-900">
                       {formatCurrency(product.profit)}
                     </span>
                   </td>
                   <td className="px-2 py-3 whitespace-nowrap text-center hidden lg:table-cell">
-                    <span
-                      className={cx(
-                        'inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-medium',
-                        product.profitMargin > 20
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-orange-100 text-orange-700'
-                      )}
-                    >
+                    <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-medium bg-neutral-100 text-neutral-800">
                       %{product.profitMargin.toFixed(1)}
                     </span>
                   </td>
@@ -414,10 +407,10 @@ export default function CostAccounting() {
                       </button>
                       <button
                         onClick={() => toast.success('Detay görüntüleniyor...')}
-                        className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors"
+                        className="p-1.5 hover:bg-neutral-100 rounded-lg transition-colors"
                         title="Detay"
                       >
-                        <FileText className="text-blue-600" size={14} />
+                        <FileText className="text-neutral-900" size={14} />
                       </button>
                     </div>
                   </td>
@@ -430,7 +423,7 @@ export default function CostAccounting() {
                 <td className="px-2 py-3 text-right text-gray-900 text-xs hidden xl:table-cell">{formatCurrency(totalOverheadCost)}</td>
                 <td className="px-2 py-3 text-right text-gray-900 text-sm">{formatCurrency(totalCost)}</td>
                 <td className="px-2 py-3 text-right text-gray-900 text-xs hidden md:table-cell">{formatCurrency(totalRevenue)}</td>
-                <td className="px-2 py-3 text-right text-green-600 text-sm">{formatCurrency(totalProfit)}</td>
+                <td className="px-2 py-3 text-right text-neutral-900 text-sm">{formatCurrency(totalProfit)}</td>
                 <td className="px-2 py-3 text-center text-gray-900 text-xs hidden lg:table-cell">%{avgProfitMargin}</td>
                 <td className="px-2 py-3"></td>
               </tr>
@@ -453,7 +446,7 @@ export default function CostAccounting() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className="bg-purple-600 h-2 rounded-full"
+                  className="bg-neutral-900 h-2 rounded-full"
                   style={{ width: `${(totalMaterialCost / totalCost) * 100}%` }}
                 ></div>
               </div>
@@ -465,7 +458,7 @@ export default function CostAccounting() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className="bg-green-600 h-2 rounded-full"
+                  className="bg-neutral-800 h-2 rounded-full"
                   style={{ width: `${(totalLaborCost / totalCost) * 100}%` }}
                 ></div>
               </div>
@@ -477,7 +470,7 @@ export default function CostAccounting() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className="bg-orange-600 h-2 rounded-full"
+                  className="bg-neutral-700 h-2 rounded-full"
                   style={{ width: `${(totalOverheadCost / totalCost) * 100}%` }}
                 ></div>
               </div>
@@ -490,25 +483,25 @@ export default function CostAccounting() {
             Öneriler
           </h3>
           <div className="space-y-3">
-            <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
-              <TrendingUp className="text-blue-600 flex-shrink-0 mt-0.5" size={20} />
+            <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-lg">
+              <TrendingUp className="text-neutral-900 flex-shrink-0 mt-0.5" size={20} />
               <div>
-                <p className="text-sm font-medium text-blue-900">Kar Marjı İyileştirme</p>
-                <p className="text-xs text-blue-700 mt-1">Hammadde maliyetlerini %5 azaltarak kar marjınızı artırabilirsiniz.</p>
+                <p className="text-sm font-medium text-neutral-900">Kar Marjı İyileştirme</p>
+                <p className="text-xs text-neutral-700 mt-1">Hammadde maliyetlerini %5 azaltarak kar marjınızı artırabilirsiniz.</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
-              <Package className="text-green-600 flex-shrink-0 mt-0.5" size={20} />
+            <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-lg">
+              <Package className="text-neutral-900 flex-shrink-0 mt-0.5" size={20} />
               <div>
-                <p className="text-sm font-medium text-green-900">Stok Optimizasyonu</p>
-                <p className="text-xs text-green-700 mt-1">Yüksek cirolu ürünlerin stokunu artırın.</p>
+                <p className="text-sm font-medium text-neutral-900">Stok Optimizasyonu</p>
+                <p className="text-xs text-neutral-700 mt-1">Yüksek cirolu ürünlerin stokunu artırın.</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
-              <Zap className="text-orange-600 flex-shrink-0 mt-0.5" size={20} />
+            <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-lg">
+              <Zap className="text-neutral-900 flex-shrink-0 mt-0.5" size={20} />
               <div>
-                <p className="text-sm font-medium text-orange-900">Enerji Tasarrufu</p>
-                <p className="text-xs text-orange-700 mt-1">Genel gider maliyetlerinde tasarruf fırsatı var.</p>
+                <p className="text-sm font-medium text-neutral-900">Enerji Tasarrufu</p>
+                <p className="text-xs text-neutral-700 mt-1">Genel gider maliyetlerinde tasarruf fırsatı var.</p>
               </div>
             </div>
           </div>

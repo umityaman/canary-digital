@@ -283,7 +283,7 @@ export default function CashBankManagement() {
               className={cx(
                 'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'overview'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-neutral-900 text-neutral-900'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               )}
             >
@@ -294,7 +294,7 @@ export default function CashBankManagement() {
               className={cx(
                 'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'bank'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-neutral-900 text-neutral-900'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               )}
             >
@@ -305,7 +305,7 @@ export default function CashBankManagement() {
               className={cx(
                 'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'cash'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-neutral-900 text-neutral-900'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               )}
             >
@@ -316,7 +316,7 @@ export default function CashBankManagement() {
               className={cx(
                 'px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
                 activeTab === 'cashflow'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-neutral-900 text-neutral-900'
                   : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               )}
             >
@@ -374,7 +374,7 @@ export default function CashBankManagement() {
                       <p>Henüz kasa hareketi bulunmuyor</p>
                       <button
                         onClick={() => setShowTransactionForm(true)}
-                        className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
+                        className="mt-4 text-neutral-900 hover:text-neutral-700 font-medium"
                       >
                         İlk işleminizi ekleyin
                       </button>
@@ -386,15 +386,11 @@ export default function CashBankManagement() {
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <div
-                          className={`p-2 rounded-full ${
-                            transaction.type === 'in' ? 'bg-green-100' : 'bg-red-100'
-                          }`}
-                        >
+                        <div className="p-2 rounded-full bg-neutral-100">
                           {transaction.type === 'in' ? (
-                            <ArrowDownLeft className="w-5 h-5 text-green-600" />
+                            <ArrowDownLeft className="w-5 h-5 text-neutral-900" />
                           ) : (
-                            <ArrowUpRight className="w-5 h-5 text-red-600" />
+                            <ArrowUpRight className="w-5 h-5 text-neutral-900" />
                           )}
                         </div>
                         <div>
@@ -722,7 +718,7 @@ export default function CashBankManagement() {
                   onChange={(e) =>
                     setTransactionForm({ ...transactionForm, description: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
                   placeholder="İşlem açıklaması"
                 />
               </div>
@@ -735,7 +731,7 @@ export default function CashBankManagement() {
                   onChange={(e) =>
                     setTransactionForm({ ...transactionForm, category: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
                 >
                   <option value="">Seçiniz</option>
                   <option value="income">Gelir</option>
