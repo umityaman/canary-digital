@@ -540,23 +540,23 @@ export default function AccountingDashboard() {
                   {formatPercentage(advancedStats.growthRate)}
                 </span>
               </div>
-              <div className="h-px bg-indigo-300 my-2" />
+              <div className="h-px bg-neutral-200 my-2" />
               <div className="flex justify-between items-center">
                 <span className="text-xs text-neutral-700">Ort. Gelir</span>
-                <span className="text-sm font-semibold text-indigo-900">{formatCurrency(advancedStats.avgIncome)}</span>
+                <span className="text-sm font-semibold text-neutral-900">{formatCurrency(advancedStats.avgIncome)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-neutral-700">Ort. Gider</span>
-                <span className="text-sm font-semibold text-indigo-900">{formatCurrency(advancedStats.avgExpense)}</span>
+                <span className="text-sm font-semibold text-neutral-900">{formatCurrency(advancedStats.avgExpense)}</span>
               </div>
             </div>
           )}
         </div>
 
         {/* Forecast */}
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200">
+        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center">
               <BarChart2 className="text-white" size={20} />
             </div>
             <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-amber-900')}>Gelecek Ay Tahmini</h3>
@@ -626,7 +626,7 @@ export default function AccountingDashboard() {
                 <div className="bg-white rounded-full h-3 overflow-hidden">
                   <div 
                     className={`h-full transition-all duration-500 ${
-                      advancedStats.targetAchievement >= 100 ? 'bg-green-500' : 'bg-amber-500'
+                      advancedStats.targetAchievement >= 100 ? 'bg-neutral-800' : 'bg-neutral-800'
                     }`}
                     style={{ width: `${Math.min(advancedStats.targetAchievement, 100)}%` }}
                   />
@@ -667,7 +667,7 @@ export default function AccountingDashboard() {
 
       {/* Detailed Statistics Section */}
       {showAdvancedStats && advancedStats && (
-        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
           <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-slate-900 mb-6')}>Detaylı İstatistikler</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Income Stats */}
@@ -686,7 +686,7 @@ export default function AccountingDashboard() {
                   <span className="text-xs text-slate-600">En Düşük</span>
                   <span className="text-sm font-bold text-slate-600">{formatCurrency(advancedStats.minIncome)}</span>
                 </div>
-                <div className="h-px bg-slate-200 my-2" />
+                <div className="h-px bg-neutral-200 my-2" />
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-slate-600">Değişkenlik</span>
                   <span className="text-sm font-bold text-slate-900">
@@ -712,7 +712,7 @@ export default function AccountingDashboard() {
                   <span className="text-xs text-slate-600">En Düşük</span>
                   <span className="text-sm font-bold text-slate-600">{formatCurrency(advancedStats.minExpense)}</span>
                 </div>
-                <div className="h-px bg-slate-200 my-2" />
+                <div className="h-px bg-neutral-200 my-2" />
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-slate-600">Değişkenlik</span>
                   <span className="text-sm font-bold text-slate-900">
@@ -750,14 +750,14 @@ export default function AccountingDashboard() {
                     {formatPercentage(advancedStats.growthRate)}
                   </span>
                 </div>
-                <div className="h-px bg-slate-200 my-2" />
+                <div className="h-px bg-neutral-200 my-2" />
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-slate-600">Performans</span>
                   <span className={`text-xs font-bold px-2 py-1 rounded ${
                     advancedStats.profitabilityRatio >= 20 
                       ? 'bg-green-100 text-neutral-800'
                       : advancedStats.profitabilityRatio >= 10
-                      ? 'bg-amber-100 text-neutral-700'
+                      ? 'bg-neutral-100 text-neutral-700'
                       : 'bg-red-100 text-neutral-800'
                   }`}>
                     {advancedStats.profitabilityRatio >= 20 ? 'Mükemmel' : advancedStats.profitabilityRatio >= 10 ? 'İyi' : 'Geliştirilmeli'}
@@ -771,7 +771,7 @@ export default function AccountingDashboard() {
 
       {/* Comparison Section */}
       {showComparison && (
-        <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 border border-neutral-200">
+        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
           <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900 mb-4')}>Dönem Karşılaştırması</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className={cx(card('md', 'sm', 'default', 'md'))}>
