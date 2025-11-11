@@ -1680,7 +1680,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Offer Table */}
-                <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden max-w-full">
+                <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden">
                   {offersLoading ? (
                     <TableSkeleton rows={10} columns={7} showHeader={true} />
                   ) : offers.length === 0 ? (
@@ -1715,15 +1715,15 @@ export default function Accounting() {
                       )}
 
                       <div className="overflow-x-auto">
-                        <table className="min-w-full">
+                        <table className="w-full">
                           <thead className={`${DESIGN_TOKENS?.colors?.bg?.subtle} ${DESIGN_TOKENS?.colors?.border?.light} border-b`}>
                             <tr>
-                              <th className="w-12 px-2 py-2 text-left">
+                              <th className="px-6 py-3 text-left">
                                 <input
                                   type="checkbox"
                                   checked={selectedOffers.length === offers.length && offers.length > 0}
                                   onChange={handleSelectAllOffers}
-                                  className={`${DESIGN_TOKENS?.radius?.sm} rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
+                                  className={`${DESIGN_TOKENS?.radius?.sm} border-neutral-300 text-neutral-900 focus:ring-neutral-900`}
                                 />
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
@@ -1732,19 +1732,19 @@ export default function Accounting() {
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
                                 Müşteri
                               </th>
-                              <th className="hidden lg:table-cell px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
+                              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">
                                 Tarih
                               </th>
-                              <th className="hidden lg:table-cell px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
+                              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden xl:table-cell">
                                 Geçerlilik
                               </th>
-                              <th className="px-3 py-2 text-right text-xs font-medium text-neutral-600 uppercase">
+                              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
                                 Tutar
                               </th>
-                              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">
+                              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">
                                 Durum
                               </th>
-                              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase">
+                              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
                                 İşlemler
                               </th>
                             </tr>
@@ -1752,7 +1752,7 @@ export default function Accounting() {
                           <tbody className="bg-white divide-y divide-neutral-200">
                             {offers.map((offer) => (
                               <tr key={offer.id} className="hover:bg-neutral-50 transition-colors">
-                                <td className="px-2 py-3">
+                                <td className="px-6 py-4">
                                   <input
                                     type="checkbox"
                                     checked={selectedOffers.includes(offer.id)}
@@ -1776,12 +1776,12 @@ export default function Accounting() {
                                     {offer.customer.email}
                                   </div>
                                 </td>
-                                <td className="hidden xl:table-cell px-3 py-3 whitespace-nowrap">
+                                <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
                                   <div className="text-sm text-neutral-900">
                                     {formatDate(offer.offerDate)}
                                   </div>
                                 </td>
-                                <td className="hidden lg:table-cell px-3 py-3 whitespace-nowrap">
+                                <td className="px-3 py-3 whitespace-nowrap hidden xl:table-cell">
                                   <div className={`text-sm ${
                                     new Date(offer.validUntil) < new Date() 
                                       ? 'text-red-600 font-medium' 
@@ -1793,12 +1793,12 @@ export default function Accounting() {
                                     <div className="text-xs text-red-500">Süresi doldu</div>
                                   )}
                                 </td>
-                                <td className="px-3 py-3 whitespace-nowrap text-right">
-                                  <div className="text-sm font-medium text-neutral-900">
+                                <td className="px-3 py-3 whitespace-nowrap">
+                                  <span className="text-sm font-semibold text-neutral-900">
                                     {formatCurrency(offer.grandTotal)}
-                                  </div>
+                                  </span>
                                 </td>
-                                <td className="px-3 py-3 whitespace-nowrap text-center">
+                                <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
                                   {getOfferStatusBadge(offer.status)}
                                 </td>
                                 <td className="px-3 py-3 whitespace-nowrap">
