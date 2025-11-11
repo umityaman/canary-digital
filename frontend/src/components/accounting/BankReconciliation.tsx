@@ -426,7 +426,7 @@ export default function BankReconciliation() {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
           >
             <Upload size={18} />
             <span className="hidden sm:inline">Ekstre Yükle</span>
@@ -577,7 +577,7 @@ export default function BankReconciliation() {
               <button
                 onClick={handleAutoMatch}
                 disabled={loading}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors disabled:opacity-50"
               >
                 <Link2 size={18} />
                 <span>Otomatik Eşleştir</span>
@@ -633,7 +633,7 @@ export default function BankReconciliation() {
                             {tx.matched && (
                               <button
                                 onClick={() => handleUnmatch(tx.id)}
-                                className="mt-1 text-xs text-red-600 hover:underline"
+                                className="mt-1 text-xs text-neutral-900 hover:underline"
                               >
                                 Eşleştirmeyi Kaldır
                               </button>
@@ -783,13 +783,13 @@ export default function BankReconciliation() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-neutral-600">Toplam Giriş:</span>
-                      <span className="font-semibold text-green-600">
+                      <span className="font-semibold text-neutral-900">
                         {formatCurrency(bankTransactions.filter(t => t.type === 'credit').reduce((sum, t) => sum + t.amount, 0))}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-neutral-600">Toplam Çıkış:</span>
-                      <span className="font-semibold text-red-600">
+                      <span className="font-semibold text-neutral-900">
                         {formatCurrency(bankTransactions.filter(t => t.type === 'debit').reduce((sum, t) => sum + t.amount, 0))}
                       </span>
                     </div>
@@ -832,16 +832,10 @@ export default function BankReconciliation() {
               </div>
 
               {/* Reconciliation Result */}
-              <div className={`p-6 rounded-xl ${
-                Math.abs(stats.differenceAmount) < 0.01
-                  ? 'bg-green-50 border border-green-200'
-                  : 'bg-red-50 border border-red-200'
-              }`}>
+              <div className="p-6 rounded-xl bg-neutral-50 border border-neutral-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className={`text-lg font-semibold ${
-                      Math.abs(stats.differenceAmount) < 0.01 ? 'text-green-900' : 'text-red-900'
-                    }`}>
+                    <h4 className="text-lg font-semibold text-neutral-900">
                       {Math.abs(stats.differenceAmount) < 0.01 ? 'Mutabakat Sağlandı ✓' : 'Mutabakat Farkı Var!'}
                     </h4>
                     <p className={`text-sm mt-1 ${

@@ -252,7 +252,7 @@ const BankAccountManagement: React.FC = () => {
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="text-sm text-gray-500">Aktif Hesap</div>
-            <div className="text-2xl font-bold text-green-600">{stats.activeAccounts}</div>
+            <div className="text-2xl font-bold text-neutral-900">{stats.activeAccounts}</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="text-sm text-gray-500">Toplam Bakiye</div>
@@ -264,7 +264,7 @@ const BankAccountManagement: React.FC = () => {
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="text-sm text-gray-500">Mutabakat Bekleyen</div>
-            <div className="text-2xl font-bold text-orange-600">{stats.unreconciledCount}</div>
+            <div className="text-2xl font-bold text-neutral-900">{stats.unreconciledCount}</div>
           </div>
         </div>
       )}
@@ -280,7 +280,7 @@ const BankAccountManagement: React.FC = () => {
             <button
               onClick={() => handleSyncAccounts()}
               disabled={syncing || registeredBanks.length === 0}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:bg-gray-400"
             >
               <FaSync className={syncing ? 'animate-spin' : ''} />
               {syncing ? 'Senkronize Ediliyor...' : 'Tümünü Senkronize Et'}
@@ -363,7 +363,7 @@ const BankAccountManagement: React.FC = () => {
               <button
                 onClick={handleSyncTransactions}
                 disabled={syncing}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400"
+                className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:bg-gray-400"
               >
                 <FaSync className={syncing ? 'animate-spin' : ''} />
                 İşlemleri Senkronize Et
@@ -454,27 +454,19 @@ const BankAccountManagement: React.FC = () => {
                       <td className="px-4 py-3 text-sm">{txn.description}</td>
                       <td className="px-4 py-3 text-sm">{txn.counterpartyName || '-'}</td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            txn.type === 'DEBIT' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                          }`}
-                        >
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">
                           {txn.type === 'DEBIT' ? 'Giden' : 'Gelen'}
                         </span>
                       </td>
-                      <td
-                        className={`px-4 py-3 whitespace-nowrap text-sm text-right font-semibold ${
-                          txn.type === 'DEBIT' ? 'text-red-600' : 'text-green-600'
-                        }`}
-                      >
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right font-semibold text-neutral-900">
                         {txn.type === 'DEBIT' ? '-' : '+'}
                         {formatCurrency(Math.abs(txn.amount))}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-center">
                         {txn.isReconciled ? (
-                          <FaCheckCircle className="text-green-500 mx-auto" />
+                          <FaCheckCircle className="text-neutral-900 mx-auto" />
                         ) : (
-                          <FaTimesCircle className="text-orange-500 mx-auto" />
+                          <FaTimesCircle className="text-neutral-500 mx-auto" />
                         )}
                       </td>
                     </tr>
