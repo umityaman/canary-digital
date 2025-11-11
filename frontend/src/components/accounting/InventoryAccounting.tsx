@@ -522,7 +522,7 @@ export default function InventoryAccounting() {
       {/* Stats Cards - Responsive Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Total Transactions */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 text-white">
+        <div className="bg-neutral-900 rounded-xl p-3 text-white">
           <div className="flex items-center justify-between mb-2">
             <Package size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.totalTransactions}</span>
@@ -531,7 +531,7 @@ export default function InventoryAccounting() {
         </div>
 
         {/* Pending */}
-        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-3 text-white">
+        <div className="bg-neutral-700 rounded-xl p-3 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.pendingRecords}</span>
@@ -540,7 +540,7 @@ export default function InventoryAccounting() {
         </div>
 
         {/* Recorded */}
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-3 text-white">
+        <div className="bg-neutral-900 rounded-xl p-3 text-white">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={20} />
             <span className="text-xl lg:text-2xl font-bold">{stats.recordedCount}</span>

@@ -24,19 +24,16 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       title: 'Aktif Araçlar',
       value: '12',
       icon: Package,
-      gradient: 'from-blue-500 to-blue-600',
     },
     {
       title: 'Kullanılan Bu Ay',
       value: '847',
       icon: Calculator,
-      gradient: 'from-green-500 to-green-600',
     },
     {
       title: 'Zaman Kazanımı',
       value: '24 saat',
       icon: Calendar,
-      gradient: 'from-purple-500 to-purple-600',
     },
   ]
 
@@ -45,35 +42,30 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       title: 'Entegrasyonlar',
       description: 'Banka, e-ticaret ve GİB entegrasyonlarını yönetin',
       icon: Globe,
-      gradient: 'from-cyan-500 to-cyan-600',
       onClick: () => setCurrentView('integrations'),
     },
     {
       title: 'Kategori ve Etiket Yönetimi',
       description: 'Gelir/gider kategorileri ve etiketleri yönetin',
       icon: FolderOpen,
-      gradient: 'from-blue-500 to-blue-600',
       onClick: () => setCurrentView('categories'),
     },
     {
       title: 'Raporlar',
       description: 'Detaylı finansal raporlar oluşturun',
       icon: BarChart,
-      gradient: 'from-purple-500 to-purple-600',
       onClick: () => onNavigate('reports'),
     },
     {
       title: 'Cari Hesaplar',
       description: 'Müşteri ve tedarikçi hesaplarını görüntüleyin',
       icon: Users,
-      gradient: 'from-green-500 to-green-600',
       onClick: () => onNavigate('cari'),
     },
     {
       title: 'Hatırlatmalar',
       description: 'Ödeme ve işlem hatırlatmaları ayarlayın',
       icon: Bell,
-      gradient: 'from-orange-500 to-orange-600',
       onClick: () => onNavigate('reminders'),
       badge: 5,
     },
@@ -81,21 +73,18 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       title: 'Ekstre Paylaşımı',
       description: 'Müşterilerinize ekstre gönderin',
       icon: Mail,
-      gradient: 'from-pink-500 to-pink-600',
       onClick: () => onNavigate('statements'),
     },
     {
       title: 'Barkod Okuyucu',
       description: 'Ürün barkodlarını okuyun ve fatura oluşturun',
       icon: CreditCard,
-      gradient: 'from-indigo-500 to-indigo-600',
       onClick: () => onNavigate('barcode'),
     },
     {
       title: 'Fatura Oluştur',
       description: 'Hızlı fatura oluşturma aracı',
       icon: FileText,
-      gradient: 'from-teal-500 to-teal-600',
       onClick: () => {
         toast.success('Fatura oluşturma sayfasına yönlendiriliyorsunuz...')
         onNavigate('invoice')
@@ -168,7 +157,6 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
               title={tool.title}
               description={tool.description}
               icon={tool.icon}
-              gradient={tool.gradient}
               onClick={tool.onClick}
               badge={tool.badge}
             />
@@ -177,7 +165,7 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       </div>
 
       {/* Tips Section */}
-      <div className={cx(card('md', 'sm', 'info'), 'bg-gradient-to-br from-blue-50 to-indigo-50')}>
+      <div className={cx(card('md', 'sm', 'info'), 'bg-neutral-50 border-neutral-200')}>
         <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-3`}>💡 İpucu</h3>
         <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
           Araçlar sekmesinden tüm muhasebe işlemlerinize hızlıca erişebilirsiniz. 

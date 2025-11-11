@@ -138,44 +138,44 @@ export default function AccountCardList() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <Users className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900 mb-1`}>{accounts.length}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-blue-700`}>Toplam Cari</p>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{accounts.length}</h3>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Toplam Cari</p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <TrendingUp className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-900 mb-1`}>{formatCurrency(calculateTotalDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-700`}>Toplam Alacak</p>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{formatCurrency(calculateTotalDebt())}</h3>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Toplam Alacak</p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-red-50 to-red-100 border-red-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center">
               <AlertCircle className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-700`}>Vadesi Geçmiş</p>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Vadesi Geçmiş</p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
+        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-700 rounded-xl flex items-center justify-center">
               <Clock className="text-white" size={20} />
             </div>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-900 mb-1`}>{getOverdueAccountsCount()}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-orange-700`}>Gecikmiş Hesap</p>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{getOverdueAccountsCount()}</h3>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gecikmiş Hesap</p>
         </div>
       </div>
 

@@ -512,7 +512,7 @@ export default function AdvancedReporting() {
         <div className="space-y-6">
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-900 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <ArrowUpCircle size={20} />
                 <CheckCircle size={18} />
@@ -523,7 +523,7 @@ export default function AdvancedReporting() {
               <div className="text-xs opacity-90">Toplam Nakit Girişi</div>
             </div>
 
-            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-800 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <ArrowDownCircle size={20} />
                 <AlertCircle size={18} />
@@ -534,8 +534,8 @@ export default function AdvancedReporting() {
               <div className="text-xs opacity-90">Toplam Nakit Çıkışı</div>
             </div>
 
-            <div className={`bg-gradient-to-br rounded-xl p-4 text-white ${
-              cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'from-blue-500 to-blue-600' : 'from-orange-500 to-orange-600'
+            <div className={`rounded-xl p-4 text-white ${
+              cashflowData.reduce((sum, d) => sum + d.netChange, 0) >= 0 ? 'bg-neutral-900' : 'bg-neutral-700'
             }`}>
               <div className="flex items-center justify-between mb-2">
                 <TrendingUp size={20} />
@@ -716,7 +716,7 @@ export default function AdvancedReporting() {
         <div className="space-y-6">
           {/* Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-900 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <TrendingUp size={20} />
                 <CheckCircle size={18} />
@@ -725,7 +725,7 @@ export default function AdvancedReporting() {
               <div className="text-xs opacity-90">Toplam Gelir</div>
             </div>
 
-            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-800 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <TrendingDown size={20} />
                 <AlertCircle size={18} />
@@ -734,8 +734,8 @@ export default function AdvancedReporting() {
               <div className="text-xs opacity-90">Toplam Gider</div>
             </div>
 
-            <div className={`bg-gradient-to-br rounded-xl p-4 text-white ${
-              netProfit >= 0 ? 'from-blue-500 to-blue-600' : 'from-orange-500 to-orange-600'
+            <div className={`rounded-xl p-4 text-white ${
+              netProfit >= 0 ? 'bg-neutral-900' : 'bg-neutral-700'
             }`}>
               <div className="flex items-center justify-between mb-2">
                 <DollarSign size={20} />
@@ -859,7 +859,7 @@ export default function AdvancedReporting() {
         <div className="space-y-6">
           {/* Summary */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-900 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <Building2 size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">AKTİF</span>
@@ -868,7 +868,7 @@ export default function AdvancedReporting() {
               <div className="text-xs opacity-90">Toplam Varlıklar</div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-800 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <CreditCard size={20} />
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">PASİF</span>
@@ -882,8 +882,8 @@ export default function AdvancedReporting() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Assets */}
             <div className={card('md', 'none', 'default', 'lg')}>
-              <div className="p-3 border-b border-neutral-200 bg-blue-50">
-                <h3 className="text-sm font-semibold text-blue-900">AKTİFLER (Varlıklar)</h3>
+              <div className="p-3 border-b border-neutral-200 bg-neutral-50">
+                <h3 className="text-sm font-semibold text-neutral-900">AKTİFLER (Varlıklar)</h3>
               </div>
               <div className="p-4 space-y-4">
                 {assets.map((section, index) => (
@@ -903,10 +903,10 @@ export default function AdvancedReporting() {
                   </div>
                 ))}
                 
-                <div className="pt-4 border-t-2 border-blue-500">
+                <div className="pt-4 border-t-2 border-neutral-900">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-bold text-blue-900">TOPLAM AKTİF</h4>
-                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-blue-900')}>{formatCurrency(totalAssets)}</span>
+                    <h4 className="text-lg font-bold text-neutral-900">TOPLAM AKTİF</h4>
+                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-neutral-900')}>{formatCurrency(totalAssets)}</span>
                   </div>
                 </div>
               </div>
@@ -914,15 +914,15 @@ export default function AdvancedReporting() {
 
             {/* Liabilities */}
             <div className={card('md', 'none', 'default', 'lg')}>
-              <div className="p-3 border-b border-neutral-200 bg-purple-50">
-                <h3 className="text-sm font-semibold text-purple-900">PASİFLER (Kaynaklar)</h3>
+              <div className="p-3 border-b border-neutral-200 bg-neutral-50">
+                <h3 className="text-sm font-semibold text-neutral-900">PASİFLER (Kaynaklar)</h3>
               </div>
               <div className="p-4 space-y-4">
                 {liabilities.map((section, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-3 pb-2 border-b border-neutral-200">
                       <h4 className="font-semibold text-neutral-900">{section.category}</h4>
-                      <span className="font-bold text-purple-600">{formatCurrency(section.total)}</span>
+                      <span className="font-bold text-neutral-900">{formatCurrency(section.total)}</span>
                     </div>
                     <div className="space-y-2">
                       {section.subcategories.map((item, idx) => (
@@ -935,10 +935,10 @@ export default function AdvancedReporting() {
                   </div>
                 ))}
                 
-                <div className="pt-4 border-t-2 border-purple-500">
+                <div className="pt-4 border-t-2 border-neutral-800">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-bold text-purple-900">TOPLAM PASİF</h4>
-                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-purple-900')}>{formatCurrency(totalLiabilities)}</span>
+                    <h4 className="text-lg font-bold text-neutral-900">TOPLAM PASİF</h4>
+                    <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-neutral-900')}>{formatCurrency(totalLiabilities)}</span>
                   </div>
                 </div>
               </div>
@@ -948,15 +948,15 @@ export default function AdvancedReporting() {
           {/* Balance Check */}
           <div className={`p-6 rounded-xl ${
             Math.abs(totalAssets - totalLiabilities) < 0.01
-              ? 'bg-green-50 border border-green-200'
-              : 'bg-red-50 border border-red-200'
+              ? 'bg-neutral-50 border border-neutral-300'
+              : 'bg-neutral-100 border border-neutral-400'
           }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {Math.abs(totalAssets - totalLiabilities) < 0.01 ? (
-                  <CheckCircle className="text-green-600" size={32} />
+                  <CheckCircle className="text-neutral-900" size={32} />
                 ) : (
-                  <AlertCircle className="text-red-600" size={32} />
+                  <AlertCircle className="text-neutral-700" size={32} />
                 )}
                 <div>
                   <h4 className={`text-lg font-bold ${
@@ -984,7 +984,7 @@ export default function AdvancedReporting() {
         <div className="space-y-6">
           {/* Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-900 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <TrendingUp size={20} />
                 <CheckCircle size={18} />
@@ -995,7 +995,7 @@ export default function AdvancedReporting() {
               <div className="text-xs opacity-90">Hesaplanan KDV (Çıkan)</div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
+            <div className="bg-neutral-800 rounded-xl p-4 text-white">
               <div className="flex items-center justify-between mb-2">
                 <TrendingDown size={20} />
                 <Minus size={18} />
@@ -1006,8 +1006,8 @@ export default function AdvancedReporting() {
               <div className="text-xs opacity-90">İndirilecek KDV (Giren)</div>
             </div>
 
-            <div className={`bg-gradient-to-br rounded-xl p-4 text-white ${
-              vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'from-orange-500 to-orange-600' : 'from-green-500 to-green-600'
+            <div className={`rounded-xl p-4 text-white ${
+              vatData.reduce((sum, d) => sum + d.netVAT, 0) >= 0 ? 'bg-neutral-900' : 'bg-neutral-700'
             }`}>
               <div className="flex items-center justify-between mb-2">
                 <DollarSign size={20} />

@@ -208,7 +208,7 @@ export default function CostAccounting() {
               <p className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(totalCost)}</p>
               <p className="text-xs text-gray-500 mt-1">Bu dönem</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center">
               <Calculator className="text-white" size={24} />
             </div>
           </div>
@@ -266,33 +266,33 @@ export default function CostAccounting() {
               <p className="text-xl font-bold text-gray-900">{formatCurrency(totalRevenue)}</p>
             </div>
           </div>
-          <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>
+          <div className="h-1 bg-neutral-900 rounded-full"></div>
         </div>
 
   <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <TrendingUp className="text-green-600" size={20} />
+            <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+              <TrendingUp className="text-neutral-900" size={20} />
             </div>
             <div>
               <p className="text-sm text-gray-600">Toplam Kar</p>
-              <p className="text-xl font-bold text-green-600">{formatCurrency(totalProfit)}</p>
+              <p className="text-xl font-bold text-neutral-900">{formatCurrency(totalProfit)}</p>
             </div>
           </div>
-          <div className="h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
+          <div className="h-1 bg-neutral-900 rounded-full"></div>
         </div>
 
   <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <PieChart className="text-purple-600" size={20} />
+            <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+              <PieChart className="text-neutral-900" size={20} />
             </div>
             <div>
               <p className="text-sm text-gray-600">Ortalama Kar Marjı</p>
-              <p className="text-xl font-bold text-purple-600">%{avgProfitMargin}</p>
+              <p className="text-xl font-bold text-neutral-900">%{avgProfitMargin}</p>
             </div>
           </div>
-          <div className="h-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full"></div>
+          <div className="h-1 bg-neutral-800 rounded-full"></div>
         </div>
       </div>
 

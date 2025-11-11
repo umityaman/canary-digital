@@ -515,19 +515,19 @@ export default function AccountingDashboard() {
       {/* Advanced Statistics and Target Tracking */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Analytics */}
-        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-6 border border-indigo-200">
+        <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <Zap className="text-white" size={20} />
             </div>
-            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-indigo-900')}>Hızlı Analizler</h3>
+            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900')}>Hızlı Analizler</h3>
           </div>
           {advancedStats && (
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-indigo-700">Kârlılık Oranı</span>
+                <span className="text-sm text-neutral-700">Kârlılık Oranı</span>
                 <span className={`text-lg font-bold ${
-                  advancedStats.profitabilityRatio >= 0 ? 'text-green-600' : 'text-red-600'
+                  advancedStats.profitabilityRatio >= 0 ? 'text-neutral-900' : 'text-neutral-700'
                 }`}>
                   {advancedStats.profitabilityRatio.toFixed(1)}%
                 </span>
@@ -595,22 +595,22 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Target Tracking */}
-        <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl p-6 border border-teal-200">
+        <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <Target className="text-white" size={20} />
             </div>
-            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-teal-900')}>Hedef Takibi</h3>
+            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900')}>Hedef Takibi</h3>
           </div>
           <div className="space-y-4">
             <div>
-              <label className="text-sm text-teal-700 mb-2 block">Aylık Gelir Hedefi</label>
+              <label className="text-sm text-neutral-700 mb-2 block">Aylık Gelir Hedefi</label>
               <input
                 type="number"
                 value={monthlyTarget}
                 onChange={(e) => setMonthlyTarget(Number(e.target.value))}
                 placeholder="Hedef tutarı girin"
-                className="w-full px-4 py-2 rounded-xl border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"
+                className="w-full px-4 py-2 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-500 bg-white"
               />
             </div>
             {monthlyTarget > 0 && advancedStats && (

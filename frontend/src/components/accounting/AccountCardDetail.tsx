@@ -333,44 +333,44 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-5 border border-blue-200">
+        <div className="bg-neutral-50 rounded-2xl p-5 border border-neutral-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <FileText className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-blue-900 mb-1">{invoices.length}</h3>
-          <p className="text-sm text-blue-700">Toplam Fatura</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{invoices.length}</h3>
+          <p className="text-sm text-neutral-700">Toplam Fatura</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-5 border border-green-200">
+        <div className="bg-neutral-50 rounded-2xl p-5 border border-neutral-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <TrendingUp className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-green-900 mb-1">{formatCurrency(totalDebt)}</h3>
-          <p className="text-sm text-green-700">Toplam Borç</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(totalDebt)}</h3>
+          <p className="text-sm text-neutral-700">Toplam Borç</p>
         </div>
 
-        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-5 border border-red-200">
+        <div className="bg-neutral-50 rounded-2xl p-5 border border-neutral-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center">
               <AlertCircle className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-red-900 mb-1">{formatCurrency(overdueDebt)}</h3>
-          <p className="text-sm text-red-700">Vadesi Geçmiş</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(overdueDebt)}</h3>
+          <p className="text-sm text-neutral-700">Vadesi Geçmiş</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-5 border border-purple-200">
+        <div className="bg-neutral-50 rounded-2xl p-5 border border-neutral-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
               <CheckCircle className="text-white" size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-purple-900 mb-1">{formatCurrency(totalPaid)}</h3>
-          <p className="text-sm text-purple-700">Tahsil Edilen</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(totalPaid)}</h3>
+          <p className="text-sm text-neutral-700">Tahsil Edilen</p>
         </div>
       </div>
 

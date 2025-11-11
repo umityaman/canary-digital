@@ -212,7 +212,7 @@ export default function CashBankManagement() {
       {/* Summary Stats - Responsive Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Balance */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+        <div className="bg-neutral-900 rounded-xl p-6 text-white">
           <div className="flex items-center justify-between mb-3">
             <Wallet className="w-8 h-8 opacity-80" />
             <span className="px-2 py-1 text-xs font-medium rounded-full bg-white/20 text-white">Toplam</span>

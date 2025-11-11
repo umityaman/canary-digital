@@ -12,21 +12,18 @@ const SupportTab: React.FC = () => {
       title: 'Canlı Destek',
       description: 'Anlık destek alın',
       icon: MessageCircle,
-      gradient: 'from-green-500 to-green-600',
       onClick: () => toast.success('Canlı destek başlatılıyor...'),
     },
     {
       title: 'Dokümantasyon',
       description: 'Kullanım kılavuzlarını inceleyin',
       icon: BookOpen,
-      gradient: 'from-blue-500 to-blue-600',
       onClick: () => toast.success('Dokümantasyon açılıyor...'),
     },
     {
       title: 'Video Eğitimler',
       description: 'Video eğitimlerimize göz atın',
       icon: Video,
-      gradient: 'from-purple-500 to-purple-600',
       onClick: () => toast.success('Video eğitimler açılıyor...'),
     },
   ]
@@ -80,20 +77,20 @@ const SupportTab: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { color: string; text: string }> = {
-      'open': { color: 'bg-blue-100 text-blue-700', text: 'Açık' },
-      'in-progress': { color: 'bg-orange-100 text-orange-700', text: 'Devam Ediyor' },
-      'resolved': { color: 'bg-green-100 text-green-700', text: 'Çözüldü' }
+      'open': { color: 'bg-neutral-800 text-white', text: 'Açık' },
+      'in-progress': { color: 'bg-neutral-600 text-white', text: 'Devam Ediyor' },
+      'resolved': { color: 'bg-neutral-900 text-white', text: 'Çözüldü' }
     }
-    return statusMap[status] || { color: 'bg-gray-100 text-gray-700', text: status }
+    return statusMap[status] || { color: 'bg-neutral-300 text-neutral-700', text: status }
   }
 
   const getPriorityBadge = (priority: string) => {
     const priorityMap: Record<string, { color: string; text: string }> = {
-      'high': { color: 'bg-red-100 text-red-700', text: 'Yüksek' },
-      'medium': { color: 'bg-yellow-100 text-yellow-700', text: 'Orta' },
-      'low': { color: 'bg-gray-100 text-gray-700', text: 'Düşük' }
+      'high': { color: 'bg-neutral-900 text-white', text: 'Yüksek' },
+      'medium': { color: 'bg-neutral-600 text-white', text: 'Orta' },
+      'low': { color: 'bg-neutral-300 text-neutral-700', text: 'Düşük' }
     }
-    return priorityMap[priority] || { color: 'bg-gray-100 text-gray-700', text: priority }
+    return priorityMap[priority] || { color: 'bg-neutral-300 text-neutral-700', text: priority }
   }
 
   return (
@@ -106,7 +103,6 @@ const SupportTab: React.FC = () => {
             title={action.title}
             description={action.description}
             icon={action.icon}
-            gradient={action.gradient}
             onClick={action.onClick}
           />
         ))}

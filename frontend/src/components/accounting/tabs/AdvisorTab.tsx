@@ -13,25 +13,21 @@ const AdvisorTab: React.FC = () => {
       title: 'Toplam Müşteri',
       value: '42',
       icon: Users,
-      gradient: 'from-blue-500 to-blue-600',
     },
     {
       title: 'Aktif Dönem',
       value: '2025/10',
       icon: Calendar,
-      gradient: 'from-purple-500 to-purple-600',
     },
     {
       title: 'Aylık İşlem',
       value: '1,247',
       icon: TrendingUp,
-      gradient: 'from-green-500 to-green-600',
     },
     {
       title: 'E-Belge Sayısı',
       value: '384',
       icon: FileText,
-      gradient: 'from-orange-500 to-orange-600',
     },
   ]
 
@@ -40,21 +36,18 @@ const AdvisorTab: React.FC = () => {
       title: 'XML Export',
       description: 'E-fatura XML dosyalarını dışa aktarın',
       icon: Download,
-      gradient: 'from-blue-500 to-blue-600',
       onClick: () => toast.success('XML export başlatılıyor...'),
     },
     {
       title: 'Excel Raporlar',
       description: 'Detaylı Excel raporları oluşturun',
       icon: FileText,
-      gradient: 'from-green-500 to-green-600',
       onClick: () => toast.success('Excel raporu hazırlanıyor...'),
     },
     {
       title: 'Toplu E-Belge Gönderimi',
       description: 'Birden fazla e-belgeyi aynı anda gönderin',
       icon: Send,
-      gradient: 'from-purple-500 to-purple-600',
       onClick: () => toast.success('Toplu gönderim başlatılıyor...'),
     },
   ]
@@ -93,7 +86,6 @@ const AdvisorTab: React.FC = () => {
               title={action.title}
               description={action.description}
               icon={action.icon}
-              gradient={action.gradient}
               onClick={action.onClick}
             />
           ))}
@@ -108,18 +100,18 @@ const AdvisorTab: React.FC = () => {
           {clients.map((client, index) => (
             <div
               key={index}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors"
             >
               <div>
-                <h3 className="font-semibold text-gray-900">{client.name}</h3>
-                <p className="text-sm text-gray-600">VKN: {client.vkn}</p>
+                <h3 className="font-semibold text-neutral-900">{client.name}</h3>
+                <p className="text-sm text-neutral-600">VKN: {client.vkn}</p>
               </div>
               
               <div className="flex items-center gap-3">
                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                   client.status === 'active' 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-orange-100 text-orange-700'
+                    ? 'bg-neutral-800 text-white' 
+                    : 'bg-neutral-300 text-neutral-700'
                 }`}>
                   {client.status === 'active' ? 'Aktif' : 'Beklemede'}
                 </span>

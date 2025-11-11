@@ -444,7 +444,7 @@ export default function BankReconciliation() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         {/* Total Bank Transactions */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 text-white">
+        <div className="bg-neutral-900 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <Building2 size={20} />
             <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.totalBankTransactions}</span>
@@ -453,7 +453,7 @@ export default function BankReconciliation() {
         </div>
 
         {/* Total System Transactions */}
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-4 text-white">
+        <div className="bg-neutral-800 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <FileText size={20} />
             <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.totalSystemTransactions}</span>
@@ -462,7 +462,7 @@ export default function BankReconciliation() {
         </div>
 
         {/* Matched */}
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-4 text-white">
+        <div className="bg-neutral-900 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <CheckCircle size={20} />
             <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.matchedCount}</span>
@@ -471,7 +471,7 @@ export default function BankReconciliation() {
         </div>
 
         {/* Unmatched Bank */}
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 text-white">
+        <div className="bg-neutral-700 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
             <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.unmatchedBankCount}</span>
@@ -480,7 +480,7 @@ export default function BankReconciliation() {
         </div>
 
         {/* Unmatched System */}
-        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-4 text-white">
+        <div className="bg-neutral-600 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-2">
             <AlertCircle size={20} />
             <span className={DESIGN_TOKENS?.typography?.stat.md}>{stats.unmatchedSystemCount}</span>
@@ -489,10 +489,10 @@ export default function BankReconciliation() {
         </div>
 
         {/* Difference */}
-        <div className={`bg-gradient-to-br rounded-2xl p-4 text-white ${
+        <div className={`rounded-2xl p-4 text-white ${
           Math.abs(stats.differenceAmount) < 0.01 
-            ? 'from-green-500 to-green-600' 
-            : 'from-red-500 to-red-600'
+            ? 'bg-neutral-900' 
+            : 'bg-neutral-700'
         }`}>
           <div className="flex items-center justify-between mb-2">
             {Math.abs(stats.differenceAmount) < 0.01 ? <CheckCircle size={20} /> : <XCircle size={20} />}
