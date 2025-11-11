@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users,
@@ -84,7 +84,7 @@ export default function CurrentAccountManagement() {
       setAccounts(data.data || data);
     } catch (error: any) {
       console.error('Failed to load current accounts:', error);
-      toast.error('Cari hesaplar yÃ¼klenemedi: ' + (error.message || 'Bilinmeyen hata'));
+      toast.error('Cari hesaplar yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ export default function CurrentAccountManagement() {
       }
     } catch (error: any) {
       console.error('Failed to load transactions:', error);
-      toast.error('Hareketler yÃ¼klenemedi: ' + (error.message || 'Bilinmeyen hata'));
+      toast.error('Hareketler yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
     } finally {
       setTransactionsLoading(false);
     }
@@ -123,7 +123,7 @@ export default function CurrentAccountManagement() {
   };
 
   const handleDeleteAccount = async (accountId: number) => {
-    if (!confirm('Bu cari hesabÄ± silmek istediÄŸinize emin misiniz?')) return;
+    if (!confirm('Bu cari hesabý silmek istediðinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`/api/accounting/current-accounts/${accountId}`, {
@@ -144,8 +144,8 @@ export default function CurrentAccountManagement() {
 
   const getAccountTypeBadge = (type: string) => {
     const config = type === 'CUSTOMER' 
-      ? { label: 'MÃ¼ÅŸteri', color: 'bg-blue-100 text-blue-700' }
-      : { label: 'TedarikÃ§i', color: 'bg-purple-100 text-purple-700' };
+      ? { label: 'Müþteri', color: 'bg-blue-100 text-neutral-800' }
+      : { label: 'Tedarikçi', color: 'bg-purple-100 text-neutral-800' };
 
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
@@ -155,8 +155,8 @@ export default function CurrentAccountManagement() {
   };
 
   const getBalanceColor = (balance: number): string => {
-    if (balance > 0) return 'text-green-600';
-    if (balance < 0) return 'text-red-600';
+    if (balance > 0) return 'text-neutral-900';
+    if (balance < 0) return 'text-neutral-800';
     return 'text-gray-600';
   };
 
@@ -196,10 +196,10 @@ export default function CurrentAccountManagement() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>
-            Cari Hesap YÃ¶netimi
+            Cari Hesap Yönetimi
           </h2>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
-            MÃ¼ÅŸteri ve tedarikÃ§i cari hesaplarÄ±nÄ± yÃ¶netin
+            Müþteri ve tedarikçi cari hesaplarýný yönetin
           </p>
         </div>
 
@@ -211,16 +211,16 @@ export default function CurrentAccountManagement() {
                 exportCurrentAccountsToExcel(accounts);
                 toast.success('Cari hesaplar Excel olarak indirildi');
               } catch (error) {
-                toast.error('Excel export baÅŸarÄ±sÄ±z oldu');
+                toast.error('Excel export baþarýsýz oldu');
               }
             }}
           >
             <Download className="w-4 h-4" />
-            Excel Ä°ndir
+            Excel Ýndir
           </button>
           <button
             className={button('primary', 'md', 'md')}
-            onClick={() => toast.success('Yeni cari hesap ekleme Ã¶zelliÄŸi yakÄ±nda eklenecek')}
+            onClick={() => toast.success('Yeni cari hesap ekleme özelliði yakýnda eklenecek')}
           >
             <Plus className="w-4 h-4" />
             Yeni Cari Hesap
@@ -232,7 +232,7 @@ export default function CurrentAccountManagement() {
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <Users className="w-8 h-8 text-blue-500" />
+            <Users className="w-8 h-8 text-neutral-900" />
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {filteredAccounts.length}
@@ -241,27 +241,27 @@ export default function CurrentAccountManagement() {
             Toplam Cari
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.xs} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>
-            {customerCount} MÃ¼ÅŸteri, {supplierCount} TedarikÃ§i
+            {customerCount} Müþteri, {supplierCount} Tedarikçi
           </p>
         </div>
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="w-8 h-8 text-green-500" />
+            <TrendingUp className="w-8 h-8 text-neutral-900" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
             {formatCurrency(totalDebit)}
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
-            Toplam BorÃ§
+            Toplam Borç
           </p>
         </div>
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <TrendingDown className="w-8 h-8 text-red-500" />
+            <TrendingDown className="w-8 h-8 text-neutral-800" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-600`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-800`}>
             {formatCurrency(totalCredit)}
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
@@ -271,7 +271,7 @@ export default function CurrentAccountManagement() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <DollarSign className="w-8 h-8 text-purple-500" />
+            <DollarSign className="w-8 h-8 text-neutral-900" />
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${getBalanceColor(totalBalance)}`}>
             {formatCurrency(totalBalance)}
@@ -283,13 +283,13 @@ export default function CurrentAccountManagement() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <Clock className="w-8 h-8 text-orange-500" />
+            <Clock className="w-8 h-8 text-neutral-900" />
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.md} ${DESIGN_TOKENS?.colors?.text.primary}`}>
             {filteredAccounts.filter((a) => Math.abs(a.balance) > 0).length}
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
-            AÃ§Ä±k Bakiye
+            Açýk Bakiye
           </p>
         </div>
       </div>
@@ -302,7 +302,7 @@ export default function CurrentAccountManagement() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Cari adÄ±, kodu veya vergi no ara..."
+              placeholder="Cari adý, kodu veya vergi no ara..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -315,9 +315,9 @@ export default function CurrentAccountManagement() {
             onChange={(e) => setTypeFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="ALL">TÃ¼m Tipler</option>
-            <option value="CUSTOMER">MÃ¼ÅŸteri</option>
-            <option value="SUPPLIER">TedarikÃ§i</option>
+            <option value="ALL">Tüm Tipler</option>
+            <option value="CUSTOMER">Müþteri</option>
+            <option value="SUPPLIER">Tedarikçi</option>
           </select>
 
           {/* Balance Filter */}
@@ -326,10 +326,10 @@ export default function CurrentAccountManagement() {
             onChange={(e) => setBalanceFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="ALL">TÃ¼m Bakiyeler</option>
-            <option value="POSITIVE">AlacaklÄ± (Pozitif)</option>
-            <option value="NEGATIVE">BorÃ§lu (Negatif)</option>
-            <option value="ZERO">SÄ±fÄ±r Bakiye</option>
+            <option value="ALL">Tüm Bakiyeler</option>
+            <option value="POSITIVE">Alacaklý (Pozitif)</option>
+            <option value="NEGATIVE">Borçlu (Negatif)</option>
+            <option value="ZERO">Sýfýr Bakiye</option>
           </select>
         </div>
 
@@ -352,11 +352,11 @@ export default function CurrentAccountManagement() {
           </button>
 
           <button
-            onClick={() => toast.success('Excel export Ã¶zelliÄŸi yakÄ±nda eklenecek')}
+            onClick={() => toast.success('Excel export özelliði yakýnda eklenecek')}
             className={button('secondary', 'sm', 'md')}
           >
             <Download className="w-4 h-4" />
-            Excel Ä°ndir
+            Excel Ýndir
           </button>
         </div>
       </div>
@@ -371,12 +371,12 @@ export default function CurrentAccountManagement() {
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
             <Users className="w-16 h-16 text-gray-300 mb-4" />
             <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
-              Cari Hesap BulunamadÄ±
+              Cari Hesap Bulunamadý
             </p>
             <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
               {searchQuery || typeFilter !== 'ALL' || balanceFilter !== 'ALL'
-                ? 'Arama kriterlerinize uygun cari hesap bulunamadÄ±'
-                : 'HenÃ¼z cari hesap eklenmemiÅŸ'}
+                ? 'Arama kriterlerinize uygun cari hesap bulunamadý'
+                : 'Henüz cari hesap eklenmemiþ'}
             </p>
           </div>
         ) : (
@@ -388,13 +388,13 @@ export default function CurrentAccountManagement() {
                     Cari Kodu
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Cari AdÄ±
+                    Cari Adý
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Tip
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    BorÃ§
+                    Borç
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Alacak
@@ -403,7 +403,7 @@ export default function CurrentAccountManagement() {
                     Bakiye
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ä°ÅŸlemler
+                    Ýþlemler
                   </th>
                 </tr>
               </thead>
@@ -434,12 +434,12 @@ export default function CurrentAccountManagement() {
                       {getAccountTypeBadge(account.type)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-900 font-medium`}>
                         {formatCurrency(account.totalDebit)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800 font-medium`}>
                         {formatCurrency(account.totalCredit)}
                       </span>
                     </td>
@@ -452,21 +452,21 @@ export default function CurrentAccountManagement() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleViewDetail(account)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="DetaylarÄ± GÃ¶rÃ¼ntÃ¼le"
+                          className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
+                          title="Detaylarý Görüntüle"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => toast.success('DÃ¼zenleme Ã¶zelliÄŸi yakÄ±nda eklenecek')}
-                          className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
-                          title="DÃ¼zenle"
+                          onClick={() => toast.success('Düzenleme özelliði yakýnda eklenecek')}
+                          className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
+                          title="Düzenle"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteAccount(account.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-2 text-neutral-800 hover:bg-neutral-50 rounded-lg transition-colors"
                           title="Sil"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -490,7 +490,7 @@ export default function CurrentAccountManagement() {
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>
-                    Cari Hesap DetayÄ±
+                    Cari Hesap Detayý
                   </h3>
                   <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
                     {selectedAccount.code} - {selectedAccount.name}
@@ -545,9 +545,9 @@ export default function CurrentAccountManagement() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className={card('md', 'md', 'default', 'lg')}>
                   <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-2`}>
-                    Toplam BorÃ§
+                    Toplam Borç
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-600`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                     {formatCurrency(selectedAccount.totalDebit)}
                   </p>
                 </div>
@@ -555,7 +555,7 @@ export default function CurrentAccountManagement() {
                   <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-2`}>
                     Toplam Alacak
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-red-600`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-800`}>
                     {formatCurrency(selectedAccount.totalCredit)}
                   </p>
                 </div>
@@ -581,7 +581,7 @@ export default function CurrentAccountManagement() {
                   </div>
                 ) : !selectedAccount.transactions || selectedAccount.transactions.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    HenÃ¼z hareket bulunmamaktadÄ±r
+                    Henüz hareket bulunmamaktadýr
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -592,13 +592,13 @@ export default function CurrentAccountManagement() {
                             Tarih
                           </th>
                           <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                            AÃ§Ä±klama
+                            Açýklama
                           </th>
                           <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                             Fatura No
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                            BorÃ§
+                            Borç
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                             Alacak
@@ -620,10 +620,10 @@ export default function CurrentAccountManagement() {
                             <td className="px-4 py-3 text-sm text-gray-600 text-center">
                               {txn.invoiceNumber || '-'}
                             </td>
-                            <td className="px-4 py-3 text-sm text-green-600 font-medium text-right">
+                            <td className="px-4 py-3 text-sm text-neutral-900 font-medium text-right">
                               {txn.type === 'DEBIT' ? formatCurrency(txn.amount) : '-'}
                             </td>
-                            <td className="px-4 py-3 text-sm text-red-600 font-medium text-right">
+                            <td className="px-4 py-3 text-sm text-neutral-800 font-medium text-right">
                               {txn.type === 'CREDIT' ? formatCurrency(txn.amount) : '-'}
                             </td>
                             <td className={`px-4 py-3 text-sm font-medium text-right ${getBalanceColor(txn.balance)}`}>
@@ -647,11 +647,11 @@ export default function CurrentAccountManagement() {
                 Kapat
               </button>
               <button
-                onClick={() => toast.success('Ekstre yazdÄ±rma Ã¶zelliÄŸi yakÄ±nda eklenecek')}
+                onClick={() => toast.success('Ekstre yazdýrma özelliði yakýnda eklenecek')}
                 className={button('primary', 'md', 'md')}
               >
                 <FileText className="w-4 h-4" />
-                Ekstre YazdÄ±r
+                Ekstre Yazdýr
               </button>
             </div>
           </div>

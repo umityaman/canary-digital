@@ -1,4 +1,4 @@
-ï»¿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Search, Download, Filter, Truck, Package, Eye, Plus, RefreshCw,
   FileText, Calendar, User, MapPin, CheckCircle, Clock, X, ArrowRight
@@ -51,7 +51,7 @@ export default function DeliveryNoteList() {
   const loadDeliveryNotes = async () => {
     setLoading(true)
     try {
-      // Mock data - gerÃ§ek API geldiÄŸinde deÄŸiÅŸtirilecek
+      // Mock data - gerçek API geldiðinde deðiþtirilecek
       const mockData: DeliveryNote[] = [
         {
           id: 1,
@@ -59,9 +59,9 @@ export default function DeliveryNoteList() {
           orderId: 1,
           orderNumber: 'ORD-2024-001',
           customerId: 2,
-          customerName: 'ABC ProdÃ¼ksiyon',
+          customerName: 'ABC Prodüksiyon',
           deliveryDate: '2024-11-01',
-          deliveryAddress: 'BeyoÄŸlu, Ä°stanbul',
+          deliveryAddress: 'Beyoðlu, Ýstanbul',
           status: 'delivered',
           invoiceId: 1,
           invoiceNumber: 'INV-2024-001',
@@ -69,7 +69,7 @@ export default function DeliveryNoteList() {
             { description: 'Canon EOS 5D Mark IV', quantity: 2, unit: 'Adet' },
             { description: 'Sony A7 III', quantity: 1, unit: 'Adet' }
           ],
-          notes: 'Dikkatli taÅŸÄ±nsÄ±n',
+          notes: 'Dikkatli taþýnsýn',
           totalItems: 3,
           createdAt: '2024-10-28'
         },
@@ -81,7 +81,7 @@ export default function DeliveryNoteList() {
           customerId: 3,
           customerName: 'XYZ Film',
           deliveryDate: '2024-11-02',
-          deliveryAddress: 'KadÄ±kÃ¶y, Ä°stanbul',
+          deliveryAddress: 'Kadýköy, Ýstanbul',
           status: 'shipped',
           invoiceId: null,
           invoiceNumber: null,
@@ -99,16 +99,16 @@ export default function DeliveryNoteList() {
           orderId: null,
           orderNumber: null,
           customerId: 4,
-          customerName: 'Test MÃ¼ÅŸteri',
+          customerName: 'Test Müþteri',
           deliveryDate: '2024-11-03',
-          deliveryAddress: 'ÅžiÅŸli, Ä°stanbul',
+          deliveryAddress: 'Þiþli, Ýstanbul',
           status: 'prepared',
           invoiceId: null,
           invoiceNumber: null,
           items: [
-            { description: 'IÅŸÄ±k Seti', quantity: 1, unit: 'Set' }
+            { description: 'Iþýk Seti', quantity: 1, unit: 'Set' }
           ],
-          notes: 'AkÅŸam teslimat',
+          notes: 'Akþam teslimat',
           totalItems: 1,
           createdAt: '2024-10-30'
         }
@@ -117,7 +117,7 @@ export default function DeliveryNoteList() {
       setDeliveryNotes(mockData)
     } catch (error: any) {
       console.error('Failed to load delivery notes:', error)
-      toast.error('Ä°rsaliyeler yÃ¼klenemedi')
+      toast.error('Ýrsaliyeler yüklenemedi')
     } finally {
       setLoading(false)
     }
@@ -174,26 +174,26 @@ export default function DeliveryNoteList() {
 
   const handleConvertToInvoice = async (note: DeliveryNote) => {
     if (note.invoiceId) {
-      toast.error('Bu irsaliye zaten faturalandÄ±rÄ±lmÄ±ÅŸ')
+      toast.error('Bu irsaliye zaten faturalandýrýlmýþ')
       return
     }
 
-    if (!confirm(`${note.deliveryNumber} numaralÄ± irsaliye iÃ§in fatura oluÅŸturulsun mu?`)) {
+    if (!confirm(`${note.deliveryNumber} numaralý irsaliye için fatura oluþturulsun mu?`)) {
       return
     }
 
     try {
-      // Mock - gerÃ§ek API ile deÄŸiÅŸtirilecek
-      toast.success('Ä°rsaliye faturaya dÃ¶nÃ¼ÅŸtÃ¼rÃ¼ldÃ¼')
+      // Mock - gerçek API ile deðiþtirilecek
+      toast.success('Ýrsaliye faturaya dönüþtürüldü')
       loadDeliveryNotes()
     } catch (error: any) {
       console.error('Failed to convert to invoice:', error)
-      toast.error('Fatura oluÅŸturulamadÄ±')
+      toast.error('Fatura oluþturulamadý')
     }
   }
 
   const handleDownloadPDF = (note: DeliveryNote) => {
-    toast.info('PDF indirme Ã¶zelliÄŸi yakÄ±nda eklenecek')
+    toast.info('PDF indirme özelliði yakýnda eklenecek')
   }
 
   const calculateStats = () => {
@@ -239,7 +239,7 @@ export default function DeliveryNoteList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Ä°rsaliye YÃ¶netimi</h2>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Ýrsaliye Yönetimi</h2>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>Sevkiyat ve teslimat takibi</p>
         </div>
         <div className="flex gap-2">
@@ -255,7 +255,7 @@ export default function DeliveryNoteList() {
             className={cx(button('md', 'primary', 'md'), 'gap-2')}
           >
             <Plus size={18} />
-            <span className="hidden sm:inline">Yeni Ä°rsaliye</span>
+            <span className="hidden sm:inline">Yeni Ýrsaliye</span>
           </button>
         </div>
       </div>
@@ -264,50 +264,50 @@ export default function DeliveryNoteList() {
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200')}>
           <div className="flex items-center justify-between mb-2">
-            <FileText className="text-blue-600" size={20} />
+            <FileText className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900`}>{stats.total}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-blue-700`}>Toplam Ä°rsaliye</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Toplam Ýrsaliye</p>
         </div>
 
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200')}>
           <div className="flex items-center justify-between mb-2">
-            <Package className="text-indigo-600" size={20} />
+            <Package className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-indigo-900`}>{stats.prepared}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-indigo-700`}>HazÄ±rlandÄ±</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Hazýrlandý</p>
         </div>
 
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200')}>
           <div className="flex items-center justify-between mb-2">
-            <Truck className="text-orange-600" size={20} />
+            <Truck className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-orange-900`}>{stats.shipped}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-orange-700`}>Yolda</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Yolda</p>
         </div>
 
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-green-50 to-green-100 border-green-200')}>
           <div className="flex items-center justify-between mb-2">
-            <CheckCircle className="text-green-600" size={20} />
+            <CheckCircle className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-900`}>{stats.delivered}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-700`}>Teslim Edildi</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Teslim Edildi</p>
         </div>
 
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200')}>
           <div className="flex items-center justify-between mb-2">
-            <FileText className="text-purple-600" size={20} />
+            <FileText className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-900`}>{stats.invoiced}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-purple-700`}>FaturalandÄ±</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Faturalandý</p>
         </div>
 
         <div className={cx(card('sm', 'sm', 'subtle', 'lg'), 'bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200')}>
           <div className="flex items-center justify-between mb-2">
-            <Clock className="text-yellow-600" size={20} />
+            <Clock className="text-neutral-900" size={20} />
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-yellow-900`}>{stats.pending}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-yellow-700`}>Fatura Bekliyor</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Fatura Bekliyor</p>
         </div>
       </div>
 
@@ -320,7 +320,7 @@ export default function DeliveryNoteList() {
               <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${DESIGN_TOKENS?.colors?.text.muted}`} size={20} />
               <input
                 type="text"
-                placeholder="Ä°rsaliye no, mÃ¼ÅŸteri, sipariÅŸ no, adres ara..."
+                placeholder="Ýrsaliye no, müþteri, sipariþ no, adres ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
@@ -334,11 +334,11 @@ export default function DeliveryNoteList() {
             onChange={(e) => setFilterStatus(e.target.value as any)}
             className={input('md', 'default', undefined, 'md')}
           >
-            <option value="all">TÃ¼m Durumlar</option>
-            <option value="prepared">HazÄ±rlandÄ±</option>
+            <option value="all">Tüm Durumlar</option>
+            <option value="prepared">Hazýrlandý</option>
             <option value="shipped">Yolda</option>
             <option value="delivered">Teslim Edildi</option>
-            <option value="cancelled">Ä°ptal</option>
+            <option value="cancelled">Ýptal</option>
           </select>
         </div>
       </div>
@@ -346,20 +346,20 @@ export default function DeliveryNoteList() {
       {/* Delivery Notes List */}
       <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">YÃ¼kleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : filteredNotes.length === 0 ? (
           <div className="p-12 text-center">
             <Truck className="mx-auto text-neutral-400 mb-3" size={48} />
             <p className="text-neutral-600">
               {searchTerm || filterStatus !== 'all'
-                ? 'Arama kriterlerine uygun irsaliye bulunamadÄ±'
-                : 'HenÃ¼z irsaliye bulunmuyor'}
+                ? 'Arama kriterlerine uygun irsaliye bulunamadý'
+                : 'Henüz irsaliye bulunmuyor'}
             </p>
             <button
               onClick={() => setShowForm(true)}
               className="mt-4 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
             >
-              Ä°lk Ä°rsaliyeyi OluÅŸtur
+              Ýlk Ýrsaliyeyi Oluþtur
             </button>
           </div>
         ) : (
@@ -368,10 +368,10 @@ export default function DeliveryNoteList() {
               <thead className="bg-neutral-50 border-b border-neutral-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Ä°rsaliye Bilgileri
+                    Ýrsaliye Bilgileri
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    MÃ¼ÅŸteri
+                    Müþteri
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
                     Teslimat
@@ -386,7 +386,7 @@ export default function DeliveryNoteList() {
                     Fatura
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Ä°ÅŸlemler
+                    Ýþlemler
                   </th>
                 </tr>
               </thead>
@@ -405,7 +405,7 @@ export default function DeliveryNoteList() {
                             {formatDate(note.deliveryDate)}
                           </span>
                           {note.orderNumber && (
-                            <span className="flex items-center gap-1 text-blue-600">
+                            <span className="flex items-center gap-1 text-neutral-900">
                               <Package size={12} />
                               {note.orderNumber}
                             </span>
@@ -433,12 +433,12 @@ export default function DeliveryNoteList() {
                     </td>
                     <td className="px-6 py-4 text-center">
                       {note.invoiceNumber ? (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs font-medium">
                           <CheckCircle size={12} />
                           {note.invoiceNumber}
                         </span>
                       ) : (
-                        <span className="text-xs text-neutral-500">â€”</span>
+                        <span className="text-xs text-neutral-500">—</span>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -458,18 +458,18 @@ export default function DeliveryNoteList() {
                           <button
                             onClick={() => handleConvertToInvoice(note)}
                             className="p-2 hover:bg-purple-50 rounded-lg transition-colors"
-                            title="Faturaya Ã‡evir"
+                            title="Faturaya Çevir"
                           >
-                            <ArrowRight size={18} className="text-purple-600" />
+                            <ArrowRight size={18} className="text-neutral-900" />
                           </button>
                         )}
                         
                         <button
                           onClick={() => handleDownloadPDF(note)}
                           className="p-2 hover:bg-green-50 rounded-lg transition-colors"
-                          title="PDF Ä°ndir"
+                          title="PDF Ýndir"
                         >
-                          <Download size={18} className="text-green-600" />
+                          <Download size={18} className="text-neutral-900" />
                         </button>
                       </div>
                     </td>
@@ -484,7 +484,7 @@ export default function DeliveryNoteList() {
       {/* Results Info */}
       {!loading && filteredNotes.length > 0 && (
         <div className="text-sm text-neutral-600 text-center">
-          {filteredNotes.length} irsaliye gÃ¶steriliyor
+          {filteredNotes.length} irsaliye gösteriliyor
           {deliveryNotes.length !== filteredNotes.length && ` (toplam ${deliveryNotes.length} irsaliye)`}
         </div>
       )}

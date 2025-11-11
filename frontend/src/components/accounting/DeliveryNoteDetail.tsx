@@ -173,7 +173,7 @@ export default function DeliveryNoteDetail({
               {note.orderId && (
                 <div>
                   <div className="text-sm text-neutral-600 mb-1">Sipariş No</div>
-                  <div className="font-semibold text-blue-600">{note.orderNumber}</div>
+                  <div className="font-semibold text-neutral-900">{note.orderNumber}</div>
                 </div>
               )}
             </div>
@@ -218,7 +218,7 @@ export default function DeliveryNoteDetail({
               </h3>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-purple-600">Fatura No:</span>
+                  <span className="text-sm text-neutral-900">Fatura No:</span>
                   <span className="font-semibold text-purple-900">{note.invoiceNumber}</span>
                 </div>
                 <div className="mt-3">

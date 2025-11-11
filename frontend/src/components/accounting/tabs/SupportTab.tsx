@@ -1,4 +1,4 @@
-ï»¿import React from 'react'
+import React from 'react'
 import { 
   MessageCircle, BookOpen, Video, HelpCircle, Send, Clock
 } from 'lucide-react'
@@ -9,22 +9,22 @@ import { card, button, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
 const SupportTab: React.FC = () => {
   const quickActions = [
     {
-      title: 'CanlÄ± Destek',
-      description: 'AnlÄ±k destek alÄ±n',
+      title: 'Canlı Destek',
+      description: 'Anlık destek alın',
       icon: MessageCircle,
-      onClick: () => toast.success('CanlÄ± destek baÅŸlatÄ±lÄ±yor...'),
+      onClick: () => toast.success('Canlı destek başlatılıyor...'),
     },
     {
-      title: 'DokÃ¼mantasyon',
-      description: 'KullanÄ±m kÄ±lavuzlarÄ±nÄ± inceleyin',
+      title: 'Dokümantasyon',
+      description: 'Kullanım kılavuzlarını inceleyin',
       icon: BookOpen,
-      onClick: () => toast.success('DokÃ¼mantasyon aÃ§Ä±lÄ±yor...'),
+      onClick: () => toast.success('Dokümantasyon açılıyor...'),
     },
     {
-      title: 'Video EÄŸitimler',
-      description: 'Video eÄŸitimlerimize gÃ¶z atÄ±n',
+      title: 'Video Eğitimler',
+      description: 'Video eğitimlerimize göz atın',
       icon: Video,
-      onClick: () => toast.success('Video eÄŸitimler aÃ§Ä±lÄ±yor...'),
+      onClick: () => toast.success('Video eğitimler açılıyor...'),
     },
   ]
 
@@ -45,7 +45,7 @@ const SupportTab: React.FC = () => {
     },
     {
       id: '#SUP-2025-003',
-      subject: 'Fatura dÃ¼zenleme hatasÄ±',
+      subject: 'Fatura düzenleme hatası',
       status: 'resolved',
       priority: 'low',
       date: '2025-10-28',
@@ -54,41 +54,41 @@ const SupportTab: React.FC = () => {
 
   const faq = [
     {
-      question: 'E-fatura nasÄ±l kesilir?',
-      answer: 'Faturalar sekmesinden yeni fatura oluÅŸtur butonuna tÄ±klayarak e-fatura kesebilirsiniz.',
+      question: 'E-fatura nasıl kesilir?',
+      answer: 'Faturalar sekmesinden yeni fatura oluştur butonuna tıklayarak e-fatura kesebilirsiniz.',
     },
     {
-      question: 'Ekstre nasÄ±l paylaÅŸÄ±lÄ±r?',
-      answer: 'AraÃ§lar > Ekstre PaylaÅŸÄ±mÄ± menÃ¼sÃ¼nden mÃ¼ÅŸterinizi seÃ§erek ekstre gÃ¶nderebilirsiniz.',
+      question: 'Ekstre nasıl paylaşılır?',
+      answer: 'Araçlar > Ekstre Paylaşımı menüsünden müşterinizi seçerek ekstre gönderebilirsiniz.',
     },
     {
-      question: 'HatÄ±rlatma nasÄ±l kurulur?',
-      answer: 'AraÃ§lar > HatÄ±rlatmalar sekmesinden yeni hatÄ±rlatma oluÅŸturabilirsiniz.',
+      question: 'Hatırlatma nasıl kurulur?',
+      answer: 'Araçlar > Hatırlatmalar sekmesinden yeni hatırlatma oluşturabilirsiniz.',
     },
     {
-      question: 'Raporlar nasÄ±l dÄ±ÅŸa aktarÄ±lÄ±r?',
-      answer: 'Raporlar sekmesinde Excel veya PDF butonlarÄ±nÄ± kullanarak raporlarÄ±nÄ±zÄ± indirebilirsiniz.',
+      question: 'Raporlar nasıl dışa aktarılır?',
+      answer: 'Raporlar sekmesinde Excel veya PDF butonlarını kullanarak raporlarınızı indirebilirsiniz.',
     },
     {
-      question: 'Barkod okuyucu nasÄ±l kullanÄ±lÄ±r?',
-      answer: 'AraÃ§lar > Barkod Okuyucu menÃ¼sÃ¼nden kamera eriÅŸimi vererek barkod okutabilirsiniz.',
+      question: 'Barkod okuyucu nasıl kullanılır?',
+      answer: 'Araçlar > Barkod Okuyucu menüsünden kamera erişimi vererek barkod okutabilirsiniz.',
     },
   ]
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { color: string; text: string }> = {
-      'open': { color: 'bg-neutral-800 text-white', text: 'AÃ§Ä±k' },
+      'open': { color: 'bg-neutral-800 text-white', text: 'Açık' },
       'in-progress': { color: 'bg-neutral-600 text-white', text: 'Devam Ediyor' },
-      'resolved': { color: 'bg-neutral-900 text-white', text: 'Ã‡Ã¶zÃ¼ldÃ¼' }
+      'resolved': { color: 'bg-neutral-900 text-white', text: 'Çözüldü' }
     }
     return statusMap[status] || { color: 'bg-neutral-300 text-neutral-700', text: status }
   }
 
   const getPriorityBadge = (priority: string) => {
     const priorityMap: Record<string, { color: string; text: string }> = {
-      'high': { color: 'bg-neutral-900 text-white', text: 'YÃ¼ksek' },
+      'high': { color: 'bg-neutral-900 text-white', text: 'Yüksek' },
       'medium': { color: 'bg-neutral-600 text-white', text: 'Orta' },
-      'low': { color: 'bg-neutral-300 text-neutral-700', text: 'DÃ¼ÅŸÃ¼k' }
+      'low': { color: 'bg-neutral-300 text-neutral-700', text: 'Düşük' }
     }
     return priorityMap[priority] || { color: 'bg-neutral-300 text-neutral-700', text: priority }
   }
@@ -113,7 +113,7 @@ const SupportTab: React.FC = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Destek Talepleri</h2>
           <button
-            onClick={() => toast.success('Yeni destek talebi oluÅŸturuluyor...')}
+            onClick={() => toast.success('Yeni destek talebi oluşturuluyor...')}
             className={cx(button('md', 'primary'), 'gap-2')}
           >
             <Send size={18} />
@@ -147,7 +147,7 @@ const SupportTab: React.FC = () => {
                   </p>
                 </div>
                 <button
-                  onClick={() => toast.success(`${ticket.id} detaylarÄ± gÃ¶steriliyor...`)}
+                  onClick={() => toast.success(`${ticket.id} detayları gösteriliyor...`)}
                   className={button('sm', 'primary')}
                 >
                   Detay
@@ -161,15 +161,15 @@ const SupportTab: React.FC = () => {
       {/* FAQ */}
       <div className={card('md', 'sm')}>
         <div className="flex items-center gap-3 mb-6">
-          <HelpCircle className="text-blue-600" size={24} />
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>SÄ±k Sorulan Sorular</h2>
+          <HelpCircle className="text-neutral-900" size={24} />
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Sık Sorulan Sorular</h2>
         </div>
 
         <div className="space-y-4">
           {faq.map((item, index) => (
             <div key={index} className="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
-              <h3 className="font-semibold text-gray-900 mb-2">â“ {item.question}</h3>
-              <p className="text-gray-600 text-sm">ğŸ’¡ {item.answer}</p>
+              <h3 className="font-semibold text-gray-900 mb-2">? {item.question}</h3>
+              <p className="text-gray-600 text-sm">?? {item.answer}</p>
             </div>
           ))}
         </div>

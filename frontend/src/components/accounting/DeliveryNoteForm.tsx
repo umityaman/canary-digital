@@ -264,11 +264,11 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
               {selectedOrder && (
                 <div className="bg-blue-50 rounded-xl p-4 space-y-2 text-sm">
                   <div>
-                    <span className="text-blue-600">Sipariş:</span>
+                    <span className="text-neutral-900">Sipariş:</span>
                     <span className="ml-2 font-medium text-blue-900">{selectedOrder.orderNumber}</span>
                   </div>
                   <div>
-                    <span className="text-blue-600">Kalem Sayısı:</span>
+                    <span className="text-neutral-900">Kalem Sayısı:</span>
                     <span className="ml-2 font-medium text-blue-900">{selectedOrder.items.length}</span>
                   </div>
                 </div>
@@ -400,7 +400,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
                         onClick={() => handleRemoveItem(item.id)}
                         className="p-1 hover:bg-red-100 rounded-lg transition-colors"
                       >
-                        <Trash2 size={16} className="text-red-600" />
+                        <Trash2 size={16} className="text-neutral-800" />
                       </button>
                     )}
                   </div>

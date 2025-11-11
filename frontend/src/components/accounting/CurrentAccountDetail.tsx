@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -112,7 +112,7 @@ export default function CurrentAccountDetail() {
       setAccount(data.data || data);
     } catch (error: any) {
       console.error('Failed to load account:', error);
-      toast.error('Cari hesap yÃ¼klenemedi');
+      toast.error('Cari hesap yüklenemedi');
       navigate('/accounting');
     } finally {
       setLoading(false);
@@ -148,7 +148,7 @@ export default function CurrentAccountDetail() {
       setTotalPages(data.pagination?.pages || 1);
     } catch (error: any) {
       console.error('Failed to load transactions:', error);
-      toast.error('Hareketler yÃ¼klenemedi');
+      toast.error('Hareketler yüklenemedi');
     } finally {
       setTransactionsLoading(false);
     }
@@ -160,19 +160,19 @@ export default function CurrentAccountDetail() {
       exportCurrentAccountTransactionsToExcel(account, transactions);
       toast.success('Cari ekstre Excel olarak indirildi');
     } catch (error) {
-      toast.error('Excel export baÅŸarÄ±sÄ±z oldu');
+      toast.error('Excel export baþarýsýz oldu');
     }
   };
 
   const handleSendStatement = () => {
-    toast.success('Email gÃ¶nderme Ã¶zelliÄŸi yakÄ±nda eklenecek');
+    toast.success('Email gönderme özelliði yakýnda eklenecek');
   };
 
   const getAccountTypeBadge = (type: string) => {
     const config =
       type === 'CUSTOMER'
-        ? { label: 'MÃ¼ÅŸteri', color: 'bg-blue-100 text-blue-700' }
-        : { label: 'TedarikÃ§i', color: 'bg-purple-100 text-purple-700' };
+        ? { label: 'Müþteri', color: 'bg-neutral-100 text-neutral-800' }
+        : { label: 'Tedarikçi', color: 'bg-neutral-100 text-neutral-800' };
 
     return (
       <span className={`px-3 py-1 rounded-full text-sm font-medium ${config.color}`}>
@@ -182,9 +182,7 @@ export default function CurrentAccountDetail() {
   };
 
   const getBalanceColor = (balance: number): string => {
-    if (balance > 0) return 'text-green-600';
-    if (balance < 0) return 'text-red-600';
-    return 'text-gray-600';
+    return 'text-neutral-900';
   };
 
   const formatCurrency = (amount: number): string => {
@@ -256,14 +254,14 @@ export default function CurrentAccountDetail() {
             className={button('secondary', 'md', 'md')}
           >
             <Mail className="w-4 h-4" />
-            Ekstre GÃ¶nder
+            Ekstre Gönder
           </button>
           <button
             onClick={handleExportStatement}
             className={button('primary', 'md', 'md')}
           >
             <Download className="w-4 h-4" />
-            Ekstre Ä°ndir
+            Ekstre Ýndir
           </button>
         </div>
       </div>
@@ -272,25 +270,25 @@ export default function CurrentAccountDetail() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingUp className="w-8 h-8 text-green-500" />
+            <TrendingUp className="w-8 h-8 text-neutral-900" />
           </div>
           <p
-            className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}
+            className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}
           >
             {formatCurrency(account.totalDebit)}
           </p>
           <p
             className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
-            Toplam BorÃ§
+            Toplam Borç
           </p>
         </div>
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingDown className="w-8 h-8 text-red-500" />
+            <TrendingDown className="w-8 h-8 text-neutral-800" />
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-800 mb-1`}>
             {formatCurrency(account.totalCredit)}
           </p>
           <p
@@ -302,7 +300,7 @@ export default function CurrentAccountDetail() {
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <DollarSign className="w-8 h-8 text-purple-500" />
+            <DollarSign className="w-8 h-8 text-neutral-900" />
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${getBalanceColor(
@@ -317,21 +315,21 @@ export default function CurrentAccountDetail() {
             Net Bakiye
           </p>
           {account.balance > 0 && (
-            <p className="text-xs text-green-600 mt-1">AlacaklÄ±</p>
+            <p className="text-xs text-neutral-900 mt-1">Alacaklý</p>
           )}
           {account.balance < 0 && (
-            <p className="text-xs text-red-600 mt-1">BorÃ§lu</p>
+            <p className="text-xs text-neutral-800 mt-1">Borçlu</p>
           )}
         </div>
 
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <CreditCard className="w-8 h-8 text-blue-500" />
+            <CreditCard className="w-8 h-8 text-neutral-900" />
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
           >
-            {account.creditLimit ? formatCurrency(account.creditLimit) : 'âˆž'}
+            {account.creditLimit ? formatCurrency(account.creditLimit) : '?'}
           </p>
           <p
             className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
@@ -340,7 +338,7 @@ export default function CurrentAccountDetail() {
           </p>
           {account.creditLimit && account.balance < 0 && (
             <p className="text-xs text-gray-600 mt-1">
-              KullanÄ±lan: {formatCurrency(Math.abs(account.balance))}
+              Kullanýlan: {formatCurrency(Math.abs(account.balance))}
             </p>
           )}
         </div>
@@ -353,7 +351,7 @@ export default function CurrentAccountDetail() {
           <h3
             className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}
           >
-            Ä°letiÅŸim Bilgileri
+            Ýletiþim Bilgileri
           </h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
@@ -444,12 +442,12 @@ export default function CurrentAccountDetail() {
               <p
                 className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
               >
-                Ã–deme Vadesi
+                Ödeme Vadesi
               </p>
               <p
                 className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
               >
-                {account.paymentTerm ? `${account.paymentTerm} gÃ¼n` : 'TanÄ±msÄ±z'}
+                {account.paymentTerm ? `${account.paymentTerm} gün` : 'Tanýmsýz'}
               </p>
             </div>
 
@@ -457,7 +455,7 @@ export default function CurrentAccountDetail() {
               <p
                 className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
               >
-                Hesap AÃ§Ä±lÄ±ÅŸ Tarihi
+                Hesap Açýlýþ Tarihi
               </p>
               <p
                 className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
@@ -470,14 +468,14 @@ export default function CurrentAccountDetail() {
               <p
                 className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
               >
-                Son Ä°ÅŸlem Tarihi
+                Son Ýþlem Tarihi
               </p>
               <p
                 className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
               >
                 {account.lastTransactionDate
                   ? formatDate(account.lastTransactionDate)
-                  : 'HenÃ¼z iÅŸlem yok'}
+                  : 'Henüz iþlem yok'}
               </p>
             </div>
 
@@ -491,9 +489,9 @@ export default function CurrentAccountDetail() {
                 className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
               >
                 {account.isActive ? (
-                  <span className="text-green-600 font-medium">âœ“ Aktif</span>
+                  <span className="text-neutral-900 font-medium">? Aktif</span>
                 ) : (
-                  <span className="text-red-600 font-medium">âœ— Pasif</span>
+                  <span className="text-neutral-800 font-medium">? Pasif</span>
                 )}
               </p>
             </div>
@@ -510,7 +508,7 @@ export default function CurrentAccountDetail() {
             Hesap Hareketleri
           </h3>
           <button
-            onClick={() => toast.success('Yeni hareket ekleme Ã¶zelliÄŸi yakÄ±nda')}
+            onClick={() => toast.success('Yeni hareket ekleme özelliði yakýnda')}
             className={button('secondary', 'sm', 'md')}
           >
             <Plus className="w-4 h-4" />
@@ -524,7 +522,7 @@ export default function CurrentAccountDetail() {
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
-              BaÅŸlangÄ±Ã§ Tarihi
+              Baþlangýç Tarihi
             </label>
             <input
               type="date"
@@ -537,7 +535,7 @@ export default function CurrentAccountDetail() {
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
-              BitiÅŸ Tarihi
+              Bitiþ Tarihi
             </label>
             <input
               type="date"
@@ -550,15 +548,15 @@ export default function CurrentAccountDetail() {
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
-              Ä°ÅŸlem Tipi
+              Ýþlem Tipi
             </label>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="ALL">TÃ¼mÃ¼</option>
-              <option value="DEBIT">BorÃ§</option>
+              <option value="ALL">Tümü</option>
+              <option value="DEBIT">Borç</option>
               <option value="CREDIT">Alacak</option>
             </select>
           </div>
@@ -593,7 +591,7 @@ export default function CurrentAccountDetail() {
         ) : transactions.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>HenÃ¼z hareket bulunmamaktadÄ±r</p>
+            <p>Henüz hareket bulunmamaktadýr</p>
           </div>
         ) : (
           <>
@@ -605,13 +603,13 @@ export default function CurrentAccountDetail() {
                       Tarih
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      AÃ§Ä±klama
+                      Açýklama
                     </th>
                     <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                       Referans
                     </th>
                     <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                      BorÃ§
+                      Borç
                     </th>
                     <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                       Alacak
@@ -620,7 +618,7 @@ export default function CurrentAccountDetail() {
                       Bakiye
                     </th>
                     <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
-                      Ä°ÅŸlem
+                      Ýþlem
                     </th>
                   </tr>
                 </thead>
@@ -642,17 +640,17 @@ export default function CurrentAccountDetail() {
                       </td>
                       <td className="px-4 py-3 text-sm text-center">
                         {txn.invoiceNumber ? (
-                          <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-mono">
+                          <span className="px-2 py-1 bg-neutral-50 text-neutral-800 rounded text-xs font-mono">
                             {txn.invoiceNumber}
                           </span>
                         ) : (
                           '-'
                         )}
                       </td>
-                      <td className="px-4 py-3 text-sm text-green-600 font-medium text-right whitespace-nowrap">
+                      <td className="px-4 py-3 text-sm text-neutral-900 font-medium text-right whitespace-nowrap">
                         {txn.type === 'DEBIT' ? formatCurrency(txn.amount) : '-'}
                       </td>
-                      <td className="px-4 py-3 text-sm text-red-600 font-medium text-right whitespace-nowrap">
+                      <td className="px-4 py-3 text-sm text-neutral-800 font-medium text-right whitespace-nowrap">
                         {txn.type === 'CREDIT' ? formatCurrency(txn.amount) : '-'}
                       </td>
                       <td
@@ -665,9 +663,9 @@ export default function CurrentAccountDetail() {
                       <td className="px-4 py-3 text-center">
                         <button
                           onClick={() =>
-                            toast.success('Detay gÃ¶rÃ¼ntÃ¼leme Ã¶zelliÄŸi yakÄ±nda')
+                            toast.success('Detay görüntüleme özelliði yakýnda')
                           }
-                          className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                          className="p-1 text-neutral-900 hover:bg-neutral-50 rounded"
                           title="Detay"
                         >
                           <Eye className="w-4 h-4" />
@@ -687,7 +685,7 @@ export default function CurrentAccountDetail() {
                   disabled={currentPage === 1}
                   className="px-3 py-1 border rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Ã–nceki
+                  Önceki
                 </button>
                 <span className="text-sm text-gray-600">
                   Sayfa {currentPage} / {totalPages}
