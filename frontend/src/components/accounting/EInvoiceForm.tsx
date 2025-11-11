@@ -282,7 +282,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
             </h2>
             <p className="text-sm text-neutral-600 mt-1">
               {selectedCustomer && (
-                <span className={`font-medium ${selectedCustomer.taxNumber ? 'text-purple-600' : 'text-indigo-600'}`}>
+                <span className={`font-medium ${selectedCustomer.taxNumber ? 'text-neutral-900' : 'text-neutral-900'}`}>
                   {invoiceType}
                 </span>
               )}
@@ -366,8 +366,8 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
                   <div className="mt-3 pt-3 border-t border-neutral-200">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
                       selectedCustomer.taxNumber
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'bg-indigo-100 text-indigo-700'
+                        ? 'bg-neutral-100 text-neutral-800'
+                        : 'bg-neutral-100 text-neutral-800'
                     }`}>
                       {invoiceType}
                     </span>
@@ -470,7 +470,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
                         onClick={() => handleRemoveItem(item.id)}
                         className="p-1 hover:bg-red-100 rounded-lg transition-colors"
                       >
-                        <Trash2 size={16} className="text-red-600" />
+                        <Trash2 size={16} className="text-neutral-800" />
                       </button>
                     )}
                   </div>
@@ -571,7 +571,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
               {totals.discountTotal > 0 && (
                 <div className="flex items-center justify-between text-neutral-700">
                   <span>İskonto:</span>
-                  <span className="font-semibold text-red-600">
+                  <span className="font-semibold text-neutral-800">
                     -{new Intl.NumberFormat('tr-TR', {
                       style: 'currency',
                       currency: 'TRY'

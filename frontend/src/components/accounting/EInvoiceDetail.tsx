@@ -217,11 +217,11 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
   const getStatusInfo = (status: string) => {
     const statusMap: Record<string, { label: string; color: string; bgColor: string }> = {
       draft: { label: 'Taslak', color: 'text-gray-700', bgColor: 'bg-gray-100' },
-      sent: { label: 'Gönderildi', color: 'text-blue-700', bgColor: 'bg-blue-100' },
-      approved: { label: 'Onaylandı', color: 'text-green-700', bgColor: 'bg-green-100' },
-      rejected: { label: 'Reddedildi', color: 'text-red-700', bgColor: 'bg-red-100' },
-      cancelled: { label: 'İptal', color: 'text-orange-700', bgColor: 'bg-orange-100' },
-      paid: { label: 'Ödendi', color: 'text-purple-700', bgColor: 'bg-purple-100' },
+      sent: { label: 'Gönderildi', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
+      approved: { label: 'Onaylandı', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
+      rejected: { label: 'Reddedildi', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
+      cancelled: { label: 'İptal', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
+      paid: { label: 'Ödendi', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
     }
     return statusMap[status] || statusMap.draft
   }
@@ -242,7 +242,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
           <div>
             <h2 className="text-2xl font-bold text-neutral-900">Fatura #{invoice.invoiceNumber}</h2>
             <p className="text-sm text-neutral-600 mt-1">
-              <span className={`font-medium ${invoice.invoiceType === 'e-fatura' ? 'text-purple-600' : 'text-indigo-600'}`}>
+              <span className={`font-medium ${invoice.invoiceType === 'e-fatura' ? 'text-neutral-900' : 'text-neutral-900'}`}>
                 {invoice.invoiceType === 'e-fatura' ? 'E-Fatura' : 'E-Arşiv'}
               </span>
             </p>
@@ -313,9 +313,9 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
         {invoice.invoiceType === 'e-fatura' ? (
           <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold ${
             invoice.eInvoiceMeta?.gibStatus === 'sent'
-              ? 'bg-blue-100 text-blue-700'
+              ? 'bg-neutral-100 text-neutral-800'
               : invoice.eInvoiceMeta?.gibStatus === 'delivered'
-                ? 'bg-green-100 text-green-700'
+                ? 'bg-neutral-100 text-neutral-800'
                 : 'bg-gray-100 text-gray-700'
           }`}>
             <Hash size={16} />
@@ -328,7 +328,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
         ) : (
           invoice.eDocumentStatus && (
             <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold ${
-              invoice.eDocumentStatus === 'delivered' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+              invoice.eDocumentStatus === 'delivered' ? 'bg-neutral-100 text-neutral-800' : 'bg-neutral-100 text-neutral-800'
             }`}>
               {invoice.eDocumentStatus === 'delivered' ? 'E-Belge Teslim Edildi' : 'E-Belge İşleniyor'}
             </span>
@@ -435,19 +435,19 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-blue-700">Toplam Tutar:</span>
+                <span className="text-sm text-neutral-800">Toplam Tutar:</span>
                 <span className="text-xl font-bold text-blue-900">{formatCurrency(invoice.grandTotal)}</span>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="text-sm text-blue-700">Ödenen:</span>
-                <span className="text-lg font-semibold text-green-700">{formatCurrency(invoice.paidAmount)}</span>
+                <span className="text-sm text-neutral-800">Ödenen:</span>
+                <span className="text-lg font-semibold text-neutral-800">{formatCurrency(invoice.paidAmount)}</span>
               </div>
               
               <div className="pt-3 border-t border-blue-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-blue-700">Kalan:</span>
-                  <span className="text-xl font-bold text-red-700">
+                  <span className="text-sm font-medium text-neutral-800">Kalan:</span>
+                  <span className="text-xl font-bold text-neutral-800">
                     {formatCurrency(invoice.grandTotal - invoice.paidAmount)}
                   </span>
                 </div>
@@ -486,7 +486,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
                         <td className="px-4 py-3 text-sm text-neutral-900">{item.description}</td>
                         <td className="px-4 py-3 text-center text-sm text-neutral-700">{item.quantity}</td>
                         <td className="px-4 py-3 text-right text-sm text-neutral-700">{formatCurrency(item.unitPrice)}</td>
-                        <td className="px-4 py-3 text-right text-sm text-red-600">
+                        <td className="px-4 py-3 text-right text-sm text-neutral-800">
                           {item.discountPercentage > 0 ? `%${item.discountPercentage}` : '-'}
                         </td>
                         <td className="px-4 py-3 text-right text-sm text-neutral-700">%{item.taxRate}</td>
@@ -513,7 +513,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
               {invoice.discountAmount > 0 && (
                 <div className="flex items-center justify-between text-neutral-700">
                   <span>İskonto:</span>
-                  <span className="font-semibold text-red-600">-{formatCurrency(invoice.discountAmount)}</span>
+                  <span className="font-semibold text-neutral-800">-{formatCurrency(invoice.discountAmount)}</span>
                 </div>
               )}
 
