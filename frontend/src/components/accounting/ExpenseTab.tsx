@@ -265,7 +265,7 @@ export default function ExpenseTab() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[180px]')}
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px]')}
             >
               <option value="">Tüm Kategoriler</option>
               <option value="Personel Maaşları">Personel Maaşları</option>
@@ -280,10 +280,10 @@ export default function ExpenseTab() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
             >
-              <option value="">Tï¿½m Durumlar</option>
-              <option value="paid">ï¿½dendi</option>
+              <option value="">Tüm Durumlar</option>
+              <option value="paid">Ödendi</option>
               <option value="pending">Beklemede</option>
-              <option value="cancelled">ï¿½ptal</option>
+              <option value="cancelled">İptal</option>
             </select>
 
             <button
@@ -333,7 +333,7 @@ export default function ExpenseTab() {
                     <th className={TABLE_HEADER_CELL}>İşlemler</th>
                   </tr>
                 </thead>
-                <tbody >
+                <tbody>
                   {expenses.map((expense) => (
                     <tr key={expense.id} className="hover:bg-neutral-50 transition-colors">
                       <td className={TABLE_BODY_CELL}>
