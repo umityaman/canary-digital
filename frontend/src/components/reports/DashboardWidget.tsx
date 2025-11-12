@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   TrendingUp,
   DollarSign,
@@ -115,7 +115,7 @@ const DashboardWidget: React.FC<DashboardWidgetProps> = ({ companyId }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-500"></div>
       </div>
     );
   }
@@ -149,7 +149,7 @@ const DashboardWidget: React.FC<DashboardWidgetProps> = ({ companyId }) => {
               className={`px-4 py-2 text-sm ${
                 dateRange === 'month'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                  : 'bg-white text-neutral-600 hover:bg-neutral-50'
               }`}
             >
               Bu Ay
@@ -159,7 +159,7 @@ const DashboardWidget: React.FC<DashboardWidgetProps> = ({ companyId }) => {
               className={`px-4 py-2 text-sm border-l ${
                 dateRange === 'quarter'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                  : 'bg-white text-neutral-600 hover:bg-neutral-50'
               }`}
             >
               Çeyrek
@@ -169,7 +169,7 @@ const DashboardWidget: React.FC<DashboardWidgetProps> = ({ companyId }) => {
               className={`px-4 py-2 text-sm border-l ${
                 dateRange === 'year'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                  : 'bg-white text-neutral-600 hover:bg-neutral-50'
               }`}
             >
               Yıl
@@ -179,7 +179,7 @@ const DashboardWidget: React.FC<DashboardWidgetProps> = ({ companyId }) => {
           {/* Refresh Button */}
           <button
             onClick={loadDashboard}
-            className="p-2 hover:bg-gray-100 rounded-lg"
+            className="p-2 hover:bg-neutral-100 rounded-lg"
             disabled={loading}
           >
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -329,7 +329,7 @@ const DashboardWidget: React.FC<DashboardWidgetProps> = ({ companyId }) => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-800">{res.reservationNo}</p>
-                      <p className="text-sm text-gray-600">{res.customerName}</p>
+                      <p className="text-sm text-neutral-600">{res.customerName}</p>
                       <p className="text-xs text-gray-500 mt-1">
                         {formatDate(res.startDate)} - {formatDate(res.endDate)} •{' '}
                         {res.itemCount} ekipman

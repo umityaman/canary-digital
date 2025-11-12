@@ -193,7 +193,7 @@ const CompanyInfo: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <RefreshCw className="w-8 h-8 animate-spin text-neutral-900" />
-        <span className="ml-3 text-gray-600">Yükleniyor...</span>
+        <span className="ml-3 text-neutral-600">Yükleniyor...</span>
       </div>
     );
   }
@@ -202,8 +202,8 @@ const CompanyInfo: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center h-64">
         <AlertCircle className="w-12 h-12 text-neutral-700 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Şirket Bilgileri Yüklenemedi</h3>
-        <p className="text-gray-600 mb-4">Veriler yüklenirken bir hata oluştu</p>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-2">Şirket Bilgileri Yüklenemedi</h3>
+        <p className="text-neutral-600 mb-4">Veriler yüklenirken bir hata oluştu</p>
         <button
           onClick={loadData}
           className={cx(button('md', 'primary', 'md'), 'gap-2')}
@@ -259,7 +259,7 @@ const CompanyInfo: React.FC = () => {
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
           <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
-            <Building2 className="w-5 h-5 mr-2 text-gray-600" />
+            <Building2 className="w-5 h-5 mr-2 text-neutral-600" />
             Genel Bilgiler
           </h3>
 
@@ -277,7 +277,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.name}</p>
+                <p className="text-neutral-900">{companyData.name}</p>
               )}
             </div>
 
@@ -295,7 +295,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.email || '-'}</p>
+                <p className="text-neutral-900">{companyData.email || '-'}</p>
               )}
             </div>
 
@@ -313,7 +313,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.phone || '-'}</p>
+                <p className="text-neutral-900">{companyData.phone || '-'}</p>
               )}
             </div>
 
@@ -331,7 +331,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.mobilePhone || '-'}</p>
+                <p className="text-neutral-900">{companyData.mobilePhone || '-'}</p>
               )}
             </div>
 
@@ -349,7 +349,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.website || '-'}</p>
+                <p className="text-neutral-900">{companyData.website || '-'}</p>
               )}
             </div>
 
@@ -367,7 +367,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.authorizedPerson || '-'}</p>
+                <p className="text-neutral-900">{companyData.authorizedPerson || '-'}</p>
               )}
             </div>
           </div>
@@ -378,7 +378,7 @@ const CompanyInfo: React.FC = () => {
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
           <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
-            <MapPin className="w-5 h-5 mr-2 text-gray-600" />
+            <MapPin className="w-5 h-5 mr-2 text-neutral-600" />
             Adres Bilgileri
           </h3>
 
@@ -396,7 +396,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.address || '-'}</p>
+                <p className="text-neutral-900">{companyData.address || '-'}</p>
               )}
             </div>
 
@@ -413,7 +413,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.address2 || '-'}</p>
+                <p className="text-neutral-900">{companyData.address2 || '-'}</p>
               )}
             </div>
 
@@ -430,7 +430,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.city || '-'}</p>
+                <p className="text-neutral-900">{companyData.city || '-'}</p>
               )}
             </div>
 
@@ -447,7 +447,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.district || '-'}</p>
+                <p className="text-neutral-900">{companyData.district || '-'}</p>
               )}
             </div>
 
@@ -464,7 +464,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.postalCode || '-'}</p>
+                <p className="text-neutral-900">{companyData.postalCode || '-'}</p>
               )}
             </div>
           </div>
@@ -475,7 +475,7 @@ const CompanyInfo: React.FC = () => {
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
           <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
-            <FileText className="w-5 h-5 mr-2 text-gray-600" />
+            <FileText className="w-5 h-5 mr-2 text-neutral-600" />
             Vergi ve Ticari Bilgiler
           </h3>
 
@@ -493,7 +493,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.taxNumber || '-'}</p>
+                <p className="text-neutral-900">{companyData.taxNumber || '-'}</p>
               )}
             </div>
 
@@ -510,7 +510,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.taxOffice || '-'}</p>
+                <p className="text-neutral-900">{companyData.taxOffice || '-'}</p>
               )}
             </div>
 
@@ -527,7 +527,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.tradeRegister || '-'}</p>
+                <p className="text-neutral-900">{companyData.tradeRegister || '-'}</p>
               )}
             </div>
 
@@ -544,7 +544,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.mersisNo || '-'}</p>
+                <p className="text-neutral-900">{companyData.mersisNo || '-'}</p>
               )}
             </div>
           </div>
@@ -555,7 +555,7 @@ const CompanyInfo: React.FC = () => {
       <div className={card('md', 'md', 'default', 'md')}>
         <div className="p-6 space-y-6">
           <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
-            <CreditCard className="w-5 h-5 mr-2 text-gray-600" />
+            <CreditCard className="w-5 h-5 mr-2 text-neutral-600" />
             Varsayılan Banka Bilgileri
           </h3>
 
@@ -573,7 +573,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.bankName || '-'}</p>
+                <p className="text-neutral-900">{companyData.bankName || '-'}</p>
               )}
             </div>
 
@@ -590,7 +590,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.bankBranch || '-'}</p>
+                <p className="text-neutral-900">{companyData.bankBranch || '-'}</p>
               )}
             </div>
 
@@ -607,7 +607,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900 font-mono">{companyData.iban || '-'}</p>
+                <p className="text-neutral-900 font-mono">{companyData.iban || '-'}</p>
               )}
             </div>
 
@@ -624,7 +624,7 @@ const CompanyInfo: React.FC = () => {
                   className={input('md', 'default', 'full', 'md')}
                 />
               ) : (
-                <p className="text-gray-900">{companyData.accountHolder || '-'}</p>
+                <p className="text-neutral-900">{companyData.accountHolder || '-'}</p>
               )}
             </div>
           </div>
@@ -636,32 +636,32 @@ const CompanyInfo: React.FC = () => {
         <div className={card('md', 'md', 'default', 'md')}>
           <div className="p-6 space-y-6">
             <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold', DESIGN_TOKENS?.colors?.text.primary, 'flex items-center')}>
-              <Building className="w-5 h-5 mr-2 text-gray-600" />
+              <Building className="w-5 h-5 mr-2 text-neutral-600" />
               Banka Hesapları
             </h3>
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="p-4 bg-neutral-50 rounded-lg">
-                <p className="text-sm text-gray-600">Toplam Bakiye</p>
+                <p className="text-sm text-neutral-600">Toplam Bakiye</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {formatCurrency(bankAccounts?.totals?.totalBalance || 0)}
                 </p>
               </div>
               <div className="p-4 bg-neutral-50 rounded-lg">
-                <p className="text-sm text-gray-600">Kullanılabilir</p>
+                <p className="text-sm text-neutral-600">Kullanılabilir</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {formatCurrency(bankAccounts?.totals?.totalAvailable || 0)}
                 </p>
               </div>
               <div className="p-4 bg-neutral-50 rounded-lg">
-                <p className="text-sm text-gray-600">Bloke</p>
+                <p className="text-sm text-neutral-600">Bloke</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {formatCurrency(bankAccounts?.totals?.totalBlocked || 0)}
                 </p>
               </div>
               <div className="p-4 bg-neutral-50 rounded-lg">
-                <p className="text-sm text-gray-600">Aktif Hesap</p>
+                <p className="text-sm text-neutral-600">Aktif Hesap</p>
                 <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                   {bankAccounts?.totals?.activeAccounts || 0} / {bankAccounts?.totals?.totalAccounts || 0}
                 </p>
@@ -671,7 +671,7 @@ const CompanyInfo: React.FC = () => {
             {/* Bank Accounts Table */}
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-neutral-50">
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Banka
@@ -692,22 +692,22 @@ const CompanyInfo: React.FC = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {(bankAccounts?.accounts || []).map((account) => (
-                    <tr key={account.id} className="hover:bg-gray-50">
+                    <tr key={account.id} className="hover:bg-neutral-50">
                       <td className="px-4 py-3">
                         <div>
-                          <p className="font-medium text-gray-900">{account.bankName}</p>
+                          <p className="font-medium text-neutral-900">{account.bankName}</p>
                           {account.branch && (
                             <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>{account.branch}</p>
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-gray-700">{account.accountNumber}</td>
-                      <td className="px-4 py-3 font-mono text-sm text-gray-700">
+                      <td className="px-4 py-3 text-neutral-700">{account.accountNumber}</td>
+                      <td className="px-4 py-3 font-mono text-sm text-neutral-700">
                         {account.iban}
                       </td>
                       <td className="px-4 py-3">
                         <div>
-                          <p className="font-semibold text-gray-900">
+                          <p className="font-semibold text-neutral-900">
                             {formatCurrency(account.balance)}
                           </p>
                           <p className="text-xs text-gray-500">{account.currency}</p>
@@ -718,7 +718,7 @@ const CompanyInfo: React.FC = () => {
                           className={`px-2 py-1 text-xs rounded-full ${
                             account.isActive
                               ? 'bg-neutral-50 text-neutral-900'
-                              : 'bg-gray-100 text-gray-800'
+                              : 'bg-neutral-100 text-gray-800'
                           }`}
                         >
                           {account.isActive ? 'Aktif' : 'Pasif'}

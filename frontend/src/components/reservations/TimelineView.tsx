@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -152,11 +152,11 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
       PENDING: 'bg-yellow-100 border-yellow-400 text-yellow-800',
       CONFIRMED: 'bg-green-100 border-green-400 text-green-800',
       IN_PROGRESS: 'bg-blue-100 border-blue-400 text-blue-800',
-      COMPLETED: 'bg-gray-100 border-gray-400 text-gray-800',
+      COMPLETED: 'bg-neutral-100 border-gray-400 text-gray-800',
       CANCELLED: 'bg-red-100 border-red-400 text-red-800',
       REJECTED: 'bg-red-100 border-red-400 text-red-800',
     };
-    return colors[status as keyof typeof colors] || 'bg-gray-100 border-gray-400';
+    return colors[status as keyof typeof colors] || 'bg-neutral-100 border-gray-400';
   };
 
   const getStatusIcon = (status: string) => {
@@ -187,7 +187,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
       <div className="overflow-x-auto">
         {/* Timeline Header - Date Scale */}
         <div className="flex border-b sticky top-0 bg-white z-10">
-          <div className="w-64 flex-shrink-0 p-4 font-semibold border-r bg-gray-50">
+          <div className="w-64 flex-shrink-0 p-4 font-semibold border-r bg-neutral-50">
             Ekipman
           </div>
           <div className="flex-1 flex">
@@ -201,10 +201,10 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
                 <div
                   key={i}
                   className={`flex-1 min-w-[40px] p-2 text-center text-xs border-r ${
-                    isToday ? 'bg-blue-50 font-bold' : isWeekend ? 'bg-gray-50' : ''
+                    isToday ? 'bg-blue-50 font-bold' : isWeekend ? 'bg-neutral-50' : ''
                   }`}
                 >
-                  <div className={isToday ? 'text-blue-600' : 'text-gray-600'}>
+                  <div className={isToday ? 'text-blue-600' : 'text-neutral-600'}>
                     {date.getDate()}
                   </div>
                   <div className="text-gray-400 text-[10px]">
@@ -218,7 +218,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
 
         {/* Timeline Rows - Equipment */}
         {filteredEquipment.map((equipment) => (
-          <div key={equipment.equipmentId} className="flex border-b hover:bg-gray-50">
+          <div key={equipment.equipmentId} className="flex border-b hover:bg-neutral-50">
             {/* Equipment Info */}
             <div className="w-64 flex-shrink-0 p-4 border-r">
               <div className="flex items-start gap-2">
@@ -257,7 +257,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
                         isToday
                           ? 'bg-blue-50'
                           : isWeekend
-                          ? 'bg-gray-50'
+                          ? 'bg-neutral-50'
                           : 'bg-white'
                       }`}
                     />
@@ -349,7 +349,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
                 className={`px-3 py-1 text-sm rounded ${
                   zoomLevel === 'day'
                     ? 'bg-blue-500 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-neutral-600 hover:bg-neutral-100'
                 }`}
               >
                 Gün
@@ -359,7 +359,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
                 className={`px-3 py-1 text-sm rounded ${
                   zoomLevel === 'week'
                     ? 'bg-blue-500 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-neutral-600 hover:bg-neutral-100'
                 }`}
               >
                 Hafta
@@ -369,7 +369,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
                 className={`px-3 py-1 text-sm rounded ${
                   zoomLevel === 'month'
                     ? 'bg-blue-500 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-neutral-600 hover:bg-neutral-100'
                 }`}
               >
                 Ay
@@ -380,19 +380,19 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
             <div className="flex items-center gap-1">
               <button
                 onClick={() => navigateTime('prev')}
-                className="p-2 hover:bg-gray-100 rounded"
+                className="p-2 hover:bg-neutral-100 rounded"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={goToToday}
-                className="px-3 py-2 text-sm hover:bg-gray-100 rounded"
+                className="px-3 py-2 text-sm hover:bg-neutral-100 rounded"
               >
                 Bugün
               </button>
               <button
                 onClick={() => navigateTime('next')}
-                className="p-2 hover:bg-gray-100 rounded"
+                className="p-2 hover:bg-neutral-100 rounded"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -401,7 +401,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
             {/* Refresh */}
             <button
               onClick={loadTimeline}
-              className="p-2 hover:bg-gray-100 rounded"
+              className="p-2 hover:bg-neutral-100 rounded"
               disabled={loading}
             >
               <RotateCcw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -445,7 +445,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
 
           {/* Stats */}
           {timeline && (
-            <div className="ml-auto flex items-center gap-4 text-sm text-gray-600">
+            <div className="ml-auto flex items-center gap-4 text-sm text-neutral-600">
               <div>
                 <span className="font-semibold">{timeline.totalEquipment}</span> Ekipman
               </div>
@@ -471,7 +471,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
             <span>Devam Ediyor</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            <div className="w-3 h-3 rounded bg-gray-100 border-2 border-gray-400"></div>
+            <div className="w-3 h-3 rounded bg-neutral-100 border-2 border-gray-400"></div>
             <span>Tamamlandı</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
@@ -485,7 +485,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ companyId, onReservationCli
       <div className="relative">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-500"></div>
           </div>
         ) : (
           renderTimeline()

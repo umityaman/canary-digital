@@ -152,11 +152,11 @@ export default function IntegrationsTab() {
                       <Link2 className="text-neutral-900" size={24} />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">e-Fatura</h4>
+                      <h4 className="font-semibold text-neutral-900">e-Fatura</h4>
                       <span className="text-xs text-neutral-600 font-medium">Yakında</span>
                     </div>
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-600">
+                  <ul className="space-y-2 text-sm text-neutral-600">
                     <li className="flex items-start gap-2">
                       <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Otomatik fatura oluşturma</span>
@@ -183,11 +183,11 @@ export default function IntegrationsTab() {
                       <Link2 className="text-neutral-900" size={24} />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">e-Arşiv Fatura</h4>
+                      <h4 className="font-semibold text-neutral-900">e-Arşiv Fatura</h4>
                       <span className="text-xs text-neutral-600 font-medium">Yakında</span>
                     </div>
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-600">
+                  <ul className="space-y-2 text-sm text-neutral-600">
                     <li className="flex items-start gap-2">
                       <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Bireysel müşteri faturaları</span>
@@ -214,11 +214,11 @@ export default function IntegrationsTab() {
                       <Link2 className="text-neutral-900" size={24} />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">e-İrsaliye</h4>
+                      <h4 className="font-semibold text-neutral-900">e-İrsaliye</h4>
                       <span className="text-xs text-neutral-600 font-medium">Yakında</span>
                     </div>
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-600">
+                  <ul className="space-y-2 text-sm text-neutral-600">
                     <li className="flex items-start gap-2">
                       <span className="text-neutral-900 mt-0.5">✓</span>
                       <span>Sevkiyat irsaliyesi</span>
@@ -241,15 +241,15 @@ export default function IntegrationsTab() {
 
               {/* Benefits */}
               <div className={card('md', 'lg', 'default', 'xl')}>
-                <h4 className="font-semibold text-gray-900 mb-4">Avantajlar</h4>
+                <h4 className="font-semibold text-neutral-900 mb-4">Avantajlar</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
                     <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <span className="text-neutral-900 font-bold">⚡</span>
                     </div>
                     <div>
-                      <h5 className="font-medium text-gray-900 text-sm mb-1">Hız ve Verimlilik</h5>
-                      <p className="text-xs text-gray-600">Fatura oluşturma sürenizi %90 azaltın</p>
+                      <h5 className="font-medium text-neutral-900 text-sm mb-1">Hız ve Verimlilik</h5>
+                      <p className="text-xs text-neutral-600">Fatura oluşturma sürenizi %90 azaltın</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -257,8 +257,8 @@ export default function IntegrationsTab() {
                       <span className="text-neutral-900 font-bold">✓</span>
                     </div>
                     <div>
-                      <h5 className="font-medium text-gray-900 text-sm mb-1">Yasal Uyumluluk</h5>
-                      <p className="text-xs text-gray-600">GİB standartlarına %100 uygun</p>
+                      <h5 className="font-medium text-neutral-900 text-sm mb-1">Yasal Uyumluluk</h5>
+                      <p className="text-xs text-neutral-600">GİB standartlarına %100 uygun</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -266,8 +266,8 @@ export default function IntegrationsTab() {
                       <span className="text-neutral-900 font-bold">🔒</span>
                     </div>
                     <div>
-                      <h5 className="font-medium text-gray-900 text-sm mb-1">Güvenli İmzalama</h5>
-                      <p className="text-xs text-gray-600">e-İmza entegrasyonu ile güvenli</p>
+                      <h5 className="font-medium text-neutral-900 text-sm mb-1">Güvenli İmzalama</h5>
+                      <p className="text-xs text-neutral-600">e-İmza entegrasyonu ile güvenli</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -275,8 +275,8 @@ export default function IntegrationsTab() {
                       <span className="text-neutral-900 font-bold">💰</span>
                     </div>
                     <div>
-                      <h5 className="font-medium text-gray-900 text-sm mb-1">Maliyet Tasarrufu</h5>
-                      <p className="text-xs text-gray-600">Kağıt ve posta giderlerinden kurtulun</p>
+                      <h5 className="font-medium text-neutral-900 text-sm mb-1">Maliyet Tasarrufu</h5>
+                      <p className="text-xs text-neutral-600">Kağıt ve posta giderlerinden kurtulun</p>
                     </div>
                   </div>
                 </div>
@@ -289,8 +289,8 @@ export default function IntegrationsTab() {
                     <span className="text-white text-2xl">🚀</span>
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900 mb-2">Geliştirme Aşamasında</h4>
-                    <p className="text-sm text-gray-600 mb-3">
+                    <h4 className="font-semibold text-neutral-900 mb-2">Geliştirme Aşamasında</h4>
+                    <p className="text-sm text-neutral-600 mb-3">
                       GİB entegrasyonu şu anda geliştirme aşamasındadır. Yakında kullanıma sunulacaktır.
                       Bilgilendirilmek için e-posta adresinizi bırakabilirsiniz.
                     </p>

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 
@@ -28,12 +28,12 @@ export const LanguageSwitcher: React.FC = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-neutral-100 transition-colors"
         aria-label="Change language"
       >
-        <Globe size={20} className="text-gray-600" />
+        <Globe size={20} className="text-neutral-600" />
         <span className="text-2xl">{currentLanguage.flag}</span>
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-neutral-700">
           {currentLanguage.code.toUpperCase()}
         </span>
       </button>
@@ -47,18 +47,18 @@ export const LanguageSwitcher: React.FC = () => {
           />
 
           {/* Dropdown */}
-          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-20 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 z-20 overflow-hidden">
             {languages.map((language) => (
               <button
                 key={language.code}
                 onClick={() => handleLanguageChange(language.code)}
-                className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors ${
                   language.code === i18n.language ? 'bg-blue-50' : ''
                 }`}
               >
                 <span className="text-2xl">{language.flag}</span>
                 <div className="flex-1 text-left">
-                  <div className="font-medium text-gray-900">{language.name}</div>
+                  <div className="font-medium text-neutral-900">{language.name}</div>
                   <div className="text-xs text-gray-500">{language.code.toUpperCase()}</div>
                 </div>
                 {language.code === i18n.language && (

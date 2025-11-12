@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { CheckCircle, Plus, Trash2 } from 'lucide-react';
 import type { CreateInspectionDto, ChecklistItem } from '../../types/inspection';
 
@@ -180,7 +180,7 @@ export default function Step2Checklist({ data, onChange }: Step2Props) {
                         onChange={(e) => handleNotesChange(item.id, e.target.value)}
                         placeholder="Not ekle..."
                         rows={2}
-                        className="mt-2 w-full px-3 py-2 text-xs border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        className="mt-2 w-full px-3 py-2 text-xs border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none"
                       />
                     </div>
                     <button
@@ -217,7 +217,7 @@ export default function Step2Checklist({ data, onChange }: Step2Props) {
                 value={newItem.category}
                 onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
                 placeholder="Kategori (ör: Fiziksel Durum)"
-                className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
               />
             </div>
             <div>
@@ -226,7 +226,7 @@ export default function Step2Checklist({ data, onChange }: Step2Props) {
                 value={newItem.label}
                 onChange={(e) => setNewItem({ ...newItem, label: e.target.value })}
                 placeholder="Kontrol maddesi"
-                className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
               />
             </div>
             <div className="flex gap-2">
@@ -253,7 +253,7 @@ export default function Step2Checklist({ data, onChange }: Step2Props) {
       </div>
 
       {/* Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+      <div className="bg-blue-50 border border-neutral-200 rounded-xl p-4">
         <p className="text-sm text-blue-900">
           <strong>💡 İpucu:</strong> Her maddeyi kontrol ettikten sonra işaretleyin. Özel durumlar varsa not alanına yazın.
         </p>

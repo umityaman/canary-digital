@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { X, Save, AlertCircle } from 'lucide-react'
 import { useEquipmentStore } from '../../stores/equipmentStore'
 
@@ -135,12 +135,12 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-neutral-900">
             {mode === 'create' ? 'Yeni Ekipman Ekle' : 'Ekipman Düzenle'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-neutral-600 transition-colors"
           >
             <X size={24} />
           </button>
@@ -159,7 +159,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Ekipman Adı */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Ekipman Adı *
               </label>
               <input
@@ -167,7 +167,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                  formErrors.name ? 'border-red-500' : 'border-gray-300'
+                  formErrors.name ? 'border-red-500' : 'border-neutral-300'
                 }`}
                 placeholder="Örn: Canon EOS R5"
               />
@@ -178,7 +178,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
 
             {/* Marka */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Marka *
               </label>
               <input
@@ -186,7 +186,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
                 value={formData.brand}
                 onChange={(e) => handleInputChange('brand', e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                  formErrors.brand ? 'border-red-500' : 'border-gray-300'
+                  formErrors.brand ? 'border-red-500' : 'border-neutral-300'
                 }`}
                 placeholder="Örn: Canon"
               />
@@ -197,7 +197,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
 
             {/* Model */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Model *
               </label>
               <input
@@ -205,7 +205,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
                 value={formData.model}
                 onChange={(e) => handleInputChange('model', e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                  formErrors.model ? 'border-red-500' : 'border-gray-300'
+                  formErrors.model ? 'border-red-500' : 'border-neutral-300'
                 }`}
                 placeholder="Örn: EOS R5"
               />
@@ -216,14 +216,14 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
 
             {/* Kategori */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Kategori *
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => handleInputChange('category', e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                  formErrors.category ? 'border-red-500' : 'border-gray-300'
+                  formErrors.category ? 'border-red-500' : 'border-neutral-300'
                 }`}
               >
                 <option value="">Kategori Seçin</option>
@@ -243,21 +243,21 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
 
             {/* Seri Numarası */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Seri Numarası
               </label>
               <input
                 type="text"
                 value={formData.serialNumber}
                 onChange={(e) => handleInputChange('serialNumber', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 placeholder="Örn: 123456789"
               />
             </div>
 
             {/* Günlük Fiyat */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Günlük Fiyat (₺)
               </label>
               <input
@@ -271,7 +271,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
                   handleInputChange('dailyPrice', parseFloat(value) || 0);
                 }}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                  formErrors.dailyPrice ? 'border-red-500' : 'border-gray-300'
+                  formErrors.dailyPrice ? 'border-red-500' : 'border-neutral-300'
                 }`}
                 placeholder="0.00"
               />
@@ -283,7 +283,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
 
           {/* Durum */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Durum
             </label>
             <div className="flex space-x-4">
@@ -322,14 +322,14 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
 
           {/* Açıklama */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Açıklama
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => handleInputChange('description', e.target.value)}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Ekipman hakkında ek bilgiler..."
             />
           </div>
@@ -340,7 +340,7 @@ const EquipmentModal: React.FC<EquipmentModalProps> = ({
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50"
             >
               İptal
             </button>

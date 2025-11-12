@@ -33,11 +33,11 @@ const NotificationsTab: React.FC = () => {
   const getNotificationColor = (type: string) => {
     switch (type) {
       case 'payment': return 'bg-neutral-50 border-green-200'
-      case 'invoice': return 'bg-neutral-50 border-blue-200'
+      case 'invoice': return 'bg-neutral-50 border-neutral-200'
       case 'reminder': return 'bg-orange-50 border-orange-200'
       case 'statement': return 'bg-neutral-50 border-purple-200'
-      case 'system': return 'bg-gray-50 border-gray-200'
-      default: return 'bg-white border-gray-200'
+      case 'system': return 'bg-neutral-50 border-neutral-200'
+      default: return 'bg-white border-neutral-200'
     }
   }
 
@@ -61,7 +61,7 @@ const NotificationsTab: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
       </div>
     )
   }
@@ -177,7 +177,7 @@ const NotificationsTab: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                      <h3 className="font-semibold text-neutral-900 flex items-center gap-2">
                         {notification.title}
                         {notification.isUrgent && (
                           <span className={cx(badge('danger', 'sm'), 'font-bold')}>
@@ -185,7 +185,7 @@ const NotificationsTab: React.FC = () => {
                           </span>
                         )}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                      <p className="text-sm text-neutral-600 mt-1">{notification.message}</p>
                     </div>
 
                     {/* Actions */}
@@ -227,7 +227,7 @@ const NotificationsTab: React.FC = () => {
         <div className="space-y-4">
           {/* Email Notifications */}
           <div>
-            <h4 className="font-medium text-gray-700 mb-3 flex items-center gap-2">
+            <h4 className="font-medium text-neutral-700 mb-3 flex items-center gap-2">
               <Mail size={18} />
               E-posta Bildirimleri
             </h4>
@@ -237,34 +237,34 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.emailPayments}
                   onChange={(e) => updatePreferences({ emailPayments: e.target.checked })}
-                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-neutral-500"
                 />
-                <span className="text-gray-700">Ödeme bildirimleri</span>
+                <span className="text-neutral-700">Ödeme bildirimleri</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={preferences.emailInvoices}
                   onChange={(e) => updatePreferences({ emailInvoices: e.target.checked })}
-                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-neutral-500"
                 />
-                <span className="text-gray-700">Fatura bildirimleri</span>
+                <span className="text-neutral-700">Fatura bildirimleri</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={preferences.emailReminders}
                   onChange={(e) => updatePreferences({ emailReminders: e.target.checked })}
-                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-neutral-500"
                 />
-                <span className="text-gray-700">Hatırlatmalar</span>
+                <span className="text-neutral-700">Hatırlatmalar</span>
               </label>
             </div>
           </div>
 
           {/* SMS Notifications */}
           <div>
-            <h4 className="font-medium text-gray-700 mb-3 flex items-center gap-2">
+            <h4 className="font-medium text-neutral-700 mb-3 flex items-center gap-2">
               <MessageSquare size={18} />
               SMS Bildirimleri
             </h4>
@@ -274,25 +274,25 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.smsPayments}
                   onChange={(e) => updatePreferences({ smsPayments: e.target.checked })}
-                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-neutral-500"
                 />
-                <span className="text-gray-700">Ödeme bildirimleri</span>
+                <span className="text-neutral-700">Ödeme bildirimleri</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={preferences.smsReminders}
                   onChange={(e) => updatePreferences({ smsReminders: e.target.checked })}
-                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-neutral-500"
                 />
-                <span className="text-gray-700">Hatırlatmalar</span>
+                <span className="text-neutral-700">Hatırlatmalar</span>
               </label>
             </div>
           </div>
 
           {/* Push Notifications */}
           <div>
-            <h4 className="font-medium text-gray-700 mb-3 flex items-center gap-2">
+            <h4 className="font-medium text-neutral-700 mb-3 flex items-center gap-2">
               <Smartphone size={18} />
               Push Bildirimleri
             </h4>
@@ -302,9 +302,9 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.pushNotifications}
                   onChange={(e) => updatePreferences({ pushNotifications: e.target.checked })}
-                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-neutral-500"
                 />
-                <span className="text-gray-700">Tüm push bildirimlerini etkinleştir</span>
+                <span className="text-neutral-700">Tüm push bildirimlerini etkinleştir</span>
               </label>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   Grid, 
   List, 
@@ -189,7 +189,7 @@ export const DocumentBrowser: React.FC<DocumentBrowserProps> = ({
                 className="w-full h-32 object-cover rounded-md"
               />
             ) : (
-              <div className="w-full h-32 flex items-center justify-center bg-gray-100 rounded-md">
+              <div className="w-full h-32 flex items-center justify-center bg-neutral-100 rounded-md">
                 {getFileIcon(document.mimeType, 'lg')}
               </div>
             )}
@@ -303,7 +303,7 @@ export const DocumentBrowser: React.FC<DocumentBrowserProps> = ({
 
   const DocumentListItem: React.FC<{ document: Document }> = ({ document }) => (
     <div 
-      className="flex items-center gap-4 p-4 border-b hover:bg-gray-50 cursor-pointer group"
+      className="flex items-center gap-4 p-4 border-b hover:bg-neutral-50 cursor-pointer group"
       onClick={() => onDocumentSelect?.(document)}
     >
       {/* File Icon/Thumbnail */}
@@ -506,12 +506,12 @@ export const DocumentBrowser: React.FC<DocumentBrowserProps> = ({
       {/* Documents */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-600"></div>
         </div>
       ) : documents.length === 0 ? (
         <div className="text-center py-12">
           <FileIcon className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Dosya bulunamadı</h3>
+          <h3 className="text-lg font-medium text-neutral-900 mb-2">Dosya bulunamadı</h3>
           <p className="text-gray-500">
             {searchQuery ? 'Arama kriterlerinize uygun dosya bulunamadı.' : 'Henüz dosya yüklenmemiş.'}
           </p>

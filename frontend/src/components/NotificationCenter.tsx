@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -180,7 +180,7 @@ const NotificationCenter: React.FC = () => {
       case 'INFO':
         return <Info className="w-5 h-5 text-blue-600" />;
       default:
-        return <Bell className="w-5 h-5 text-gray-600" />;
+        return <Bell className="w-5 h-5 text-neutral-600" />;
     }
   };
 
@@ -191,7 +191,7 @@ const NotificationCenter: React.FC = () => {
       HIGH: 'bg-red-100 text-red-800',
       URGENT: 'bg-red-200 text-red-900',
       NORMAL: 'bg-blue-100 text-blue-800',
-      LOW: 'bg-gray-100 text-gray-800',
+      LOW: 'bg-neutral-100 text-gray-800',
     };
 
     return (
@@ -224,11 +224,11 @@ const NotificationCenter: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-neutral-900 flex items-center gap-2">
             <Bell className="w-6 h-6" />
             Bildirim Merkezi
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-neutral-600 mt-1">
             {unreadCount > 0 ? `${unreadCount} okunmamış bildirim` : 'Tüm bildirimler okundu'}
           </p>
         </div>
@@ -260,7 +260,7 @@ const NotificationCenter: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-500"
             >
               {categories.map(category => (
                 <option key={category.value} value={category.value}>
@@ -273,7 +273,7 @@ const NotificationCenter: React.FC = () => {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-500"
             >
               {types.map(type => (
                 <option key={type.value} value={type.value}>
@@ -288,7 +288,7 @@ const NotificationCenter: React.FC = () => {
                 type="checkbox"
                 checked={showUnreadOnly}
                 onChange={(e) => setShowUnreadOnly(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 border-neutral-300 rounded focus:ring-neutral-500"
               />
               <span className="text-sm">Sadece okunmamış</span>
             </label>
@@ -326,7 +326,7 @@ const NotificationCenter: React.FC = () => {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <h4 className="text-sm font-medium text-gray-900">
+                      <h4 className="text-sm font-medium text-neutral-900">
                         {notification.title}
                       </h4>
                       <div className="flex items-center gap-2">
@@ -337,7 +337,7 @@ const NotificationCenter: React.FC = () => {
                       </div>
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-neutral-600 mb-3">
                       {notification.message}
                     </p>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   PieChart,
   Pie,
@@ -164,7 +164,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
       case 'retired':
         return <Clock className="w-4 h-4 text-red-600" />;
       default:
-        return <Package className="w-4 h-4 text-gray-600" />;
+        return <Package className="w-4 h-4 text-neutral-600" />;
     }
   };
 
@@ -242,7 +242,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value as any)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="1d">Bugün</option>
                 <option value="7d">Son 7 Gün</option>
@@ -254,7 +254,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="all">Tüm Kategoriler</option>
                 {data?.byCategory?.map(cat => (
@@ -273,12 +273,12 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           {/* Summary metrics */}
           {data && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-                <p className="text-sm text-gray-600">Toplam Ekipman</p>
+              <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+                <p className="text-sm text-neutral-600">Toplam Ekipman</p>
                 <p className="text-lg font-semibold">{data.totalEquipment || 0}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-                <p className="text-sm text-gray-600">Ortalama Kullanım</p>
+              <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+                <p className="text-sm text-neutral-600">Ortalama Kullanım</p>
                 <div className="flex items-center gap-2">
                   <p className="text-lg font-semibold">{(data.averageUtilization || 0).toFixed(1)}%</p>
                   <Badge 
@@ -289,8 +289,8 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   </Badge>
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-                <p className="text-sm text-gray-600">En Çok Kullanılan</p>
+              <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+                <p className="text-sm text-neutral-600">En Çok Kullanılan</p>
                 <p className="text-lg font-semibold truncate overflow-hidden text-ellipsis whitespace-nowrap" title={data.topPerformers?.[0]?.name || 'N/A'}>
                   {data.topPerformers?.[0]?.name || 'N/A'}
                 </p>
@@ -298,8 +298,8 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   <p className="text-sm text-gray-500">%{(data.topPerformers[0].utilizationRate || 0).toFixed(1)}</p>
                 )}
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-                <p className="text-sm text-gray-600">Az Kullanılan</p>
+              <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+                <p className="text-sm text-neutral-600">Az Kullanılan</p>
                 <p className="text-sm font-semibold text-orange-600">
                   {data.underutilized?.length || 0} Ekipman
                 </p>
@@ -313,7 +313,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           {data && data.statusDistribution && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               <div className="overflow-hidden">
-                <h4 className="text-sm font-medium text-gray-900 mb-3">Durum Dağılımı</h4>
+                <h4 className="text-sm font-medium text-neutral-900 mb-3">Durum Dağılımı</h4>
                 <div className="overflow-x-auto">
                   <div style={{ minWidth: 300, height: 250 }}>
                     <ResponsiveContainer width="100%" height="100%">
@@ -341,7 +341,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
 
               {/* Category performance */}
               <div className="overflow-hidden">
-                <h4 className="text-sm font-medium text-gray-900 mb-3">Kategoriye Göre Performans</h4>
+                <h4 className="text-sm font-medium text-neutral-900 mb-3">Kategoriye Göre Performans</h4>
                 <div className="overflow-x-auto">
                   <div style={{ minWidth: 400, height: 250 }}>
                     <ResponsiveContainer width="100%" height="100%">
@@ -375,7 +375,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           {/* Utilization trend */}
           {showTrend && data && data.utilizationTrend && data.utilizationTrend.length > 0 && (
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-900 mb-3">Kullanım Trendi</h4>
+              <h4 className="text-sm font-medium text-neutral-900 mb-3">Kullanım Trendi</h4>
               <div className="overflow-x-auto">
                 <div style={{ minWidth: 600, height: 200 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -431,18 +431,18 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
           <CardContent>
             <div className="space-y-3">
               {filteredTopPerformers.slice(0, 5).map((equipment) => (
-                <div key={equipment.equipmentId} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={equipment.equipmentId} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                   <div className="flex items-center gap-3">
                     {getStatusIcon(equipment.status)}
                     <div>
                       <p className="font-medium">{equipment.name}</p>
-                      <p className="text-sm text-gray-600">{equipment.category}</p>
+                      <p className="text-sm text-neutral-600">{equipment.category}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="font-medium">{(equipment.utilizationRate || 0).toFixed(1)}%</p>
-                      <p className="text-sm text-gray-600">{formatCurrency(equipment.revenue || 0)}</p>
+                      <p className="text-sm text-neutral-600">{formatCurrency(equipment.revenue || 0)}</p>
                     </div>
                     <div className="w-24">
                       <Progress value={equipment.utilizationRate || 0} className="h-2" />
@@ -472,7 +472,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                     {getStatusIcon(equipment.status)}
                     <div>
                       <p className="font-medium">{equipment.name}</p>
-                      <p className="text-sm text-gray-600">{equipment.category}</p>
+                      <p className="text-sm text-neutral-600">{equipment.category}</p>
                       {equipment.lastRental && (
                         <p className="text-xs text-gray-500">
                           Son kiralama: {format(parseISO(equipment.lastRental), 'dd MMM yyyy', { locale: tr })}
@@ -483,7 +483,7 @@ export const EquipmentUtilization: React.FC<EquipmentUtilizationProps> = ({
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="font-medium text-orange-600">{(equipment.utilizationRate || 0).toFixed(1)}%</p>
-                      <p className="text-sm text-gray-600">{formatCurrency(equipment.revenue || 0)}</p>
+                      <p className="text-sm text-neutral-600">{formatCurrency(equipment.revenue || 0)}</p>
                     </div>
                     <div className="w-24">
                       <Progress 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pie Chart with Percentages Örneği
  * Kullanım: Revenue category breakdown
  * Özellikler: Custom colors, percentage labels, legend
@@ -91,12 +91,12 @@ export default function PieChartWithPercentages() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
       <Pie data={data} options={options} />
 
       {/* Category Details */}
       <div className="mt-6 space-y-3">
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">Detaylı Dağılım</h4>
+        <h4 className="text-sm font-semibold text-neutral-700 mb-3">Detaylı Dağılım</h4>
         {categoryData.map((item, index) => {
           const percentage = ((item.value / total) * 100).toFixed(1);
           return (
@@ -106,10 +106,10 @@ export default function PieChartWithPercentages() {
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-sm text-gray-600">{item.name}</span>
+                <span className="text-sm text-neutral-600">{item.name}</span>
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm font-semibold text-neutral-900">
                   ₺{item.value.toLocaleString('tr-TR')}
                 </p>
                 <p className="text-xs text-gray-500">{percentage}%</p>
@@ -117,9 +117,9 @@ export default function PieChartWithPercentages() {
             </div>
           );
         })}
-        <div className="pt-3 border-t border-gray-200 flex items-center justify-between">
-          <span className="text-sm font-semibold text-gray-700">Toplam</span>
-          <span className="text-lg font-bold text-gray-900">
+        <div className="pt-3 border-t border-neutral-200 flex items-center justify-between">
+          <span className="text-sm font-semibold text-neutral-700">Toplam</span>
+          <span className="text-lg font-bold text-neutral-900">
             ₺{total.toLocaleString('tr-TR')}
           </span>
         </div>

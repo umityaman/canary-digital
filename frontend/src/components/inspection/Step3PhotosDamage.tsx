@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Camera, AlertTriangle, X } from 'lucide-react';
 import PhotoUpload from '../PhotoUpload';
 import type { CreateInspectionDto } from '../../types/inspection';
@@ -343,7 +343,7 @@ export default function Step3PhotosDamage({ data, onChange }: Step3Props) {
       )}
 
       {/* Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+      <div className="bg-blue-50 border border-neutral-200 rounded-xl p-4">
         <p className="text-sm text-blue-900">
           <strong>💡 İpucu:</strong> Fotoğraflar PDF raporuna eklenecektir. Hasarlı bölgelerin net fotoğraflarını çekin.
         </p>

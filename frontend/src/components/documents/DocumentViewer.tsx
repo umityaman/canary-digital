@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   Eye, 
   Download, 
@@ -196,16 +196,16 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
       return (
         <div className="flex items-center justify-center h-96">
           <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-          <span className="ml-2 text-gray-600">Önizleme yükleniyor...</span>
+          <span className="ml-2 text-neutral-600">Önizleme yükleniyor...</span>
         </div>
       );
     }
 
     if (!canPreview(document.mimeType) || !previewUrl) {
       return (
-        <div className="flex flex-col items-center justify-center h-96 bg-gray-50 rounded-lg">
+        <div className="flex flex-col items-center justify-center h-96 bg-neutral-50 rounded-lg">
           {getFileIcon(document.mimeType)}
-          <h3 className="mt-4 text-lg font-medium text-gray-900">{document.name}</h3>
+          <h3 className="mt-4 text-lg font-medium text-neutral-900">{document.name}</h3>
           <p className="mt-2 text-sm text-gray-500">
             Bu dosya türü için önizleme desteklenmiyor
           </p>
@@ -223,7 +223,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
     // Image Preview
     if (document.mimeType.startsWith('image/')) {
       return (
-        <div className="relative overflow-hidden bg-gray-100 rounded-lg" style={{ height: isFullscreen ? '80vh' : '500px' }}>
+        <div className="relative overflow-hidden bg-neutral-100 rounded-lg" style={{ height: isFullscreen ? '80vh' : '500px' }}>
           <img
             src={previewUrl}
             alt={document.name}
@@ -240,7 +240,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
     // PDF Preview
     if (document.mimeType === 'application/pdf') {
       return (
-        <div className="relative bg-gray-100 rounded-lg" style={{ height: isFullscreen ? '80vh' : '600px' }}>
+        <div className="relative bg-neutral-100 rounded-lg" style={{ height: isFullscreen ? '80vh' : '600px' }}>
           <iframe
             src={`${previewUrl}#toolbar=1&navpanes=1&scrollbar=1&page=1&view=FitH`}
             className="w-full h-full border-0 rounded-lg"
@@ -269,9 +269,9 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
     // Audio Preview
     if (document.mimeType.startsWith('audio/')) {
       return (
-        <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-lg">
+        <div className="flex flex-col items-center justify-center h-64 bg-neutral-50 rounded-lg">
           <Music className="w-16 h-16 text-green-500 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-4">{document.name}</h3>
+          <h3 className="text-lg font-medium text-neutral-900 mb-4">{document.name}</h3>
           <audio src={previewUrl} controls className="w-full max-w-md">
             Tarayıcınız ses oynatmayı desteklemiyor.
           </audio>
@@ -282,7 +282,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
     // Text Preview
     if (document.mimeType.startsWith('text/')) {
       return (
-        <div className="bg-gray-50 rounded-lg p-4" style={{ height: isFullscreen ? '70vh' : '400px' }}>
+        <div className="bg-neutral-50 rounded-lg p-4" style={{ height: isFullscreen ? '70vh' : '400px' }}>
           <iframe
             src={previewUrl}
             className="w-full h-full border-0 bg-white rounded"
@@ -396,23 +396,23 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                     {/* Basic Info */}
                     <div className="space-y-3">
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Dosya Adı</label>
-                        <p className="text-sm text-gray-900 break-words">{document.name}</p>
+                        <label className="text-sm font-medium text-neutral-700">Dosya Adı</label>
+                        <p className="text-sm text-neutral-900 break-words">{document.name}</p>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Boyut</label>
-                        <p className="text-sm text-gray-900">{formatFileSize(document.size)}</p>
+                        <label className="text-sm font-medium text-neutral-700">Boyut</label>
+                        <p className="text-sm text-neutral-900">{formatFileSize(document.size)}</p>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Tür</label>
-                        <p className="text-sm text-gray-900">{document.mimeType}</p>
+                        <label className="text-sm font-medium text-neutral-700">Tür</label>
+                        <p className="text-sm text-neutral-900">{document.mimeType}</p>
                       </div>
                       
                       {document.category && (
                         <div>
-                          <label className="text-sm font-medium text-gray-700">Kategori</label>
+                          <label className="text-sm font-medium text-neutral-700">Kategori</label>
                           <Badge 
                             variant="secondary" 
                             className="mt-1"
@@ -428,14 +428,14 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                       
                       {document.description && (
                         <div>
-                          <label className="text-sm font-medium text-gray-700">Açıklama</label>
-                          <p className="text-sm text-gray-900">{document.description}</p>
+                          <label className="text-sm font-medium text-neutral-700">Açıklama</label>
+                          <p className="text-sm text-neutral-900">{document.description}</p>
                         </div>
                       )}
                       
                       {document.tags && document.tags.length > 0 && (
                         <div>
-                          <label className="text-sm font-medium text-gray-700">Etiketler</label>
+                          <label className="text-sm font-medium text-neutral-700">Etiketler</label>
                           <div className="flex flex-wrap gap-1 mt-1">
                             {document.tags.map((tag, index) => (
                               <Badge key={index} variant="outline" className="text-xs">
@@ -451,38 +451,38 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                   <TabsContent value="activity" className="space-y-4">
                     <div className="space-y-3">
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Yükleyen</label>
-                        <p className="text-sm text-gray-900">{document.uploadedBy.name}</p>
+                        <label className="text-sm font-medium text-neutral-700">Yükleyen</label>
+                        <p className="text-sm text-neutral-900">{document.uploadedBy.name}</p>
                         <p className="text-xs text-gray-500">{document.uploadedBy.email}</p>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Yüklenme Tarihi</label>
-                        <p className="text-sm text-gray-900">{formatDate(document.uploadedAt)}</p>
+                        <label className="text-sm font-medium text-neutral-700">Yüklenme Tarihi</label>
+                        <p className="text-sm text-neutral-900">{formatDate(document.uploadedAt)}</p>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Son Güncelleme</label>
-                        <p className="text-sm text-gray-900">{formatDate(document.updatedAt)}</p>
+                        <label className="text-sm font-medium text-neutral-700">Son Güncelleme</label>
+                        <p className="text-sm text-neutral-900">{formatDate(document.updatedAt)}</p>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium text-gray-700">Versiyon</label>
-                        <p className="text-sm text-gray-900">v{document.version}</p>
+                        <label className="text-sm font-medium text-neutral-700">Versiyon</label>
+                        <p className="text-sm text-neutral-900">v{document.version}</p>
                       </div>
                       
                       {(document.shareCount !== undefined || document.downloadCount !== undefined) && (
                         <div className="space-y-2 pt-2 border-t">
-                          <label className="text-sm font-medium text-gray-700">İstatistikler</label>
+                          <label className="text-sm font-medium text-neutral-700">İstatistikler</label>
                           {document.downloadCount !== undefined && (
                             <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">İndirme sayısı:</span>
+                              <span className="text-neutral-600">İndirme sayısı:</span>
                               <span className="font-medium">{document.downloadCount}</span>
                             </div>
                           )}
                           {document.shareCount !== undefined && (
                             <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Paylaşım sayısı:</span>
+                              <span className="text-neutral-600">Paylaşım sayısı:</span>
                               <span className="font-medium">{document.shareCount}</span>
                             </div>
                           )}

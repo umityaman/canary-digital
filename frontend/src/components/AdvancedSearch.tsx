@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Filter, X, Save, Star, Clock, ChevronDown } from 'lucide-react';
 import api from '../services/api';
 import { debounce } from 'lodash';
@@ -198,12 +198,12 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
             placeholder={`Search ${entity}...`}
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
-            className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-10 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
           />
           {query && (
             <button
               onClick={() => handleQueryChange('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-neutral-600"
             >
               <X size={20} />
             </button>
@@ -212,7 +212,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
         
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+          className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 flex items-center gap-2"
         >
           <Filter size={20} />
           Filters
@@ -237,7 +237,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
             <button
               key={search.id}
               onClick={() => applySavedSearch(search)}
-              className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm flex items-center gap-2 group"
+              className="px-3 py-1 bg-neutral-100 hover:bg-neutral-200 rounded-full text-sm flex items-center gap-2 group"
             >
               {search.isPinned && <Star size={14} className="text-yellow-500" />}
               {search.name}
@@ -259,7 +259,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
       {/* Search History */}
       {searchHistory.length > 0 && query === '' && (
         <div className="border-t pt-4">
-          <div className="text-sm text-gray-600 mb-2 flex items-center gap-2">
+          <div className="text-sm text-neutral-600 mb-2 flex items-center gap-2">
             <Clock size={16} />
             Recent Searches
           </div>
@@ -268,7 +268,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               <button
                 key={index}
                 onClick={() => handleQueryChange(item.query)}
-                className="px-3 py-1 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700"
+                className="px-3 py-1 bg-neutral-50 hover:bg-neutral-100 rounded-full text-sm text-neutral-700"
               >
                 {item.query}
                 <span className="ml-2 text-gray-400">{item.resultCount}</span>
@@ -280,20 +280,20 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
       {/* Filters Panel */}
       {showFilters && (
-        <div className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50">
+        <div className="border border-neutral-200 rounded-lg p-4 space-y-4 bg-neutral-50">
           {entity === 'equipment' && (
             <>
               {/* Brand Filter */}
               {filterOptions.brands && filterOptions.brands.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Brand
                   </label>
                   <select
                     multiple
                     value={filters.brand || []}
                     onChange={(e) => handleFilterChange('brand', Array.from(e.target.selectedOptions, option => option.value))}
-                    className="w-full border border-gray-300 rounded-lg p-2"
+                    className="w-full border border-neutral-300 rounded-lg p-2"
                   >
                     {filterOptions.brands.map((brand: any) => (
                       <option key={brand.value} value={brand.value}>
@@ -307,26 +307,26 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               {/* Price Range */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Min Price
                   </label>
                   <input
                     type="number"
                     value={filters.priceMin || ''}
                     onChange={(e) => handleFilterChange('priceMin', parseFloat(e.target.value))}
-                    className="w-full border border-gray-300 rounded-lg p-2"
+                    className="w-full border border-neutral-300 rounded-lg p-2"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Max Price
                   </label>
                   <input
                     type="number"
                     value={filters.priceMax || ''}
                     onChange={(e) => handleFilterChange('priceMax', parseFloat(e.target.value))}
-                    className="w-full border border-gray-300 rounded-lg p-2"
+                    className="w-full border border-neutral-300 rounded-lg p-2"
                     placeholder="1000"
                   />
                 </div>
@@ -334,13 +334,13 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
               {/* Availability */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
                   Availability
                 </label>
                 <select
                   value={filters.availability || 'all'}
                   onChange={(e) => handleFilterChange('availability', e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg p-2"
+                  className="w-full border border-neutral-300 rounded-lg p-2"
                 >
                   <option value="all">All</option>
                   <option value="available">Available</option>
@@ -356,25 +356,25 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               {/* Date Range */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     From Date
                   </label>
                   <input
                     type="date"
                     value={filters.dateFrom || ''}
                     onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg p-2"
+                    className="w-full border border-neutral-300 rounded-lg p-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     To Date
                   </label>
                   <input
                     type="date"
                     value={filters.dateTo || ''}
                     onChange={(e) => handleFilterChange('dateTo', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg p-2"
+                    className="w-full border border-neutral-300 rounded-lg p-2"
                   />
                 </div>
               </div>
@@ -382,26 +382,26 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               {/* Amount Range */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Min Amount
                   </label>
                   <input
                     type="number"
                     value={filters.amountMin || ''}
                     onChange={(e) => handleFilterChange('amountMin', parseFloat(e.target.value))}
-                    className="w-full border border-gray-300 rounded-lg p-2"
+                    className="w-full border border-neutral-300 rounded-lg p-2"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Max Amount
                   </label>
                   <input
                     type="number"
                     value={filters.amountMax || ''}
                     onChange={(e) => handleFilterChange('amountMax', parseFloat(e.target.value))}
-                    className="w-full border border-gray-300 rounded-lg p-2"
+                    className="w-full border border-neutral-300 rounded-lg p-2"
                     placeholder="10000"
                   />
                 </div>
@@ -412,13 +412,13 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           {/* Sort */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Sort By
               </label>
               <select
                 value={filters.sortBy}
                 onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-2"
+                className="w-full border border-neutral-300 rounded-lg p-2"
               >
                 <option value="name">Name</option>
                 <option value="createdAt">Created Date</option>
@@ -428,13 +428,13 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Order
               </label>
               <select
                 value={filters.sortOrder}
                 onChange={(e) => handleFilterChange('sortOrder', e.target.value as 'asc' | 'desc')}
-                className="w-full border border-gray-300 rounded-lg p-2"
+                className="w-full border border-neutral-300 rounded-lg p-2"
               >
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
@@ -445,7 +445,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           {/* Clear Filters */}
           <button
             onClick={clearFilters}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 text-gray-700"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-100 text-neutral-700"
           >
             Clear All Filters
           </button>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -119,8 +119,8 @@ export const NotificationPreferences: React.FC = () => {
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Bildirim Tercihleri</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl font-bold text-neutral-900">Bildirim Tercihleri</h1>
+          <p className="text-neutral-600 mt-1">
             Hangi bildirimleri almak istediğinizi seçin
           </p>
         </div>
@@ -220,7 +220,7 @@ export const NotificationPreferences: React.FC = () => {
         <CardContent className="space-y-6">
           {/* Reservations */}
           <div>
-            <h4 className="font-medium text-gray-900 mb-3">Rezervasyonlar</h4>
+            <h4 className="font-medium text-neutral-900 mb-3">Rezervasyonlar</h4>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">E-posta</span>
@@ -250,7 +250,7 @@ export const NotificationPreferences: React.FC = () => {
 
           {/* Orders */}
           <div>
-            <h4 className="font-medium text-gray-900 mb-3">Siparişler</h4>
+            <h4 className="font-medium text-neutral-900 mb-3">Siparişler</h4>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">E-posta</span>
@@ -280,7 +280,7 @@ export const NotificationPreferences: React.FC = () => {
 
           {/* Equipment */}
           <div>
-            <h4 className="font-medium text-gray-900 mb-3">Ekipman</h4>
+            <h4 className="font-medium text-neutral-900 mb-3">Ekipman</h4>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">E-posta</span>
@@ -310,7 +310,7 @@ export const NotificationPreferences: React.FC = () => {
 
           {/* Reminders */}
           <div>
-            <h4 className="font-medium text-gray-900 mb-3">Hatırlatmalar</h4>
+            <h4 className="font-medium text-neutral-900 mb-3">Hatırlatmalar</h4>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">E-posta</span>
@@ -340,7 +340,7 @@ export const NotificationPreferences: React.FC = () => {
 
           {/* Alerts */}
           <div>
-            <h4 className="font-medium text-gray-900 mb-3">Uyarılar</h4>
+            <h4 className="font-medium text-neutral-900 mb-3">Uyarılar</h4>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">E-posta</span>
@@ -401,8 +401,8 @@ export const NotificationPreferences: React.FC = () => {
           <Separator />
 
           <div>
-            <h4 className="font-medium text-gray-900 mb-3">Sessiz Saatler</h4>
-            <p className="text-sm text-gray-600 mb-4">
+            <h4 className="font-medium text-neutral-900 mb-3">Sessiz Saatler</h4>
+            <p className="text-sm text-neutral-600 mb-4">
               Bu saatler arasında bildirim gönderilmez
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -412,7 +412,7 @@ export const NotificationPreferences: React.FC = () => {
                   type="time"
                   value={preferences.quietHoursStart || '22:00'}
                   onChange={(e) => updatePreference('quietHoursStart', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500"
                 />
               </div>
               <div>
@@ -421,7 +421,7 @@ export const NotificationPreferences: React.FC = () => {
                   type="time"
                   value={preferences.quietHoursEnd || '08:00'}
                   onChange={(e) => updatePreference('quietHoursEnd', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500"
                 />
               </div>
             </div>

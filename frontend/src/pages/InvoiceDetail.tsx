@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { 
   ArrowLeft, Download, Printer, Share2, Mail, MessageSquare,
@@ -162,11 +162,11 @@ export default function InvoiceDetail() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { label: string; color: string; icon: any }> = {
-      draft: { label: 'Taslak', color: 'bg-gray-100 text-gray-800', icon: FileText },
+      draft: { label: 'Taslak', color: 'bg-neutral-100 text-gray-800', icon: FileText },
       sent: { label: 'Gönderildi', color: 'bg-blue-100 text-blue-800', icon: Mail },
       paid: { label: 'Ödendi', color: 'bg-green-100 text-green-800', icon: CheckCircle },
       overdue: { label: 'Vadesi Geçti', color: 'bg-red-100 text-red-800', icon: AlertCircle },
-      cancelled: { label: 'İptal', color: 'bg-gray-100 text-gray-800', icon: XCircle },
+      cancelled: { label: 'İptal', color: 'bg-neutral-100 text-gray-800', icon: XCircle },
     }
 
     const config = statusConfig[status] || statusConfig.draft

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, X } from 'lucide-react';
 import { useCustomerStore } from '../stores/customerStore';
@@ -46,12 +46,12 @@ const CustomerCreate: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/customers')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
           >
-            <ArrowLeft size={20} className="text-gray-600" />
+            <ArrowLeft size={20} className="text-neutral-600" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Yeni Müşteri Ekle</h1>
+            <h1 className="text-2xl font-bold text-neutral-900">Yeni Müşteri Ekle</h1>
             <p className="text-sm text-gray-500 mt-1">Yeni müşteri bilgilerini girin</p>
           </div>
         </div>
@@ -60,7 +60,7 @@ const CustomerCreate: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate('/customers')}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
           >
             <X size={18} />
             İptal
@@ -89,7 +89,7 @@ const CustomerCreate: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-2">
               Ad Soyad <span className="text-red-500">*</span>
             </label>
             <input
@@ -99,14 +99,14 @@ const CustomerCreate: React.FC = () => {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               placeholder="Ahmet Yılmaz"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-2">
               E-posta <span className="text-red-500">*</span>
             </label>
             <input
@@ -116,14 +116,14 @@ const CustomerCreate: React.FC = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               placeholder="ahmet@example.com"
             />
           </div>
 
           {/* Phone */}
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="phone" className="block text-sm font-medium text-neutral-700 mb-2">
               Telefon <span className="text-red-500">*</span>
             </label>
             <input
@@ -133,14 +133,14 @@ const CustomerCreate: React.FC = () => {
               required
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               placeholder="+90 555 123 4567"
             />
           </div>
 
           {/* Company */}
           <div>
-            <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="company" className="block text-sm font-medium text-neutral-700 mb-2">
               Şirket
             </label>
             <input
@@ -149,14 +149,14 @@ const CustomerCreate: React.FC = () => {
               name="company"
               value={formData.company}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               placeholder="Yılmaz Ltd. Şti."
             />
           </div>
 
           {/* Tax Number */}
           <div>
-            <label htmlFor="taxNumber" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="taxNumber" className="block text-sm font-medium text-neutral-700 mb-2">
               Vergi Numarası
             </label>
             <input
@@ -165,14 +165,14 @@ const CustomerCreate: React.FC = () => {
               name="taxNumber"
               value={formData.taxNumber}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               placeholder="1234567890"
             />
           </div>
 
           {/* Address */}
           <div className="md:col-span-2">
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="address" className="block text-sm font-medium text-neutral-700 mb-2">
               Adres
             </label>
             <textarea
@@ -181,7 +181,7 @@ const CustomerCreate: React.FC = () => {
               rows={3}
               value={formData.address}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               placeholder="Tam adres..."
             />
           </div>

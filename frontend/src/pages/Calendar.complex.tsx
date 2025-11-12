@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -230,19 +230,19 @@ export default function Calendar() {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Calendar</h1>
-        <p className="text-gray-600">Manage orders, deliveries, and events</p>
+        <h1 className="text-3xl font-bold text-neutral-900">Calendar</h1>
+        <p className="text-neutral-600">Manage orders, deliveries, and events</p>
       </div>
 
       {/* Filters */}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">Event Type</label>
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2"
+              className="w-full border border-neutral-300 rounded-md px-3 py-2"
             >
               <option value="all">All Types</option>
               {eventTypes.map((type) => (
@@ -254,11 +254,11 @@ export default function Calendar() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">Status</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2"
+              className="w-full border border-neutral-300 rounded-md px-3 py-2"
             >
               <option value="all">All Statuses</option>
               {statusOptions.map((status) => (
@@ -270,11 +270,11 @@ export default function Calendar() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">Priority</label>
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2"
+              className="w-full border border-neutral-300 rounded-md px-3 py-2"
             >
               <option value="all">All Priorities</option>
               {priorityOptions.map((priority) => (
@@ -292,7 +292,7 @@ export default function Calendar() {
                 setFilterStatus('all');
                 setFilterPriority('all');
               }}
-              className="w-full bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+              className="w-full bg-neutral-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
             >
               Clear Filters
             </button>
@@ -349,29 +349,29 @@ export default function Calendar() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Title *</label>
                   <input
                     type="text"
                     value={modalData.title}
                     onChange={(e) => setModalData({ ...modalData, title: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    className="w-full border border-neutral-300 rounded-md px-3 py-2"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
                   <textarea
                     value={modalData.description}
                     onChange={(e) => setModalData({ ...modalData, description: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    className="w-full border border-neutral-300 rounded-md px-3 py-2"
                     rows={3}
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Event Type *</label>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Event Type *</label>
                     <select
                       value={modalData.eventType}
                       onChange={(e) => {
@@ -382,7 +382,7 @@ export default function Calendar() {
                           color: type?.color || '#3b82f6',
                         });
                       }}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      className="w-full border border-neutral-300 rounded-md px-3 py-2"
                     >
                       {eventTypes.map((type) => (
                         <option key={type.value} value={type.value}>
@@ -393,11 +393,11 @@ export default function Calendar() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Priority</label>
                     <select
                       value={modalData.priority}
                       onChange={(e) => setModalData({ ...modalData, priority: e.target.value })}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      className="w-full border border-neutral-300 rounded-md px-3 py-2"
                     >
                       {priorityOptions.map((priority) => (
                         <option key={priority} value={priority}>
@@ -410,23 +410,23 @@ export default function Calendar() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Start Date *</label>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Start Date *</label>
                     <input
                       type="datetime-local"
                       value={modalData.startDate}
                       onChange={(e) => setModalData({ ...modalData, startDate: e.target.value })}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      className="w-full border border-neutral-300 rounded-md px-3 py-2"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">End Date *</label>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">End Date *</label>
                     <input
                       type="datetime-local"
                       value={modalData.endDate}
                       onChange={(e) => setModalData({ ...modalData, endDate: e.target.value })}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      className="w-full border border-neutral-300 rounded-md px-3 py-2"
                       required
                     />
                   </div>
@@ -440,42 +440,42 @@ export default function Calendar() {
                       onChange={(e) => setModalData({ ...modalData, allDay: e.target.checked })}
                       className="mr-2"
                     />
-                    <span className="text-sm font-medium text-gray-700">All Day Event</span>
+                    <span className="text-sm font-medium text-neutral-700">All Day Event</span>
                   </label>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Location</label>
                   <input
                     type="text"
                     value={modalData.location}
                     onChange={(e) => setModalData({ ...modalData, location: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    className="w-full border border-neutral-300 rounded-md px-3 py-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Notes</label>
                   <textarea
                     value={modalData.notes}
                     onChange={(e) => setModalData({ ...modalData, notes: e.target.value })}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    className="w-full border border-neutral-300 rounded-md px-3 py-2"
                     rows={3}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Color</label>
                   <input
                     type="color"
                     value={modalData.color}
                     onChange={(e) => setModalData({ ...modalData, color: e.target.value })}
-                    className="h-10 w-20 border border-gray-300 rounded-md"
+                    className="h-10 w-20 border border-neutral-300 rounded-md"
                   />
                 </div>
 
                 {selectedEvent && (
-                  <div className="bg-gray-50 p-4 rounded-md">
+                  <div className="bg-neutral-50 p-4 rounded-md">
                     <h3 className="font-semibold mb-2">Event Details</h3>
                     <div className="text-sm space-y-1">
                       <p>Status: <span className="font-medium">{selectedEvent.status}</span></p>
@@ -507,7 +507,7 @@ export default function Calendar() {
                     setShowModal(false);
                     resetModal();
                   }}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                  className="px-4 py-2 bg-gray-300 text-neutral-700 rounded-md hover:bg-gray-400"
                 >
                   Cancel
                 </button>

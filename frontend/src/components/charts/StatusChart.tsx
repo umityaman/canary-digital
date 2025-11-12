@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   PieChart,
   Pie,
@@ -22,10 +22,10 @@ interface StatusChartProps {
 const StatusChart: React.FC<StatusChartProps> = ({ data, isLoading }) => {
   if (isLoading) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-64 bg-gray-100 rounded"></div>
+          <div className="h-6 bg-neutral-200 rounded w-1/3 mb-4"></div>
+          <div className="h-64 bg-neutral-100 rounded"></div>
         </div>
       </div>
     );
@@ -53,8 +53,8 @@ const StatusChart: React.FC<StatusChartProps> = ({ data, isLoading }) => {
     if (active && payload && payload.length) {
       const percentage = ((payload[0].value / total) * 100).toFixed(1);
       return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
-          <p className="text-xs font-semibold text-gray-700 mb-2">
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-neutral-200">
+          <p className="text-xs font-semibold text-neutral-700 mb-2">
             {statusIcons[payload[0].payload.status]}{' '}
             {statusLabels[payload[0].payload.status] || payload[0].payload.status}
           </p>
@@ -62,7 +62,7 @@ const StatusChart: React.FC<StatusChartProps> = ({ data, isLoading }) => {
             <p className="text-xs">
               Sayı: <span className="font-semibold">{payload[0].value}</span>
             </p>
-            <p className="text-xs text-gray-600">Oran: {percentage}%</p>
+            <p className="text-xs text-neutral-600">Oran: {percentage}%</p>
           </div>
         </div>
       );
@@ -76,7 +76,7 @@ const StatusChart: React.FC<StatusChartProps> = ({ data, isLoading }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
       <div className="mb-6">
         <h3 className="text-lg font-bold text-gray-800">📋 Sipariş Durumu Dağılımı</h3>
         <p className="text-xs text-gray-500 mt-1">Mevcut siparişlerin durum analizi</p>
@@ -121,14 +121,14 @@ const StatusChart: React.FC<StatusChartProps> = ({ data, isLoading }) => {
           return (
             <div
               key={item.status}
-              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <div
                   className="w-4 h-4 rounded-full"
                   style={{ backgroundColor: item.color }}
                 ></div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-neutral-700">
                   {statusIcons[item.status]} {statusLabels[item.status] || item.status}
                 </span>
               </div>

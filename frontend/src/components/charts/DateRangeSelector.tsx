@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { subDays, format } from 'date-fns';
 
 interface DateRange {
@@ -60,9 +60,9 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-200">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-700">📅 Tarih Aralığı</h3>
+        <h3 className="text-sm font-semibold text-neutral-700">📅 Tarih Aralığı</h3>
         <span className="text-xs text-gray-500">
           {format(selectedRange.startDate, 'dd/MM/yyyy')} -{' '}
           {format(selectedRange.endDate, 'dd/MM/yyyy')}
@@ -96,7 +96,7 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
       </div>
 
       {showCustom && (
-        <div className="flex items-end gap-2 p-3 bg-gray-50 rounded-md">
+        <div className="flex items-end gap-2 p-3 bg-neutral-50 rounded-md">
           <div className="flex-1">
             <label className="block text-xs font-medium text-neutral-700 mb-1">
               Başlangıç

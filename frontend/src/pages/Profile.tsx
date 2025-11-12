@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import {
   Building2,
   Phone,
@@ -185,7 +185,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-50">
+    <div className="h-full flex flex-col bg-neutral-50">
       {/* Tabs */}
       <div className="bg-white border-b">
         <div className="flex space-x-1 p-4">
@@ -201,7 +201,7 @@ export default function Profile() {
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'bg-neutral-900 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-neutral-600 hover:bg-neutral-100'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -260,7 +260,7 @@ export default function Profile() {
                       className="w-24 h-24 object-contain rounded-lg border"
                     />
                   ) : (
-                    <div className="w-24 h-24 bg-gray-100 rounded-lg border flex items-center justify-center">
+                    <div className="w-24 h-24 bg-neutral-100 rounded-lg border flex items-center justify-center">
                       <Image className="w-10 h-10 text-gray-400" />
                     </div>
                   )}
@@ -288,7 +288,7 @@ export default function Profile() {
                     value={companyData.name}
                     onChange={(e) => setCompanyData({ ...companyData, name: e.target.value })}
                     disabled={!editMode}
-                    className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                    className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                   />
                 </div>
                 <div>
@@ -300,7 +300,7 @@ export default function Profile() {
                       setCompanyData({ ...companyData, authorizedPerson: e.target.value })
                     }
                     disabled={!editMode}
-                    className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                    className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                   />
                 </div>
               </div>
@@ -320,7 +320,7 @@ export default function Profile() {
                       setCompanyData({ ...companyData, addressLine1: e.target.value })
                     }
                     disabled={!editMode}
-                    className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                    className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                   />
                   <input
                     type="text"
@@ -330,14 +330,14 @@ export default function Profile() {
                       setCompanyData({ ...companyData, addressLine2: e.target.value })
                     }
                     disabled={!editMode}
-                    className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                    className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                   />
                   <div className="grid grid-cols-4 gap-4">
                     <select
                       value={companyData.city}
                       onChange={(e) => setCompanyData({ ...companyData, city: e.target.value })}
                       disabled={!editMode}
-                      className="px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     >
                       <option value="">Şehir Seçiniz</option>
                       {CITIES.map((city) => (
@@ -354,7 +354,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, district: e.target.value })
                       }
                       disabled={!editMode}
-                      className="px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                     <input
                       type="text"
@@ -364,13 +364,13 @@ export default function Profile() {
                         setCompanyData({ ...companyData, postalCode: e.target.value })
                       }
                       disabled={!editMode}
-                      className="px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                     <input
                       type="text"
                       value="Türkiye"
                       disabled
-                      className="px-4 py-2 border rounded-lg bg-gray-100 text-gray-700"
+                      className="px-4 py-2 border rounded-lg bg-neutral-100 text-neutral-700"
                     />
                   </div>
                 </div>
@@ -393,7 +393,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, mobilePhone: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -406,7 +406,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, landlinePhone: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -416,7 +416,7 @@ export default function Profile() {
                       value={companyData.email}
                       onChange={(e) => setCompanyData({ ...companyData, email: e.target.value })}
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -429,7 +429,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, website: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                 </div>
@@ -451,7 +451,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, taxNumber: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -463,7 +463,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, taxOffice: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -475,7 +475,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, tradeRegistryNo: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -487,7 +487,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, mersisNo: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                 </div>
@@ -508,7 +508,7 @@ export default function Profile() {
                       value={companyData.iban}
                       onChange={(e) => setCompanyData({ ...companyData, iban: e.target.value })}
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -520,7 +520,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, bankName: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -532,7 +532,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, bankBranch: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                   <div>
@@ -544,7 +544,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, accountHolder: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     />
                   </div>
                 </div>
@@ -561,7 +561,7 @@ export default function Profile() {
                         setCompanyData({ ...companyData, timezone: e.target.value })
                       }
                       disabled={!editMode}
-                      className="w-full px-4 py-2 border rounded-lg disabled:bg-gray-50"
+                      className="w-full px-4 py-2 border rounded-lg disabled:bg-neutral-50"
                     >
                       {TIMEZONES.map((tz) => (
                         <option key={tz} value={tz}>
@@ -578,14 +578,14 @@ export default function Profile() {
           {activeTab === 'team' && (
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-2xl font-bold mb-4">Ekip Yönetimi</h2>
-              <p className="text-gray-600">Backend API hazırlanıyor...</p>
+              <p className="text-neutral-600">Backend API hazırlanıyor...</p>
             </div>
           )}
 
           {activeTab === 'permissions' && (
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-2xl font-bold mb-4">Yetkilendirme</h2>
-              <p className="text-gray-600">Backend API hazırlanıyor...</p>
+              <p className="text-neutral-600">Backend API hazırlanıyor...</p>
             </div>
           )}
 
@@ -595,10 +595,10 @@ export default function Profile() {
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-bold text-neutral-900 mb-2">
                       İki Faktörlü Doğrulama (2FA)
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-neutral-600">
                       Hesabınızın güvenliğini artırmak için ek bir doğrulama katmanı ekleyin
                     </p>
                   </div>
@@ -609,7 +609,7 @@ export default function Profile() {
                         Aktif
                       </span>
                     ) : (
-                      <span className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-lg font-medium">
+                      <span className="flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-600 rounded-lg font-medium">
                         <XCircle className="w-5 h-5" />
                         Pasif
                       </span>
@@ -619,7 +619,7 @@ export default function Profile() {
 
                 {twoFactorEnabled ? (
                   <div className="space-y-4">
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="p-4 bg-blue-50 border border-neutral-200 rounded-lg">
                       <div className="flex items-start gap-3">
                         <Shield className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                         <div>
@@ -643,7 +643,7 @@ export default function Profile() {
                       <button
                         onClick={handleViewBackupCodes}
                         disabled={loading}
-                        className="flex-1 px-4 py-3 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+                        className="flex-1 px-4 py-3 bg-white border-2 border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
                       >
                         Yedek Kodları Görüntüle
                       </button>
@@ -683,32 +683,32 @@ export default function Profile() {
                     </button>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                      <div className="p-4 border border-gray-200 rounded-lg">
+                      <div className="p-4 border border-neutral-200 rounded-lg">
                         <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
                           <Lock className="w-5 h-5 text-blue-600" />
                         </div>
-                        <h4 className="font-semibold text-gray-900 mb-1">E-posta</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-semibold text-neutral-900 mb-1">E-posta</h4>
+                        <p className="text-sm text-neutral-600">
                           E-postanıza gönderilen 6 haneli kodu kullanın
                         </p>
                       </div>
 
-                      <div className="p-4 border border-gray-200 rounded-lg">
+                      <div className="p-4 border border-neutral-200 rounded-lg">
                         <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
                           <Phone className="w-5 h-5 text-green-600" />
                         </div>
-                        <h4 className="font-semibold text-gray-900 mb-1">SMS</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-semibold text-neutral-900 mb-1">SMS</h4>
+                        <p className="text-sm text-neutral-600">
                           Telefonunuza gönderilen kodu kullanın
                         </p>
                       </div>
 
-                      <div className="p-4 border border-gray-200 rounded-lg">
+                      <div className="p-4 border border-neutral-200 rounded-lg">
                         <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
                           <Shield className="w-5 h-5 text-purple-600" />
                         </div>
-                        <h4 className="font-semibold text-gray-900 mb-1">Authenticator</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-semibold text-neutral-900 mb-1">Authenticator</h4>
+                        <p className="text-sm text-neutral-600">
                           Google Authenticator gibi uygulamalar
                         </p>
                       </div>
@@ -719,19 +719,19 @@ export default function Profile() {
 
               {/* Password Change Section */}
               <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Şifre Değiştir</h2>
-                <p className="text-gray-600 mb-4">
+                <h2 className="text-xl font-bold text-neutral-900 mb-4">Şifre Değiştir</h2>
+                <p className="text-neutral-600 mb-4">
                   Güvenliğiniz için şifrenizi düzenli olarak değiştirmenizi öneririz.
                 </p>
-                <button className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium">
+                <button className="px-6 py-3 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition font-medium">
                   Şifreyi Değiştir
                 </button>
               </div>
 
               {/* Active Sessions */}
               <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Aktif Oturumlar</h2>
-                <p className="text-gray-600 mb-4">
+                <h2 className="text-xl font-bold text-neutral-900 mb-4">Aktif Oturumlar</h2>
+                <p className="text-neutral-600 mb-4">
                   Hesabınıza erişimi olan cihazları görebilir ve yönetebilirsiniz.
                 </p>
                 <div className="text-sm text-gray-500">Yakında eklenecek...</div>
@@ -742,7 +742,7 @@ export default function Profile() {
           {activeTab === 'activity' && (
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-2xl font-bold mb-4">Aktivite Geçmişi</h2>
-              <p className="text-gray-600">Backend API hazırlanıyor...</p>
+              <p className="text-neutral-600">Backend API hazırlanıyor...</p>
             </div>
           )}
         </div>

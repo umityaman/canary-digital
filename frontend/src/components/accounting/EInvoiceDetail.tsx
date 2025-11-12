@@ -216,7 +216,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
   const getStatusInfo = (status: string) => {
     const statusMap: Record<string, { label: string; color: string; bgColor: string }> = {
-      draft: { label: 'Taslak', color: 'text-gray-700', bgColor: 'bg-gray-100' },
+      draft: { label: 'Taslak', color: 'text-neutral-700', bgColor: 'bg-neutral-100' },
       sent: { label: 'Gönderildi', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
       approved: { label: 'Onaylandı', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
       rejected: { label: 'Reddedildi', color: 'text-neutral-800', bgColor: 'bg-neutral-100' },
@@ -316,7 +316,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
               ? 'bg-neutral-100 text-neutral-800'
               : invoice.eInvoiceMeta?.gibStatus === 'delivered'
                 ? 'bg-neutral-100 text-neutral-800'
-                : 'bg-gray-100 text-gray-700'
+                : 'bg-neutral-100 text-neutral-700'
           }`}>
             <Hash size={16} />
             {invoice.eInvoiceMeta?.gibStatus === 'sent'

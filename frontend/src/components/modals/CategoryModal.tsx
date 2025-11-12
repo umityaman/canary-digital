@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { X, Tag, FileText, ToggleLeft, ToggleRight } from 'lucide-react';
 
 interface Category {
@@ -163,7 +163,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onSave, 
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
-                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent ${
                   errors.name ? 'border-red-500' : 'border-neutral-300'
                 }`}
                 placeholder="Örn: Profesyonel Kameralar"
@@ -184,7 +184,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onSave, 
               <textarea
                 value={formData.description}
                 onChange={(e) => handleChange('description', e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent resize-none"
                 placeholder="Kategori hakkında kısa açıklama..."
                 rows={3}
               />
@@ -202,9 +202,9 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onSave, 
                   key={option.value}
                   type="button"
                   onClick={() => handleChange('icon', option.value)}
-                  className={`p-3 border-2 rounded-lg flex flex-col items-center justify-center gap-1 transition-all hover:border-blue-500 ${
+                  className={`p-3 border-2 rounded-lg flex flex-col items-center justify-center gap-1 transition-all hover:border-neutral-500 ${
                     formData.icon === option.value
-                      ? 'border-blue-500 bg-blue-50'
+                      ? 'border-neutral-500 bg-blue-50'
                       : 'border-neutral-200'
                   }`}
                   title={option.label}

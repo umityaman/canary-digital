@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { Upload, X, Image as ImageIcon, Camera } from 'lucide-react';
 
 interface PhotoUploadProps {
@@ -105,8 +105,8 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         className={`
           border-2 border-dashed rounded-xl p-8 text-center transition-all
           ${isDragging 
-            ? 'border-blue-500 bg-blue-50' 
-            : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+            ? 'border-neutral-500 bg-blue-50' 
+            : 'border-neutral-300 bg-neutral-50 hover:border-gray-400 hover:bg-neutral-100'
           }
           ${photos.length >= maxFiles ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
         `}
@@ -133,7 +133,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
           )}
 
           <div>
-            <p className="text-base font-medium text-gray-700">
+            <p className="text-base font-medium text-neutral-700">
               {photos.length >= maxFiles 
                 ? 'Maksimum fotoğraf sayısına ulaştınız'
                 : 'Fotoğrafları sürükleyin veya tıklayın'
@@ -172,7 +172,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
       {photos.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-medium text-gray-700">
+            <h4 className="text-sm font-medium text-neutral-700">
               Yüklenen Fotoğraflar ({photos.length}/{maxFiles})
             </h4>
           </div>
@@ -181,7 +181,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
             {photos.map((photo, index) => (
               <div
                 key={index}
-                className="relative group aspect-square rounded-lg overflow-hidden border-2 border-gray-200 hover:border-gray-300 transition-all"
+                className="relative group aspect-square rounded-lg overflow-hidden border-2 border-neutral-200 hover:border-neutral-300 transition-all"
               >
                 {/* Image Preview */}
                 <img

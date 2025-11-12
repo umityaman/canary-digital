@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -258,14 +258,14 @@ export default function PaymentForm({
       
       <CardContent className="space-y-6">
         {/* Amount Display */}
-        <div className="text-center py-4 bg-gray-50 rounded-lg">
-          <div className="text-2xl font-bold text-gray-900">
+        <div className="text-center py-4 bg-neutral-50 rounded-lg">
+          <div className="text-2xl font-bold text-neutral-900">
             {amount.toLocaleString('tr-TR', {
               style: 'currency',
               currency: currency
             })}
           </div>
-          <div className="text-sm text-gray-600">Ödenecek Tutar</div>
+          <div className="text-sm text-neutral-600">Ödenecek Tutar</div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -346,10 +346,10 @@ export default function PaymentForm({
                 {installmentOptions.slice(0, 6).map((option) => (
                   <label
                     key={option.installmentNumber}
-                    className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${
+                    className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-neutral-50 ${
                       selectedInstallment === option.installmentNumber 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : 'border-gray-200'
+                        ? 'border-neutral-500 bg-blue-50' 
+                        : 'border-neutral-200'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -366,7 +366,7 @@ export default function PaymentForm({
                           {option.installmentNumber === 1 ? 'Peşin' : `${option.installmentNumber} Taksit`}
                         </div>
                         {option.installmentNumber > 1 && (
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-neutral-600">
                             {option.installmentPrice} TL x {option.installmentNumber}
                           </div>
                         )}
@@ -384,7 +384,7 @@ export default function PaymentForm({
                 ))}
               </div>
               {loadingInstallments && (
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-neutral-600">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   Taksit seçenekleri yükleniyor...
                 </div>
@@ -418,9 +418,9 @@ export default function PaymentForm({
           )}
 
           {/* Security Info */}
-          <div className="flex items-start gap-2 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-            <Lock className="w-4 h-4 text-gray-600 mt-0.5" />
-            <div className="text-sm text-gray-700">
+          <div className="flex items-start gap-2 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
+            <Lock className="w-4 h-4 text-neutral-600 mt-0.5" />
+            <div className="text-sm text-neutral-700">
               <div className="font-medium">Güvenli Ödeme</div>
               <div>Kart bilgileriniz SSL ile şifrelenir ve saklanmaz.</div>
             </div>

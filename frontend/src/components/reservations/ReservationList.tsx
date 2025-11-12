@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   List,
   Search,
@@ -99,7 +99,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
         icon: <AlertCircle className="w-4 h-4" />,
       },
       COMPLETED: {
-        bg: 'bg-gray-100 text-gray-800',
+        bg: 'bg-neutral-100 text-gray-800',
         text: 'Tamamlandı',
         icon: <CheckCircle className="w-4 h-4" />,
       },
@@ -155,7 +155,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-md">
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-neutral-200">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <List className="w-6 h-6 text-blue-600" />
@@ -168,9 +168,9 @@ const ReservationList: React.FC<ReservationListProps> = ({
           <button
             onClick={loadReservations}
             disabled={loading}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+            className="p-2 hover:bg-neutral-100 rounded-lg transition-colors disabled:opacity-50"
           >
-            <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-5 h-5 text-neutral-600 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
 
@@ -183,7 +183,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
               placeholder="Rezervasyon no, müşteri adı, email veya telefon ara..."
             />
           </div>
@@ -194,7 +194,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
           >
             <option value="">Tüm Durumlar</option>
             <option value="PENDING">Bekliyor</option>
@@ -217,7 +217,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-neutral-50 border-b border-neutral-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Rezervasyon No
@@ -250,7 +250,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
               <tr>
                 <td colSpan={8} className="px-6 py-12 text-center">
                   <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-600"></div>
                   </div>
                 </td>
               </tr>
@@ -264,7 +264,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
               reservations.map((reservation) => (
                 <tr
                   key={reservation.id}
-                  className="hover:bg-gray-50 cursor-pointer transition-colors"
+                  className="hover:bg-neutral-50 cursor-pointer transition-colors"
                   onClick={() => onReservationClick?.(reservation)}
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -280,7 +280,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                     <div className="flex items-start gap-2">
                       <User className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-gray-900 truncate">
+                        <div className="text-sm font-medium text-neutral-900 truncate">
                           {reservation.customerName}
                         </div>
                         <div className="text-xs text-gray-500 truncate">
@@ -294,13 +294,13 @@ const ReservationList: React.FC<ReservationListProps> = ({
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-neutral-900">
                       {new Date(reservation.startDate).toLocaleDateString('tr-TR', {
                         day: '2-digit',
                         month: 'short',
                       })}
                     </div>
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-neutral-900">
                       {new Date(reservation.endDate).toLocaleDateString('tr-TR', {
                         day: '2-digit',
                         month: 'short',
@@ -320,7 +320,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                   <td className="px-6 py-4">
                     <div className="flex items-start gap-2">
                       <Package className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                      <div className="text-sm text-gray-900">
+                      <div className="text-sm text-neutral-900">
                         {reservation.items.length > 0 ? (
                           <div>
                             <div className="font-medium">
@@ -342,7 +342,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-1">
                       <DollarSign className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className="text-sm font-semibold text-neutral-900">
                         {reservation.totalAmount.toFixed(2)} TL
                       </span>
                     </div>
@@ -377,8 +377,8 @@ const ReservationList: React.FC<ReservationListProps> = ({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-          <div className="text-sm text-gray-600">
+        <div className="px-6 py-4 border-t border-neutral-200 flex items-center justify-between">
+          <div className="text-sm text-neutral-600">
             Sayfa {page} / {totalPages} • Toplam {total} rezervasyon
           </div>
 
@@ -386,7 +386,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1 || loading}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
             >
               Önceki
             </button>
@@ -411,7 +411,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                     className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
                       page === pageNum
                         ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 hover:bg-gray-50'
+                        : 'border border-neutral-300 hover:bg-neutral-50'
                     }`}
                   >
                     {pageNum}
@@ -423,7 +423,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page === totalPages || loading}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
             >
               Sonraki
             </button>

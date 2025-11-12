@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { 
   Building2, Link2, CheckCircle, XCircle, AlertCircle, 
   ExternalLink, Shield, Zap, Clock,
@@ -363,7 +363,7 @@ export default function BankIntegrations() {
       case 'coming-soon':
         return <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">Yakında</span>
       case 'inactive':
-        return <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Pasif</span>
+        return <span className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-xs font-medium">Pasif</span>
       default:
         return null
     }
@@ -381,17 +381,17 @@ export default function BankIntegrations() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-neutral-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <h1 className="text-2xl font-bold text-neutral-900 flex items-center gap-2">
                 <Building2 className="w-8 h-8 text-blue-600" />
                 Banka Entegrasyonları
               </h1>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-neutral-600 mt-1">
                 Türkiye'deki tüm bankalarınızı tek platformda yönetin
               </p>
             </div>
@@ -448,7 +448,7 @@ export default function BankIntegrations() {
         {/* Connected Banks */}
         {connectedBanks.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
               Bağlı Hesaplar ({connectedBanks.length})
             </h2>
@@ -459,7 +459,7 @@ export default function BankIntegrations() {
                     <div className="flex items-center gap-3">
                       <span className="text-3xl">{bank.logo}</span>
                       <div>
-                        <h3 className="font-semibold text-gray-900">{bank.name}</h3>
+                        <h3 className="font-semibold text-neutral-900">{bank.name}</h3>
                         <div className="flex items-center gap-1 mt-1">
                           <CheckCircle className="w-3 h-3 text-green-600" />
                           <span className="text-xs text-green-700">Bağlı</span>
@@ -470,13 +470,13 @@ export default function BankIntegrations() {
                   
                   <div className="space-y-2 mb-3">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Son Senkronizasyon:</span>
-                      <span className="font-medium text-gray-900">{bank.lastSync}</span>
+                      <span className="text-neutral-600">Son Senkronizasyon:</span>
+                      <span className="font-medium text-neutral-900">{bank.lastSync}</span>
                     </div>
                   </div>
 
                   <div className="flex gap-2">
-                    <button className="flex-1 px-3 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-sm">
+                    <button className="flex-1 px-3 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2 text-sm">
                       <RefreshCw className="w-4 h-4" />
                       Yenile
                     </button>
@@ -504,7 +504,7 @@ export default function BankIntegrations() {
                 className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
                   activeCategory === cat.id
                     ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
               >
                 <span>{getCategoryIcon(cat.id)}</span>
@@ -512,7 +512,7 @@ export default function BankIntegrations() {
                 <span className={`px-2 py-0.5 rounded-full text-xs ${
                   activeCategory === cat.id
                     ? 'bg-white/20 text-white'
-                    : 'bg-white text-gray-700'
+                    : 'bg-white text-neutral-700'
                 }`}>
                   {cat.count}
                 </span>
@@ -528,19 +528,19 @@ export default function BankIntegrations() {
               placeholder="Banka ara..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
             />
           </div>
 
           {/* Available Banks */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredBanks.map(bank => (
-              <div key={bank.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
+              <div key={bank.id} className="border border-neutral-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{bank.logo}</span>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{bank.name}</h3>
+                      <h3 className="font-semibold text-neutral-900">{bank.name}</h3>
                       <div className="mt-1">{getStatusBadge(bank.status)}</div>
                     </div>
                   </div>
@@ -550,7 +550,7 @@ export default function BankIntegrations() {
                   {bank.features.slice(0, 3).map((feature, idx) => (
                     <div key={idx} className="flex items-center gap-2">
                       <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0" />
-                      <span className="text-sm text-gray-600">{feature}</span>
+                      <span className="text-sm text-neutral-600">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -583,31 +583,31 @@ export default function BankIntegrations() {
         </div>
 
         {/* Info Section */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-neutral-200 rounded-lg p-6">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
               <Shield className="text-white w-6 h-6" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                 Güvenli Banka Entegrasyonu
               </h3>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-neutral-600 mb-3">
                 Tüm banka bağlantıları 256-bit SSL şifreleme ile korunmaktadır. Hiçbir şifreniz sistemimizde saklanmaz. 
                 Open Banking standartları ile güvenli API bağlantısı sağlanmaktadır.
               </p>
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <Lock className="text-blue-600 w-4 h-4" />
-                  <span className="text-gray-700">256-bit SSL</span>
+                  <span className="text-neutral-700">256-bit SSL</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Key className="text-blue-600 w-4 h-4" />
-                  <span className="text-gray-700">OAuth 2.0</span>
+                  <span className="text-neutral-700">OAuth 2.0</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Database className="text-blue-600 w-4 h-4" />
-                  <span className="text-gray-700">KVKK Uyumlu</span>
+                  <span className="text-neutral-700">KVKK Uyumlu</span>
                 </div>
               </div>
             </div>

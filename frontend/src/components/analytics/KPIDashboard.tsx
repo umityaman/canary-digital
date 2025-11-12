@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -318,7 +318,7 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value as any)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="7d">Son 7 Gün</option>
                 <option value="30d">Son 30 Gün</option>
@@ -346,13 +346,13 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
                       {getIcon(kpi.icon)}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600">{kpi.title}</p>
+                      <p className="text-sm font-medium text-neutral-600">{kpi.title}</p>
                       <p className="text-xs text-gray-500">{kpi.period}</p>
                     </div>
                   </div>
                   
                   <div className="mt-2">
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-bold text-neutral-900">
                       {formatValue(kpi.value, kpi.format)}
                     </p>
                     
@@ -397,15 +397,15 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Aylık</span>
+                <span className="text-neutral-600">Aylık</span>
                 <span className="font-medium">{formatValue(data.revenue.monthly, 'currency')}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Haftalık</span>
+                <span className="text-neutral-600">Haftalık</span>
                 <span className="font-medium">{formatValue(data.revenue.weekly, 'currency')}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Günlük</span>
+                <span className="text-neutral-600">Günlük</span>
                 <span className="font-medium">{formatValue(data.revenue.daily, 'currency')}</span>
               </div>
             </CardContent>
@@ -418,15 +418,15 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Tamamlanan</span>
+                <span className="text-neutral-600">Tamamlanan</span>
                 <span className="font-medium text-neutral-900">{data.orders.completed}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Bekleyen</span>
+                <span className="text-neutral-600">Bekleyen</span>
                 <span className="font-medium text-neutral-700">{data.orders.pending}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">İptal Edilen</span>
+                <span className="text-neutral-600">İptal Edilen</span>
                 <span className="font-medium text-neutral-500">{data.orders.cancelled}</span>
               </div>
             </CardContent>
@@ -439,15 +439,15 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Müsait</span>
+                <span className="text-neutral-600">Müsait</span>
                 <span className="font-medium text-neutral-900">{data.equipment.available}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Kiralanmış</span>
+                <span className="text-neutral-600">Kiralanmış</span>
                 <span className="font-medium text-neutral-700">{data.equipment.rented}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Bakımda</span>
+                <span className="text-neutral-600">Bakımda</span>
                 <span className="font-medium text-neutral-600">{data.equipment.maintenance}</span>
               </div>
             </CardContent>
@@ -460,15 +460,15 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">İşletme Maliyeti</span>
+                <span className="text-neutral-600">İşletme Maliyeti</span>
                 <span className="font-medium">{formatValue(data.financial.operatingCosts, 'currency')}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">ROI</span>
+                <span className="text-neutral-600">ROI</span>
                 <span className="font-medium">{formatValue(data.financial.roi, 'percentage')}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Nakit Akışı</span>
+                <span className="text-neutral-600">Nakit Akışı</span>
                 <span className={`font-medium ${data.financial.cashFlow >= 0 ? 'text-neutral-900' : 'text-neutral-600'}`}>
                   {formatValue(data.financial.cashFlow, 'currency')}
                 </span>

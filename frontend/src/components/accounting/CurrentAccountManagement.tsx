@@ -157,7 +157,7 @@ export default function CurrentAccountManagement() {
   const getBalanceColor = (balance: number): string => {
     if (balance > 0) return 'text-neutral-900';
     if (balance < 0) return 'text-neutral-800';
-    return 'text-gray-600';
+    return 'text-neutral-600';
   };
 
   const formatCurrency = (amount: number): string => {
@@ -305,7 +305,7 @@ export default function CurrentAccountManagement() {
               placeholder="Cari adı, kodu veya vergi no ara..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
 
@@ -313,7 +313,7 @@ export default function CurrentAccountManagement() {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
           >
             <option value="ALL">Tüm Tipler</option>
             <option value="CUSTOMER">Müşteri</option>
@@ -324,7 +324,7 @@ export default function CurrentAccountManagement() {
           <select
             value={balanceFilter}
             onChange={(e) => setBalanceFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
           >
             <option value="ALL">Tüm Bakiyeler</option>
             <option value="POSITIVE">Alacaklı (Pozitif)</option>
@@ -365,7 +365,7 @@ export default function CurrentAccountManagement() {
       <div className={card('none', 'none', 'default', 'lg')}>
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-600"></div>
           </div>
         ) : filteredAccounts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
@@ -382,7 +382,7 @@ export default function CurrentAccountManagement() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b-2 border-gray-200">
+              <thead className="bg-neutral-50 border-b-2 border-neutral-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Cari Kodu
@@ -409,7 +409,7 @@ export default function CurrentAccountManagement() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredAccounts.map((account) => (
-                  <tr key={account.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={account.id} className="hover:bg-neutral-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <Users className="w-4 h-4 text-gray-400 mr-2" />
@@ -486,7 +486,7 @@ export default function CurrentAccountManagement() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="border-b border-gray-200 p-6">
+            <div className="border-b border-neutral-200 p-6">
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>
@@ -498,7 +498,7 @@ export default function CurrentAccountManagement() {
                 </div>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-neutral-600 transition-colors"
                 >
                   <AlertCircle className="w-6 h-6" />
                 </button>
@@ -577,7 +577,7 @@ export default function CurrentAccountManagement() {
                 
                 {transactionsLoading ? (
                   <div className="flex items-center justify-center h-32">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-neutral-600"></div>
                   </div>
                 ) : !selectedAccount.transactions || selectedAccount.transactions.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
@@ -585,8 +585,8 @@ export default function CurrentAccountManagement() {
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="w-full border border-gray-200 rounded-lg">
-                      <thead className="bg-gray-50">
+                    <table className="w-full border border-neutral-200 rounded-lg">
+                      <thead className="bg-neutral-50">
                         <tr>
                           <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                             Tarih
@@ -610,14 +610,14 @@ export default function CurrentAccountManagement() {
                       </thead>
                       <tbody className="divide-y divide-gray-200">
                         {selectedAccount.transactions.map((txn) => (
-                          <tr key={txn.id} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">
+                          <tr key={txn.id} className="hover:bg-neutral-50">
+                            <td className="px-4 py-3 text-sm text-neutral-900 whitespace-nowrap">
                               {formatDate(txn.date)}
                             </td>
-                            <td className="px-4 py-3 text-sm text-gray-900">
+                            <td className="px-4 py-3 text-sm text-neutral-900">
                               {txn.description}
                             </td>
-                            <td className="px-4 py-3 text-sm text-gray-600 text-center">
+                            <td className="px-4 py-3 text-sm text-neutral-600 text-center">
                               {txn.invoiceNumber || '-'}
                             </td>
                             <td className="px-4 py-3 text-sm text-neutral-900 font-medium text-right">
@@ -639,7 +639,7 @@ export default function CurrentAccountManagement() {
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-gray-200 p-6 flex justify-end gap-3">
+            <div className="border-t border-neutral-200 p-6 flex justify-end gap-3">
               <button
                 onClick={() => setShowDetailModal(false)}
                 className={button('secondary', 'md', 'md')}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useNotification } from '../contexts/NotificationContext';
@@ -427,17 +427,17 @@ const NewOrder: React.FC = () => {
   const [notesOpen, setNotesOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       
       {/* Add Customer Modal */}
       {showAddCustomerModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Yeni müşteri</h2>
+            <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">Yeni müşteri</h2>
               <button 
                 onClick={() => setShowAddCustomerModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -446,55 +446,55 @@ const NewOrder: React.FC = () => {
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ad *</label>
-                  <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Ad *</label>
+                  <input type="text" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Soyad</label>
-                  <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Soyad</label>
+                  <input type="text" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">E-posta *</label>
-                <input type="email" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-sm font-medium text-neutral-700 mb-1">E-posta *</label>
+                <input type="email" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Telefon</label>
-                <input type="tel" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Telefon</label>
+                <input type="tel" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Şirket</label>
-                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Şirket</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Numarası</label>
-                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Vergi Numarası</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Adres</label>
-                <input type="text" placeholder="Sokak adresi" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2" />
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Adres</label>
+                <input type="text" placeholder="Sokak adresi" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 mb-2" />
                 <div className="grid grid-cols-2 gap-2">
-                  <input type="text" placeholder="Şehir" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                  <input type="text" placeholder="Posta kodu" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="text" placeholder="Şehir" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
+                  <input type="text" placeholder="Posta kodu" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
                 </div>
-                <input type="text" placeholder="Ülke" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2" />
+                <input type="text" placeholder="Ülke" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 mt-2" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notlar</label>
-                <textarea rows={3} className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Notlar</label>
+                <textarea rows={3} className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none"></textarea>
               </div>
             </div>
             
-            <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+            <div className="sticky bottom-0 bg-white border-t border-neutral-200 px-6 py-4 flex items-center justify-end gap-2">
               <button 
                 onClick={() => setShowAddCustomerModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 İptal
               </button>
@@ -510,11 +510,11 @@ const NewOrder: React.FC = () => {
       {showCustomFieldModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-lg">
-            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">New custom field</h2>
+            <div className="border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">New custom field</h2>
               <button 
                 onClick={() => setShowCustomFieldModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -522,13 +522,13 @@ const NewOrder: React.FC = () => {
             
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Custom field label</label>
-                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Custom field label</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Data type</label>
-                <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Data type</label>
+                <select className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
                   <option>Single line text</option>
                   <option>Multi-line text</option>
                   <option>Date</option>
@@ -538,37 +538,37 @@ const NewOrder: React.FC = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
-                <input type="text" className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Value</label>
+                <input type="text" className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Show on</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Show on</label>
                 <div className="space-y-2">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                    <span className="text-sm text-gray-700">Quotes</span>
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-neutral-300 rounded focus:ring-neutral-500" />
+                    <span className="text-sm text-neutral-700">Quotes</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                    <span className="text-sm text-gray-700">Contracts</span>
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-neutral-300 rounded focus:ring-neutral-500" />
+                    <span className="text-sm text-neutral-700">Contracts</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                    <span className="text-sm text-gray-700">Invoices</span>
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-neutral-300 rounded focus:ring-neutral-500" />
+                    <span className="text-sm text-neutral-700">Invoices</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                    <span className="text-sm text-gray-700">Packing slip</span>
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 border-neutral-300 rounded focus:ring-neutral-500" />
+                    <span className="text-sm text-neutral-700">Packing slip</span>
                   </label>
                 </div>
               </div>
             </div>
             
-            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+            <div className="border-t border-neutral-200 px-6 py-4 flex items-center justify-end gap-2">
               <button 
                 onClick={() => setShowCustomFieldModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 Cancel
               </button>
@@ -584,11 +584,11 @@ const NewOrder: React.FC = () => {
       {showDiscountModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Add discount</h2>
+            <div className="border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">Add discount</h2>
               <button 
                 onClick={() => setShowDiscountModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -596,14 +596,14 @@ const NewOrder: React.FC = () => {
             
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Discount type</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Discount type</label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setDiscount(prev => ({ ...prev, type: 'percentage' }))}
                     className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                       discount.type === 'percentage'
-                        ? 'bg-blue-50 border-blue-500 text-blue-700'
-                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-blue-50 border-neutral-500 text-blue-700'
+                        : 'bg-white border-neutral-300 text-neutral-700 hover:bg-neutral-50'
                     }`}
                   >
                     Percentage (%)
@@ -612,8 +612,8 @@ const NewOrder: React.FC = () => {
                     onClick={() => setDiscount(prev => ({ ...prev, type: 'fixed' }))}
                     className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                       discount.type === 'fixed'
-                        ? 'bg-blue-50 border-blue-500 text-blue-700'
-                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-blue-50 border-neutral-500 text-blue-700'
+                        : 'bg-white border-neutral-300 text-neutral-700 hover:bg-neutral-50'
                     }`}
                   >
                     Fixed (£)
@@ -622,7 +622,7 @@ const NewOrder: React.FC = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   {discount.type === 'percentage' ? 'Percentage' : 'Amount (£)'}
                 </label>
                 <input 
@@ -631,26 +631,26 @@ const NewOrder: React.FC = () => {
                   max={discount.type === 'percentage' ? 100 : undefined}
                   value={discount.value}
                   onChange={(e) => setDiscount(prev => ({ ...prev, value: Number(e.target.value) }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" 
                   placeholder={discount.type === 'percentage' ? '0-100' : '0.00'}
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Reason (optional)</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Reason (optional)</label>
                 <textarea 
                   rows={2}
                   value={discount.reason}
                   onChange={(e) => setDiscount(prev => ({ ...prev, reason: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none"
                   placeholder="e.g., Early bird discount, Bulk order..."
                 ></textarea>
               </div>
               
               {discount.value > 0 && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <div className="bg-blue-50 border border-neutral-200 rounded-lg p-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-700">Discount amount:</span>
+                    <span className="text-neutral-700">Discount amount:</span>
                     <span className="font-semibold text-blue-700">
                       £{discount.type === 'percentage' 
                         ? (subtotal * discount.value / 100).toFixed(2)
@@ -662,13 +662,13 @@ const NewOrder: React.FC = () => {
               )}
             </div>
             
-            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+            <div className="border-t border-neutral-200 px-6 py-4 flex items-center justify-end gap-2">
               <button 
                 onClick={() => {
                   setShowDiscountModal(false);
                   setDiscount({ type: 'percentage', value: 0, reason: '' });
                 }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 Cancel
               </button>
@@ -687,11 +687,11 @@ const NewOrder: React.FC = () => {
       {showCouponModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Add coupon</h2>
+            <div className="border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">Add coupon</h2>
               <button 
                 onClick={() => setShowCouponModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -699,12 +699,12 @@ const NewOrder: React.FC = () => {
             
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Coupon code</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Coupon code</label>
                 <input 
                   type="text" 
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono uppercase" 
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 font-mono uppercase" 
                   placeholder="Enter coupon code"
                 />
               </div>
@@ -741,13 +741,13 @@ const NewOrder: React.FC = () => {
               </div>
             </div>
             
-            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+            <div className="border-t border-neutral-200 px-6 py-4 flex items-center justify-end gap-2">
               <button 
                 onClick={() => {
                   setShowCouponModal(false);
                   if (!appliedCoupon) setCouponCode('');
                 }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 Cancel
               </button>
@@ -778,8 +778,8 @@ const NewOrder: React.FC = () => {
       {showQRScanModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">
+            <div className="border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">
                 Scan QR Code - {qrScanType === 'customer' ? 'Customer' : 'Equipment'}
               </h2>
               <button 
@@ -788,7 +788,7 @@ const NewOrder: React.FC = () => {
                   setQrManualInput('');
                   setQrError('');
                 }}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -804,7 +804,7 @@ const NewOrder: React.FC = () => {
               
               {/* Manual Input Section */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
                   Enter QR Code or ID manually
                 </label>
                 <div className="flex gap-2">
@@ -817,7 +817,7 @@ const NewOrder: React.FC = () => {
                         handleManualQRScan();
                       }
                     }}
-                    className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono" 
+                    className="flex-1 px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 font-mono" 
                     placeholder="Paste or type code here"
                   />
                   <button
@@ -831,9 +831,9 @@ const NewOrder: React.FC = () => {
               </div>
               
               {/* Camera Section - Placeholder */}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+              <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center bg-neutral-50">
                 <QrCode className="w-16 h-16 text-gray-400 mx-auto mb-3" />
-                <p className="text-sm font-medium text-gray-700 mb-1">Camera scanning coming soon</p>
+                <p className="text-sm font-medium text-neutral-700 mb-1">Camera scanning coming soon</p>
                 <p className="text-xs text-gray-500">
                   For now, please use manual input above
                 </p>
@@ -841,7 +841,7 @@ const NewOrder: React.FC = () => {
               
               <div className="text-xs text-gray-500">
                 <p className="font-medium mb-1">Tips:</p>
-                <ul className="list-disc list-inside space-y-0.5 text-gray-600">
+                <ul className="list-disc list-inside space-y-0.5 text-neutral-600">
                   <li>Paste the QR code value from your scanner</li>
                   <li>Or type the {qrScanType === 'customer' ? 'customer' : 'equipment'} ID directly</li>
                   <li>Press Enter to scan quickly</li>
@@ -849,14 +849,14 @@ const NewOrder: React.FC = () => {
               </div>
             </div>
             
-            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end">
+            <div className="border-t border-neutral-200 px-6 py-4 flex items-center justify-end">
               <button 
                 onClick={() => {
                   setShowQRScanModal(false);
                   setQrManualInput('');
                   setQrError('');
                 }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 Close
               </button>
@@ -869,11 +869,11 @@ const NewOrder: React.FC = () => {
       {showEmailModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Send Email</h2>
+            <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">Send Email</h2>
               <button 
                 onClick={() => setShowEmailModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -881,7 +881,7 @@ const NewOrder: React.FC = () => {
             
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email Template</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Email Template</label>
                 <select 
                   value={emailTemplate}
                   onChange={(e) => {
@@ -908,7 +908,7 @@ const NewOrder: React.FC = () => {
                     setEmailSubject(templates[e.target.value]?.subject || '');
                     setEmailBody(templates[e.target.value]?.body || '');
                   }}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 >
                   <option value="order_confirmation">Order Confirmation</option>
                   <option value="payment_reminder">Payment Reminder</option>
@@ -919,50 +919,50 @@ const NewOrder: React.FC = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">To</label>
                 <input 
                   type="email" 
                   value={emailRecipient || selectedCustomer?.email || ''}
                   onChange={(e) => setEmailRecipient(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" 
                   placeholder="customer@example.com"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Subject</label>
                 <input 
                   type="text" 
                   value={emailSubject}
                   onChange={(e) => setEmailSubject(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500" 
                   placeholder="Email subject"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Message</label>
                 <textarea 
                   rows={8}
                   value={emailBody}
                   onChange={(e) => setEmailBody(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono"
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none font-mono"
                   placeholder="Email message body..."
                 ></textarea>
               </div>
               
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="bg-blue-50 border border-neutral-200 rounded-lg p-3">
                 <p className="text-xs text-blue-700">
                   <strong>Available variables:</strong> #{'{ORDER_ID}'}, #{'{CUSTOMER_NAME}'}, #{'{PICKUP_DATE}'}, #{'{RETURN_DATE}'}, #{'{TOTAL_AMOUNT}'}
                 </p>
               </div>
             </div>
             
-            <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+            <div className="sticky bottom-0 bg-white border-t border-neutral-200 px-6 py-4 flex items-center justify-end gap-2">
               <button 
                 onClick={() => setShowEmailModal(false)}
                 disabled={sendingEmail}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -1013,15 +1013,15 @@ const NewOrder: React.FC = () => {
       {showAddTagModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Add Tag</h2>
+            <div className="border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">Add Tag</h2>
               <button 
                 onClick={() => {
                   setShowAddTagModal(false);
                   setNewTagName('');
                   setNewTagColor('#3B82F6');
                 }}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -1029,19 +1029,19 @@ const NewOrder: React.FC = () => {
             
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tag Name</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Tag Name</label>
                 <input 
                   type="text"
                   value={newTagName}
                   onChange={(e) => setNewTagName(e.target.value)}
                   placeholder="e.g., Urgent, VIP Customer, Follow-up"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   autoFocus
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tag Color</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Tag Color</label>
                 <div className="grid grid-cols-4 gap-2">
                   {tagColors.map(color => (
                     <button
@@ -1050,7 +1050,7 @@ const NewOrder: React.FC = () => {
                       className={`h-10 rounded-lg border-2 transition-all ${
                         newTagColor === color.value 
                           ? 'border-gray-900 scale-105' 
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-neutral-200 hover:border-neutral-300'
                       }`}
                       style={{ backgroundColor: color.value }}
                       title={color.name}
@@ -1059,8 +1059,8 @@ const NewOrder: React.FC = () => {
                 </div>
               </div>
               
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
+              <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3">
+                <p className="text-sm font-medium text-neutral-700 mb-2">Preview:</p>
                 <div 
                   className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-medium text-white"
                   style={{ backgroundColor: newTagColor }}
@@ -1071,14 +1071,14 @@ const NewOrder: React.FC = () => {
               </div>
             </div>
             
-            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-2">
+            <div className="border-t border-neutral-200 px-6 py-4 flex items-center justify-end gap-2">
               <button 
                 onClick={() => {
                   setShowAddTagModal(false);
                   setNewTagName('');
                   setNewTagColor('#3B82F6');
                 }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 Cancel
               </button>
@@ -1098,11 +1098,11 @@ const NewOrder: React.FC = () => {
       {showAddDocumentModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Upload Document</h2>
+            <div className="border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">Upload Document</h2>
               <button 
                 onClick={() => setShowAddDocumentModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -1121,19 +1121,19 @@ const NewOrder: React.FC = () => {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingDocument}
-                className="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-blue-500 hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full border-2 border-dashed border-neutral-300 rounded-lg p-8 hover:border-neutral-500 hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex flex-col items-center gap-3">
                   {uploadingDocument ? (
                     <>
                       <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
-                      <p className="text-sm text-gray-600">Uploading...</p>
+                      <p className="text-sm text-neutral-600">Uploading...</p>
                     </>
                   ) : (
                     <>
                       <FileText className="w-12 h-12 text-gray-400" />
                       <div className="text-center">
-                        <p className="text-sm font-medium text-gray-900">Click to upload documents</p>
+                        <p className="text-sm font-medium text-neutral-900">Click to upload documents</p>
                         <p className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX, JPG, PNG, TXT</p>
                       </div>
                     </>
@@ -1141,17 +1141,17 @@ const NewOrder: React.FC = () => {
                 </div>
               </button>
               
-              <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="mt-4 bg-blue-50 border border-neutral-200 rounded-lg p-3">
                 <p className="text-xs text-blue-700">
                   <strong>Tip:</strong> You can upload multiple files at once. Maximum file size: 10MB per file.
                 </p>
               </div>
             </div>
             
-            <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end">
+            <div className="border-t border-neutral-200 px-6 py-4 flex items-center justify-end">
               <button 
                 onClick={() => setShowAddDocumentModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 Close
               </button>
@@ -1164,22 +1164,22 @@ const NewOrder: React.FC = () => {
         {/* Left Side - Header + Main Content */}
         <div className="flex-1">
           {/* Header */}
-          <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="bg-white border-b border-neutral-200 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="text-sm text-gray-600">
-                  <span className="hover:text-gray-900 cursor-pointer" onClick={() => navigate('/orders')}>Kiralamalar</span>
+                <div className="text-sm text-neutral-600">
+                  <span className="hover:text-neutral-900 cursor-pointer" onClick={() => navigate('/orders')}>Kiralamalar</span>
                   <span className="mx-2">›</span>
-                  <span className="text-gray-900">Yeni kiralama</span>
+                  <span className="text-neutral-900">Yeni kiralama</span>
                 </div>
-                <span className="px-2.5 py-0.5 bg-gray-200 text-gray-700 text-xs font-medium rounded-full">Yeni</span>
+                <span className="px-2.5 py-0.5 bg-neutral-200 text-neutral-700 text-xs font-medium rounded-full">Yeni</span>
               </div>
               
               <div className="flex items-center gap-2">
                 <button 
                   onClick={handleSaveAsDraft}
                   disabled={savingOrder}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm font-medium text-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {savingOrder && <Loader2 className="w-4 h-4 animate-spin" />}
                   {savingOrder ? 'Kaydediliyor...' : 'Taslak olarak kaydet'}
@@ -1187,36 +1187,36 @@ const NewOrder: React.FC = () => {
                 <div className="relative dropdown-container">
                   <button 
                     onClick={() => setShowThreeDotsMenu(!showThreeDotsMenu)}
-                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="p-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                   >
-                    <MoreHorizontal className="w-5 h-5 text-gray-600" />
+                    <MoreHorizontal className="w-5 h-5 text-neutral-600" />
                   </button>
                   
                   {/* 3-Dot Dropdown Menu */}
                   {showThreeDotsMenu && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-neutral-200 py-1 z-50">
+                      <button className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2">
                         <Copy className="w-4 h-4" />
                         Kiralamayı kopyala
                       </button>
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-neutral-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
                         Taslağa geri dön
                       </button>
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-neutral-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
                         Rezerve'ye geri dön
                       </button>
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-neutral-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
                         Teslim alındı'ya geri dön
                       </button>
-                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 flex items-center gap-2">
+                      <button className="w-full px-4 py-2 text-left text-sm text-gray-500 hover:bg-neutral-50 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
                         İade edildi'ye geri dön
                       </button>
-                      <hr className="my-1 border-gray-200" />
-                      <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50 flex items-center gap-2">
+                      <hr className="my-1 border-neutral-200" />
+                      <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-neutral-50 flex items-center gap-2">
                         <X className="w-4 h-4" />
                         Kiralamayı iptal et
                       </button>
@@ -1250,15 +1250,15 @@ const NewOrder: React.FC = () => {
               <div className="space-y-6">
                 
                 {/* Customer Section */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <h3 className="text-base font-semibold text-gray-900 mb-4">Müşteri</h3>
+                <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+                  <h3 className="text-base font-semibold text-neutral-900 mb-4">Müşteri</h3>
                   <div className="flex gap-2">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
                         placeholder="Müşteri ara"
-                        className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full pl-10 pr-4 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                       />
                     </div>
                     <button
@@ -1266,36 +1266,36 @@ const NewOrder: React.FC = () => {
                         setQRScanType('customer');
                         setShowQRScanModal(true);
                       }}
-                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="p-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                       title="QR Tara"
                     >
-                      <QrCode className="w-4 h-4 text-gray-600" />
+                      <QrCode className="w-4 h-4 text-neutral-600" />
                     </button>
                     <button
                       onClick={() => setShowAddCustomerModal(true)}
-                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="p-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                       title="Müşteri ekle"
                     >
-                      <UserPlus className="w-4 h-4 text-gray-600" />
+                      <UserPlus className="w-4 h-4 text-neutral-600" />
                     </button>
                   </div>
                 </div>
 
                 {/* Information Section */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-base font-semibold text-gray-900">Bilgiler</h3>
+                    <h3 className="text-base font-semibold text-neutral-900">Bilgiler</h3>
                     <button 
                       onClick={() => setShowCustomFieldModal(true)}
-                      className="text-sm text-gray-700 hover:text-gray-900 font-medium px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="text-sm text-neutral-700 hover:text-neutral-900 font-medium px-3 py-1.5 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                     >
                       Alan ekle
                     </button>
                   </div>
                   
-                  <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                    <p className="text-sm font-medium text-gray-900 mb-2">Henüz özel alan oluşturmadınız.</p>
-                    <p className="text-xs text-gray-600 mb-3 px-4">
+                  <div className="text-center py-8 border border-dashed border-neutral-300 rounded-lg bg-neutral-50">
+                    <p className="text-sm font-medium text-neutral-900 mb-2">Henüz özel alan oluşturmadınız.</p>
+                    <p className="text-xs text-neutral-600 mb-3 px-4">
                       Özel alanlar, teslimat bilgileri veya notlar gibi ekstra detayları gösterir. Kiralamalar üzerinde otomatik doldurulacak şekilde ayarlayabilir veya yukarıdaki butonu kullanarak tek seferlik alanlar ekleyebilirsiniz.
                     </p>
                     <button 
@@ -1312,12 +1312,12 @@ const NewOrder: React.FC = () => {
               </div>
 
               {/* Right Column: Pickup (Tek Başına) */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Teslim Alma</h3>
+              <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+                <h3 className="text-base font-semibold text-neutral-900 mb-4">Teslim Alma</h3>
 
                 {/* Pick up */}
                 <div className="mb-6">
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Teslim alma</h4>
+                  <h4 className="text-sm font-medium text-neutral-700 mb-3">Teslim alma</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <input
@@ -1325,7 +1325,7 @@ const NewOrder: React.FC = () => {
                         value={pickupDate}
                         onChange={(e) => setPickupDate(e.target.value)}
                         placeholder="Tarih seçin"
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                       />
                     </div>
                     <div>
@@ -1334,7 +1334,7 @@ const NewOrder: React.FC = () => {
                         value={pickupTime}
                         onChange={(e) => setPickupTime(e.target.value)}
                         placeholder="Saat"
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                       />
                     </div>
                   </div>
@@ -1342,7 +1342,7 @@ const NewOrder: React.FC = () => {
 
                 {/* Return */}
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">İade</h4>
+                  <h4 className="text-sm font-medium text-neutral-700 mb-3">İade</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <input
@@ -1350,7 +1350,7 @@ const NewOrder: React.FC = () => {
                         value={returnDate}
                         onChange={(e) => setReturnDate(e.target.value)}
                         placeholder="Tarih seçin"
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                       />
                     </div>
                     <div>
@@ -1359,7 +1359,7 @@ const NewOrder: React.FC = () => {
                         value={returnTime}
                         onChange={(e) => setReturnTime(e.target.value)}
                         placeholder="Saat"
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                       />
                     </div>
                   </div>
@@ -1368,7 +1368,7 @@ const NewOrder: React.FC = () => {
             </div>
 
             {/* Row 2: Products & Pricing (Tek Section, Full Width) */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
               
               {/* PRODUCTS PART */}
               <div className="flex gap-2 mb-6">
@@ -1379,7 +1379,7 @@ const NewOrder: React.FC = () => {
                     placeholder="Ürün eklemek için ara"
                     value={searchProducts}
                     onChange={(e) => setSearchProducts(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-4 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   />
                 </div>
                 <button
@@ -1387,17 +1387,17 @@ const NewOrder: React.FC = () => {
                     setQRScanType('equipment');
                     setShowQRScanModal(true);
                   }}
-                  className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="p-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
                   title="QR Tara"
                 >
-                  <QrCode className="w-4 h-4 text-gray-600" />
+                  <QrCode className="w-4 h-4 text-neutral-600" />
                 </button>
               </div>
 
               {/* Product lines list or Empty State */}
               {productLines.length === 0 ? (
                 <div className="text-center py-20 mb-6">
-                  <p className="text-sm text-gray-900 font-medium mb-1">Bu kiralama boş. Ürün veya özel satır ekleyerek başlayın.</p>
+                  <p className="text-sm text-neutral-900 font-medium mb-1">Bu kiralama boş. Ürün veya özel satır ekleyerek başlayın.</p>
                 </div>
               ) : (
                 <div className="space-y-2 mb-6">
@@ -1408,10 +1408,10 @@ const NewOrder: React.FC = () => {
                       onDragStart={(e) => onDragStart(e, idx)}
                       onDragOver={onDragOver}
                       onDrop={(e) => onDrop(e, idx)}
-                      className="flex items-center gap-2 p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-50"
+                      className="flex items-center gap-2 p-2 border border-neutral-200 rounded-md bg-white hover:bg-neutral-50"
                     >
                       {/* Drag Handle */}
-                      <button className="p-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing">
+                      <button className="p-1 text-gray-400 hover:text-neutral-600 cursor-grab active:cursor-grabbing">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <circle cx="6" cy="4" r="1" fill="currentColor"/>
                           <circle cx="10" cy="4" r="1" fill="currentColor"/>
@@ -1423,7 +1423,7 @@ const NewOrder: React.FC = () => {
                       </button>
 
                       {/* Menu Button */}
-                      <button className="p-1 text-gray-400 hover:text-gray-600">
+                      <button className="p-1 text-gray-400 hover:text-neutral-600">
                         <ChevronDown className="w-4 h-4" />
                       </button>
 
@@ -1434,16 +1434,16 @@ const NewOrder: React.FC = () => {
                           value={line.title}
                           onChange={(e) => updateLine(line.id, { title: e.target.value })}
                           placeholder={line.isSection ? "Bölüm adı" : line.type === 'charge' ? "Başlık" : "Ad"}
-                          className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                          className="w-full px-3 py-1.5 text-sm border border-neutral-300 rounded focus:outline-none focus:border-neutral-500"
                         />
                       </div>
 
                       {/* Quantity - Sadece Charge için */}
                       {line.type === 'charge' && (
-                        <div className="flex items-center border border-gray-300 rounded">
+                        <div className="flex items-center border border-neutral-300 rounded">
                           <button 
                             onClick={() => updateLine(line.id, { qty: Math.max(1, Number(line.qty || 1) - 1) })} 
-                            className="px-2 py-1 hover:bg-gray-100 text-gray-600"
+                            className="px-2 py-1 hover:bg-neutral-100 text-neutral-600"
                           >
                             -
                           </button>
@@ -1451,11 +1451,11 @@ const NewOrder: React.FC = () => {
                             type="text" 
                             value={line.qty || 1} 
                             onChange={(e) => updateLine(line.id, { qty: Number(e.target.value) || 1 })} 
-                            className="w-12 text-center text-sm py-1 border-x border-gray-300"
+                            className="w-12 text-center text-sm py-1 border-x border-neutral-300"
                           />
                           <button 
                             onClick={() => updateLine(line.id, { qty: Number(line.qty || 1) + 1 })} 
-                            className="px-2 py-1 hover:bg-gray-100 text-gray-600"
+                            className="px-2 py-1 hover:bg-neutral-100 text-neutral-600"
                           >
                             +
                           </button>
@@ -1465,12 +1465,12 @@ const NewOrder: React.FC = () => {
                       {/* Price - Sadece Charge için */}
                       {line.type === 'charge' && (
                         <div className="flex items-center gap-1">
-                          <span className="text-sm text-gray-600">£</span>
+                          <span className="text-sm text-neutral-600">£</span>
                           <input 
                             type="text" 
                             value={line.price || '0,00'} 
                             onChange={(e) => updateLine(line.id, { price: e.target.value })} 
-                            className="w-20 px-2 py-1.5 text-sm text-right border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                            className="w-20 px-2 py-1.5 text-sm text-right border border-neutral-300 rounded focus:outline-none focus:border-neutral-500"
                           />
                         </div>
                       )}
@@ -1480,7 +1480,7 @@ const NewOrder: React.FC = () => {
                         <select 
                           value={line.tax || 'Vergisiz'} 
                           onChange={(e) => updateLine(line.id, { tax: e.target.value })} 
-                          className="px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-white"
+                          className="px-3 py-1.5 text-sm border border-neutral-300 rounded focus:outline-none focus:border-neutral-500 bg-white"
                         >
                           <option>Vergi kategorisi yok</option>
                           <option>%20 KDV</option>
@@ -1508,7 +1508,7 @@ const NewOrder: React.FC = () => {
               )}
 
               {/* Divider */}
-              <hr className="my-6 border-gray-200" />
+              <hr className="my-6 border-neutral-200" />
 
               {/* PRICING PART - Sol: Add custom line, Sağ: Pricing bilgileri */}
               <div className="flex items-start justify-between">
@@ -1517,7 +1517,7 @@ const NewOrder: React.FC = () => {
                 <div className="relative dropdown-container">
                   <button 
                     onClick={() => setShowAddLineMenu(!showAddLineMenu)}
-                    className="text-sm text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1"
+                    className="text-sm text-neutral-700 hover:text-neutral-900 font-medium flex items-center gap-1"
                   >
                     <ChevronDown className="w-4 h-4" />
                     Özel satır ekle
@@ -1525,24 +1525,24 @@ const NewOrder: React.FC = () => {
                   
                   {/* Add Line Dropdown Menu */}
                   {showAddLineMenu && (
-                    <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                    <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-1 z-50">
                       <button 
                         onClick={() => addCustomLine('custom')}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
                       >
                         <Plus className="w-4 h-4" />
                         Özel satır ekle
                       </button>
                       <button 
                         onClick={() => addCustomLine('charge')}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
                       >
                         <CreditCard className="w-4 h-4" />
                         Ücret
                       </button>
                       <button 
                         onClick={() => addCustomLine('section')}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
                       >
                         <Package className="w-4 h-4" />
                         Bölüm
@@ -1554,13 +1554,13 @@ const NewOrder: React.FC = () => {
                 {/* Sağ Taraf: Pricing Bilgileri */}
                 <div className="w-80 space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-700">Ara Toplam</span>
-                    <span className="font-medium text-gray-900">₺{subtotal.toFixed(2)}</span>
+                    <span className="text-neutral-700">Ara Toplam</span>
+                    <span className="font-medium text-neutral-900">₺{subtotal.toFixed(2)}</span>
                   </div>
                   
                   {/* Discount */}
                   {discount.value > 0 ? (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-2">
+                    <div className="bg-blue-50 border border-neutral-200 rounded-lg p-2">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="text-xs font-medium text-blue-700">
@@ -1628,14 +1628,14 @@ const NewOrder: React.FC = () => {
                   {/* Total Discount Display */}
                   {totalDiscount > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-700">Toplam indirim</span>
+                      <span className="text-neutral-700">Toplam indirim</span>
                       <span className="font-medium text-green-600">-₺{totalDiscount.toFixed(2)}</span>
                     </div>
                   )}
                   
-                  <div className="border-t border-gray-200 pt-3 flex justify-between">
-                    <span className="text-sm font-semibold text-gray-900">Vergiler dahil toplam</span>
-                    <span className="text-sm font-semibold text-gray-900">₺{totalWithTax.toFixed(2)}</span>
+                  <div className="border-t border-neutral-200 pt-3 flex justify-between">
+                    <span className="text-sm font-semibold text-neutral-900">Vergiler dahil toplam</span>
+                    <span className="text-sm font-semibold text-neutral-900">₺{totalWithTax.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -1645,11 +1645,11 @@ const NewOrder: React.FC = () => {
         </div>
 
         {/* Right Sidebar - En Üstten Başlıyor */}
-        <div className="w-64 border-l border-gray-200 bg-white">
+        <div className="w-64 border-l border-neutral-200 bg-white">
           <div className="p-4 space-y-4">
             
             {/* Action Buttons - Tek Kart İçinde */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 space-y-2">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-3 space-y-2">
               <button 
                 onClick={() => setShowEmailModal(true)}
                 className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center justify-center gap-2"
@@ -1657,10 +1657,10 @@ const NewOrder: React.FC = () => {
                 <Mail className="w-4 h-4" />
                 E-posta gönder
               </button>
-              <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+              <button className="w-full px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm font-medium text-neutral-700">
                 Yeni sözleşme
               </button>
-              <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+              <button className="w-full px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm font-medium text-neutral-700">
                 Yeni teklif
               </button>
             </div>
@@ -1671,12 +1671,12 @@ const NewOrder: React.FC = () => {
             </button>
 
             {/* Documents Accordion */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
               <button
                 onClick={() => setDocumentsOpen(!documentsOpen)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-neutral-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-neutral-900">
                   Belgeler {documents.length > 0 && <span className="text-gray-500">{documents.length}</span>}
                 </span>
                 {documentsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
@@ -1686,18 +1686,18 @@ const NewOrder: React.FC = () => {
                   {documents.map(doc => (
                     <div 
                       key={doc.id}
-                      className="flex items-center justify-between text-sm py-2 hover:bg-gray-50 rounded px-2 group"
+                      className="flex items-center justify-between text-sm py-2 hover:bg-neutral-50 rounded px-2 group"
                     >
                       <div className="flex items-center gap-2 flex-1 min-w-0">
                         <FileText className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                        <span className="text-gray-700 truncate">{doc.name}</span>
+                        <span className="text-neutral-700 truncate">{doc.name}</span>
                         <span className="text-gray-400 text-xs flex-shrink-0">
                           {formatFileSize(doc.size)}
                         </span>
                       </div>
                       <button
                         onClick={() => handleRemoveDocument(doc.id)}
-                        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-all"
+                        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-neutral-200 rounded transition-all"
                       >
                         <X className="w-3 h-3 text-gray-500" />
                       </button>
@@ -1706,7 +1706,7 @@ const NewOrder: React.FC = () => {
                   
                   <button 
                     onClick={() => setShowAddDocumentModal(true)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700 flex items-center justify-center gap-2 mt-2"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm text-neutral-700 flex items-center justify-center gap-2 mt-2"
                   >
                     <Plus className="w-4 h-4" />
                     Belge yükle
@@ -1716,12 +1716,12 @@ const NewOrder: React.FC = () => {
             </div>
 
             {/* Invoices Accordion */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
               <button
                 onClick={() => setInvoicesOpen(!invoicesOpen)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-neutral-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Faturalar</span>
+                <span className="text-sm font-semibold text-neutral-900">Faturalar</span>
                 {invoicesOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {invoicesOpen && (
@@ -1732,35 +1732,35 @@ const NewOrder: React.FC = () => {
             </div>
 
             {/* Payments Accordion */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
               <button
                 onClick={() => setPaymentsOpen(!paymentsOpen)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-neutral-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Ödemeler</span>
+                <span className="text-sm font-semibold text-neutral-900">Ödemeler</span>
                 {paymentsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {paymentsOpen && (
                 <div className="px-4 pb-3 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Ödendi</span>
-                    <span className="font-medium text-gray-900">₺0,00</span>
+                    <span className="text-neutral-600">Ödendi</span>
+                    <span className="font-medium text-neutral-900">₺0,00</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Vadesi gelecek</span>
-                    <span className="font-medium text-gray-900">₺0,00</span>
+                    <span className="text-neutral-600">Vadesi gelecek</span>
+                    <span className="font-medium text-neutral-900">₺0,00</span>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Tags Accordion */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
               <button
                 onClick={() => setTagsOpen(!tagsOpen)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-neutral-50 transition-colors"
               >
-                <span className="text-sm font-semibold text-gray-900">Etiketler</span>
+                <span className="text-sm font-semibold text-neutral-900">Etiketler</span>
                 {tagsOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
               </button>
               {tagsOpen && (
@@ -1787,7 +1787,7 @@ const NewOrder: React.FC = () => {
                   )}
                   <button 
                     onClick={() => setShowAddTagModal(true)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700 flex items-center justify-center gap-2"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm text-neutral-700 flex items-center justify-center gap-2"
                   >
                     <Plus className="w-4 h-4" />
                     Etiket ekle
@@ -1797,13 +1797,13 @@ const NewOrder: React.FC = () => {
             </div>
 
             {/* Notes Accordion */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
               <button
                 onClick={() => setNotesOpen(!notesOpen)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-neutral-50 transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-gray-900">Notlar</span>
+                  <span className="text-sm font-semibold text-neutral-900">Notlar</span>
                   {savingNotes && (
                     <span className="text-xs text-gray-500 flex items-center gap-1">
                       <Loader2 className="w-3 h-3 animate-spin" />
@@ -1825,7 +1825,7 @@ const NewOrder: React.FC = () => {
                     onChange={(e) => handleNotesChange(e.target.value)}
                     placeholder="Yeni not ekle (2 saniye sonra otomatik kaydedilir)"
                     rows={3}
-                    className="w-full text-sm border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full text-sm border border-neutral-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none"
                   />
                 </div>
               )}

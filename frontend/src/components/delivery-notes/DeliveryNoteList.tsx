@@ -125,7 +125,7 @@ export default function DeliveryNoteList() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
       </div>
     );
   }
@@ -163,8 +163,8 @@ export default function DeliveryNoteList() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Toplam</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{deliveryNotes.length}</p>
+              <p className="text-sm text-neutral-600">Toplam</p>
+              <p className="text-2xl font-bold text-neutral-900 mt-1">{deliveryNotes.length}</p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
               <Package className="text-blue-600" size={24} />
@@ -175,7 +175,7 @@ export default function DeliveryNoteList() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Beklemede</p>
+              <p className="text-sm text-neutral-600">Beklemede</p>
               <p className="text-2xl font-bold text-orange-600 mt-1">
                 {deliveryNotes.filter(n => n.status === 'pending').length}
               </p>
@@ -189,7 +189,7 @@ export default function DeliveryNoteList() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Teslim Edildi</p>
+              <p className="text-sm text-neutral-600">Teslim Edildi</p>
               <p className="text-2xl font-bold text-green-600 mt-1">
                 {deliveryNotes.filter(n => n.status === 'delivered').length}
               </p>
@@ -203,7 +203,7 @@ export default function DeliveryNoteList() {
         <div className={card('md', 'lg', 'default', 'xl')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Faturalandı</p>
+              <p className="text-sm text-neutral-600">Faturalandı</p>
               <p className="text-2xl font-bold text-blue-600 mt-1">
                 {deliveryNotes.filter(n => n.status === 'invoiced').length}
               </p>
@@ -241,15 +241,15 @@ export default function DeliveryNoteList() {
       <div className={card('none', 'none', 'default', 'xl')}>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-neutral-50 border-b border-neutral-200">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">İrsaliye No</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase hidden lg:table-cell">Tarih</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Müşteri</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase hidden md:table-cell">Tip</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase">Tutar</th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">Durum</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase">İşlemler</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase">İrsaliye No</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tarih</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Tip</th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Tutar</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-neutral-700 uppercase">İşlemler</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -257,27 +257,27 @@ export default function DeliveryNoteList() {
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center">
                     <Package className="mx-auto mb-3 text-gray-400" size={48} />
-                    <p className="text-gray-600">İrsaliye bulunamadı</p>
+                    <p className="text-neutral-600">İrsaliye bulunamadı</p>
                   </td>
                 </tr>
               ) : (
                 deliveryNotes.map((note) => (
-                  <tr key={note.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={note.id} className="hover:bg-neutral-50 transition-colors">
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="font-medium text-gray-900">{note.deliveryNumber}</div>
+                      <div className="font-medium text-neutral-900">{note.deliveryNumber}</div>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600 hidden lg:table-cell">
+                    <td className="px-4 py-4 whitespace-nowrap text-sm text-neutral-600 hidden lg:table-cell">
                       {formatDate(note.deliveryDate)}
                     </td>
                     <td className="px-4 py-4">
-                      <div className="font-medium text-gray-900">{note.customer.name}</div>
+                      <div className="font-medium text-neutral-900">{note.customer.name}</div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap hidden md:table-cell">
                       <span className={badge('sm', 'default')}>
                         {note.deliveryType === 'sevk' ? 'Sevk' : 'Tahsilat'}
                       </span>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-right font-medium text-gray-900">
+                    <td className="px-4 py-4 whitespace-nowrap text-right font-medium text-neutral-900">
                       {formatCurrency(calculateTotal(note))}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-center">
@@ -289,17 +289,17 @@ export default function DeliveryNoteList() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => navigate(`/delivery-notes/${note.id}`)}
-                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                          className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
                           title="Görüntüle"
                         >
-                          <Eye className="text-gray-600" size={16} />
+                          <Eye className="text-neutral-600" size={16} />
                         </button>
                         <button
                           onClick={() => handleDownloadPDF(note.id)}
-                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                          className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
                           title="PDF İndir"
                         >
-                          <Download className="text-gray-600" size={16} />
+                          <Download className="text-neutral-600" size={16} />
                         </button>
                         {note.status === 'pending' && (
                           <button
@@ -348,12 +348,12 @@ export default function DeliveryNoteList() {
             <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}>
               Faturaya Dönüştür
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-neutral-600 mb-4">
               <strong>{selectedNote.deliveryNumber}</strong> numaralı irsaliyeyi faturaya dönüştürmek istediğinizden emin misiniz?
             </p>
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <p className="text-sm text-gray-600">Müşteri: {selectedNote.customer.name}</p>
-              <p className="text-sm text-gray-600 mt-1">Tutar: {formatCurrency(calculateTotal(selectedNote))}</p>
+            <div className="bg-neutral-50 rounded-lg p-4 mb-6">
+              <p className="text-sm text-neutral-600">Müşteri: {selectedNote.customer.name}</p>
+              <p className="text-sm text-neutral-600 mt-1">Tutar: {formatCurrency(calculateTotal(selectedNote))}</p>
             </div>
             <div className="flex gap-3">
               <button

@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { Bell, X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNotificationAPI, useRealTimeNotifications } from '../hooks/useNotificationAPI';
@@ -154,9 +154,9 @@ export const NotificationPanel = () => {
       {/* Notification Bell Button */}
       <button
         onClick={togglePanel}
-        className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        className="relative p-2 hover:bg-neutral-100 rounded-lg transition-colors"
       >
-        <Bell className="w-6 h-6 text-gray-600" />
+        <Bell className="w-6 h-6 text-neutral-600" />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -171,11 +171,11 @@ export const NotificationPanel = () => {
             className="fixed inset-0 z-40"
             onClick={() => setOpen(false)}
           />
-          <div className="fixed right-4 top-16 z-50 w-96 bg-white rounded-lg shadow-2xl border border-gray-200 max-h-[600px] flex flex-col">
+          <div className="fixed right-4 top-16 z-50 w-96 bg-white rounded-lg shadow-2xl border border-neutral-200 max-h-[600px] flex flex-col">
             {/* Header */}
-            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+            <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">Bildirimler</h3>
+                <h3 className="text-lg font-semibold text-neutral-900">Bildirimler</h3>
                 {unreadCount > 0 && (
                   <p className="text-sm text-gray-500">{unreadCount} okunmamış</p>
                 )}
@@ -202,7 +202,7 @@ export const NotificationPanel = () => {
                   {notifications.map((notification) => (
                     <div
                       key={notification.id}
-                      className={`p-4 hover:bg-gray-50 transition-colors ${
+                      className={`p-4 hover:bg-neutral-50 transition-colors ${
                         !notification.read ? 'bg-blue-50/50' : ''
                       }`}
                       onClick={() => !notification.read && handleMarkAsRead(notification.id)}
@@ -211,7 +211,7 @@ export const NotificationPanel = () => {
                         <div className="mt-0.5">{getIcon(notification.type)}</div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <h4 className="text-sm font-medium text-gray-900">
+                            <h4 className="text-sm font-medium text-neutral-900">
                               {notification.title}
                             </h4>
                             <button
@@ -219,12 +219,12 @@ export const NotificationPanel = () => {
                                 e.stopPropagation();
                                 handleDelete(notification.id);
                               }}
-                              className="text-gray-400 hover:text-gray-600"
+                              className="text-gray-400 hover:text-neutral-600"
                             >
                               <X className="w-4 h-4" />
                             </button>
                           </div>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-sm text-neutral-600 mt-1">
                             {notification.message}
                           </p>
                           <div className="flex items-center justify-between mt-2">

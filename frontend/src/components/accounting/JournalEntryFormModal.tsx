@@ -280,7 +280,7 @@ export default function JournalEntryFormModal({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto">
         {/* Header */}
-        <div className="border-b border-gray-200 p-6 sticky top-0 bg-white z-10">
+        <div className="border-b border-neutral-200 p-6 sticky top-0 bg-white z-10">
           <div className="flex justify-between items-center">
             <div>
               <h3
@@ -296,7 +296,7 @@ export default function JournalEntryFormModal({
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-neutral-600 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -319,7 +319,7 @@ export default function JournalEntryFormModal({
                 onChange={(e) =>
                   setFormData({ ...formData, entryDate: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
                 required
               />
             </div>
@@ -338,7 +338,7 @@ export default function JournalEntryFormModal({
                     status: e.target.value as 'DRAFT' | 'POSTED',
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
               >
                 <option value="DRAFT">Taslak</option>
                 <option value="POSTED">Kesinleştir</option>
@@ -356,7 +356,7 @@ export default function JournalEntryFormModal({
                   type="text"
                   value={formData.entryNumber}
                   disabled
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg bg-neutral-50 text-gray-500"
                 />
               </div>
             )}
@@ -373,7 +373,7 @@ export default function JournalEntryFormModal({
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
               rows={2}
               placeholder="Muhasebe fişi açıklaması..."
               required
@@ -402,7 +402,7 @@ export default function JournalEntryFormModal({
               {formData.items.map((item, index) => (
                 <div
                   key={item.id}
-                  className="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-3"
+                  className="border border-neutral-200 rounded-lg p-4 bg-neutral-50 space-y-3"
                 >
                   <div className="flex justify-between items-center mb-2">
                     <span
@@ -454,14 +454,14 @@ export default function JournalEntryFormModal({
                             })
                           }
                           placeholder="Hesap ara..."
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-8"
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 pr-8"
                         />
                         <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                       </div>
 
                       {/* Account Dropdown */}
                       {showAccountPicker[item.id!] && (
-                        <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <div className="absolute z-20 w-full mt-1 bg-white border border-neutral-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                           {loading ? (
                             <div className="p-4 text-center text-gray-500">
                               Yükleniyor...
@@ -476,12 +476,12 @@ export default function JournalEntryFormModal({
                                 key={account.id}
                                 type="button"
                                 onClick={() => handleSelectAccount(item.id!, account)}
-                                className="w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors"
+                                className="w-full px-4 py-2 text-left hover:bg-neutral-100 transition-colors"
                               >
-                                <div className="font-mono text-sm text-gray-700">
+                                <div className="font-mono text-sm text-neutral-700">
                                   {account.code}
                                 </div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-sm text-neutral-600">
                                   {account.name}
                                 </div>
                               </button>
@@ -505,7 +505,7 @@ export default function JournalEntryFormModal({
                           handleItemChange(item.id!, 'description', e.target.value)
                         }
                         placeholder="Satır açıklaması..."
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
                       />
                     </div>
 
@@ -531,7 +531,7 @@ export default function JournalEntryFormModal({
                             handleItemChange(item.id!, 'creditAmount', 0);
                           }
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       />
                     </div>
 
@@ -557,7 +557,7 @@ export default function JournalEntryFormModal({
                             handleItemChange(item.id!, 'debitAmount', 0);
                           }
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       />
                     </div>
                   </div>
@@ -566,7 +566,7 @@ export default function JournalEntryFormModal({
             </div>
 
             {/* Totals */}
-            <div className="mt-4 p-4 bg-neutral-50 border border-blue-200 rounded-lg">
+            <div className="mt-4 p-4 bg-neutral-50 border border-neutral-200 rounded-lg">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p
@@ -613,7 +613,7 @@ export default function JournalEntryFormModal({
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
             <button
               type="button"
               onClick={onClose}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Search, Package, Users, ShoppingCart, X } from 'lucide-react';
 import api from '../services/api';
 import { debounce } from 'lodash';
@@ -82,12 +82,12 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onClose }) => {
           placeholder="Search equipment, customers, orders..."
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
-          className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+          className="w-full pl-12 pr-12 py-3 border-2 border-neutral-200 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-lg"
         />
         {query && (
           <button
             onClick={handleClear}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-neutral-600"
           >
             <X size={20} />
           </button>
@@ -96,14 +96,14 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onClose }) => {
 
       {/* Loading State */}
       {loading && (
-        <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 p-4 text-center text-gray-500">
+        <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-neutral-200 p-4 text-center text-gray-500">
           Searching...
         </div>
       )}
 
       {/* Results Dropdown */}
       {showResults && !loading && (
-        <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-xl border border-gray-200 max-h-96 overflow-y-auto z-50">
+        <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-xl border border-neutral-200 max-h-96 overflow-y-auto z-50">
           {totalResults === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Search size={48} className="mx-auto mb-4 text-gray-300" />
@@ -123,9 +123,9 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onClose }) => {
                     <button
                       key={item.id}
                       onClick={() => handleItemClick('equipment', item.id)}
-                      className="w-full text-left px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
+                      className="w-full text-left px-3 py-2 hover:bg-neutral-50 rounded-lg transition-colors"
                     >
-                      <div className="font-medium text-gray-900">{item.name}</div>
+                      <div className="font-medium text-neutral-900">{item.name}</div>
                       <div className="text-sm text-gray-500">
                         {item.code} • {item.brand} {item.model}
                         <span className={`ml-2 px-2 py-0.5 rounded text-xs ${
@@ -152,9 +152,9 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onClose }) => {
                     <button
                       key={item.id}
                       onClick={() => handleItemClick('customers', item.id)}
-                      className="w-full text-left px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
+                      className="w-full text-left px-3 py-2 hover:bg-neutral-50 rounded-lg transition-colors"
                     >
-                      <div className="font-medium text-gray-900">{item.name}</div>
+                      <div className="font-medium text-neutral-900">{item.name}</div>
                       <div className="text-sm text-gray-500">
                         {item.company && `${item.company} • `}
                         {item.email || item.phone}
@@ -175,9 +175,9 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onClose }) => {
                     <button
                       key={item.id}
                       onClick={() => handleItemClick('orders', item.id)}
-                      className="w-full text-left px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
+                      className="w-full text-left px-3 py-2 hover:bg-neutral-50 rounded-lg transition-colors"
                     >
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-neutral-900">
                         {item.orderNumber}
                       </div>
                       <div className="text-sm text-gray-500 flex items-center justify-between">
@@ -188,7 +188,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onClose }) => {
                               ? 'bg-green-100 text-green-800' 
                               : item.status === 'ACTIVE'
                               ? 'bg-blue-100 text-blue-800'
-                              : 'bg-gray-100 text-gray-800'
+                              : 'bg-neutral-100 text-gray-800'
                           }`}>
                             {item.status}
                           </span>
@@ -217,7 +217,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onClose }) => {
 
       {/* Keyboard Shortcuts Hint */}
       <div className="mt-2 text-xs text-gray-500 text-center">
-        Press <kbd className="px-2 py-1 bg-gray-100 rounded">ESC</kbd> to close
+        Press <kbd className="px-2 py-1 bg-neutral-100 rounded">ESC</kbd> to close
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ClipboardCheck,
@@ -151,7 +151,7 @@ export default function Inspection() {
               <select 
                 value={filters.type || ''}
                 onChange={(e) => setFilters({ ...filters, type: e.target.value as any })}
-                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="">Tümü</option>
                 <option value="CHECKOUT">Teslim Alış</option>
@@ -164,7 +164,7 @@ export default function Inspection() {
               <select 
                 value={filters.status || ''}
                 onChange={(e) => setFilters({ ...filters, status: e.target.value as any })}
-                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="">Tümü</option>
                 <option value="PENDING">Beklemede</option>
@@ -179,7 +179,7 @@ export default function Inspection() {
                 type="date"
                 value={filters.startDate || ''}
                 onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
               />
             </div>
 
@@ -189,7 +189,7 @@ export default function Inspection() {
                 type="date"
                 value={filters.endDate || ''}
                 onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
               />
             </div>
           </div>

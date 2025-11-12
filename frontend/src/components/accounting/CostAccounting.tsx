@@ -172,7 +172,7 @@ export default function CostAccounting() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
       </div>
     );
   }
@@ -204,8 +204,8 @@ export default function CostAccounting() {
         <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Toplam Maliyet</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(totalCost)}</p>
+              <p className="text-sm text-neutral-600">Toplam Maliyet</p>
+              <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalCost)}</p>
               <p className="text-xs text-gray-500 mt-1">Bu dönem</p>
             </div>
             <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center">
@@ -217,7 +217,7 @@ export default function CostAccounting() {
   <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Hammadde</p>
+              <p className="text-sm text-neutral-600">Hammadde</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalMaterialCost)}</p>
               <p className="text-xs text-gray-500 mt-1">{((totalMaterialCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
@@ -230,7 +230,7 @@ export default function CostAccounting() {
   <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">İşçilik</p>
+              <p className="text-sm text-neutral-600">İşçilik</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalLaborCost)}</p>
               <p className="text-xs text-gray-500 mt-1">{((totalLaborCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
@@ -243,7 +243,7 @@ export default function CostAccounting() {
   <div className={cx(card('sm', 'md', 'default', 'lg'), 'min-w-0')}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Genel Gider</p>
+              <p className="text-sm text-neutral-600">Genel Gider</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalOverheadCost)}</p>
               <p className="text-xs text-gray-500 mt-1">{((totalOverheadCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
@@ -262,8 +262,8 @@ export default function CostAccounting() {
               <DollarSign className="text-neutral-900" size={20} />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Toplam Gelir</p>
-              <p className="text-xl font-bold text-gray-900">{formatCurrency(totalRevenue)}</p>
+              <p className="text-sm text-neutral-600">Toplam Gelir</p>
+              <p className="text-xl font-bold text-neutral-900">{formatCurrency(totalRevenue)}</p>
             </div>
           </div>
           <div className="h-1 bg-neutral-900 rounded-full"></div>
@@ -275,7 +275,7 @@ export default function CostAccounting() {
               <TrendingUp className="text-neutral-900" size={20} />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Toplam Kar</p>
+              <p className="text-sm text-neutral-600">Toplam Kar</p>
               <p className="text-xl font-bold text-neutral-900">{formatCurrency(totalProfit)}</p>
             </div>
           </div>
@@ -288,7 +288,7 @@ export default function CostAccounting() {
               <PieChart className="text-neutral-900" size={20} />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Ortalama Kar Marjı</p>
+              <p className="text-sm text-neutral-600">Ortalama Kar Marjı</p>
               <p className="text-xl font-bold text-neutral-900">%{avgProfitMargin}</p>
             </div>
           </div>
@@ -344,7 +344,7 @@ export default function CostAccounting() {
 
       {/* Product Cost Analysis Table */}
   <div className={cx(card('md', 'sm', 'default', 'lg'), 'p-0 overflow-hidden')}>
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-neutral-200">
           <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-2`}>
             <BarChart3 className="text-neutral-900" size={20} />
             Ürün Bazlı Maliyet Analizi
@@ -352,38 +352,38 @@ export default function CostAccounting() {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-neutral-50 border-b border-neutral-200">
               <tr>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">Ürün</th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden lg:table-cell">Hammadde</th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden md:table-cell">İşçilik</th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden xl:table-cell">G.Gider</th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase">Maliyet</th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase hidden md:table-cell">Fiyat</th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase">Kar</th>
-                <th className="px-2 py-2 text-center text-xs font-medium text-gray-700 uppercase hidden lg:table-cell">Marj</th>
-                <th className="px-2 py-2 text-right text-xs font-medium text-gray-700 uppercase">İşlem</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-700 uppercase">Ürün</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Hammadde</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">İşçilik</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden xl:table-cell">G.Gider</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Maliyet</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Fiyat</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase">Kar</th>
+                <th className="px-2 py-2 text-center text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Marj</th>
+                <th className="px-2 py-2 text-right text-xs font-medium text-neutral-700 uppercase">İşlem</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {productCosts.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={product.id} className="hover:bg-neutral-50 transition-colors">
                   <td className="px-3 py-3 whitespace-nowrap">
-                    <div className="font-medium text-gray-900 text-sm">{product.productName}</div>
+                    <div className="font-medium text-neutral-900 text-sm">{product.productName}</div>
                   </td>
-                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden lg:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-neutral-600 hidden lg:table-cell">
                     {formatCurrency(product.materialCost)}
                   </td>
-                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden md:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-neutral-600 hidden md:table-cell">
                     {formatCurrency(product.laborCost)}
                   </td>
-                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden xl:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-neutral-600 hidden xl:table-cell">
                     {formatCurrency(product.overheadCost)}
                   </td>
-                  <td className="px-2 py-3 whitespace-nowrap text-right font-medium text-gray-900 text-sm">
+                  <td className="px-2 py-3 whitespace-nowrap text-right font-medium text-neutral-900 text-sm">
                     {formatCurrency(product.totalCost)}
                   </td>
-                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-gray-600 hidden md:table-cell">
+                  <td className="px-2 py-3 whitespace-nowrap text-right text-xs text-neutral-600 hidden md:table-cell">
                     {formatCurrency(product.sellingPrice)}
                   </td>
                   <td className="px-2 py-3 whitespace-nowrap text-right">
@@ -400,10 +400,10 @@ export default function CostAccounting() {
                     <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => toast.success('Düzenleme açılıyor...')}
-                        className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-1.5 hover:bg-neutral-100 rounded-lg transition-colors"
                         title="Düzenle"
                       >
-                        <Edit className="text-gray-600" size={14} />
+                        <Edit className="text-neutral-600" size={14} />
                       </button>
                       <button
                         onClick={() => toast.success('Detay görüntüleniyor...')}
@@ -416,15 +416,15 @@ export default function CostAccounting() {
                   </td>
                 </tr>
               ))}
-              <tr className="bg-gray-100 font-bold">
-                <td className="px-3 py-3 text-gray-900 text-sm">TOPLAM</td>
-                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden lg:table-cell">{formatCurrency(totalMaterialCost)}</td>
-                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden md:table-cell">{formatCurrency(totalLaborCost)}</td>
-                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden xl:table-cell">{formatCurrency(totalOverheadCost)}</td>
-                <td className="px-2 py-3 text-right text-gray-900 text-sm">{formatCurrency(totalCost)}</td>
-                <td className="px-2 py-3 text-right text-gray-900 text-xs hidden md:table-cell">{formatCurrency(totalRevenue)}</td>
+              <tr className="bg-neutral-100 font-bold">
+                <td className="px-3 py-3 text-neutral-900 text-sm">TOPLAM</td>
+                <td className="px-2 py-3 text-right text-neutral-900 text-xs hidden lg:table-cell">{formatCurrency(totalMaterialCost)}</td>
+                <td className="px-2 py-3 text-right text-neutral-900 text-xs hidden md:table-cell">{formatCurrency(totalLaborCost)}</td>
+                <td className="px-2 py-3 text-right text-neutral-900 text-xs hidden xl:table-cell">{formatCurrency(totalOverheadCost)}</td>
+                <td className="px-2 py-3 text-right text-neutral-900 text-sm">{formatCurrency(totalCost)}</td>
+                <td className="px-2 py-3 text-right text-neutral-900 text-xs hidden md:table-cell">{formatCurrency(totalRevenue)}</td>
                 <td className="px-2 py-3 text-right text-neutral-900 text-sm">{formatCurrency(totalProfit)}</td>
-                <td className="px-2 py-3 text-center text-gray-900 text-xs hidden lg:table-cell">%{avgProfitMargin}</td>
+                <td className="px-2 py-3 text-center text-neutral-900 text-xs hidden lg:table-cell">%{avgProfitMargin}</td>
                 <td className="px-2 py-3"></td>
               </tr>
             </tbody>
@@ -441,10 +441,10 @@ export default function CostAccounting() {
           <div className="space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-gray-600">Hammadde</span>
-                <span className="text-sm font-medium text-gray-900">{formatCurrency(totalMaterialCost)}</span>
+                <span className="text-sm text-neutral-600">Hammadde</span>
+                <span className="text-sm font-medium text-neutral-900">{formatCurrency(totalMaterialCost)}</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-neutral-200 rounded-full h-2">
                 <div 
                   className="bg-neutral-900 h-2 rounded-full"
                   style={{ width: `${(totalMaterialCost / totalCost) * 100}%` }}
@@ -453,10 +453,10 @@ export default function CostAccounting() {
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-gray-600">İşçilik</span>
-                <span className="text-sm font-medium text-gray-900">{formatCurrency(totalLaborCost)}</span>
+                <span className="text-sm text-neutral-600">İşçilik</span>
+                <span className="text-sm font-medium text-neutral-900">{formatCurrency(totalLaborCost)}</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-neutral-200 rounded-full h-2">
                 <div 
                   className="bg-neutral-800 h-2 rounded-full"
                   style={{ width: `${(totalLaborCost / totalCost) * 100}%` }}
@@ -465,10 +465,10 @@ export default function CostAccounting() {
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-gray-600">Genel Gider</span>
-                <span className="text-sm font-medium text-gray-900">{formatCurrency(totalOverheadCost)}</span>
+                <span className="text-sm text-neutral-600">Genel Gider</span>
+                <span className="text-sm font-medium text-neutral-900">{formatCurrency(totalOverheadCost)}</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-neutral-200 rounded-full h-2">
                 <div 
                   className="bg-neutral-700 h-2 rounded-full"
                   style={{ width: `${(totalOverheadCost / totalCost) * 100}%` }}

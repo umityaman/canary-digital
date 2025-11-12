@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { pricingAPI } from '../../services/api';
 
 interface PricingRule {
@@ -130,11 +130,11 @@ const PricingRuleManager: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Yükleniyor...</p>
+          <p className="text-neutral-600">Yükleniyor...</p>
         </div>
       ) : rules.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 mb-4">Henüz fiyatlandırma kuralı eklenmemiş</p>
+        <div className="text-center py-12 bg-neutral-50 rounded-lg">
+          <p className="text-neutral-600 mb-4">Henüz fiyatlandırma kuralı eklenmemiş</p>
           <button
             onClick={() => setShowModal(true)}
             className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
@@ -148,7 +148,7 @@ const PricingRuleManager: React.FC = () => {
             <div
               key={rule.id}
               className={`bg-white rounded-lg shadow p-4 border-l-4 ${
-                rule.isActive ? 'border-green-500' : 'border-gray-300'
+                rule.isActive ? 'border-green-500' : 'border-neutral-300'
               }`}
             >
               <div className="flex justify-between items-start">
@@ -158,7 +158,7 @@ const PricingRuleManager: React.FC = () => {
                     <span className={`px-2 py-1 text-xs rounded-full ${
                       rule.isActive
                         ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
+                        : 'bg-neutral-100 text-gray-800'
                     }`}>
                       {rule.isActive ? 'Aktif' : 'Pasif'}
                     </span>
@@ -168,13 +168,13 @@ const PricingRuleManager: React.FC = () => {
                   </div>
                   
                   {rule.description && (
-                    <p className="text-sm text-gray-600 mb-3">{rule.description}</p>
+                    <p className="text-sm text-neutral-600 mb-3">{rule.description}</p>
                   )}
 
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     {/* Discount Info */}
                     <div>
-                      <span className="text-gray-600">İndirim: </span>
+                      <span className="text-neutral-600">İndirim: </span>
                       <span className="font-medium text-green-600">
                         {rule.discountType === 'PERCENTAGE' && `%${rule.discountValue}`}
                         {rule.discountType === 'FIXED_AMOUNT' && `${rule.discountValue} TL`}
@@ -184,7 +184,7 @@ const PricingRuleManager: React.FC = () => {
 
                     {/* Priority */}
                     <div>
-                      <span className="text-gray-600">Öncelik: </span>
+                      <span className="text-neutral-600">Öncelik: </span>
                       <span className="font-medium">{rule.priority}</span>
                     </div>
 
@@ -192,12 +192,12 @@ const PricingRuleManager: React.FC = () => {
                     {rule.ruleType === 'DURATION' && (
                       <>
                         <div>
-                          <span className="text-gray-600">Minimum Süre: </span>
+                          <span className="text-neutral-600">Minimum Süre: </span>
                           <span className="font-medium">{rule.minDuration} {rule.durationType?.toLowerCase()}</span>
                         </div>
                         {rule.maxDuration && (
                           <div>
-                            <span className="text-gray-600">Maximum Süre: </span>
+                            <span className="text-neutral-600">Maximum Süre: </span>
                             <span className="font-medium">{rule.maxDuration} {rule.durationType?.toLowerCase()}</span>
                           </div>
                         )}
@@ -208,12 +208,12 @@ const PricingRuleManager: React.FC = () => {
                     {rule.ruleType === 'QUANTITY' && (
                       <>
                         <div>
-                          <span className="text-gray-600">Minimum Miktar: </span>
+                          <span className="text-neutral-600">Minimum Miktar: </span>
                           <span className="font-medium">{rule.minQuantity}</span>
                         </div>
                         {rule.maxQuantity && (
                           <div>
-                            <span className="text-gray-600">Maximum Miktar: </span>
+                            <span className="text-neutral-600">Maximum Miktar: </span>
                             <span className="font-medium">{rule.maxQuantity}</span>
                           </div>
                         )}
@@ -224,13 +224,13 @@ const PricingRuleManager: React.FC = () => {
                     {rule.startDate && rule.endDate && (
                       <>
                         <div>
-                          <span className="text-gray-600">Başlangıç: </span>
+                          <span className="text-neutral-600">Başlangıç: </span>
                           <span className="font-medium">
                             {new Date(rule.startDate).toLocaleDateString('tr-TR')}
                           </span>
                         </div>
                         <div>
-                          <span className="text-gray-600">Bitiş: </span>
+                          <span className="text-neutral-600">Bitiş: </span>
                           <span className="font-medium">
                             {new Date(rule.endDate).toLocaleDateString('tr-TR')}
                           </span>
@@ -272,7 +272,7 @@ const PricingRuleManager: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     Kural Adı *
                   </label>
                   <input
@@ -280,21 +280,21 @@ const PricingRuleManager: React.FC = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     placeholder="Haftalık İndirim"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     Açıklama
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     placeholder="7 gün ve üzeri kiralamalar için %10 indirim"
                   />
                 </div>
@@ -302,14 +302,14 @@ const PricingRuleManager: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Rule Type */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Kural Tipi *
                     </label>
                     <select
                       value={formData.ruleType}
                       onChange={(e) => setFormData({ ...formData, ruleType: e.target.value as any })}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     >
                       <option value="DURATION">Süre Bazlı</option>
                       <option value="QUANTITY">Miktar Bazlı</option>
@@ -320,14 +320,14 @@ const PricingRuleManager: React.FC = () => {
 
                   {/* Discount Type */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       İndirim Tipi *
                     </label>
                     <select
                       value={formData.discountType}
                       onChange={(e) => setFormData({ ...formData, discountType: e.target.value as any })}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     >
                       <option value="PERCENTAGE">Yüzde (%)</option>
                       <option value="FIXED_AMOUNT">Sabit Tutar (TL)</option>
@@ -339,7 +339,7 @@ const PricingRuleManager: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Discount Value */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       İndirim Değeri *
                     </label>
                     <input
@@ -349,13 +349,13 @@ const PricingRuleManager: React.FC = () => {
                       required
                       min="0"
                       step="0.01"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     />
                   </div>
 
                   {/* Priority */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Öncelik
                     </label>
                     <input
@@ -363,7 +363,7 @@ const PricingRuleManager: React.FC = () => {
                       value={formData.priority}
                       onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) })}
                       min="1"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     />
                   </div>
                 </div>
@@ -372,13 +372,13 @@ const PricingRuleManager: React.FC = () => {
                 {formData.ruleType === 'DURATION' && (
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Süre Tipi
                       </label>
                       <select
                         value={formData.durationType}
                         onChange={(e) => setFormData({ ...formData, durationType: e.target.value as any })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                       >
                         <option value="HOURLY">Saatlik</option>
                         <option value="DAILY">Günlük</option>
@@ -387,7 +387,7 @@ const PricingRuleManager: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Min Süre
                       </label>
                       <input
@@ -395,11 +395,11 @@ const PricingRuleManager: React.FC = () => {
                         value={formData.minDuration || ''}
                         onChange={(e) => setFormData({ ...formData, minDuration: parseInt(e.target.value) })}
                         min="1"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Max Süre
                       </label>
                       <input
@@ -407,7 +407,7 @@ const PricingRuleManager: React.FC = () => {
                         value={formData.maxDuration || ''}
                         onChange={(e) => setFormData({ ...formData, maxDuration: parseInt(e.target.value) || undefined })}
                         min="1"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                       />
                     </div>
                   </div>
@@ -417,7 +417,7 @@ const PricingRuleManager: React.FC = () => {
                 {formData.ruleType === 'QUANTITY' && (
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Min Miktar
                       </label>
                       <input
@@ -425,11 +425,11 @@ const PricingRuleManager: React.FC = () => {
                         value={formData.minQuantity || ''}
                         onChange={(e) => setFormData({ ...formData, minQuantity: parseInt(e.target.value) })}
                         min="1"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Max Miktar
                       </label>
                       <input
@@ -437,7 +437,7 @@ const PricingRuleManager: React.FC = () => {
                         value={formData.maxQuantity || ''}
                         onChange={(e) => setFormData({ ...formData, maxQuantity: parseInt(e.target.value) || undefined })}
                         min="1"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                       />
                     </div>
                   </div>
@@ -446,25 +446,25 @@ const PricingRuleManager: React.FC = () => {
                 {/* Date Range */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Başlangıç Tarihi
                     </label>
                     <input
                       type="date"
                       value={formData.startDate || ''}
                       onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Bitiş Tarihi
                     </label>
                     <input
                       type="date"
                       value={formData.endDate || ''}
                       onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
                     />
                   </div>
                 </div>
@@ -476,9 +476,9 @@ const PricingRuleManager: React.FC = () => {
                     id="isActive"
                     checked={formData.isActive}
                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 border-neutral-300 rounded focus:ring-neutral-500"
                   />
-                  <label htmlFor="isActive" className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="isActive" className="ml-2 text-sm text-neutral-700">
                     Aktif
                   </label>
                 </div>
@@ -492,7 +492,7 @@ const PricingRuleManager: React.FC = () => {
                       setEditingRule(null);
                       resetForm();
                     }}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                    className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-md hover:bg-neutral-50"
                   >
                     İptal
                   </button>

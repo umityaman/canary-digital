@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+﻿import { create } from 'zustand'
 import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react'
 
 
@@ -70,7 +70,7 @@ export const ToastContainer = () => {
       case 'warning':
         return 'bg-yellow-50 border-yellow-200'
       case 'info':
-        return 'bg-blue-50 border-blue-200'
+        return 'bg-blue-50 border-neutral-200'
     }
   }
 

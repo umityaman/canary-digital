@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 
 interface QuickActionButtonProps {
   title: string
@@ -15,7 +15,7 @@ const QuickActionButton: React.FC<QuickActionButtonProps> = ({
 }) => {
   const colorClasses = {
     primary: 'bg-primary-500 hover:bg-primary-600 text-white',
-    secondary: 'bg-gray-500 hover:bg-gray-600 text-white',
+    secondary: 'bg-neutral-500 hover:bg-gray-600 text-white',
     success: 'bg-green-500 hover:bg-green-600 text-white',
     warning: 'bg-accent-orange hover:bg-orange-600 text-white'
   }

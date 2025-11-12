@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Plus, Edit, Trash2, Package, Upload, Download, ChevronDown, Plug, Settings, QrCode, ScanLine, CheckSquare, Square, ArrowUpDown } from 'lucide-react'
 import { useEquipmentStore } from '../stores/equipmentStore'
@@ -349,7 +349,7 @@ const Inventory: React.FC = () => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-neutral-900 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Ekipmanlar yükleniyor...</p>
+          <p className="text-neutral-600">Ekipmanlar yükleniyor...</p>
         </div>
       </div>
     )
@@ -380,7 +380,7 @@ const Inventory: React.FC = () => {
             placeholder="Ekipman ara..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
           />
         </div>
 
@@ -393,7 +393,7 @@ const Inventory: React.FC = () => {
               setSortBy(by)
               setSortOrder(order)
             }}
-            className="pl-4 pr-10 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent appearance-none bg-white cursor-pointer"
+            className="pl-4 pr-10 py-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-900 focus:border-transparent appearance-none bg-white cursor-pointer"
           >
             <option value="date-desc">En Yeni</option>
             <option value="date-asc">En Eski</option>
@@ -465,10 +465,10 @@ const Inventory: React.FC = () => {
       {/* Ana İçerik: Sidebar ve Tablo */}
       <div className="flex gap-6">
         <div className="w-52 flex-shrink-0 space-y-4">
-        <div className="bg-white rounded-lg border border-gray-200">
+        <div className="bg-white rounded-lg border border-neutral-200">
           <button 
             onClick={() => setCategoryOpen(!categoryOpen)}
-            className="w-full flex items-center justify-between p-4 text-left font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between p-4 text-left font-medium text-neutral-900 hover:bg-neutral-50 transition-colors"
           >
             <span>Kategori</span>
             <ChevronDown 
@@ -485,9 +485,9 @@ const Inventory: React.FC = () => {
                   value="all"
                   checked={filterCategory === 'all'}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
+                  className="w-4 h-4 text-neutral-900 border-neutral-300 focus:ring-neutral-900"
                 />
-                <span className="text-sm text-gray-700">Tümü</span>
+                <span className="text-sm text-neutral-700">Tümü</span>
               </label>
               {categories.length === 0 ? (
                 <p className="text-xs text-gray-500 py-2">Henüz kategori eklenmemiş</p>
@@ -500,9 +500,9 @@ const Inventory: React.FC = () => {
                       value={cat.name}
                       checked={filterCategory === cat.name}
                       onChange={(e) => setFilterCategory(e.target.value)}
-                      className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
+                      className="w-4 h-4 text-neutral-900 border-neutral-300 focus:ring-neutral-900"
                     />
-                    <span className="text-sm text-gray-700 flex items-center gap-1">
+                    <span className="text-sm text-neutral-700 flex items-center gap-1">
                       {cat.icon && <span>{cat.icon}</span>}
                       {cat.name}
                     </span>
@@ -524,10 +524,10 @@ const Inventory: React.FC = () => {
           )}
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200">
+        <div className="bg-white rounded-lg border border-neutral-200">
           <button 
             onClick={() => setStatusOpen(!statusOpen)}
-            className="w-full flex items-center justify-between p-4 text-left font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between p-4 text-left font-medium text-neutral-900 hover:bg-neutral-50 transition-colors"
           >
             <span>Durum</span>
             <ChevronDown 
@@ -544,9 +544,9 @@ const Inventory: React.FC = () => {
                   value="all"
                   checked={filterStatus === 'all'}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
+                  className="w-4 h-4 text-neutral-900 border-neutral-300 focus:ring-neutral-900"
                 />
-                <span className="text-sm text-gray-700">Tümü</span>
+                <span className="text-sm text-neutral-700">Tümü</span>
               </label>
               {statusOptions.map(status => (
                 <label key={status.value} className="flex items-center space-x-2 cursor-pointer">
@@ -556,19 +556,19 @@ const Inventory: React.FC = () => {
                     value={status.value}
                     checked={filterStatus === status.value}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
+                    className="w-4 h-4 text-neutral-900 border-neutral-300 focus:ring-neutral-900"
                   />
-                  <span className="text-sm text-gray-700">{status.label}</span>
+                  <span className="text-sm text-neutral-700">{status.label}</span>
                 </label>
               ))}
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200">
+        <div className="bg-white rounded-lg border border-neutral-200">
           <button 
             onClick={() => setEquipmentTypeOpen(!equipmentTypeOpen)}
-            className="w-full flex items-center justify-between p-4 text-left font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between p-4 text-left font-medium text-neutral-900 hover:bg-neutral-50 transition-colors"
           >
             <span>Ekipman Tipi</span>
             <ChevronDown 
@@ -585,9 +585,9 @@ const Inventory: React.FC = () => {
                   value="all"
                   checked={filterEquipmentType === 'all'}
                   onChange={(e) => setFilterEquipmentType(e.target.value)}
-                  className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
+                  className="w-4 h-4 text-neutral-900 border-neutral-300 focus:ring-neutral-900"
                 />
-                <span className="text-sm text-gray-700">Tümü</span>
+                <span className="text-sm text-neutral-700">Tümü</span>
               </label>
               {equipmentTypeOptions.map(type => (
                 <label key={type.value} className="flex items-center space-x-2 cursor-pointer">
@@ -597,9 +597,9 @@ const Inventory: React.FC = () => {
                     value={type.value}
                     checked={filterEquipmentType === type.value}
                     onChange={(e) => setFilterEquipmentType(e.target.value)}
-                    className="w-4 h-4 text-neutral-900 border-gray-300 focus:ring-neutral-900"
+                    className="w-4 h-4 text-neutral-900 border-neutral-300 focus:ring-neutral-900"
                   />
-                  <span className="text-sm text-gray-700">{type.label}</span>
+                  <span className="text-sm text-neutral-700">{type.label}</span>
                 </label>
               ))}
             </div>
@@ -614,11 +614,11 @@ const Inventory: React.FC = () => {
             <ScanLine size={16} />
             <span className="text-sm font-medium">Tara</span>
           </button>
-          <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors">
             <Upload size={16} />
             <span className="text-sm font-medium">Yükle</span>
           </button>
-          <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors">
             <Download size={16} />
             <span className="text-sm font-medium">Çıkar</span>
           </button>
@@ -642,40 +642,40 @@ const Inventory: React.FC = () => {
           {/* Stats Cards */}
           {showMetrics && (
             <div className="grid grid-cols-4 gap-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="text-sm text-gray-600 mb-1">Toplam Ekipman</div>
-                <div className="text-3xl font-bold text-gray-900">{stats.total}</div>
+              <div className="bg-white rounded-xl border border-neutral-200 p-6">
+                <div className="text-sm text-neutral-600 mb-1">Toplam Ekipman</div>
+                <div className="text-3xl font-bold text-neutral-900">{stats.total}</div>
               </div>
               
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="text-sm text-gray-600 mb-1">Kirada</div>
-                <div className="text-3xl font-bold text-gray-900">{stats.rented}</div>
+              <div className="bg-white rounded-xl border border-neutral-200 p-6">
+                <div className="text-sm text-neutral-600 mb-1">Kirada</div>
+                <div className="text-3xl font-bold text-neutral-900">{stats.rented}</div>
               </div>
               
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="text-sm text-gray-600 mb-1">Kayıp</div>
-                <div className="text-3xl font-bold text-gray-900">{stats.lost}</div>
+              <div className="bg-white rounded-xl border border-neutral-200 p-6">
+                <div className="text-sm text-neutral-600 mb-1">Kayıp</div>
+                <div className="text-3xl font-bold text-neutral-900">{stats.lost}</div>
               </div>
               
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="text-sm text-gray-600 mb-1">Bakımda</div>
-                <div className="text-3xl font-bold text-gray-900">{stats.maintenance}</div>
+              <div className="bg-white rounded-xl border border-neutral-200 p-6">
+                <div className="text-sm text-neutral-600 mb-1">Bakımda</div>
+                <div className="text-3xl font-bold text-neutral-900">{stats.maintenance}</div>
               </div>
             </div>
           )}
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="border-b border-gray-200 px-6 py-3">
+        <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+          <div className="border-b border-neutral-200 px-6 py-3">
             <div className="flex gap-6">
-              <button className="pb-3 border-b-2 border-blue-600 text-blue-600 font-medium text-sm">
+              <button className="pb-3 border-b-2 border-neutral-600 text-blue-600 font-medium text-sm">
                 Ekipmanlar
               </button>
-              <button className="pb-3 border-b-2 border-transparent text-gray-600 hover:text-gray-900 font-medium text-sm">
+              <button className="pb-3 border-b-2 border-transparent text-neutral-600 hover:text-neutral-900 font-medium text-sm">
                 Koleksiyonlar
               </button>
-              <button className="pb-3 border-b-2 border-transparent text-gray-600 hover:text-gray-900 font-medium text-sm">
+              <button className="pb-3 border-b-2 border-transparent text-neutral-600 hover:text-neutral-900 font-medium text-sm">
                 Paketler
               </button>
             </div>
@@ -684,15 +684,15 @@ const Inventory: React.FC = () => {
         {/* Content Area */}
         <div className="p-4">
         {filteredEquipment.length === 0 ? (
-          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+          <div className="bg-white rounded-lg border border-neutral-200 p-12 text-center">
             <div className="flex flex-col items-center">
               <Package size={64} className="text-gray-300 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                 {searchTerm || filterStatus !== 'all' || filterCategory !== 'all' || filterEquipmentType !== 'all'
                   ? 'Ekipman bulunamadı'
                   : 'İlk ekipmanınızı ekleyin'}
               </h3>
-              <p className="text-gray-600 mb-6 max-w-md">
+              <p className="text-neutral-600 mb-6 max-w-md">
                 {searchTerm || filterStatus !== 'all' || filterCategory !== 'all' || filterEquipmentType !== 'all'
                   ? 'Arama kriterlerinize uygun ekipman bulunamadı.'
                   : 'Kiralama işine hazırlanın, ilk ürününüzü ekleyin.'}
@@ -708,9 +708,9 @@ const Inventory: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-neutral-50 border-b border-neutral-200">
                 <tr>
                   <th className="text-left py-3 px-4 w-10">
                     <button
@@ -718,7 +718,7 @@ const Inventory: React.FC = () => {
                         e.stopPropagation()
                         toggleSelectAll()
                       }}
-                      className="p-1 hover:bg-gray-200 rounded transition-colors"
+                      className="p-1 hover:bg-neutral-200 rounded transition-colors"
                     >
                       {selectedItems.size === filteredEquipment.length && filteredEquipment.length > 0 ? (
                         <CheckSquare size={18} className="text-neutral-900" />
@@ -727,22 +727,22 @@ const Inventory: React.FC = () => {
                       )}
                     </button>
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-xs text-gray-700 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 font-medium text-xs text-neutral-700 uppercase tracking-wider">
                     Ekipman
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-xs text-gray-700 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 font-medium text-xs text-neutral-700 uppercase tracking-wider">
                     Durum
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-xs text-gray-700 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 font-medium text-xs text-neutral-700 uppercase tracking-wider">
                     Stok
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-xs text-gray-700 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 font-medium text-xs text-neutral-700 uppercase tracking-wider">
                     Kategori
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-xs text-gray-700 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 font-medium text-xs text-neutral-700 uppercase tracking-wider">
                     Seri No
                   </th>
-                  <th className="text-right py-3 px-4 font-medium text-xs text-gray-700 uppercase tracking-wider">
+                  <th className="text-right py-3 px-4 font-medium text-xs text-neutral-700 uppercase tracking-wider">
                     İşlemler
                   </th>
                 </tr>
@@ -751,13 +751,13 @@ const Inventory: React.FC = () => {
                 {filteredEquipment.map((item) => (
                   <tr 
                     key={item.id} 
-                    className={`hover:bg-gray-50 cursor-pointer ${selectedItems.has(item.id) ? 'bg-blue-50' : ''}`}
+                    className={`hover:bg-neutral-50 cursor-pointer ${selectedItems.has(item.id) ? 'bg-blue-50' : ''}`}
                     onClick={() => navigate(`/inventory/${item.id}`)}
                   >
                     <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => toggleSelectItem(item.id)}
-                        className="p-1 hover:bg-gray-200 rounded transition-colors"
+                        className="p-1 hover:bg-neutral-200 rounded transition-colors"
                       >
                         {selectedItems.has(item.id) ? (
                           <CheckSquare size={18} className="text-neutral-900" />
@@ -769,8 +769,8 @@ const Inventory: React.FC = () => {
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
                         <div>
-                          <div className="font-medium text-sm text-gray-900">{item.name}</div>
-                          <div className="text-xs text-gray-600">{item.brand} {item.model}</div>
+                          <div className="font-medium text-sm text-neutral-900">{item.name}</div>
+                          <div className="text-xs text-neutral-600">{item.brand} {item.model}</div>
                         </div>
                         {item.booqableId && (
                           <div 
@@ -791,8 +791,8 @@ const Inventory: React.FC = () => {
                         Stokta
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{item.category}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{item.serialNumber || '-'}</td>
+                    <td className="py-3 px-4 text-sm text-neutral-700">{item.category}</td>
+                    <td className="py-3 px-4 text-sm text-neutral-700">{item.serialNumber || '-'}</td>
                     <td className="py-3 px-4">
                       <div className="flex justify-end space-x-1">
                         <button
@@ -810,7 +810,7 @@ const Inventory: React.FC = () => {
                             e.stopPropagation();
                             handleEdit(item);
                           }}
-                          className="p-1.5 text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                          className="p-1.5 text-neutral-600 hover:bg-neutral-100 rounded transition-colors"
                           title="Düzenle"
                         >
                           <Edit size={16} />

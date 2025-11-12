@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   LineChart,
   Line,
@@ -26,10 +26,10 @@ interface UtilizationChartProps {
 const UtilizationChart: React.FC<UtilizationChartProps> = ({ data, isLoading }) => {
   if (isLoading) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="h-64 bg-gray-100 rounded"></div>
+          <div className="h-6 bg-neutral-200 rounded w-1/4 mb-4"></div>
+          <div className="h-64 bg-neutral-100 rounded"></div>
         </div>
       </div>
     );
@@ -56,15 +56,15 @@ const UtilizationChart: React.FC<UtilizationChartProps> = ({ data, isLoading }) 
     if (active && payload && payload.length) {
       const rate = payload[0].value;
       return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
-          <p className="text-xs font-semibold text-gray-700 mb-2">
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-neutral-200">
+          <p className="text-xs font-semibold text-neutral-700 mb-2">
             {format(new Date(payload[0].payload.date), 'dd MMM yyyy')}
           </p>
           <div className="space-y-1">
             <p className="text-xs">
               📊 Kullanım: <span className="font-semibold">{rate.toFixed(1)}%</span>
             </p>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-neutral-600">
               🔧 Aktif: {payload[0].payload.activeRentals} /{' '}
               {payload[0].payload.totalEquipment}
             </p>
@@ -76,7 +76,7 @@ const UtilizationChart: React.FC<UtilizationChartProps> = ({ data, isLoading }) 
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-bold text-gray-800">📊 Ekipman Kullanım Oranı</h3>
@@ -94,20 +94,20 @@ const UtilizationChart: React.FC<UtilizationChartProps> = ({ data, isLoading }) 
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className={`p-3 rounded-lg ${getUtilizationBg(avgUtilization)}`}>
-          <div className="text-xs text-gray-600 mb-1">Ortalama</div>
+          <div className="text-xs text-neutral-600 mb-1">Ortalama</div>
           <div className={`text-xl font-bold ${getUtilizationColor(avgUtilization)}`}>
             {avgUtilization.toFixed(1)}%
           </div>
         </div>
         <div className={`p-3 rounded-lg ${getUtilizationBg(maxUtilization)}`}>
-          <div className="text-xs text-gray-600 mb-1">En Yüksek</div>
+          <div className="text-xs text-neutral-600 mb-1">En Yüksek</div>
           <div className={`text-xl font-bold ${getUtilizationColor(maxUtilization)}`}>
             {maxUtilization.toFixed(1)}%
           </div>
         </div>
-        <div className="bg-gray-50 p-3 rounded-lg">
-          <div className="text-xs text-gray-600 mb-1">Toplam Ekipman</div>
-          <div className="text-xl font-bold text-gray-700">
+        <div className="bg-neutral-50 p-3 rounded-lg">
+          <div className="text-xs text-neutral-600 mb-1">Toplam Ekipman</div>
+          <div className="text-xl font-bold text-neutral-700">
             {data[data.length - 1]?.totalEquipment || 0}
           </div>
         </div>

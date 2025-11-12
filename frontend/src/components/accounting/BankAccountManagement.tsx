@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import {
@@ -290,7 +290,7 @@ const BankAccountManagement: React.FC = () => {
 
         {loading ? (
           <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600 mx-auto"></div>
           </div>
         ) : accounts.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
@@ -311,7 +311,7 @@ const BankAccountManagement: React.FC = () => {
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   selectedAccount === account.id
                     ? 'border-neutral-500 bg-neutral-50'
-                    : 'border-gray-200 hover:border-neutral-300'
+                    : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -326,9 +326,9 @@ const BankAccountManagement: React.FC = () => {
                   )}
                 </div>
                 <div className="space-y-1 text-sm">
-                  <p className="text-gray-600">IBAN: {account.iban}</p>
-                  <p className="text-gray-600">Hesap No: {account.accountNumber}</p>
-                  <p className="text-gray-600">Tür: {account.accountType}</p>
+                  <p className="text-neutral-600">IBAN: {account.iban}</p>
+                  <p className="text-neutral-600">Hesap No: {account.accountNumber}</p>
+                  <p className="text-neutral-600">Tür: {account.accountType}</p>
                 </div>
                 <div className="mt-3 pt-3 border-t">
                   <div className="flex justify-between items-center">
@@ -381,29 +381,29 @@ const BankAccountManagement: React.FC = () => {
           {/* Filters */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Başlangıç Tarihi</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">Başlangıç Tarihi</label>
               <input
                 type="date"
                 value={dateFilter.startDate}
                 onChange={(e) => setDateFilter({ ...dateFilter, startDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Bitiş Tarihi</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">Bitiş Tarihi</label>
               <input
                 type="date"
                 value={dateFilter.endDate}
                 onChange={(e) => setDateFilter({ ...dateFilter, endDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">İşlem Tipi</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">İşlem Tipi</label>
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md"
               >
                 <option value="">Tümü</option>
                 <option value="DEBIT">Giden</option>
@@ -411,7 +411,7 @@ const BankAccountManagement: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ara</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">Ara</label>
               <div className="relative">
                 <FaSearch className="absolute left-3 top-3 text-gray-400" />
                 <input
@@ -419,7 +419,7 @@ const BankAccountManagement: React.FC = () => {
                   placeholder="Açıklama, karşı taraf..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-md"
                 />
               </div>
             </div>
@@ -428,7 +428,7 @@ const BankAccountManagement: React.FC = () => {
           {/* Transactions Table */}
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-neutral-50">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarih</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlem No</th>
@@ -448,7 +448,7 @@ const BankAccountManagement: React.FC = () => {
                   </tr>
                 ) : (
                   filteredTransactions.map((txn) => (
-                    <tr key={txn.id} className="hover:bg-gray-50">
+                    <tr key={txn.id} className="hover:bg-neutral-50">
                       <td className="px-4 py-3 whitespace-nowrap text-sm">{formatDate(txn.date)}</td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm font-mono">{txn.transactionNumber}</td>
                       <td className="px-4 py-3 text-sm">{txn.description}</td>
@@ -486,7 +486,7 @@ const BankAccountManagement: React.FC = () => {
               >
                 Önceki
               </button>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-neutral-600">
                 Sayfa {currentPage} / {totalPages}
               </span>
               <button

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Dynamic Revenue Chart Örneği
  * Kullanım: API'den veri çekme, period selector
  * Özellikler: Dynamic data loading, period filter, loading state
@@ -184,14 +184,14 @@ export default function DynamicRevenueChart() {
   const min = Math.min(...chartData.values, 0);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
       {/* Header with Period Selector */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Gelir Trendi</h3>
+        <h3 className="text-lg font-semibold text-neutral-900">Gelir Trendi</h3>
         <select
           value={period}
           onChange={(e) => setPeriod(e.target.value as Period)}
-          className="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-1.5 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
         >
           <option value="7d">Son 7 Gün</option>
           <option value="30d">Son 30 Gün</option>
@@ -203,7 +203,7 @@ export default function DynamicRevenueChart() {
       {/* Chart */}
       {loading ? (
         <div className="h-64 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-500"></div>
         </div>
       ) : (
         <Line data={data} options={options} />
@@ -213,25 +213,25 @@ export default function DynamicRevenueChart() {
       {!loading && (
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-blue-50 p-3 rounded-lg">
-            <p className="text-xs text-gray-600 mb-1">Toplam</p>
+            <p className="text-xs text-neutral-600 mb-1">Toplam</p>
             <p className="text-lg font-bold text-blue-600">
               ₺{total.toLocaleString('tr-TR')}
             </p>
           </div>
           <div className="bg-green-50 p-3 rounded-lg">
-            <p className="text-xs text-gray-600 mb-1">Ortalama</p>
+            <p className="text-xs text-neutral-600 mb-1">Ortalama</p>
             <p className="text-lg font-bold text-green-600">
               ₺{Math.round(average).toLocaleString('tr-TR')}
             </p>
           </div>
           <div className="bg-purple-50 p-3 rounded-lg">
-            <p className="text-xs text-gray-600 mb-1">En Yüksek</p>
+            <p className="text-xs text-neutral-600 mb-1">En Yüksek</p>
             <p className="text-lg font-bold text-purple-600">
               ₺{max.toLocaleString('tr-TR')}
             </p>
           </div>
           <div className="bg-orange-50 p-3 rounded-lg">
-            <p className="text-xs text-gray-600 mb-1">En Düşük</p>
+            <p className="text-xs text-neutral-600 mb-1">En Düşük</p>
             <p className="text-lg font-bold text-orange-600">
               ₺{min.toLocaleString('tr-TR')}
             </p>

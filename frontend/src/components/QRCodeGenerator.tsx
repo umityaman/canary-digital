@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+﻿import React, { useEffect, useState, useRef } from 'react';
 import QRCode from 'qrcode';
 import JsBarcode from 'jsbarcode';
 import { Download, Copy, CheckCircle, Printer } from 'lucide-react';
@@ -208,7 +208,7 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
                 />
               ) : (
                 <div className="w-[300px] h-[300px] bg-neutral-100 flex items-center justify-center mx-auto rounded-lg">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-500"></div>
                 </div>
               )}
             </div>

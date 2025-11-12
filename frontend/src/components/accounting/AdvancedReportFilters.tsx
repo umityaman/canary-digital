@@ -172,7 +172,7 @@ export default function AdvancedReportFilters({
               type="date"
               value={filters.dateFrom}
               onChange={(e) => handleFilterUpdate('dateFrom', e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function AdvancedReportFilters({
               type="date"
               value={filters.dateTo}
               onChange={(e) => handleFilterUpdate('dateTo', e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function AdvancedReportFilters({
           <select
             value={filters.reportType}
             onChange={(e) => handleFilterUpdate('reportType', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
           >
             <option value="ALL">Tümü</option>
             <option value="INCOME">Gelir</option>
@@ -230,14 +230,14 @@ export default function AdvancedReportFilters({
 
       {/* Advanced Filters Panel */}
       {showAdvanced && (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-6">
+        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-6 space-y-6">
           <div className="flex justify-between items-center">
             <h3 className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}>
               Gelişmiş Filtreleme Seçenekleri
             </h3>
             <button
               onClick={() => setShowAdvanced(false)}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 hover:text-neutral-600"
             >
               <X className="w-5 h-5" />
             </button>
@@ -258,14 +258,14 @@ export default function AdvancedReportFilters({
                     placeholder="Müşteri ara..."
                     value={customerSearch}
                     onChange={(e) => setCustomerSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
                   />
                 </div>
-                <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-lg bg-white">
+                <div className="max-h-40 overflow-y-auto border border-neutral-200 rounded-lg bg-white">
                   {filteredCustomers.map((customer) => (
                     <label
                       key={customer.id}
-                      className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer"
+                      className="flex items-center px-3 py-2 hover:bg-neutral-50 cursor-pointer"
                     >
                       <input
                         type="checkbox"
@@ -313,14 +313,14 @@ export default function AdvancedReportFilters({
                     placeholder="Tedarikçi ara..."
                     value={supplierSearch}
                     onChange={(e) => setSupplierSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
                   />
                 </div>
-                <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-lg bg-white">
+                <div className="max-h-40 overflow-y-auto border border-neutral-200 rounded-lg bg-white">
                   {filteredSuppliers.map((supplier) => (
                     <label
                       key={supplier.id}
-                      className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer"
+                      className="flex items-center px-3 py-2 hover:bg-neutral-50 cursor-pointer"
                     >
                       <input
                         type="checkbox"
@@ -368,7 +368,7 @@ export default function AdvancedReportFilters({
                     className={`px-3 py-1 rounded-full text-sm transition-colors ${
                       filters.categories.includes(cat.id)
                         ? 'bg-neutral-900 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        : 'bg-neutral-200 text-neutral-700 hover:bg-gray-300'
                     }`}
                   >
                     {filters.categories.includes(cat.id) && (
@@ -393,7 +393,7 @@ export default function AdvancedReportFilters({
                     className={`px-3 py-1 rounded-full text-sm transition-colors ${
                       filters.status.includes(status.id)
                         ? 'bg-neutral-900 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        : 'bg-neutral-200 text-neutral-700 hover:bg-gray-300'
                     }`}
                   >
                     {filters.status.includes(status.id) && (
@@ -417,14 +417,14 @@ export default function AdvancedReportFilters({
                   placeholder="Min"
                   value={filters.minAmount || ''}
                   onChange={(e) => handleFilterUpdate('minAmount', e.target.value ? Number(e.target.value) : null)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
                 />
                 <input
                   type="number"
                   placeholder="Max"
                   value={filters.maxAmount || ''}
                   onChange={(e) => handleFilterUpdate('maxAmount', e.target.value ? Number(e.target.value) : null)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
                 />
               </div>
             </div>
@@ -437,7 +437,7 @@ export default function AdvancedReportFilters({
               <select
                 value={filters.groupBy}
                 onChange={(e) => handleFilterUpdate('groupBy', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="DATE">Tarihe Göre</option>
                 <option value="CUSTOMER">Müşteriye Göre</option>
@@ -456,7 +456,7 @@ export default function AdvancedReportFilters({
                 <select
                   value={filters.sortBy}
                   onChange={(e) => handleFilterUpdate('sortBy', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
                 >
                   <option value="DATE">Tarih</option>
                   <option value="AMOUNT">Tutar</option>
@@ -471,7 +471,7 @@ export default function AdvancedReportFilters({
                 <select
                   value={filters.sortOrder}
                   onChange={(e) => handleFilterUpdate('sortOrder', e.target.value as 'asc' | 'desc')}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
                 >
                   <option value="asc">
                     <TrendingUp className="inline w-4 h-4" /> Artan

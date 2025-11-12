@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   BarChart,
   Bar,
@@ -38,10 +38,10 @@ const COLORS = [
 const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }) => {
   if (isLoading) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-64 bg-gray-100 rounded"></div>
+          <div className="h-6 bg-neutral-200 rounded w-1/3 mb-4"></div>
+          <div className="h-64 bg-neutral-100 rounded"></div>
         </div>
       </div>
     );
@@ -63,8 +63,8 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
-          <p className="text-xs font-semibold text-gray-700 mb-2">
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-neutral-200">
+          <p className="text-xs font-semibold text-neutral-700 mb-2">
             🔧 {payload[0].payload.name}
           </p>
           <div className="space-y-1">
@@ -85,7 +85,7 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
       <div className="mb-6">
         <h3 className="text-lg font-bold text-gray-800">🏆 En Popüler Ekipmanlar</h3>
         <p className="text-xs text-gray-500 mt-1">Kiralama sıklığına göre sıralama</p>
@@ -100,7 +100,7 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
                 <div className="text-sm font-bold text-gray-800">
                   {topPerformer.name}
                 </div>
-                <div className="text-xs text-gray-600 mt-1">
+                <div className="text-xs text-neutral-600 mt-1">
                   En çok kiralanan ekipman
                 </div>
               </div>
@@ -109,7 +109,7 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
               <div className="text-2xl font-bold text-neutral-900">
                 {topPerformer.rentCount}
               </div>
-              <div className="text-xs text-gray-600">kiralama</div>
+              <div className="text-xs text-neutral-600">kiralama</div>
             </div>
           </div>
         </div>
@@ -117,11 +117,11 @@ const TopEquipmentChart: React.FC<TopEquipmentChartProps> = ({ data, isLoading }
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="bg-neutral-100 p-3 rounded-lg">
-          <div className="text-xs text-gray-600 mb-1">Toplam Kiralama</div>
+          <div className="text-xs text-neutral-600 mb-1">Toplam Kiralama</div>
           <div className="text-xl font-bold text-neutral-900">{totalRents}</div>
         </div>
         <div className="bg-neutral-100 p-3 rounded-lg">
-          <div className="text-xs text-gray-600 mb-1">Toplam Gelir</div>
+          <div className="text-xs text-neutral-600 mb-1">Toplam Gelir</div>
           <div className="text-xl font-bold text-neutral-900">
             {formatCurrency(totalRevenue)}
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
   FileText, Download, Upload, Edit3, Eye, Plus,
@@ -35,13 +35,13 @@ class ErrorBoundary extends React.Component<
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Analytics Yüklenemedi</h3>
-            <p className="text-gray-600 mb-4">
+            <h3 className="text-xl font-semibold text-neutral-900 mb-2">Analytics Yüklenemedi</h3>
+            <p className="text-neutral-600 mb-4">
               {this.state.error?.message || 'Bilinmeyen bir hata oluştu'}
             </p>
             <details className="text-left mt-4 p-4 bg-white rounded border border-red-200">
               <summary className="cursor-pointer font-medium text-red-700 mb-2">Teknik Detaylar</summary>
-              <pre className="text-xs text-gray-600 overflow-auto">
+              <pre className="text-xs text-neutral-600 overflow-auto">
                 {this.state.error?.stack}
               </pre>
             </details>

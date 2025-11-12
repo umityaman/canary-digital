@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Chart.js Examples Demo Page
  * Tüm chart örneklerini görüntülemek için demo sayfası
  * URL: /chart-examples (geliştirme amaçlı)
@@ -12,14 +12,14 @@ import { ExampleUsage } from '../components/charts/examples/ReusableChartWrapper
 
 export default function ChartExamplesPage() {
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-neutral-50 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-neutral-900 mb-2">
             📊 Chart.js Örnekleri
           </h1>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             Sprint 1 Analytics Dashboard için hazırlanmış chart örnekleri
           </p>
           <div className="mt-4 flex gap-4">
@@ -47,13 +47,13 @@ export default function ChartExamplesPage() {
           {/* Example 1: Simple Line Chart */}
           <section>
             <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-1">
+              <h2 className="text-xl font-semibold text-neutral-900 mb-1">
                 1. Simple Line Chart
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-neutral-600">
                 Temel line chart örneği - Revenue trend gösterimi için ideal
               </p>
-              <code className="text-xs bg-gray-100 px-2 py-1 rounded mt-2 inline-block">
+              <code className="text-xs bg-neutral-100 px-2 py-1 rounded mt-2 inline-block">
                 frontend/src/components/charts/examples/SimpleLineChart.tsx
               </code>
             </div>
@@ -63,13 +63,13 @@ export default function ChartExamplesPage() {
           {/* Example 2: Multi-Dataset Bar Chart */}
           <section>
             <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-1">
+              <h2 className="text-xl font-semibold text-neutral-900 mb-1">
                 2. Multi-Dataset Bar Chart
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-neutral-600">
                 Yıllık karşılaştırma için çoklu dataset bar chart
               </p>
-              <code className="text-xs bg-gray-100 px-2 py-1 rounded mt-2 inline-block">
+              <code className="text-xs bg-neutral-100 px-2 py-1 rounded mt-2 inline-block">
                 frontend/src/components/charts/examples/MultiDatasetBarChart.tsx
               </code>
             </div>
@@ -79,13 +79,13 @@ export default function ChartExamplesPage() {
           {/* Example 3: Pie Chart with Percentages */}
           <section>
             <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-1">
+              <h2 className="text-xl font-semibold text-neutral-900 mb-1">
                 3. Pie Chart with Percentages
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-neutral-600">
                 Kategori dağılımı için percentage'lı pie chart
               </p>
-              <code className="text-xs bg-gray-100 px-2 py-1 rounded mt-2 inline-block">
+              <code className="text-xs bg-neutral-100 px-2 py-1 rounded mt-2 inline-block">
                 frontend/src/components/charts/examples/PieChartWithPercentages.tsx
               </code>
             </div>
@@ -95,13 +95,13 @@ export default function ChartExamplesPage() {
           {/* Example 4: Dynamic Revenue Chart */}
           <section>
             <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-1">
+              <h2 className="text-xl font-semibold text-neutral-900 mb-1">
                 4. Dynamic Revenue Chart
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-neutral-600">
                 Period selector ile dinamik veri yükleme örneği
               </p>
-              <code className="text-xs bg-gray-100 px-2 py-1 rounded mt-2 inline-block">
+              <code className="text-xs bg-neutral-100 px-2 py-1 rounded mt-2 inline-block">
                 frontend/src/components/charts/examples/DynamicRevenueChart.tsx
               </code>
             </div>
@@ -111,13 +111,13 @@ export default function ChartExamplesPage() {
           {/* Example 5: Reusable Chart Wrapper */}
           <section>
             <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-1">
+              <h2 className="text-xl font-semibold text-neutral-900 mb-1">
                 5. Reusable Chart Wrapper
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-neutral-600">
                 Generic, type-safe, tekrar kullanılabilir chart component
               </p>
-              <code className="text-xs bg-gray-100 px-2 py-1 rounded mt-2 inline-block">
+              <code className="text-xs bg-neutral-100 px-2 py-1 rounded mt-2 inline-block">
                 frontend/src/components/charts/examples/ReusableChartWrapper.tsx
               </code>
             </div>
@@ -126,7 +126,7 @@ export default function ChartExamplesPage() {
         </div>
 
         {/* Footer with Learning Tips */}
-        <div className="mt-12 bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="mt-12 bg-blue-50 border border-neutral-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-blue-900 mb-3">
             💡 Öğrenme İpuçları
           </h3>
@@ -141,39 +141,39 @@ export default function ChartExamplesPage() {
 
         {/* Quick Reference */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h4 className="font-semibold text-gray-900 mb-3">🎨 Renk Paleti</h4>
+          <div className="bg-white p-6 rounded-lg border border-neutral-200">
+            <h4 className="font-semibold text-neutral-900 mb-3">🎨 Renk Paleti</h4>
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded bg-blue-500"></div>
                 <code className="text-xs">#3b82f6</code>
-                <span className="text-sm text-gray-600">Primary Blue</span>
+                <span className="text-sm text-neutral-600">Primary Blue</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded bg-green-500"></div>
                 <code className="text-xs">#10b981</code>
-                <span className="text-sm text-gray-600">Success Green</span>
+                <span className="text-sm text-neutral-600">Success Green</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded bg-amber-500"></div>
                 <code className="text-xs">#f59e0b</code>
-                <span className="text-sm text-gray-600">Warning Amber</span>
+                <span className="text-sm text-neutral-600">Warning Amber</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded bg-red-500"></div>
                 <code className="text-xs">#ef4444</code>
-                <span className="text-sm text-gray-600">Danger Red</span>
+                <span className="text-sm text-neutral-600">Danger Red</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded bg-purple-500"></div>
                 <code className="text-xs">#8b5cf6</code>
-                <span className="text-sm text-gray-600">Purple</span>
+                <span className="text-sm text-neutral-600">Purple</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h4 className="font-semibold text-gray-900 mb-3">📚 Kaynak Linkler</h4>
+          <div className="bg-white p-6 rounded-lg border border-neutral-200">
+            <h4 className="font-semibold text-neutral-900 mb-3">📚 Kaynak Linkler</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <a

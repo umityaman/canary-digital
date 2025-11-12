@@ -502,7 +502,7 @@ export default function InventoryAccounting() {
           <button
             onClick={() => loadInventoryTransactions()}
             disabled={loading}
-            className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-3 py-2 bg-neutral-100 hover:bg-neutral-200 rounded-xl transition-colors disabled:opacity-50"
             title="Yenile"
           >
             <RefreshCw className={loading ? 'animate-spin' : ''} size={18} />

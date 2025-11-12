@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -100,7 +100,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <select
               value={period}
               onChange={(e) => setPeriod(e.target.value as any)}
-              className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-2 py-1 border border-neutral-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
             >
               <option value="1d">Bugün</option>
               <option value="7d">7 Gün</option>
@@ -141,7 +141,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <BarChart3 className="w-6 h-6" />
                 Analiz Dashboard'u
               </CardTitle>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-neutral-600 mt-1">
                 {getPeriodLabel(period)} dönemi için kapsamlı iş analizi
               </p>
             </div>
@@ -153,7 +153,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <select
                   value={period}
                   onChange={(e) => setPeriod(e.target.value as any)}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 >
                   <option value="1d">Bugün</option>
                   <option value="7d">Son 7 Gün</option>
@@ -203,13 +203,13 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
           {/* Status bar */}
           <div className="flex items-center justify-between mt-4 pt-4 border-t">
-            <div className="flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-4 text-sm text-neutral-600">
               <span>Son güncelleme: {lastUpdated.toLocaleTimeString('tr-TR')}</span>
               <Badge variant="secondary" className="text-xs">
                 Canlı Veri
               </Badge>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-neutral-600">
               <Eye className="w-4 h-4" />
               <span>Gerçek zamanlı analiz</span>
             </div>

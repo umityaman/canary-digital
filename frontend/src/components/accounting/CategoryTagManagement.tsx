@@ -155,7 +155,7 @@ export default function CategoryTagManagement() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-600"></div>
       </div>
     );
   }
@@ -217,7 +217,7 @@ export default function CategoryTagManagement() {
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   categoryFilter === 'income'
                     ? 'bg-neutral-50 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 )}
               >
                 Gelir ({incomeCount})
@@ -228,7 +228,7 @@ export default function CategoryTagManagement() {
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   categoryFilter === 'expense'
                     ? 'bg-neutral-50 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 )}
               >
                 Gider ({expenseCount})
@@ -240,7 +240,7 @@ export default function CategoryTagManagement() {
               {filteredCategories.map((category) => (
                 <div
                   key={`${category.type}-${category.name}`}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors"
                 >
                   {editingCategoryId === `${category.type}-${category.name}` ? (
                     <div className="flex items-center gap-2 flex-1">
@@ -248,7 +248,7 @@ export default function CategoryTagManagement() {
                         type="text"
                         value={editCategoryValue}
                         onChange={(e) => setEditCategoryValue(e.target.value)}
-                        className="flex-1 px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="flex-1 px-3 py-1 border border-neutral-300 rounded focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
                         autoFocus
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') handleRenameCategory(category);
@@ -269,7 +269,7 @@ export default function CategoryTagManagement() {
                           setEditingCategoryId(null);
                           setEditCategoryValue('');
                         }}
-                        className="p-2 text-gray-600 hover:bg-gray-200 rounded"
+                        className="p-2 text-neutral-600 hover:bg-neutral-200 rounded"
                       >
                         <X size={16} />
                       </button>
@@ -282,7 +282,7 @@ export default function CategoryTagManagement() {
                         ) : (
                           <TrendingDown className="w-5 h-5 text-neutral-800" />
                         )}
-                        <span className="font-medium text-gray-900">{category.name}</span>
+                        <span className="font-medium text-neutral-900">{category.name}</span>
                         <span
                           className={`px-2 py-1 text-xs rounded-full ${
                             category.type === 'income'
@@ -350,7 +350,7 @@ export default function CategoryTagManagement() {
 
             {/* Tag Form */}
             {showTagForm && (
-              <div className={`mb-6 p-4 bg-neutral-50 ${DESIGN_TOKENS?.radius?.md} border border-blue-200`}>
+              <div className={`mb-6 p-4 bg-neutral-50 ${DESIGN_TOKENS?.radius?.md} border border-neutral-200`}>
                 <h4 className={`${DESIGN_TOKENS?.typography?.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-3`}>
                   {editingTagId ? 'Etiket Düzenle' : 'Yeni Etiket'}
                 </h4>
@@ -412,14 +412,14 @@ export default function CategoryTagManagement() {
               {tags.map((tag) => (
                 <div
                   key={tag.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className="w-8 h-8 rounded-full border-2"
                       style={{ backgroundColor: tag.color, borderColor: tag.color }}
                     />
-                    <span className="font-medium text-gray-900">{tag.name}</span>
+                    <span className="font-medium text-neutral-900">{tag.name}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <button

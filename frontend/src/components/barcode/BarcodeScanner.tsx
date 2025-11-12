@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Camera, Scan, Package, Plus, Search } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -170,7 +170,7 @@ const BarcodeScanner = () => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-sm font-medium text-blue-900">Bugün Taranan</h4>
             <Scan className="text-blue-600" size={20} />
@@ -199,7 +199,7 @@ const BarcodeScanner = () => {
       </div>
 
       {/* Info */}
-      <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
+      <div className="bg-blue-50 rounded-2xl p-6 border border-neutral-200">
         <h3 className="font-semibold text-blue-900 mb-3">💡 İpuçları</h3>
         <ul className="space-y-2 text-sm text-blue-800">
           <li>• Mobil cihazlarda kamera erişimi için uygulama kullanın</li>

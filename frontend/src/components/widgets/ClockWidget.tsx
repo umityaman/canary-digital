@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { Clock } from 'lucide-react'
 
 const ClockWidget: React.FC = () => {
@@ -37,7 +37,7 @@ const ClockWidget: React.FC = () => {
         <div className="text-2xl font-bold text-gray-800">
           {time.toLocaleTimeString('tr-TR')}
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-neutral-600">
           {time.toLocaleDateString('tr-TR', { 
             weekday: 'long', 
             day: 'numeric', 
@@ -50,7 +50,7 @@ const ClockWidget: React.FC = () => {
       <div className="space-y-2">
         {worldTimes.map(city => (
           <div key={city.city} className="flex justify-between text-sm">
-            <span className="text-gray-600">{city.city}</span>
+            <span className="text-neutral-600">{city.city}</span>
             <span className="font-medium">{getTimeForCity(city.offset)}</span>
           </div>
         ))}

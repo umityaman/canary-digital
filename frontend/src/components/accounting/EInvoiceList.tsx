@@ -347,7 +347,7 @@ export default function EInvoiceList() {
 
   const getStatusBadge = (status: string) => {
     const badges = {
-      draft: { label: 'Taslak', color: 'bg-gray-100 text-gray-700', icon: <File size={14} /> },
+      draft: { label: 'Taslak', color: 'bg-neutral-100 text-neutral-700', icon: <File size={14} /> },
       sent: { label: 'G�nderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={14} /> },
       approved: { label: 'Onayland�', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={14} /> },
       rejected: { label: 'Reddedildi', color: 'bg-neutral-100 text-neutral-800', icon: <X size={14} /> },
@@ -367,7 +367,7 @@ export default function EInvoiceList() {
     if (invoice.invoiceType === 'e-fatura') {
       const status = invoice.eInvoiceMeta?.gibStatus || 'draft'
       const badges = {
-        draft: { label: 'XML Taslak', color: 'bg-gray-100 text-gray-700', icon: <File size={12} /> },
+        draft: { label: 'XML Taslak', color: 'bg-neutral-100 text-neutral-700', icon: <File size={12} /> },
         sent: { label: 'G�B G�nderildi', color: 'bg-neutral-100 text-neutral-800', icon: <Send size={12} /> },
         delivered: { label: 'Yan�t Al�nd�', color: 'bg-neutral-100 text-neutral-800', icon: <CheckCircle size={12} /> },
         failed: { label: 'Hata', color: 'bg-neutral-100 text-neutral-800', icon: <AlertCircle size={12} /> },

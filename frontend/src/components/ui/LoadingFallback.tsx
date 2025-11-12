@@ -1,11 +1,11 @@
-import React from 'react'
+﻿import React from 'react'
 
 const LoadingFallback: React.FC<{ message?: string }> = ({ message = 'Yükleniyor...' }) => {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4">
       <div className="relative">
         {/* Spinner */}
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-neutral-600"></div>
         
         {/* Inner circle */}
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -13,10 +13,10 @@ const LoadingFallback: React.FC<{ message?: string }> = ({ message = 'Yükleniyo
         </div>
       </div>
       
-      <p className="mt-6 text-gray-600 font-medium animate-pulse">{message}</p>
+      <p className="mt-6 text-neutral-600 font-medium animate-pulse">{message}</p>
       
       {/* Progress bar */}
-      <div className="mt-4 w-64 h-1 bg-gray-200 rounded-full overflow-hidden">
+      <div className="mt-4 w-64 h-1 bg-neutral-200 rounded-full overflow-hidden">
         <div className="h-full bg-blue-600 animate-progress"></div>
       </div>
       

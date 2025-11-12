@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { reminderAPI, Reminder, ReminderStats } from '../../services/reminders';
 import { Clock, Bell, AlertCircle, CheckCircle, XCircle, Plus, Calendar, Mail, MessageSquare, Smartphone, Edit2, Trash2, Filter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -111,7 +111,7 @@ const ReminderManagement = () => {
       case 'urgent': return 'text-red-600 bg-red-50 border-red-200';
       case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
       case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'low': return 'text-blue-600 bg-blue-50 border-neutral-200';
       default: return 'text-neutral-600 bg-neutral-50 border-neutral-200';
     }
   };
@@ -119,7 +119,7 @@ const ReminderManagement = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'text-green-600 bg-green-50 border-green-200';
-      case 'sent': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'sent': return 'text-blue-600 bg-blue-50 border-neutral-200';
       case 'cancelled': return 'text-neutral-600 bg-neutral-50 border-neutral-200';
       case 'pending': return 'text-orange-600 bg-orange-50 border-orange-200';
       default: return 'text-neutral-600 bg-neutral-50 border-neutral-200';
@@ -169,7 +169,7 @@ const ReminderManagement = () => {
       {/* Stats */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-sm font-medium text-blue-900">Toplam</h4>
               <Clock className="text-blue-600" size={20} />

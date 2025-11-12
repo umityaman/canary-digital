@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { X, Download, Mail, Printer, Eye, FileText } from 'lucide-react';
 import type jsPDF from 'jspdf';
 import { InvoiceData, InvoiceConfig, InvoiceTemplate } from './InvoiceTypes';
@@ -202,7 +202,7 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
           {/* Template Selection */}
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+            <h3 className="text-sm font-semibold text-neutral-700 mb-3">
               Fatura Şablonu Seçin
             </h3>
             <div className="grid grid-cols-3 gap-4">
@@ -212,8 +212,8 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
                   onClick={() => handleTemplateChange(template)}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     selectedTemplate === template
-                      ? 'border-blue-500 bg-blue-50 shadow-md'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-neutral-500 bg-blue-50 shadow-md'
+                      : 'border-neutral-200 hover:border-neutral-300'
                   }`}
                 >
                   <div className="text-4xl mb-2 text-center">
@@ -223,7 +223,7 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
                     <div className="font-semibold text-gray-800">
                       {templateInfo[template].name}
                     </div>
-                    <div className="text-xs text-gray-600 mt-1">
+                    <div className="text-xs text-neutral-600 mt-1">
                       {templateInfo[template].description}
                     </div>
                   </div>
@@ -233,8 +233,8 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
           </div>
 
           {/* Configuration Options */}
-          <div className="mb-6 p-4 bg-gray-50 rounded-xl">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          <div className="mb-6 p-4 bg-neutral-50 rounded-xl">
+            <h3 className="text-sm font-semibold text-neutral-700 mb-3">
               Fatura Ayarları
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -243,36 +243,36 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
                   type="checkbox"
                   checked={config.showTax}
                   onChange={(e) => setConfig({ ...config, showTax: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                  className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-neutral-500"
                 />
-                <span className="text-sm text-gray-700">KDV Göster</span>
+                <span className="text-sm text-neutral-700">KDV Göster</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={config.showLogo}
                   onChange={(e) => setConfig({ ...config, showLogo: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                  className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-neutral-500"
                 />
-                <span className="text-sm text-gray-700">Logo Göster</span>
+                <span className="text-sm text-neutral-700">Logo Göster</span>
               </label>
             </div>
           </div>
 
           {/* Invoice Summary */}
-          <div className="mb-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          <div className="mb-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-neutral-200">
+            <h3 className="text-sm font-semibold text-neutral-700 mb-3">
               Fatura Özeti
             </h3>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-gray-600">Müşteri:</span>
+                <span className="text-neutral-600">Müşteri:</span>
                 <span className="ml-2 font-semibold text-gray-800">
                   {invoiceData.customer.name}
                 </span>
               </div>
               <div>
-                <span className="text-gray-600">Toplam:</span>
+                <span className="text-neutral-600">Toplam:</span>
                 <span className="ml-2 font-semibold text-gray-800">
                   {new Intl.NumberFormat('tr-TR', {
                     style: 'currency',
@@ -281,13 +281,13 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
                 </span>
               </div>
               <div>
-                <span className="text-gray-600">Kalem Sayısı:</span>
+                <span className="text-neutral-600">Kalem Sayısı:</span>
                 <span className="ml-2 font-semibold text-gray-800">
                   {invoiceData.items.length}
                 </span>
               </div>
               <div>
-                <span className="text-gray-600">Tarih:</span>
+                <span className="text-neutral-600">Tarih:</span>
                 <span className="ml-2 font-semibold text-gray-800">
                   {new Date(invoiceData.invoiceDate).toLocaleDateString('tr-TR')}
                 </span>
@@ -297,10 +297,10 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+        <div className="bg-neutral-50 px-6 py-4 border-t border-neutral-200 flex items-center justify-between">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
+            className="px-4 py-2 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors"
           >
             İptal
           </button>

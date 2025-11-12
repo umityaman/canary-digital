@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+﻿import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { 
   Upload, 
@@ -218,8 +218,8 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           className={`
             border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
             ${isDragActive 
-              ? 'border-blue-500 bg-blue-50' 
-              : 'border-gray-300 hover:border-gray-400'
+              ? 'border-neutral-500 bg-blue-50' 
+              : 'border-neutral-300 hover:border-gray-400'
             }
           `}
         >
@@ -229,7 +229,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
             <p className="text-blue-600 font-medium">Dosyaları buraya bırakın...</p>
           ) : (
             <div>
-              <p className="text-gray-600 mb-2">
+              <p className="text-neutral-600 mb-2">
                 Dosyaları buraya sürükleyip bırakın veya <span className="text-blue-600 font-medium">seçmek için tıklayın</span>
               </p>
               <p className="text-sm text-gray-500">
@@ -246,7 +246,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
         {files.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="font-medium text-gray-900">
+              <h4 className="font-medium text-neutral-900">
                 Seçilen Dosyalar ({files.length})
               </h4>
               <Button
@@ -263,7 +263,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
               {files.map((file) => (
                 <div
                   key={file.id}
-                  className="flex items-center gap-3 p-3 border rounded-lg bg-gray-50"
+                  className="flex items-center gap-3 p-3 border rounded-lg bg-neutral-50"
                 >
                   {/* File Preview/Icon */}
                   <div className="flex-shrink-0">
@@ -361,7 +361,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
         {/* Upload Summary */}
         {files.length > 0 && (
-          <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded">
+          <div className="text-sm text-neutral-600 bg-blue-50 p-3 rounded">
             <p>
               <strong>{files.length}</strong> dosya seçildi, 
               toplam boyut: <strong>{formatFileSize(files.reduce((sum, file) => sum + file.size, 0))}</strong>

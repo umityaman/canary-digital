@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+﻿import React, { useState } from 'react'
 import { DollarSign, TrendingUp } from 'lucide-react'
 
 const CurrencyWidget: React.FC = () => {
@@ -40,13 +40,13 @@ const CurrencyWidget: React.FC = () => {
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm"
+            className="flex-1 px-3 py-2 border border-neutral-300 rounded text-sm"
             placeholder="Miktar"
           />
           <select
             value={fromCurrency}
             onChange={(e) => setFromCurrency(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded text-sm"
+            className="px-3 py-2 border border-neutral-300 rounded text-sm"
           >
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
@@ -58,13 +58,13 @@ const CurrencyWidget: React.FC = () => {
         <div className="text-center text-gray-500 text-sm">↓</div>
 
         <div className="flex space-x-2">
-          <div className="flex-1 px-3 py-2 bg-gray-100 rounded text-sm font-medium">
+          <div className="flex-1 px-3 py-2 bg-neutral-100 rounded text-sm font-medium">
             {convert()}
           </div>
           <select
             value={toCurrency}
             onChange={(e) => setToCurrency(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded text-sm"
+            className="px-3 py-2 border border-neutral-300 rounded text-sm"
           >
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
@@ -78,12 +78,12 @@ const CurrencyWidget: React.FC = () => {
       <div className="border-t pt-3">
         <div className="flex items-center space-x-1 mb-2">
           <TrendingUp size={16} className="text-green-500" />
-          <span className="text-sm font-medium text-gray-700">Piyasa</span>
+          <span className="text-sm font-medium text-neutral-700">Piyasa</span>
         </div>
         <div className="space-y-1">
           {marketData.map(item => (
             <div key={item.name} className="flex justify-between text-xs">
-              <span className="text-gray-600">{item.name}</span>
+              <span className="text-neutral-600">{item.name}</span>
               <div className="flex space-x-1">
                 <span className="font-medium">{item.value}</span>
                 <span className={item.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}>

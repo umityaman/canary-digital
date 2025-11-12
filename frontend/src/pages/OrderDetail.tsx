@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config/api';
 import { useNotification } from '../contexts/NotificationContext';
@@ -64,7 +64,7 @@ const paymentStatusColors: Record<string, string> = {
   'payment_due': 'bg-orange-100 text-orange-800',
   'partially_paid': 'bg-yellow-100 text-yellow-800',
   'paid': 'bg-green-100 text-green-800',
-  'refunded': 'bg-gray-100 text-gray-800',
+  'refunded': 'bg-neutral-100 text-gray-800',
 };
 
 const statusLabels: Record<string, string> = {
@@ -271,7 +271,7 @@ export default function OrderDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
       </div>
     );
   }
@@ -281,7 +281,7 @@ export default function OrderDetail() {
       <div className="flex flex-col items-center justify-center h-screen">
         <XCircle className="w-16 h-16 text-red-500 mb-4" />
         <h2 className="text-xl font-semibold text-gray-800 mb-2">Sipariş Bulunamadı</h2>
-        <p className="text-gray-600 mb-4">{error || 'Sipariş mevcut değil'}</p>
+        <p className="text-neutral-600 mb-4">{error || 'Sipariş mevcut değil'}</p>
         <button
           onClick={() => navigate('/orders')}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -318,18 +318,18 @@ export default function OrderDetail() {
   const paymentPercentage = (paidAmount / totalAmount) * 100;
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-neutral-50 min-h-screen">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center">
           <button
             onClick={() => navigate('/orders')}
-            className="mr-4 p-2 hover:bg-gray-200 rounded-lg transition-colors"
+            className="mr-4 p-2 hover:bg-neutral-200 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{order.orderNumber}</h1>
+            <h1 className="text-2xl font-bold text-neutral-900">{order.orderNumber}</h1>
             <p className="text-sm text-gray-500">Oluşturma: {new Date(order.createdAt).toLocaleDateString('tr-TR')}</p>
           </div>
         </div>
@@ -364,7 +364,7 @@ export default function OrderDetail() {
           </button>
           <button
             onClick={() => navigate(`/orders/edit/${order.id}`)}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 flex items-center gap-2"
+            className="px-4 py-2 bg-neutral-200 text-neutral-700 rounded-lg hover:bg-gray-300 flex items-center gap-2"
           >
             <Edit className="w-4 h-4" />
             Düzenle
@@ -399,13 +399,13 @@ export default function OrderDetail() {
             <div className="flex gap-4 mb-6">
               <div className="flex-1">
                 <p className="text-sm text-gray-500 mb-1">Sipariş Durumu</p>
-                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}>
+                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status] || 'bg-neutral-100 text-gray-800'}`}>
                   {statusLabels[order.status] || order.status}
                 </span>
               </div>
               <div className="flex-1">
                 <p className="text-sm text-gray-500 mb-1">Ödeme Durumu</p>
-                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${paymentStatusColors[order.paymentStatus] || 'bg-gray-100 text-gray-800'}`}>
+                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${paymentStatusColors[order.paymentStatus] || 'bg-neutral-100 text-gray-800'}`}>
                   {paymentStatusLabels[order.paymentStatus] || order.paymentStatus}
                 </span>
               </div>
@@ -413,7 +413,7 @@ export default function OrderDetail() {
 
             {/* Status Timeline */}
             <div className="border-t pt-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-4">Sipariş Süreci</h3>
+              <h3 className="text-sm font-semibold text-neutral-700 mb-4">Sipariş Süreci</h3>
               <div className="relative">
                 {statusSteps.map((step, index) => {
                   const StepIcon = step.icon;
@@ -436,14 +436,14 @@ export default function OrderDetail() {
                       <div className={`relative z-10 flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center border-2 ${
                         isCompleted 
                           ? 'bg-green-500 border-green-500 text-white' 
-                          : 'bg-white border-gray-300 text-gray-400'
+                          : 'bg-white border-neutral-300 text-gray-400'
                       }`}>
                         <StepIcon size={20} />
                       </div>
                       
                       {/* Content */}
                       <div className="ml-4 flex-1">
-                        <p className={`font-medium ${isCurrent ? 'text-green-600' : isCompleted ? 'text-gray-900' : 'text-gray-500'}`}>
+                        <p className={`font-medium ${isCurrent ? 'text-green-600' : isCompleted ? 'text-neutral-900' : 'text-gray-500'}`}>
                           {step.label}
                         </p>
                         {isCurrent && (
@@ -479,10 +479,10 @@ export default function OrderDetail() {
             {/* Payment Progress Bar */}
             <div className="mb-6">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-600">Ödenen Tutar</span>
+                <span className="text-neutral-600">Ödenen Tutar</span>
                 <span className="font-semibold text-green-600">£{paidAmount.toFixed(2)} / £{totalAmount.toFixed(2)}</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
+              <div className="w-full bg-neutral-200 rounded-full h-3">
                 <div 
                   className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(paymentPercentage, 100)}%` }}
@@ -503,19 +503,19 @@ export default function OrderDetail() {
                     order.paymentStatus === 'partially_paid' ? 'bg-yellow-500' : 
                     'bg-red-500'
                   }`}></div>
-                  <span className="text-sm text-gray-600">Toplam Tutar</span>
+                  <span className="text-sm text-neutral-600">Toplam Tutar</span>
                 </div>
-                <span className="font-bold text-gray-900">£{totalAmount.toFixed(2)}</span>
+                <span className="font-bold text-neutral-900">£{totalAmount.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600 ml-5">Ödenen</span>
+                <span className="text-sm text-neutral-600 ml-5">Ödenen</span>
                 <span className="font-medium text-green-600">£{paidAmount.toFixed(2)}</span>
               </div>
               
               {remainingAmount > 0 && (
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 ml-5">Kalan Bakiye</span>
+                  <span className="text-sm text-neutral-600 ml-5">Kalan Bakiye</span>
                   <span className="font-medium text-orange-600">£{remainingAmount.toFixed(2)}</span>
                 </div>
               )}
@@ -598,7 +598,7 @@ export default function OrderDetail() {
             {/* Pricing Summary */}
             <div className="mt-6 pt-6 border-t space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Alt Toplam</span>
+                <span className="text-neutral-600">Alt Toplam</span>
                 <span>£{order.subtotal.toFixed(2)}</span>
               </div>
               {order.discountAmount > 0 && (
@@ -609,7 +609,7 @@ export default function OrderDetail() {
               )}
               {order.taxAmount > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">KDV</span>
+                  <span className="text-neutral-600">KDV</span>
                   <span>£{order.taxAmount.toFixed(2)}</span>
                 </div>
               )}
@@ -627,7 +627,7 @@ export default function OrderDetail() {
                 <FileText className="w-5 h-5 text-gray-400" />
                 <h2 className="text-lg font-semibold">Notlar</h2>
               </div>
-              <p className="text-gray-700 whitespace-pre-wrap">{order.notes}</p>
+              <p className="text-neutral-700 whitespace-pre-wrap">{order.notes}</p>
             </div>
           )}
         </div>
@@ -692,7 +692,7 @@ export default function OrderDetail() {
               </div>
               <div className="space-y-2">
                 {documents.map((doc: any, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                     <div className="flex items-center gap-2">
                       <FileText className="w-4 h-4 text-gray-400" />
                       <div>
@@ -745,7 +745,7 @@ export default function OrderDetail() {
             <select
               value={newStatus}
               onChange={(e) => setNewStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg mb-4"
             >
               <option value="PENDING">Beklemede</option>
               <option value="CONFIRMED">Onaylandı</option>
@@ -756,7 +756,7 @@ export default function OrderDetail() {
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setShowStatusModal(false)}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-lg"
               >
                 İptal
               </button>
@@ -777,11 +777,11 @@ export default function OrderDetail() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-2">Siparişi Sil</h3>
-            <p className="text-gray-600 mb-4">Bu siparişi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+            <p className="text-neutral-600 mb-4">Bu siparişi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-lg"
               >
                 İptal
               </button>
@@ -806,20 +806,20 @@ export default function OrderDetail() {
               <h3 className="text-lg font-semibold">Ödeme Al</h3>
             </div>
             
-            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+            <div className="mb-4 p-3 bg-neutral-50 rounded-lg">
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Sipariş No:</span>
+                <span className="text-neutral-600">Sipariş No:</span>
                 <span className="font-medium">{order?.orderNumber}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Toplam Tutar:</span>
+                <span className="text-neutral-600">Toplam Tutar:</span>
                 <span className="font-bold text-lg text-green-600">£{order?.totalAmount.toFixed(2)}</span>
               </div>
             </div>
 
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Kart Üzerindeki İsim
                 </label>
                 <input
@@ -827,12 +827,12 @@ export default function OrderDetail() {
                   value={cardHolderName}
                   onChange={(e) => setCardHolderName(e.target.value)}
                   placeholder="Ad Soyad"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Kart Numarası
                 </label>
                 <input
@@ -846,13 +846,13 @@ export default function OrderDetail() {
                   }}
                   placeholder="1234 5678 9012 3456"
                   maxLength={19}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     Ay
                   </label>
                   <input
@@ -866,11 +866,11 @@ export default function OrderDetail() {
                     }}
                     placeholder="MM"
                     maxLength={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     Yıl
                   </label>
                   <input
@@ -884,11 +884,11 @@ export default function OrderDetail() {
                     }}
                     placeholder="YYYY"
                     maxLength={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     CVV
                   </label>
                   <input
@@ -902,7 +902,7 @@ export default function OrderDetail() {
                     }}
                     placeholder="123"
                     maxLength={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
               </div>
@@ -918,7 +918,7 @@ export default function OrderDetail() {
                   setExpireYear('');
                   setCvc('');
                 }}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-lg"
               >
                 İptal
               </button>

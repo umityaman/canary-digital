@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+﻿import React, { useState } from 'react'
 import { 
   ShoppingCart, Store, Package, Truck, Link2, CheckCircle, 
   XCircle, Clock, Settings, RefreshCw, ExternalLink, Shield,
@@ -402,7 +402,7 @@ const ECommerceIntegrations: React.FC = () => {
     const statusConfig = {
       active: { label: 'Aktif', color: 'bg-green-100 text-green-800', icon: CheckCircle },
       'coming-soon': { label: 'Yakında', color: 'bg-blue-100 text-blue-800', icon: Clock },
-      inactive: { label: 'Pasif', color: 'bg-gray-100 text-gray-800', icon: XCircle }
+      inactive: { label: 'Pasif', color: 'bg-neutral-100 text-gray-800', icon: XCircle }
     }
     const config = statusConfig[status as keyof typeof statusConfig]
     const Icon = config.icon
@@ -428,17 +428,17 @@ const ECommerceIntegrations: React.FC = () => {
   const totalOrders = connections.reduce((sum, conn) => sum + conn.ordersCount, 0)
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-neutral-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <h1 className="text-2xl font-bold text-neutral-900 flex items-center gap-2">
                 <Store className="w-8 h-8 text-indigo-600" />
                 E-Ticaret Entegrasyonları
               </h1>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-neutral-600 mt-1">
                 Pazaryerleri, e-ticaret altyapıları, kargo ve ödeme sistemleri ile entegre olun
               </p>
             </div>
@@ -495,7 +495,7 @@ const ECommerceIntegrations: React.FC = () => {
         {/* Connected Marketplaces */}
         {connectedMarketplaces.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
               Bağlı Platformlar ({connectedMarketplaces.length})
             </h2>
@@ -508,8 +508,8 @@ const ECommerceIntegrations: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">{marketplace.logo}</span>
                         <div>
-                          <h3 className="font-semibold text-gray-900">{marketplace.name}</h3>
-                          <p className="text-xs text-gray-600">{connection?.storeName}</p>
+                          <h3 className="font-semibold text-neutral-900">{marketplace.name}</h3>
+                          <p className="text-xs text-neutral-600">{connection?.storeName}</p>
                         </div>
                       </div>
                       {getStatusBadge(marketplace.status)}
@@ -518,15 +518,15 @@ const ECommerceIntegrations: React.FC = () => {
                     {connection && (
                       <div className="space-y-2 mb-3 bg-white rounded p-3">
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Sipariş:</span>
+                          <span className="text-neutral-600">Sipariş:</span>
                           <span className="font-semibold">{connection.ordersCount}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Ciro:</span>
+                          <span className="text-neutral-600">Ciro:</span>
                           <span className="font-semibold text-green-600">₺{connection.revenue.toLocaleString('tr-TR')}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Son Senkr:</span>
+                          <span className="text-neutral-600">Son Senkr:</span>
                           <span className="text-xs text-gray-500">{connection.lastSync}</span>
                         </div>
                       </div>
@@ -563,7 +563,7 @@ const ECommerceIntegrations: React.FC = () => {
                   className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
                     activeCategory === category.id
                       ? 'bg-indigo-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -571,7 +571,7 @@ const ECommerceIntegrations: React.FC = () => {
                   <span className={`px-2 py-0.5 rounded-full text-xs ${
                     activeCategory === category.id
                       ? 'bg-white/20 text-white'
-                      : 'bg-white text-gray-700'
+                      : 'bg-white text-neutral-700'
                   }`}>
                     {category.count}
                   </span>
@@ -588,19 +588,19 @@ const ECommerceIntegrations: React.FC = () => {
               placeholder="Platform ara..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
 
           {/* Marketplace Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredMarketplaces.map(marketplace => (
-              <div key={marketplace.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-all hover:border-indigo-300">
+              <div key={marketplace.id} className="border border-neutral-200 rounded-lg p-4 hover:shadow-lg transition-all hover:border-indigo-300">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{marketplace.logo}</span>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{marketplace.name}</h3>
+                      <h3 className="font-semibold text-neutral-900">{marketplace.name}</h3>
                       <p className="text-xs text-gray-500">{getCategoryIcon(marketplace.category)} {marketplace.category}</p>
                     </div>
                   </div>
@@ -609,7 +609,7 @@ const ECommerceIntegrations: React.FC = () => {
 
                 {marketplace.commission && (
                   <div className="mb-3 text-sm">
-                    <span className="text-gray-600">Komisyon: </span>
+                    <span className="text-neutral-600">Komisyon: </span>
                     <span className="font-semibold text-indigo-600">{marketplace.commission}</span>
                   </div>
                 )}
@@ -618,12 +618,12 @@ const ECommerceIntegrations: React.FC = () => {
                   <p className="text-xs text-gray-500 mb-2">Özellikler:</p>
                   <div className="flex flex-wrap gap-1">
                     {marketplace.features.slice(0, 3).map((feature, index) => (
-                      <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+                      <span key={index} className="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">
                         {feature}
                       </span>
                     ))}
                     {marketplace.features.length > 3 && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-500 rounded text-xs">
+                      <span className="px-2 py-1 bg-neutral-100 text-gray-500 rounded text-xs">
                         +{marketplace.features.length - 3}
                       </span>
                     )}
@@ -634,7 +634,7 @@ const ECommerceIntegrations: React.FC = () => {
                   <span className={`text-xs px-2 py-1 rounded ${
                     marketplace.apiType === 'official' ? 'bg-blue-100 text-blue-700' :
                     marketplace.apiType === 'partner' ? 'bg-purple-100 text-purple-700' :
-                    'bg-gray-100 text-gray-700'
+                    'bg-neutral-100 text-neutral-700'
                   }`}>
                     {marketplace.apiType === 'official' ? '🔗 Resmi API' : 
                      marketplace.apiType === 'partner' ? '🤝 Partner API' : '📝 Manuel'}
@@ -666,8 +666,8 @@ const ECommerceIntegrations: React.FC = () => {
         </div>
 
         {/* Security Info */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
-          <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-neutral-200">
+          <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5 text-blue-600" />
             Güvenlik ve Gizlilik
           </h3>
@@ -675,22 +675,22 @@ const ECommerceIntegrations: React.FC = () => {
             <div className="flex items-start gap-3">
               <Lock className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
-                <p className="font-medium text-sm text-gray-900">SSL 256-bit Şifreleme</p>
-                <p className="text-xs text-gray-600">Tüm verileriniz şifrelenir</p>
+                <p className="font-medium text-sm text-neutral-900">SSL 256-bit Şifreleme</p>
+                <p className="text-xs text-neutral-600">Tüm verileriniz şifrelenir</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Key className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
-                <p className="font-medium text-sm text-gray-900">OAuth 2.0</p>
-                <p className="text-xs text-gray-600">Güvenli yetkilendirme</p>
+                <p className="font-medium text-sm text-neutral-900">OAuth 2.0</p>
+                <p className="text-xs text-neutral-600">Güvenli yetkilendirme</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Database className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
-                <p className="font-medium text-sm text-gray-900">KVKK Uyumlu</p>
-                <p className="text-xs text-gray-600">Veri güvenliği garantisi</p>
+                <p className="font-medium text-sm text-neutral-900">KVKK Uyumlu</p>
+                <p className="text-xs text-neutral-600">Veri güvenliği garantisi</p>
               </div>
             </div>
           </div>
@@ -704,29 +704,29 @@ const ECommerceIntegrations: React.FC = () => {
             <div className="flex items-center gap-3 mb-4">
               <span className="text-4xl">{selectedMarketplace.logo}</span>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">{selectedMarketplace.name}</h3>
-                <p className="text-sm text-gray-600">Entegrasyon Kurulumu</p>
+                <h3 className="text-lg font-semibold text-neutral-900">{selectedMarketplace.name}</h3>
+                <p className="text-sm text-neutral-600">Entegrasyon Kurulumu</p>
               </div>
             </div>
 
             <div className="space-y-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">API Anahtarı</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">API Anahtarı</label>
                 <input
                   type="text"
                   placeholder="API Key giriniz"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mağaza Adı</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Mağaza Adı</label>
                 <input
                   type="text"
                   placeholder="Mağaza adınız"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="bg-blue-50 border border-neutral-200 rounded-lg p-3">
                 <p className="text-xs text-blue-800">
                   <strong>Not:</strong> API bilgilerinizi {selectedMarketplace.name} yönetim panelinden alabilirsiniz.
                 </p>
@@ -742,7 +742,7 @@ const ECommerceIntegrations: React.FC = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowConnectionModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 İptal
               </button>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link2, RefreshCw, CheckCircle, XCircle, Loader, Clock, AlertCircle } from 'lucide-react';
 import api from '../../services/api';
 
@@ -124,7 +124,7 @@ export default function BooqableSettings() {
           <Loader size={12} className="animate-spin" /> Devam Ediyor
         </span>;
       default:
-        return <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">{status}</span>;
+        return <span className="px-2 py-1 bg-neutral-100 text-neutral-700 text-xs rounded">{status}</span>;
     }
   };
 
@@ -161,11 +161,11 @@ export default function BooqableSettings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-neutral-900 flex items-center gap-2">
           <Link2 size={28} />
           Booqable Entegrasyonu
         </h2>
-        <p className="text-gray-600 mt-1">
+        <p className="text-neutral-600 mt-1">
           Booqable ile ekipman, müşteri ve sipariş verilerinizi senkronize edin
         </p>
       </div>
@@ -179,13 +179,13 @@ export default function BooqableSettings() {
 
       {/* Connection Status */}
       {connection?.connected ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
+        <div className="bg-white border border-neutral-200 rounded-xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
               <div>
-                <h3 className="font-semibold text-gray-900">Bağlı</h3>
-                <p className="text-sm text-gray-600">{connection.accountUrl}</p>
+                <h3 className="font-semibold text-neutral-900">Bağlı</h3>
+                <p className="text-sm text-neutral-600">{connection.accountUrl}</p>
               </div>
             </div>
             <button
@@ -197,7 +197,7 @@ export default function BooqableSettings() {
           </div>
 
           {connection.lastSyncAt && (
-            <div className="flex items-center gap-2 text-sm text-gray-600 pt-2 border-t">
+            <div className="flex items-center gap-2 text-sm text-neutral-600 pt-2 border-t">
               <Clock size={16} />
               <span>Son senkronizasyon: {formatDate(connection.lastSyncAt)}</span>
               {connection.lastSyncStatus && getStatusBadge(connection.lastSyncStatus)}
@@ -206,11 +206,11 @@ export default function BooqableSettings() {
         </div>
       ) : (
         /* Connection Form */
-        <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-          <h3 className="font-semibold text-gray-900">Bağlan</h3>
+        <div className="bg-white border border-neutral-200 rounded-xl p-6 space-y-4">
+          <h3 className="font-semibold text-neutral-900">Bağlan</h3>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Booqable API Key *
             </label>
             <input
@@ -218,7 +218,7 @@ export default function BooqableSettings() {
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               placeholder="sk_live_xxxxxxxxxxxxxxxx"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
             />
             <p className="text-xs text-gray-500 mt-1">
               API anahtarınızı Booqable → Settings → API'den alabilirsiniz
@@ -226,7 +226,7 @@ export default function BooqableSettings() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Account URL (opsiyonel)
             </label>
             <input
@@ -234,7 +234,7 @@ export default function BooqableSettings() {
               value={accountUrl}
               onChange={(e) => setAccountUrl(e.target.value)}
               placeholder="https://api.booqable.com"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
             />
           </div>
 
@@ -257,8 +257,8 @@ export default function BooqableSettings() {
 
       {/* Manual Sync Buttons */}
       {connection?.connected && (
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Manuel Senkronizasyon</h3>
+        <div className="bg-white border border-neutral-200 rounded-xl p-6">
+          <h3 className="font-semibold text-neutral-900 mb-4">Manuel Senkronizasyon</h3>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <button
@@ -306,13 +306,13 @@ export default function BooqableSettings() {
 
       {/* Recent Syncs */}
       {connection?.connected && connection.recentSyncs && connection.recentSyncs.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Son Senkronizasyonlar</h3>
+        <div className="bg-white border border-neutral-200 rounded-xl p-6">
+          <h3 className="font-semibold text-neutral-900 mb-4">Son Senkronizasyonlar</h3>
           
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-sm text-gray-600 border-b">
+                <tr className="text-left text-sm text-neutral-600 border-b">
                   <th className="pb-3">Tip</th>
                   <th className="pb-3">Durum</th>
                   <th className="pb-3">İşlenen</th>
@@ -326,16 +326,16 @@ export default function BooqableSettings() {
                 {connection.recentSyncs.map((sync) => (
                   <tr key={sync.id} className="border-b last:border-0 text-sm">
                     <td className="py-3">
-                      <span className="font-medium text-gray-900">
+                      <span className="font-medium text-neutral-900">
                         {getSyncTypeLabel(sync.syncType)}
                       </span>
                     </td>
                     <td className="py-3">{getStatusBadge(sync.status)}</td>
-                    <td className="py-3 text-gray-700">{sync.recordsProcessed}</td>
+                    <td className="py-3 text-neutral-700">{sync.recordsProcessed}</td>
                     <td className="py-3 text-green-600">{sync.recordsCreated}</td>
                     <td className="py-3 text-blue-600">{sync.recordsUpdated}</td>
                     <td className="py-3 text-red-600">{sync.recordsFailed}</td>
-                    <td className="py-3 text-gray-600">{formatDate(sync.startedAt)}</td>
+                    <td className="py-3 text-neutral-600">{formatDate(sync.startedAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -345,7 +345,7 @@ export default function BooqableSettings() {
       )}
 
       {/* Documentation */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+      <div className="bg-blue-50 border border-neutral-200 rounded-xl p-6">
         <h3 className="font-semibold text-blue-900 mb-2">📖 Dokümantasyon</h3>
         <p className="text-sm text-blue-800 mb-3">
           Booqable entegrasyonu hakkında daha fazla bilgi için:

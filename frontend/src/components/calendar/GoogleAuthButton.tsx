@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { Calendar as CalendarIcon, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { useCalendarStore } from '../../stores/calendarStore';
 
@@ -35,7 +35,7 @@ export default function GoogleAuthButton() {
             <CalendarIcon className="h-8 w-8 text-blue-600" />
           </div>
           <div className="ml-4">
-            <h3 className="text-lg font-medium text-gray-900">Google Calendar Entegrasyonu</h3>
+            <h3 className="text-lg font-medium text-neutral-900">Google Calendar Entegrasyonu</h3>
             <p className="text-sm text-gray-500 mt-1">
               Siparişleriniz otomatik olarak Google Calendar'a senkronize edilir
             </p>
@@ -108,7 +108,7 @@ export default function GoogleAuthButton() {
             <button
               onClick={handleDisconnect}
               disabled={loading}
-              className="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              className="w-full inline-flex justify-center items-center px-4 py-2 border border-neutral-300 text-sm font-medium rounded-md text-neutral-700 bg-white hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500 disabled:opacity-50"
             >
               Bağlantıyı Kes
             </button>
@@ -117,9 +117,9 @@ export default function GoogleAuthButton() {
       </div>
 
       {googleConnected && !needsReconnect && (
-        <div className="mt-6 border-t border-gray-200 pt-6">
-          <h4 className="text-sm font-medium text-gray-900 mb-3">Özellikler:</h4>
-          <ul className="space-y-2 text-sm text-gray-600">
+        <div className="mt-6 border-t border-neutral-200 pt-6">
+          <h4 className="text-sm font-medium text-neutral-900 mb-3">Özellikler:</h4>
+          <ul className="space-y-2 text-sm text-neutral-600">
             <li className="flex items-start">
               <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
               <span>Yeni sipariş → Otomatik calendar event</span>

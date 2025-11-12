@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -175,7 +175,7 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
       case 'cancelled':
         return <XCircle className="w-4 h-4 text-red-600" />;
       default:
-        return <ShoppingCart className="w-4 h-4 text-gray-600" />;
+        return <ShoppingCart className="w-4 h-4 text-neutral-600" />;
     }
   };
 
@@ -395,7 +395,7 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value as any)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="1d">Bugün</option>
                 <option value="7d">Son 7 Gün</option>
@@ -407,7 +407,7 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
               <select
                 value={chartType}
                 onChange={(e) => setChartType(e.target.value as any)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
               >
                 <option value="line">Çizgi</option>
                 <option value="area">Alan</option>
@@ -423,27 +423,27 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
           {/* Summary metrics */}
           {data && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-600">Toplam Sipariş</p>
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-sm text-neutral-600">Toplam Sipariş</p>
                 <p className="text-lg font-semibold">{data.totalOrders.toLocaleString()}</p>
                 <div className="flex items-center gap-1 mt-1">
                   {getGrowthBadge(data.orderTrends?.ordersGrowth || 0)}
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-600">Tamamlanma Oranı</p>
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-sm text-neutral-600">Tamamlanma Oranı</p>
                 <p className="text-lg font-semibold">{data.completionRate.toFixed(1)}%</p>
                 <p className="text-sm text-gray-500">{data.completedOrders} tamamlandı</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-600">Ortalama Sipariş Değeri</p>
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-sm text-neutral-600">Ortalama Sipariş Değeri</p>
                 <p className="text-lg font-semibold">{formatCurrency(data.averageOrderValue)}</p>
                 <div className="flex items-center gap-1 mt-1">
                   {getGrowthBadge(data.orderTrends?.averageOrderValueGrowth || 0)}
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-600">İptal Oranı</p>
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-sm text-neutral-600">İptal Oranı</p>
                 <p className="text-lg font-semibold text-red-600">{data.cancellationRate.toFixed(1)}%</p>
                 <p className="text-sm text-gray-500">{data.cancelledOrders} iptal</p>
               </div>
@@ -503,14 +503,14 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
                   {/* Status breakdown table */}
                   <div className="mt-4 space-y-2">
                     {data.ordersByStatus.map((status, index) => (
-                      <div key={status.status} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <div key={status.status} className="flex items-center justify-between p-2 bg-neutral-50 rounded">
                         <div className="flex items-center gap-2">
                           {getStatusIcon(status.status)}
                           <span className="font-medium">{getStatusLabel(status.status)}</span>
                         </div>
                         <div className="text-right">
                           <p className="font-medium">{status.count} sipariş</p>
-                          <p className="text-sm text-gray-600">{formatCurrency(status.revenue)}</p>
+                          <p className="text-sm text-neutral-600">{formatCurrency(status.revenue)}</p>
                         </div>
                       </div>
                     ))}
@@ -528,19 +528,19 @@ export const OrderAnalytics: React.FC<OrderAnalyticsProps> = ({
                 <CardContent>
                   <div className="space-y-3">
                     {data.popularEquipment.slice(0, 5).map((equipment, index) => (
-                      <div key={equipment.equipmentId} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={equipment.equipmentId} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
                             {index + 1}
                           </div>
                           <div>
                             <p className="font-medium">{equipment.name}</p>
-                            <p className="text-sm text-gray-600">{equipment.category}</p>
+                            <p className="text-sm text-neutral-600">{equipment.category}</p>
                           </div>
                         </div>
                         <div className="text-right">
                           <p className="font-medium">{equipment.orderCount} sipariş</p>
-                          <p className="text-sm text-gray-600">{formatCurrency(equipment.revenue)}</p>
+                          <p className="text-sm text-neutral-600">{formatCurrency(equipment.revenue)}</p>
                           <p className="text-xs text-gray-500">
                             Ort. {equipment.averageRentalDuration} gün
                           </p>

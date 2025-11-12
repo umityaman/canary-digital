@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -273,7 +273,7 @@ export const OrdersChart: React.FC<OrdersChartProps> = ({
       <div className="bg-purple-50 rounded-lg p-4 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-600">Toplam Sipariş</p>
+            <p className="text-sm text-neutral-600">Toplam Sipariş</p>
             <p className="text-3xl font-bold text-purple-600 mt-1">
               {data.total}
             </p>

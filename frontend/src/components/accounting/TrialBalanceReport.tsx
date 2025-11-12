@@ -119,7 +119,7 @@ export default function TrialBalanceReport() {
       REVENUE: 'text-neutral-900',
       EXPENSE: 'text-orange-600',
     };
-    return colors[type] || 'text-gray-600';
+    return colors[type] || 'text-neutral-600';
   };
 
   const getAccountTypeName = (type: string): string => {
@@ -240,7 +240,7 @@ export default function TrialBalanceReport() {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
 
@@ -255,7 +255,7 @@ export default function TrialBalanceReport() {
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
 
@@ -286,7 +286,7 @@ export default function TrialBalanceReport() {
                 type="checkbox"
                 checked={showZeroBalances}
                 onChange={(e) => setShowZeroBalances(e.target.checked)}
-                className="w-4 h-4 text-neutral-900 rounded focus:ring-2 focus:ring-blue-500"
+                className="w-4 h-4 text-neutral-900 rounded focus:ring-2 focus:ring-neutral-500"
               />
               <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>
                 Sï¿½fï¿½r bakiye gï¿½ster
@@ -304,7 +304,7 @@ export default function TrialBalanceReport() {
           >
             Hesap Detaylarï¿½
           </h3>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 text-sm text-neutral-600">
             <FileSpreadsheet className="w-4 h-4" />
             <span>{items.length} hesap</span>
           </div>
@@ -312,7 +312,7 @@ export default function TrialBalanceReport() {
 
         {loading ? (
           <div className="flex items-center justify-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-600"></div>
           </div>
         ) : items.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
@@ -350,15 +350,15 @@ export default function TrialBalanceReport() {
                   return (
                     <tr
                       key={idx}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-neutral-50 transition-colors"
                     >
                       <td className={TABLE_BODY_CELL}>
-                        <span className="font-mono text-sm font-medium text-gray-900">
+                        <span className="font-mono text-sm font-medium text-neutral-900">
                           {item.accountCode}
                         </span>
                       </td>
                       <td className={TABLE_BODY_CELL}>
-                        <p className="text-sm text-gray-900 font-medium">
+                        <p className="text-sm text-neutral-900 font-medium">
                           {item.accountName}
                         </p>
                       </td>
@@ -388,7 +388,7 @@ export default function TrialBalanceReport() {
                               ? 'text-neutral-900'
                               : balance < 0
                               ? 'text-neutral-900'
-                              : 'text-gray-600'
+                              : 'text-neutral-600'
                           }`}
                         >
                           {formatCurrency(Math.abs(balance))}
@@ -399,7 +399,7 @@ export default function TrialBalanceReport() {
                   );
                 })}
               </tbody>
-              <tfoot className="bg-gray-100 border-t-2 border-gray-300">
+              <tfoot className="bg-neutral-100 border-t-2 border-neutral-300">
                 <tr className="font-bold">
                   <td colSpan={3} className="px-4 py-3 text-right text-sm">
                     TOPLAM:

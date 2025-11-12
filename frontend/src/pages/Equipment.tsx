@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Plus, 
@@ -185,8 +185,8 @@ export default function Equipment() {
                     <Package className="w-6 h-6 text-neutral-700" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-600">{item.brand} {item.model}</p>
+                    <h3 className="font-semibold text-neutral-900">{item.name}</h3>
+                    <p className="text-sm text-neutral-600">{item.brand} {item.model}</p>
                   </div>
                 </div>
                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>
@@ -200,23 +200,23 @@ export default function Equipment() {
 
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Seri No:</span>
+                  <span className="text-neutral-600">Seri No:</span>
                   <span className="font-medium">#{item.serialNumber}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Tip:</span>
+                  <span className="text-neutral-600">Tip:</span>
                   <span className="font-medium">{item.type}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Konum:</span>
+                  <span className="text-neutral-600">Konum:</span>
                   <span className="font-medium">{item.location}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Günlük Ücret:</span>
+                  <span className="text-neutral-600">Günlük Ücret:</span>
                   <span className="font-semibold text-green-600">{formatCurrency(item.dailyRate)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Toplam Kullanım:</span>
+                  <span className="text-neutral-600">Toplam Kullanım:</span>
                   <span className="font-medium">{item.totalUsageDays} gün</span>
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function Equipment() {
                 </button>
                 <button
                   onClick={() => navigate(`/equipment/${item.id}/edit`)}
-                  className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
+                  className="flex items-center justify-center gap-2 px-3 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 text-sm"
                 >
                   <Edit className="w-4 h-4" />
                 </button>
@@ -250,8 +250,8 @@ export default function Equipment() {
       {equipment.length === 0 && (
         <div className="text-center py-12">
           <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz ekipman bulunmuyor</h3>
-          <p className="text-gray-600 mb-4">İlk ekipmanınızı eklemek için başlayın.</p>
+          <h3 className="text-lg font-semibold text-neutral-900 mb-2">Henüz ekipman bulunmuyor</h3>
+          <p className="text-neutral-600 mb-4">İlk ekipmanınızı eklemek için başlayın.</p>
           <button 
             onClick={() => navigate('/equipment/new')}
             className="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800"

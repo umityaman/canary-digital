@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { 
   Search, 
   Filter, 
@@ -399,7 +399,7 @@ export const DocumentSearch: React.FC<DocumentSearchProps> = ({
                     <Badge
                       key={tag}
                       variant={filters.tags?.includes(tag) ? "default" : "outline"}
-                      className="cursor-pointer hover:bg-gray-100"
+                      className="cursor-pointer hover:bg-neutral-100"
                       onClick={() => toggleArrayFilter('tags', tag)}
                     >
                       {tag}

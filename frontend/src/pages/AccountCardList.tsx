@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search, Filter, Users, TrendingUp, TrendingDown, DollarSign, Edit2, Eye } from 'lucide-react'
 import { toast } from 'react-hot-toast'
@@ -83,7 +83,7 @@ const AccountCardList: React.FC = () => {
       supplier: 'bg-orange-100 text-orange-700',
       both: 'bg-purple-100 text-purple-700'
     }
-    return colors[type] || 'bg-gray-100 text-gray-700'
+    return colors[type] || 'bg-neutral-100 text-neutral-700'
   }
 
   const formatBalance = (balance: number) => {
@@ -98,7 +98,7 @@ const AccountCardList: React.FC = () => {
     } else if (balance < 0) {
       return <span className="text-green-600 font-medium">₺{formatted} Alacak</span>
     }
-    return <span className="text-gray-600">₺0,00</span>
+    return <span className="text-neutral-600">₺0,00</span>
   }
 
   const stats = accountCards.reduce((acc, card) => {
@@ -287,7 +287,7 @@ const AccountCardList: React.FC = () => {
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           card.isActive 
                             ? 'bg-green-100 text-green-700' 
-                            : 'bg-gray-100 text-gray-700'
+                            : 'bg-neutral-100 text-neutral-700'
                         }`}>
                           {card.isActive ? 'Aktif' : 'Pasif'}
                         </span>

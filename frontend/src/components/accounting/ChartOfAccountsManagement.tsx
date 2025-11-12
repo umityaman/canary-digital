@@ -154,7 +154,7 @@ export default function ChartOfAccountsManagement() {
       EXPENSE: { color: 'bg-neutral-100 text-neutral-800' },
     };
 
-    const config = typeConfig[type] || { color: 'bg-gray-100 text-gray-700' };
+    const config = typeConfig[type] || { color: 'bg-neutral-100 text-neutral-700' };
 
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
@@ -181,13 +181,13 @@ export default function ChartOfAccountsManagement() {
 
     return (
       <React.Fragment key={account.id}>
-        <tr className="hover:bg-gray-50 transition-colors">
+        <tr className="hover:bg-neutral-50 transition-colors">
           <td className="px-6 py-4 whitespace-nowrap">
             <div className="flex items-center" style={{ paddingLeft: `${level * 24}px` }}>
               {hasChildren ? (
                 <button
                   onClick={() => toggleNode(account.id)}
-                  className="mr-2 text-gray-400 hover:text-gray-600"
+                  className="mr-2 text-gray-400 hover:text-neutral-600"
                 >
                   {isExpanded ? (
                     <ChevronDown className="w-4 h-4" />
@@ -382,7 +382,7 @@ export default function ChartOfAccountsManagement() {
               placeholder="Hesap kodu veya adı ara..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
 
@@ -390,7 +390,7 @@ export default function ChartOfAccountsManagement() {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
           >
             <option value="ALL">Tüm Hesap Tipleri</option>
             <option value="ASSET">Varlık</option>
@@ -442,7 +442,7 @@ export default function ChartOfAccountsManagement() {
       <div className={card('none', 'none', 'default', 'lg')}>
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-600"></div>
           </div>
         ) : accounts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
@@ -457,7 +457,7 @@ export default function ChartOfAccountsManagement() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b-2 border-gray-200">
+              <thead className="bg-neutral-50 border-b-2 border-neutral-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Hesap Kodu

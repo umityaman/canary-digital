@@ -121,7 +121,7 @@ export default function ExpenseTab() {
         total: data.total,
         count: data.count,
         percentage: (data.total / total) * 100,
-        color: CATEGORY_COLORS[category] || 'bg-gray-500'
+        color: CATEGORY_COLORS[category] || 'bg-neutral-500'
       }))
       
       setCategoryStats(stats.sort((a, b) => b.total - a.total))

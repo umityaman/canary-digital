@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface EInvoice {
@@ -267,10 +267,10 @@ const EInvoiceManagement: React.FC = () => {
       RECEIVED: { color: 'bg-neutral-100 text-neutral-800', text: 'Alındı' },
       APPROVED: { color: 'bg-neutral-100 text-neutral-800', text: 'Onaylandı' },
       REJECTED: { color: 'bg-neutral-100 text-neutral-800', text: 'Reddedildi' },
-      CANCELLED: { color: 'bg-gray-100 text-gray-800', text: 'İptal Edildi' },
+      CANCELLED: { color: 'bg-neutral-100 text-gray-800', text: 'İptal Edildi' },
     };
 
-    const badge = badges[status] || { color: 'bg-gray-100 text-gray-800', text: status };
+    const badge = badges[status] || { color: 'bg-neutral-100 text-gray-800', text: status };
 
     return (
       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${badge.color}`}>
@@ -295,8 +295,8 @@ const EInvoiceManagement: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">GIB e-Fatura Yönetimi</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-neutral-900">GIB e-Fatura Yönetimi</h2>
+          <p className="mt-1 text-sm text-neutral-600">
             Toplam {totalCount} e-Fatura • {failedCount} Başarısız
           </p>
         </div>
@@ -333,7 +333,7 @@ const EInvoiceManagement: React.FC = () => {
               placeholder="Fatura No, Müşteri veya UUID ara..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
             />
           </div>
           <select
@@ -342,7 +342,7 @@ const EInvoiceManagement: React.FC = () => {
               setSelectedStatus(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500"
           >
             <option value="ALL">Tüm Durumlar</option>
             <option value="PENDING">Beklemede</option>
@@ -359,8 +359,8 @@ const EInvoiceManagement: React.FC = () => {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
           <div className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Yükleniyor...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600 mx-auto"></div>
+            <p className="mt-4 text-neutral-600">Yükleniyor...</p>
           </div>
         ) : filteredInvoices.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
@@ -369,7 +369,7 @@ const EInvoiceManagement: React.FC = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-neutral-50">
                 <tr>
                   <th className="px-4 py-3 text-left">
                     <input
@@ -396,7 +396,7 @@ const EInvoiceManagement: React.FC = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredInvoices.map((eInvoice) => (
-                  <tr key={eInvoice.id} className="hover:bg-gray-50">
+                  <tr key={eInvoice.id} className="hover:bg-neutral-50">
                     <td className="px-4 py-4">
                       <input
                         type="checkbox"
@@ -411,10 +411,10 @@ const EInvoiceManagement: React.FC = () => {
                         className="rounded"
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">
                       {eInvoice.invoice.invoiceNumber}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                       {eInvoice.invoice.customer.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
@@ -426,7 +426,7 @@ const EInvoiceManagement: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {new Date(eInvoice.invoice.invoiceDate).toLocaleDateString('tr-TR')}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                       {eInvoice.invoice.totalAmount.toLocaleString('tr-TR')} ₺
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -465,22 +465,22 @@ const EInvoiceManagement: React.FC = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-            <div className="text-sm text-gray-700">
+          <div className="px-6 py-4 border-t border-neutral-200 flex items-center justify-between">
+            <div className="text-sm text-neutral-700">
               Sayfa {currentPage} / {totalPages}
             </div>
             <div className="flex gap-2">
               <button
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50"
+                className="px-3 py-1 border rounded hover:bg-neutral-50 disabled:opacity-50"
               >
                 Önceki
               </button>
               <button
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50"
+                className="px-3 py-1 border rounded hover:bg-neutral-50 disabled:opacity-50"
               >
                 Sonraki
               </button>
@@ -501,7 +501,7 @@ const EInvoiceManagement: React.FC = () => {
                   setCancelReason('');
                   setResponseReason('');
                 }}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-neutral-600"
               >
                 ✕
               </button>
@@ -510,27 +510,27 @@ const EInvoiceManagement: React.FC = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-600">Fatura No</p>
+                  <p className="text-sm text-neutral-600">Fatura No</p>
                   <p className="font-semibold">{selectedEInvoice.invoice.invoiceNumber}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Müşteri</p>
+                  <p className="text-sm text-neutral-600">Müşteri</p>
                   <p className="font-semibold">{selectedEInvoice.invoice.customer.name}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">UUID</p>
+                  <p className="text-sm text-neutral-600">UUID</p>
                   <p className="font-mono text-sm">{selectedEInvoice.uuid}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Durum</p>
+                  <p className="text-sm text-neutral-600">Durum</p>
                   {getStatusBadge(selectedEInvoice.status)}
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Gönderilme Tarihi</p>
+                  <p className="text-sm text-neutral-600">Gönderilme Tarihi</p>
                   <p>{selectedEInvoice.sentAt ? new Date(selectedEInvoice.sentAt).toLocaleString('tr-TR') : '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Alınma Tarihi</p>
+                  <p className="text-sm text-neutral-600">Alınma Tarihi</p>
                   <p>{selectedEInvoice.receivedAt ? new Date(selectedEInvoice.receivedAt).toLocaleString('tr-TR') : '-'}</p>
                 </div>
               </div>
@@ -568,13 +568,13 @@ const EInvoiceManagement: React.FC = () => {
                 {/* Send Response (for incoming invoices) */}
                 {selectedEInvoice.status === 'RECEIVED' && (
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-neutral-700">
                       Faturaya Yanıt Ver
                     </label>
                     <select
                       value={responseStatus}
                       onChange={(e) => setResponseStatus(e.target.value as 'ACCEPTED' | 'REJECTED')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                     >
                       <option value="ACCEPTED">Kabul Et</option>
                       <option value="REJECTED">Reddet</option>
@@ -584,7 +584,7 @@ const EInvoiceManagement: React.FC = () => {
                         value={responseReason}
                         onChange={(e) => setResponseReason(e.target.value)}
                         placeholder="Red nedeni (zorunlu)"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                         rows={2}
                       />
                     )}
@@ -600,14 +600,14 @@ const EInvoiceManagement: React.FC = () => {
                 {/* Cancel Invoice */}
                 {(selectedEInvoice.status === 'SENT' || selectedEInvoice.status === 'APPROVED') && (
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-neutral-700">
                       Faturayı İptal Et
                     </label>
                     <textarea
                       value={cancelReason}
                       onChange={(e) => setCancelReason(e.target.value)}
                       placeholder="İptal nedeni (zorunlu)"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                       rows={2}
                     />
                     <button

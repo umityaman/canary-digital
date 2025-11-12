@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState } from 'react'
 import { Plus, ShoppingCart, Package, FileText, MessageSquare, CheckSquare } from 'lucide-react'
 import { useEquipmentStore } from '../stores/equipmentStore'
 import { useAuthStore } from '../stores/authStore'
@@ -119,7 +119,7 @@ const Home: React.FC = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">Kiralık</p>
+              <p className="text-sm font-medium text-neutral-600 mb-1">Kiralık</p>
               <p className="text-3xl font-bold text-red-600">{stats.rentedEquipment}</p>
               <p className="text-sm text-gray-500 mt-1">Şu anda kirada</p>
             </div>
@@ -139,7 +139,7 @@ const Home: React.FC = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">Bakımda</p>
+              <p className="text-sm font-medium text-neutral-600 mb-1">Bakımda</p>
               <p className="text-3xl font-bold text-orange-600">{stats.maintenanceEquipment}</p>
               <p className="text-sm text-gray-500 mt-1">Servis gerekli</p>
             </div>
@@ -160,7 +160,7 @@ const Home: React.FC = () => {
       <section className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="flex justify-between items-center p-6 pb-4">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Son Eklenen Ekipmanlar</h2>
+            <h2 className="text-xl font-semibold text-neutral-900">Son Eklenen Ekipmanlar</h2>
             <p className="text-sm text-gray-500 mt-1">En son sisteme eklenen ekipmanlar</p>
           </div>
           <a 
@@ -174,17 +174,17 @@ const Home: React.FC = () => {
         
         <div className="divide-y divide-gray-100">
           {equipment.slice(0, 4).map((item, index) => (
-            <div key={item.id} className="p-6 hover:bg-gray-50 transition-colors">
+            <div key={item.id} className="p-6 hover:bg-neutral-50 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center shadow-sm">
-                    <Package size={24} className="text-gray-600" />
+                    <Package size={24} className="text-neutral-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 mb-1">{item.name}</h3>
-                    <p className="text-sm text-gray-600">{item.brand} {item.model}</p>
+                    <h3 className="font-semibold text-neutral-900 mb-1">{item.name}</h3>
+                    <p className="text-sm text-neutral-600">{item.brand} {item.model}</p>
                     <div className="flex items-center mt-2 space-x-3">
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+                      <span className="text-xs text-gray-500 bg-neutral-100 px-2 py-1 rounded-md">
                         {item.category}
                       </span>
                       <span className={`text-xs px-2 py-1 rounded-md font-medium ${
@@ -199,7 +199,7 @@ const Home: React.FC = () => {
                 </div>
                 
                 <div className="text-right">
-                  <div className="text-lg font-bold text-gray-900">
+                  <div className="text-lg font-bold text-neutral-900">
                     {item.dailyPrice ? `₺${item.dailyPrice}` : '-'}
                   </div>
                   <div className="text-sm text-gray-500">günlük</div>
@@ -212,7 +212,7 @@ const Home: React.FC = () => {
         {equipment.length === 0 && (
           <div className="p-12 text-center">
             <Package size={48} className="mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Henüz ekipman yok</h3>
+            <h3 className="text-lg font-medium text-neutral-900 mb-2">Henüz ekipman yok</h3>
             <p className="text-gray-500 mb-6">İlk ekipmanınızı ekleyerek başlayın</p>
             <a 
               href="/inventory" 
@@ -228,7 +228,7 @@ const Home: React.FC = () => {
       {/* Araçlar & Bilgi Merkezi - Professional Grid */}
       <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Araçlar & Bilgi Merkezi</h2>
+          <h2 className="text-xl font-semibold text-neutral-900">Araçlar & Bilgi Merkezi</h2>
           <p className="text-sm text-gray-500 mt-1">İş akışınızı hızlandıran araçlar ve güncel bilgiler</p>
         </div>
         
@@ -241,22 +241,22 @@ const Home: React.FC = () => {
           {/* Additional Information Widgets */}
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Borsa & Kripto</h3>
+              <h3 className="font-semibold text-neutral-900">Borsa & Kripto</h3>
               <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center">
                 <FileText size={16} className="text-neutral-700" />
               </div>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">BIST 100:</span>
+                <span className="text-sm text-neutral-700">BIST 100:</span>
                 <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-md">+2.45%</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Bitcoin:</span>
+                <span className="text-sm text-neutral-700">Bitcoin:</span>
                 <span className="text-sm font-medium text-red-600 bg-red-100 px-2 py-1 rounded-md">-1.23%</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Ethereum:</span>
+                <span className="text-sm text-neutral-700">Ethereum:</span>
                 <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-md">+0.87%</span>
               </div>
             </div>
@@ -264,33 +264,33 @@ const Home: React.FC = () => {
           
           <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6 border border-orange-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Hava Durumu</h3>
+              <h3 className="font-semibold text-neutral-900">Hava Durumu</h3>
               <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center">
                 <span className="text-lg">🌤️</span>
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">22°C</div>
-              <div className="text-sm text-gray-600 mb-2">İstanbul</div>
+              <div className="text-3xl font-bold text-neutral-900 mb-1">22°C</div>
+              <div className="text-sm text-neutral-600 mb-2">İstanbul</div>
               <div className="text-xs text-gray-500 bg-white/60 px-3 py-1 rounded-full">Parçalı bulutlu</div>
             </div>
           </div>
           
           <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Hatırlatıcılar</h3>
+              <h3 className="font-semibold text-neutral-900">Hatırlatıcılar</h3>
               <div className="w-8 h-8 bg-neutral-100 rounded-lg flex items-center justify-center">
                 <CheckSquare size={16} className="text-neutral-700" />
               </div>
             </div>
             <div className="space-y-3">
               <div className="bg-white/70 rounded-lg p-3 border border-yellow-200">
-                <div className="font-medium text-sm text-gray-900 mb-1">Bakım zamanı</div>
-                <div className="text-xs text-gray-600">Sony A7 IV bakıma alınacak</div>
+                <div className="font-medium text-sm text-neutral-900 mb-1">Bakım zamanı</div>
+                <div className="text-xs text-neutral-600">Sony A7 IV bakıma alınacak</div>
               </div>
-              <div className="bg-white/70 rounded-lg p-3 border border-blue-200">
-                <div className="font-medium text-sm text-gray-900 mb-1">Toplantı</div>
-                <div className="text-xs text-gray-600">Müşteri görüşmesi - 14:00</div>
+              <div className="bg-white/70 rounded-lg p-3 border border-neutral-200">
+                <div className="font-medium text-sm text-neutral-900 mb-1">Toplantı</div>
+                <div className="text-xs text-neutral-600">Müşteri görüşmesi - 14:00</div>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Reusable Chart Wrapper Component
  * Kullanım: Generic chart component for any chart type
  * Özellikler: Type-safe, reusable, error handling
@@ -112,11 +112,11 @@ export default function ReusableChartWrapper({
   };
 
   return (
-    <div className={`bg-white p-6 rounded-lg shadow-sm border border-gray-200 ${className}`}>
+    <div className={`bg-white p-6 rounded-lg shadow-sm border border-neutral-200 ${className}`}>
       {/* Header */}
       {(title || showExport) && (
         <div className="flex items-center justify-between mb-4">
-          {title && <h3 className="text-lg font-semibold text-gray-900">{title}</h3>}
+          {title && <h3 className="text-lg font-semibold text-neutral-900">{title}</h3>}
           {showExport && (
             <div className="flex gap-2">
               <button
@@ -140,7 +140,7 @@ export default function ReusableChartWrapper({
       {loading && (
         <div className="h-64 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-3"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-500 mx-auto mb-3"></div>
             <p className="text-sm text-gray-500">Grafik yükleniyor...</p>
           </div>
         </div>
@@ -163,7 +163,7 @@ export default function ReusableChartWrapper({
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p className="text-sm text-gray-600">Grafik yüklenirken hata oluştu</p>
+            <p className="text-sm text-neutral-600">Grafik yüklenirken hata oluştu</p>
             <p className="text-xs text-gray-500 mt-1">{error}</p>
           </div>
         </div>

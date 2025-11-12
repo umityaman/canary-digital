@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { X, Copy, Download, Printer, AlertCircle, RefreshCw, CheckCircle } from 'lucide-react';
 import api from '../services/api';
 
@@ -181,14 +181,14 @@ ${codes.join('\n')}
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Yedek Kodlar</h2>
+            <h2 className="text-xl font-bold text-neutral-900">Yedek Kodlar</h2>
             <p className="text-sm text-gray-500 mt-1">
               2FA erişim sorunlarında kullanılacak yedek kodlar
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition"
+            className="text-gray-400 hover:text-neutral-600 transition"
           >
             <X className="w-6 h-6" />
           </button>
@@ -220,7 +220,7 @@ ${codes.join('\n')}
               {codes.map((code, index) => (
                 <div
                   key={index}
-                  className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg font-mono text-center text-sm font-semibold text-gray-900 hover:bg-gray-100 transition"
+                  className="px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg font-mono text-center text-sm font-semibold text-neutral-900 hover:bg-neutral-100 transition"
                 >
                   {code}
                 </div>
@@ -233,7 +233,7 @@ ${codes.join('\n')}
             <button
               onClick={handleCopy}
               disabled={loading}
-              className="flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               {copied ? (
                 <>
@@ -251,7 +251,7 @@ ${codes.join('\n')}
             <button
               onClick={handleDownload}
               disabled={loading}
-              className="flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               <Download className="w-4 h-4" />
               İndir
@@ -260,7 +260,7 @@ ${codes.join('\n')}
             <button
               onClick={handlePrint}
               disabled={loading}
-              className="flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               <Printer className="w-4 h-4" />
               Yazdır
@@ -290,7 +290,7 @@ ${codes.join('\n')}
                 <button
                   onClick={() => setShowRegenerateConfirm(false)}
                   disabled={loading}
-                  className="flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  className="flex-1 px-4 py-2 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
                   İptal
                 </button>
@@ -306,7 +306,7 @@ ${codes.join('\n')}
           )}
 
           {/* Info */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="mt-6 p-4 bg-blue-50 border border-neutral-200 rounded-lg">
             <h4 className="font-semibold text-blue-900 mb-2">💡 Yedek Kodlar Nasıl Kullanılır?</h4>
             <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
               <li>Telefonunuza erişiminizi kaybederseniz bu kodları kullanın</li>
@@ -318,7 +318,7 @@ ${codes.join('\n')}
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t bg-gray-50 flex justify-end">
+        <div className="px-6 py-4 border-t bg-neutral-50 flex justify-end">
           <button
             onClick={onClose}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { pricingAPI } from '../../services/api';
 
 interface PriceCalculatorProps {
@@ -139,14 +139,14 @@ const PriceCalculatorWidget: React.FC<PriceCalculatorProps> = ({
       
       {/* Equipment Info */}
       <div className="mb-4 pb-4 border-b">
-        <p className="text-sm text-gray-600">{equipmentName}</p>
+        <p className="text-sm text-neutral-600">{equipmentName}</p>
         <p className="text-lg font-semibold text-blue-600">{dailyPrice} TL/gün</p>
       </div>
 
       {/* Date Selection */}
       <div className="space-y-4 mb-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 mb-1">
             Başlangıç Tarihi
           </label>
           <input
@@ -154,12 +154,12 @@ const PriceCalculatorWidget: React.FC<PriceCalculatorProps> = ({
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             min={new Date().toISOString().split('T')[0]}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 mb-1">
             Bitiş Tarihi
           </label>
           <input
@@ -167,12 +167,12 @@ const PriceCalculatorWidget: React.FC<PriceCalculatorProps> = ({
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
             min={startDate}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 mb-1">
             Miktar
           </label>
           <input
@@ -180,14 +180,14 @@ const PriceCalculatorWidget: React.FC<PriceCalculatorProps> = ({
             value={quantity}
             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
             min="1"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500"
           />
         </div>
       </div>
 
       {/* Promo Code */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 mb-1">
           Promosyon Kodu (Opsiyonel)
         </label>
         <div className="flex gap-2">
@@ -196,7 +196,7 @@ const PriceCalculatorWidget: React.FC<PriceCalculatorProps> = ({
             value={promoCode}
             onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
             placeholder="WELCOME20"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 uppercase"
+            className="flex-1 px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500 uppercase"
           />
           <button
             onClick={validatePromoCode}
@@ -229,20 +229,20 @@ const PriceCalculatorWidget: React.FC<PriceCalculatorProps> = ({
         <div className="mb-4 space-y-3">
           {/* Duration */}
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Süre</span>
+            <span className="text-neutral-600">Süre</span>
             <span className="font-medium">{getDurationText()}</span>
           </div>
 
           {/* Base Price */}
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Temel Fiyat</span>
+            <span className="text-neutral-600">Temel Fiyat</span>
             <span className="font-medium">{priceBreakdown.basePrice.toFixed(2)} TL</span>
           </div>
 
           {/* Discounts */}
           {priceBreakdown.discounts.length > 0 && (
             <div className="border-t pt-2">
-              <p className="text-sm font-medium text-gray-700 mb-2">İndirimler</p>
+              <p className="text-sm font-medium text-neutral-700 mb-2">İndirimler</p>
               {priceBreakdown.discounts.map((discount: any, index: number) => (
                 <div key={index} className="flex justify-between text-sm mb-1">
                   <span className="text-green-600 flex items-center">
@@ -268,13 +268,13 @@ const PriceCalculatorWidget: React.FC<PriceCalculatorProps> = ({
           )}
 
           {/* Final Price */}
-          <div className="flex justify-between text-lg font-bold text-gray-900 border-t-2 pt-3">
+          <div className="flex justify-between text-lg font-bold text-neutral-900 border-t-2 pt-3">
             <span>Toplam</span>
             <span className="text-blue-600">{priceBreakdown.finalPrice.toFixed(2)} TL</span>
           </div>
 
           {/* Price per Day */}
-          <div className="text-center text-sm text-gray-600">
+          <div className="text-center text-sm text-neutral-600">
             {priceBreakdown.pricePerDay.toFixed(2)} TL/gün (ortalama)
           </div>
 

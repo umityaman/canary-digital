@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { X, Calendar, User, Package, DollarSign } from 'lucide-react';
 import { useCustomerStore } from '../../stores/customerStore';
 import { useEquipmentStore } from '../../stores/equipmentStore';
@@ -125,7 +125,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-neutral-600 transition-colors"
           >
             <X size={24} />
           </button>
@@ -140,7 +140,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
                 <User size={16} />
                 M��teri *
               </label>
@@ -148,7 +148,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                 required
                 value={formData.customerId}
                 onChange={(e) => setFormData({ ...formData, customerId: Number(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               >
                 <option value="0">M��teri Se�in...</option>
                 {customers.map((customer) => (
@@ -160,7 +160,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
             </div>
 
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
                 <Package size={16} />
                 Ekipman *
               </label>
@@ -168,7 +168,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                 required
                 value={formData.equipmentId}
                 onChange={(e) => setFormData({ ...formData, equipmentId: Number(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               >
                 <option value="0">Ekipman Seçin...</option>
                 {equipment.filter(e => e.status === 'AVAILABLE').map((item) => (
@@ -180,7 +180,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
             </div>
 
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
                 <Calendar size={16} />
                 Ba�lang�� Tarihi *
               </label>
@@ -189,12 +189,12 @@ const OrderModal: React.FC<OrderModalProps> = ({
                 required
                 value={formData.startDate}
                 onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               />
             </div>
 
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
                 <Calendar size={16} />
                 Biti� Tarihi *
               </label>
@@ -203,7 +203,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                 required
                 value={formData.endDate}
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               />
             </div>
           </div>
@@ -221,14 +221,14 @@ const OrderModal: React.FC<OrderModalProps> = ({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-2 block">
+            <label className="text-sm font-medium text-neutral-700 mb-2 block">
               Notlar
             </label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
               placeholder="�zel notlar, talepler vb."
             />
           </div>
@@ -237,7 +237,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
               disabled={loading}
             >
               �ptal

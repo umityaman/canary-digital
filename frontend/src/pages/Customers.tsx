@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Edit, Trash2, Users, Mail, Phone, Building, Plug } from 'lucide-react';
 import { useCustomerStore } from '../stores/customerStore';
@@ -76,7 +76,7 @@ const Customers: React.FC = () => {
             placeholder="Müşteri ara (isim, email, telefon, şirket)..."
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+            className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
           />
         </div>
         <button
@@ -111,7 +111,7 @@ const Customers: React.FC = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-neutral-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Müşteri
@@ -132,7 +132,7 @@ const Customers: React.FC = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {customers.map((customer) => (
-                  <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={customer.id} className="hover:bg-neutral-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <div className="flex-shrink-0 h-10 w-10 bg-neutral-100 rounded-full flex items-center justify-center">
@@ -142,7 +142,7 @@ const Customers: React.FC = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium text-neutral-900">
                               {customer.name}
                             </div>
                             {customer.booqableId && (
@@ -181,7 +181,7 @@ const Customers: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {customer.company ? (
-                        <div className="flex items-center text-sm text-gray-900">
+                        <div className="flex items-center text-sm text-neutral-900">
                           <Building size={14} className="mr-1 text-gray-400" />
                           {customer.company}
                         </div>

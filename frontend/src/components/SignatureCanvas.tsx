@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+﻿import React, { useRef, useState } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 import { Trash2, Check } from 'lucide-react';
 
@@ -57,7 +57,7 @@ const SignatureCanvasComponent: React.FC<SignatureCanvasProps> = ({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-neutral-700">
         {label}
       </label>
 
@@ -95,7 +95,7 @@ const SignatureCanvasComponent: React.FC<SignatureCanvasProps> = ({
         // İmza çizme alanı
         <div className="relative">
           <div 
-            className="border-2 border-gray-300 rounded-lg overflow-hidden bg-white"
+            className="border-2 border-neutral-300 rounded-lg overflow-hidden bg-white"
             style={{ width: '100%', maxWidth: width }}
           >
             <SignatureCanvas
@@ -116,7 +116,7 @@ const SignatureCanvasComponent: React.FC<SignatureCanvasProps> = ({
               type="button"
               onClick={clear}
               disabled={disabled}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               <Trash2 size={16} />
               Temizle

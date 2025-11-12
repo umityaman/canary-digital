@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -46,8 +46,8 @@ export default function Payments() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Ödeme Yönetimi</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-3xl font-bold text-neutral-900">Ödeme Yönetimi</h1>
+          <p className="text-neutral-600 mt-1">
             Ödemeleri takip edin ve yönetin
           </p>
         </div>
@@ -76,8 +76,8 @@ export default function Payments() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Toplam Gelir</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-neutral-600">Toplam Gelir</p>
+                <p className="text-2xl font-bold text-neutral-900">
                   {stats.totalRevenue.toLocaleString('tr-TR', {
                     style: 'currency',
                     currency: 'TRY'
@@ -91,7 +91,7 @@ export default function Payments() {
             <div className="mt-4 flex items-center text-sm">
               <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
               <span className="text-green-600">+12.5%</span>
-              <span className="text-gray-600 ml-1">önceki aya göre</span>
+              <span className="text-neutral-600 ml-1">önceki aya göre</span>
             </div>
           </CardContent>
         </Card>
@@ -100,8 +100,8 @@ export default function Payments() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Bu Ay</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-neutral-600">Bu Ay</p>
+                <p className="text-2xl font-bold text-neutral-900">
                   {stats.thisMonth.toLocaleString('tr-TR', {
                     style: 'currency',
                     currency: 'TRY'
@@ -113,7 +113,7 @@ export default function Payments() {
               </div>
             </div>
             <div className="mt-4 flex items-center text-sm">
-              <span className="text-gray-600">{new Date().toLocaleDateString('tr-TR', { month: 'long' })} ayı</span>
+              <span className="text-neutral-600">{new Date().toLocaleDateString('tr-TR', { month: 'long' })} ayı</span>
             </div>
           </CardContent>
         </Card>
@@ -122,8 +122,8 @@ export default function Payments() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Bekleyen Ödemeler</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-neutral-600">Bekleyen Ödemeler</p>
+                <p className="text-2xl font-bold text-neutral-900">
                   {stats.pendingPayments.toLocaleString('tr-TR', {
                     style: 'currency',
                     currency: 'TRY'
@@ -135,7 +135,7 @@ export default function Payments() {
               </div>
             </div>
             <div className="mt-4 flex items-center text-sm">
-              <span className="text-gray-600">8 bekleyen işlem</span>
+              <span className="text-neutral-600">8 bekleyen işlem</span>
             </div>
           </CardContent>
         </Card>
@@ -144,8 +144,8 @@ export default function Payments() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Başarı Oranı</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-neutral-600">Başarı Oranı</p>
+                <p className="text-2xl font-bold text-neutral-900">
                   {((stats.completedPayments / (stats.completedPayments + stats.failedPayments)) * 100).toFixed(1)}%
                 </p>
               </div>
@@ -154,7 +154,7 @@ export default function Payments() {
               </div>
             </div>
             <div className="mt-4 flex items-center text-sm">
-              <span className="text-gray-600">{stats.completedPayments} başarılı</span>
+              <span className="text-neutral-600">{stats.completedPayments} başarılı</span>
             </div>
           </CardContent>
         </Card>
@@ -193,7 +193,7 @@ export default function Payments() {
                     <CreditCard className="w-8 h-8 text-blue-600" />
                     <div>
                       <div className="font-medium">Kredi Kartı</div>
-                      <div className="text-sm text-gray-600">Iyzico ile güvenli ödeme</div>
+                      <div className="text-sm text-neutral-600">Iyzico ile güvenli ödeme</div>
                     </div>
                   </div>
                   <Badge variant="default">Aktif</Badge>
@@ -204,7 +204,7 @@ export default function Payments() {
                     <DollarSign className="w-8 h-8 text-green-600" />
                     <div>
                       <div className="font-medium">Banka Havalesi</div>
-                      <div className="text-sm text-gray-600">Direkt banka transferi</div>
+                      <div className="text-sm text-neutral-600">Direkt banka transferi</div>
                     </div>
                   </div>
                   <Badge variant="secondary">Yakında</Badge>
@@ -215,7 +215,7 @@ export default function Payments() {
                     <Users className="w-8 h-8 text-purple-600" />
                     <div>
                       <div className="font-medium">Taksitli Ödeme</div>
-                      <div className="text-sm text-gray-600">Kredi kartı taksitleri</div>
+                      <div className="text-sm text-neutral-600">Kredi kartı taksitleri</div>
                     </div>
                   </div>
                   <Badge variant="secondary">Yakında</Badge>
@@ -276,7 +276,7 @@ export default function Payments() {
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-neutral-500 rounded-full"></div>
                       <span>İade Edildi</span>
                     </div>
                     <span className="font-medium">{stats.refundedPayments}</span>
@@ -309,14 +309,14 @@ export default function Payments() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
                       API Modu
                     </label>
                     <Badge variant="secondary">Sandbox (Test)</Badge>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
                       3D Secure
                     </label>
                     <Badge variant="default">Aktif</Badge>

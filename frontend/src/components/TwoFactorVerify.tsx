@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Shield, AlertCircle, RefreshCw, Key } from 'lucide-react';
 import api from '../services/api';
 
@@ -100,8 +100,8 @@ const TwoFactorVerify = ({ onVerified, onCancel, method = 'EMAIL' }: TwoFactorVe
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
             <Shield className="w-8 h-8 text-blue-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">İki Faktörlü Doğrulama</h2>
-          <p className="text-gray-600">
+          <h2 className="text-2xl font-bold text-neutral-900 mb-2">İki Faktörlü Doğrulama</h2>
+          <p className="text-neutral-600">
             {useBackupCode
               ? 'Yedek kodunuzu girin'
               : `${getMethodText()} 6 haneli kodu girin`}
@@ -139,7 +139,7 @@ const TwoFactorVerify = ({ onVerified, onCancel, method = 'EMAIL' }: TwoFactorVe
             placeholder={useBackupCode ? 'XXXX-XXXX' : '123456'}
             maxLength={useBackupCode ? 9 : 6}
             disabled={loading}
-            className="w-full px-4 py-4 text-center text-2xl font-mono border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 tracking-widest"
+            className="w-full px-4 py-4 text-center text-2xl font-mono border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 tracking-widest"
             autoFocus
           />
           <p className="mt-2 text-sm text-gray-500 text-center">
@@ -171,7 +171,7 @@ const TwoFactorVerify = ({ onVerified, onCancel, method = 'EMAIL' }: TwoFactorVe
               setCode('');
               setError('');
             }}
-            className="w-full inline-flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-gray-800 transition"
+            className="w-full inline-flex items-center justify-center gap-2 text-sm text-neutral-600 hover:text-gray-800 transition"
           >
             <Key className="w-4 h-4" />
             {useBackupCode ? 'Normal kodu kullan' : 'Yedek kod kullan'}
@@ -183,7 +183,7 @@ const TwoFactorVerify = ({ onVerified, onCancel, method = 'EMAIL' }: TwoFactorVe
           <button
             onClick={onCancel}
             disabled={loading}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            className="flex-1 px-4 py-3 border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             İptal
           </button>
@@ -197,8 +197,8 @@ const TwoFactorVerify = ({ onVerified, onCancel, method = 'EMAIL' }: TwoFactorVe
         </div>
 
         {/* Help Text */}
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-600 text-center">
+        <div className="mt-6 p-4 bg-neutral-50 rounded-lg">
+          <p className="text-xs text-neutral-600 text-center">
             💡 <strong>İpucu:</strong> Doğrulama kodunuza erişemiyorsanız, yedek
             kodlarınızdan birini kullanabilirsiniz.
           </p>

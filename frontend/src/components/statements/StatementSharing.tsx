@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { statementAPI, StatementData, StatementFilters } from '../../services/statements';
 import { FileText, Download, Mail, MessageCircle, Calendar, TrendingUp, TrendingDown, Clock, User, Send } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -286,7 +286,7 @@ const StatementSharing = () => {
 
           {/* Summary */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+            <div className="bg-blue-50 rounded-xl p-4 border border-neutral-200">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-blue-900">Açılış Bakiyesi</span>
                 <TrendingUp className="text-blue-600" size={16} />
@@ -496,7 +496,7 @@ const StatementSharing = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full border border-blue-200">
+                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full border border-neutral-200">
                     {item.format.toUpperCase()} • {item.sentVia}
                   </span>
                   <p className="text-xs text-neutral-600 mt-1">{formatDate(item.sentAt)}</p>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -112,7 +112,7 @@ export default function CurrentAccountDetail() {
       setAccount(data.data || data);
     } catch (error: any) {
       console.error('Failed to load account:', error);
-      toast.error('Cari hesap yüklenemedi');
+      toast.error('Cari hesap yï¿½klenemedi');
       navigate('/accounting');
     } finally {
       setLoading(false);
@@ -148,7 +148,7 @@ export default function CurrentAccountDetail() {
       setTotalPages(data.pagination?.pages || 1);
     } catch (error: any) {
       console.error('Failed to load transactions:', error);
-      toast.error('Hareketler yüklenemedi');
+      toast.error('Hareketler yï¿½klenemedi');
     } finally {
       setTransactionsLoading(false);
     }
@@ -160,19 +160,19 @@ export default function CurrentAccountDetail() {
       exportCurrentAccountTransactionsToExcel(account, transactions);
       toast.success('Cari ekstre Excel olarak indirildi');
     } catch (error) {
-      toast.error('Excel export baþarýsýz oldu');
+      toast.error('Excel export baï¿½arï¿½sï¿½z oldu');
     }
   };
 
   const handleSendStatement = () => {
-    toast.success('Email gönderme özelliði yakýnda eklenecek');
+    toast.success('Email gï¿½nderme ï¿½zelliï¿½i yakï¿½nda eklenecek');
   };
 
   const getAccountTypeBadge = (type: string) => {
     const config =
       type === 'CUSTOMER'
-        ? { label: 'Müþteri', color: 'bg-neutral-100 text-neutral-800' }
-        : { label: 'Tedarikçi', color: 'bg-neutral-100 text-neutral-800' };
+        ? { label: 'Mï¿½ï¿½teri', color: 'bg-neutral-100 text-neutral-800' }
+        : { label: 'Tedarikï¿½i', color: 'bg-neutral-100 text-neutral-800' };
 
     return (
       <span className={`px-3 py-1 rounded-full text-sm font-medium ${config.color}`}>
@@ -213,7 +213,7 @@ export default function CurrentAccountDetail() {
   if (loading || !account) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
       </div>
     );
   }
@@ -224,7 +224,7 @@ export default function CurrentAccountDetail() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate('/accounting')}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
@@ -237,7 +237,7 @@ export default function CurrentAccountDetail() {
             </h1>
             {getAccountTypeBadge(account.type)}
             {!account.isActive && (
-              <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+              <span className="px-3 py-1 rounded-full text-sm font-medium bg-neutral-100 text-neutral-700">
                 Pasif
               </span>
             )}
@@ -254,14 +254,14 @@ export default function CurrentAccountDetail() {
             className={button('secondary', 'md', 'md')}
           >
             <Mail className="w-4 h-4" />
-            Ekstre Gönder
+            Ekstre Gï¿½nder
           </button>
           <button
             onClick={handleExportStatement}
             className={button('primary', 'md', 'md')}
           >
             <Download className="w-4 h-4" />
-            Ekstre Ýndir
+            Ekstre ï¿½ndir
           </button>
         </div>
       </div>
@@ -280,7 +280,7 @@ export default function CurrentAccountDetail() {
           <p
             className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
-            Toplam Borç
+            Toplam Borï¿½
           </p>
         </div>
 
@@ -315,10 +315,10 @@ export default function CurrentAccountDetail() {
             Net Bakiye
           </p>
           {account.balance > 0 && (
-            <p className="text-xs text-neutral-900 mt-1">Alacaklý</p>
+            <p className="text-xs text-neutral-900 mt-1">Alacaklï¿½</p>
           )}
           {account.balance < 0 && (
-            <p className="text-xs text-neutral-800 mt-1">Borçlu</p>
+            <p className="text-xs text-neutral-800 mt-1">Borï¿½lu</p>
           )}
         </div>
 
@@ -337,8 +337,8 @@ export default function CurrentAccountDetail() {
             Kredi Limiti
           </p>
           {account.creditLimit && account.balance < 0 && (
-            <p className="text-xs text-gray-600 mt-1">
-              Kullanýlan: {formatCurrency(Math.abs(account.balance))}
+            <p className="text-xs text-neutral-600 mt-1">
+              Kullanï¿½lan: {formatCurrency(Math.abs(account.balance))}
             </p>
           )}
         </div>
@@ -351,7 +351,7 @@ export default function CurrentAccountDetail() {
           <h3
             className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-4`}
           >
-            Ýletiþim Bilgileri
+            ï¿½letiï¿½im Bilgileri
           </h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
@@ -442,12 +442,12 @@ export default function CurrentAccountDetail() {
               <p
                 className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
               >
-                Ödeme Vadesi
+                ï¿½deme Vadesi
               </p>
               <p
                 className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
               >
-                {account.paymentTerm ? `${account.paymentTerm} gün` : 'Tanýmsýz'}
+                {account.paymentTerm ? `${account.paymentTerm} gï¿½n` : 'Tanï¿½msï¿½z'}
               </p>
             </div>
 
@@ -455,7 +455,7 @@ export default function CurrentAccountDetail() {
               <p
                 className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
               >
-                Hesap Açýlýþ Tarihi
+                Hesap Aï¿½ï¿½lï¿½ï¿½ Tarihi
               </p>
               <p
                 className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
@@ -468,14 +468,14 @@ export default function CurrentAccountDetail() {
               <p
                 className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-1`}
               >
-                Son Ýþlem Tarihi
+                Son ï¿½ï¿½lem Tarihi
               </p>
               <p
                 className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.primary}`}
               >
                 {account.lastTransactionDate
                   ? formatDate(account.lastTransactionDate)
-                  : 'Henüz iþlem yok'}
+                  : 'Henï¿½z iï¿½lem yok'}
               </p>
             </div>
 
@@ -508,7 +508,7 @@ export default function CurrentAccountDetail() {
             Hesap Hareketleri
           </h3>
           <button
-            onClick={() => toast.success('Yeni hareket ekleme özelliði yakýnda')}
+            onClick={() => toast.success('Yeni hareket ekleme ï¿½zelliï¿½i yakï¿½nda')}
             className={button('secondary', 'sm', 'md')}
           >
             <Plus className="w-4 h-4" />
@@ -522,41 +522,41 @@ export default function CurrentAccountDetail() {
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
-              Baþlangýç Tarihi
+              Baï¿½langï¿½ï¿½ Tarihi
             </label>
             <input
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
           <div>
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
-              Bitiþ Tarihi
+              Bitiï¿½ Tarihi
             </label>
             <input
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
           <div>
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
-              Ýþlem Tipi
+              ï¿½ï¿½lem Tipi
             </label>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             >
-              <option value="ALL">Tümü</option>
-              <option value="DEBIT">Borç</option>
+              <option value="ALL">Tï¿½mï¿½</option>
+              <option value="DEBIT">Borï¿½</option>
               <option value="CREDIT">Alacak</option>
             </select>
           </div>
@@ -586,30 +586,30 @@ export default function CurrentAccountDetail() {
         {/* Transactions Table */}
         {transactionsLoading ? (
           <div className="flex items-center justify-center h-32">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-neutral-600"></div>
           </div>
         ) : transactions.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Henüz hareket bulunmamaktadýr</p>
+            <p>Henï¿½z hareket bulunmamaktadï¿½r</p>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b-2 border-gray-200">
+                <thead className="bg-neutral-50 border-b-2 border-neutral-200">
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Tarih
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Açýklama
+                      Aï¿½ï¿½klama
                     </th>
                     <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                       Referans
                     </th>
                     <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                      Borç
+                      Borï¿½
                     </th>
                     <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                       Alacak
@@ -618,17 +618,17 @@ export default function CurrentAccountDetail() {
                       Bakiye
                     </th>
                     <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
-                      Ýþlem
+                      ï¿½ï¿½lem
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {transactions.map((txn) => (
-                    <tr key={txn.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                    <tr key={txn.id} className="hover:bg-neutral-50 transition-colors">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-neutral-900">
                         {formatDateTime(txn.date)}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
+                      <td className="px-4 py-3 text-sm text-neutral-900">
                         <div>
                           <p>{txn.description}</p>
                           {txn.paymentMethod && (
@@ -663,7 +663,7 @@ export default function CurrentAccountDetail() {
                       <td className="px-4 py-3 text-center">
                         <button
                           onClick={() =>
-                            toast.success('Detay görüntüleme özelliði yakýnda')
+                            toast.success('Detay gï¿½rï¿½ntï¿½leme ï¿½zelliï¿½i yakï¿½nda')
                           }
                           className="p-1 text-neutral-900 hover:bg-neutral-50 rounded"
                           title="Detay"
@@ -685,9 +685,9 @@ export default function CurrentAccountDetail() {
                   disabled={currentPage === 1}
                   className="px-3 py-1 border rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Önceki
+                  ï¿½nceki
                 </button>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-neutral-600">
                   Sayfa {currentPage} / {totalPages}
                 </span>
                 <button

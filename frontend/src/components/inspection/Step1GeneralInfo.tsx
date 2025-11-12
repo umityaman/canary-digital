@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Package, MapPin } from 'lucide-react';
 import type { CreateInspectionDto } from '../../types/inspection';
 import api from '../../services/api';
@@ -62,7 +62,7 @@ export default function Step1GeneralInfo({ data, onChange }: Step1Props) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
       </div>
     );
   }
@@ -87,7 +87,7 @@ export default function Step1GeneralInfo({ data, onChange }: Step1Props) {
             onClick={() => handleChange('inspectionType', 'CHECKOUT')}
             className={`p-4 border-2 rounded-xl transition-all ${
               data.inspectionType === 'CHECKOUT'
-                ? 'border-blue-600 bg-blue-50'
+                ? 'border-neutral-600 bg-blue-50'
                 : 'border-neutral-200 hover:border-neutral-300'
             }`}
           >
@@ -128,7 +128,7 @@ export default function Step1GeneralInfo({ data, onChange }: Step1Props) {
         <select
           value={data.orderId || ''}
           onChange={(e) => handleOrderChange(e.target.value)}
-          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
           required
         >
           <option value="">Sipariş seçin...</option>
@@ -158,7 +158,7 @@ export default function Step1GeneralInfo({ data, onChange }: Step1Props) {
         <select
           value={data.equipmentId || ''}
           onChange={(e) => handleChange('equipmentId', parseInt(e.target.value))}
-          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
           required
         >
           <option value="">Ekipman seçin...</option>
@@ -178,7 +178,7 @@ export default function Step1GeneralInfo({ data, onChange }: Step1Props) {
         <select
           value={data.inspectorId || ''}
           onChange={(e) => handleChange('inspectorId', parseInt(e.target.value))}
-          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
           required
         >
           <option value="">Kontrol eden kişiyi seçin...</option>
@@ -201,7 +201,7 @@ export default function Step1GeneralInfo({ data, onChange }: Step1Props) {
           value={data.location || ''}
           onChange={(e) => handleChange('location', e.target.value)}
           placeholder="Örn: İstanbul Merkez Depo, Ankara Şube..."
-          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500"
         />
         <p className="text-xs text-neutral-500 mt-1">
           Kontrolün yapıldığı fiziksel konum (opsiyonel)
@@ -218,7 +218,7 @@ export default function Step1GeneralInfo({ data, onChange }: Step1Props) {
           onChange={(e) => handleChange('notes', e.target.value)}
           placeholder="Genel notlar, özel durumlar..."
           rows={4}
-          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none"
         />
       </div>
 

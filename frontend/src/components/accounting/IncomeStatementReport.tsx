@@ -283,7 +283,7 @@ export default function IncomeStatementReport() {
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -313,7 +313,7 @@ export default function IncomeStatementReport() {
                     className="flex justify-between items-center py-2 px-3 hover:bg-neutral-50 rounded-lg transition-colors"
                   >
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-neutral-900">
                         {item.accountName}
                       </p>
                       {viewType === 'detailed' && (
@@ -364,7 +364,7 @@ export default function IncomeStatementReport() {
                     className="flex justify-between items-center py-2 px-3 hover:bg-neutral-50 rounded-lg transition-colors"
                   >
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-neutral-900">
                         {item.accountName}
                       </p>
                       {viewType === 'detailed' && (
@@ -438,7 +438,7 @@ export default function IncomeStatementReport() {
       </div>
 
       {/* Period Info */}
-      <div className="bg-neutral-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-neutral-900 mt-0.5" />
           <div>

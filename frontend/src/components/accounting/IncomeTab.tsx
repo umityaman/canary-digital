@@ -174,9 +174,9 @@ export default function IncomeTab() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl">
       {/* Stats Cards */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
             <div className={statCardIcon('primary')}>
@@ -185,7 +185,7 @@ export default function IncomeTab() {
             <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{formatCurrency(monthlyIncome)}</h3>
-          <p className="text-xs font-medium text-neutral-600">Aylï¿½k Gelir</p>
+          <p className="text-xs font-medium text-neutral-600">Aylık Gelir</p>
         </div>
 
         <div className={card('sm', 'sm', 'default', 'lg')}>
@@ -207,21 +207,21 @@ export default function IncomeTab() {
             <span className="text-xs font-medium text-neutral-600">Kayï¿½t</span>
           </div>
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{incomes.length}</h3>
-          <p className="text-xs font-medium text-neutral-600">Gelir Kaydï¿½</p>
+          <p className="text-xs font-medium text-neutral-600">Gelir Kaydı</p>
         </div>
       </div>
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
         <div className={card('sm', 'md', 'default', 'lg')}>
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Daï¿½ï¿½lï¿½mï¿½</h3>
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Dağılımı</h3>
           <div className="space-y-3">
             {categoryStats.map((stat) => (
               <div key={stat.category}>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-neutral-700">{stat.category}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-neutral-500">{stat.count} kayï¿½t</span>
+                    <span className="text-xs text-neutral-500">{stat.count} kayıt</span>
                     <span className="text-sm font-semibold text-neutral-900">
                       {formatCurrency(stat.total)}
                     </span>

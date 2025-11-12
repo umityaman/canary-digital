@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { PenTool, CheckSquare } from 'lucide-react';
 import SignatureCanvas from '../SignatureCanvas';
 import type { CreateInspectionDto } from '../../types/inspection';
@@ -95,7 +95,7 @@ export default function Step4Signatures({ data, onChange }: Step4Props) {
             type="checkbox"
             checked={customerAgreed}
             onChange={(e) => setCustomerAgreed(e.target.checked)}
-            className="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+            className="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-neutral-500"
           />
           <span className="text-sm text-neutral-700">
             Yukarıda belirtilen ekipmanı kontrol ettim ve mevcut durumunu onaylıyorum. 

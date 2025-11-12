@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+﻿import React, { useState } from 'react'
 import { Filter, X, Calendar, DollarSign } from 'lucide-react'
 
 export interface FilterPanelProps {
@@ -74,7 +74,7 @@ const FilterPanel = React.memo<FilterPanelProps>(({
             <select
               value={dateRange}
               onChange={(e) => onDateRangeChange(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
             >
               <option value="all">Tüm Zamanlar</option>
               <option value="7days">Son 7 Gün</option>
@@ -91,7 +91,7 @@ const FilterPanel = React.memo<FilterPanelProps>(({
             <select
               value={statusFilter}
               onChange={(e) => onStatusChange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
             >
               <option value="">Tüm Durumlar</option>
               {statusOptions.map(option => (
@@ -120,7 +120,7 @@ const FilterPanel = React.memo<FilterPanelProps>(({
         {onReset && (
           <button
             onClick={onReset}
-            className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors ml-auto"
+            className="inline-flex items-center gap-2 px-4 py-2 text-neutral-600 hover:bg-neutral-50 rounded-lg transition-colors ml-auto"
           >
             <X size={18} />
             <span className="font-medium">Sıfırla</span>
@@ -130,25 +130,25 @@ const FilterPanel = React.memo<FilterPanelProps>(({
 
       {/* Advanced Filters */}
       {showAdvanced && (
-        <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+        <div className="mt-4 pt-4 border-t border-neutral-200 space-y-4">
           {/* Custom Date Range */}
           {dateRange === 'custom' && onCustomDateChange && (
             <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-700 min-w-[100px]">
+              <label className="text-sm font-medium text-neutral-700 min-w-[100px]">
                 Tarih Aralığı:
               </label>
               <input
                 type="date"
                 value={localDateFrom}
                 onChange={(e) => setLocalDateFrom(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
               />
               <span className="text-gray-500">-</span>
               <input
                 type="date"
                 value={localDateTo}
                 onChange={(e) => setLocalDateTo(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
               />
               <button
                 onClick={handleApplyDateFilter}
@@ -162,7 +162,7 @@ const FilterPanel = React.memo<FilterPanelProps>(({
           {/* Amount Range */}
           {onAmountChange && (
             <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-700 min-w-[100px]">
+              <label className="text-sm font-medium text-neutral-700 min-w-[100px]">
                 <DollarSign size={16} className="inline mr-1" />
                 Tutar Aralığı:
               </label>
@@ -171,7 +171,7 @@ const FilterPanel = React.memo<FilterPanelProps>(({
                 placeholder="Min"
                 value={localMinAmount}
                 onChange={(e) => setLocalMinAmount(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-32"
+                className="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent w-32"
               />
               <span className="text-gray-500">-</span>
               <input
@@ -179,7 +179,7 @@ const FilterPanel = React.memo<FilterPanelProps>(({
                 placeholder="Max"
                 value={localMaxAmount}
                 onChange={(e) => setLocalMaxAmount(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-32"
+                className="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent w-32"
               />
               <button
                 onClick={handleApplyAmountFilter}

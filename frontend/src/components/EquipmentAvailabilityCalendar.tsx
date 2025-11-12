@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Calendar, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import api from '../services/api';
 
@@ -101,7 +101,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
     
     // Check if date is in the past
     if (date < today) {
-      return { type: 'past', label: 'Geçmiş', color: 'bg-gray-100 text-gray-400' };
+      return { type: 'past', label: 'Geçmiş', color: 'bg-neutral-100 text-gray-400' };
     }
 
     // Check for active rentals
@@ -229,7 +229,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
       <div className="grid grid-cols-7 gap-2">
         {/* Week day headers */}
         {weekDays.map(day => (
-          <div key={day} className="text-center font-semibold text-sm text-gray-600 pb-2">
+          <div key={day} className="text-center font-semibold text-sm text-neutral-600 pb-2">
             {day}
           </div>
         ))}
@@ -245,7 +245,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
     const status = getDateStatus(selectedDate);
 
     return (
-      <div className="mt-6 p-4 bg-white rounded-lg border-2 border-gray-200">
+      <div className="mt-6 p-4 bg-white rounded-lg border-2 border-neutral-200">
         <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
           <Calendar className="w-5 h-5" />
           {selectedDate.toLocaleDateString('tr-TR', { 
@@ -267,27 +267,27 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
         {status.rental && (
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Sipariş No:</span>
+              <span className="text-neutral-600">Sipariş No:</span>
               <span className="font-medium">{status.rental.orderNumber}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Müşteri:</span>
+              <span className="text-neutral-600">Müşteri:</span>
               <span className="font-medium">{status.rental.customerName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Teslim:</span>
+              <span className="text-neutral-600">Teslim:</span>
               <span className="font-medium">{new Date(status.rental.pickupDate).toLocaleDateString('tr-TR')}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">İade:</span>
+              <span className="text-neutral-600">İade:</span>
               <span className="font-medium">{new Date(status.rental.returnDate).toLocaleDateString('tr-TR')}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Durum:</span>
+              <span className="text-neutral-600">Durum:</span>
               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                 status.rental.status === 'ACTIVE' ? 'bg-blue-100 text-blue-700' :
                 status.rental.status === 'CONFIRMED' ? 'bg-green-100 text-green-700' :
-                'bg-gray-100 text-gray-700'
+                'bg-neutral-100 text-neutral-700'
               }`}>
                 {status.rental.status}
               </span>
@@ -298,19 +298,19 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
         {status.maintenance && (
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Bakım Türü:</span>
+              <span className="text-neutral-600">Bakım Türü:</span>
               <span className="font-medium">{status.maintenance.type}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Başlangıç:</span>
+              <span className="text-neutral-600">Başlangıç:</span>
               <span className="font-medium">{new Date(status.maintenance.scheduledDate).toLocaleDateString('tr-TR')}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Tahmini Süre:</span>
+              <span className="text-neutral-600">Tahmini Süre:</span>
               <span className="font-medium">{status.maintenance.estimatedDuration} gün</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Durum:</span>
+              <span className="text-neutral-600">Durum:</span>
               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                 status.maintenance.status === 'SCHEDULED' ? 'bg-yellow-100 text-yellow-700' :
                 status.maintenance.status === 'IN_PROGRESS' ? 'bg-orange-100 text-orange-700' :
@@ -323,7 +323,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
         )}
 
         {status.type === 'available' && (
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-neutral-600">
             Bu tarihte ekipman müsait ve kiralanabilir.
           </p>
         )}
@@ -332,38 +332,38 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
             <Calendar className="w-6 h-6 text-blue-600" />
             Müsaitlik Takvimi
           </h2>
           {equipmentName && (
-            <p className="text-sm text-gray-600 mt-1">{equipmentName}</p>
+            <p className="text-sm text-neutral-600 mt-1">{equipmentName}</p>
           )}
         </div>
         
         <div className="flex items-center gap-3">
           <button
             onClick={handlePreviousMonth}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
           >
-            <ChevronLeft className="w-5 h-5 text-gray-600" />
+            <ChevronLeft className="w-5 h-5 text-neutral-600" />
           </button>
           
           <div className="text-center min-w-[180px]">
-            <div className="font-semibold text-lg text-gray-900">
+            <div className="font-semibold text-lg text-neutral-900">
               {currentDate.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })}
             </div>
           </div>
           
           <button
             onClick={handleNextMonth}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
           >
-            <ChevronRight className="w-5 h-5 text-gray-600" />
+            <ChevronRight className="w-5 h-5 text-neutral-600" />
           </button>
         </div>
       </div>
@@ -372,30 +372,30 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
       <div className="flex flex-wrap gap-4 mb-6 pb-4 border-b">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
-          <span className="text-sm text-gray-700">Müsait</span>
+          <span className="text-sm text-neutral-700">Müsait</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-orange-100 border border-orange-300 rounded"></div>
-          <span className="text-sm text-gray-700">Rezerve</span>
+          <span className="text-sm text-neutral-700">Rezerve</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-          <span className="text-sm text-gray-700">Kirada</span>
+          <span className="text-sm text-neutral-700">Kirada</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
-          <span className="text-sm text-gray-700">Bakım</span>
+          <span className="text-sm text-neutral-700">Bakım</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-100 border border-gray-300 rounded"></div>
-          <span className="text-sm text-gray-700">Geçmiş</span>
+          <div className="w-4 h-4 bg-neutral-100 border border-neutral-300 rounded"></div>
+          <span className="text-sm text-neutral-700">Geçmiş</span>
         </div>
       </div>
 
       {/* Calendar */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
         </div>
       ) : (
         <>
@@ -414,7 +414,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
                 return getDateStatus(date).type === 'available';
               }).length}
           </div>
-          <div className="text-xs text-gray-600">Müsait Gün</div>
+          <div className="text-xs text-neutral-600">Müsait Gün</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-red-600">
@@ -424,7 +424,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
                 return getDateStatus(date).type === 'rented';
               }).length}
           </div>
-          <div className="text-xs text-gray-600">Kirada</div>
+          <div className="text-xs text-neutral-600">Kirada</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-orange-600">
@@ -434,7 +434,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
                 return getDateStatus(date).type === 'reserved';
               }).length}
           </div>
-          <div className="text-xs text-gray-600">Rezerve</div>
+          <div className="text-xs text-neutral-600">Rezerve</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-yellow-600">
@@ -444,7 +444,7 @@ export const EquipmentAvailabilityCalendar: React.FC<EquipmentAvailabilityCalend
                 return getDateStatus(date).type === 'maintenance';
               }).length}
           </div>
-          <div className="text-xs text-gray-600">Bakım</div>
+          <div className="text-xs text-neutral-600">Bakım</div>
         </div>
       </div>
     </div>

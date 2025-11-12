@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+﻿import { createContext, useContext, useState, ReactNode } from 'react';
 import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react';
 
 type NotificationType = 'success' | 'error' | 'warning' | 'info';
@@ -70,7 +70,7 @@ export const NotificationProvider = ({ children }: NotificationProviderProps) =>
       case 'warning':
         return 'bg-yellow-50 text-yellow-800 border-yellow-200';
       case 'info':
-        return 'bg-blue-50 text-blue-800 border-blue-200';
+        return 'bg-blue-50 text-blue-800 border-neutral-200';
     }
   };
 

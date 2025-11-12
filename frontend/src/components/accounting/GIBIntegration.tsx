@@ -267,7 +267,7 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
           disabled={loading}
           className={cx(
             card('md', 'xs', 'default', 'lg'),
-            'border-2 hover:border-blue-500 hover:bg-neutral-50 transition-all text-left group'
+            'border-2 hover:border-neutral-500 hover:bg-neutral-50 transition-all text-left group'
           )}
         >
           <Send className="text-neutral-900 group-hover:scale-110 transition-transform" size={32} />
@@ -365,7 +365,7 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
       )}
 
       {/* Info Box */}
-      <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-neutral-50 border-blue-200')}>
+      <div className={cx(card('md', 'sm', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
         <div className="flex items-start gap-3">
           <AlertCircle className="text-neutral-900 mt-1" size={20} />
           <div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { 
   ArrowLeft, Phone, Mail, MapPin, FileText, DollarSign, 
@@ -116,7 +116,7 @@ const AccountCardDetail: React.FC = () => {
     } else if (balance < 0) {
       return { text: `₺${formatted}`, label: 'Alacak', color: 'text-green-600' }
     }
-    return { text: '₺0,00', label: 'Bakiye', color: 'text-gray-600' }
+    return { text: '₺0,00', label: 'Bakiye', color: 'text-neutral-600' }
   }
 
   const getTypeLabel = (type: string) => {

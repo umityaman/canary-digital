@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -309,7 +309,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value as any)}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
             >
               <option value="1d">Bugün</option>
               <option value="7d">Son 7 Gün</option>
@@ -322,7 +322,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
             <select
               value={chartType}
               onChange={(e) => setChartType(e.target.value as any)}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
             >
               <option value="line">Çizgi</option>
               <option value="area">Alan</option>
@@ -338,24 +338,24 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
         {/* Summary metrics */}
         {data && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-              <p className="text-sm text-gray-600">Toplam Gelir</p>
+            <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+              <p className="text-sm text-neutral-600">Toplam Gelir</p>
               <p className="text-lg font-semibold truncate overflow-hidden text-ellipsis whitespace-nowrap">{formatCurrency(data.totalRevenue)}</p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-              <p className="text-sm text-gray-600">Günlük Büyüme</p>
+            <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+              <p className="text-sm text-neutral-600">Günlük Büyüme</p>
               <div className="flex items-center gap-2 min-w-0">
                 {getGrowthBadge(data.growth.daily)}
               </div>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-              <p className="text-sm text-gray-600">Haftalık Büyüme</p>
+            <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+              <p className="text-sm text-neutral-600">Haftalık Büyüme</p>
               <div className="flex items-center gap-2 min-w-0">
                 {getGrowthBadge(data.growth.weekly)}
               </div>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg overflow-hidden min-w-0">
-              <p className="text-sm text-gray-600">Aylık Büyüme</p>
+            <div className="bg-neutral-50 p-3 rounded-lg overflow-hidden min-w-0">
+              <p className="text-sm text-neutral-600">Aylık Büyüme</p>
               <div className="flex items-center gap-2 min-w-0">
                 {getGrowthBadge(data.growth.monthly)}
               </div>
@@ -376,17 +376,17 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
         {/* Category breakdown */}
         {data && data.revenueByCategory && data.revenueByCategory.length > 0 && (
           <div className="mt-6">
-            <h4 className="text-sm font-medium text-gray-900 mb-3">Kategoriye Göre Gelir</h4>
+            <h4 className="text-sm font-medium text-neutral-900 mb-3">Kategoriye Göre Gelir</h4>
             <div className="overflow-x-auto">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 min-w-max lg:min-w-0">
                 {data.revenueByCategory.map((category, index) => (
-                  <div key={category.category} className="bg-gray-50 p-2 rounded text-center min-w-[120px]">
+                  <div key={category.category} className="bg-neutral-50 p-2 rounded text-center min-w-[120px]">
                     <div 
                       className="w-4 h-4 rounded-full mx-auto mb-1"
                       style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     />
                     <p className="text-xs font-medium truncate">{category.category}</p>
-                    <p className="text-xs text-gray-600">{formatCurrency(category.revenue)}</p>
+                    <p className="text-xs text-neutral-600">{formatCurrency(category.revenue)}</p>
                     <p className="text-xs text-gray-500">%{(category.percentage || 0).toFixed(1)}</p>
                   </div>
                 ))}

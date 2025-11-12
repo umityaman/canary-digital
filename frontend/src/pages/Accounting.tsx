@@ -2002,7 +2002,7 @@ export default function Accounting() {
 
                 {/* Quick Stats for Tools */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-medium text-blue-900">Aktif Etiketler</h4>
                       <Tag className="text-blue-600" size={20} />
@@ -2049,7 +2049,7 @@ export default function Accounting() {
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-medium text-blue-900">Toplam Mï¿½kellef</h4>
                       <Users className="text-blue-600" size={20} />
@@ -2154,7 +2154,7 @@ export default function Accounting() {
 
                 {/* Quick Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <button onClick={() => toast('Canlï¿½ destek baï¿½latï¿½lï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Canlï¿½ destek baï¿½latï¿½lï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200 hover:shadow-lg transition-all text-left group">
                     <MessageCircle className="text-blue-600 mb-3" size={32} />
                     <h3 className="font-semibold text-blue-900 mb-2">Canlï¿½ Destek</h3>
                     <p className="text-sm text-blue-700">7/24 online destek ekibi</p>
@@ -2281,7 +2281,7 @@ export default function Accounting() {
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-medium text-blue-900">Toplam</h4>
                       <Bell className="text-blue-600" size={20} />
@@ -2334,7 +2334,7 @@ export default function Accounting() {
                     { id: 6, type: 'payment', title: 'ï¿½deme Alï¿½ndï¿½', message: 'GHI Ltd. 8,500 ? ï¿½deme gerï¿½ekleï¿½tirdi', time: '1 gï¿½n ï¿½nce', unread: false, urgent: false },
                   ].map(notif => (
                     <div key={notif.id} className={`bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-lg ${
-                      notif.unread ? 'border-blue-200 bg-blue-50' : 'border-neutral-200'
+                      notif.unread ? 'border-neutral-200 bg-blue-50' : 'border-neutral-200'
                     } ${notif.urgent ? 'ring-2 ring-red-300' : ''}`}>
                       <div className="flex items-start gap-4">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${

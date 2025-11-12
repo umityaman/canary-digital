@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Package, Upload, QrCode, DollarSign } from 'lucide-react';
 import { useNotification } from '../contexts/NotificationContext';
@@ -242,27 +242,27 @@ const NewEquipment: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white border-b border-neutral-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate('/inventory')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600" />
+              <ArrowLeft className="w-5 h-5 text-neutral-600" />
             </button>
             <div className="flex items-center gap-3">
-              <Package className="w-6 h-6 text-gray-700" />
-              <h1 className="text-2xl font-semibold text-gray-900">Yeni Ekipman Ekle</h1>
+              <Package className="w-6 h-6 text-neutral-700" />
+              <h1 className="text-2xl font-semibold text-neutral-900">Yeni Ekipman Ekle</h1>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/inventory')}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
+              className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm font-medium text-neutral-700"
             >
               İptal
             </button>
@@ -283,8 +283,8 @@ const NewEquipment: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           
           {/* 1. Genel Bilgiler */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <Package className="w-5 h-5" />
               1. Genel Bilgiler
             </h2>
@@ -292,7 +292,7 @@ const NewEquipment: React.FC = () => {
             <div className="grid grid-cols-2 gap-4">
               {/* Ekipman ID - Otomatik */}
               <div className="col-span-2">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="bg-blue-50 border border-neutral-200 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-blue-900">Ekipman ID (Otomatik)</p>
@@ -307,7 +307,7 @@ const NewEquipment: React.FC = () => {
 
               {/* Marka */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Marka <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -315,7 +315,7 @@ const NewEquipment: React.FC = () => {
                   name="brand"
                   value={formData.brand}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Örn: Canon, Sony, Nikon..."
                   required
                 />
@@ -323,7 +323,7 @@ const NewEquipment: React.FC = () => {
 
               {/* Model */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Model <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -331,7 +331,7 @@ const NewEquipment: React.FC = () => {
                   name="model"
                   value={formData.model}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Örn: EOS R5, A7III..."
                   required
                 />
@@ -339,7 +339,7 @@ const NewEquipment: React.FC = () => {
 
               {/* Stok No */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Stok No
                 </label>
                 <input
@@ -347,7 +347,7 @@ const NewEquipment: React.FC = () => {
                   name="stockNumber"
                   value={formData.stockNumber}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Aynı marka/model ekipmanlar için"
                 />
                 <p className="text-xs text-gray-500 mt-1">Bu numara aynı marka modelde olan ekipmanlar için kullanılacak</p>
@@ -355,7 +355,7 @@ const NewEquipment: React.FC = () => {
 
               {/* Kategori */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Kategori
                 </label>
                 <div className="flex gap-2">
@@ -363,7 +363,7 @@ const NewEquipment: React.FC = () => {
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   >
                     <option value="">Kategori seçin (opsiyonel)</option>
                     {categories.map(cat => (
@@ -382,7 +382,7 @@ const NewEquipment: React.FC = () => {
 
               {/* Seri Numarası */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Seri Numarası
                 </label>
                 <input
@@ -390,14 +390,14 @@ const NewEquipment: React.FC = () => {
                   name="serialNumber"
                   value={formData.serialNumber}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Örn: SN123456789"
                 />
               </div>
 
               {/* QR Kod */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+                <label className="block text-sm font-medium text-neutral-700 mb-1 flex items-center gap-2">
                   <QrCode className="w-4 h-4" />
                   QR Kod
                 </label>
@@ -406,7 +406,7 @@ const NewEquipment: React.FC = () => {
                   name="qrCode"
                   value={formData.qrCode}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="/tools sayfasında oluşturulan QR kod"
                 />
                 <p className="text-xs text-gray-500 mt-1">QR kod oluşturmak için Tools sayfasını ziyaret edin</p>
@@ -414,7 +414,7 @@ const NewEquipment: React.FC = () => {
 
               {/* Belgelerdeki Açıklamalar */}
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Belgelerdeki Açıklamalar
                 </label>
                 <textarea
@@ -422,7 +422,7 @@ const NewEquipment: React.FC = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none"
                   placeholder="Örneğin aksesuarlarınızı buraya listeleyebilirsiniz..."
                 />
               </div>
@@ -430,8 +430,8 @@ const NewEquipment: React.FC = () => {
           </div>
 
           {/* 2. Fiyatlandırma */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <DollarSign className="w-5 h-5" />
               2. Fiyatlandırma
             </h2>
@@ -442,21 +442,21 @@ const NewEquipment: React.FC = () => {
                 onClick={() => handlePricingTypeChange('NO_CHARGE')}
                 className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
                   formData.pricingType === 'NO_CHARGE' 
-                    ? 'border-blue-500 bg-blue-50' 
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-neutral-500 bg-blue-50' 
+                    : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    formData.pricingType === 'NO_CHARGE' ? 'border-blue-500' : 'border-gray-300'
+                    formData.pricingType === 'NO_CHARGE' ? 'border-neutral-500' : 'border-neutral-300'
                   }`}>
                     {formData.pricingType === 'NO_CHARGE' && (
                       <div className="w-3 h-3 rounded-full bg-blue-500" />
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">Bu ürün için ücret almıyorum</p>
-                    <p className="text-sm text-gray-600">Ücretsiz kullanım için bu seçeneği seçin</p>
+                    <p className="font-medium text-neutral-900">Bu ürün için ücret almıyorum</p>
+                    <p className="text-sm text-neutral-600">Ücretsiz kullanım için bu seçeneği seçin</p>
                   </div>
                 </div>
               </div>
@@ -466,21 +466,21 @@ const NewEquipment: React.FC = () => {
                 onClick={() => handlePricingTypeChange('FIXED')}
                 className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
                   formData.pricingType === 'FIXED' 
-                    ? 'border-blue-500 bg-blue-50' 
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-neutral-500 bg-blue-50' 
+                    : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    formData.pricingType === 'FIXED' ? 'border-blue-500' : 'border-gray-300'
+                    formData.pricingType === 'FIXED' ? 'border-neutral-500' : 'border-neutral-300'
                   }`}>
                     {formData.pricingType === 'FIXED' && (
                       <div className="w-3 h-3 rounded-full bg-blue-500" />
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">Sabit Kiralama Ücreti</p>
-                    <p className="text-sm text-gray-600">Belirli bir ücret belirleyin</p>
+                    <p className="font-medium text-neutral-900">Sabit Kiralama Ücreti</p>
+                    <p className="text-sm text-neutral-600">Belirli bir ücret belirleyin</p>
                   </div>
                 </div>
 
@@ -504,7 +504,7 @@ const NewEquipment: React.FC = () => {
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                             formData.fixedPriceType === period.value
                               ? 'bg-blue-600 text-white'
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                           }`}
                         >
                           {period.label}
@@ -514,7 +514,7 @@ const NewEquipment: React.FC = () => {
 
                     {/* Fiyat Girişi */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Ücret (₺)
                       </label>
                       <input
@@ -523,7 +523,7 @@ const NewEquipment: React.FC = () => {
                         value={formData.fixedPrice}
                         onChange={handleInputChange}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                         placeholder="Örn: 500"
                         step="0.01"
                       />
@@ -537,21 +537,21 @@ const NewEquipment: React.FC = () => {
                 onClick={() => handlePricingTypeChange('SMART')}
                 className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
                   formData.pricingType === 'SMART' 
-                    ? 'border-blue-500 bg-blue-50' 
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-neutral-500 bg-blue-50' 
+                    : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    formData.pricingType === 'SMART' ? 'border-blue-500' : 'border-gray-300'
+                    formData.pricingType === 'SMART' ? 'border-neutral-500' : 'border-neutral-300'
                   }`}>
                     {formData.pricingType === 'SMART' && (
                       <div className="w-3 h-3 rounded-full bg-blue-500" />
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">Akıllı Fiyatlandırma</p>
-                    <p className="text-sm text-gray-600">Tools sayfasında oluşturulan fiyatlandırmayı kullan</p>
+                    <p className="font-medium text-neutral-900">Akıllı Fiyatlandırma</p>
+                    <p className="text-sm text-neutral-600">Tools sayfasında oluşturulan fiyatlandırmayı kullan</p>
                   </div>
                 </div>
 
@@ -562,7 +562,7 @@ const NewEquipment: React.FC = () => {
                       value={formData.smartPricingId}
                       onChange={handleInputChange}
                       onClick={(e) => e.stopPropagation()}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                     >
                       <option value="">Akıllı fiyatlandırma seçin</option>
                       {smartPricings.map(sp => (
@@ -581,19 +581,19 @@ const NewEquipment: React.FC = () => {
           </div>
 
           {/* 3. Durum ve Tür */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">3. Durum ve Tür</h2>
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4">3. Durum ve Tür</h2>
             
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Durum
                 </label>
                 <select
                   name="status"
                   value={formData.status}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 >
                   <option value="AVAILABLE">Müsait</option>
                   <option value="RENTED">Kirada</option>
@@ -605,14 +605,14 @@ const NewEquipment: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Ekipman Türü
                 </label>
                 <select
                   name="equipmentType"
                   value={formData.equipmentType}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 >
                   <option value="RENTAL">Kiralık</option>
                   <option value="SALE">Satılık</option>
@@ -621,7 +621,7 @@ const NewEquipment: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Konum
                 </label>
                 <input
@@ -629,7 +629,7 @@ const NewEquipment: React.FC = () => {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Depo, Raf numarası"
                 />
               </div>
@@ -637,12 +637,12 @@ const NewEquipment: React.FC = () => {
           </div>
 
           {/* 4. Satın Alma Bilgileri */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">4. Satın Alma Bilgileri</h2>
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4">4. Satın Alma Bilgileri</h2>
             
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Satın Alma Fiyatı (₺)
                 </label>
                 <input
@@ -650,14 +650,14 @@ const NewEquipment: React.FC = () => {
                   name="purchasePrice"
                   value={formData.purchasePrice}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Örn: 50000"
                   step="0.01"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Tedarikçi
                 </label>
                 <input
@@ -665,13 +665,13 @@ const NewEquipment: React.FC = () => {
                   name="supplier"
                   value={formData.supplier}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Tedarikçi firma adı"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Satın Alma Tarihi
                 </label>
                 <input
@@ -679,12 +679,12 @@ const NewEquipment: React.FC = () => {
                   name="purchaseDate"
                   value={formData.purchaseDate}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Garanti Bitiş Tarihi
                 </label>
                 <input
@@ -692,12 +692,12 @@ const NewEquipment: React.FC = () => {
                   name="warrantyEndDate"
                   value={formData.warrantyEndDate}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 />
               </div>
 
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Not
                 </label>
                 <textarea
@@ -705,7 +705,7 @@ const NewEquipment: React.FC = () => {
                   value={formData.notes}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 resize-none"
                   placeholder="Satın alma ile ilgili notlar..."
                 />
               </div>
@@ -713,13 +713,13 @@ const NewEquipment: React.FC = () => {
           </div>
 
           {/* 5. Fotoğraflar */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">5. Fotoğraflar</h2>
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4">5. Fotoğraflar</h2>
             
             <div className="space-y-4">
               {/* Fotoğraf Upload Button */}
               <div className="flex items-center gap-3">
-                <label className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer text-sm font-medium text-gray-700">
+                <label className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors cursor-pointer text-sm font-medium text-neutral-700">
                   <Upload className="w-4 h-4" />
                   {uploading ? 'Yükleniyor...' : 'Fotoğraf Yükle'}
                   <input
@@ -744,7 +744,7 @@ const NewEquipment: React.FC = () => {
                       <img
                         src={url}
                         alt={`Ekipman fotoğrafı ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg border border-gray-200"
+                        className="w-full h-32 object-cover rounded-lg border border-neutral-200"
                       />
                       <button
                         type="button"
@@ -764,7 +764,7 @@ const NewEquipment: React.FC = () => {
               )}
 
               {formData.images.length === 0 && (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
                   <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                   <p className="text-sm text-gray-500">Henüz fotoğraf yüklenmedi</p>
                 </div>
@@ -786,11 +786,11 @@ const NewEquipment: React.FC = () => {
       {showNewCategoryModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Yeni Kategori Ekle</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-4">Yeni Kategori Ekle</h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Kategori Adı <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -803,7 +803,7 @@ const NewEquipment: React.FC = () => {
                       handleAddCategory();
                     }
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
                   placeholder="Örn: Ses Sistemleri, Aydınlatma, Kamera..."
                   autoFocus
                 />
@@ -816,7 +816,7 @@ const NewEquipment: React.FC = () => {
                   setShowNewCategoryModal(false);
                   setNewCategoryName('');
                 }}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
+                className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm font-medium text-neutral-700"
               >
                 İptal
               </button>

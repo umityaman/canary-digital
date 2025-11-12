@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -109,7 +109,7 @@ export const EquipmentUtilizationChart: React.FC<EquipmentUtilizationChartProps>
     return (
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Ekipman Kullanımı</h3>
+          <h3 className="text-lg font-semibold text-neutral-900">Ekipman Kullanımı</h3>
           <Activity className="w-5 h-5 text-green-500" />
         </div>
         <div className="flex items-center justify-center h-64">
@@ -123,7 +123,7 @@ export const EquipmentUtilizationChart: React.FC<EquipmentUtilizationChartProps>
     return (
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Ekipman Kullanımı</h3>
+          <h3 className="text-lg font-semibold text-neutral-900">Ekipman Kullanımı</h3>
           <Activity className="w-5 h-5 text-green-500" />
         </div>
         <div className="flex items-center justify-center h-64 text-red-500">
@@ -137,7 +137,7 @@ export const EquipmentUtilizationChart: React.FC<EquipmentUtilizationChartProps>
     return (
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Ekipman Kullanımı</h3>
+          <h3 className="text-lg font-semibold text-neutral-900">Ekipman Kullanımı</h3>
           <Activity className="w-5 h-5 text-green-500" />
         </div>
         <div className="flex items-center justify-center h-64 text-gray-500">

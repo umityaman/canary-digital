@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Clock, User, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { reservationAPI } from '../../services/api';
 
@@ -105,12 +105,12 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       case 'IN_PROGRESS':
         return 'bg-blue-100 text-blue-800 border-blue-300';
       case 'COMPLETED':
-        return 'bg-gray-100 text-gray-800 border-gray-300';
+        return 'bg-neutral-100 text-gray-800 border-neutral-300';
       case 'CANCELLED':
       case 'REJECTED':
         return 'bg-red-100 text-red-800 border-red-300';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300';
+        return 'bg-neutral-100 text-gray-800 border-neutral-300';
     }
   };
 
@@ -147,7 +147,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
 
       if (!isCurrentMonth) {
         days.push(
-          <div key={i} className="min-h-24 bg-gray-50 border border-gray-200"></div>
+          <div key={i} className="min-h-24 bg-neutral-50 border border-neutral-200"></div>
         );
         continue;
       }
@@ -157,16 +157,16 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       days.push(
         <div
           key={i}
-          className={`min-h-24 border border-gray-200 p-1 ${
+          className={`min-h-24 border border-neutral-200 p-1 ${
             isToday ? 'bg-blue-50 border-blue-400' : 'bg-white'
-          } hover:bg-gray-50 transition-colors`}
+          } hover:bg-neutral-50 transition-colors`}
         >
           <div className="flex justify-between items-start mb-1">
             <span
               className={`text-sm font-semibold ${
                 isToday
                   ? 'bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center'
-                  : 'text-gray-700'
+                  : 'text-neutral-700'
               }`}
             >
               {dayNumber}
@@ -213,7 +213,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-md">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-neutral-200">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Calendar className="w-6 h-6 text-blue-600" />
@@ -222,33 +222,33 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
 
           <div className="flex items-center gap-2">
             {/* View Mode Toggle */}
-            <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+            <div className="flex border border-neutral-300 rounded-lg overflow-hidden">
               <button
                 onClick={() => setViewMode('month')}
                 className={`px-3 py-1 text-sm ${
                   viewMode === 'month'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white text-neutral-700 hover:bg-neutral-50'
                 }`}
               >
                 Ay
               </button>
               <button
                 onClick={() => setViewMode('week')}
-                className={`px-3 py-1 text-sm border-l border-gray-300 ${
+                className={`px-3 py-1 text-sm border-l border-neutral-300 ${
                   viewMode === 'week'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white text-neutral-700 hover:bg-neutral-50'
                 }`}
               >
                 Hafta
               </button>
               <button
                 onClick={() => setViewMode('day')}
-                className={`px-3 py-1 text-sm border-l border-gray-300 ${
+                className={`px-3 py-1 text-sm border-l border-neutral-300 ${
                   viewMode === 'day'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white text-neutral-700 hover:bg-neutral-50'
                 }`}
               >
                 Gün
@@ -261,9 +261,9 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
         <div className="flex items-center justify-between">
           <button
             onClick={goToPreviousMonth}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
           >
-            <ChevronLeft className="w-5 h-5 text-gray-600" />
+            <ChevronLeft className="w-5 h-5 text-neutral-600" />
           </button>
 
           <div className="flex items-center gap-3">
@@ -280,41 +280,41 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
 
           <button
             onClick={goToNextMonth}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
           >
-            <ChevronRight className="w-5 h-5 text-gray-600" />
+            <ChevronRight className="w-5 h-5 text-neutral-600" />
           </button>
         </div>
       </div>
 
       {/* Legend */}
-      <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 flex flex-wrap gap-3 text-xs">
+      <div className="px-4 py-3 bg-neutral-50 border-b border-neutral-200 flex flex-wrap gap-3 text-xs">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded"></div>
-          <span className="text-gray-600">Bekleyen</span>
+          <span className="text-neutral-600">Bekleyen</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-green-100 border border-green-300 rounded"></div>
-          <span className="text-gray-600">Onaylı</span>
+          <span className="text-neutral-600">Onaylı</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-blue-100 border border-blue-300 rounded"></div>
-          <span className="text-gray-600">Devam Eden</span>
+          <span className="text-neutral-600">Devam Eden</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-gray-100 border border-gray-300 rounded"></div>
-          <span className="text-gray-600">Tamamlandı</span>
+          <div className="w-3 h-3 bg-neutral-100 border border-neutral-300 rounded"></div>
+          <span className="text-neutral-600">Tamamlandı</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-100 border border-red-300 rounded"></div>
-          <span className="text-gray-600">İptal/Red</span>
+          <span className="text-neutral-600">İptal/Red</span>
         </div>
       </div>
 
       {/* Calendar Grid */}
       {loading ? (
         <div className="flex items-center justify-center h-96">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
         </div>
       ) : (
         <div className="p-4">
@@ -323,7 +323,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
             {['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'].map((day) => (
               <div
                 key={day}
-                className="text-center text-sm font-semibold text-gray-600 py-2"
+                className="text-center text-sm font-semibold text-neutral-600 py-2"
               >
                 {day}
               </div>
@@ -336,18 +336,18 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       )}
 
       {/* Summary */}
-      <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 flex items-center justify-between text-sm">
-        <div className="text-gray-600">
+      <div className="px-4 py-3 border-t border-neutral-200 bg-neutral-50 flex items-center justify-between text-sm">
+        <div className="text-neutral-600">
           <span className="font-semibold">{reservations.length}</span> rezervasyon
         </div>
         <div className="flex items-center gap-4">
-          <div className="text-gray-600">
+          <div className="text-neutral-600">
             Bekleyen:{' '}
             <span className="font-semibold">
               {reservations.filter((r) => r.status === 'PENDING').length}
             </span>
           </div>
-          <div className="text-gray-600">
+          <div className="text-neutral-600">
             Onaylı:{' '}
             <span className="font-semibold">
               {reservations.filter((r) => r.status === 'CONFIRMED').length}

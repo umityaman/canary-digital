@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Settings, Users, Activity, Plug } from 'lucide-react'
 import BooqableSettings from '../components/settings/BooqableSettings'
 
@@ -64,11 +64,11 @@ export default function Admin(){
             </div>
             <div className="bg-white rounded-2xl border border-neutral-200 p-6 text-center">
               <h3 className="text-2xl font-bold text-orange-600 mb-2">156</h3>
-              <p className="text-gray-600">Toplam Ekipman</p>
+              <p className="text-neutral-600">Toplam Ekipman</p>
             </div>
             <div className="card text-center">
               <h3 className="text-2xl font-bold text-purple-600 mb-2">99.9%</h3>
-              <p className="text-gray-600">Sistem Uptime</p>
+              <p className="text-neutral-600">Sistem Uptime</p>
             </div>
           </div>
           
@@ -87,15 +87,15 @@ export default function Admin(){
               <div className="space-y-2">
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-sm">Yeni kullanıcı eklendi: john@example.com</span>
-                  <span className="text-xs text-gray-600">5 dk önce</span>
+                  <span className="text-xs text-neutral-600">5 dk önce</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-sm">Sistem yedeği tamamlandı</span>
-                  <span className="text-xs text-gray-600">1 saat önce</span>
+                  <span className="text-xs text-neutral-600">1 saat önce</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-sm">Güvenlik ayarları güncellendi</span>
-                  <span className="text-xs text-gray-600">3 saat önce</span>
+                  <span className="text-xs text-neutral-600">3 saat önce</span>
                 </div>
               </div>
             </div>

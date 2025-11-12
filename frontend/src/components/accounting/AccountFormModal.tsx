@@ -192,7 +192,7 @@ export default function AccountFormModal({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="border-b border-gray-200 p-6 sticky top-0 bg-white z-10">
+        <div className="border-b border-neutral-200 p-6 sticky top-0 bg-white z-10">
           <div className="flex justify-between items-center">
             <div>
               <h3
@@ -208,7 +208,7 @@ export default function AccountFormModal({
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-neutral-600 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -230,7 +230,7 @@ export default function AccountFormModal({
                 value={formData.code}
                 onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                 placeholder="Örn: 100 veya 100.01 veya 100.01.01"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 font-mono"
                 required
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -252,7 +252,7 @@ export default function AccountFormModal({
                     type: e.target.value as AccountFormData['type'],
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
                 required
               >
                 <option value="ASSET">{getAccountTypeLabel('ASSET')}</option>
@@ -275,7 +275,7 @@ export default function AccountFormModal({
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="Örn: Kasa, Banka, Müşteriler"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
               required
             />
           </div>
@@ -298,7 +298,7 @@ export default function AccountFormModal({
                 }}
                 onFocus={() => setShowParentPicker(true)}
                 placeholder="Üst hesap ara veya boş bırak (ana hesap)"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-8"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 pr-8"
               />
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             </div>
@@ -315,16 +315,16 @@ export default function AccountFormModal({
 
             {/* Parent Account Dropdown */}
             {showParentPicker && !formData.parentId && (
-              <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-20 w-full mt-1 bg-white border border-neutral-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                 <button
                   type="button"
                   onClick={() => {
                     setFormData({ ...formData, parentId: null });
                     setShowParentPicker(false);
                   }}
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors border-b"
+                  className="w-full px-4 py-2 text-left hover:bg-neutral-100 transition-colors border-b"
                 >
-                  <div className="font-medium text-gray-700">Ana Hesap (Üst hesap yok)</div>
+                  <div className="font-medium text-neutral-700">Ana Hesap (Üst hesap yok)</div>
                   <div className="text-sm text-gray-500">En üst seviyede hesap oluştur</div>
                 </button>
 
@@ -338,10 +338,10 @@ export default function AccountFormModal({
                       key={account.id}
                       type="button"
                       onClick={() => handleSelectParent(account)}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors"
+                      className="w-full px-4 py-2 text-left hover:bg-neutral-100 transition-colors"
                     >
-                      <div className="font-mono text-sm text-gray-700">{account.code}</div>
-                      <div className="text-sm text-gray-600">{account.name}</div>
+                      <div className="font-mono text-sm text-neutral-700">{account.code}</div>
+                      <div className="text-sm text-neutral-600">{account.name}</div>
                     </button>
                   ))
                 )}
@@ -365,13 +365,13 @@ export default function AccountFormModal({
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Hesap hakkında ek bilgi..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
               rows={3}
             />
           </div>
 
           {/* Active Status */}
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-3 p-4 bg-neutral-50 rounded-lg">
             <input
               type="checkbox"
               id="isActive"
@@ -403,7 +403,7 @@ export default function AccountFormModal({
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
             <button
               type="button"
               onClick={onClose}

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Simple Line Chart Örneği
  * Kullanım: Revenue trend gösterimi için
  * Özellikler: Smooth curves, filled area, responsive
@@ -118,7 +118,7 @@ export default function SimpleLineChart() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
       <Line data={data} options={options} />
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { 
   Search, Plus, FileText, Download, Mail, Eye, Clock, 
   CheckCircle, XCircle, AlertCircle, DollarSign, Calendar,
@@ -107,17 +107,17 @@ const Invoices: React.FC = () => {
         return {
           label: 'Ödenmedi',
           icon: Clock,
-          bgColor: 'bg-gray-50',
-          textColor: 'text-gray-700',
-          borderColor: 'border-gray-200'
+          bgColor: 'bg-neutral-50',
+          textColor: 'text-neutral-700',
+          borderColor: 'border-neutral-200'
         };
       default:
         return {
           label: 'Bilinmiyor',
           icon: AlertCircle,
-          bgColor: 'bg-gray-50',
-          textColor: 'text-gray-700',
-          borderColor: 'border-gray-200'
+          bgColor: 'bg-neutral-50',
+          textColor: 'text-neutral-700',
+          borderColor: 'border-neutral-200'
         };
     }
   };
@@ -150,8 +150,8 @@ const Invoices: React.FC = () => {
               Toplam
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">{invoices.length}</p>
-          <p className="text-sm text-gray-600">Fatura</p>
+          <p className="text-2xl font-bold text-neutral-900 mb-1">{invoices.length}</p>
+          <p className="text-sm text-neutral-600">Fatura</p>
         </div>
 
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
@@ -163,8 +163,8 @@ const Invoices: React.FC = () => {
               Tahsil
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">₺{paidAmount.toLocaleString()}</p>
-          <p className="text-sm text-gray-600">Ödenen</p>
+          <p className="text-2xl font-bold text-neutral-900 mb-1">₺{paidAmount.toLocaleString()}</p>
+          <p className="text-sm text-neutral-600">Ödenen</p>
         </div>
 
         <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-6 border border-red-100">
@@ -176,8 +176,8 @@ const Invoices: React.FC = () => {
               Bekleyen
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">₺{unpaidAmount.toLocaleString()}</p>
-          <p className="text-sm text-gray-600">Tahsilat</p>
+          <p className="text-2xl font-bold text-neutral-900 mb-1">₺{unpaidAmount.toLocaleString()}</p>
+          <p className="text-sm text-neutral-600">Tahsilat</p>
         </div>
 
         <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
@@ -189,10 +189,10 @@ const Invoices: React.FC = () => {
               Oran
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 mb-1">
+          <p className="text-2xl font-bold text-neutral-900 mb-1">
             {totalAmount > 0 ? Math.round((paidAmount / totalAmount) * 100) : 0}%
           </p>
-          <p className="text-sm text-gray-600">Tahsilat Oranı</p>
+          <p className="text-sm text-neutral-600">Tahsilat Oranı</p>
         </div>
       </div>
 
@@ -205,7 +205,7 @@ const Invoices: React.FC = () => {
             placeholder="Fatura no, müşteri adı veya şirket ara..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
+            className="w-full pl-10 pr-4 py-2.5 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900"
           />
         </div>
         
@@ -213,7 +213,7 @@ const Invoices: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 bg-white"
+            className="px-4 py-2.5 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 bg-white"
           >
             <option value="all">Tüm Durumlar</option>
             <option value="paid">Ödendi</option>
@@ -222,7 +222,7 @@ const Invoices: React.FC = () => {
             <option value="overdue">Vadesi Geçti</option>
           </select>
           
-          <button className="flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2.5 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
             <Filter size={20} />
             Filtrele
           </button>
@@ -245,16 +245,16 @@ const Invoices: React.FC = () => {
           return (
             <div 
               key={invoice.id}
-              className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:border-neutral-300"
+              className="bg-white border border-neutral-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:border-neutral-300"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <FileText size={18} className="text-gray-400" />
-                    <h3 className="text-lg font-semibold text-gray-900">{invoice.invoiceNo}</h3>
+                    <h3 className="text-lg font-semibold text-neutral-900">{invoice.invoiceNo}</h3>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-neutral-600">
                     <User size={14} />
                     <span className="font-medium">{invoice.customerName}</span>
                   </div>
@@ -279,7 +279,7 @@ const Invoices: React.FC = () => {
                     <Calendar size={12} />
                     <span>Kesim Tarihi</span>
                   </div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-neutral-900">
                     {new Date(invoice.issueDate).toLocaleDateString('tr-TR')}
                   </p>
                 </div>
@@ -288,7 +288,7 @@ const Invoices: React.FC = () => {
                     <Clock size={12} />
                     <span>Vade Tarihi</span>
                   </div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-neutral-900">
                     {new Date(invoice.dueDate).toLocaleDateString('tr-TR')}
                   </p>
                 </div>
@@ -297,8 +297,8 @@ const Invoices: React.FC = () => {
               {/* Amount Info */}
               <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-600">Toplam Tutar</span>
-                  <span className="text-lg font-bold text-gray-900">
+                  <span className="text-sm text-neutral-600">Toplam Tutar</span>
+                  <span className="text-lg font-bold text-neutral-900">
                     {invoice.currency}{invoice.amount.toLocaleString()}
                   </span>
                 </div>
@@ -306,20 +306,20 @@ const Invoices: React.FC = () => {
                 {invoice.status !== 'paid' && (
                   <>
                     <div className="flex justify-between items-center text-sm mb-2">
-                      <span className="text-gray-600">Ödenen</span>
+                      <span className="text-neutral-600">Ödenen</span>
                       <span className="font-medium text-green-600">
                         {invoice.currency}{invoice.paidAmount.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between items-center text-sm mb-3">
-                      <span className="text-gray-600">Kalan</span>
+                      <span className="text-neutral-600">Kalan</span>
                       <span className="font-medium text-red-600">
                         {invoice.currency}{remainingAmount.toLocaleString()}
                       </span>
                     </div>
                     
                     {/* Payment Progress */}
-                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    <div className="w-full bg-neutral-200 rounded-full h-2 mb-2">
                       <div 
                         className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${paymentPercentage}%` }}
@@ -333,9 +333,9 @@ const Invoices: React.FC = () => {
               </div>
 
               {/* Items Count */}
-              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 pb-4 border-b border-gray-100">
-                <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-medium text-gray-700">{invoice.items}</span>
+              <div className="flex items-center gap-2 text-sm text-neutral-600 mb-4 pb-4 border-b border-gray-100">
+                <div className="w-6 h-6 bg-neutral-100 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-medium text-neutral-700">{invoice.items}</span>
                 </div>
                 <span>Kalem</span>
               </div>
@@ -346,7 +346,7 @@ const Invoices: React.FC = () => {
                   <Eye size={16} />
                   <span>Görüntüle</span>
                 </button>
-                <button className="flex items-center justify-center gap-1.5 py-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+                <button className="flex items-center justify-center gap-1.5 py-2 text-sm font-medium text-neutral-600 bg-neutral-50 hover:bg-neutral-100 rounded-lg transition-colors">
                   <Download size={16} />
                   <span>İndir</span>
                 </button>

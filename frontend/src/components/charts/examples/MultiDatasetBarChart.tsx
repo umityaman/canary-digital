@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Multi-Dataset Bar Chart Örneği
  * Kullanım: Yıllık karşılaştırma (2024 vs 2025)
  * Özellikler: Grouped bars, custom colors, legend
@@ -113,19 +113,19 @@ export default function MultiDatasetBarChart() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
       <Bar data={data} options={options} />
       
       {/* Summary Statistics */}
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div className="bg-blue-50 p-3 rounded-lg">
-          <p className="text-sm text-gray-600">2024 Toplam</p>
+          <p className="text-sm text-neutral-600">2024 Toplam</p>
           <p className="text-2xl font-bold text-blue-600">
             ₺{data.datasets[0].data.reduce((a, b) => a + b, 0).toLocaleString('tr-TR')}
           </p>
         </div>
         <div className="bg-green-50 p-3 rounded-lg">
-          <p className="text-sm text-gray-600">2025 Toplam</p>
+          <p className="text-sm text-neutral-600">2025 Toplam</p>
           <p className="text-2xl font-bold text-green-600">
             ₺{data.datasets[1].data.reduce((a, b) => a + b, 0).toLocaleString('tr-TR')}
           </p>

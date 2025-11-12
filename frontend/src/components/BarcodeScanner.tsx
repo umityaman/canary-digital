@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { X, Camera, ScanLine, Loader2 } from 'lucide-react';
 import { scanAPI } from '../services/api';
@@ -205,7 +205,7 @@ export default function BarcodeScanner({ onScan, onClose, isOpen }: BarcodeScann
                 value={manualInput}
                 onChange={(e) => setManualInput(e.target.value)}
                 placeholder="Ekipman ID veya barcode numarası"
-                className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500 font-mono"
                 autoFocus={!isScanning}
               />
             </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { X, Shield, Mail, Smartphone, Key, Copy, Download, Printer, AlertCircle } from 'lucide-react';
 import api from '../services/api';
 
@@ -197,11 +197,11 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
         <div className="flex justify-between items-center p-6 border-b">
           <div className="flex items-center gap-3">
             <Shield className="w-6 h-6 text-blue-600" />
-            <h2 className="text-xl font-bold text-gray-900">İki Faktörlü Doğrulama Kurulumu</h2>
+            <h2 className="text-xl font-bold text-neutral-900">İki Faktörlü Doğrulama Kurulumu</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition"
+            className="text-gray-400 hover:text-neutral-600 transition"
           >
             <X className="w-6 h-6" />
           </button>
@@ -217,7 +217,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition ${
                       currentStep >= step.step
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-400'
+                        : 'bg-neutral-200 text-gray-400'
                     }`}
                   >
                     {step.step}
@@ -233,7 +233,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
                 {index < steps.length - 1 && (
                   <div
                     className={`h-1 flex-1 mx-2 transition ${
-                      currentStep > step.step ? 'bg-blue-600' : 'bg-gray-200'
+                      currentStep > step.step ? 'bg-blue-600' : 'bg-neutral-200'
                     }`}
                   />
                 )}
@@ -254,21 +254,21 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
           {/* Step 1: Method Selection */}
           {currentStep === 1 && (
             <div className="space-y-4">
-              <p className="text-gray-600 mb-6">
+              <p className="text-neutral-600 mb-6">
                 Hesabınızın güvenliğini artırmak için bir doğrulama yöntemi seçin:
               </p>
 
               <button
                 onClick={() => handleMethodSelect('EMAIL')}
                 className={`w-full p-4 border-2 rounded-lg text-left transition hover:border-blue-400 ${
-                  selectedMethod === 'EMAIL' ? 'border-blue-600 bg-blue-50' : 'border-gray-200'
+                  selectedMethod === 'EMAIL' ? 'border-neutral-600 bg-blue-50' : 'border-neutral-200'
                 }`}
               >
                 <div className="flex items-start gap-4">
                   <Mail className="w-6 h-6 text-blue-600 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">E-posta ile Doğrulama</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="font-semibold text-neutral-900 mb-1">E-posta ile Doğrulama</h3>
+                    <p className="text-sm text-neutral-600">
                       E-posta adresinize gönderilen 6 haneli kodu kullanarak giriş yapın.
                     </p>
                   </div>
@@ -278,14 +278,14 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
               <button
                 onClick={() => handleMethodSelect('SMS')}
                 className={`w-full p-4 border-2 rounded-lg text-left transition hover:border-blue-400 ${
-                  selectedMethod === 'SMS' ? 'border-blue-600 bg-blue-50' : 'border-gray-200'
+                  selectedMethod === 'SMS' ? 'border-neutral-600 bg-blue-50' : 'border-neutral-200'
                 }`}
               >
                 <div className="flex items-start gap-4">
                   <Smartphone className="w-6 h-6 text-blue-600 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">SMS ile Doğrulama</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="font-semibold text-neutral-900 mb-1">SMS ile Doğrulama</h3>
+                    <p className="text-sm text-neutral-600">
                       Telefon numaranıza gönderilen 6 haneli kodu kullanarak giriş yapın.
                     </p>
                   </div>
@@ -295,16 +295,16 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
               <button
                 onClick={() => handleMethodSelect('TOTP')}
                 className={`w-full p-4 border-2 rounded-lg text-left transition hover:border-blue-400 ${
-                  selectedMethod === 'TOTP' ? 'border-blue-600 bg-blue-50' : 'border-gray-200'
+                  selectedMethod === 'TOTP' ? 'border-neutral-600 bg-blue-50' : 'border-neutral-200'
                 }`}
               >
                 <div className="flex items-start gap-4">
                   <Key className="w-6 h-6 text-blue-600 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">
+                    <h3 className="font-semibold text-neutral-900 mb-1">
                       Doğrulayıcı Uygulama (TOTP)
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-neutral-600">
                       Google Authenticator veya benzeri bir uygulama kullanarak giriş yapın.
                     </p>
                   </div>
@@ -318,7 +318,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
             <div className="space-y-6">
               {selectedMethod === 'SMS' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Telefon Numarası
                   </label>
                   <input
@@ -326,7 +326,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="+90 5XX XXX XX XX"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
                   />
                   <p className="mt-2 text-sm text-gray-500">
                     Doğrulama kodları bu numaraya SMS olarak gönderilecektir.
@@ -337,8 +337,8 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
               {selectedMethod === 'EMAIL' && (
                 <div className="text-center py-8">
                   <Mail className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">E-posta Doğrulama</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-2">E-posta Doğrulama</h3>
+                  <p className="text-neutral-600">
                     Devam ettiğinizde, kayıtlı e-posta adresinize bir doğrulama kodu
                     gönderilecektir.
                   </p>
@@ -348,10 +348,10 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
               {selectedMethod === 'TOTP' && (
                 <div className="text-center py-8">
                   <Key className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                     Doğrulayıcı Uygulama
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-neutral-600">
                     Google Authenticator veya benzeri bir uygulama kullanarak QR kodunu
                     tarayacaksınız.
                   </p>
@@ -365,19 +365,19 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
             <div className="space-y-6">
               {selectedMethod === 'TOTP' && qrCode && (
                 <div className="text-center">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">
                     QR Kodunu Tarayın
                   </h3>
-                  <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block">
+                  <div className="bg-white p-4 rounded-lg border-2 border-neutral-200 inline-block">
                     <img src={qrCode} alt="QR Code" className="w-64 h-64" />
                   </div>
-                  <p className="text-sm text-gray-600 mt-4">
+                  <p className="text-sm text-neutral-600 mt-4">
                     Google Authenticator uygulamasıyla bu QR kodunu tarayın
                   </p>
                   {secret && (
                     <div className="mt-4">
                       <p className="text-xs text-gray-500 mb-2">Elle girmek için:</p>
-                      <code className="px-4 py-2 bg-gray-100 rounded text-sm font-mono">
+                      <code className="px-4 py-2 bg-neutral-100 rounded text-sm font-mono">
                         {secret}
                       </code>
                     </div>
@@ -387,7 +387,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
 
               {(selectedMethod === 'EMAIL' || selectedMethod === 'SMS') && (
                 <div className="text-center">
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-neutral-600 mb-4">
                     {selectedMethod === 'EMAIL'
                       ? 'E-posta adresinize bir doğrulama kodu gönderilecektir.'
                       : 'Telefon numaranıza bir doğrulama kodu gönderilecektir.'}
@@ -407,7 +407,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
               )}
 
               <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
                   Doğrulama Kodu
                 </label>
                 <input
@@ -416,7 +416,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
                   onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   placeholder="123456"
                   maxLength={6}
-                  className="w-full px-4 py-3 text-center text-2xl font-mono border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent tracking-widest"
+                  className="w-full px-4 py-3 text-center text-2xl font-mono border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-transparent tracking-widest"
                 />
                 <p className="mt-2 text-sm text-gray-500 text-center">6 haneli kodu girin</p>
               </div>
@@ -427,21 +427,21 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
           {currentStep === 4 && (
             <div className="space-y-6">
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                   🎉 2FA Başarıyla Aktifleştirildi!
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-neutral-600">
                   Aşağıdaki yedek kodları güvenli bir yerde saklayın. Telefonunuza erişiminizi
                   kaybederseniz bu kodları kullanabilirsiniz.
                 </p>
               </div>
 
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <div className="bg-neutral-50 p-6 rounded-lg border border-neutral-200">
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   {backupCodes.map((code, index) => (
                     <div
                       key={index}
-                      className="px-4 py-3 bg-white border border-gray-200 rounded font-mono text-center text-sm"
+                      className="px-4 py-3 bg-white border border-neutral-200 rounded font-mono text-center text-sm"
                     >
                       {code}
                     </div>
@@ -451,21 +451,21 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
                 <div className="flex gap-2 justify-center">
                   <button
                     onClick={handleCopyBackupCodes}
-                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 transition"
                   >
                     <Copy className="w-4 h-4" />
                     Kopyala
                   </button>
                   <button
                     onClick={handleDownloadBackupCodes}
-                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 transition"
                   >
                     <Download className="w-4 h-4" />
                     İndir
                   </button>
                   <button
                     onClick={handlePrintBackupCodes}
-                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 transition"
                   >
                     <Printer className="w-4 h-4" />
                     Yazdır
@@ -487,10 +487,10 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t bg-gray-50 flex justify-between">
+        <div className="px-6 py-4 border-t bg-neutral-50 flex justify-between">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800 transition"
+            className="px-4 py-2 text-neutral-600 hover:text-gray-800 transition"
           >
             İptal
           </button>
@@ -498,7 +498,7 @@ const TwoFactorSetup = ({ isOpen, onClose, onSuccess }: TwoFactorSetupProps) => 
             {currentStep > 1 && currentStep < 4 && (
               <button
                 onClick={() => setCurrentStep(currentStep - 1)}
-                className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                className="px-6 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition"
               >
                 Geri
               </button>

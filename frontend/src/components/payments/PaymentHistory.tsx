@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -224,39 +224,39 @@ export default function PaymentHistory({
         {loading ? (
           <div className="text-center py-8">
             <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2 text-gray-400" />
-            <p className="text-gray-600">Ödemeler yükleniyor...</p>
+            <p className="text-neutral-600">Ödemeler yükleniyor...</p>
           </div>
         ) : filteredPayments.length === 0 ? (
           <div className="text-center py-8">
             <CreditCard className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-neutral-900 mb-2">
               {searchTerm ? 'Arama sonucu bulunamadı' : 'Henüz ödeme yok'}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-neutral-600">
               {searchTerm ? 'Farklı terimlerle arama yapın' : 'İlk ödeme yapıldığında burada görünecek'}
             </p>
           </div>
         ) : (
           <div className="space-y-4">
             {/* Summary */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-neutral-50 rounded-lg">
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">
                   {filteredPayments.filter(p => p.status === 'COMPLETED').length}
                 </div>
-                <div className="text-sm text-gray-600">Tamamlanan</div>
+                <div className="text-sm text-neutral-600">Tamamlanan</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-yellow-600">
                   {filteredPayments.filter(p => p.status === 'PENDING').length}
                 </div>
-                <div className="text-sm text-gray-600">Beklemede</div>
+                <div className="text-sm text-neutral-600">Beklemede</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-red-600">
                   {filteredPayments.filter(p => p.status === 'FAILED').length}
                 </div>
-                <div className="text-sm text-gray-600">Başarısız</div>
+                <div className="text-sm text-neutral-600">Başarısız</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
@@ -265,7 +265,7 @@ export default function PaymentHistory({
                     .reduce((sum, p) => sum + p.amount, 0)
                     .toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}
                 </div>
-                <div className="text-sm text-gray-600">Toplam Tahsilat</div>
+                <div className="text-sm text-neutral-600">Toplam Tahsilat</div>
               </div>
             </div>
 
@@ -290,7 +290,7 @@ export default function PaymentHistory({
                           <div className="font-medium">
                             {new Date(payment.createdAt).toLocaleDateString('tr-TR')}
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-neutral-600">
                             {new Date(payment.createdAt).toLocaleTimeString('tr-TR', {
                               hour: '2-digit',
                               minute: '2-digit'
@@ -306,7 +306,7 @@ export default function PaymentHistory({
                             currency: payment.currency
                           })}
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-neutral-600">
                           {payment.paymentMethod}
                         </div>
                       </TableCell>
@@ -322,7 +322,7 @@ export default function PaymentHistory({
                               <div className="font-medium">
                                 {payment.contract.contractNumber}
                               </div>
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-neutral-600">
                                 {payment.contract.customer.name}
                               </div>
                             </div>

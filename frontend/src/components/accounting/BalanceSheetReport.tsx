@@ -137,8 +137,8 @@ export default function BalanceSheetReport() {
     return (
       <div key={item.accountCode}>
         <div
-          className={`flex justify-between items-center py-2 px-3 hover:bg-gray-50 transition-colors ${
-            level > 0 ? 'border-l-2 border-gray-200' : ''
+          className={`flex justify-between items-center py-2 px-3 hover:bg-neutral-50 transition-colors ${
+            level > 0 ? 'border-l-2 border-neutral-200' : ''
           }`}
           style={{ paddingLeft: `${(level + 1) * 12}px` }}
         >
@@ -146,19 +146,19 @@ export default function BalanceSheetReport() {
             {hasChildren && (
               <button
                 onClick={() => toggleSection(item.accountCode)}
-                className="p-1 hover:bg-gray-200 rounded"
+                className="p-1 hover:bg-neutral-200 rounded"
               >
                 {isExpanded ? (
-                  <ChevronDown className="w-4 h-4 text-gray-600" />
+                  <ChevronDown className="w-4 h-4 text-neutral-600" />
                 ) : (
-                  <ChevronRight className="w-4 h-4 text-gray-600" />
+                  <ChevronRight className="w-4 h-4 text-neutral-600" />
                 )}
               </button>
             )}
             <div className="flex-1">
               <p
                 className={`text-sm ${
-                  level === 0 ? 'font-bold text-gray-900' : 'font-medium text-gray-700'
+                  level === 0 ? 'font-bold text-neutral-900' : 'font-medium text-neutral-700'
                 }`}
               >
                 {item.accountName}
@@ -169,7 +169,7 @@ export default function BalanceSheetReport() {
           <div className="text-right">
             <p
               className={`text-sm ${
-                level === 0 ? 'font-bold text-gray-900' : 'font-medium text-gray-700'
+                level === 0 ? 'font-bold text-neutral-900' : 'font-medium text-neutral-700'
               }`}
             >
               {formatCurrency(item.amount)}
@@ -275,12 +275,12 @@ export default function BalanceSheetReport() {
               type="date"
               value={reportDate}
               onChange={(e) => setReportDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500"
             />
           </div>
           <div className="flex-1">
-            <p className="text-sm text-gray-600 mb-1">Bilanço Denklemi:</p>
-            <p className="text-lg font-mono font-bold text-gray-900">
+            <p className="text-sm text-neutral-600 mb-1">Bilanço Denklemi:</p>
+            <p className="text-lg font-mono font-bold text-neutral-900">
               Varlıklar = Borçlar + Özkaynak
             </p>
           </div>
@@ -289,13 +289,13 @@ export default function BalanceSheetReport() {
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Assets Section */}
           <div className={card('md', 'md', 'default', 'lg')}>
-            <div className="border-b border-gray-200 pb-3 mb-4">
+            <div className="border-b border-neutral-200 pb-3 mb-4">
               <div className="flex items-center justify-between">
                 <h3
                   className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
@@ -304,7 +304,7 @@ export default function BalanceSheetReport() {
                 </h3>
                 <button
                   onClick={() => toggleSection('assets')}
-                  className="p-1 hover:bg-gray-100 rounded"
+                  className="p-1 hover:bg-neutral-100 rounded"
                 >
                   {expandedSections.has('assets') ? (
                     <ChevronDown className="w-5 h-5" />
@@ -336,7 +336,7 @@ export default function BalanceSheetReport() {
           <div className="space-y-6">
             {/* Liabilities */}
             <div className={card('md', 'md', 'default', 'lg')}>
-              <div className="border-b border-gray-200 pb-3 mb-4">
+              <div className="border-b border-neutral-200 pb-3 mb-4">
                 <div className="flex items-center justify-between">
                   <h3
                     className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
@@ -345,7 +345,7 @@ export default function BalanceSheetReport() {
                   </h3>
                   <button
                     onClick={() => toggleSection('liabilities')}
-                    className="p-1 hover:bg-gray-100 rounded"
+                    className="p-1 hover:bg-neutral-100 rounded"
                   >
                     {expandedSections.has('liabilities') ? (
                       <ChevronDown className="w-5 h-5" />
@@ -375,7 +375,7 @@ export default function BalanceSheetReport() {
 
             {/* Equity */}
             <div className={card('md', 'md', 'default', 'lg')}>
-              <div className="border-b border-gray-200 pb-3 mb-4">
+              <div className="border-b border-neutral-200 pb-3 mb-4">
                 <div className="flex items-center justify-between">
                   <h3
                     className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}
@@ -384,7 +384,7 @@ export default function BalanceSheetReport() {
                   </h3>
                   <button
                     onClick={() => toggleSection('equity')}
-                    className="p-1 hover:bg-gray-100 rounded"
+                    className="p-1 hover:bg-neutral-100 rounded"
                   >
                     {expandedSections.has('equity') ? (
                       <ChevronDown className="w-5 h-5" />

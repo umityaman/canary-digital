@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { pricingAPI } from '../../services/api';
 
 interface DiscountCode {
@@ -126,7 +126,7 @@ const DiscountCodeManager: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">İndirim Kodları</h2>
-          <p className="text-sm text-gray-600 mt-1">Promosyon kodlarını yönetin</p>
+          <p className="text-sm text-neutral-600 mt-1">Promosyon kodlarını yönetin</p>
         </div>
         <button
           onClick={() => {
@@ -149,7 +149,7 @@ const DiscountCodeManager: React.FC = () => {
           className={`px-4 py-2 rounded-md ${
             filter === 'all'
               ? 'bg-neutral-900 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           }`}
         >
           Tümü ({codes.length})
@@ -159,7 +159,7 @@ const DiscountCodeManager: React.FC = () => {
           className={`px-4 py-2 rounded-md ${
             filter === 'active'
               ? 'bg-neutral-900 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           }`}
         >
           Aktif
@@ -169,7 +169,7 @@ const DiscountCodeManager: React.FC = () => {
           className={`px-4 py-2 rounded-md ${
             filter === 'expired'
               ? 'bg-neutral-900 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           }`}
         >
           Süresi Dolmuş
@@ -178,14 +178,14 @@ const DiscountCodeManager: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Yükleniyor...</p>
+          <p className="text-neutral-600">Yükleniyor...</p>
         </div>
       ) : codes.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
+        <div className="text-center py-12 bg-neutral-50 rounded-lg">
           <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
           </svg>
-          <p className="text-gray-600 mb-4">Henüz indirim kodu eklenmemiş</p>
+          <p className="text-neutral-600 mb-4">Henüz indirim kodu eklenmemiş</p>
           <button
             onClick={() => setShowModal(true)}
             className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
@@ -205,7 +205,7 @@ const DiscountCodeManager: React.FC = () => {
                   ? 'border-yellow-500'
                   : code.isActive
                   ? 'border-green-500'
-                  : 'border-gray-300'
+                  : 'border-neutral-300'
               }`}
             >
               <div className="flex justify-between items-start mb-4">
@@ -217,17 +217,17 @@ const DiscountCodeManager: React.FC = () => {
                       </code>
                       <button
                         onClick={() => copyToClipboard(code.code)}
-                        className="p-1 hover:bg-gray-100 rounded"
+                        className="p-1 hover:bg-neutral-100 rounded"
                         title="Kopyala"
                       >
-                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
                       </button>
                     </div>
                     
                     {isExpired(code) && (
-                      <span className="px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded-full">
+                      <span className="px-2 py-1 text-xs bg-neutral-200 text-neutral-700 rounded-full">
                         Süresi Dolmuş
                       </span>
                     )}
@@ -240,7 +240,7 @@ const DiscountCodeManager: React.FC = () => {
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         code.isActive
                           ? 'bg-green-100 text-green-800'
-                          : 'bg-gray-100 text-gray-800'
+                          : 'bg-neutral-100 text-gray-800'
                       }`}>
                         {code.isActive ? 'Aktif' : 'Pasif'}
                       </span>
@@ -249,13 +249,13 @@ const DiscountCodeManager: React.FC = () => {
 
                   <h3 className="text-lg font-semibold text-gray-800 mb-1">{code.name}</h3>
                   {code.description && (
-                    <p className="text-sm text-gray-600 mb-3">{code.description}</p>
+                    <p className="text-sm text-neutral-600 mb-3">{code.description}</p>
                   )}
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     {/* Discount Value */}
                     <div className="bg-neutral-50 p-3 rounded">
-                      <p className="text-xs text-gray-600 mb-1">İndirim</p>
+                      <p className="text-xs text-neutral-600 mb-1">İndirim</p>
                       <p className="font-bold text-neutral-900">
                         {code.discountType === 'PERCENTAGE' && `%${code.discountValue}`}
                         {code.discountType === 'FIXED_AMOUNT' && `${code.discountValue} TL`}
@@ -265,7 +265,7 @@ const DiscountCodeManager: React.FC = () => {
 
                     {/* Valid Period */}
                     <div className="bg-neutral-50 p-3 rounded">
-                      <p className="text-xs text-gray-600 mb-1">Geçerlilik</p>
+                      <p className="text-xs text-neutral-600 mb-1">Geçerlilik</p>
                       <p className="font-medium text-xs">
                         {new Date(code.validFrom).toLocaleDateString('tr-TR')}
                         <br />→{' '}
@@ -275,12 +275,12 @@ const DiscountCodeManager: React.FC = () => {
 
                     {/* Usage */}
                     <div className="bg-neutral-50 p-3 rounded">
-                      <p className="text-xs text-gray-600 mb-1">Kullanım</p>
+                      <p className="text-xs text-neutral-600 mb-1">Kullanım</p>
                       <p className="font-bold text-neutral-900">
                         {code.currentUsage} / {code.maxUsage || '∞'}
                       </p>
                       {code.maxUsage && (
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                        <div className="w-full bg-neutral-200 rounded-full h-1.5 mt-2">
                           <div
                             className="bg-neutral-600 h-1.5 rounded-full"
                             style={{ width: `${getUsageProgress(code)}%` }}
@@ -291,7 +291,7 @@ const DiscountCodeManager: React.FC = () => {
 
                     {/* Per User Limit */}
                     <div className="bg-neutral-50 p-3 rounded">
-                      <p className="text-xs text-gray-600 mb-1">Kullanıcı Başına</p>
+                      <p className="text-xs text-neutral-600 mb-1">Kullanıcı Başına</p>
                       <p className="font-bold text-neutral-900">{code.maxUsagePerUser}x</p>
                     </div>
                   </div>
@@ -299,16 +299,16 @@ const DiscountCodeManager: React.FC = () => {
                   {/* Additional Info */}
                   <div className="mt-3 flex flex-wrap gap-2 text-xs">
                     {code.minOrderAmount && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                      <span className="px-2 py-1 bg-neutral-100 text-neutral-700 rounded">
                         Min. Sipariş: {code.minOrderAmount} TL
                       </span>
                     )}
                     {code.maxDiscount && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                      <span className="px-2 py-1 bg-neutral-100 text-neutral-700 rounded">
                         Max. İndirim: {code.maxDiscount} TL
                       </span>
                     )}
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                    <span className="px-2 py-1 bg-neutral-100 text-neutral-700 rounded">
                       {code.appliesTo === 'ALL' && 'Tüm Ürünler'}
                       {code.appliesTo === 'CATEGORY' && `Kategori: ${code.categoryFilter}`}
                       {code.appliesTo === 'SPECIFIC_ITEMS' && 'Belirli Ürünler'}
@@ -331,14 +331,14 @@ const DiscountCodeManager: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Code */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     Kod (Boş bırakılırsa otomatik oluşturulur)
                   </label>
                   <input
                     type="text"
                     value={formData.code}
                     onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500 uppercase"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-neutral-500 focus:border-neutral-500 uppercase"
                     placeholder="SUMMER2025"
                     maxLength={20}
                   />
@@ -346,7 +346,7 @@ const DiscountCodeManager: React.FC = () => {
 
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     İsim *
                   </label>
                   <input
@@ -354,21 +354,21 @@ const DiscountCodeManager: React.FC = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     placeholder="Yaz Kampanyası"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     Açıklama
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     placeholder="Yaz aylarında tüm ürünlerde geçerli"
                   />
                 </div>
@@ -376,14 +376,14 @@ const DiscountCodeManager: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Discount Type */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       İndirim Tipi *
                     </label>
                     <select
                       value={formData.discountType}
                       onChange={(e) => setFormData({ ...formData, discountType: e.target.value as any })}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     >
                       <option value="PERCENTAGE">Yüzde (%)</option>
                       <option value="FIXED_AMOUNT">Sabit Tutar (TL)</option>
@@ -393,7 +393,7 @@ const DiscountCodeManager: React.FC = () => {
 
                   {/* Discount Value */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       {formData.discountType === 'PERCENTAGE' ? 'İndirim (%)' : 'İndirim (TL)'} *
                     </label>
                     <input
@@ -403,21 +403,21 @@ const DiscountCodeManager: React.FC = () => {
                       required
                       min="0"
                       step="0.01"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
                 </div>
 
                 {/* Applies To */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
                     Geçerli Olduğu Alan *
                   </label>
                   <select
                     value={formData.appliesTo}
                     onChange={(e) => setFormData({ ...formData, appliesTo: e.target.value as any })}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="ALL">Tüm Ürünler</option>
                     <option value="CATEGORY">Belirli Kategori</option>
@@ -428,14 +428,14 @@ const DiscountCodeManager: React.FC = () => {
                 {/* Category Filter */}
                 {formData.appliesTo === 'CATEGORY' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Kategori
                     </label>
                     <input
                       type="text"
                       value={formData.categoryFilter}
                       onChange={(e) => setFormData({ ...formData, categoryFilter: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                       placeholder="Camera"
                     />
                   </div>
@@ -444,7 +444,7 @@ const DiscountCodeManager: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Min Order Amount */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Min. Sipariş Tutarı (TL)
                     </label>
                     <input
@@ -453,13 +453,13 @@ const DiscountCodeManager: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, minOrderAmount: parseFloat(e.target.value) || undefined })}
                       min="0"
                       step="0.01"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
 
                   {/* Max Discount */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Max. İndirim Tutarı (TL)
                     </label>
                     <input
@@ -468,7 +468,7 @@ const DiscountCodeManager: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, maxDiscount: parseFloat(e.target.value) || undefined })}
                       min="0"
                       step="0.01"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
                 </div>
@@ -476,7 +476,7 @@ const DiscountCodeManager: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Max Usage */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Toplam Kullanım Limiti
                     </label>
                     <input
@@ -484,14 +484,14 @@ const DiscountCodeManager: React.FC = () => {
                       value={formData.maxUsage || ''}
                       onChange={(e) => setFormData({ ...formData, maxUsage: parseInt(e.target.value) || undefined })}
                       min="1"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                       placeholder="Sınırsız için boş bırakın"
                     />
                   </div>
 
                   {/* Max Usage Per User */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Kullanıcı Başına Limit *
                     </label>
                     <input
@@ -500,7 +500,7 @@ const DiscountCodeManager: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, maxUsagePerUser: parseInt(e.target.value) })}
                       required
                       min="1"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
                 </div>
@@ -508,7 +508,7 @@ const DiscountCodeManager: React.FC = () => {
                 {/* Date Range */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Başlangıç Tarihi *
                     </label>
                     <input
@@ -516,11 +516,11 @@ const DiscountCodeManager: React.FC = () => {
                       value={formData.validFrom}
                       onChange={(e) => setFormData({ ...formData, validFrom: e.target.value })}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       Bitiş Tarihi *
                     </label>
                     <input
@@ -528,7 +528,7 @@ const DiscountCodeManager: React.FC = () => {
                       value={formData.validTo}
                       onChange={(e) => setFormData({ ...formData, validTo: e.target.value })}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
                 </div>
@@ -540,9 +540,9 @@ const DiscountCodeManager: React.FC = () => {
                     id="isActive"
                     checked={formData.isActive}
                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                    className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                    className="w-4 h-4 text-green-600 border-neutral-300 rounded focus:ring-green-500"
                   />
-                  <label htmlFor="isActive" className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="isActive" className="ml-2 text-sm text-neutral-700">
                     Aktif
                   </label>
                 </div>
@@ -555,7 +555,7 @@ const DiscountCodeManager: React.FC = () => {
                       setShowModal(false);
                       resetForm();
                     }}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                    className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-md hover:bg-neutral-50"
                   >
                     İptal
                   </button>
