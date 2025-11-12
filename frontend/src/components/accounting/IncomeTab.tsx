@@ -204,7 +204,7 @@ export default function IncomeTab() {
             <div className={statCardIcon('primary')}>
               <FileText className="text-white" size={16} />
             </div>
-            <span className="text-xs font-medium text-neutral-600">Kayï¿½t</span>
+            <span className="text-xs font-medium text-neutral-600">Kayıt</span>
           </div>
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{incomes.length}</h3>
           <p className="text-xs font-medium text-neutral-600">Gelir Kaydı</p>
@@ -263,12 +263,12 @@ export default function IncomeTab() {
               onChange={(e) => setCategoryFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px]')}
             >
-              <option value="">Tï¿½m Kategoriler</option>
+              <option value="">Tüm Kategoriler</option>
               <option value="Ekipman Kiralama">Ekipman Kiralama</option>
               <option value="Hizmet Bedeli">Hizmet Bedeli</option>
-              <option value="Danï¿½ï¿½manlï¿½k">Danï¿½ï¿½manlï¿½k</option>
-              <option value="Eï¿½itim">Eï¿½itim</option>
-              <option value="Diï¿½er">Diï¿½er</option>
+              <option value="Danışmanlık">Danışmanlık</option>
+              <option value="Eğitim">Eğitim</option>
+              <option value="Diğer">Diğer</option>
             </select>
 
             <select
@@ -276,10 +276,10 @@ export default function IncomeTab() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
             >
-              <option value="">Tï¿½m Durumlar</option>
-              <option value="received">Alï¿½ndï¿½</option>
+              <option value="">Tüm Durumlar</option>
+              <option value="received">Alındı</option>
               <option value="pending">Beklemede</option>
-              <option value="cancelled">ï¿½ptal</option>
+              <option value="cancelled">İptal</option>
             </select>
 
             <button
@@ -287,7 +287,7 @@ export default function IncomeTab() {
               className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}
             >
               <Download size={18} />
-              <span className="hidden sm:inline">Dï¿½ï¿½a Aktar</span>
+              <span className="hidden sm:inline">Dışa Aktar</span>
             </button>
 
             <button
@@ -307,12 +307,12 @@ export default function IncomeTab() {
       {/* Income Table */}
       <div className={card('none', 'sm', 'default', 'lg')}>
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">Yï¿½kleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : incomes.length === 0 ? (
           <div className="p-12 text-center text-neutral-600">
             <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
-            <p className="text-lg font-medium">Gelir kaydï¿½ bulunamadï¿½</p>
-            <p className="text-sm mt-2">Yeni gelir ekleyerek baï¿½layï¿½n</p>
+            <p className="text-lg font-medium">Gelir kaydı bulunamadı</p>
+            <p className="text-sm mt-2">Yeni gelir ekleyerek başlayın</p>
           </div>
         ) : (
           <>
@@ -321,12 +321,12 @@ export default function IncomeTab() {
                 <thead>
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
-                    <th className={TABLE_HEADER_CELL}>AÃ§Ä±klama</th>
+                    <th className={TABLE_HEADER_CELL}>Açıklama</th>
                     <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Kategori</th>
                     <th className={TABLE_HEADER_CELL}>Tutar</th>
-                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>Ã–deme</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>Ödeme</th>
                     <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Durum</th>
-                    <th className={TABLE_HEADER_CELL}>Ä°ÅŸlemler</th>
+                    <th className={TABLE_HEADER_CELL}>İşlemler</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -360,7 +360,7 @@ export default function IncomeTab() {
                           <button
                             onClick={() => handleEdit(income)}
                             className={cx(button('sm', 'ghost', 'lg'), 'p-2')}
-                            title="Dï¿½zenle"
+                            title="Düzenle"
                           >
                             <Edit2 size={16} />
                           </button>
@@ -390,7 +390,7 @@ export default function IncomeTab() {
                   disabled={currentPage === 1}
                   className={cx(button('md', 'outline', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
                 >
-                  ï¿½nceki
+                  Önceki
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}

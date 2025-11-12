@@ -304,7 +304,7 @@ export default function ExpenseTab() {
               className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}
             >
               <Download size={18} />
-              <span className="hidden sm:inline">Dï¿½ï¿½a Aktar</span>
+              <span className="hidden sm:inline">Dışa Aktar</span>
             </button>
 
             <button
@@ -324,26 +324,26 @@ export default function ExpenseTab() {
       {/* Expense Table */}
       <div className={card('none', 'sm', 'default', 'lg')}>
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">Yï¿½kleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : expenses.length === 0 ? (
           <div className="p-12 text-center text-neutral-600">
             <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
-            <p className="text-lg font-medium">Gider kaydï¿½ bulunamadï¿½</p>
-            <p className="text-sm mt-2">Yeni gider ekleyerek baï¿½layï¿½n</p>
+            <p className="text-lg font-medium">Gider kaydı bulunamadı</p>
+            <p className="text-sm mt-2">Yeni gider ekleyerek başlayın</p>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="min-w-full w-full">
-                <thead >
+                <thead>
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
-                    <th className={TABLE_HEADER_CELL}>Aï¿½ï¿½klama</th>
+                    <th className={TABLE_HEADER_CELL}>Açıklama</th>
                     <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Kategori</th>
                     <th className={TABLE_HEADER_CELL}>Tutar</th>
-                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>ï¿½deme</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>Ödeme</th>
                     <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Durum</th>
-                    <th className={TABLE_HEADER_CELL}>ï¿½ï¿½lemler</th>
+                    <th className={TABLE_HEADER_CELL}>İşlemler</th>
                   </tr>
                 </thead>
                 <tbody >
@@ -377,7 +377,7 @@ export default function ExpenseTab() {
                           <button
                             onClick={() => handleEdit(expense)}
                             className={cx(button('sm', 'ghost', 'lg'), 'p-2')}
-                            title="Dï¿½zenle"
+                            title="Düzenle"
                           >
                             <Edit2 size={16} />
                           </button>
@@ -407,7 +407,7 @@ export default function ExpenseTab() {
                   disabled={currentPage === 1}
                   className={cx(button('md', 'outline', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
                 >
-                  ï¿½nceki
+                  Önceki
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
