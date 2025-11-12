@@ -359,37 +359,37 @@ export default function Accounting() {
   const handleOfferStatusUpdate = async (offerId: number, status: string) => {
     try {
       await offerAPI.updateStatus(offerId, status)
-      toast.success('Teklif durumu gï¿½ncellendi')
+      toast.success('Teklif durumu güncellendi')
       loadOffers()
     } catch (error: any) {
       console.error('Failed to update offer status:', error)
-      toast.error('Durum gï¿½ncellenemedi')
+      toast.error('Durum güncellenemedi')
     }
   }
 
   const handleConvertToInvoice = async (offerId: number) => {
-    if (!confirm('Bu teklifi faturaya dï¿½nï¿½ï¿½tï¿½rmek istediï¿½inizden emin misiniz?')) {
+    if (!confirm('Bu teklifi faturaya dönüştürmek istediğinizden emin misiniz?')) {
       return
     }
     
     try {
-      // Note: Bu endpoint iï¿½in orderId, startDate, endDate gerekiyor
-      // Basitleï¿½tirilmiï¿½ versiyon - gerï¿½ek implementasyonda modal ile bu bilgileri almalï¿½sï¿½nï¿½z
+      // Note: Bu endpoint için orderId, startDate, endDate gerekiyor
+      // Basitleştirilmiş versiyon - gerçek implementasyonda modal ile bu bilgileri almalısınız
       const today = new Date().toISOString().split('T')[0]
       const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]
       
       const response = await offerAPI.convertToInvoice(offerId, {
-        orderId: offerId, // Geï¿½ici olarak offerId kullanï¿½yoruz
+        orderId: offerId, // Geçici olarak offerId kullanıyoruz
         startDate: today,
         endDate: nextMonth,
-        notes: 'Tekliften otomatik oluï¿½turuldu'
+        notes: 'Tekliften otomatik oluşturuldu'
       })
       
-      toast.success('Teklif baï¿½arï¿½yla faturaya dï¿½nï¿½ï¿½tï¿½rï¿½ldï¿½')
+      toast.success('Teklif başarıyla faturaya dönüştürüldü')
       navigate(`/accounting/invoice/${response.data.invoice.id}`)
     } catch (error: any) {
       console.error('Failed to convert offer:', error)
-      toast.error('Dï¿½nï¿½ï¿½tï¿½rme baï¿½arï¿½sï¿½z: ' + (error.response?.data?.message || error.message))
+      toast.error('Dönüştürme başarısız: ' + (error.response?.data?.message || error.message))
     }
   }
 
@@ -411,12 +411,12 @@ export default function Accounting() {
   }
 
   const handleBulkDeleteInvoices = async () => {
-    if (!confirm(`${selectedInvoices.length} faturayï¿½ silmek istediï¿½inizden emin misiniz?`)) {
+    if (!confirm(`${selectedInvoices.length} faturayı silmek istediğinizden emin misiniz?`)) {
       return
     }
     
     try {
-      // Bu iï¿½lem her faturayï¿½ tek tek silecek - idealde backend'de bulk delete endpoint olmalï¿½
+      // Bu işlem her faturayı tek tek silecek - idealde backend'de bulk delete endpoint olmalı
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
       for (const id of selectedInvoices) {
         await axios.delete(`${API_URL}/invoices/${id}`, {
@@ -428,7 +428,7 @@ export default function Accounting() {
       loadInvoices()
     } catch (error: any) {
       console.error('Bulk delete failed:', error)
-      toast.error('Toplu silme baï¿½arï¿½sï¿½z')
+      toast.error('Toplu silme başarısız')
     }
   }
 
@@ -450,7 +450,7 @@ export default function Accounting() {
   }
 
   const handleBulkDeleteOffers = async () => {
-    if (!confirm(`${selectedOffers.length} teklifi silmek istediï¿½inizden emin misiniz?`)) {
+    if (!confirm(`${selectedOffers.length} teklifi silmek istediğinizden emin misiniz?`)) {
       return
     }
     
@@ -466,7 +466,7 @@ export default function Accounting() {
       loadOffers()
     } catch (error: any) {
       console.error('Bulk delete failed:', error)
-      toast.error('Toplu silme baï¿½arï¿½sï¿½z')
+      toast.error('Toplu silme başarısız')
     }
   }
 
@@ -559,20 +559,20 @@ export default function Accounting() {
   }
 
   const handleSendEmail = (_invoice: any) => {
-    toast('Email gï¿½nderme ï¿½zelliï¿½i yakï¿½nda eklenecek!', { icon: '??' })
+    toast('Email gönderme özelliği yakında eklenecek!', { icon: '??' })
     setOpenInvoiceDropdown(null)
   }
 
   const handleSendWhatsApp = (invoice: any) => {
     const customer = invoice.customer
     if (!customer?.phone) {
-      toast.error('Mï¿½ï¿½terinin telefon numarasï¿½ bulunamadï¿½')
+      toast.error('Müşterinin telefon numarası bulunamadı')
       return
     }
-    const message = `Merhaba, ${invoice.invoiceNumber} numaralï¿½ faturanï¿½z hazï¿½r. Toplam: ${invoice.total?.toFixed(2)} TL`
+    const message = `Merhaba, ${invoice.invoiceNumber} numaralı faturanız hazır. Toplam: ${invoice.total?.toFixed(2)} TL`
     const whatsappUrl = `https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
-    toast.success('WhatsApp aï¿½ï¿½lï¿½yor...')
+    toast.success('WhatsApp açılıyor...')
     setOpenInvoiceDropdown(null)
   }
 
@@ -584,11 +584,11 @@ export default function Accounting() {
 
   const handleCopyInvoice = async (invoice: any) => {
     try {
-      const invoiceText = `Fatura No: ${invoice.invoiceNumber}\nMï¿½ï¿½teri: ${invoice.customer?.name}\nTutar: ${invoice.total?.toFixed(2)} TL`
+      const invoiceText = `Fatura No: ${invoice.invoiceNumber}\nMüşteri: ${invoice.customer?.name}\nTutar: ${invoice.total?.toFixed(2)} TL`
       await navigator.clipboard.writeText(invoiceText)
-      toast.success('Fatura bilgileri kopyalandï¿½!')
+      toast.success('Fatura bilgileri kopyalandı!')
     } catch (error) {
-      toast.error('Kopyalama baï¿½arï¿½sï¿½z')
+      toast.error('Kopyalama başarısız')
     }
     setOpenInvoiceDropdown(null)
   }
@@ -619,20 +619,20 @@ export default function Accounting() {
   }
 
   const handleSendOfferEmail = (_offer: any) => {
-    toast('Email gï¿½nderme ï¿½zelliï¿½i yakï¿½nda eklenecek!', { icon: '??' })
+    toast('Email gönderme özelliği yakında eklenecek!', { icon: '??' })
     setOpenOfferDropdown(null)
   }
 
   const handleSendOfferWhatsApp = (offer: any) => {
     const customer = offer.customer
     if (!customer?.phone) {
-      toast.error('Mï¿½ï¿½terinin telefon numarasï¿½ bulunamadï¿½')
+      toast.error('Müşterinin telefon numarası bulunamadı')
       return
     }
-    const message = `Merhaba, ${offer.offerNumber} numaralï¿½ teklifimiz hazï¿½r. Toplam: ${offer.total?.toFixed(2)} TL`
+    const message = `Merhaba, ${offer.offerNumber} numaralı teklifimiz hazır. Toplam: ${offer.total?.toFixed(2)} TL`
     const whatsappUrl = `https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
-    toast.success('WhatsApp aï¿½ï¿½lï¿½yor...')
+    toast.success('WhatsApp açılıyor...')
     setOpenOfferDropdown(null)
   }
 
@@ -644,11 +644,11 @@ export default function Accounting() {
 
   const handleCopyOffer = async (offer: any) => {
     try {
-      const offerText = `Teklif No: ${offer.offerNumber}\nMï¿½ï¿½teri: ${offer.customer?.name}\nTutar: ${offer.total?.toFixed(2)} TL`
+      const offerText = `Teklif No: ${offer.offerNumber}\nMüşteri: ${offer.customer?.name}\nTutar: ${offer.total?.toFixed(2)} TL`
       await navigator.clipboard.writeText(offerText)
-      toast.success('Teklif bilgileri kopyalandï¿½!')
+      toast.success('Teklif bilgileri kopyalandı!')
     } catch (error) {
-      toast.error('Kopyalama baï¿½arï¿½sï¿½z')
+      toast.error('Kopyalama başarısız')
     }
     setOpenOfferDropdown(null)
   }
@@ -660,7 +660,7 @@ export default function Accounting() {
       setChecks(res.data.data || res.data)
     } catch (error: any) {
       console.error('Failed to load checks:', error)
-      toast.error('ï¿½ekler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Çekler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setChecksLoading(false)
     }
@@ -680,28 +680,28 @@ export default function Accounting() {
   }
 
   const handleDeleteCheck = async (id: number) => {
-    if (!confirm('Bu ï¿½eki silmek istediï¿½inizden emin misiniz?')) {
+    if (!confirm('Bu çeki silmek istediğinizden emin misiniz?')) {
       return
     }
     
     try {
       await checksAPI.delete(id)
-      toast.success('ï¿½ek baï¿½arï¿½yla silindi')
+      toast.success('Çek başarıyla silindi')
       loadChecks()
     } catch (error: any) {
       console.error('Failed to delete check:', error)
-      toast.error('ï¿½ek silinemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Çek silinemedi: ' + (error.response?.data?.message || error.message))
     }
   }
 
   const handleDeletePromissory = async (id: number) => {
-    if (!confirm('Bu senedi silmek istediï¿½inizden emin misiniz?')) {
+    if (!confirm('Bu senedi silmek istediğinizden emin misiniz?')) {
       return
     }
     
     try {
       await promissoryAPI.delete(id)
-      toast.success('Senet baï¿½arï¿½yla silindi')
+      toast.success('Senet başarıyla silindi')
       loadPromissory()
     } catch (error: any) {
       console.error('Failed to delete promissory note:', error)
@@ -716,7 +716,7 @@ export default function Accounting() {
       setAgingData(res.data.data || res.data)
     } catch (error: any) {
       console.error('Failed to load aging data:', error)
-      toast.error('Yaï¿½landï¿½rma verisi alï¿½namadï¿½: ' + (error.response?.data?.message || error.message))
+      toast.error('Yaşlandırma verisi alınamadı: ' + (error.response?.data?.message || error.message))
     } finally {
       setAgingLoading(false)
     }
@@ -763,10 +763,10 @@ export default function Accounting() {
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
-    { id: 'offer' as const, label: 'Teklif Yï¿½netimi', icon: <Receipt size={18} /> },
+    { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
     { id: 'current-accounts' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
-    { id: 'receivables' as const, label: 'Alacak Yï¿½netimi', icon: <DollarSign size={18} /> },
-    { id: 'chart-of-accounts' as const, label: 'Hesap Planï¿½', icon: <BarChart3 size={18} /> },
+    { id: 'receivables' as const, label: 'Alacak Yönetimi', icon: <DollarSign size={18} /> },
+    { id: 'chart-of-accounts' as const, label: 'Hesap Planı', icon: <BarChart3 size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
     { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
     { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
@@ -814,7 +814,7 @@ export default function Accounting() {
             <p className={DESIGN_TOKENS?.statCard?.label}>Bu Ay Gider</p>
           </div>
 
-          {/* Net Kï¿½r */}
+          {/* Net Kâr */}
           <div className={card('sm', 'sm', 'default', 'xl')}>
             <div className="flex items-center justify-between mb-3">
               <div className={statCardIcon('info')}>
@@ -825,7 +825,7 @@ export default function Accounting() {
             <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.netProfit) : '?0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Net Kï¿½r</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Net Kâr</p>
           </div>
 
           {/* Tahsilat / Bekleyen */}
@@ -839,7 +839,7 @@ export default function Accounting() {
             <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.totalOverdue) : '?0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Vade Geï¿½miï¿½</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Vade Geçmiş</p>
             {stats && stats.totalCollections > 0 && (
               <p className={DESIGN_TOKENS?.statCard?.subtitle}>
                 Bu ay: {formatCurrency(stats.totalCollections)}
@@ -868,8 +868,8 @@ export default function Accounting() {
 
           {/* Content Area */}
           <div className="flex-1 p-6 lg:p-8">
-            <ErrorBoundary fallbackTitle="Muhasebe Modï¿½lï¿½ Hatasï¿½" fallbackMessage="Muhasebe modï¿½lï¿½nde bir sorun oluï¿½tu. Lï¿½tfen sayfayï¿½ yenileyin.">
-              <Suspense fallback={<LoadingFallback message="ï¿½ï¿½erik yï¿½kleniyor..." />}>
+            <ErrorBoundary fallbackTitle="Muhasebe Modülü Hatası" fallbackMessage="Muhasebe modülünde bir sorun oluştu. Lütfen sayfayı yenileyin.">
+              <Suspense fallback={<LoadingFallback message="İçerik yükleniyor..." />}>
                 {/* Dashboard Tab */}
                 {activeTab === 'dashboard' && <AccountingDashboard />}
 
@@ -898,7 +898,7 @@ export default function Accounting() {
                     onClick={() => setReportsSubTab('advanced')}
                     className={tab(reportsSubTab === 'advanced', 'underline')}
                   >
-                    Geliï¿½miï¿½ Raporlar
+                    Gelişmiş Raporlar
                   </button>
                   <button
                     onClick={() => setReportsSubTab('trial-balance')}
@@ -916,7 +916,7 @@ export default function Accounting() {
                     onClick={() => setReportsSubTab('balance-sheet')}
                     className={tab(reportsSubTab === 'balance-sheet', 'underline')}
                   >
-                    Bilanï¿½o
+                    Bilanço
                   </button>
                 </div>
 
@@ -928,10 +928,10 @@ export default function Accounting() {
               </div>
             )}
 
-            {/* Receivables Management Tab - ï¿½ekler, Senetler, Yaï¿½landï¿½rma */}
+            {/* Receivables Management Tab - Çekler, Senetler, Yaşlandırma */}
             {activeTab === 'receivables' && (
               <div className="space-y-6 max-w-7xl mx-auto">
-                <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Yï¿½netimi</h2>
+                <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Yönetimi</h2>
                 
                 {/* Sub-tabs for Checks, Promissory, Aging */}
                 <div className="flex gap-4 border-b border-neutral-200 mb-6">
@@ -939,7 +939,7 @@ export default function Accounting() {
                     onClick={() => setReceivablesSubTab('checks')}
                     className={tab(receivablesSubTab === 'checks', 'underline')}
                   >
-                    ï¿½ekler
+                    Çekler
                   </button>
                   <button
                     onClick={() => setReceivablesSubTab('promissory')}
@@ -951,7 +951,7 @@ export default function Accounting() {
                     onClick={() => setReceivablesSubTab('aging')}
                     className={tab(receivablesSubTab === 'aging', 'underline')}
                   >
-                    Yaï¿½landï¿½rma Raporu
+                    Yaşlandırma Raporu
                   </button>
                 </div>
 
@@ -959,7 +959,7 @@ export default function Accounting() {
                 {receivablesSubTab === 'checks' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className={DESIGN_TOKENS?.typography?.h3}>ï¿½ekler</h3>
+                      <h3 className={DESIGN_TOKENS?.typography?.h3}>Çekler</h3>
                       <button
                         onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
                         className={cx(button('md', 'primary', 'xl'), 'gap-2')}
@@ -971,20 +971,20 @@ export default function Accounting() {
 
                     <div className={card('none', 'sm', 'default', 'xl')}>
                       {checksLoading ? (
-                        <div className="p-12 text-center text-neutral-600">ï¿½ekler yï¿½kleniyor...</div>
+                        <div className="p-12 text-center text-neutral-600">Çekler yükleniyor...</div>
                       ) : checks.length === 0 ? (
-                        <div className="p-12 text-center text-neutral-600">ï¿½ek bulunamadï¿½</div>
+                        <div className="p-12 text-center text-neutral-600">Çek bulunamadı</div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="min-w-full w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
                                 <th className={TABLE_HEADER_CELL}>No</th>
-                                <th className={TABLE_HEADER_CELL}>Mï¿½ï¿½teri</th>
+                                <th className={TABLE_HEADER_CELL}>Müşteri</th>
                                 <th className={TABLE_HEADER_CELL}>Tutar</th>
                                 <th className={TABLE_HEADER_CELL}>Vade</th>
                                 <th className={TABLE_HEADER_CELL}>Durum</th>
-                                <th className={TABLE_HEADER_CELL}>ï¿½ï¿½lemler</th>
+                                <th className={TABLE_HEADER_CELL}>İşlemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-100">
@@ -1000,7 +1000,7 @@ export default function Accounting() {
                                       <button
                                         onClick={() => { setEditingCheck(c); setCheckModalOpen(true) }}
                                         className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
-                                        title="Dï¿½zenle"
+                                        title="Düzenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
@@ -1039,20 +1039,20 @@ export default function Accounting() {
 
                     <div className={card('none', 'sm', 'default', 'xl')}>
                       {promissoryLoading ? (
-                        <div className="p-12 text-center text-neutral-600">Senetler yï¿½kleniyor...</div>
+                        <div className="p-12 text-center text-neutral-600">Senetler yükleniyor...</div>
                       ) : promissory.length === 0 ? (
-                        <div className="p-12 text-center text-neutral-600">Senet bulunamadï¿½</div>
+                        <div className="p-12 text-center text-neutral-600">Senet bulunamadı</div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="min-w-full w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
                                 <th className={TABLE_HEADER_CELL}>No</th>
-                                <th className={TABLE_HEADER_CELL}>Mï¿½ï¿½teri</th>
+                                <th className={TABLE_HEADER_CELL}>Müşteri</th>
                                 <th className={TABLE_HEADER_CELL}>Tutar</th>
                                 <th className={TABLE_HEADER_CELL}>Vade</th>
                                 <th className={TABLE_HEADER_CELL}>Durum</th>
-                                <th className={TABLE_HEADER_CELL}>ï¿½ï¿½lemler</th>
+                                <th className={TABLE_HEADER_CELL}>İşlemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-100">
@@ -1068,7 +1068,7 @@ export default function Accounting() {
                                       <button
                                         onClick={() => { setEditingPromissory(p); setPromissoryModalOpen(true) }}
                                         className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
-                                        title="Dï¿½zenle"
+                                        title="Düzenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
@@ -1102,15 +1102,15 @@ export default function Accounting() {
 
             {/* Invoice Tab */}
             {activeTab === 'invoice' && (
-              <ErrorBoundary fallbackTitle="Fatura Listesi Hatasï¿½" fallbackMessage="Fatura listesi yï¿½klenirken bir sorun oluï¿½tu.">
+              <ErrorBoundary fallbackTitle="Fatura Listesi Hatası" fallbackMessage="Fatura listesi yï¿½klenirken bir sorun oluştu.">
                 <div className="space-y-6 max-w-7xl mx-auto">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Fatura Yï¿½netimi</h2>
+                    <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Fatura Yönetimi</h2>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => setActiveTab('ebelge')}
                         className={cx(button('md', 'outline', 'md'), 'gap-2')}
-                        title="E-Fatura oluï¿½tur ve gï¿½nder"
+                        title="E-Fatura oluştur ve gï¿½nder"
                       >
                         <Globe size={18} />
                         E-Belge
@@ -1134,7 +1134,7 @@ export default function Accounting() {
                       <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
                       <input
                         type="text"
-                        placeholder="Fatura no veya mï¿½ï¿½teri ara..."
+                        placeholder="Fatura no veya müşteri ara..."
                         value={invoiceSearch}
                         onChange={(e) => setInvoiceSearch(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSearchInvoices()}
@@ -1153,12 +1153,12 @@ export default function Accounting() {
                         }}
                         className={cx(input('md', 'default', undefined, 'md'), 'pl-10 appearance-none')}
                       >
-                        <option value="">Tï¿½m Durumlar</option>
+                        <option value="">Tüm Durumlar</option>
                         <option value="draft">Taslak</option>
-                        <option value="sent">Gï¿½nderildi</option>
-                        <option value="paid">ï¿½dendi</option>
-                        <option value="partial_paid">Kï¿½smi ï¿½deme</option>
-                        <option value="cancelled">ï¿½ptal</option>
+                        <option value="sent">Gönderildi</option>
+                        <option value="paid">Ödendi</option>
+                        <option value="partial_paid">Kısmi Ödeme</option>
+                        <option value="cancelled">İptal</option>
                       </select>
                     </div>
 
@@ -1168,7 +1168,7 @@ export default function Accounting() {
                       className={cx(button('md', 'outline', 'md'), 'gap-2 justify-center')}
                     >
                       <Filter size={18} />
-                      {showAdvancedFilters ? 'Filtreleri Gizle' : 'Geliï¿½miï¿½ Filtre'}
+                      {showAdvancedFilters ? 'Filtreleri Gizle' : 'Gelişmiş Filtre'}
                     </button>
 
                     {/* Search Button */}
@@ -1187,17 +1187,17 @@ export default function Accounting() {
                         {/* Date Range Preset */}
                         <div>
                           <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                            Tarih Aralï¿½ï¿½ï¿½
+                            Tarih Aralığı
                           </label>
                           <select
                             value={dateRange}
                             onChange={(e) => setDateRange(e.target.value as any)}
                             className={input('md', 'default', undefined, 'md')}
                           >
-                            <option value="all">Tï¿½m Zamanlar</option>
-                            <option value="7days">Son 7 Gï¿½n</option>
-                            <option value="30days">Son 30 Gï¿½n</option>
-                            <option value="custom">ï¿½zel Tarih</option>
+                            <option value="all">Tüm Zamanlar</option>
+                            <option value="7days">Son 7 Gün</option>
+                            <option value="30days">Son 30 Gün</option>
+                            <option value="custom">Özel Tarih</option>
                           </select>
                         </div>
 
@@ -1239,7 +1239,7 @@ export default function Accounting() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Baï¿½langï¿½ï¿½ Tarihi
+                              Başlangıç Tarihi
                             </label>
                             <input
                               type="date"
@@ -1250,7 +1250,7 @@ export default function Accounting() {
                           </div>
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Bitiï¿½ Tarihi
+                              Bitiş Tarihi
                             </label>
                             <input
                               type="date"
@@ -1283,8 +1283,8 @@ export default function Accounting() {
                   ) : invoices.length === 0 ? (
                     <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text?.tertiary}`}>
                       <FileText className={`mx-auto mb-4 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={48} />
-                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Fatura bulunamadï¿½</p>
-                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni fatura oluï¿½turarak baï¿½layï¿½n</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Fatura bulunamadı</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni fatura oluşturarak başlayın</p>
                     </div>
                   ) : (
                     <>
@@ -1292,12 +1292,12 @@ export default function Accounting() {
                       {selectedInvoices.length > 0 && (
                         <div className={`${DESIGN_TOKENS?.colors?.interactive?.default} px-6 py-3 flex items-center justify-between ${DESIGN_TOKENS?.radius?.lg} rounded-b-none`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedInvoices.length} fatura seï¿½ildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedInvoices.length} fatura seçildi</span>
                             <button
                               onClick={() => setSelectedInvoices([])}
                               className={`${DESIGN_TOKENS?.typography?.body?.md} text-neutral-300 hover:text-white`}
                             >
-                              Seï¿½imi Temizle
+                              Seçimi Temizle
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
@@ -1327,7 +1327,7 @@ export default function Accounting() {
                                 Fatura No
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                Mï¿½ï¿½teri
+                                Müşteri
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">
                                 Ekipman
@@ -1342,7 +1342,7 @@ export default function Accounting() {
                                 Durum
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                ï¿½ï¿½lemler
+                                İşlemler
                               </th>
                             </tr>
                           </thead>
@@ -1412,28 +1412,28 @@ export default function Accounting() {
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Download size={16} />
-                                              PDF ï¿½ndir
+                                              PDF İndir
                                             </button>
                                             <button
                                               onClick={() => handleSendEmail(invoice)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Mail size={16} />
-                                              Email Gï¿½nder
+                                              Email Günder
                                             </button>
                                             <button
                                               onClick={() => handleSendWhatsApp(invoice)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <MessageCircle size={16} />
-                                              WhatsApp Gï¿½nder
+                                              WhatsApp Günder
                                             </button>
                                             <button
                                               onClick={() => handlePrint(invoice)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Printer size={16} />
-                                              Yazdï¿½r
+                                              Yazdır
                                             </button>
                                             <button
                                               onClick={() => handleCopyInvoice(invoice)}
@@ -1485,7 +1485,7 @@ export default function Accounting() {
 
             {/* Offer Tab */}
             {activeTab === 'offer' && (
-              <ErrorBoundary fallbackTitle="Teklif Listesi Hatasï¿½" fallbackMessage="Teklif listesi yï¿½klenirken bir sorun oluï¿½tu.">
+              <ErrorBoundary fallbackTitle="Teklif Listesi Hatası" fallbackMessage="Teklif listesi yï¿½klenirken bir sorun oluştu.">
                 <div className="space-y-6 max-w-7xl mx-auto">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Teklif Listesi</h2>
@@ -1507,7 +1507,7 @@ export default function Accounting() {
                       <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
                       <input
                         type="text"
-                        placeholder="Teklif no veya mï¿½ï¿½teri ara..."
+                        placeholder="Teklif no veya müşteri ara..."
                         value={offerSearch}
                         onChange={(e) => setOfferSearch(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSearchOffers()}
@@ -1526,13 +1526,13 @@ export default function Accounting() {
                         }}
                         className={cx(input('md', 'default', undefined, 'md'), 'pl-10 appearance-none')}
                       >
-                        <option value="">Tï¿½m Durumlar</option>
+                        <option value="">Tüm Durumlar</option>
                         <option value="draft">Taslak</option>
-                        <option value="sent">Gï¿½nderildi</option>
+                        <option value="sent">Gönderildi</option>
                         <option value="accepted">Kabul Edildi</option>
                         <option value="rejected">Reddedildi</option>
-                        <option value="converted">Faturaya Dï¿½nï¿½ï¿½tï¿½</option>
-                        <option value="expired">Sï¿½resi Doldu</option>
+                        <option value="converted">Faturaya Dönüştü</option>
+                        <option value="expired">Süresi Doldu</option>
                       </select>
                     </div>
 
@@ -1542,7 +1542,7 @@ export default function Accounting() {
                       className={cx(button('md', 'outline', 'md'), 'gap-2 justify-center')}
                     >
                       <Filter size={18} />
-                      {showOfferAdvancedFilters ? 'Filtreleri Gizle' : 'Geliï¿½miï¿½ Filtre'}
+                      {showOfferAdvancedFilters ? 'Filtreleri Gizle' : 'Gelişmiş Filtre'}
                     </button>
 
                     {/* Search Button */}
@@ -1561,17 +1561,17 @@ export default function Accounting() {
                         {/* Date Range Preset */}
                         <div>
                           <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                            Tarih Aralï¿½ï¿½ï¿½
+                            Tarih Aralığı
                           </label>
                           <select
                             value={offerDateRange}
                             onChange={(e) => setOfferDateRange(e.target.value as any)}
                             className={input('md', 'default', undefined, 'md')}
                           >
-                            <option value="all">Tï¿½m Zamanlar</option>
-                            <option value="7days">Son 7 Gï¿½n</option>
-                            <option value="30days">Son 30 Gï¿½n</option>
-                            <option value="custom">ï¿½zel Tarih</option>
+                            <option value="all">Tüm Zamanlar</option>
+                            <option value="7days">Son 7 Gün</option>
+                            <option value="30days">Son 30 Gün</option>
+                            <option value="custom">Özel Tarih</option>
                           </select>
                         </div>
 
@@ -1613,7 +1613,7 @@ export default function Accounting() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Baï¿½langï¿½ï¿½ Tarihi
+                              Başlangıç Tarihi
                             </label>
                             <input
                               type="date"
@@ -1624,7 +1624,7 @@ export default function Accounting() {
                           </div>
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Bitiï¿½ Tarihi
+                              Bitiş Tarihi
                             </label>
                             <input
                               type="date"
@@ -1657,8 +1657,8 @@ export default function Accounting() {
                   ) : offers.length === 0 ? (
                     <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text?.tertiary}`}>
                       <Receipt className={`mx-auto mb-4 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={48} />
-                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Teklif bulunamadï¿½</p>
-                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni teklif oluï¿½turarak baï¿½layï¿½n</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Teklif bulunamadı</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni teklif oluşturarak başlayın</p>
                     </div>
                   ) : (
                     <>
@@ -1666,12 +1666,12 @@ export default function Accounting() {
                       {selectedOffers.length > 0 && (
                         <div className={`${DESIGN_TOKENS?.colors?.interactive?.default} text-white px-6 py-3 flex items-center justify-between rounded-t-${DESIGN_TOKENS?.radius?.lg}`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedOffers.length} teklif seï¿½ildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedOffers.length} teklif seçildi</span>
                             <button
                               onClick={() => setSelectedOffers([])}
                               className={`${DESIGN_TOKENS?.typography?.label?.md} text-neutral-300 hover:text-white`}
                             >
-                              Seï¿½imi Temizle
+                              Seçimi Temizle
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
@@ -1701,7 +1701,7 @@ export default function Accounting() {
                                 Teklif No
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                Mï¿½ï¿½teri
+                                Müşteri
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">
                                 Tarih
@@ -1716,7 +1716,7 @@ export default function Accounting() {
                                 Durum
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                ï¿½ï¿½lemler
+                                İşlemler
                               </th>
                             </tr>
                           </thead>
@@ -1755,7 +1755,7 @@ export default function Accounting() {
                                     {formatDate(offer.validUntil)}
                                   </div>
                                   {new Date(offer.validUntil) < new Date() && (
-                                    <div className="text-xs text-red-500">Sï¿½resi doldu</div>
+                                    <div className="text-xs text-red-500">Süresi doldu</div>
                                   )}
                                 </td>
                                 <td className="px-3 py-3 whitespace-nowrap">
@@ -1794,7 +1794,7 @@ export default function Accounting() {
                                                 className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-blue-600 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                               >
                                                 <Upload size={16} />
-                                                Gï¿½nder
+                                                Günder
                                               </button>
                                             )}
                                             {offer.status === 'sent' && (
@@ -1821,7 +1821,7 @@ export default function Accounting() {
                                                 className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-neutral-900 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2 font-medium`}
                                               >
                                                 <FileText size={16} />
-                                                Faturaya Dï¿½nï¿½ï¿½tï¿½r
+                                                Faturaya Dönüştür
                                               </button>
                                             )}
                                             <button
@@ -1829,28 +1829,28 @@ export default function Accounting() {
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Download size={16} />
-                                              PDF ï¿½ndir
+                                              PDF İndir
                                             </button>
                                             <button
                                               onClick={() => handleSendOfferEmail(offer)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Mail size={16} />
-                                              Email Gï¿½nder
+                                              Email Günder
                                             </button>
                                             <button
                                               onClick={() => handleSendOfferWhatsApp(offer)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <MessageCircle size={16} />
-                                              WhatsApp Gï¿½nder
+                                              WhatsApp Günder
                                             </button>
                                             <button
                                               onClick={() => handlePrintOffer(offer)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Printer size={16} />
-                                              Yazdï¿½r
+                                              Yazdır
                                             </button>
                                             <button
                                               onClick={() => handleCopyOffer(offer)}
@@ -1939,7 +1939,7 @@ export default function Accounting() {
                       </div>
                       <h3 className="font-semibold text-neutral-900">Hatï¿½rlatmalar</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">ï¿½deme bildirimleri ve vade uyarï¿½larï¿½</p>
+                    <p className="text-sm text-neutral-600">Ödeme bildirimleri ve vade uyarï¿½larï¿½</p>
                   </button>
 
                   {/* Ekstre Paylaï¿½ï¿½mï¿½ */}
@@ -1953,7 +1953,7 @@ export default function Accounting() {
                       </div>
                       <h3 className="font-semibold text-neutral-900">Ekstre Paylaï¿½ï¿½mï¿½</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Mï¿½ï¿½terilere hesap ekstresi gï¿½nderin</p>
+                    <p className="text-sm text-neutral-600">Müşterilere hesap ekstresi gï¿½nderin</p>
                   </button>
 
                   {/* Barkod Okuma */}
@@ -1972,7 +1972,7 @@ export default function Accounting() {
 
                   {/* Toplu Email */}
                   <button
-                    onClick={() => toast('Toplu email ï¿½zelliï¿½i hazï¿½rlanï¿½yor!', { icon: '??', duration: 3000 })}
+                    onClick={() => toast('Toplu email özelliği hazırlanï¿½yor!', { icon: '??', duration: 3000 })}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
@@ -1994,9 +1994,9 @@ export default function Accounting() {
                       <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <BarChart3 className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Geliï¿½miï¿½ Raporlar</h3>
+                      <h3 className="font-semibold text-neutral-900">Gelişmiş Raporlar</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Detaylï¿½ analiz ve ï¿½zel raporlar</p>
+                    <p className="text-sm text-neutral-600">Detaylï¿½ analiz ve Özel raporlar</p>
                   </button>
                 </div>
 
@@ -2022,7 +2022,7 @@ export default function Accounting() {
 
                   <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-purple-900">Gï¿½nderilen Ekstre</h4>
+                      <h4 className="text-sm font-medium text-purple-900">Günderilen Ekstre</h4>
                       <FileText className="text-purple-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-purple-900">28</p>
@@ -2044,7 +2044,7 @@ export default function Accounting() {
               <div className="space-y-6 max-w-7xl mx-auto">
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900">Mali Mï¿½ï¿½avir Paneli</h2>
-                  <p className="text-sm text-neutral-600 mt-1">Mï¿½kellef yï¿½netimi ve toplu iï¿½lemler</p>
+                  <p className="text-sm text-neutral-600 mt-1">Mï¿½kellef yï¿½netimi ve toplu işlemler</p>
                 </div>
 
                 {/* Stats */}
@@ -2081,7 +2081,7 @@ export default function Accounting() {
 
                 {/* Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <button onClick={() => toast('XML dï¿½ï¿½a aktarma hazï¿½rlanï¿½yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('XML dï¿½ï¿½a aktarma hazırlanï¿½yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-600 rounded-xl flex items-center justify-center transition-colors">
                         <Download className="text-blue-600 group-hover:text-white" size={24} />
@@ -2091,7 +2091,7 @@ export default function Accounting() {
                     <p className="text-sm text-neutral-600">Toplu veri aktarï¿½mï¿½</p>
                   </button>
 
-                  <button onClick={() => toast('Excel raporu oluï¿½turuluyor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Excel raporu oluşturuluyor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-green-100 group-hover:bg-green-600 rounded-xl flex items-center justify-center transition-colors">
                         <BarChart3 className="text-green-600 group-hover:text-white" size={24} />
@@ -2160,13 +2160,13 @@ export default function Accounting() {
                     <p className="text-sm text-blue-700">7/24 online destek ekibi</p>
                   </button>
 
-                  <button onClick={() => toast('Dokï¿½mantasyon aï¿½ï¿½lï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Dokï¿½mantasyon açılıyor...', { icon: '??' })} className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-all text-left group">
                     <FileText className="text-green-600 mb-3" size={32} />
                     <h3 className="font-semibold text-green-900 mb-2">Dokï¿½mantasyon</h3>
                     <p className="text-sm text-green-700">Kapsamlï¿½ kullanï¿½m kï¿½lavuzu</p>
                   </button>
 
-                  <button onClick={() => toast('Video eï¿½itimleri hazï¿½rlanï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Video eï¿½itimleri hazırlanï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-lg transition-all text-left group">
                     <Globe className="text-purple-600 mb-3" size={32} />
                     <h3 className="font-semibold text-purple-900 mb-2">Video Eï¿½itimler</h3>
                     <p className="text-sm text-purple-700">Adï¿½m adï¿½m videolar</p>
@@ -2177,7 +2177,7 @@ export default function Accounting() {
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-neutral-900">Destek Talepleri</h3>
-                    <button onClick={() => toast('Yeni destek talebi oluï¿½turuluyor...', { icon: '??' })} className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-xl hover:bg-neutral-800 transition-colors">
+                    <button onClick={() => toast('Yeni destek talebi oluşturuluyor...', { icon: '??' })} className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-xl hover:bg-neutral-800 transition-colors">
                       <Plus size={16} />
                       Yeni Talep
                     </button>
@@ -2186,7 +2186,7 @@ export default function Accounting() {
                   <div className="space-y-3">
                     {[
                       { id: 1, subject: 'E-Fatura Entegrasyonu', status: 'open', priority: 'high' },
-                      { id: 2, subject: 'Ekstre Gï¿½nderimi Sorunu', status: 'in-progress', priority: 'medium' },
+                      { id: 2, subject: 'Ekstre Günderimi Sorunu', status: 'in-progress', priority: 'medium' },
                       { id: 3, subject: 'Barkod Okuma Desteï¿½i', status: 'resolved', priority: 'low' },
                     ].map(ticket => (
                       <div key={ticket.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
@@ -2223,13 +2223,13 @@ export default function Accounting() {
                   <h3 className="font-semibold text-neutral-900 mb-4">Sï¿½k Sorulan Sorular</h3>
                   <div className="space-y-3">
                     {[
-                      'E-Fatura nasï¿½l oluï¿½turulur?',
+                      'E-Fatura nasï¿½l oluşturulur?',
                       'Barkod okuyucu nasï¿½l kullanï¿½lï¿½r?',
                       'Ekstre paylaï¿½ï¿½mï¿½ nasï¿½l yapï¿½lï¿½r?',
                       'Hatï¿½rlatmalar nasï¿½l ayarlanï¿½r?',
-                      'Mali mï¿½ï¿½avir paneli ï¿½zellikleri nelerdir?',
+                      'Mali mï¿½ï¿½avir paneli Özellikleri nelerdir?',
                     ].map((q, i) => (
-                      <button key={i} onClick={() => toast('Cevap aï¿½ï¿½lï¿½yor...', { icon: '?' })} className="w-full text-left p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
+                      <button key={i} onClick={() => toast('Cevap açılıyor...', { icon: '?' })} className="w-full text-left p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                         <p className="text-sm text-neutral-900">{q}</p>
                       </button>
                     ))}
@@ -2272,10 +2272,10 @@ export default function Accounting() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-neutral-900">Bildirim Merkezi</h2>
-                    <p className="text-sm text-neutral-600 mt-1">Tï¿½m sistem bildirimleri ve uyarï¿½lar</p>
+                    <p className="text-sm text-neutral-600 mt-1">Tüm sistem bildirimleri ve uyarï¿½lar</p>
                   </div>
-                  <button onClick={() => toast('Tï¿½m bildirimler okundu olarak iï¿½aretlendi', { icon: '?' })} className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors">
-                    Tï¿½mï¿½nï¿½ Okundu ï¿½ï¿½aretle
+                  <button onClick={() => toast('Tüm bildirimler okundu olarak iï¿½aretlendi', { icon: '?' })} className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors">
+                    Tümï¿½nï¿½ Okundu ï¿½ï¿½aretle
                   </button>
                 </div>
 
@@ -2315,7 +2315,7 @@ export default function Accounting() {
                 <div className="bg-white rounded-2xl p-4 border border-neutral-200">
                   <div className="flex items-center gap-3 flex-wrap">
                     <Filter size={20} className="text-neutral-600" />
-                    {['Tï¿½mï¿½', 'Okunmamï¿½ï¿½', 'ï¿½demeler', 'Faturalar', 'Hatï¿½rlatmalar', 'Sistem'].map(filter => (
+                    {['Tümï¿½', 'Okunmamï¿½ï¿½', 'Ödemeler', 'Faturalar', 'Hatï¿½rlatmalar', 'Sistem'].map(filter => (
                       <button key={filter} className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-900 hover:text-white transition-colors">
                         {filter}
                       </button>
@@ -2326,12 +2326,12 @@ export default function Accounting() {
                 {/* Notifications List */}
                 <div className="space-y-3">
                   {[
-                    { id: 1, type: 'payment', title: 'ï¿½deme Hatï¿½rlatmasï¿½', message: 'ABC Ltd.ï¿½ti. iï¿½in 15,000 ? ï¿½deme vadesi yarï¿½n dolacak', time: '5 dk ï¿½nce', unread: true, urgent: true },
-                    { id: 2, type: 'invoice', title: 'Yeni Fatura', message: 'XYZ A.ï¿½. iï¿½in #INV-2025-042 numaralï¿½ fatura oluï¿½turuldu', time: '1 saat ï¿½nce', unread: true, urgent: false },
-                    { id: 3, type: 'reminder', title: 'Vade Tarihi Yaklaï¿½ï¿½yor', message: '3 fatura iï¿½in vade tarihi bu hafta iï¿½inde', time: '2 saat ï¿½nce', unread: true, urgent: false },
-                    { id: 4, type: 'system', title: 'Sistem Gï¿½ncellemesi', message: 'Yeni ï¿½zellikler eklendi: Barkod okuyucu aktif', time: '3 saat ï¿½nce', unread: false, urgent: false },
-                    { id: 5, type: 'statement', title: 'Ekstre Gï¿½nderildi', message: 'DEF Ticaret iï¿½in hesap ekstresi email ile gï¿½nderildi', time: '5 saat ï¿½nce', unread: false, urgent: false },
-                    { id: 6, type: 'payment', title: 'ï¿½deme Alï¿½ndï¿½', message: 'GHI Ltd. 8,500 ? ï¿½deme gerï¿½ekleï¿½tirdi', time: '1 gï¿½n ï¿½nce', unread: false, urgent: false },
+                    { id: 1, type: 'payment', title: 'Ödeme Hatï¿½rlatmasï¿½', message: 'ABC Ltd.ï¿½ti. için 15,000 ? Ödeme vadesi yarï¿½n dolacak', time: '5 dk ï¿½nce', unread: true, urgent: true },
+                    { id: 2, type: 'invoice', title: 'Yeni Fatura', message: 'XYZ A.ï¿½. için #INV-2025-042 numaralı fatura oluşturuldu', time: '1 saat ï¿½nce', unread: true, urgent: false },
+                    { id: 3, type: 'reminder', title: 'Vade Tarihi Yaklaï¿½ï¿½yor', message: '3 fatura için vade tarihi bu hafta içinde', time: '2 saat ï¿½nce', unread: true, urgent: false },
+                    { id: 4, type: 'system', title: 'Sistem Güncellemesi', message: 'Yeni Özellikler eklendi: Barkod okuyucu aktif', time: '3 saat ï¿½nce', unread: false, urgent: false },
+                    { id: 5, type: 'statement', title: 'Ekstre Gönderildi', message: 'DEF Ticaret için hesap ekstresi email ile gï¿½nderildi', time: '5 saat ï¿½nce', unread: false, urgent: false },
+                    { id: 6, type: 'payment', title: 'Ödeme Alï¿½ndï¿½', message: 'GHI Ltd. 8,500 ? Ödeme gerçekleï¿½tirdi', time: '1 gï¿½n ï¿½nce', unread: false, urgent: false },
                   ].map(notif => (
                     <div key={notif.id} className={`bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-lg ${
                       notif.unread ? 'border-neutral-200 bg-blue-50' : 'border-neutral-200'
@@ -2390,9 +2390,9 @@ export default function Accounting() {
                       { label: 'Email Bildirimleri', checked: true },
                       { label: 'SMS Bildirimleri', checked: false },
                       { label: 'Push Bildirimleri', checked: true },
-                      { label: 'ï¿½deme Hatï¿½rlatmalarï¿½', checked: true },
+                      { label: 'Ödeme Hatï¿½rlatmalarï¿½', checked: true },
                       { label: 'Fatura Bildirimleri', checked: true },
-                      { label: 'Sistem Gï¿½ncellemeleri', checked: false },
+                      { label: 'Sistem Güncellemeleri', checked: false },
                     ].map((pref, i) => (
                       <label key={i} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors cursor-pointer">
                         <input type="checkbox" defaultChecked={pref.checked} className="w-5 h-5 text-neutral-900 rounded" />
