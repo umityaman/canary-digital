@@ -262,14 +262,14 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
               </div>
 
               {selectedOrder && (
-                <div className="bg-blue-50 rounded-xl p-4 space-y-2 text-sm">
+                <div className="bg-neutral-50 rounded-xl p-4 space-y-2 text-sm">
                   <div>
                     <span className="text-neutral-900">Sipariş:</span>
-                    <span className="ml-2 font-medium text-blue-900">{selectedOrder.orderNumber}</span>
+                    <span className="ml-2 font-medium text-neutral-900">{selectedOrder.orderNumber}</span>
                   </div>
                   <div>
                     <span className="text-neutral-900">Kalem Sayısı:</span>
-                    <span className="ml-2 font-medium text-blue-900">{selectedOrder.items.length}</span>
+                    <span className="ml-2 font-medium text-neutral-900">{selectedOrder.items.length}</span>
                   </div>
                 </div>
               )}
@@ -398,7 +398,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
                     {items.length > 1 && (
                       <button
                         onClick={() => handleRemoveItem(item.id)}
-                        className="p-1 hover:bg-red-100 rounded-lg transition-colors"
+                        className="p-1 hover:bg-neutral-50 rounded-lg transition-colors"
                       >
                         <Trash2 size={16} className="text-neutral-800" />
                       </button>
@@ -482,3 +482,4 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
     </div>
   )
 }
+

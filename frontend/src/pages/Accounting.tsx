@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
+﻿import { useState, useEffect, lazy, Suspense } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   DollarSign, TrendingUp, TrendingDown, FileText, Users,
@@ -50,12 +50,12 @@ const StatementSharing = lazy(() => import('../components/statements/StatementSh
 const BarcodeScanner = lazy(() => import('../components/barcode/BarcodeScanner'))
 const NotificationsTab = lazy(() => import('../components/accounting/tabs/NotificationsTab'))
 const ToolsTab = lazy(() => import('../components/accounting/tabs/ToolsTab'))
-const AdvisorTab = lazy(() => import('../components/accounting/tabs/AdvisorTab'))
+// Mali Müşavir tab removed
 const SupportTab = lazy(() => import('../components/accounting/tabs/SupportTab'))
 const IntegrationsTab = lazy(() => import('../components/accounting/tabs/IntegrationsTab'))
 const CostAccounting = lazy(() => import('../components/accounting/CostAccounting'))
 
-type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'advisor' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'bank-integration' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations' | 'journal-entries' | 'chart-of-accounts' | 'current-accounts' | 'gib-einvoice'
+type Tab = 'dashboard' | 'income' | 'expense' | 'reports' | 'invoice' | 'offer' | 'ebelge' | 'tools' | 'support' | 'receivables' | 'cari' | 'delivery' | 'reconciliation' | 'inventory' | 'cost-accounting' | 'company' | 'cash-bank' | 'bank-integration' | 'reminders' | 'statements' | 'barcode' | 'notifications' | 'integrations' | 'journal-entries' | 'chart-of-accounts' | 'current-accounts' | 'gib-einvoice'
 
 interface AccountingStats {
   totalRevenue: number
@@ -296,7 +296,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load accounting stats:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('�statistikler y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('ï¿½statistikler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setLoading(false)
     }
@@ -318,7 +318,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load invoices:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('Faturalar y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Faturalar yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setInvoicesLoading(false)
     }
@@ -345,7 +345,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load offers:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('Teklifler y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Teklifler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setOffersLoading(false)
     }
@@ -359,37 +359,37 @@ export default function Accounting() {
   const handleOfferStatusUpdate = async (offerId: number, status: string) => {
     try {
       await offerAPI.updateStatus(offerId, status)
-      toast.success('Teklif durumu g�ncellendi')
+      toast.success('Teklif durumu gï¿½ncellendi')
       loadOffers()
     } catch (error: any) {
       console.error('Failed to update offer status:', error)
-      toast.error('Durum g�ncellenemedi')
+      toast.error('Durum gï¿½ncellenemedi')
     }
   }
 
   const handleConvertToInvoice = async (offerId: number) => {
-    if (!confirm('Bu teklifi faturaya d�n��t�rmek istedi�inizden emin misiniz?')) {
+    if (!confirm('Bu teklifi faturaya dï¿½nï¿½ï¿½tï¿½rmek istediï¿½inizden emin misiniz?')) {
       return
     }
     
     try {
-      // Note: Bu endpoint i�in orderId, startDate, endDate gerekiyor
-      // Basitle�tirilmi� versiyon - ger�ek implementasyonda modal ile bu bilgileri almal�s�n�z
+      // Note: Bu endpoint iï¿½in orderId, startDate, endDate gerekiyor
+      // Basitleï¿½tirilmiï¿½ versiyon - gerï¿½ek implementasyonda modal ile bu bilgileri almalï¿½sï¿½nï¿½z
       const today = new Date().toISOString().split('T')[0]
       const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]
       
       const response = await offerAPI.convertToInvoice(offerId, {
-        orderId: offerId, // Ge�ici olarak offerId kullan�yoruz
+        orderId: offerId, // Geï¿½ici olarak offerId kullanï¿½yoruz
         startDate: today,
         endDate: nextMonth,
-        notes: 'Tekliften otomatik olu�turuldu'
+        notes: 'Tekliften otomatik oluï¿½turuldu'
       })
       
-      toast.success('Teklif ba�ar�yla faturaya d�n��t�r�ld�')
+      toast.success('Teklif baï¿½arï¿½yla faturaya dï¿½nï¿½ï¿½tï¿½rï¿½ldï¿½')
       navigate(`/accounting/invoice/${response.data.invoice.id}`)
     } catch (error: any) {
       console.error('Failed to convert offer:', error)
-      toast.error('D�n��t�rme ba�ar�s�z: ' + (error.response?.data?.message || error.message))
+      toast.error('Dï¿½nï¿½ï¿½tï¿½rme baï¿½arï¿½sï¿½z: ' + (error.response?.data?.message || error.message))
     }
   }
 
@@ -411,12 +411,12 @@ export default function Accounting() {
   }
 
   const handleBulkDeleteInvoices = async () => {
-    if (!confirm(`${selectedInvoices.length} faturay� silmek istedi�inizden emin misiniz?`)) {
+    if (!confirm(`${selectedInvoices.length} faturayï¿½ silmek istediï¿½inizden emin misiniz?`)) {
       return
     }
     
     try {
-      // Bu i�lem her faturay� tek tek silecek - idealde backend'de bulk delete endpoint olmal�
+      // Bu iï¿½lem her faturayï¿½ tek tek silecek - idealde backend'de bulk delete endpoint olmalï¿½
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
       for (const id of selectedInvoices) {
         await axios.delete(`${API_URL}/invoices/${id}`, {
@@ -428,7 +428,7 @@ export default function Accounting() {
       loadInvoices()
     } catch (error: any) {
       console.error('Bulk delete failed:', error)
-      toast.error('Toplu silme ba�ar�s�z')
+      toast.error('Toplu silme baï¿½arï¿½sï¿½z')
     }
   }
 
@@ -450,7 +450,7 @@ export default function Accounting() {
   }
 
   const handleBulkDeleteOffers = async () => {
-    if (!confirm(`${selectedOffers.length} teklifi silmek istedi�inizden emin misiniz?`)) {
+    if (!confirm(`${selectedOffers.length} teklifi silmek istediï¿½inizden emin misiniz?`)) {
       return
     }
     
@@ -466,7 +466,7 @@ export default function Accounting() {
       loadOffers()
     } catch (error: any) {
       console.error('Bulk delete failed:', error)
-      toast.error('Toplu silme ba�ar�s�z')
+      toast.error('Toplu silme baï¿½arï¿½sï¿½z')
     }
   }
 
@@ -559,20 +559,20 @@ export default function Accounting() {
   }
 
   const handleSendEmail = (_invoice: any) => {
-    toast('Email g�nderme �zelli�i yak�nda eklenecek!', { icon: '??' })
+    toast('Email gï¿½nderme ï¿½zelliï¿½i yakï¿½nda eklenecek!', { icon: '??' })
     setOpenInvoiceDropdown(null)
   }
 
   const handleSendWhatsApp = (invoice: any) => {
     const customer = invoice.customer
     if (!customer?.phone) {
-      toast.error('M��terinin telefon numaras� bulunamad�')
+      toast.error('Mï¿½ï¿½terinin telefon numarasï¿½ bulunamadï¿½')
       return
     }
-    const message = `Merhaba, ${invoice.invoiceNumber} numaral� faturan�z haz�r. Toplam: ${invoice.total?.toFixed(2)} TL`
+    const message = `Merhaba, ${invoice.invoiceNumber} numaralï¿½ faturanï¿½z hazï¿½r. Toplam: ${invoice.total?.toFixed(2)} TL`
     const whatsappUrl = `https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
-    toast.success('WhatsApp a��l�yor...')
+    toast.success('WhatsApp aï¿½ï¿½lï¿½yor...')
     setOpenInvoiceDropdown(null)
   }
 
@@ -584,11 +584,11 @@ export default function Accounting() {
 
   const handleCopyInvoice = async (invoice: any) => {
     try {
-      const invoiceText = `Fatura No: ${invoice.invoiceNumber}\nM��teri: ${invoice.customer?.name}\nTutar: ${invoice.total?.toFixed(2)} TL`
+      const invoiceText = `Fatura No: ${invoice.invoiceNumber}\nMï¿½ï¿½teri: ${invoice.customer?.name}\nTutar: ${invoice.total?.toFixed(2)} TL`
       await navigator.clipboard.writeText(invoiceText)
-      toast.success('Fatura bilgileri kopyaland�!')
+      toast.success('Fatura bilgileri kopyalandï¿½!')
     } catch (error) {
-      toast.error('Kopyalama ba�ar�s�z')
+      toast.error('Kopyalama baï¿½arï¿½sï¿½z')
     }
     setOpenInvoiceDropdown(null)
   }
@@ -619,20 +619,20 @@ export default function Accounting() {
   }
 
   const handleSendOfferEmail = (_offer: any) => {
-    toast('Email g�nderme �zelli�i yak�nda eklenecek!', { icon: '??' })
+    toast('Email gï¿½nderme ï¿½zelliï¿½i yakï¿½nda eklenecek!', { icon: '??' })
     setOpenOfferDropdown(null)
   }
 
   const handleSendOfferWhatsApp = (offer: any) => {
     const customer = offer.customer
     if (!customer?.phone) {
-      toast.error('M��terinin telefon numaras� bulunamad�')
+      toast.error('Mï¿½ï¿½terinin telefon numarasï¿½ bulunamadï¿½')
       return
     }
-    const message = `Merhaba, ${offer.offerNumber} numaral� teklifimiz haz�r. Toplam: ${offer.total?.toFixed(2)} TL`
+    const message = `Merhaba, ${offer.offerNumber} numaralï¿½ teklifimiz hazï¿½r. Toplam: ${offer.total?.toFixed(2)} TL`
     const whatsappUrl = `https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
-    toast.success('WhatsApp a��l�yor...')
+    toast.success('WhatsApp aï¿½ï¿½lï¿½yor...')
     setOpenOfferDropdown(null)
   }
 
@@ -644,11 +644,11 @@ export default function Accounting() {
 
   const handleCopyOffer = async (offer: any) => {
     try {
-      const offerText = `Teklif No: ${offer.offerNumber}\nM��teri: ${offer.customer?.name}\nTutar: ${offer.total?.toFixed(2)} TL`
+      const offerText = `Teklif No: ${offer.offerNumber}\nMï¿½ï¿½teri: ${offer.customer?.name}\nTutar: ${offer.total?.toFixed(2)} TL`
       await navigator.clipboard.writeText(offerText)
-      toast.success('Teklif bilgileri kopyaland�!')
+      toast.success('Teklif bilgileri kopyalandï¿½!')
     } catch (error) {
-      toast.error('Kopyalama ba�ar�s�z')
+      toast.error('Kopyalama baï¿½arï¿½sï¿½z')
     }
     setOpenOfferDropdown(null)
   }
@@ -660,7 +660,7 @@ export default function Accounting() {
       setChecks(res.data.data || res.data)
     } catch (error: any) {
       console.error('Failed to load checks:', error)
-      toast.error('�ekler y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('ï¿½ekler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setChecksLoading(false)
     }
@@ -673,35 +673,35 @@ export default function Accounting() {
       setPromissory(res.data.data || res.data)
     } catch (error: any) {
       console.error('Failed to load promissory notes:', error)
-      toast.error('Senetler y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Senetler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setPromissoryLoading(false)
     }
   }
 
   const handleDeleteCheck = async (id: number) => {
-    if (!confirm('Bu �eki silmek istedi�inizden emin misiniz?')) {
+    if (!confirm('Bu ï¿½eki silmek istediï¿½inizden emin misiniz?')) {
       return
     }
     
     try {
       await checksAPI.delete(id)
-      toast.success('�ek ba�ar�yla silindi')
+      toast.success('ï¿½ek baï¿½arï¿½yla silindi')
       loadChecks()
     } catch (error: any) {
       console.error('Failed to delete check:', error)
-      toast.error('�ek silinemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('ï¿½ek silinemedi: ' + (error.response?.data?.message || error.message))
     }
   }
 
   const handleDeletePromissory = async (id: number) => {
-    if (!confirm('Bu senedi silmek istedi�inizden emin misiniz?')) {
+    if (!confirm('Bu senedi silmek istediï¿½inizden emin misiniz?')) {
       return
     }
     
     try {
       await promissoryAPI.delete(id)
-      toast.success('Senet ba�ar�yla silindi')
+      toast.success('Senet baï¿½arï¿½yla silindi')
       loadPromissory()
     } catch (error: any) {
       console.error('Failed to delete promissory note:', error)
@@ -716,7 +716,7 @@ export default function Accounting() {
       setAgingData(res.data.data || res.data)
     } catch (error: any) {
       console.error('Failed to load aging data:', error)
-      toast.error('Ya�land�rma verisi al�namad�: ' + (error.response?.data?.message || error.message))
+      toast.error('Yaï¿½landï¿½rma verisi alï¿½namadï¿½: ' + (error.response?.data?.message || error.message))
     } finally {
       setAgingLoading(false)
     }
@@ -763,18 +763,17 @@ export default function Accounting() {
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
-    { id: 'offer' as const, label: 'Teklif Y�netimi', icon: <Receipt size={18} /> },
+    { id: 'offer' as const, label: 'Teklif Yï¿½netimi', icon: <Receipt size={18} /> },
     { id: 'current-accounts' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
-    { id: 'receivables' as const, label: 'Alacak Y�netimi', icon: <DollarSign size={18} /> },
-    { id: 'chart-of-accounts' as const, label: 'Hesap Plan�', icon: <BarChart3 size={18} /> },
+    { id: 'receivables' as const, label: 'Alacak Yï¿½netimi', icon: <DollarSign size={18} /> },
+    { id: 'chart-of-accounts' as const, label: 'Hesap Planï¿½', icon: <BarChart3 size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
-    { id: 'company' as const, label: '�irket Bilgileri', icon: <Building2 size={18} /> },
+    { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
     { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
-    { id: 'delivery' as const, label: '�rsaliye', icon: <Package size={18} /> },
+    { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
-    { id: 'tools' as const, label: '��letme Kolayl�klar�', icon: <Settings size={18} /> },
-    { id: 'advisor' as const, label: 'Mali M��avir', icon: <Users size={18} /> },
-    { id: 'support' as const, label: 'Yard�m & Ara�lar', icon: <Globe size={18} /> },
+    { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
+    { id: 'support' as const, label: 'Yardım & Araçlar', icon: <Globe size={18} /> },
   ]
 
   return (
@@ -815,7 +814,7 @@ export default function Accounting() {
             <p className={DESIGN_TOKENS?.statCard?.label}>Bu Ay Gider</p>
           </div>
 
-          {/* Net K�r */}
+          {/* Net Kï¿½r */}
           <div className={card('sm', 'sm', 'default', 'xl')}>
             <div className="flex items-center justify-between mb-3">
               <div className={statCardIcon('info')}>
@@ -826,7 +825,7 @@ export default function Accounting() {
             <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.netProfit) : '?0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Net K�r</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Net Kï¿½r</p>
           </div>
 
           {/* Tahsilat / Bekleyen */}
@@ -840,7 +839,7 @@ export default function Accounting() {
             <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.totalOverdue) : '?0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Vade Ge�mi�</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Vade Geï¿½miï¿½</p>
             {stats && stats.totalCollections > 0 && (
               <p className={DESIGN_TOKENS?.statCard?.subtitle}>
                 Bu ay: {formatCurrency(stats.totalCollections)}
@@ -869,8 +868,8 @@ export default function Accounting() {
 
           {/* Content Area */}
           <div className="flex-1 p-6 lg:p-8">
-            <ErrorBoundary fallbackTitle="Muhasebe Mod�l� Hatas�" fallbackMessage="Muhasebe mod�l�nde bir sorun olu�tu. L�tfen sayfay� yenileyin.">
-              <Suspense fallback={<LoadingFallback message="��erik y�kleniyor..." />}>
+            <ErrorBoundary fallbackTitle="Muhasebe Modï¿½lï¿½ Hatasï¿½" fallbackMessage="Muhasebe modï¿½lï¿½nde bir sorun oluï¿½tu. Lï¿½tfen sayfayï¿½ yenileyin.">
+              <Suspense fallback={<LoadingFallback message="ï¿½ï¿½erik yï¿½kleniyor..." />}>
                 {/* Dashboard Tab */}
                 {activeTab === 'dashboard' && <AccountingDashboard />}
 
@@ -899,7 +898,7 @@ export default function Accounting() {
                     onClick={() => setReportsSubTab('advanced')}
                     className={tab(reportsSubTab === 'advanced', 'underline')}
                   >
-                    Geli�mi� Raporlar
+                    Geliï¿½miï¿½ Raporlar
                   </button>
                   <button
                     onClick={() => setReportsSubTab('trial-balance')}
@@ -917,7 +916,7 @@ export default function Accounting() {
                     onClick={() => setReportsSubTab('balance-sheet')}
                     className={tab(reportsSubTab === 'balance-sheet', 'underline')}
                   >
-                    Bilan�o
+                    Bilanï¿½o
                   </button>
                 </div>
 
@@ -929,10 +928,10 @@ export default function Accounting() {
               </div>
             )}
 
-            {/* Receivables Management Tab - �ekler, Senetler, Ya�land�rma */}
+            {/* Receivables Management Tab - ï¿½ekler, Senetler, Yaï¿½landï¿½rma */}
             {activeTab === 'receivables' && (
               <div className="space-y-6">
-                <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Y�netimi</h2>
+                <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Yï¿½netimi</h2>
                 
                 {/* Sub-tabs for Checks, Promissory, Aging */}
                 <div className="flex gap-4 border-b border-neutral-200 mb-6">
@@ -940,7 +939,7 @@ export default function Accounting() {
                     onClick={() => setReceivablesSubTab('checks')}
                     className={tab(receivablesSubTab === 'checks', 'underline')}
                   >
-                    �ekler
+                    ï¿½ekler
                   </button>
                   <button
                     onClick={() => setReceivablesSubTab('promissory')}
@@ -952,7 +951,7 @@ export default function Accounting() {
                     onClick={() => setReceivablesSubTab('aging')}
                     className={tab(receivablesSubTab === 'aging', 'underline')}
                   >
-                    Ya�land�rma Raporu
+                    Yaï¿½landï¿½rma Raporu
                   </button>
                 </div>
 
@@ -960,32 +959,32 @@ export default function Accounting() {
                 {receivablesSubTab === 'checks' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className={DESIGN_TOKENS?.typography?.h3}>�ekler</h3>
+                      <h3 className={DESIGN_TOKENS?.typography?.h3}>ï¿½ekler</h3>
                       <button
                         onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
                         className={cx(button('md', 'primary', 'xl'), 'gap-2')}
                       >
                         <FileText size={18} />
-                        Yeni �ek
+                        Yeni ï¿½ek
                       </button>
                     </div>
 
                     <div className={card('none', 'sm', 'default', 'xl')}>
                       {checksLoading ? (
-                        <div className="p-12 text-center text-neutral-600">�ekler y�kleniyor...</div>
+                        <div className="p-12 text-center text-neutral-600">ï¿½ekler yï¿½kleniyor...</div>
                       ) : checks.length === 0 ? (
-                        <div className="p-12 text-center text-neutral-600">�ek bulunamad�</div>
+                        <div className="p-12 text-center text-neutral-600">ï¿½ek bulunamadï¿½</div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
                                 <th className={TABLE_HEADER_CELL}>No</th>
-                                <th className={TABLE_HEADER_CELL}>M��teri</th>
+                                <th className={TABLE_HEADER_CELL}>Mï¿½ï¿½teri</th>
                                 <th className={TABLE_HEADER_CELL}>Tutar</th>
                                 <th className={TABLE_HEADER_CELL}>Vade</th>
                                 <th className={TABLE_HEADER_CELL}>Durum</th>
-                                <th className={TABLE_HEADER_CELL}>��lemler</th>
+                                <th className={TABLE_HEADER_CELL}>ï¿½ï¿½lemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-100">
@@ -1001,7 +1000,7 @@ export default function Accounting() {
                                       <button
                                         onClick={() => { setEditingCheck(c); setCheckModalOpen(true) }}
                                         className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
-                                        title="D�zenle"
+                                        title="Dï¿½zenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
@@ -1040,20 +1039,20 @@ export default function Accounting() {
 
                     <div className={card('none', 'sm', 'default', 'xl')}>
                       {promissoryLoading ? (
-                        <div className="p-12 text-center text-neutral-600">Senetler y�kleniyor...</div>
+                        <div className="p-12 text-center text-neutral-600">Senetler yï¿½kleniyor...</div>
                       ) : promissory.length === 0 ? (
-                        <div className="p-12 text-center text-neutral-600">Senet bulunamad�</div>
+                        <div className="p-12 text-center text-neutral-600">Senet bulunamadï¿½</div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
                                 <th className={TABLE_HEADER_CELL}>No</th>
-                                <th className={TABLE_HEADER_CELL}>M��teri</th>
+                                <th className={TABLE_HEADER_CELL}>Mï¿½ï¿½teri</th>
                                 <th className={TABLE_HEADER_CELL}>Tutar</th>
                                 <th className={TABLE_HEADER_CELL}>Vade</th>
                                 <th className={TABLE_HEADER_CELL}>Durum</th>
-                                <th className={TABLE_HEADER_CELL}>��lemler</th>
+                                <th className={TABLE_HEADER_CELL}>ï¿½ï¿½lemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-100">
@@ -1069,7 +1068,7 @@ export default function Accounting() {
                                       <button
                                         onClick={() => { setEditingPromissory(p); setPromissoryModalOpen(true) }}
                                         className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
-                                        title="D�zenle"
+                                        title="Dï¿½zenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
@@ -1103,15 +1102,15 @@ export default function Accounting() {
 
             {/* Invoice Tab */}
             {activeTab === 'invoice' && (
-              <ErrorBoundary fallbackTitle="Fatura Listesi Hatas�" fallbackMessage="Fatura listesi y�klenirken bir sorun olu�tu.">
+              <ErrorBoundary fallbackTitle="Fatura Listesi Hatasï¿½" fallbackMessage="Fatura listesi yï¿½klenirken bir sorun oluï¿½tu.">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Fatura Y�netimi</h2>
+                    <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Fatura Yï¿½netimi</h2>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => setActiveTab('ebelge')}
                         className={cx(button('md', 'outline', 'md'), 'gap-2')}
-                        title="E-Fatura olu�tur ve g�nder"
+                        title="E-Fatura oluï¿½tur ve gï¿½nder"
                       >
                         <Globe size={18} />
                         E-Belge
@@ -1135,7 +1134,7 @@ export default function Accounting() {
                       <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
                       <input
                         type="text"
-                        placeholder="Fatura no veya m��teri ara..."
+                        placeholder="Fatura no veya mï¿½ï¿½teri ara..."
                         value={invoiceSearch}
                         onChange={(e) => setInvoiceSearch(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSearchInvoices()}
@@ -1154,12 +1153,12 @@ export default function Accounting() {
                         }}
                         className={cx(input('md', 'default', undefined, 'md'), 'pl-10 appearance-none')}
                       >
-                        <option value="">T�m Durumlar</option>
+                        <option value="">Tï¿½m Durumlar</option>
                         <option value="draft">Taslak</option>
-                        <option value="sent">G�nderildi</option>
-                        <option value="paid">�dendi</option>
-                        <option value="partial_paid">K�smi �deme</option>
-                        <option value="cancelled">�ptal</option>
+                        <option value="sent">Gï¿½nderildi</option>
+                        <option value="paid">ï¿½dendi</option>
+                        <option value="partial_paid">Kï¿½smi ï¿½deme</option>
+                        <option value="cancelled">ï¿½ptal</option>
                       </select>
                     </div>
 
@@ -1169,7 +1168,7 @@ export default function Accounting() {
                       className={cx(button('md', 'outline', 'md'), 'gap-2 justify-center')}
                     >
                       <Filter size={18} />
-                      {showAdvancedFilters ? 'Filtreleri Gizle' : 'Geli�mi� Filtre'}
+                      {showAdvancedFilters ? 'Filtreleri Gizle' : 'Geliï¿½miï¿½ Filtre'}
                     </button>
 
                     {/* Search Button */}
@@ -1188,17 +1187,17 @@ export default function Accounting() {
                         {/* Date Range Preset */}
                         <div>
                           <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                            Tarih Aral���
+                            Tarih Aralï¿½ï¿½ï¿½
                           </label>
                           <select
                             value={dateRange}
                             onChange={(e) => setDateRange(e.target.value as any)}
                             className={input('md', 'default', undefined, 'md')}
                           >
-                            <option value="all">T�m Zamanlar</option>
-                            <option value="7days">Son 7 G�n</option>
-                            <option value="30days">Son 30 G�n</option>
-                            <option value="custom">�zel Tarih</option>
+                            <option value="all">Tï¿½m Zamanlar</option>
+                            <option value="7days">Son 7 Gï¿½n</option>
+                            <option value="30days">Son 30 Gï¿½n</option>
+                            <option value="custom">ï¿½zel Tarih</option>
                           </select>
                         </div>
 
@@ -1240,7 +1239,7 @@ export default function Accounting() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Ba�lang�� Tarihi
+                              Baï¿½langï¿½ï¿½ Tarihi
                             </label>
                             <input
                               type="date"
@@ -1251,7 +1250,7 @@ export default function Accounting() {
                           </div>
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Biti� Tarihi
+                              Bitiï¿½ Tarihi
                             </label>
                             <input
                               type="date"
@@ -1284,8 +1283,8 @@ export default function Accounting() {
                   ) : invoices.length === 0 ? (
                     <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text?.tertiary}`}>
                       <FileText className={`mx-auto mb-4 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={48} />
-                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Fatura bulunamad�</p>
-                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni fatura olu�turarak ba�lay�n</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Fatura bulunamadï¿½</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni fatura oluï¿½turarak baï¿½layï¿½n</p>
                     </div>
                   ) : (
                     <>
@@ -1293,12 +1292,12 @@ export default function Accounting() {
                       {selectedInvoices.length > 0 && (
                         <div className={`${DESIGN_TOKENS?.colors?.interactive?.default} px-6 py-3 flex items-center justify-between ${DESIGN_TOKENS?.radius?.lg} rounded-b-none`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedInvoices.length} fatura se�ildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedInvoices.length} fatura seï¿½ildi</span>
                             <button
                               onClick={() => setSelectedInvoices([])}
                               className={`${DESIGN_TOKENS?.typography?.body?.md} text-neutral-300 hover:text-white`}
                             >
-                              Se�imi Temizle
+                              Seï¿½imi Temizle
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
@@ -1328,7 +1327,7 @@ export default function Accounting() {
                                 Fatura No
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                M��teri
+                                Mï¿½ï¿½teri
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">
                                 Ekipman
@@ -1343,7 +1342,7 @@ export default function Accounting() {
                                 Durum
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                ��lemler
+                                ï¿½ï¿½lemler
                               </th>
                             </tr>
                           </thead>
@@ -1413,28 +1412,28 @@ export default function Accounting() {
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Download size={16} />
-                                              PDF �ndir
+                                              PDF ï¿½ndir
                                             </button>
                                             <button
                                               onClick={() => handleSendEmail(invoice)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Mail size={16} />
-                                              Email G�nder
+                                              Email Gï¿½nder
                                             </button>
                                             <button
                                               onClick={() => handleSendWhatsApp(invoice)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <MessageCircle size={16} />
-                                              WhatsApp G�nder
+                                              WhatsApp Gï¿½nder
                                             </button>
                                             <button
                                               onClick={() => handlePrint(invoice)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.body?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Printer size={16} />
-                                              Yazd�r
+                                              Yazdï¿½r
                                             </button>
                                             <button
                                               onClick={() => handleCopyInvoice(invoice)}
@@ -1486,7 +1485,7 @@ export default function Accounting() {
 
             {/* Offer Tab */}
             {activeTab === 'offer' && (
-              <ErrorBoundary fallbackTitle="Teklif Listesi Hatas�" fallbackMessage="Teklif listesi y�klenirken bir sorun olu�tu.">
+              <ErrorBoundary fallbackTitle="Teklif Listesi Hatasï¿½" fallbackMessage="Teklif listesi yï¿½klenirken bir sorun oluï¿½tu.">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Teklif Listesi</h2>
@@ -1508,7 +1507,7 @@ export default function Accounting() {
                       <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
                       <input
                         type="text"
-                        placeholder="Teklif no veya m��teri ara..."
+                        placeholder="Teklif no veya mï¿½ï¿½teri ara..."
                         value={offerSearch}
                         onChange={(e) => setOfferSearch(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSearchOffers()}
@@ -1527,13 +1526,13 @@ export default function Accounting() {
                         }}
                         className={cx(input('md', 'default', undefined, 'md'), 'pl-10 appearance-none')}
                       >
-                        <option value="">T�m Durumlar</option>
+                        <option value="">Tï¿½m Durumlar</option>
                         <option value="draft">Taslak</option>
-                        <option value="sent">G�nderildi</option>
+                        <option value="sent">Gï¿½nderildi</option>
                         <option value="accepted">Kabul Edildi</option>
                         <option value="rejected">Reddedildi</option>
-                        <option value="converted">Faturaya D�n��t�</option>
-                        <option value="expired">S�resi Doldu</option>
+                        <option value="converted">Faturaya Dï¿½nï¿½ï¿½tï¿½</option>
+                        <option value="expired">Sï¿½resi Doldu</option>
                       </select>
                     </div>
 
@@ -1543,7 +1542,7 @@ export default function Accounting() {
                       className={cx(button('md', 'outline', 'md'), 'gap-2 justify-center')}
                     >
                       <Filter size={18} />
-                      {showOfferAdvancedFilters ? 'Filtreleri Gizle' : 'Geli�mi� Filtre'}
+                      {showOfferAdvancedFilters ? 'Filtreleri Gizle' : 'Geliï¿½miï¿½ Filtre'}
                     </button>
 
                     {/* Search Button */}
@@ -1562,17 +1561,17 @@ export default function Accounting() {
                         {/* Date Range Preset */}
                         <div>
                           <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                            Tarih Aral���
+                            Tarih Aralï¿½ï¿½ï¿½
                           </label>
                           <select
                             value={offerDateRange}
                             onChange={(e) => setOfferDateRange(e.target.value as any)}
                             className={input('md', 'default', undefined, 'md')}
                           >
-                            <option value="all">T�m Zamanlar</option>
-                            <option value="7days">Son 7 G�n</option>
-                            <option value="30days">Son 30 G�n</option>
-                            <option value="custom">�zel Tarih</option>
+                            <option value="all">Tï¿½m Zamanlar</option>
+                            <option value="7days">Son 7 Gï¿½n</option>
+                            <option value="30days">Son 30 Gï¿½n</option>
+                            <option value="custom">ï¿½zel Tarih</option>
                           </select>
                         </div>
 
@@ -1614,7 +1613,7 @@ export default function Accounting() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Ba�lang�� Tarihi
+                              Baï¿½langï¿½ï¿½ Tarihi
                             </label>
                             <input
                               type="date"
@@ -1625,7 +1624,7 @@ export default function Accounting() {
                           </div>
                           <div>
                             <label className={`block ${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary} mb-2`}>
-                              Biti� Tarihi
+                              Bitiï¿½ Tarihi
                             </label>
                             <input
                               type="date"
@@ -1658,8 +1657,8 @@ export default function Accounting() {
                   ) : offers.length === 0 ? (
                     <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text?.tertiary}`}>
                       <Receipt className={`mx-auto mb-4 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={48} />
-                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Teklif bulunamad�</p>
-                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni teklif olu�turarak ba�lay�n</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>Teklif bulunamadï¿½</p>
+                      <p className={`${DESIGN_TOKENS?.typography?.body?.md} mt-2`}>Yeni teklif oluï¿½turarak baï¿½layï¿½n</p>
                     </div>
                   ) : (
                     <>
@@ -1667,12 +1666,12 @@ export default function Accounting() {
                       {selectedOffers.length > 0 && (
                         <div className={`${DESIGN_TOKENS?.colors?.interactive?.default} text-white px-6 py-3 flex items-center justify-between rounded-t-${DESIGN_TOKENS?.radius?.lg}`}>
                           <div className="flex items-center gap-4">
-                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedOffers.length} teklif se�ildi</span>
+                            <span className={DESIGN_TOKENS?.typography?.label?.lg}>{selectedOffers.length} teklif seï¿½ildi</span>
                             <button
                               onClick={() => setSelectedOffers([])}
                               className={`${DESIGN_TOKENS?.typography?.label?.md} text-neutral-300 hover:text-white`}
                             >
-                              Se�imi Temizle
+                              Seï¿½imi Temizle
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
@@ -1702,13 +1701,13 @@ export default function Accounting() {
                                 Teklif No
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                M��teri
+                                Mï¿½ï¿½teri
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">
                                 Tarih
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden xl:table-cell">
-                                Ge�erlilik
+                                Geï¿½erlilik
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
                                 Tutar
@@ -1717,7 +1716,7 @@ export default function Accounting() {
                                 Durum
                               </th>
                               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">
-                                ��lemler
+                                ï¿½ï¿½lemler
                               </th>
                             </tr>
                           </thead>
@@ -1756,7 +1755,7 @@ export default function Accounting() {
                                     {formatDate(offer.validUntil)}
                                   </div>
                                   {new Date(offer.validUntil) < new Date() && (
-                                    <div className="text-xs text-red-500">S�resi doldu</div>
+                                    <div className="text-xs text-red-500">Sï¿½resi doldu</div>
                                   )}
                                 </td>
                                 <td className="px-3 py-3 whitespace-nowrap">
@@ -1795,7 +1794,7 @@ export default function Accounting() {
                                                 className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-blue-600 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                               >
                                                 <Upload size={16} />
-                                                G�nder
+                                                Gï¿½nder
                                               </button>
                                             )}
                                             {offer.status === 'sent' && (
@@ -1822,7 +1821,7 @@ export default function Accounting() {
                                                 className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} text-neutral-900 hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2 font-medium`}
                                               >
                                                 <FileText size={16} />
-                                                Faturaya D�n��t�r
+                                                Faturaya Dï¿½nï¿½ï¿½tï¿½r
                                               </button>
                                             )}
                                             <button
@@ -1830,28 +1829,28 @@ export default function Accounting() {
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Download size={16} />
-                                              PDF �ndir
+                                              PDF ï¿½ndir
                                             </button>
                                             <button
                                               onClick={() => handleSendOfferEmail(offer)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Mail size={16} />
-                                              Email G�nder
+                                              Email Gï¿½nder
                                             </button>
                                             <button
                                               onClick={() => handleSendOfferWhatsApp(offer)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <MessageCircle size={16} />
-                                              WhatsApp G�nder
+                                              WhatsApp Gï¿½nder
                                             </button>
                                             <button
                                               onClick={() => handlePrintOffer(offer)}
                                               className={`w-full px-4 py-2 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle} flex items-center gap-2`}
                                             >
                                               <Printer size={16} />
-                                              Yazd�r
+                                              Yazdï¿½r
                                             </button>
                                             <button
                                               onClick={() => handleCopyOffer(offer)}
@@ -1926,10 +1925,10 @@ export default function Accounting() {
             {/* Tools Tab OLD - BACKUP */}
             {false && activeTab === 'tools' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">��letme Kolayl�klar�</h2>
+                <h2 className="text-xl font-semibold text-neutral-900 mb-4">ï¿½ï¿½letme Kolaylï¿½klarï¿½</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {/* Hat�rlatmalar */}
+                  {/* Hatï¿½rlatmalar */}
                   <button
                     onClick={() => setActiveTab('reminders')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
@@ -1938,12 +1937,12 @@ export default function Accounting() {
                       <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <Clock className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Hat�rlatmalar</h3>
+                      <h3 className="font-semibold text-neutral-900">Hatï¿½rlatmalar</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">�deme bildirimleri ve vade uyar�lar�</p>
+                    <p className="text-sm text-neutral-600">ï¿½deme bildirimleri ve vade uyarï¿½larï¿½</p>
                   </button>
 
-                  {/* Ekstre Payla��m� */}
+                  {/* Ekstre Paylaï¿½ï¿½mï¿½ */}
                   <button
                     onClick={() => setActiveTab('statements')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
@@ -1952,9 +1951,9 @@ export default function Accounting() {
                       <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <FileText className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Ekstre Payla��m�</h3>
+                      <h3 className="font-semibold text-neutral-900">Ekstre Paylaï¿½ï¿½mï¿½</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">M��terilere hesap ekstresi g�nderin</p>
+                    <p className="text-sm text-neutral-600">Mï¿½ï¿½terilere hesap ekstresi gï¿½nderin</p>
                   </button>
 
                   {/* Barkod Okuma */}
@@ -1968,12 +1967,12 @@ export default function Accounting() {
                       </div>
                       <h3 className="font-semibold text-neutral-900">Barkod Okuma</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">H�zl� fatura ve stok giri�i</p>
+                    <p className="text-sm text-neutral-600">Hï¿½zlï¿½ fatura ve stok giriï¿½i</p>
                   </button>
 
                   {/* Toplu Email */}
                   <button
-                    onClick={() => toast('Toplu email �zelli�i haz�rlan�yor!', { icon: '??', duration: 3000 })}
+                    onClick={() => toast('Toplu email ï¿½zelliï¿½i hazï¿½rlanï¿½yor!', { icon: '??', duration: 3000 })}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
@@ -1982,8 +1981,8 @@ export default function Accounting() {
                       </div>
                       <h3 className="font-semibold text-neutral-900">Toplu Email</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Fatura ve teklifleri toplu g�nderin</p>
-                    <div className="mt-3 text-xs text-orange-600 font-medium">Yak�nda</div>
+                    <p className="text-sm text-neutral-600">Fatura ve teklifleri toplu gï¿½nderin</p>
+                    <div className="mt-3 text-xs text-orange-600 font-medium">Yakï¿½nda</div>
                   </button>
 
                   {/* Raporlar */}
@@ -1995,9 +1994,9 @@ export default function Accounting() {
                       <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <BarChart3 className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Geli�mi� Raporlar</h3>
+                      <h3 className="font-semibold text-neutral-900">Geliï¿½miï¿½ Raporlar</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Detayl� analiz ve �zel raporlar</p>
+                    <p className="text-sm text-neutral-600">Detaylï¿½ analiz ve ï¿½zel raporlar</p>
                   </button>
                 </div>
 
@@ -2009,12 +2008,12 @@ export default function Accounting() {
                       <Tag className="text-blue-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-blue-900">12</p>
-                    <p className="text-xs text-blue-600 mt-1">Son 30 g�n</p>
+                    <p className="text-xs text-blue-600 mt-1">Son 30 gï¿½n</p>
                   </div>
 
                   <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-green-900">Hat�rlatmalar</h4>
+                      <h4 className="text-sm font-medium text-green-900">Hatï¿½rlatmalar</h4>
                       <Clock className="text-green-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-green-900">5</p>
@@ -2023,7 +2022,7 @@ export default function Accounting() {
 
                   <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-purple-900">G�nderilen Ekstre</h4>
+                      <h4 className="text-sm font-medium text-purple-900">Gï¿½nderilen Ekstre</h4>
                       <FileText className="text-purple-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-purple-900">28</p>
@@ -2044,29 +2043,29 @@ export default function Accounting() {
             {false && activeTab === 'advisor' && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-neutral-900">Mali M��avir Paneli</h2>
-                  <p className="text-sm text-neutral-600 mt-1">M�kellef y�netimi ve toplu i�lemler</p>
+                  <h2 className="text-2xl font-bold text-neutral-900">Mali Mï¿½ï¿½avir Paneli</h2>
+                  <p className="text-sm text-neutral-600 mt-1">Mï¿½kellef yï¿½netimi ve toplu iï¿½lemler</p>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-blue-900">Toplam M�kellef</h4>
+                      <h4 className="text-sm font-medium text-blue-900">Toplam Mï¿½kellef</h4>
                       <Users className="text-blue-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-blue-900">42</p>
                   </div>
                   <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-green-900">Aktif D�nem</h4>
+                      <h4 className="text-sm font-medium text-green-900">Aktif Dï¿½nem</h4>
                       <Calendar className="text-green-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-green-900">2025/10</p>
                   </div>
                   <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-orange-900">Bu Ay ��lem</h4>
+                      <h4 className="text-sm font-medium text-orange-900">Bu Ay ï¿½ï¿½lem</h4>
                       <FileText className="text-orange-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-orange-900">1,247</p>
@@ -2082,40 +2081,40 @@ export default function Accounting() {
 
                 {/* Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <button onClick={() => toast('XML d��a aktarma haz�rlan�yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('XML dï¿½ï¿½a aktarma hazï¿½rlanï¿½yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-600 rounded-xl flex items-center justify-center transition-colors">
                         <Download className="text-blue-600 group-hover:text-white" size={24} />
                       </div>
-                      <h3 className="font-semibold">XML D��a Aktar</h3>
+                      <h3 className="font-semibold">XML Dï¿½ï¿½a Aktar</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Toplu veri aktar�m�</p>
+                    <p className="text-sm text-neutral-600">Toplu veri aktarï¿½mï¿½</p>
                   </button>
 
-                  <button onClick={() => toast('Excel raporu olu�turuluyor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Excel raporu oluï¿½turuluyor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-green-100 group-hover:bg-green-600 rounded-xl flex items-center justify-center transition-colors">
                         <BarChart3 className="text-green-600 group-hover:text-white" size={24} />
                       </div>
                       <h3 className="font-semibold">Excel Rapor</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">D�nem sonu raporlar�</p>
+                    <p className="text-sm text-neutral-600">Dï¿½nem sonu raporlarï¿½</p>
                   </button>
 
-                  <button onClick={() => toast('E-Belge g�nderimi ba�lat�l�yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('E-Belge gï¿½nderimi baï¿½latï¿½lï¿½yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-purple-100 group-hover:bg-purple-600 rounded-xl flex items-center justify-center transition-colors">
                         <Mail className="text-purple-600 group-hover:text-white" size={24} />
                       </div>
                       <h3 className="font-semibold">Toplu E-Belge</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">G�B'e toplu g�nderim</p>
+                    <p className="text-sm text-neutral-600">Gï¿½B'e toplu gï¿½nderim</p>
                   </button>
                 </div>
 
                 {/* Client List */}
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                  <h3 className="font-semibold text-neutral-900 mb-4">M�kellef Listesi</h3>
+                  <h3 className="font-semibold text-neutral-900 mb-4">Mï¿½kellef Listesi</h3>
                   <div className="space-y-3">
                     {[1, 2, 3, 4, 5].map(i => (
                       <div key={i} className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
@@ -2124,7 +2123,7 @@ export default function Accounting() {
                             {String.fromCharCode(64 + i)}
                           </div>
                           <div>
-                            <p className="font-medium text-neutral-900">M�kellef {i}</p>
+                            <p className="font-medium text-neutral-900">Mï¿½kellef {i}</p>
                             <p className="text-sm text-neutral-600">VKN: 123456789{i}</p>
                           </div>
                         </div>
@@ -2150,27 +2149,27 @@ export default function Accounting() {
               <div className="space-y-6">
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900">Destek Sistemi</h2>
-                  <p className="text-sm text-neutral-600 mt-1">Yard�m, dok�mantasyon ve canl� destek</p>
+                  <p className="text-sm text-neutral-600 mt-1">Yardï¿½m, dokï¿½mantasyon ve canlï¿½ destek</p>
                 </div>
 
                 {/* Quick Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <button onClick={() => toast('Canl� destek ba�lat�l�yor...', { icon: '??' })} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Canlï¿½ destek baï¿½latï¿½lï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 hover:shadow-lg transition-all text-left group">
                     <MessageCircle className="text-blue-600 mb-3" size={32} />
-                    <h3 className="font-semibold text-blue-900 mb-2">Canl� Destek</h3>
+                    <h3 className="font-semibold text-blue-900 mb-2">Canlï¿½ Destek</h3>
                     <p className="text-sm text-blue-700">7/24 online destek ekibi</p>
                   </button>
 
-                  <button onClick={() => toast('Dok�mantasyon a��l�yor...', { icon: '??' })} className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Dokï¿½mantasyon aï¿½ï¿½lï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-all text-left group">
                     <FileText className="text-green-600 mb-3" size={32} />
-                    <h3 className="font-semibold text-green-900 mb-2">Dok�mantasyon</h3>
-                    <p className="text-sm text-green-700">Kapsaml� kullan�m k�lavuzu</p>
+                    <h3 className="font-semibold text-green-900 mb-2">Dokï¿½mantasyon</h3>
+                    <p className="text-sm text-green-700">Kapsamlï¿½ kullanï¿½m kï¿½lavuzu</p>
                   </button>
 
-                  <button onClick={() => toast('Video e�itimleri haz�rlan�yor...', { icon: '??' })} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-lg transition-all text-left group">
+                  <button onClick={() => toast('Video eï¿½itimleri hazï¿½rlanï¿½yor...', { icon: '??' })} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-lg transition-all text-left group">
                     <Globe className="text-purple-600 mb-3" size={32} />
-                    <h3 className="font-semibold text-purple-900 mb-2">Video E�itimler</h3>
-                    <p className="text-sm text-purple-700">Ad�m ad�m videolar</p>
+                    <h3 className="font-semibold text-purple-900 mb-2">Video Eï¿½itimler</h3>
+                    <p className="text-sm text-purple-700">Adï¿½m adï¿½m videolar</p>
                   </button>
                 </div>
 
@@ -2178,7 +2177,7 @@ export default function Accounting() {
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-neutral-900">Destek Talepleri</h3>
-                    <button onClick={() => toast('Yeni destek talebi olu�turuluyor...', { icon: '??' })} className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-xl hover:bg-neutral-800 transition-colors">
+                    <button onClick={() => toast('Yeni destek talebi oluï¿½turuluyor...', { icon: '??' })} className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-xl hover:bg-neutral-800 transition-colors">
                       <Plus size={16} />
                       Yeni Talep
                     </button>
@@ -2187,8 +2186,8 @@ export default function Accounting() {
                   <div className="space-y-3">
                     {[
                       { id: 1, subject: 'E-Fatura Entegrasyonu', status: 'open', priority: 'high' },
-                      { id: 2, subject: 'Ekstre G�nderimi Sorunu', status: 'in-progress', priority: 'medium' },
-                      { id: 3, subject: 'Barkod Okuma Deste�i', status: 'resolved', priority: 'low' },
+                      { id: 2, subject: 'Ekstre Gï¿½nderimi Sorunu', status: 'in-progress', priority: 'medium' },
+                      { id: 3, subject: 'Barkod Okuma Desteï¿½i', status: 'resolved', priority: 'low' },
                     ].map(ticket => (
                       <div key={ticket.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                         <div className="flex-1">
@@ -2199,17 +2198,17 @@ export default function Accounting() {
                               ticket.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
                               'bg-green-100 text-green-700'
                             }`}>
-                              {ticket.status === 'open' ? 'A��k' : ticket.status === 'in-progress' ? '��lemde' : '��z�ld�'}
+                              {ticket.status === 'open' ? 'Aï¿½ï¿½k' : ticket.status === 'in-progress' ? 'ï¿½ï¿½lemde' : 'ï¿½ï¿½zï¿½ldï¿½'}
                             </span>
                             <span className={`px-2 py-1 text-xs rounded-full ${
                               ticket.priority === 'high' ? 'bg-red-100 text-red-700' :
                               ticket.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
                               'bg-blue-100 text-blue-700'
                             }`}>
-                              {ticket.priority === 'high' ? 'Y�ksek' : ticket.priority === 'medium' ? 'Orta' : 'D���k'}
+                              {ticket.priority === 'high' ? 'Yï¿½ksek' : ticket.priority === 'medium' ? 'Orta' : 'Dï¿½ï¿½ï¿½k'}
                             </span>
                           </div>
-                          <p className="text-sm text-neutral-600">2 saat �nce g�ncellendi</p>
+                          <p className="text-sm text-neutral-600">2 saat ï¿½nce gï¿½ncellendi</p>
                         </div>
                         <button className="px-4 py-2 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
                           Detay
@@ -2221,16 +2220,16 @@ export default function Accounting() {
 
                 {/* FAQ */}
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-                  <h3 className="font-semibold text-neutral-900 mb-4">S�k Sorulan Sorular</h3>
+                  <h3 className="font-semibold text-neutral-900 mb-4">Sï¿½k Sorulan Sorular</h3>
                   <div className="space-y-3">
                     {[
-                      'E-Fatura nas�l olu�turulur?',
-                      'Barkod okuyucu nas�l kullan�l�r?',
-                      'Ekstre payla��m� nas�l yap�l�r?',
-                      'Hat�rlatmalar nas�l ayarlan�r?',
-                      'Mali m��avir paneli �zellikleri nelerdir?',
+                      'E-Fatura nasï¿½l oluï¿½turulur?',
+                      'Barkod okuyucu nasï¿½l kullanï¿½lï¿½r?',
+                      'Ekstre paylaï¿½ï¿½mï¿½ nasï¿½l yapï¿½lï¿½r?',
+                      'Hatï¿½rlatmalar nasï¿½l ayarlanï¿½r?',
+                      'Mali mï¿½ï¿½avir paneli ï¿½zellikleri nelerdir?',
                     ].map((q, i) => (
-                      <button key={i} onClick={() => toast('Cevap a��l�yor...', { icon: '?' })} className="w-full text-left p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
+                      <button key={i} onClick={() => toast('Cevap aï¿½ï¿½lï¿½yor...', { icon: '?' })} className="w-full text-left p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                         <p className="text-sm text-neutral-900">{q}</p>
                       </button>
                     ))}
@@ -2273,10 +2272,10 @@ export default function Accounting() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-neutral-900">Bildirim Merkezi</h2>
-                    <p className="text-sm text-neutral-600 mt-1">T�m sistem bildirimleri ve uyar�lar</p>
+                    <p className="text-sm text-neutral-600 mt-1">Tï¿½m sistem bildirimleri ve uyarï¿½lar</p>
                   </div>
-                  <button onClick={() => toast('T�m bildirimler okundu olarak i�aretlendi', { icon: '?' })} className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors">
-                    T�m�n� Okundu ��aretle
+                  <button onClick={() => toast('Tï¿½m bildirimler okundu olarak iï¿½aretlendi', { icon: '?' })} className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors">
+                    Tï¿½mï¿½nï¿½ Okundu ï¿½ï¿½aretle
                   </button>
                 </div>
 
@@ -2291,7 +2290,7 @@ export default function Accounting() {
                   </div>
                   <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-orange-900">Okunmam��</h4>
+                      <h4 className="text-sm font-medium text-orange-900">Okunmamï¿½ï¿½</h4>
                       <AlertCircle className="text-orange-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-orange-900">8</p>
@@ -2316,7 +2315,7 @@ export default function Accounting() {
                 <div className="bg-white rounded-2xl p-4 border border-neutral-200">
                   <div className="flex items-center gap-3 flex-wrap">
                     <Filter size={20} className="text-neutral-600" />
-                    {['T�m�', 'Okunmam��', '�demeler', 'Faturalar', 'Hat�rlatmalar', 'Sistem'].map(filter => (
+                    {['Tï¿½mï¿½', 'Okunmamï¿½ï¿½', 'ï¿½demeler', 'Faturalar', 'Hatï¿½rlatmalar', 'Sistem'].map(filter => (
                       <button key={filter} className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-900 hover:text-white transition-colors">
                         {filter}
                       </button>
@@ -2327,12 +2326,12 @@ export default function Accounting() {
                 {/* Notifications List */}
                 <div className="space-y-3">
                   {[
-                    { id: 1, type: 'payment', title: '�deme Hat�rlatmas�', message: 'ABC Ltd.�ti. i�in 15,000 ? �deme vadesi yar�n dolacak', time: '5 dk �nce', unread: true, urgent: true },
-                    { id: 2, type: 'invoice', title: 'Yeni Fatura', message: 'XYZ A.�. i�in #INV-2025-042 numaral� fatura olu�turuldu', time: '1 saat �nce', unread: true, urgent: false },
-                    { id: 3, type: 'reminder', title: 'Vade Tarihi Yakla��yor', message: '3 fatura i�in vade tarihi bu hafta i�inde', time: '2 saat �nce', unread: true, urgent: false },
-                    { id: 4, type: 'system', title: 'Sistem G�ncellemesi', message: 'Yeni �zellikler eklendi: Barkod okuyucu aktif', time: '3 saat �nce', unread: false, urgent: false },
-                    { id: 5, type: 'statement', title: 'Ekstre G�nderildi', message: 'DEF Ticaret i�in hesap ekstresi email ile g�nderildi', time: '5 saat �nce', unread: false, urgent: false },
-                    { id: 6, type: 'payment', title: '�deme Al�nd�', message: 'GHI Ltd. 8,500 ? �deme ger�ekle�tirdi', time: '1 g�n �nce', unread: false, urgent: false },
+                    { id: 1, type: 'payment', title: 'ï¿½deme Hatï¿½rlatmasï¿½', message: 'ABC Ltd.ï¿½ti. iï¿½in 15,000 ? ï¿½deme vadesi yarï¿½n dolacak', time: '5 dk ï¿½nce', unread: true, urgent: true },
+                    { id: 2, type: 'invoice', title: 'Yeni Fatura', message: 'XYZ A.ï¿½. iï¿½in #INV-2025-042 numaralï¿½ fatura oluï¿½turuldu', time: '1 saat ï¿½nce', unread: true, urgent: false },
+                    { id: 3, type: 'reminder', title: 'Vade Tarihi Yaklaï¿½ï¿½yor', message: '3 fatura iï¿½in vade tarihi bu hafta iï¿½inde', time: '2 saat ï¿½nce', unread: true, urgent: false },
+                    { id: 4, type: 'system', title: 'Sistem Gï¿½ncellemesi', message: 'Yeni ï¿½zellikler eklendi: Barkod okuyucu aktif', time: '3 saat ï¿½nce', unread: false, urgent: false },
+                    { id: 5, type: 'statement', title: 'Ekstre Gï¿½nderildi', message: 'DEF Ticaret iï¿½in hesap ekstresi email ile gï¿½nderildi', time: '5 saat ï¿½nce', unread: false, urgent: false },
+                    { id: 6, type: 'payment', title: 'ï¿½deme Alï¿½ndï¿½', message: 'GHI Ltd. 8,500 ? ï¿½deme gerï¿½ekleï¿½tirdi', time: '1 gï¿½n ï¿½nce', unread: false, urgent: false },
                   ].map(notif => (
                     <div key={notif.id} className={`bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-lg ${
                       notif.unread ? 'border-blue-200 bg-blue-50' : 'border-neutral-200'
@@ -2360,7 +2359,7 @@ export default function Accounting() {
                             )}
                             {notif.urgent && (
                               <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
-                                AC�L
+                                ACï¿½L
                               </span>
                             )}
                           </div>
@@ -2370,7 +2369,7 @@ export default function Accounting() {
 
                         <div className="flex items-center gap-2">
                           {notif.unread && (
-                            <button onClick={() => toast('Bildirim okundu olarak i�aretlendi', { icon: '?' })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Okundu i�aretle">
+                            <button onClick={() => toast('Bildirim okundu olarak iï¿½aretlendi', { icon: '?' })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Okundu iï¿½aretle">
                               <CheckCircle size={20} />
                             </button>
                           )}
@@ -2391,9 +2390,9 @@ export default function Accounting() {
                       { label: 'Email Bildirimleri', checked: true },
                       { label: 'SMS Bildirimleri', checked: false },
                       { label: 'Push Bildirimleri', checked: true },
-                      { label: '�deme Hat�rlatmalar�', checked: true },
+                      { label: 'ï¿½deme Hatï¿½rlatmalarï¿½', checked: true },
                       { label: 'Fatura Bildirimleri', checked: true },
-                      { label: 'Sistem G�ncellemeleri', checked: false },
+                      { label: 'Sistem Gï¿½ncellemeleri', checked: false },
                     ].map((pref, i) => (
                       <label key={i} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors cursor-pointer">
                         <input type="checkbox" defaultChecked={pref.checked} className="w-5 h-5 text-neutral-900 rounded" />
@@ -2434,5 +2433,6 @@ export default function Accounting() {
     </div>
   )
 }
+
 
 

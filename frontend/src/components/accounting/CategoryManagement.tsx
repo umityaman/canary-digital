@@ -154,7 +154,7 @@ export default function CategoryManagement() {
               <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Toplam Kategori</p>
               <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mt-1`}>{categories.length}</p>
             </div>
-            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-neutral-50 rounded-xl flex items-center justify-center">
               <Tag className="text-white" size={24} />
             </div>
           </div>
@@ -173,7 +173,7 @@ export default function CategoryManagement() {
           onClick={() => setFilter('income')}
           className={cx(
             button('md', filter === 'income' ? 'primary' : 'outline', 'md'),
-            filter === 'income' && 'bg-green-500 hover:bg-green-600'
+            filter === 'income' && 'bg-neutral-50 hover:bg-neutral-50'
           )}
         >
           Gelir ({incomeCount})
@@ -182,7 +182,7 @@ export default function CategoryManagement() {
           onClick={() => setFilter('expense')}
           className={cx(
             button('md', filter === 'expense' ? 'primary' : 'outline', 'md'),
-            filter === 'expense' && 'bg-red-500 hover:bg-red-600'
+            filter === 'expense' && 'bg-neutral-50 hover:bg-neutral-50'
           )}
         >
           Gider ({expenseCount})
@@ -312,3 +312,4 @@ export default function CategoryManagement() {
     </div>
   )
 }
+

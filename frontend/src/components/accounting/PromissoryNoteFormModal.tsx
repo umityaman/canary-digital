@@ -77,7 +77,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
           {/* Senet Tipi */}
           <div>
             <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
-              Senet Tipi <span className="text-red-500">*</span>
+              Senet Tipi <span className="text-neutral-900">*</span>
             </label>
             <select
               name="type"
@@ -94,7 +94,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
           {/* Senet No */}
           <div>
             <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
-              Senet No <span className="text-red-500">*</span>
+              Senet No <span className="text-neutral-900">*</span>
             </label>
             <input
               type="text"
@@ -111,7 +111,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
             {/* Düzenleyen */}
             <div>
               <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
-                Düzenleyen <span className="text-red-500">*</span>
+                Düzenleyen <span className="text-neutral-900">*</span>
               </label>
               <input
                 type="text"
@@ -127,7 +127,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
             {/* Lehtar */}
             <div>
               <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
-                Lehtar <span className="text-red-500">*</span>
+                Lehtar <span className="text-neutral-900">*</span>
               </label>
               <input
                 type="text"
@@ -144,7 +144,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
           {/* Tutar */}
           <div>
             <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
-              Tutar (TRY) <span className="text-red-500">*</span>
+              Tutar (TRY) <span className="text-neutral-900">*</span>
             </label>
             <input
               type="number"
@@ -163,7 +163,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
             {/* Düzenleme Tarihi */}
             <div>
               <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
-                Düzenleme Tarihi <span className="text-red-500">*</span>
+                Düzenleme Tarihi <span className="text-neutral-900">*</span>
               </label>
               <input
                 type="date"
@@ -178,7 +178,7 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
             {/* Vade Tarihi */}
             <div>
               <label className={`block ${DESIGN_TOKENS?.typography?.body.sm} font-medium ${DESIGN_TOKENS?.colors?.text.secondary} mb-2`}>
-                Vade Tarihi <span className="text-red-500">*</span>
+                Vade Tarihi <span className="text-neutral-900">*</span>
               </label>
               <input
                 type="date"
@@ -279,3 +279,4 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
     </div>
   );
 }
+

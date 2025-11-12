@@ -32,10 +32,10 @@ const NotificationsTab: React.FC = () => {
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'payment': return 'bg-green-50 border-green-200'
-      case 'invoice': return 'bg-blue-50 border-blue-200'
+      case 'payment': return 'bg-neutral-50 border-green-200'
+      case 'invoice': return 'bg-neutral-50 border-blue-200'
       case 'reminder': return 'bg-orange-50 border-orange-200'
-      case 'statement': return 'bg-purple-50 border-purple-200'
+      case 'statement': return 'bg-neutral-50 border-purple-200'
       case 'system': return 'bg-gray-50 border-gray-200'
       default: return 'bg-white border-gray-200'
     }
@@ -113,7 +113,7 @@ const NotificationsTab: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveFilter('payment')}
-            className={cx(button('sm', activeFilter === 'payment' ? 'primary' : 'ghost'), activeFilter === 'payment' && 'bg-green-600 hover:bg-green-700')}
+            className={cx(button('sm', activeFilter === 'payment' ? 'primary' : 'ghost'), activeFilter === 'payment' && 'bg-neutral-50 hover:bg-neutral-50')}
           >
             💰 Ödemeler
           </button>
@@ -166,7 +166,7 @@ const NotificationsTab: React.FC = () => {
             >
               {/* Unread Indicator */}
               {!notification.isRead && (
-                <div className="absolute top-4 left-4 w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="absolute top-4 left-4 w-2 h-2 bg-neutral-50 rounded-full"></div>
               )}
 
               <div className="flex items-start gap-4 ml-4">
@@ -193,7 +193,7 @@ const NotificationsTab: React.FC = () => {
                       {!notification.isRead && (
                         <button
                           onClick={() => markAsRead(notification.id)}
-                          className="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors"
+                          className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                           title="Okundu işaretle"
                         >
                           <Check size={18} />
@@ -201,7 +201,7 @@ const NotificationsTab: React.FC = () => {
                       )}
                       <button
                         onClick={() => deleteNotification(notification.id)}
-                        className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                        className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                         title="Sil"
                       >
                         <X size={18} />
@@ -220,7 +220,7 @@ const NotificationsTab: React.FC = () => {
       {/* Notification Preferences */}
       <div className={card('md', 'sm')}>
         <div className="flex items-center gap-3 mb-4">
-          <Settings className="text-blue-600" size={24} />
+          <Settings className="text-neutral-900" size={24} />
           <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Bildirim Tercihleri</h3>
         </div>
 
@@ -237,7 +237,7 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.emailPayments}
                   onChange={(e) => updatePreferences({ emailPayments: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
                 />
                 <span className="text-gray-700">Ödeme bildirimleri</span>
               </label>
@@ -246,7 +246,7 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.emailInvoices}
                   onChange={(e) => updatePreferences({ emailInvoices: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
                 />
                 <span className="text-gray-700">Fatura bildirimleri</span>
               </label>
@@ -255,7 +255,7 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.emailReminders}
                   onChange={(e) => updatePreferences({ emailReminders: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
                 />
                 <span className="text-gray-700">Hatırlatmalar</span>
               </label>
@@ -274,7 +274,7 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.smsPayments}
                   onChange={(e) => updatePreferences({ smsPayments: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
                 />
                 <span className="text-gray-700">Ödeme bildirimleri</span>
               </label>
@@ -283,7 +283,7 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.smsReminders}
                   onChange={(e) => updatePreferences({ smsReminders: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
                 />
                 <span className="text-gray-700">Hatırlatmalar</span>
               </label>
@@ -302,7 +302,7 @@ const NotificationsTab: React.FC = () => {
                   type="checkbox"
                   checked={preferences.pushNotifications}
                   onChange={(e) => updatePreferences({ pushNotifications: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-neutral-900 rounded focus:ring-blue-500"
                 />
                 <span className="text-gray-700">Tüm push bildirimlerini etkinleştir</span>
               </label>
@@ -315,3 +315,4 @@ const NotificationsTab: React.FC = () => {
 }
 
 export default NotificationsTab
+

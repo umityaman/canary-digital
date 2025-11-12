@@ -211,18 +211,18 @@ export default function DeliveryNoteDetail({
 
           {/* Invoice Info */}
           {note.invoiceId && (
-            <div className="bg-purple-50 rounded-lg p-6 border border-neutral-200">
-              <h3 className="text-lg font-semibold text-purple-900 mb-4 flex items-center gap-2">
+            <div className="bg-neutral-50 rounded-lg p-6 border border-neutral-200">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
                 <Receipt size={20} />
                 Fatura Bilgisi
               </h3>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-neutral-900">Fatura No:</span>
-                  <span className="font-semibold text-purple-900">{note.invoiceNumber}</span>
+                  <span className="font-semibold text-neutral-900">{note.invoiceNumber}</span>
                 </div>
                 <div className="mt-3">
-                  <button className="w-full px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors text-sm">
+                  <button className="w-full px-4 py-2 bg-neutral-50 text-white rounded-xl hover:bg-neutral-50 transition-colors text-sm">
                     Faturayı Görüntüle
                   </button>
                 </div>
@@ -301,7 +301,7 @@ export default function DeliveryNoteDetail({
                   <div className="flex items-start gap-4 relative">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
                       ['prepared', 'shipped', 'delivered'].includes(note.status)
-                        ? 'bg-indigo-500 text-white'
+                        ? 'bg-neutral-50 text-white'
                         : 'bg-neutral-200 text-neutral-500'
                     }`}>
                       <Package size={16} />
@@ -340,7 +340,7 @@ export default function DeliveryNoteDetail({
                   <div className="flex items-start gap-4 relative">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
                       note.status === 'delivered'
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-neutral-50 text-white'
                         : 'bg-neutral-200 text-neutral-500'
                     }`}>
                       <CheckCircle size={16} />
@@ -352,7 +352,7 @@ export default function DeliveryNoteDetail({
                         <button
                           onClick={() => handleUpdateStatus('delivered')}
                           disabled={loading}
-                          className="mt-2 px-3 py-1.5 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
+                          className="mt-2 px-3 py-1.5 bg-neutral-50 text-white text-sm rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50"
                         >
                           Teslim Edildi Olarak İşaretle
                         </button>
@@ -373,7 +373,7 @@ export default function DeliveryNoteDetail({
                 <button
                   onClick={handleConvertToInvoice}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-neutral-50 text-white rounded-xl hover:bg-neutral-50 transition-colors disabled:opacity-50"
                 >
                   <Receipt size={18} />
                   <span>Faturaya Çevir</span>
@@ -392,7 +392,7 @@ export default function DeliveryNoteDetail({
                 <button
                   onClick={handleCancel}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-neutral-50 text-white rounded-xl hover:bg-neutral-50 transition-colors disabled:opacity-50"
                 >
                   <X size={18} />
                   <span>İrsaliyeyi İptal Et</span>
@@ -405,3 +405,4 @@ export default function DeliveryNoteDetail({
     </div>
   )
 }
+

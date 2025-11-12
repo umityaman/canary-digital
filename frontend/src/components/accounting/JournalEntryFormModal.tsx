@@ -311,7 +311,7 @@ export default function JournalEntryFormModal({
               <label
                 className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
               >
-                Tarih <span className="text-red-500">*</span>
+                Tarih <span className="text-neutral-900">*</span>
               </label>
               <input
                 type="date"
@@ -366,7 +366,7 @@ export default function JournalEntryFormModal({
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
             >
-              Genel Açıklama <span className="text-red-500">*</span>
+              Genel Açıklama <span className="text-neutral-900">*</span>
             </label>
             <textarea
               value={formData.description}
@@ -414,7 +414,7 @@ export default function JournalEntryFormModal({
                       <button
                         type="button"
                         onClick={() => handleRemoveItem(item.id!)}
-                        className="text-red-600 hover:text-red-700"
+                        className="text-neutral-900 hover:text-neutral-900"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -427,7 +427,7 @@ export default function JournalEntryFormModal({
                       <label
                         className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
                       >
-                        Hesap <span className="text-red-500">*</span>
+                        Hesap <span className="text-neutral-900">*</span>
                       </label>
                       <div className="relative">
                         <input
@@ -566,7 +566,7 @@ export default function JournalEntryFormModal({
             </div>
 
             {/* Totals */}
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mt-4 p-4 bg-neutral-50 border border-blue-200 rounded-lg">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p
@@ -575,7 +575,7 @@ export default function JournalEntryFormModal({
                     Toplam Borç
                   </p>
                   <p
-                    className={`${DESIGN_TOKENS?.typography?.heading.h4} text-green-600`}
+                    className={`${DESIGN_TOKENS?.typography?.heading.h4} text-neutral-900`}
                   >
                     {formatCurrency(getTotalDebit())}
                   </p>
@@ -586,7 +586,7 @@ export default function JournalEntryFormModal({
                   >
                     Toplam Alacak
                   </p>
-                  <p className={`${DESIGN_TOKENS?.typography?.heading.h4} text-red-600`}>
+                  <p className={`${DESIGN_TOKENS?.typography?.heading.h4} text-neutral-900`}>
                     {formatCurrency(getTotalCredit())}
                   </p>
                 </div>
@@ -597,12 +597,12 @@ export default function JournalEntryFormModal({
                     Durum
                   </p>
                   {isBalanced() ? (
-                    <div className="flex items-center justify-center gap-2 text-green-600">
+                    <div className="flex items-center justify-center gap-2 text-neutral-900">
                       <CheckCircle className="w-5 h-5" />
                       <span className="font-medium">Dengede</span>
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center gap-2 text-red-600">
+                    <div className="flex items-center justify-center gap-2 text-neutral-900">
                       <AlertCircle className="w-5 h-5" />
                       <span className="font-medium">Dengesiz</span>
                     </div>
@@ -645,3 +645,4 @@ export default function JournalEntryFormModal({
     </div>
   );
 }
+

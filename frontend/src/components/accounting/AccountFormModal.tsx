@@ -223,7 +223,7 @@ export default function AccountFormModal({
               <label
                 className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
               >
-                Hesap Kodu <span className="text-red-500">*</span>
+                Hesap Kodu <span className="text-neutral-900">*</span>
               </label>
               <input
                 type="text"
@@ -242,7 +242,7 @@ export default function AccountFormModal({
               <label
                 className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
               >
-                Hesap Tipi <span className="text-red-500">*</span>
+                Hesap Tipi <span className="text-neutral-900">*</span>
               </label>
               <select
                 value={formData.type}
@@ -268,7 +268,7 @@ export default function AccountFormModal({
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.md} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}
             >
-              Hesap Adı <span className="text-red-500">*</span>
+              Hesap Adı <span className="text-neutral-900">*</span>
             </label>
             <input
               type="text"
@@ -435,3 +435,4 @@ export default function AccountFormModal({
     </div>
   );
 }
+

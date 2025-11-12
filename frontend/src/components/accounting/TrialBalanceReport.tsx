@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   Scale,
   Calendar,
@@ -82,7 +82,7 @@ export default function TrialBalanceReport() {
       });
     } catch (error: any) {
       console.error('Failed to load trial balance:', error);
-      toast.error('Mizan raporu y�klenemedi');
+      toast.error('Mizan raporu yï¿½klenemedi');
     } finally {
       setLoading(false);
     }
@@ -96,7 +96,7 @@ export default function TrialBalanceReport() {
       });
       toast.success('Mizan raporu Excel olarak indirildi');
     } catch (error) {
-      toast.error('Excel export ba�ar�s�z oldu');
+      toast.error('Excel export baï¿½arï¿½sï¿½z oldu');
     }
   };
 
@@ -113,10 +113,10 @@ export default function TrialBalanceReport() {
 
   const getAccountTypeColor = (type: string): string => {
     const colors: Record<string, string> = {
-      ASSET: 'text-green-600',
-      LIABILITY: 'text-red-600',
-      EQUITY: 'text-purple-600',
-      REVENUE: 'text-blue-600',
+      ASSET: 'text-neutral-900',
+      LIABILITY: 'text-neutral-900',
+      EQUITY: 'text-neutral-900',
+      REVENUE: 'text-neutral-900',
       EXPENSE: 'text-orange-600',
     };
     return colors[type] || 'text-gray-600';
@@ -124,9 +124,9 @@ export default function TrialBalanceReport() {
 
   const getAccountTypeName = (type: string): string => {
     const names: Record<string, string> = {
-      ASSET: 'Varl�k',
-      LIABILITY: 'Bor�',
-      EQUITY: '�zkaynak',
+      ASSET: 'Varlï¿½k',
+      LIABILITY: 'Borï¿½',
+      EQUITY: 'ï¿½zkaynak',
       REVENUE: 'Gelir',
       EXPENSE: 'Gider',
     };
@@ -146,7 +146,7 @@ export default function TrialBalanceReport() {
           <p
             className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
           >
-            Hesap baz�nda bor�-alacak dengesi
+            Hesap bazï¿½nda borï¿½-alacak dengesi
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -156,11 +156,11 @@ export default function TrialBalanceReport() {
           </button>
           <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <Eye className="w-4 h-4" />
-            Yazd�r
+            Yazdï¿½r
           </button>
           <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
             <Download className="w-4 h-4" />
-            Excel �ndir
+            Excel ï¿½ndir
           </button>
         </div>
       </div>
@@ -169,27 +169,27 @@ export default function TrialBalanceReport() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('success')}>
+            <div className={statCardIcon('primary')}>
               <TrendingUp className="w-4 h-4 text-white" />
             </div>
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {formatCurrency(summary.totalDebit)}
           </p>
           <p
             className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
-            Toplam Bor�
+            Toplam Borï¿½
           </p>
         </div>
 
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('error')}>
+            <div className={statCardIcon('primary')}>
               <TrendingDown className="w-4 h-4 text-white" />
             </div>
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {formatCurrency(summary.totalCredit)}
           </p>
           <p
@@ -201,13 +201,13 @@ export default function TrialBalanceReport() {
 
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('warning')}>
+            <div className={statCardIcon('primary')}>
               <DollarSign className="w-4 h-4 text-white" />
             </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
-              summary.difference === 0 ? 'text-green-600' : 'text-red-600'
+              summary.difference === 0 ? 'text-neutral-900' : 'text-neutral-900'
             } mb-1`}
           >
             {formatCurrency(Math.abs(summary.difference))}
@@ -221,13 +221,13 @@ export default function TrialBalanceReport() {
 
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('info')}>
+            <div className={statCardIcon('primary')}>
               <Scale className="w-4 h-4 text-white" />
             </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
-              summary.isBalanced ? 'text-green-600' : 'text-red-600'
+              summary.isBalanced ? 'text-neutral-900' : 'text-neutral-900'
             } mb-1`}
           >
             {summary.isBalanced ? '?' : '?'}
@@ -248,7 +248,7 @@ export default function TrialBalanceReport() {
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
-              Ba�lang�� Tarihi
+              Baï¿½langï¿½ï¿½ Tarihi
             </label>
             <input
               type="date"
@@ -263,7 +263,7 @@ export default function TrialBalanceReport() {
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
-              Biti� Tarihi
+              Bitiï¿½ Tarihi
             </label>
             <input
               type="date"
@@ -285,10 +285,10 @@ export default function TrialBalanceReport() {
               onChange={(e) => setAccountTypeFilter(e.target.value)}
               className={input('md', 'default', undefined, 'lg')}
             >
-              <option value="ALL">T�m�</option>
-              <option value="ASSET">Varl�k</option>
-              <option value="LIABILITY">Bor�</option>
-              <option value="EQUITY">�zkaynak</option>
+              <option value="ALL">Tï¿½mï¿½</option>
+              <option value="ASSET">Varlï¿½k</option>
+              <option value="LIABILITY">Borï¿½</option>
+              <option value="EQUITY">ï¿½zkaynak</option>
               <option value="REVENUE">Gelir</option>
               <option value="EXPENSE">Gider</option>
             </select>
@@ -300,10 +300,10 @@ export default function TrialBalanceReport() {
                 type="checkbox"
                 checked={showZeroBalances}
                 onChange={(e) => setShowZeroBalances(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                className="w-4 h-4 text-neutral-900 rounded focus:ring-2 focus:ring-blue-500"
               />
               <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>
-                S�f�r bakiye g�ster
+                Sï¿½fï¿½r bakiye gï¿½ster
               </span>
             </label>
           </div>
@@ -316,7 +316,7 @@ export default function TrialBalanceReport() {
           <h3
             className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}
           >
-            Hesap Detaylar�
+            Hesap Detaylarï¿½
           </h3>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <FileSpreadsheet className="w-4 h-4" />
@@ -331,7 +331,7 @@ export default function TrialBalanceReport() {
         ) : items.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <Scale className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Se�ilen kriterlere uygun kay�t bulunamad�</p>
+            <p>Seï¿½ilen kriterlere uygun kayï¿½t bulunamadï¿½</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -342,13 +342,13 @@ export default function TrialBalanceReport() {
                     Hesap Kodu
                   </th>
                   <th className={TABLE_HEADER_CELL}>
-                    Hesap Ad�
+                    Hesap Adï¿½
                   </th>
                   <th className={`${TABLE_HEADER_CELL} text-center`}>
                     Tip
                   </th>
                   <th className={`${TABLE_HEADER_CELL} text-right`}>
-                    Bor�
+                    Borï¿½
                   </th>
                   <th className={`${TABLE_HEADER_CELL} text-right`}>
                     Alacak
@@ -386,12 +386,12 @@ export default function TrialBalanceReport() {
                         </span>
                       </td>
                       <td className={`${TABLE_BODY_CELL} text-right`}>
-                        <span className="text-sm text-green-600 font-medium">
+                        <span className="text-sm text-neutral-900 font-medium">
                           {item.debit > 0 ? formatCurrency(item.debit) : '-'}
                         </span>
                       </td>
                       <td className={`${TABLE_BODY_CELL} text-right`}>
-                        <span className="text-sm text-red-600 font-medium">
+                        <span className="text-sm text-neutral-900 font-medium">
                           {item.credit > 0 ? formatCurrency(item.credit) : '-'}
                         </span>
                       </td>
@@ -399,9 +399,9 @@ export default function TrialBalanceReport() {
                         <span
                           className={`text-sm font-bold ${
                             balance > 0
-                              ? 'text-green-600'
+                              ? 'text-neutral-900'
                               : balance < 0
-                              ? 'text-red-600'
+                              ? 'text-neutral-900'
                               : 'text-gray-600'
                           }`}
                         >
@@ -418,16 +418,16 @@ export default function TrialBalanceReport() {
                   <td colSpan={3} className="px-4 py-3 text-right text-sm">
                     TOPLAM:
                   </td>
-                  <td className="px-4 py-3 text-right text-green-600">
+                  <td className="px-4 py-3 text-right text-neutral-900">
                     {formatCurrency(summary.totalDebit)}
                   </td>
-                  <td className="px-4 py-3 text-right text-red-600">
+                  <td className="px-4 py-3 text-right text-neutral-900">
                     {formatCurrency(summary.totalCredit)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <span
                       className={
-                        summary.difference === 0 ? 'text-green-600' : 'text-red-600'
+                        summary.difference === 0 ? 'text-neutral-900' : 'text-neutral-900'
                       }
                     >
                       {summary.isBalanced ? '? Dengede' : '? Dengesiz'}
@@ -442,22 +442,22 @@ export default function TrialBalanceReport() {
 
       {/* Balance Warning */}
       {!summary.isBalanced && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-neutral-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                <span className="text-red-600 text-lg font-bold">!</span>
+              <div className="w-8 h-8 bg-neutral-50 rounded-full flex items-center justify-center">
+                <span className="text-neutral-900 text-lg font-bold">!</span>
               </div>
             </div>
             <div className="flex-1">
-              <h4 className="text-red-900 font-semibold mb-1">Mizan Dengesi Uyu�muyor</h4>
-              <p className="text-red-700 text-sm mb-2">
-                Toplam bor� ve alacak tutarlar� e�it de�il. Fark:{' '}
+              <h4 className="text-neutral-900 font-semibold mb-1">Mizan Dengesi Uyuï¿½muyor</h4>
+              <p className="text-neutral-900 text-sm mb-2">
+                Toplam borï¿½ ve alacak tutarlarï¿½ eï¿½it deï¿½il. Fark:{' '}
                 {formatCurrency(Math.abs(summary.difference))}
               </p>
-              <p className="text-red-600 text-xs">
-                L�tfen yevmiye kay�tlar�n�z� kontrol edin. Her kay�tta bor� ve alacak
-                toplamlar� e�it olmal�d�r.
+              <p className="text-neutral-900 text-xs">
+                Lï¿½tfen yevmiye kayï¿½tlarï¿½nï¿½zï¿½ kontrol edin. Her kayï¿½tta borï¿½ ve alacak
+                toplamlarï¿½ eï¿½it olmalï¿½dï¿½r.
               </p>
             </div>
           </div>
@@ -466,5 +466,7 @@ export default function TrialBalanceReport() {
     </div>
   );
 }
+
+
 
 

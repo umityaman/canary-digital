@@ -266,7 +266,7 @@ export default function DeliveryNoteList() {
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900`}>{stats.total}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.total}</h3>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Toplam �rsaliye</p>
         </div>
 
@@ -274,7 +274,7 @@ export default function DeliveryNoteList() {
           <div className="flex items-center justify-between mb-2">
             <Package className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-indigo-900`}>{stats.prepared}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.prepared}</h3>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Haz�rland�</p>
         </div>
 
@@ -290,7 +290,7 @@ export default function DeliveryNoteList() {
           <div className="flex items-center justify-between mb-2">
             <CheckCircle className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-green-900`}>{stats.delivered}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.delivered}</h3>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Teslim Edildi</p>
         </div>
 
@@ -298,7 +298,7 @@ export default function DeliveryNoteList() {
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-900`}>{stats.invoiced}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.invoiced}</h3>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Faturaland�</p>
         </div>
 
@@ -306,7 +306,7 @@ export default function DeliveryNoteList() {
           <div className="flex items-center justify-between mb-2">
             <Clock className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-yellow-900`}>{stats.pending}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.pending}</h3>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-800`}>Fatura Bekliyor</p>
         </div>
       </div>
@@ -457,7 +457,7 @@ export default function DeliveryNoteList() {
                         {!note.invoiceId && note.status !== 'cancelled' && (
                           <button
                             onClick={() => handleConvertToInvoice(note)}
-                            className="p-2 hover:bg-purple-50 rounded-lg transition-colors"
+                            className="p-2 hover:bg-neutral-50 rounded-lg transition-colors"
                             title="Faturaya �evir"
                           >
                             <ArrowRight size={18} className="text-neutral-900" />
@@ -466,7 +466,7 @@ export default function DeliveryNoteList() {
                         
                         <button
                           onClick={() => handleDownloadPDF(note)}
-                          className="p-2 hover:bg-green-50 rounded-lg transition-colors"
+                          className="p-2 hover:bg-neutral-50 rounded-lg transition-colors"
                           title="PDF �ndir"
                         >
                           <Download size={18} className="text-neutral-900" />
@@ -491,3 +491,4 @@ export default function DeliveryNoteList() {
     </div>
   )
 }
+

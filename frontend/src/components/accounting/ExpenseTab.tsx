@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Plus, Search, Filter, Download, TrendingDown, Calendar, DollarSign, FileText, Trash2, Edit2, Eye, PieChart } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
@@ -30,14 +30,14 @@ interface CategoryStat {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'Personel Maa�lar�': 'bg-neutral-900',
+  'Personel Maaï¿½larï¿½': 'bg-neutral-900',
   'Kira': 'bg-neutral-800',
-  'Elektrik/Su/Do�algaz': 'bg-neutral-700',
-  '�nternet/Telefon': 'bg-neutral-900',
-  'Malzeme Al�m�': 'bg-neutral-800',
-  'Ekipman Bak�m/Onar�m': 'bg-neutral-700',
+  'Elektrik/Su/Doï¿½algaz': 'bg-neutral-700',
+  'ï¿½nternet/Telefon': 'bg-neutral-900',
+  'Malzeme Alï¿½mï¿½': 'bg-neutral-800',
+  'Ekipman Bakï¿½m/Onarï¿½m': 'bg-neutral-700',
   'Pazarlama/Reklam': 'bg-neutral-600',
-  'Di�er': 'bg-neutral-500'
+  'Diï¿½er': 'bg-neutral-500'
 }
 
 export default function ExpenseTab() {
@@ -131,17 +131,17 @@ export default function ExpenseTab() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Bu gider kayd�n� silmek istedi�inizden emin misiniz?')) {
+    if (!confirm('Bu gider kaydï¿½nï¿½ silmek istediï¿½inizden emin misiniz?')) {
       return
     }
     
     try {
       await accountingAPI.deleteExpense(id)
-      toast.success('Gider kayd� silindi')
+      toast.success('Gider kaydï¿½ silindi')
       loadExpenses()
     } catch (error: any) {
       console.error('Failed to delete expense:', error)
-      toast.error('Silme i�lemi ba�ar�s�z: ' + (error.response?.data?.message || error.message))
+      toast.error('Silme iï¿½lemi baï¿½arï¿½sï¿½z: ' + (error.response?.data?.message || error.message))
     }
   }
 
@@ -154,13 +154,13 @@ export default function ExpenseTab() {
     if (receiptUrl) {
       window.open(receiptUrl, '_blank')
     } else {
-      toast.error('Makbuz bulunamad�')
+      toast.error('Makbuz bulunamadï¿½')
     }
   }
 
   const handleExport = () => {
     // TODO: Implement CSV/Excel export
-    toast.success('D��a aktarma ba�lat�ld�')
+    toast.success('Dï¿½ï¿½a aktarma baï¿½latï¿½ldï¿½')
   }
 
   const formatCurrency = (amount: number) => {
@@ -196,18 +196,18 @@ export default function ExpenseTab() {
       <div className="grid grid-cols-3 gap-3">
         <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className={statCardIcon('error')}>
+            <div className={statCardIcon('primary')}>
               <TrendingDown className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{formatCurrency(monthlyExpense)}</h3>
-          <p className="text-xs font-medium text-neutral-600">Ayl�k Gider</p>
+          <p className="text-xs font-medium text-neutral-600">Aylï¿½k Gider</p>
         </div>
 
         <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className={statCardIcon('warning')}>
+            <div className={statCardIcon('primary')}>
               <DollarSign className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Toplam</span>
@@ -218,27 +218,27 @@ export default function ExpenseTab() {
 
         <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className={statCardIcon('neutral')}>
+            <div className={statCardIcon('primary')}>
               <FileText className="text-white" size={16} />
             </div>
-            <span className="text-xs font-medium text-neutral-600">Kay�t</span>
+            <span className="text-xs font-medium text-neutral-600">Kayï¿½t</span>
           </div>
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{expenses.length}</h3>
-          <p className="text-xs font-medium text-neutral-600">Gider Kayd�</p>
+          <p className="text-xs font-medium text-neutral-600">Gider Kaydï¿½</p>
         </div>
       </div>
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
         <div className={card('sm', 'md', 'default', 'lg')}>
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Da��l�m�</h3>
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Daï¿½ï¿½lï¿½mï¿½</h3>
           <div className="space-y-3">
             {categoryStats.map((stat) => (
               <div key={stat.category}>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-neutral-700">{stat.category}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-neutral-500">{stat.count} kay�t</span>
+                    <span className="text-xs text-neutral-500">{stat.count} kayï¿½t</span>
                     <span className="text-sm font-semibold text-neutral-900">
                       {formatCurrency(stat.total)}
                     </span>
@@ -280,12 +280,12 @@ export default function ExpenseTab() {
               onChange={(e) => setCategoryFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[180px]')}
             >
-              <option value="">T�m Kategoriler</option>
-              <option value="Personel Maa�lar�">Personel Maa�lar�</option>
+              <option value="">Tï¿½m Kategoriler</option>
+              <option value="Personel Maaï¿½larï¿½">Personel Maaï¿½larï¿½</option>
               <option value="Kira">Kira</option>
-              <option value="Elektrik/Su/Do�algaz">Elektrik/Su/Do�algaz</option>
-              <option value="Ekipman Bak�m/Onar�m">Ekipman Bak�m/Onar�m</option>
-              <option value="Di�er">Di�er</option>
+              <option value="Elektrik/Su/Doï¿½algaz">Elektrik/Su/Doï¿½algaz</option>
+              <option value="Ekipman Bakï¿½m/Onarï¿½m">Ekipman Bakï¿½m/Onarï¿½m</option>
+              <option value="Diï¿½er">Diï¿½er</option>
             </select>
 
             <select
@@ -293,10 +293,10 @@ export default function ExpenseTab() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
             >
-              <option value="">T�m Durumlar</option>
-              <option value="paid">�dendi</option>
+              <option value="">Tï¿½m Durumlar</option>
+              <option value="paid">ï¿½dendi</option>
               <option value="pending">Beklemede</option>
-              <option value="cancelled">�ptal</option>
+              <option value="cancelled">ï¿½ptal</option>
             </select>
 
             <button
@@ -304,7 +304,7 @@ export default function ExpenseTab() {
               className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}
             >
               <Download size={18} />
-              <span className="hidden sm:inline">D��a Aktar</span>
+              <span className="hidden sm:inline">Dï¿½ï¿½a Aktar</span>
             </button>
 
             <button
@@ -324,12 +324,12 @@ export default function ExpenseTab() {
       {/* Expense Table */}
       <div className={card('none', 'sm', 'default', 'lg')}>
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">Y�kleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yï¿½kleniyor...</div>
         ) : expenses.length === 0 ? (
           <div className="p-12 text-center text-neutral-600">
             <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
-            <p className="text-lg font-medium">Gider kayd� bulunamad�</p>
-            <p className="text-sm mt-2">Yeni gider ekleyerek ba�lay�n</p>
+            <p className="text-lg font-medium">Gider kaydï¿½ bulunamadï¿½</p>
+            <p className="text-sm mt-2">Yeni gider ekleyerek baï¿½layï¿½n</p>
           </div>
         ) : (
           <>
@@ -338,12 +338,12 @@ export default function ExpenseTab() {
                 <thead >
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
-                    <th className={TABLE_HEADER_CELL}>A��klama</th>
+                    <th className={TABLE_HEADER_CELL}>Aï¿½ï¿½klama</th>
                     <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Kategori</th>
                     <th className={TABLE_HEADER_CELL}>Tutar</th>
-                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>�deme</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>ï¿½deme</th>
                     <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Durum</th>
-                    <th className={TABLE_HEADER_CELL}>��lemler</th>
+                    <th className={TABLE_HEADER_CELL}>ï¿½ï¿½lemler</th>
                   </tr>
                 </thead>
                 <tbody >
@@ -377,7 +377,7 @@ export default function ExpenseTab() {
                           <button
                             onClick={() => handleEdit(expense)}
                             className={cx(button('sm', 'ghost', 'lg'), 'p-2')}
-                            title="D�zenle"
+                            title="Dï¿½zenle"
                           >
                             <Edit2 size={16} />
                           </button>
@@ -407,7 +407,7 @@ export default function ExpenseTab() {
                   disabled={currentPage === 1}
                   className={cx(button('md', 'outline', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
                 >
-                  �nceki
+                  ï¿½nceki
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
@@ -435,5 +435,6 @@ export default function ExpenseTab() {
     </div>
   )
 }
+
 
 

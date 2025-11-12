@@ -468,7 +468,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
                     {items.length > 1 && (
                       <button
                         onClick={() => handleRemoveItem(item.id)}
-                        className="p-1 hover:bg-red-100 rounded-lg transition-colors"
+                        className="p-1 hover:bg-neutral-50 rounded-lg transition-colors"
                       >
                         <Trash2 size={16} className="text-neutral-800" />
                       </button>
@@ -608,3 +608,4 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
     </div>
   )
 }
+

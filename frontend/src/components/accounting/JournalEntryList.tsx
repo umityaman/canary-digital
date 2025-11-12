@@ -112,8 +112,8 @@ export default function JournalEntryList() {
   const getStatusBadge = (status: string) => {
     const statusConfig = {
       DRAFT: { label: 'Taslak', color: 'bg-gray-100 text-gray-700' },
-      POSTED: { label: 'Kesinleşmiş', color: 'bg-green-100 text-green-700' },
-      CANCELLED: { label: 'İptal', color: 'bg-red-100 text-red-700' },
+      POSTED: { label: 'Kesinleşmiş', color: 'bg-neutral-50 text-neutral-900' },
+      CANCELLED: { label: 'İptal', color: 'bg-neutral-50 text-neutral-900' },
     };
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.DRAFT;
@@ -344,12 +344,12 @@ export default function JournalEntryList() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-green-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-900 font-medium`}>
                         {formatCurrency(entry.totalDebit)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-red-600 font-medium`}>
+                      <span className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-900 font-medium`}>
                         {formatCurrency(entry.totalCredit)}
                       </span>
                     </td>
@@ -360,7 +360,7 @@ export default function JournalEntryList() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleViewDetail(entry)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                           title="Detayları Görüntüle"
                         >
                           <Eye className="w-4 h-4" />
@@ -379,7 +379,7 @@ export default function JournalEntryList() {
                             </button>
                             <button
                               onClick={() => handleDeleteEntry(entry.id)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
                               title="Sil"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -504,10 +504,10 @@ export default function JournalEntryList() {
                           <td className="px-4 py-3 text-sm text-gray-600">
                             {item.description}
                           </td>
-                          <td className="px-4 py-3 text-sm text-green-600 font-medium text-right">
+                          <td className="px-4 py-3 text-sm text-neutral-900 font-medium text-right">
                             {item.debitAmount > 0 ? formatCurrency(item.debitAmount) : '-'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-red-600 font-medium text-right">
+                          <td className="px-4 py-3 text-sm text-neutral-900 font-medium text-right">
                             {item.creditAmount > 0 ? formatCurrency(item.creditAmount) : '-'}
                           </td>
                         </tr>
@@ -518,22 +518,22 @@ export default function JournalEntryList() {
                         <td colSpan={3} className="px-4 py-3 text-sm font-semibold text-gray-900 text-right">
                           TOPLAM:
                         </td>
-                        <td className="px-4 py-3 text-sm font-bold text-green-700 text-right">
+                        <td className="px-4 py-3 text-sm font-bold text-neutral-900 text-right">
                           {formatCurrency(selectedEntry.totalDebit)}
                         </td>
-                        <td className="px-4 py-3 text-sm font-bold text-red-700 text-right">
+                        <td className="px-4 py-3 text-sm font-bold text-neutral-900 text-right">
                           {formatCurrency(selectedEntry.totalCredit)}
                         </td>
                       </tr>
                       <tr>
                         <td colSpan={5} className="px-4 py-2 text-center">
                           {selectedEntry.totalDebit === selectedEntry.totalCredit ? (
-                            <span className="inline-flex items-center gap-1 text-sm text-green-600">
+                            <span className="inline-flex items-center gap-1 text-sm text-neutral-900">
                               <CheckCircle className="w-4 h-4" />
                               Borç ve Alacak Dengede
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-sm text-red-600">
+                            <span className="inline-flex items-center gap-1 text-sm text-neutral-900">
                               <XCircle className="w-4 h-4" />
                               Borç ve Alacak Dengesiz!
                             </span>
@@ -583,3 +583,4 @@ export default function JournalEntryList() {
     </div>
   );
 }
+

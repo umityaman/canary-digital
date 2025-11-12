@@ -253,7 +253,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
             <button
               onClick={handleSendEDocument}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-neutral-50 text-white rounded-xl hover:bg-neutral-50 transition-colors disabled:opacity-50"
             >
               <Send size={18} />
               <span className="hidden sm:inline">E-Belge Gönder</span>
@@ -272,7 +272,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
               <button
                 onClick={handleDownloadXML}
                 disabled={loading}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-neutral-50 text-white rounded-xl hover:bg-neutral-50 transition-colors disabled:opacity-50"
               >
                 <File size={18} />
                 <span className="hidden sm:inline">XML İndir</span>
@@ -283,7 +283,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
           {invoice.parasutId && (
             <button
               onClick={handleDownloadPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-neutral-50 text-white rounded-xl hover:bg-neutral-50 transition-colors"
             >
               <Download size={18} />
               <span className="hidden sm:inline">PDF İndir</span>
@@ -294,7 +294,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
             <button
               onClick={handleCancelInvoice}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-neutral-50 text-white rounded-xl hover:bg-neutral-50 transition-colors disabled:opacity-50"
             >
               <X size={18} />
               <span className="hidden sm:inline">İptal Et</span>
@@ -429,14 +429,14 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
           {/* Payment Info */}
           <div className="bg-white rounded-lg p-6 border border-neutral-200">
-            <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
               <DollarSign size={20} />
               Ödeme Bilgileri
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-neutral-800">Toplam Tutar:</span>
-                <span className="text-xl font-bold text-blue-900">{formatCurrency(invoice.grandTotal)}</span>
+                <span className="text-xl font-bold text-neutral-900">{formatCurrency(invoice.grandTotal)}</span>
               </div>
               
               <div className="flex items-center justify-between">
@@ -557,3 +557,4 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
     </div>
   )
 }
+

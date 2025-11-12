@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users,
@@ -84,7 +84,7 @@ export default function CurrentAccountManagement() {
       setAccounts(data.data || data);
     } catch (error: any) {
       console.error('Failed to load current accounts:', error);
-      toast.error('Cari hesaplar yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
+      toast.error('Cari hesaplar yÃ¼klenemedi: ' + (error.message || 'Bilinmeyen hata'));
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ export default function CurrentAccountManagement() {
       }
     } catch (error: any) {
       console.error('Failed to load transactions:', error);
-      toast.error('Hareketler yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
+      toast.error('Hareketler yÃ¼klenemedi: ' + (error.message || 'Bilinmeyen hata'));
     } finally {
       setTransactionsLoading(false);
     }
@@ -123,7 +123,7 @@ export default function CurrentAccountManagement() {
   };
 
   const handleDeleteAccount = async (accountId: number) => {
-    if (!confirm('Bu cari hesabý silmek istediðinize emin misiniz?')) return;
+    if (!confirm('Bu cari hesabÄ± silmek istediÄŸinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`/api/accounting/current-accounts/${accountId}`, {
@@ -144,8 +144,8 @@ export default function CurrentAccountManagement() {
 
   const getAccountTypeBadge = (type: string) => {
     const config = type === 'CUSTOMER' 
-      ? { label: 'Müþteri', color: 'bg-blue-100 text-neutral-800' }
-      : { label: 'Tedarikçi', color: 'bg-purple-100 text-neutral-800' };
+      ? { label: 'MÃ¼ÅŸteri', color: 'bg-neutral-50 text-neutral-800' }
+      : { label: 'TedarikÃ§i', color: 'bg-neutral-50 text-neutral-800' };
 
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
@@ -196,10 +196,10 @@ export default function CurrentAccountManagement() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>
-            Cari Hesap Yönetimi
+            Cari Hesap YÃ¶netimi
           </h2>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
-            Müþteri ve tedarikçi cari hesaplarýný yönetin
+            MÃ¼ÅŸteri ve tedarikÃ§i cari hesaplarÄ±nÄ± yÃ¶netin
           </p>
         </div>
 
@@ -211,16 +211,16 @@ export default function CurrentAccountManagement() {
                 exportCurrentAccountsToExcel(accounts);
                 toast.success('Cari hesaplar Excel olarak indirildi');
               } catch (error) {
-                toast.error('Excel export baþarýsýz oldu');
+                toast.error('Excel export baÅŸarÄ±sÄ±z oldu');
               }
             }}
           >
             <Download className="w-4 h-4" />
-            Excel Ýndir
+            Excel Ä°ndir
           </button>
           <button
             className={button('primary', 'md', 'md')}
-            onClick={() => toast.success('Yeni cari hesap ekleme özelliði yakýnda eklenecek')}
+            onClick={() => toast.success('Yeni cari hesap ekleme Ã¶zelliÄŸi yakÄ±nda eklenecek')}
           >
             <Plus className="w-4 h-4" />
             Yeni Cari Hesap
@@ -241,7 +241,7 @@ export default function CurrentAccountManagement() {
             Toplam Cari
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.xs} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>
-            {customerCount} Müþteri, {supplierCount} Tedarikçi
+            {customerCount} MÃ¼ÅŸteri, {supplierCount} TedarikÃ§i
           </p>
         </div>
 
@@ -253,7 +253,7 @@ export default function CurrentAccountManagement() {
             {formatCurrency(totalDebit)}
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
-            Toplam Borç
+            Toplam BorÃ§
           </p>
         </div>
 
@@ -289,7 +289,7 @@ export default function CurrentAccountManagement() {
             {filteredAccounts.filter((a) => Math.abs(a.balance) > 0).length}
           </p>
           <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
-            Açýk Bakiye
+            AÃ§Ä±k Bakiye
           </p>
         </div>
       </div>
@@ -302,7 +302,7 @@ export default function CurrentAccountManagement() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Cari adý, kodu veya vergi no ara..."
+              placeholder="Cari adÄ±, kodu veya vergi no ara..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -315,9 +315,9 @@ export default function CurrentAccountManagement() {
             onChange={(e) => setTypeFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="ALL">Tüm Tipler</option>
-            <option value="CUSTOMER">Müþteri</option>
-            <option value="SUPPLIER">Tedarikçi</option>
+            <option value="ALL">TÃ¼m Tipler</option>
+            <option value="CUSTOMER">MÃ¼ÅŸteri</option>
+            <option value="SUPPLIER">TedarikÃ§i</option>
           </select>
 
           {/* Balance Filter */}
@@ -326,10 +326,10 @@ export default function CurrentAccountManagement() {
             onChange={(e) => setBalanceFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="ALL">Tüm Bakiyeler</option>
-            <option value="POSITIVE">Alacaklý (Pozitif)</option>
-            <option value="NEGATIVE">Borçlu (Negatif)</option>
-            <option value="ZERO">Sýfýr Bakiye</option>
+            <option value="ALL">TÃ¼m Bakiyeler</option>
+            <option value="POSITIVE">AlacaklÄ± (Pozitif)</option>
+            <option value="NEGATIVE">BorÃ§lu (Negatif)</option>
+            <option value="ZERO">SÄ±fÄ±r Bakiye</option>
           </select>
         </div>
 
@@ -352,11 +352,11 @@ export default function CurrentAccountManagement() {
           </button>
 
           <button
-            onClick={() => toast.success('Excel export özelliði yakýnda eklenecek')}
+            onClick={() => toast.success('Excel export Ã¶zelliÄŸi yakÄ±nda eklenecek')}
             className={button('secondary', 'sm', 'md')}
           >
             <Download className="w-4 h-4" />
-            Excel Ýndir
+            Excel Ä°ndir
           </button>
         </div>
       </div>
@@ -371,12 +371,12 @@ export default function CurrentAccountManagement() {
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
             <Users className="w-16 h-16 text-gray-300 mb-4" />
             <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
-              Cari Hesap Bulunamadý
+              Cari Hesap BulunamadÄ±
             </p>
             <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
               {searchQuery || typeFilter !== 'ALL' || balanceFilter !== 'ALL'
-                ? 'Arama kriterlerinize uygun cari hesap bulunamadý'
-                : 'Henüz cari hesap eklenmemiþ'}
+                ? 'Arama kriterlerinize uygun cari hesap bulunamadÄ±'
+                : 'HenÃ¼z cari hesap eklenmemiÅŸ'}
             </p>
           </div>
         ) : (
@@ -388,13 +388,13 @@ export default function CurrentAccountManagement() {
                     Cari Kodu
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Cari Adý
+                    Cari AdÄ±
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Tip
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Borç
+                    BorÃ§
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Alacak
@@ -403,7 +403,7 @@ export default function CurrentAccountManagement() {
                     Bakiye
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ýþlemler
+                    Ä°ÅŸlemler
                   </th>
                 </tr>
               </thead>
@@ -453,14 +453,14 @@ export default function CurrentAccountManagement() {
                         <button
                           onClick={() => handleViewDetail(account)}
                           className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
-                          title="Detaylarý Görüntüle"
+                          title="DetaylarÄ± GÃ¶rÃ¼ntÃ¼le"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => toast.success('Düzenleme özelliði yakýnda eklenecek')}
+                          onClick={() => toast.success('DÃ¼zenleme Ã¶zelliÄŸi yakÄ±nda eklenecek')}
                           className="p-2 text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors"
-                          title="Düzenle"
+                          title="DÃ¼zenle"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
@@ -490,7 +490,7 @@ export default function CurrentAccountManagement() {
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className={`${DESIGN_TOKENS?.typography?.heading.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>
-                    Cari Hesap Detayý
+                    Cari Hesap DetayÄ±
                   </h3>
                   <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
                     {selectedAccount.code} - {selectedAccount.name}
@@ -545,7 +545,7 @@ export default function CurrentAccountManagement() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className={card('md', 'md', 'default', 'lg')}>
                   <p className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mb-2`}>
-                    Toplam Borç
+                    Toplam BorÃ§
                   </p>
                   <p className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>
                     {formatCurrency(selectedAccount.totalDebit)}
@@ -581,7 +581,7 @@ export default function CurrentAccountManagement() {
                   </div>
                 ) : !selectedAccount.transactions || selectedAccount.transactions.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    Henüz hareket bulunmamaktadýr
+                    HenÃ¼z hareket bulunmamaktadÄ±r
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -592,13 +592,13 @@ export default function CurrentAccountManagement() {
                             Tarih
                           </th>
                           <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                            Açýklama
+                            AÃ§Ä±klama
                           </th>
                           <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                             Fatura No
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                            Borç
+                            BorÃ§
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                             Alacak
@@ -647,11 +647,11 @@ export default function CurrentAccountManagement() {
                 Kapat
               </button>
               <button
-                onClick={() => toast.success('Ekstre yazdýrma özelliði yakýnda eklenecek')}
+                onClick={() => toast.success('Ekstre yazdÄ±rma Ã¶zelliÄŸi yakÄ±nda eklenecek')}
                 className={button('primary', 'md', 'md')}
               >
                 <FileText className="w-4 h-4" />
-                Ekstre Yazdýr
+                Ekstre YazdÄ±r
               </button>
             </div>
           </div>
@@ -660,3 +660,4 @@ export default function CurrentAccountManagement() {
     </div>
   );
 }
+

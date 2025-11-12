@@ -717,7 +717,7 @@ const CompanyInfo: React.FC = () => {
                         <span
                           className={`px-2 py-1 text-xs rounded-full ${
                             account.isActive
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-neutral-50 text-neutral-900'
                               : 'bg-gray-100 text-gray-800'
                           }`}
                         >
@@ -737,3 +737,4 @@ const CompanyInfo: React.FC = () => {
 };
 
 export default CompanyInfo;
+

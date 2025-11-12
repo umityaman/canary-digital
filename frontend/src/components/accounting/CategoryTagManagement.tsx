@@ -216,7 +216,7 @@ export default function CategoryTagManagement() {
                 className={cx(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   categoryFilter === 'income'
-                    ? 'bg-green-600 text-white'
+                    ? 'bg-neutral-50 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 )}
               >
@@ -227,7 +227,7 @@ export default function CategoryTagManagement() {
                 className={cx(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   categoryFilter === 'expense'
-                    ? 'bg-red-600 text-white'
+                    ? 'bg-neutral-50 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 )}
               >
@@ -286,8 +286,8 @@ export default function CategoryTagManagement() {
                         <span
                           className={`px-2 py-1 text-xs rounded-full ${
                             category.type === 'income'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
+                              ? 'bg-neutral-50 text-neutral-900'
+                              : 'bg-neutral-50 text-neutral-900'
                           }`}
                         >
                           {category.type === 'income' ? 'Gelir' : 'Gider'}
@@ -350,7 +350,7 @@ export default function CategoryTagManagement() {
 
             {/* Tag Form */}
             {showTagForm && (
-              <div className={`mb-6 p-4 bg-blue-50 ${DESIGN_TOKENS?.radius?.md} border border-blue-200`}>
+              <div className={`mb-6 p-4 bg-neutral-50 ${DESIGN_TOKENS?.radius?.md} border border-blue-200`}>
                 <h4 className={`${DESIGN_TOKENS?.typography?.h4} ${DESIGN_TOKENS?.colors?.text.primary} mb-3`}>
                   {editingTagId ? 'Etiket Düzenle' : 'Yeni Etiket'}
                 </h4>
@@ -454,3 +454,4 @@ export default function CategoryTagManagement() {
     </div>
   );
 }
+

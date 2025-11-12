@@ -153,11 +153,11 @@ export default function IncomeStatementReport() {
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('success')}>
+            <div className={statCardIcon('primary')}>
               <TrendingUp className="w-4 h-4 text-white" />
             </div>
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {formatCurrency(data.summary.totalRevenue)}
           </p>
           <p
@@ -169,11 +169,11 @@ export default function IncomeStatementReport() {
 
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('error')}>
+            <div className={statCardIcon('primary')}>
               <TrendingDown className="w-4 h-4 text-white" />
             </div>
           </div>
-          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
+          <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-neutral-900 mb-1`}>
             {formatCurrency(data.summary.totalExpense)}
           </p>
           <p
@@ -185,13 +185,13 @@ export default function IncomeStatementReport() {
 
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('info')}>
+            <div className={statCardIcon('primary')}>
               <BarChart3 className="w-4 h-4 text-white" />
             </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
-              data.summary.grossProfit >= 0 ? 'text-green-600' : 'text-red-600'
+              data.summary.grossProfit >= 0 ? 'text-neutral-900' : 'text-neutral-900'
             } mb-1`}
           >
             {formatCurrency(Math.abs(data.summary.grossProfit))}
@@ -205,13 +205,13 @@ export default function IncomeStatementReport() {
 
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('warning')}>
+            <div className={statCardIcon('primary')}>
               <DollarSign className="w-4 h-4 text-white" />
             </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
-              isProfitable ? 'text-green-600' : 'text-red-600'
+              isProfitable ? 'text-neutral-900' : 'text-neutral-900'
             } mb-1`}
           >
             {formatCurrency(Math.abs(data.summary.netProfit))}
@@ -225,13 +225,13 @@ export default function IncomeStatementReport() {
 
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <div className={statCardIcon('neutral')}>
+            <div className={statCardIcon('primary')}>
               <PieChart className="w-4 h-4 text-white" />
             </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
-              data.summary.profitMargin >= 0 ? 'text-green-600' : 'text-red-600'
+              data.summary.profitMargin >= 0 ? 'text-neutral-900' : 'text-neutral-900'
             } mb-1`}
           >
             {formatPercentage(data.summary.profitMargin)}
@@ -309,7 +309,7 @@ export default function IncomeStatementReport() {
               >
                 Gelirler (Revenue)
               </h3>
-              <span className="text-green-600 font-bold text-lg">
+              <span className="text-neutral-900 font-bold text-lg">
                 {formatCurrency(data.summary.totalRevenue)}
               </span>
             </div>
@@ -324,7 +324,7 @@ export default function IncomeStatementReport() {
                 {data.revenues.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between items-center py-2 px-3 hover:bg-green-50 rounded-lg transition-colors"
+                    className="flex justify-between items-center py-2 px-3 hover:bg-neutral-50 rounded-lg transition-colors"
                   >
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">
@@ -337,7 +337,7 @@ export default function IncomeStatementReport() {
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-green-600">
+                      <p className="text-sm font-bold text-neutral-900">
                         {formatCurrency(item.amount)}
                       </p>
                       {viewType === 'detailed' && (
@@ -360,7 +360,7 @@ export default function IncomeStatementReport() {
               >
                 Giderler (Expenses)
               </h3>
-              <span className="text-red-600 font-bold text-lg">
+              <span className="text-neutral-900 font-bold text-lg">
                 {formatCurrency(data.summary.totalExpense)}
               </span>
             </div>
@@ -375,7 +375,7 @@ export default function IncomeStatementReport() {
                 {data.expenses.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between items-center py-2 px-3 hover:bg-red-50 rounded-lg transition-colors"
+                    className="flex justify-between items-center py-2 px-3 hover:bg-neutral-50 rounded-lg transition-colors"
                   >
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">
@@ -388,7 +388,7 @@ export default function IncomeStatementReport() {
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-red-600">
+                      <p className="text-sm font-bold text-neutral-900">
                         {formatCurrency(item.amount)}
                       </p>
                       {viewType === 'detailed' && (
@@ -408,43 +408,43 @@ export default function IncomeStatementReport() {
       {/* Profit/Loss Summary */}
       <div
         className={`${card('md', 'md', 'default', 'lg')} ${
-          isProfitable ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
+          isProfitable ? 'bg-neutral-50 border-green-200' : 'bg-neutral-50 border-red-200'
         }`}
       >
         <div className="flex items-center gap-4">
           <div
             className={`w-12 h-12 rounded-full flex items-center justify-center ${
-              isProfitable ? 'bg-green-100' : 'bg-red-100'
+              isProfitable ? 'bg-neutral-50' : 'bg-neutral-50'
             }`}
           >
             {isProfitable ? (
-              <TrendingUp className="w-6 h-6 text-green-600" />
+              <TrendingUp className="w-6 h-6 text-neutral-900" />
             ) : (
-              <TrendingDown className="w-6 h-6 text-red-600" />
+              <TrendingDown className="w-6 h-6 text-neutral-900" />
             )}
           </div>
           <div className="flex-1">
             <h4
               className={`text-lg font-bold mb-1 ${
-                isProfitable ? 'text-green-900' : 'text-red-900'
+                isProfitable ? 'text-neutral-900' : 'text-neutral-900'
               }`}
             >
               {isProfitable ? 'Kar (Profit)' : 'Zarar (Loss)'}
             </h4>
-            <p className={`text-sm ${isProfitable ? 'text-green-700' : 'text-red-700'}`}>
+            <p className={`text-sm ${isProfitable ? 'text-neutral-900' : 'text-neutral-900'}`}>
               Dönem sonucu: {formatCurrency(Math.abs(data.summary.netProfit))}
             </p>
           </div>
           <div className="text-right">
             <p
               className={`text-3xl font-bold ${
-                isProfitable ? 'text-green-600' : 'text-red-600'
+                isProfitable ? 'text-neutral-900' : 'text-neutral-900'
               }`}
             >
               {isProfitable ? '+' : '-'}
               {formatCurrency(Math.abs(data.summary.netProfit))}
             </p>
-            <p className={`text-sm ${isProfitable ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`text-sm ${isProfitable ? 'text-neutral-900' : 'text-neutral-900'}`}>
               Kar Marjı: {formatPercentage(data.summary.profitMargin)}
             </p>
           </div>
@@ -452,12 +452,12 @@ export default function IncomeStatementReport() {
       </div>
 
       {/* Period Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-neutral-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-neutral-900 mt-0.5" />
           <div>
-            <h4 className="text-blue-900 font-semibold mb-1">Rapor Dönemi</h4>
-            <p className="text-blue-700 text-sm">
+            <h4 className="text-neutral-900 font-semibold mb-1">Rapor Dönemi</h4>
+            <p className="text-neutral-900 text-sm">
               {new Date(dateFrom).toLocaleDateString('tr-TR', {
                 year: 'numeric',
                 month: 'long',
@@ -470,7 +470,7 @@ export default function IncomeStatementReport() {
                 day: 'numeric',
               })}
             </p>
-            <p className="text-blue-600 text-xs mt-1">
+            <p className="text-neutral-900 text-xs mt-1">
               Bu rapor seçilen tarih aralığındaki tüm gelir ve gider hesaplarını içerir.
             </p>
           </div>
@@ -479,3 +479,5 @@ export default function IncomeStatementReport() {
     </div>
   );
 }
+
+

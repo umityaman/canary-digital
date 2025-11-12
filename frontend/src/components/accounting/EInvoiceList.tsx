@@ -486,7 +486,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <FileText className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-blue-900`}>{stats.total}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.total}</h3>
           <p className="text-xs text-neutral-800">Toplam Fatura</p>
         </div>
 
@@ -494,7 +494,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <Zap className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-purple-900`}>{stats.eFatura}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.eFatura}</h3>
           <p className="text-xs text-neutral-800">E-Fatura</p>
         </div>
 
@@ -502,7 +502,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <Archive className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-indigo-900`}>{stats.eArsiv}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900`}>{stats.eArsiv}</h3>
           <p className="text-xs text-neutral-800">E-Ar�iv</p>
         </div>
 
@@ -510,7 +510,7 @@ export default function EInvoiceList() {
           <div className="flex items-center justify-between mb-2">
             <DollarSign className="text-neutral-900" size={20} />
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} font-bold text-green-900`}>{formatCurrency(stats.totalAmount)}</h3>
+          <h3 className={`${DESIGN_TOKENS?.typography?.stat.sm} font-bold text-neutral-900`}>{formatCurrency(stats.totalAmount)}</h3>
           <p className="text-xs text-neutral-800">Toplam Tutar</p>
         </div>
 
@@ -662,7 +662,7 @@ export default function EInvoiceList() {
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
                         invoice.invoiceType === 'e-fatura'
                           ? 'bg-neutral-100 text-neutral-800'
-                          : 'bg-indigo-100 text-neutral-800'
+                          : 'bg-neutral-50 text-neutral-800'
                       }`}>
                         {invoice.invoiceType === 'e-fatura' ? <Zap size={12} /> : <Archive size={12} />}
                         {invoice.invoiceType === 'e-fatura' ? 'E-Fatura' : 'E-Ar�iv'}
@@ -699,7 +699,7 @@ export default function EInvoiceList() {
                           <button
                             onClick={() => handleSendEDocument(invoice)}
                             disabled={actionInvoiceId === invoice.id}
-                            className="p-2 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                            className="p-2 hover:bg-neutral-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
                             title="E-Belge G�nder"
                           >
                             <Send size={18} className="text-neutral-900" />
@@ -719,7 +719,7 @@ export default function EInvoiceList() {
                             <button
                               onClick={() => handleDownloadXML(invoice)}
                               disabled={actionInvoiceId === invoice.id}
-                              className="p-2 hover:bg-purple-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                              className="p-2 hover:bg-neutral-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
                               title="E-Fatura XML �ndir"
                             >
                               <File size={18} className="text-neutral-900" />
@@ -731,7 +731,7 @@ export default function EInvoiceList() {
                           <button
                             onClick={() => handleDownloadPDF(invoice)}
                             disabled={actionInvoiceId === invoice.id}
-                            className="p-2 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                            className="p-2 hover:bg-neutral-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
                             title="PDF �ndir"
                           >
                             <Download size={18} className="text-neutral-900" />
@@ -742,10 +742,10 @@ export default function EInvoiceList() {
                           <button
                             onClick={() => handleCancelInvoice(invoice)}
                             disabled={actionInvoiceId === invoice.id}
-                            className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                            className="p-2 hover:bg-neutral-50 rounded-lg transition-colors disabled:opacity-50 disabled:pointer-events-none"
                             title="�ptal Et"
                           >
-                            <X size={18} className="text-red-600" />
+                            <X size={18} className="text-neutral-900" />
                           </button>
                         )}
                       </div>
@@ -768,3 +768,4 @@ export default function EInvoiceList() {
     </div>
   )
 }
+

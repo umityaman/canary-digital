@@ -294,7 +294,7 @@ export default function ExpenseModal({ open, onClose, onSaved, initial }: Expens
                   href={formData.receiptUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:text-blue-700"
+                  className="text-sm text-neutral-900 hover:text-neutral-900"
                 >
                   Makbuzu Görüntüle
                 </a>
@@ -341,4 +341,5 @@ export default function ExpenseModal({ open, onClose, onSaved, initial }: Expens
     </div>
   )
 }
+
 
