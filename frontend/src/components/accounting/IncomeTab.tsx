@@ -3,7 +3,11 @@ import { Plus, Search, Filter, Download, TrendingUp, Calendar, DollarSign, FileT
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
 import IncomeModal from './IncomeModal'
-import { card, button, input, badge, getStatGradient, DESIGN_TOKENS, cx, statCardIcon, TABLE_HEADER_CELL, TABLE_BODY_CELL, TABLE_BODY_CELL_MUTED } from '../../styles/design-tokens'
+import { card, button, input, badge, getStatGradient, DESIGN_TOKENS, cx, statCardIcon } from '../../styles/design-tokens'
+
+// Hardcoded table cell classes (to avoid bundling issues)
+const TABLE_HEADER_CELL = 'px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50'
+const TABLE_BODY_CELL = 'px-6 py-4 text-sm text-neutral-900'
 
 interface Income {
   id: number
