@@ -540,10 +540,9 @@ export const badge = (
  * @example tableHeaderCell() // Returns complete table header cell classes
  */
 export const tableHeaderCell = () => {
-  return cx(
-    DESIGN_TOKENS_RAW.table.header.cell,
-    DESIGN_TOKENS_RAW.table.header.bg
-  )
+  const cell = DESIGN_TOKENS_RAW?.table?.header?.cell || 'px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider'
+  const bg = DESIGN_TOKENS_RAW?.table?.header?.bg || 'bg-neutral-50'
+  return cx(cell, bg)
 }
 
 /**
@@ -551,7 +550,10 @@ export const tableHeaderCell = () => {
  * @example tableBodyCell(false) // Returns complete table body cell classes
  */
 export const tableBodyCell = (muted = false) => {
-  return muted ? DESIGN_TOKENS_RAW.table.body.cellMuted : DESIGN_TOKENS_RAW.table.body.cell
+  if (muted) {
+    return DESIGN_TOKENS_RAW?.table?.body?.cellMuted || 'px-6 py-4 text-sm text-neutral-600'
+  }
+  return DESIGN_TOKENS_RAW?.table?.body?.cell || 'px-6 py-4 text-sm text-neutral-900'
 }
 
 /**
