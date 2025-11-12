@@ -154,13 +154,13 @@ export default function ExpenseTab() {
     if (receiptUrl) {
       window.open(receiptUrl, '_blank')
     } else {
-      toast.error('Makbuz bulunamadï¿½')
+      toast.error('Makbuz bulunamadı')
     }
   }
 
   const handleExport = () => {
     // TODO: Implement CSV/Excel export
-    toast.success('Dï¿½ï¿½a aktarma baï¿½latï¿½ldï¿½')
+    toast.success('Dışa aktarma başlatıldı')
   }
 
   const formatCurrency = (amount: number) => {
@@ -280,12 +280,12 @@ export default function ExpenseTab() {
               onChange={(e) => setCategoryFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[180px]')}
             >
-              <option value="">Tï¿½m Kategoriler</option>
-              <option value="Personel Maaï¿½larï¿½">Personel Maaï¿½larï¿½</option>
+              <option value="">Tüm Kategoriler</option>
+              <option value="Personel Maaşları">Personel Maaşları</option>
               <option value="Kira">Kira</option>
-              <option value="Elektrik/Su/Doï¿½algaz">Elektrik/Su/Doï¿½algaz</option>
-              <option value="Ekipman Bakï¿½m/Onarï¿½m">Ekipman Bakï¿½m/Onarï¿½m</option>
-              <option value="Diï¿½er">Diï¿½er</option>
+              <option value="Elektrik/Su/Doğalgaz">Elektrik/Su/Doğalgaz</option>
+              <option value="Ekipman Bakım/Onarım">Ekipman Bakım/Onarım</option>
+              <option value="Diğer">Diğer</option>
             </select>
 
             <select

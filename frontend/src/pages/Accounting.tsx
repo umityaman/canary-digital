@@ -318,7 +318,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load invoices:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('Faturalar yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Faturalar yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setInvoicesLoading(false)
     }
@@ -345,7 +345,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load offers:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('Teklifler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Teklifler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setOffersLoading(false)
     }

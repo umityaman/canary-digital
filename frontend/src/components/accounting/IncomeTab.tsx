@@ -118,17 +118,17 @@ export default function IncomeTab() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Bu gelir kaydï¿½nï¿½ silmek istediï¿½inizden emin misiniz?')) {
+    if (!confirm('Bu gelir kaydını silmek istediğinizden emin misiniz?')) {
       return
     }
     
     try {
       await accountingAPI.deleteIncome(id)
-      toast.success('Gelir kaydï¿½ silindi')
+      toast.success('Gelir kaydı silindi')
       loadIncomes()
     } catch (error: any) {
       console.error('Failed to delete income:', error)
-      toast.error('Silme iï¿½lemi baï¿½arï¿½sï¿½z: ' + (error.response?.data?.message || error.message))
+      toast.error('Silme işlemi başarısız: ' + (error.response?.data?.message || error.message))
     }
   }
 
@@ -139,7 +139,7 @@ export default function IncomeTab() {
 
   const handleExport = () => {
     // TODO: Implement CSV/Excel export
-    toast.success('Dï¿½ï¿½a aktarma baï¿½latï¿½ldï¿½')
+    toast.success('Dışa aktarma başlatıldı')
   }
 
   const formatCurrency = (amount: number) => {
