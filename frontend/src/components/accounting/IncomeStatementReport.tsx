@@ -457,7 +457,7 @@ export default function IncomeStatementReport() {
               })}
             </p>
             <p className="text-neutral-900 text-xs mt-1">
-              Bu rapor seçilen tarih aralığındaki tüm gelir ve gider hesaplarını içerir.
+              Bu rapor seçilen tarih aralığındaki tüm gelir ve gider Hesaplarını içerir.
             </p>
           </div>
         </div>

@@ -30,14 +30,14 @@ interface CategoryStat {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'Personel Maaï¿½larï¿½': 'bg-neutral-900',
+  'Personel Maaşları': 'bg-neutral-900',
   'Kira': 'bg-neutral-800',
-  'Elektrik/Su/Doï¿½algaz': 'bg-neutral-700',
-  'ï¿½nternet/Telefon': 'bg-neutral-900',
-  'Malzeme Alï¿½mï¿½': 'bg-neutral-800',
-  'Ekipman Bakï¿½m/Onarï¿½m': 'bg-neutral-700',
+  'Elektrik/Su/Doğalgaz': 'bg-neutral-700',
+  'İnternet/Telefon': 'bg-neutral-900',
+  'Malzeme Alımı': 'bg-neutral-800',
+  'Ekipman Bakım/Onarım': 'bg-neutral-700',
   'Pazarlama/Reklam': 'bg-neutral-600',
-  'Diï¿½er': 'bg-neutral-500'
+  'Diğer': 'bg-neutral-500'
 }
 
 export default function ExpenseTab() {
@@ -131,17 +131,17 @@ export default function ExpenseTab() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Bu gider kaydï¿½nï¿½ silmek istediï¿½inizden emin misiniz?')) {
+    if (!confirm('Bu gider kaydını silmek istediğinizden emin misiniz?')) {
       return
     }
     
     try {
       await accountingAPI.deleteExpense(id)
-      toast.success('Gider kaydï¿½ silindi')
+      toast.success('Gider kaydı silindi')
       loadExpenses()
     } catch (error: any) {
       console.error('Failed to delete expense:', error)
-      toast.error('Silme iï¿½lemi baï¿½arï¿½sï¿½z: ' + (error.response?.data?.message || error.message))
+      toast.error('Silme işlemi başarısız: ' + (error.response?.data?.message || error.message))
     }
   }
 

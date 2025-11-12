@@ -296,7 +296,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load accounting stats:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('ï¿½statistikler yï¿½klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('İstatistikler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setLoading(false)
     }
