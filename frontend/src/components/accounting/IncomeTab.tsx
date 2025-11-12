@@ -174,7 +174,7 @@ export default function IncomeTab() {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto" style={{ scrollbarGutter: 'stable' }}>
+    <div className="space-y-6 max-w-7xl mx-auto w-full" style={{ maxWidth: '80rem' }}>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className={card('sm', 'sm', 'default', 'lg')}>
@@ -305,7 +305,7 @@ export default function IncomeTab() {
       </div>
 
       {/* Income Table */}
-      <div className={card('none', 'sm', 'default', 'lg')}>
+      <div className={card('none', 'sm', 'default', 'lg')} style={{ overflow: 'hidden' }}>
         {loading ? (
           <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : incomes.length === 0 ? (
