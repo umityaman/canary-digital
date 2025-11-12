@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react'
-import { Plus, Search, Filter, Download, TrendingDown, Calendar, DollarSign, FileText, Trash2, Edit2, Eye, PieChart } from 'lucide-react'
+import { Plus, Search, Filter, Download, TrendingDown, Calendar, DollarSign, FileText, Trash2, Edit2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
 import ExpenseModal from './ExpenseModal'
@@ -26,18 +26,6 @@ interface CategoryStat {
   total: number
   count: number
   percentage: number
-  color: string
-}
-
-const CATEGORY_COLORS: Record<string, string> = {
-  'Personel Maaşları': 'bg-neutral-900',
-  'Kira': 'bg-neutral-800',
-  'Elektrik/Su/Doğalgaz': 'bg-neutral-700',
-  'İnternet/Telefon': 'bg-neutral-900',
-  'Malzeme Alımı': 'bg-neutral-800',
-  'Ekipman Bakım/Onarım': 'bg-neutral-700',
-  'Pazarlama/Reklam': 'bg-neutral-600',
-  'Diğer': 'bg-neutral-500'
 }
 
 export default function ExpenseTab() {
@@ -120,8 +108,7 @@ export default function ExpenseTab() {
         category,
         total: data.total,
         count: data.count,
-        percentage: (data.total / total) * 100,
-        color: CATEGORY_COLORS[category] || 'bg-neutral-500'
+        percentage: (data.total / total) * 100
       }))
       
       setCategoryStats(stats.sort((a, b) => b.total - a.total))
