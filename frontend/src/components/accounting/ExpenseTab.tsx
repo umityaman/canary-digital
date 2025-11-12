@@ -265,7 +265,7 @@ export default function ExpenseTab() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px]')}
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
             >
               <option value="">Tüm Kategoriler</option>
               <option value="Personel Maaşları">Personel Maaşları</option>
