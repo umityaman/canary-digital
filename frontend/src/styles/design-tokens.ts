@@ -254,6 +254,161 @@ const DESIGN_TOKENS_RAW = {
       expired: { label: 'Süresi Doldu', color: 'bg-orange-100 text-orange-700' },
     },
   },
+  
+  // ========== TABLE ==========
+  table: {
+    base: 'w-full',
+    container: 'overflow-x-auto',
+    
+    header: {
+      row: 'border-b border-neutral-200',
+      cell: 'px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider',
+      bg: 'bg-neutral-50',
+    },
+    
+    body: {
+      row: 'border-b border-neutral-100 hover:bg-neutral-50 transition-colors',
+      cell: 'px-6 py-4 text-sm text-neutral-900',
+      cellMuted: 'px-6 py-4 text-sm text-neutral-600',
+    },
+    
+    empty: 'p-12 text-center text-neutral-600',
+  },
+  
+  // ========== DROPDOWN ==========
+  dropdown: {
+    container: 'relative',
+    trigger: 'inline-flex items-center justify-center transition-colors',
+    
+    menu: {
+      base: 'absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-neutral-200 py-1 z-20',
+      width: {
+        sm: 'w-40',
+        md: 'w-48',
+        lg: 'w-56',
+      },
+    },
+    
+    item: {
+      base: 'w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-50 transition-colors flex items-center gap-2',
+      danger: 'text-red-600 hover:bg-red-50',
+      success: 'text-green-600 hover:bg-green-50',
+    },
+    
+    divider: 'my-1 border-t border-neutral-200',
+  },
+  
+  // ========== STAT CARD ==========
+  statCard: {
+    container: 'bg-white border border-neutral-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all',
+    
+    icon: {
+      wrapper: 'w-10 h-10 rounded-lg flex items-center justify-center',
+      colors: {
+        primary: 'bg-neutral-900 text-white',
+        success: 'bg-green-100 text-green-700',
+        warning: 'bg-orange-100 text-orange-700',
+        error: 'bg-red-100 text-red-700',
+        info: 'bg-blue-100 text-blue-700',
+        neutral: 'bg-neutral-100 text-neutral-700',
+      },
+    },
+    
+    value: 'text-2xl font-bold text-neutral-900 mb-1',
+    label: 'text-sm font-medium text-neutral-600',
+    subtitle: 'text-xs text-neutral-500 mt-1',
+    
+    badge: 'text-xs font-medium text-neutral-600',
+  },
+  
+  // ========== TAB ==========
+  tab: {
+    container: 'flex gap-1',
+    
+    button: {
+      base: 'px-4 py-2.5 text-sm font-medium transition-all rounded-lg',
+      active: 'bg-neutral-900 text-white',
+      inactive: 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
+    },
+    
+    // Vertical tabs (sidebar)
+    vertical: {
+      container: 'flex flex-col gap-1',
+      button: {
+        base: 'flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all rounded-lg text-left',
+        active: 'bg-neutral-900 text-white',
+        inactive: 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
+      },
+    },
+    
+    // Underline tabs
+    underline: {
+      container: 'flex gap-4 border-b border-neutral-200',
+      button: {
+        base: 'px-6 py-3 text-sm font-medium transition-colors relative',
+        active: 'text-neutral-900 border-b-2 border-neutral-900 -mb-px',
+        inactive: 'text-neutral-600 hover:text-neutral-900',
+      },
+    },
+  },
+  
+  // ========== PAGINATION ==========
+  pagination: {
+    container: 'flex items-center justify-between px-6 py-4 bg-neutral-50 border-t border-neutral-200',
+    info: 'text-sm text-neutral-600',
+    buttons: 'flex gap-2',
+  },
+  
+  // ========== FILTER ==========
+  filter: {
+    container: 'bg-white border border-neutral-200 rounded-xl p-4 shadow-sm space-y-4',
+    section: 'space-y-3',
+    label: 'block text-sm font-medium text-neutral-700 mb-2',
+    divider: 'border-t border-neutral-200',
+    actions: 'flex justify-end gap-2 pt-4',
+  },
+  
+  // ========== MODAL ==========
+  modal: {
+    overlay: 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4',
+    container: 'bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden',
+    
+    header: {
+      container: 'px-6 py-4 border-b border-neutral-200 flex items-center justify-between',
+      title: 'text-xl font-semibold text-neutral-900',
+      close: 'text-neutral-500 hover:text-neutral-700 transition-colors',
+    },
+    
+    body: 'px-6 py-4 overflow-y-auto',
+    
+    footer: {
+      container: 'px-6 py-4 border-t border-neutral-200 flex justify-end gap-3',
+    },
+  },
+  
+  // ========== ALERT ==========
+  alert: {
+    base: 'p-4 rounded-xl flex items-start gap-3',
+    
+    variant: {
+      success: 'bg-green-50 border border-green-200 text-green-800',
+      warning: 'bg-orange-50 border border-orange-200 text-orange-800',
+      error: 'bg-red-50 border border-red-200 text-red-800',
+      info: 'bg-blue-50 border border-blue-200 text-blue-800',
+    },
+    
+    icon: 'flex-shrink-0 w-5 h-5',
+    content: 'flex-1',
+    title: 'font-medium mb-1',
+    message: 'text-sm',
+  },
+  
+  // ========== LOADING ==========
+  loading: {
+    spinner: 'animate-spin rounded-full border-2 border-neutral-200 border-t-neutral-900',
+    overlay: 'absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center',
+    text: 'ml-3 text-sm text-neutral-600',
+  },
 }
 
 // ========== HELPER FUNCTIONS ==========
@@ -351,7 +506,8 @@ export const badge = (
   size: keyof typeof DESIGN_TOKENS_RAW.badge.size = 'md',
   variant: keyof typeof DESIGN_TOKENS_RAW.badge.variant = 'solid'
 ) => {
-  const statusConfig = DESIGN_TOKENS_RAW.status[type][status as keyof typeof DESIGN_TOKENS_RAW.status.invoice]
+  const statusMap = DESIGN_TOKENS_RAW.status[type] as Record<string, { label: string; color: string }>
+  const statusConfig = statusMap[status]
   
   if (!statusConfig) {
     // Fallback for unknown status
@@ -377,6 +533,66 @@ export const badge = (
     ),
     label: statusConfig.label
   }
+}
+
+/**
+ * Build table header cell class name
+ * @example tableHeaderCell() // Returns complete table header cell classes
+ */
+export const tableHeaderCell = () => {
+  return cx(
+    DESIGN_TOKENS_RAW.table.header.cell,
+    DESIGN_TOKENS_RAW.table.header.bg
+  )
+}
+
+/**
+ * Build table body cell class name
+ * @example tableBodyCell(false) // Returns complete table body cell classes
+ */
+export const tableBodyCell = (muted = false) => {
+  return muted ? DESIGN_TOKENS_RAW.table.body.cellMuted : DESIGN_TOKENS_RAW.table.body.cell
+}
+
+/**
+ * Build stat card with icon color
+ * @example statCard('success') // Returns stat card icon classes
+ */
+export const statCardIcon = (
+  color: keyof typeof DESIGN_TOKENS_RAW.statCard.icon.colors = 'primary'
+) => {
+  return cx(
+    DESIGN_TOKENS_RAW.statCard.icon.wrapper,
+    DESIGN_TOKENS_RAW.statCard.icon.colors[color]
+  )
+}
+
+/**
+ * Build tab button class name
+ * @example tab(true, 'horizontal') // Returns tab button classes
+ */
+export const tab = (
+  active: boolean,
+  variant: 'horizontal' | 'vertical' | 'underline' = 'horizontal'
+) => {
+  if (variant === 'vertical') {
+    return cx(
+      DESIGN_TOKENS_RAW.tab.vertical.button.base,
+      active ? DESIGN_TOKENS_RAW.tab.vertical.button.active : DESIGN_TOKENS_RAW.tab.vertical.button.inactive
+    )
+  }
+  
+  if (variant === 'underline') {
+    return cx(
+      DESIGN_TOKENS_RAW.tab.underline.button.base,
+      active ? DESIGN_TOKENS_RAW.tab.underline.button.active : DESIGN_TOKENS_RAW.tab.underline.button.inactive
+    )
+  }
+  
+  return cx(
+    DESIGN_TOKENS_RAW.tab.button.base,
+    active ? DESIGN_TOKENS_RAW.tab.button.active : DESIGN_TOKENS_RAW.tab.button.inactive
+  )
 }
 
 /**
@@ -434,3 +650,12 @@ export const radius = createSafeProxy(DESIGN_TOKENS_RAW.radius)
 export const shadow = createSafeProxy(DESIGN_TOKENS_RAW.shadow)
 export const colors = createSafeProxy(DESIGN_TOKENS_RAW.colors)
 export const typography = createSafeProxy(DESIGN_TOKENS_RAW.typography)
+export const tableStyles = createSafeProxy(DESIGN_TOKENS_RAW.table)
+export const dropdownStyles = createSafeProxy(DESIGN_TOKENS_RAW.dropdown)
+export const statCardStyles = createSafeProxy(DESIGN_TOKENS_RAW.statCard)
+export const tabStyles = createSafeProxy(DESIGN_TOKENS_RAW.tab)
+export const paginationStyles = createSafeProxy(DESIGN_TOKENS_RAW.pagination)
+export const filterStyles = createSafeProxy(DESIGN_TOKENS_RAW.filter)
+export const modalStyles = createSafeProxy(DESIGN_TOKENS_RAW.modal)
+export const alertStyles = createSafeProxy(DESIGN_TOKENS_RAW.alert)
+export const loadingStyles = createSafeProxy(DESIGN_TOKENS_RAW.loading)

@@ -12,7 +12,7 @@ import {
   FileSpreadsheet,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { card, button, DESIGN_TOKENS } from '../../styles/design-tokens';
+import { card, button, DESIGN_TOKENS, statCardIcon, tableHeaderCell, tableBodyCell, cx, input } from '../../styles/design-tokens';
 import { exportTrialBalanceToExcel } from '../../utils/excelExport';
 
 interface TrialBalanceItem {
@@ -146,15 +146,15 @@ export default function TrialBalanceReport() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={loadTrialBalance} className={button('secondary', 'md', 'md')}>
+          <button onClick={loadTrialBalance} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <RefreshCw className="w-4 h-4" />
             Yenile
           </button>
-          <button onClick={handlePrint} className={button('secondary', 'md', 'md')}>
+          <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <Eye className="w-4 h-4" />
             Yazdır
           </button>
-          <button onClick={handleExport} className={button('primary', 'md', 'md')}>
+          <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
             <Download className="w-4 h-4" />
             Excel İndir
           </button>
@@ -163,9 +163,11 @@ export default function TrialBalanceReport() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingUp className="w-8 h-8 text-green-500" />
+            <div className={statCardIcon('success')}>
+              <TrendingUp className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
             {formatCurrency(summary.totalDebit)}
@@ -177,9 +179,11 @@ export default function TrialBalanceReport() {
           </p>
         </div>
 
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingDown className="w-8 h-8 text-red-500" />
+            <div className={statCardIcon('error')}>
+              <TrendingDown className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
             {formatCurrency(summary.totalCredit)}
@@ -191,9 +195,11 @@ export default function TrialBalanceReport() {
           </p>
         </div>
 
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <DollarSign className="w-8 h-8 text-purple-500" />
+            <div className={statCardIcon('warning')}>
+              <DollarSign className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
@@ -209,9 +215,11 @@ export default function TrialBalanceReport() {
           </p>
         </div>
 
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <Scale className="w-8 h-8 text-blue-500" />
+            <div className={statCardIcon('info')}>
+              <Scale className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
@@ -271,7 +279,7 @@ export default function TrialBalanceReport() {
             <select
               value={accountTypeFilter}
               onChange={(e) => setAccountTypeFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={input('md', 'default', undefined, 'lg')}
             >
               <option value="ALL">Tümü</option>
               <option value="ASSET">Varlık</option>
@@ -324,29 +332,29 @@ export default function TrialBalanceReport() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b-2 border-gray-200">
+              <thead className={DESIGN_TOKENS?.table?.header}>
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className={tableHeaderCell()}>
                     Hesap Kodu
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className={tableHeaderCell()}>
                     Hesap Adı
                   </th>
-                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                  <th className={cx(tableHeaderCell(), 'text-center')}>
                     Tip
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                  <th className={cx(tableHeaderCell(), 'text-right')}>
                     Borç
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                  <th className={cx(tableHeaderCell(), 'text-right')}>
                     Alacak
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                  <th className={cx(tableHeaderCell(), 'text-right')}>
                     Bakiye
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className={DESIGN_TOKENS?.table?.body}>
                 {items.map((item, idx) => {
                   const balance = item.debit - item.credit;
                   return (
@@ -354,17 +362,17 @@ export default function TrialBalanceReport() {
                       key={idx}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      <td className="px-4 py-3 whitespace-nowrap">
+                      <td className={tableBodyCell()}>
                         <span className="font-mono text-sm font-medium text-gray-900">
                           {item.accountCode}
                         </span>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className={tableBodyCell()}>
                         <p className="text-sm text-gray-900 font-medium">
                           {item.accountName}
                         </p>
                       </td>
-                      <td className="px-4 py-3 text-center">
+                      <td className={cx(tableBodyCell(), 'text-center')}>
                         <span
                           className={`text-xs font-medium ${getAccountTypeColor(
                             item.accountType
@@ -373,17 +381,17 @@ export default function TrialBalanceReport() {
                           {getAccountTypeName(item.accountType)}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className={cx(tableBodyCell(), 'text-right')}>
                         <span className="text-sm text-green-600 font-medium">
                           {item.debit > 0 ? formatCurrency(item.debit) : '-'}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className={cx(tableBodyCell(), 'text-right')}>
                         <span className="text-sm text-red-600 font-medium">
                           {item.credit > 0 ? formatCurrency(item.credit) : '-'}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className={cx(tableBodyCell(), 'text-right')}>
                         <span
                           className={`text-sm font-bold ${
                             balance > 0

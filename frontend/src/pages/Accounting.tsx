@@ -27,7 +27,7 @@ import LoadingFallback from '../components/ui/LoadingFallback'
 import ErrorBoundary from '../components/ErrorBoundary'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
-import { card, button, input, badge, getStatGradient, DESIGN_TOKENS, cx } from '../styles/design-tokens'
+import { card, button, input, badge, getStatGradient, statCardIcon, tab, tableHeaderCell, tableBodyCell, DESIGN_TOKENS, cx } from '../styles/design-tokens'
 
 // Lazy load heavy components for better performance
 const IncomeTab = lazy(() => import('../components/accounting/IncomeTab'))
@@ -779,66 +779,66 @@ export default function Accounting() {
       {loading ? (
         <CardSkeleton count={4} />
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Bu Ay Gelir */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-2">
-              <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
-                <TrendingUp className="text-white" size={16} />
+          <div className={card('sm', 'sm', 'default', 'xl')}>
+            <div className="flex items-center justify-between mb-3">
+              <div className={statCardIcon('success')}>
+                <TrendingUp size={20} />
               </div>
               {stats && stats.invoiceCount > 0 && (
-                <span className="text-xs font-medium text-neutral-600">
+                <span className={DESIGN_TOKENS?.statCard?.badge}>
                   {stats.invoiceCount} fatura
                 </span>
               )}
             </div>
-            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+            <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.totalRevenue) : '₺0'}
             </h3>
-            <p className="text-xs font-medium text-neutral-600">Bu Ay Gelir</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Bu Ay Gelir</p>
           </div>
 
           {/* Bu Ay Gider */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-2">
-              <div className="w-8 h-8 bg-neutral-700 rounded-lg flex items-center justify-center">
-                <TrendingDown className="text-white" size={16} />
+          <div className={card('sm', 'sm', 'default', 'xl')}>
+            <div className="flex items-center justify-between mb-3">
+              <div className={statCardIcon('error')}>
+                <TrendingDown size={20} />
               </div>
             </div>
-            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+            <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.totalExpenses) : '₺0'}
             </h3>
-            <p className="text-xs font-medium text-neutral-600">Bu Ay Gider</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Bu Ay Gider</p>
           </div>
 
           {/* Net Kâr */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-2">
-              <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
-                <DollarSign className="text-white" size={16} />
+          <div className={card('sm', 'sm', 'default', 'xl')}>
+            <div className="flex items-center justify-between mb-3">
+              <div className={statCardIcon('info')}>
+                <DollarSign size={20} />
               </div>
-              <span className="text-xs font-medium text-neutral-600">Net</span>
+              <span className={DESIGN_TOKENS?.statCard?.badge}>Net</span>
             </div>
-            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+            <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.netProfit) : '₺0'}
             </h3>
-            <p className="text-xs font-medium text-neutral-600">Net Kâr</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Net Kâr</p>
           </div>
 
           {/* Tahsilat / Bekleyen */}
-          <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-2">
-              <div className="w-8 h-8 bg-neutral-600 rounded-lg flex items-center justify-center">
-                <Clock className="text-white" size={16} />
+          <div className={card('sm', 'sm', 'default', 'xl')}>
+            <div className="flex items-center justify-between mb-3">
+              <div className={statCardIcon('warning')}>
+                <Clock size={20} />
               </div>
-              <span className="text-xs font-medium text-neutral-600">Bekleyen</span>
+              <span className={DESIGN_TOKENS?.statCard?.badge}>Bekleyen</span>
             </div>
-            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+            <h3 className={DESIGN_TOKENS?.statCard?.value}>
               {stats ? formatCurrency(stats.totalOverdue) : '₺0'}
             </h3>
-            <p className="text-xs font-medium text-neutral-600">Vade Geçmiş</p>
+            <p className={DESIGN_TOKENS?.statCard?.label}>Vade Geçmiş</p>
             {stats && stats.totalCollections > 0 && (
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className={DESIGN_TOKENS?.statCard?.subtitle}>
                 Bu ay: {formatCurrency(stats.totalCollections)}
               </p>
             )}
@@ -847,28 +847,24 @@ export default function Accounting() {
       )}
 
       {/* Tabs - Vertical Layout */}
-      <div className={`${card('sm', 'sm', 'default', 'lg')} overflow-hidden`}>
+      <div className={card('none', 'sm', 'default', 'xl')}>
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar Tabs */}
-          <nav className={`flex flex-row ${DESIGN_TOKENS?.spacing.xs.gap} overflow-x-auto ${DESIGN_TOKENS?.colors?.border?.light} border-b lg:border-b-0 lg:border-r lg:w-56 lg:flex-col lg:gap-0 flex-shrink-0`}>
-            {tabs.map((tab) => (
+          <nav className="flex flex-row gap-1 overflow-x-auto border-b border-neutral-200 lg:border-b-0 lg:border-r lg:w-56 lg:flex-col p-2 flex-shrink-0">
+            {tabs.map((tabItem) => (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex min-w-[9rem] items-center space-x-2 px-3 py-2.5 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors lg:min-w-0 lg:w-full ${
-                  activeTab === tab.id
-                    ? `${DESIGN_TOKENS?.colors?.interactive?.default}`
-                    : `${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.bg?.subtle}`
-                }`}
+                key={tabItem.id}
+                onClick={() => setActiveTab(tabItem.id)}
+                className={tab(activeTab === tabItem.id, 'vertical')}
               >
-                {tab.icon}
-                <span className="text-xs lg:text-sm">{tab.label}</span>
+                {tabItem.icon}
+                <span className="whitespace-nowrap">{tabItem.label}</span>
               </button>
             ))}
           </nav>
 
           {/* Content Area */}
-          <div className={`flex-1 ${DESIGN_TOKENS?.spacing?.md?.padding} lg:${DESIGN_TOKENS?.spacing?.lg?.padding}`}>
+          <div className="flex-1 p-6 lg:p-8">
             <ErrorBoundary fallbackTitle="Muhasebe Modülü Hatası" fallbackMessage="Muhasebe modülünde bir sorun oluştu. Lütfen sayfayı yenileyin.">
               <Suspense fallback={<LoadingFallback message="İçerik yükleniyor..." />}>
                 {/* Dashboard Tab */}
@@ -889,49 +885,33 @@ export default function Accounting() {
             {/* Reports Tab - Advanced Reporting with Sub-tabs */}
             {activeTab === 'reports' && (
               <div className="space-y-6">
-                <h2 className={`${DESIGN_TOKENS?.typography?.heading?.h2} ${DESIGN_TOKENS?.colors?.text?.primary} mb-6`}>
+                <h2 className={DESIGN_TOKENS?.typography?.h2}>
                   Raporlar
                 </h2>
                 
                 {/* Sub-tabs for Reports */}
-                <div className={`flex gap-2 border-b border-gray-200 mb-6`}>
+                <div className="flex gap-4 border-b border-neutral-200 mb-6">
                   <button
                     onClick={() => setReportsSubTab('advanced')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors ${
-                      reportsSubTab === 'advanced'
-                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                    className={tab(reportsSubTab === 'advanced', 'underline')}
                   >
                     Gelişmiş Raporlar
                   </button>
                   <button
                     onClick={() => setReportsSubTab('trial-balance')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors ${
-                      reportsSubTab === 'trial-balance'
-                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                    className={tab(reportsSubTab === 'trial-balance', 'underline')}
                   >
                     Mizan
                   </button>
                   <button
                     onClick={() => setReportsSubTab('income-statement')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors ${
-                      reportsSubTab === 'income-statement'
-                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                    className={tab(reportsSubTab === 'income-statement', 'underline')}
                   >
                     Gelir-Gider Tablosu
                   </button>
                   <button
                     onClick={() => setReportsSubTab('balance-sheet')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors ${
-                      reportsSubTab === 'balance-sheet'
-                        ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                    className={tab(reportsSubTab === 'balance-sheet', 'underline')}
                   >
                     Bilanço
                   </button>
@@ -948,37 +928,25 @@ export default function Accounting() {
             {/* Receivables Management Tab - Çekler, Senetler, Yaşlandırma */}
             {activeTab === 'receivables' && (
               <div className="space-y-6">
-                <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'} mb-6`}>Alacak Yönetimi</h2>
+                <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Yönetimi</h2>
                 
                 {/* Sub-tabs for Checks, Promissory, Aging */}
-                <div className={`flex gap-2 ${DESIGN_TOKENS?.colors?.border?.light} border-b mb-6`}>
+                <div className="flex gap-4 border-b border-neutral-200 mb-6">
                   <button
                     onClick={() => setReceivablesSubTab('checks')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors ${
-                      receivablesSubTab === 'checks'
-                        ? `border-b-2 ${DESIGN_TOKENS?.colors?.interactive?.default} ${DESIGN_TOKENS?.colors?.text?.primary}`
-                        : `${DESIGN_TOKENS?.colors?.text?.tertiary} hover:${DESIGN_TOKENS?.colors?.text?.primary}`
-                    }`}
+                    className={tab(receivablesSubTab === 'checks', 'underline')}
                   >
                     Çekler
                   </button>
                   <button
                     onClick={() => setReceivablesSubTab('promissory')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors ${
-                      receivablesSubTab === 'promissory'
-                        ? `border-b-2 ${DESIGN_TOKENS?.colors?.interactive?.default} ${DESIGN_TOKENS?.colors?.text?.primary}`
-                        : `${DESIGN_TOKENS?.colors?.text?.tertiary} hover:${DESIGN_TOKENS?.colors?.text?.primary}`
-                    }`}
+                    className={tab(receivablesSubTab === 'promissory', 'underline')}
                   >
                     Senetler
                   </button>
                   <button
                     onClick={() => setReceivablesSubTab('aging')}
-                    className={`px-6 py-3 ${DESIGN_TOKENS?.typography?.label?.lg} transition-colors ${
-                      receivablesSubTab === 'aging'
-                        ? `border-b-2 ${DESIGN_TOKENS?.colors?.interactive?.default} ${DESIGN_TOKENS?.colors?.text?.primary}`
-                        : `${DESIGN_TOKENS?.colors?.text?.tertiary} hover:${DESIGN_TOKENS?.colors?.text?.primary}`
-                    }`}
+                    className={tab(receivablesSubTab === 'aging', 'underline')}
                   >
                     Yaşlandırma Raporu
                   </button>
@@ -988,54 +956,54 @@ export default function Accounting() {
                 {receivablesSubTab === 'checks' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text?.primary}`}>Çekler</h3>
+                      <h3 className={DESIGN_TOKENS?.typography?.h3}>Çekler</h3>
                       <button
                         onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
-                        className={cx(button('md', 'primary', 'md'), 'gap-2')}
+                        className={cx(button('md', 'primary', 'xl'), 'gap-2')}
                       >
                         <FileText size={18} />
                         Yeni Çek
                       </button>
                     </div>
 
-                    <div className={card('sm', 'sm', 'default', 'lg')}>
+                    <div className={card('none', 'sm', 'default', 'xl')}>
                       {checksLoading ? (
-                        <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text?.tertiary}`}>Çekler yükleniyor...</div>
+                        <div className="p-12 text-center text-neutral-600">Çekler yükleniyor...</div>
                       ) : checks.length === 0 ? (
-                        <div className={`p-12 text-center ${DESIGN_TOKENS?.colors?.text?.tertiary}`}>Çek bulunamadı</div>
+                        <div className="p-12 text-center text-neutral-600">Çek bulunamadı</div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="w-full">
-                            <thead className={`${DESIGN_TOKENS?.colors?.bg?.subtle} ${DESIGN_TOKENS?.colors?.border?.light} border-b`}>
+                            <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} uppercase`}>No</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} uppercase`}>Müşteri</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} uppercase`}>Tutar</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} uppercase`}>Vade</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} uppercase`}>Durum</th>
-                                <th className={`px-6 py-3 text-left ${DESIGN_TOKENS?.typography?.label?.md} ${DESIGN_TOKENS?.colors?.text?.secondary} uppercase`}>İşlemler</th>
+                                <th className={tableHeaderCell()}>No</th>
+                                <th className={tableHeaderCell()}>Müşteri</th>
+                                <th className={tableHeaderCell()}>Tutar</th>
+                                <th className={tableHeaderCell()}>Vade</th>
+                                <th className={tableHeaderCell()}>Durum</th>
+                                <th className={tableHeaderCell()}>İşlemler</th>
                               </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-neutral-200">
+                            <tbody className="bg-white divide-y divide-neutral-100">
                               {checks.map((c: any) => (
-                                <tr key={c.id} className="hover:bg-neutral-50">
-                                  <td className="px-6 py-4">{c.documentNumber || `#${c.id}`}</td>
-                                  <td className="px-6 py-4">{c.customer?.name || c.customerName || '-'}</td>
-                                  <td className="px-6 py-4">{formatCurrency(c.amount || 0)}</td>
-                                  <td className="px-6 py-4">{c.dueDate ? formatDate(c.dueDate) : '-'}</td>
-                                  <td className="px-6 py-4">{c.status || '-'}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                <tr key={c.id} className="hover:bg-neutral-50 transition-colors">
+                                  <td className={tableBodyCell()}>{c.documentNumber || `#${c.id}`}</td>
+                                  <td className={tableBodyCell()}>{c.customer?.name || c.customerName || '-'}</td>
+                                  <td className={tableBodyCell()}>{formatCurrency(c.amount || 0)}</td>
+                                  <td className={tableBodyCell()}>{c.dueDate ? formatDate(c.dueDate) : '-'}</td>
+                                  <td className={tableBodyCell()}>{c.status || '-'}</td>
+                                  <td className={cx(tableBodyCell(), 'whitespace-nowrap')}>
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => { setEditingCheck(c); setCheckModalOpen(true) }}
-                                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                                        className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
                                         title="Düzenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
                                       <button
                                         onClick={() => handleDeleteCheck(c.id)}
-                                        className="text-red-600 hover:text-red-800 transition-colors"
+                                        className="text-red-600 hover:text-red-800 transition-colors p-1 rounded hover:bg-red-50"
                                         title="Sil"
                                       >
                                         <Trash2 size={16} />
@@ -1056,17 +1024,17 @@ export default function Accounting() {
                 {receivablesSubTab === 'promissory' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-neutral-900">Senetler</h3>
+                      <h3 className={DESIGN_TOKENS?.typography?.h3}>Senetler</h3>
                       <button
                         onClick={() => { setEditingPromissory(null); setPromissoryModalOpen(true) }}
-                        className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2"
+                        className={cx(button('md', 'primary', 'xl'), 'gap-2')}
                       >
                         <FileText size={18} />
                         Yeni Senet
                       </button>
                     </div>
 
-                    <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+                    <div className={card('none', 'sm', 'default', 'xl')}>
                       {promissoryLoading ? (
                         <div className="p-12 text-center text-neutral-600">Senetler yükleniyor...</div>
                       ) : promissory.length === 0 ? (
@@ -1076,34 +1044,34 @@ export default function Accounting() {
                           <table className="w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">No</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Tutar</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Vade</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-700 uppercase">İşlemler</th>
+                                <th className={tableHeaderCell()}>No</th>
+                                <th className={tableHeaderCell()}>Müşteri</th>
+                                <th className={tableHeaderCell()}>Tutar</th>
+                                <th className={tableHeaderCell()}>Vade</th>
+                                <th className={tableHeaderCell()}>Durum</th>
+                                <th className={tableHeaderCell()}>İşlemler</th>
                               </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-neutral-200">
+                            <tbody className="bg-white divide-y divide-neutral-100">
                               {promissory.map((p: any) => (
-                                <tr key={p.id} className="hover:bg-neutral-50">
-                                  <td className="px-6 py-4">{p.documentNumber || `#${p.id}`}</td>
-                                  <td className="px-6 py-4">{p.customer?.name || p.customerName || '-'}</td>
-                                  <td className="px-6 py-4">{formatCurrency(p.amount || 0)}</td>
-                                  <td className="px-6 py-4">{p.dueDate ? formatDate(p.dueDate) : '-'}</td>
-                                  <td className="px-6 py-4">{p.status || '-'}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                <tr key={p.id} className="hover:bg-neutral-50 transition-colors">
+                                  <td className={tableBodyCell()}>{p.documentNumber || `#${p.id}`}</td>
+                                  <td className={tableBodyCell()}>{p.customer?.name || p.customerName || '-'}</td>
+                                  <td className={tableBodyCell()}>{formatCurrency(p.amount || 0)}</td>
+                                  <td className={tableBodyCell()}>{p.dueDate ? formatDate(p.dueDate) : '-'}</td>
+                                  <td className={tableBodyCell()}>{p.status || '-'}</td>
+                                  <td className={cx(tableBodyCell(), 'whitespace-nowrap')}>
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => { setEditingPromissory(p); setPromissoryModalOpen(true) }}
-                                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                                        className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
                                         title="Düzenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
                                       <button
                                         onClick={() => handleDeletePromissory(p.id)}
-                                        className="text-red-600 hover:text-red-800 transition-colors"
+                                        className="text-red-600 hover:text-red-800 transition-colors p-1 rounded hover:bg-red-50"
                                         title="Sil"
                                       >
                                         <Trash2 size={16} />

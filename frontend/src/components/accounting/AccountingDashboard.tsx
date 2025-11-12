@@ -1,4 +1,4 @@
-ï»¿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import {
   TrendingUp, TrendingDown, DollarSign, Calendar, ArrowUpRight, ArrowDownRight,
@@ -11,7 +11,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'react-hot-toast'
-import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
+import { card, button, input, DESIGN_TOKENS, cx, statCardIcon } from '../../styles/design-tokens'
 
 interface DashboardStats {
   currentMonth: {
@@ -71,7 +71,7 @@ export default function AccountingDashboard() {
       const token = localStorage.getItem('auth_token') || localStorage.getItem('token')
       
       if (!token) {
-        console.warn('âš ï¸ No auth token found, showing empty dashboard')
+        console.warn('?? No auth token found, showing empty dashboard')
         // Don't show error, just set empty data
         setStats({
           currentMonth: { income: 0, expense: 0, profit: 0 },
@@ -90,25 +90,25 @@ export default function AccountingDashboard() {
         'Content-Type': 'application/json'
       }
 
-      console.log('ðŸ“Š Loading dashboard data...', { API_URL })
+      console.log('?? Loading dashboard data...', { API_URL })
 
       // Fetch dashboard trends and categories in parallel
       const [trendsRes, incomeCatRes, expenseCatRes] = await Promise.all([
         axios.get(`${API_URL}/api/accounting/dashboard/trends?months=6`, { headers }).catch(err => {
-          console.error('âŒ Trends API error:', err.response?.data || err.message)
+          console.error('? Trends API error:', err.response?.data || err.message)
           return { data: { data: [] } }
         }),
         axios.get(`${API_URL}/api/accounting/dashboard/categories?type=income`, { headers }).catch(err => {
-          console.error('âŒ Income categories API error:', err.response?.data || err.message)
+          console.error('? Income categories API error:', err.response?.data || err.message)
           return { data: { data: [] } }
         }),
         axios.get(`${API_URL}/api/accounting/dashboard/categories?type=expense`, { headers }).catch(err => {
-          console.error('âŒ Expense categories API error:', err.response?.data || err.message)
+          console.error('? Expense categories API error:', err.response?.data || err.message)
           return { data: { data: [] } }
         })
       ])
 
-      console.log('âœ… Dashboard data loaded:', { trendsRes: trendsRes.data, incomeCatRes: incomeCatRes.data, expenseCatRes: expenseCatRes.data })
+      console.log('? Dashboard data loaded:', { trendsRes: trendsRes.data, incomeCatRes: incomeCatRes.data, expenseCatRes: expenseCatRes.data })
 
       const trendsData = trendsRes.data.data || []
       const incomeCategories = incomeCatRes.data.data || []
@@ -141,12 +141,12 @@ export default function AccountingDashboard() {
 
       // Format category data
       const formattedIncomeCategories = (incomeCategories || []).map((cat: any) => ({
-        category: cat.category || 'DiÄŸer',
+        category: cat.category || 'Diðer',
         amount: cat.total || cat.amount || 0
       }))
 
       const formattedExpenseCategories = (expenseCategories || []).map((cat: any) => ({
-        category: cat.category || 'DiÄŸer',
+        category: cat.category || 'Diðer',
         amount: cat.total || cat.amount || 0
       }))
 
@@ -174,7 +174,7 @@ export default function AccountingDashboard() {
       })
     } catch (error: any) {
       console.error('Failed to load dashboard data:', error)
-      toast.error('Dashboard verileri yÃ¼klenemedi')
+      toast.error('Dashboard verileri yüklenemedi')
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -268,7 +268,7 @@ export default function AccountingDashboard() {
       
       // Add date
       doc.setFontSize(10)
-      doc.text(`OluÅŸturulma: ${new Date().toLocaleString('tr-TR')}`, 20, 30)
+      doc.text(`Oluþturulma: ${new Date().toLocaleString('tr-TR')}`, 20, 30)
       
       // Add stats
       doc.setFontSize(12)
@@ -281,14 +281,14 @@ export default function AccountingDashboard() {
         yPos += 10
         doc.text(`Kar/Zarar: ${formatCurrency(stats.currentMonth.profit)}`, 20, yPos)
         yPos += 10
-        doc.text(`Nakit AkÄ±ÅŸÄ±: ${formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}`, 20, yPos)
+        doc.text(`Nakit Akýþý: ${formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}`, 20, yPos)
       }
       
       doc.save(`muhasebe-dashboard-${new Date().getTime()}.pdf`)
       toast.success('PDF indirildi')
     } catch (error) {
       console.error('PDF export error:', error)
-      toast.error('PDF oluÅŸturulamadÄ±')
+      toast.error('PDF oluþturulamadý')
     } finally {
       setExporting(false)
     }
@@ -301,14 +301,14 @@ export default function AccountingDashboard() {
       // Create CSV content
       const csvContent = [
         ['Muhasebe Dashboard Raporu'],
-        ['OluÅŸturulma', new Date().toLocaleString('tr-TR')],
+        ['Oluþturulma', new Date().toLocaleString('tr-TR')],
         [''],
-        ['Metrik', 'Bu Ay', 'GeÃ§en Ay', 'DeÄŸiÅŸim'],
+        ['Metrik', 'Bu Ay', 'Geçen Ay', 'Deðiþim'],
         ['Gelir', stats.currentMonth.income, stats.previousMonth.income, `${formatPercentage(stats.trends.incomeChange)}`],
         ['Gider', stats.currentMonth.expense, stats.previousMonth.expense, `${formatPercentage(stats.trends.expenseChange)}`],
         ['Kar/Zarar', stats.currentMonth.profit, stats.previousMonth.profit, `${formatPercentage(stats.trends.profitChange)}`],
         [''],
-        ['AylÄ±k Veriler'],
+        ['Aylýk Veriler'],
         ['Ay', 'Gelir', 'Gider'],
         ...stats.monthlyData.map(d => [d.month, d.income, d.expense])
       ]
@@ -320,10 +320,10 @@ export default function AccountingDashboard() {
       link.download = `muhasebe-dashboard-${new Date().getTime()}.csv`
       link.click()
       
-      toast.success('Excel dosyasÄ± indirildi')
+      toast.success('Excel dosyasý indirildi')
     } catch (error) {
       console.error('Excel export error:', error)
-      toast.error('Excel dosyasÄ± oluÅŸturulamadÄ±')
+      toast.error('Excel dosyasý oluþturulamadý')
     }
   }
 
@@ -331,7 +331,7 @@ export default function AccountingDashboard() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-center h-64">
-          <div className="text-neutral-600">Dashboard yÃ¼kleniyor...</div>
+          <div className="text-neutral-600">Dashboard yükleniyor...</div>
         </div>
       </div>
     )
@@ -341,7 +341,7 @@ export default function AccountingDashboard() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-center h-64">
-          <div className="text-neutral-600">Dashboard verisi yÃ¼klenemedi</div>
+          <div className="text-neutral-600">Dashboard verisi yüklenemedi</div>
         </div>
       </div>
     )
@@ -367,63 +367,39 @@ export default function AccountingDashboard() {
           {/* Period Filter Buttons */}
           <button
             onClick={() => setSelectedPeriod('day')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === 'day'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
-            }`}
+            className={button('sm', selectedPeriod === 'day' ? 'primary' : 'outline', 'lg')}
           >
-            BugÃ¼n
+            Bugün
           </button>
           <button
             onClick={() => setSelectedPeriod('week')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === 'week'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
-            }`}
+            className={button('sm', selectedPeriod === 'week' ? 'primary' : 'outline', 'lg')}
           >
             Bu Hafta
           </button>
           <button
             onClick={() => setSelectedPeriod('month')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === 'month'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
-            }`}
+            className={button('sm', selectedPeriod === 'month' ? 'primary' : 'outline', 'lg')}
           >
             Bu Ay
           </button>
           <button
             onClick={() => setSelectedPeriod('quarter')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === 'quarter'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
-            }`}
+            className={button('sm', selectedPeriod === 'quarter' ? 'primary' : 'outline', 'lg')}
           >
             Son 3 Ay
           </button>
           <button
             onClick={() => setSelectedPeriod('halfyear')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === 'halfyear'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
-            }`}
+            className={button('sm', selectedPeriod === 'halfyear' ? 'primary' : 'outline', 'lg')}
           >
             Son 6 Ay
           </button>
           <button
             onClick={() => setSelectedPeriod('year')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === 'year'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50'
-            }`}
+            className={button('sm', selectedPeriod === 'year' ? 'primary' : 'outline', 'lg')}
           >
-            YÄ±llÄ±k
+            Yýllýk
           </button>
         </div>
       </div>
@@ -431,9 +407,9 @@ export default function AccountingDashboard() {
       {/* KPI Cards - Minimal B&W Design */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Income Card */}
-        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+        <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
+            <div className={statCardIcon('success')}>
               <TrendingUp className="text-white" size={16} />
             </div>
             <div className={`flex items-center gap-1 text-xs font-semibold ${
@@ -450,9 +426,9 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Expense Card */}
-        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+        <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className="w-8 h-8 bg-neutral-700 rounded-lg flex items-center justify-center">
+            <div className={statCardIcon('error')}>
               <TrendingDown className="text-white" size={16} />
             </div>
             <div className={`flex items-center gap-1 text-xs font-semibold ${
@@ -469,13 +445,12 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Profit Card */}
-        <div className={`bg-white border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow ${
+        <div className={cx(
+          card('sm', 'sm', 'default', 'lg'),
           stats.currentMonth.profit >= 0 ? 'border-neutral-900' : 'border-neutral-300'
-        }`}>
+        )}>
           <div className="flex items-center justify-between mb-2">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-              stats.currentMonth.profit >= 0 ? 'bg-neutral-900' : 'bg-neutral-400'
-            }`}>
+            <div className={statCardIcon(stats.currentMonth.profit >= 0 ? 'success' : 'neutral')}>
               <DollarSign className="text-white" size={16} />
             </div>
             <div className={`flex items-center gap-1 text-xs font-semibold ${
@@ -493,14 +468,14 @@ export default function AccountingDashboard() {
           <p className={`text-xs font-medium ${
             stats.currentMonth.profit >= 0 ? 'text-neutral-900' : 'text-neutral-600'
           }`}>
-            {stats.currentMonth.profit >= 0 ? 'Net KÃ¢r' : 'Net Zarar'}
+            {stats.currentMonth.profit >= 0 ? 'Net Kâr' : 'Net Zarar'}
           </p>
         </div>
 
         {/* Cash Flow Card */}
-        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+        <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
+            <div className={statCardIcon('info')}>
               <Calendar className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
@@ -508,24 +483,24 @@ export default function AccountingDashboard() {
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
             {formatCurrency(stats.currentMonth.income - stats.currentMonth.expense)}
           </h3>
-          <p className="text-xs font-medium text-neutral-600">Nakit AkÄ±ÅŸÄ±</p>
+          <p className="text-xs font-medium text-neutral-600">Nakit Akýþý</p>
         </div>
       </div>
 
       {/* Advanced Statistics and Target Tracking */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Analytics */}
-        <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
+        <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
+            <div className={statCardIcon('success')}>
               <Zap className="text-white" size={20} />
             </div>
-            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900')}>HÄ±zlÄ± Analizler</h3>
+            <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900')}>Hýzlý Analizler</h3>
           </div>
           {advancedStats && (
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-neutral-700">KÃ¢rlÄ±lÄ±k OranÄ±</span>
+                <span className="text-sm text-neutral-700">Kârlýlýk Oraný</span>
                 <span className={`text-lg font-bold ${
                   advancedStats.profitabilityRatio >= 0 ? 'text-neutral-900' : 'text-neutral-700'
                 }`}>
@@ -533,7 +508,7 @@ export default function AccountingDashboard() {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-neutral-700">BÃ¼yÃ¼me HÄ±zÄ±</span>
+                <span className="text-sm text-neutral-700">Büyüme Hýzý</span>
                 <span className={`text-lg font-bold ${
                   advancedStats.growthRate >= 0 ? 'text-neutral-900' : 'text-neutral-800'
                 }`}>
@@ -554,9 +529,9 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Forecast */}
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+        <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center">
+            <div className={statCardIcon('info')}>
               <BarChart2 className="text-white" size={20} />
             </div>
             <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-amber-900')}>Gelecek Ay Tahmini</h3>
@@ -566,22 +541,22 @@ export default function AccountingDashboard() {
               <div className="bg-white/60 rounded-xl p-3">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-xs text-neutral-700">Tahmini Gelir</span>
-                  <span className="text-neutral-900 text-xs">â†‘</span>
+                  <span className="text-neutral-900 text-xs">^</span>
                 </div>
                 <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-amber-900')}>{formatCurrency(advancedStats.forecastIncome)}</span>
               </div>
               <div className="bg-white/60 rounded-xl p-3">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-xs text-neutral-700">Tahmini Gider</span>
-                  <span className="text-neutral-800 text-xs">â†“</span>
+                  <span className="text-neutral-800 text-xs">v</span>
                 </div>
                 <span className={cx(DESIGN_TOKENS?.typography?.stat.md, 'text-amber-900')}>{formatCurrency(advancedStats.forecastExpense)}</span>
               </div>
-              <div className={cx(card('md', 'xs', 'default', 'md'))}>
+              <div className={cx(card('md', 'sm', 'default', 'md'))}>
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs text-neutral-700">Tahmini KÃ¢r</span>
+                  <span className="text-xs text-neutral-700">Tahmini Kâr</span>
                   <span className={`text-xs ${advancedStats.forecastProfit >= 0 ? 'text-neutral-900' : 'text-neutral-800'}`}>
-                    {advancedStats.forecastProfit >= 0 ? 'â†‘' : 'â†“'}
+                    {advancedStats.forecastProfit >= 0 ? '^' : 'v'}
                   </span>
                 </div>
                 <span className={`text-xl font-bold ${
@@ -595,28 +570,28 @@ export default function AccountingDashboard() {
         </div>
 
         {/* Target Tracking */}
-        <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
+        <div className={card('md', 'lg', 'default', 'lg')}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
+            <div className={statCardIcon('warning')}>
               <Target className="text-white" size={20} />
             </div>
             <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900')}>Hedef Takibi</h3>
           </div>
           <div className="space-y-4">
             <div>
-              <label className="text-sm text-neutral-700 mb-2 block">AylÄ±k Gelir Hedefi</label>
+              <label className="text-sm text-neutral-700 mb-2 block">Aylýk Gelir Hedefi</label>
               <input
                 type="number"
                 value={monthlyTarget}
                 onChange={(e) => setMonthlyTarget(Number(e.target.value))}
-                placeholder="Hedef tutarÄ± girin"
+                placeholder="Hedef tutarý girin"
                 className="w-full px-4 py-2 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-500 bg-white"
               />
             </div>
             {monthlyTarget > 0 && advancedStats && (
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-neutral-700">GerÃ§ekleÅŸme</span>
+                  <span className="text-sm text-neutral-700">Gerçekleþme</span>
                   <span className={`text-xl font-bold ${
                     advancedStats.targetAchievement >= 100 ? 'text-neutral-900' : 'text-neutral-700'
                   }`}>
@@ -637,7 +612,7 @@ export default function AccountingDashboard() {
                 </div>
                 {advancedStats.targetAchievement >= 100 && (
                   <div className="bg-green-100 text-green-800 text-xs px-3 py-2 rounded-lg text-center font-medium">
-                    ðŸŽ‰ Hedef aÅŸÄ±ldÄ±!
+                    ?? Hedef aþýldý!
                   </div>
                 )}
               </div>
@@ -647,48 +622,48 @@ export default function AccountingDashboard() {
       </div>
 
       {/* Advanced Statistics Toggle */}
-      <div className="flex items-center justify-between bg-white rounded-2xl p-4 border border-neutral-200">
+      <div className={cx(card('md', 'md', 'default', 'lg'), 'flex items-center justify-between')}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center">
-            <Activity className="text-neutral-600" size={20} />
+          <div className={statCardIcon('neutral')}>
+            <Activity className="text-white" size={20} />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-neutral-900">DetaylÄ± Ä°statistikler</h3>
-            <p className="text-xs text-neutral-600">Ortalama, maksimum ve minimum deÄŸerleri gÃ¶ster</p>
+            <h3 className="text-sm font-semibold text-neutral-900">Detaylý Ýstatistikler</h3>
+            <p className="text-xs text-neutral-600">Ortalama, maksimum ve minimum deðerleri göster</p>
           </div>
         </div>
         <button
           onClick={() => setShowAdvancedStats(!showAdvancedStats)}
-          className="px-4 py-2 rounded-xl text-sm font-medium bg-neutral-900 text-white hover:bg-neutral-800 transition-colors"
+          className={button('sm', 'primary', 'lg')}
         >
-          {showAdvancedStats ? 'Gizle' : 'GÃ¶ster'}
+          {showAdvancedStats ? 'Gizle' : 'Göster'}
         </button>
       </div>
 
       {/* Detailed Statistics Section */}
       {showAdvancedStats && advancedStats && (
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-slate-900 mb-6')}>DetaylÄ± Ä°statistikler</h3>
+        <div className={card('md', 'lg', 'default', 'lg')}>
+          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-slate-900 mb-6')}>Detaylý Ýstatistikler</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Income Stats */}
-            <div className={cx(card('md', 'md', 'default', 'md'))}>
-              <h4 className="text-sm font-semibold text-neutral-800 mb-4">Gelir Ä°statistikleri</h4>
+            <div className={card('sm', 'md', 'default', 'lg')}>
+              <h4 className="text-sm font-semibold text-neutral-800 mb-4">Gelir Ýstatistikleri</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-slate-600">Ortalama</span>
                   <span className="text-sm font-bold text-slate-900">{formatCurrency(advancedStats.avgIncome)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">En YÃ¼ksek</span>
+                  <span className="text-xs text-slate-600">En Yüksek</span>
                   <span className="text-sm font-bold text-neutral-900">{formatCurrency(advancedStats.maxIncome)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">En DÃ¼ÅŸÃ¼k</span>
+                  <span className="text-xs text-slate-600">En Düþük</span>
                   <span className="text-sm font-bold text-slate-600">{formatCurrency(advancedStats.minIncome)}</span>
                 </div>
                 <div className="h-px bg-neutral-200 my-2" />
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">DeÄŸiÅŸkenlik</span>
+                  <span className="text-xs text-slate-600">Deðiþkenlik</span>
                   <span className="text-sm font-bold text-slate-900">
                     {formatCurrency(advancedStats.maxIncome - advancedStats.minIncome)}
                   </span>
@@ -697,24 +672,24 @@ export default function AccountingDashboard() {
             </div>
 
             {/* Expense Stats */}
-            <div className={cx(card('md', 'md', 'default', 'md'))}>
-              <h4 className="text-sm font-semibold text-neutral-800 mb-4">Gider Ä°statistikleri</h4>
+            <div className={card('sm', 'md', 'default', 'lg')}>
+              <h4 className="text-sm font-semibold text-neutral-800 mb-4">Gider Ýstatistikleri</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-slate-600">Ortalama</span>
                   <span className="text-sm font-bold text-slate-900">{formatCurrency(advancedStats.avgExpense)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">En YÃ¼ksek</span>
+                  <span className="text-xs text-slate-600">En Yüksek</span>
                   <span className="text-sm font-bold text-neutral-800">{formatCurrency(advancedStats.maxExpense)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">En DÃ¼ÅŸÃ¼k</span>
+                  <span className="text-xs text-slate-600">En Düþük</span>
                   <span className="text-sm font-bold text-slate-600">{formatCurrency(advancedStats.minExpense)}</span>
                 </div>
                 <div className="h-px bg-neutral-200 my-2" />
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">DeÄŸiÅŸkenlik</span>
+                  <span className="text-xs text-slate-600">Deðiþkenlik</span>
                   <span className="text-sm font-bold text-slate-900">
                     {formatCurrency(advancedStats.maxExpense - advancedStats.minExpense)}
                   </span>
@@ -723,11 +698,11 @@ export default function AccountingDashboard() {
             </div>
 
             {/* Profit Stats */}
-            <div className={cx(card('md', 'md', 'default', 'md'))}>
-              <h4 className="text-sm font-semibold text-neutral-800 mb-4">KÃ¢r/Zarar Ä°statistikleri</h4>
+            <div className={card('sm', 'md', 'default', 'lg')}>
+              <h4 className="text-sm font-semibold text-neutral-800 mb-4">Kâr/Zarar Ýstatistikleri</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">Ortalama KÃ¢r</span>
+                  <span className="text-xs text-slate-600">Ortalama Kâr</span>
                   <span className={`text-sm font-bold ${
                     advancedStats.avgProfit >= 0 ? 'text-neutral-900' : 'text-neutral-800'
                   }`}>
@@ -735,7 +710,7 @@ export default function AccountingDashboard() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">KÃ¢rlÄ±lÄ±k</span>
+                  <span className="text-xs text-slate-600">Kârlýlýk</span>
                   <span className={`text-sm font-bold ${
                     advancedStats.profitabilityRatio >= 0 ? 'text-neutral-900' : 'text-neutral-800'
                   }`}>
@@ -743,7 +718,7 @@ export default function AccountingDashboard() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-slate-600">BÃ¼yÃ¼me HÄ±zÄ±</span>
+                  <span className="text-xs text-slate-600">Büyüme Hýzý</span>
                   <span className={`text-sm font-bold ${
                     advancedStats.growthRate >= 0 ? 'text-neutral-900' : 'text-neutral-800'
                   }`}>
@@ -760,7 +735,7 @@ export default function AccountingDashboard() {
                       ? 'bg-neutral-100 text-neutral-700'
                       : 'bg-red-100 text-neutral-800'
                   }`}>
-                    {advancedStats.profitabilityRatio >= 20 ? 'MÃ¼kemmel' : advancedStats.profitabilityRatio >= 10 ? 'Ä°yi' : 'GeliÅŸtirilmeli'}
+                    {advancedStats.profitabilityRatio >= 20 ? 'Mükemmel' : advancedStats.profitabilityRatio >= 10 ? 'Ýyi' : 'Geliþtirilmeli'}
                   </span>
                 </div>
               </div>
@@ -771,12 +746,12 @@ export default function AccountingDashboard() {
 
       {/* Comparison Section */}
       {showComparison && (
-        <div className="bg-white rounded-2xl p-6 border border-neutral-200">
-          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900 mb-4')}>DÃ¶nem KarÅŸÄ±laÅŸtÄ±rmasÄ±</h3>
+        <div className={card('md', 'lg', 'default', 'lg')}>
+          <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900 mb-4')}>Dönem Karþýlaþtýrmasý</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className={cx(card('md', 'sm', 'default', 'md'))}>
+            <div className={card('sm', 'sm', 'default', 'lg')}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-neutral-600">Gelir ArtÄ±ÅŸÄ±</span>
+                <span className="text-sm text-neutral-600">Gelir Artýþý</span>
                 <div className={`flex items-center gap-1 text-sm font-semibold ${
                   stats.trends.incomeChange >= 0 ? 'text-neutral-900' : 'text-neutral-800'
                 }`}>
@@ -790,7 +765,7 @@ export default function AccountingDashboard() {
                   <span className="font-medium">{formatCurrency(stats.currentMonth.income)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-neutral-500">GeÃ§en ay:</span>
+                  <span className="text-neutral-500">Geçen ay:</span>
                   <span className="font-medium">{formatCurrency(stats.previousMonth.income)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
@@ -800,9 +775,9 @@ export default function AccountingDashboard() {
               </div>
             </div>
 
-            <div className={cx(card('md', 'sm', 'default', 'md'))}>
+            <div className={card('sm', 'sm', 'default', 'lg')}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-neutral-600">Gider DeÄŸiÅŸimi</span>
+                <span className="text-sm text-neutral-600">Gider Deðiþimi</span>
                 <div className={`flex items-center gap-1 text-sm font-semibold ${
                   stats.trends.expenseChange >= 0 ? 'text-neutral-800' : 'text-neutral-900'
                 }`}>
@@ -816,7 +791,7 @@ export default function AccountingDashboard() {
                   <span className="font-medium">{formatCurrency(stats.currentMonth.expense)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-neutral-500">GeÃ§en ay:</span>
+                  <span className="text-neutral-500">Geçen ay:</span>
                   <span className="font-medium">{formatCurrency(stats.previousMonth.expense)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
@@ -826,9 +801,9 @@ export default function AccountingDashboard() {
               </div>
             </div>
 
-            <div className={cx(card('md', 'sm', 'default', 'md'))}>
+            <div className={card('sm', 'sm', 'default', 'lg')}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-neutral-600">Kar/Zarar DeÄŸiÅŸimi</span>
+                <span className="text-sm text-neutral-600">Kar/Zarar Deðiþimi</span>
                 <div className={`flex items-center gap-1 text-sm font-semibold ${
                   stats.trends.profitChange >= 0 ? 'text-neutral-900' : 'text-neutral-800'
                 }`}>
@@ -842,7 +817,7 @@ export default function AccountingDashboard() {
                   <span className="font-medium">{formatCurrency(stats.currentMonth.profit)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-neutral-500">GeÃ§en ay:</span>
+                  <span className="text-neutral-500">Geçen ay:</span>
                   <span className="font-medium">{formatCurrency(stats.previousMonth.profit)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
@@ -860,31 +835,25 @@ export default function AccountingDashboard() {
         {/* Monthly Trend Chart */}
         <div className={card('md', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-6">
-            <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>AylÄ±k Trend</h3>
+            <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary}`}>Aylýk Trend</h3>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setChartType('line')}
-                className={`p-2 rounded-lg transition-colors ${
-                  chartType === 'line' ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:bg-neutral-100'
-                }`}
-                title="Ã‡izgi Grafik"
+                className={cx(button('sm', chartType === 'line' ? 'primary' : 'outline', 'lg'), 'p-2')}
+                title="Çizgi Grafik"
               >
                 <LineChartIcon size={16} />
               </button>
               <button
                 onClick={() => setChartType('bar')}
-                className={`p-2 rounded-lg transition-colors ${
-                  chartType === 'bar' ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:bg-neutral-100'
-                }`}
-                title="Ã‡ubuk Grafik"
+                className={cx(button('sm', chartType === 'bar' ? 'primary' : 'outline', 'lg'), 'p-2')}
+                title="Çubuk Grafik"
               >
                 <BarChart3 size={16} />
               </button>
               <button
                 onClick={() => setChartType('area')}
-                className={`p-2 rounded-lg transition-colors ${
-                  chartType === 'area' ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:bg-neutral-100'
-                }`}
+                className={cx(button('sm', chartType === 'area' ? 'primary' : 'outline', 'lg'), 'p-2')}
                 title="Alan Grafik"
               >
                 <AreaChartIcon size={16} />
@@ -1062,7 +1031,7 @@ export default function AccountingDashboard() {
 
       {/* Quick Actions */}
       <div className={card('md', 'lg', 'default', 'lg')}>
-        <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900 mb-4')}>HÄ±zlÄ± Ä°ÅŸlemler</h3>
+        <h3 className={cx(DESIGN_TOKENS?.typography?.body.lg, 'font-semibold text-neutral-900 mb-4')}>Hýzlý Ýþlemler</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <button
             onClick={() => window.location.hash = '#income'}
@@ -1073,7 +1042,7 @@ export default function AccountingDashboard() {
             </div>
             <div>
               <h4 className="font-semibold text-green-900 text-sm">Gelir Ekle</h4>
-              <p className="text-xs text-neutral-800">Yeni gelir kaydÄ±</p>
+              <p className="text-xs text-neutral-800">Yeni gelir kaydý</p>
             </div>
           </button>
 
@@ -1086,7 +1055,7 @@ export default function AccountingDashboard() {
             </div>
             <div>
               <h4 className="font-semibold text-red-900 text-sm">Gider Ekle</h4>
-              <p className="text-xs text-neutral-800">Yeni gider kaydÄ±</p>
+              <p className="text-xs text-neutral-800">Yeni gider kaydý</p>
             </div>
           </button>
 
@@ -1099,7 +1068,7 @@ export default function AccountingDashboard() {
             </div>
             <div>
               <h4 className="font-semibold text-blue-900 text-sm">Fatura Kes</h4>
-              <p className="text-xs text-neutral-800">Yeni fatura oluÅŸtur</p>
+              <p className="text-xs text-neutral-800">Yeni fatura oluþtur</p>
             </div>
           </button>
 
@@ -1112,7 +1081,7 @@ export default function AccountingDashboard() {
             </div>
             <div>
               <h4 className="font-semibold text-purple-900 text-sm">Raporlar</h4>
-              <p className="text-xs text-purple-700">DetaylÄ± raporlar</p>
+              <p className="text-xs text-purple-700">Detaylý raporlar</p>
             </div>
           </button>
         </div>

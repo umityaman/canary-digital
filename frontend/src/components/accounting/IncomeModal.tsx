@@ -246,14 +246,14 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
             <button
               type="button"
               onClick={onClose}
-              className={button('md', 'outline', 'md')}
+              className={button('md', 'outline', 'lg')}
             >
               İptal
             </button>
             <button
               type="submit"
               disabled={loading}
-              className={button('md', 'dark', 'md')}
+              className={cx(button('md', 'primary', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
             >
               {loading ? 'Kaydediliyor...' : (initial ? 'Güncelle' : 'Kaydet')}
             </button>

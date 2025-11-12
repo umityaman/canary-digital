@@ -262,14 +262,14 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
               type="button"
               onClick={onClose}
               disabled={saving}
-              className={button('md', 'outline', 'md')}
+              className={cx(button('md', 'outline', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
             >
               İptal
             </button>
             <button
               type="submit"
               disabled={saving}
-              className={button('md', 'primary', 'md')}
+              className={cx(button('md', 'primary', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
             >
               {saving ? 'Kaydediliyor...' : initial?.id ? 'Güncelle' : 'Kaydet'}
             </button>

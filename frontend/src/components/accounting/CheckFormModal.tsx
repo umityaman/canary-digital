@@ -71,8 +71,8 @@ export default function CheckFormModal({ open, onClose, onSaved, initial }: Prop
           <textarea name="notes" value={form.notes} onChange={handleChange} placeholder="Notlar" rows={4} className={input('md')} />
 
           <div className="flex justify-end gap-3 pt-4 border-t">
-            <button type="button" onClick={onClose} className={button('md', 'ghost')}>Kapat</button>
-            <button type="submit" disabled={saving} className={button('md', 'primary')}>{saving ? 'Kaydediliyor...' : 'Kaydet'}</button>
+            <button type="button" onClick={onClose} className={button('md', 'outline', 'lg')}>Kapat</button>
+            <button type="submit" disabled={saving} className={cx(button('md', 'primary', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}>{saving ? 'Kaydediliyor...' : 'Kaydet'}</button>
           </div>
         </form>
       </div>

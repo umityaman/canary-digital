@@ -12,7 +12,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { card, button, DESIGN_TOKENS } from '../../styles/design-tokens';
+import { card, button, DESIGN_TOKENS, statCardIcon, tableHeaderCell, tableBodyCell, cx, input } from '../../styles/design-tokens';
 import { exportIncomeStatementToExcel } from '../../utils/excelExport';
 
 interface IncomeStatementItem {
@@ -134,15 +134,15 @@ export default function IncomeStatementReport() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={loadIncomeStatement} className={button('secondary', 'md', 'md')}>
+          <button onClick={loadIncomeStatement} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <RefreshCw className="w-4 h-4" />
             Yenile
           </button>
-          <button onClick={handlePrint} className={button('secondary', 'md', 'md')}>
+          <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <Eye className="w-4 h-4" />
             Yazdır
           </button>
-          <button onClick={handleExport} className={button('primary', 'md', 'md')}>
+          <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
             <Download className="w-4 h-4" />
             Excel İndir
           </button>
@@ -151,9 +151,11 @@ export default function IncomeStatementReport() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingUp className="w-8 h-8 text-green-500" />
+            <div className={statCardIcon('success')}>
+              <TrendingUp className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-green-600 mb-1`}>
             {formatCurrency(data.summary.totalRevenue)}
@@ -165,9 +167,11 @@ export default function IncomeStatementReport() {
           </p>
         </div>
 
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <TrendingDown className="w-8 h-8 text-red-500" />
+            <div className={statCardIcon('error')}>
+              <TrendingDown className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p className={`${DESIGN_TOKENS?.typography?.stat.lg} text-red-600 mb-1`}>
             {formatCurrency(data.summary.totalExpense)}
@@ -179,9 +183,11 @@ export default function IncomeStatementReport() {
           </p>
         </div>
 
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <BarChart3 className="w-8 h-8 text-blue-500" />
+            <div className={statCardIcon('info')}>
+              <BarChart3 className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
@@ -197,9 +203,11 @@ export default function IncomeStatementReport() {
           </p>
         </div>
 
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <DollarSign className="w-8 h-8 text-purple-500" />
+            <div className={statCardIcon('warning')}>
+              <DollarSign className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
@@ -215,9 +223,11 @@ export default function IncomeStatementReport() {
           </p>
         </div>
 
-        <div className={card('md', 'md', 'default', 'lg')}>
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
-            <PieChart className="w-8 h-8 text-orange-500" />
+            <div className={statCardIcon('neutral')}>
+              <PieChart className="w-4 h-4 text-white" />
+            </div>
           </div>
           <p
             className={`${DESIGN_TOKENS?.typography?.stat.lg} ${
@@ -248,7 +258,7 @@ export default function IncomeStatementReport() {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={input('md', 'default', undefined, 'lg')}
             />
           </div>
 
@@ -263,7 +273,7 @@ export default function IncomeStatementReport() {
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={input('md', 'default', undefined, 'lg')}
             />
           </div>
 
@@ -276,7 +286,7 @@ export default function IncomeStatementReport() {
             <select
               value={viewType}
               onChange={(e) => setViewType(e.target.value as 'detailed' | 'summary')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={input('md', 'default', undefined, 'lg')}
             >
               <option value="detailed">Detaylı</option>
               <option value="summary">Özet</option>

@@ -13,7 +13,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { card, button, DESIGN_TOKENS } from '../../styles/design-tokens';
+import { card, button, DESIGN_TOKENS, statCardIcon, tableHeaderCell, tableBodyCell, cx, input } from '../../styles/design-tokens';
 import { exportBalanceSheetToExcel } from '../../utils/excelExport';
 
 interface BalanceSheetItem {
@@ -201,15 +201,15 @@ export default function BalanceSheetReport() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={loadBalanceSheet} className={button('secondary', 'md', 'md')}>
+          <button onClick={loadBalanceSheet} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <RefreshCw className="w-4 h-4" />
             Yenile
           </button>
-          <button onClick={handlePrint} className={button('secondary', 'md', 'md')}>
+          <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <Eye className="w-4 h-4" />
             Yazdır
           </button>
-          <button onClick={handleExport} className={button('primary', 'md', 'md')}>
+          <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
             <Download className="w-4 h-4" />
             Excel İndir
           </button>

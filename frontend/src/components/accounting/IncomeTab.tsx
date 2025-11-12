@@ -3,7 +3,7 @@ import { Plus, Search, Filter, Download, TrendingUp, Calendar, DollarSign, FileT
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
 import IncomeModal from './IncomeModal'
-import { card, button, input, badge, getStatGradient, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
+import { card, button, input, badge, getStatGradient, DESIGN_TOKENS, cx, statCardIcon, tableHeaderCell, tableBodyCell } from '../../styles/design-tokens'
 
 interface Income {
   id: number
@@ -173,9 +173,9 @@ export default function IncomeTab() {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+        <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
+            <div className={statCardIcon('success')}>
               <TrendingUp className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
@@ -184,9 +184,9 @@ export default function IncomeTab() {
           <p className="text-xs font-medium text-neutral-600">Aylık Gelir</p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+        <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className="w-8 h-8 bg-neutral-700 rounded-lg flex items-center justify-center">
+            <div className={statCardIcon('info')}>
               <DollarSign className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Toplam</span>
@@ -195,9 +195,9 @@ export default function IncomeTab() {
           <p className="text-xs font-medium text-neutral-600">Toplam Gelir</p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+        <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
-            <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
+            <div className={statCardIcon('neutral')}>
               <FileText className="text-white" size={16} />
             </div>
             <span className="text-xs font-medium text-neutral-600">Kayıt</span>
@@ -209,7 +209,7 @@ export default function IncomeTab() {
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
-        <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm">
+        <div className={card('sm', 'md', 'default', 'lg')}>
           <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Dağılımı</h3>
           <div className="space-y-3">
             {categoryStats.map((stat) => (
@@ -314,55 +314,55 @@ export default function IncomeTab() {
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-neutral-50 border-b border-neutral-200">
+                <thead className={DESIGN_TOKENS?.table?.header}>
                   <tr>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Tarih</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Açıklama</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">Kategori</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">Tutar</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden lg:table-cell">Ödeme</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase hidden md:table-cell">Durum</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase">İşlemler</th>
+                    <th className={tableHeaderCell()}>Tarih</th>
+                    <th className={tableHeaderCell()}>Açıklama</th>
+                    <th className={cx(tableHeaderCell(), 'hidden md:table-cell')}>Kategori</th>
+                    <th className={tableHeaderCell()}>Tutar</th>
+                    <th className={cx(tableHeaderCell(), 'hidden lg:table-cell')}>Ödeme</th>
+                    <th className={cx(tableHeaderCell(), 'hidden md:table-cell')}>Durum</th>
+                    <th className={tableHeaderCell()}>İşlemler</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-neutral-200">
+                <tbody className={DESIGN_TOKENS?.table?.body}>
                   {incomes.map((income) => (
                     <tr key={income.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="px-3 py-3 whitespace-nowrap">
+                      <td className={tableBodyCell()}>
                         <div className="flex items-center gap-1">
                           <Calendar size={14} className="text-neutral-400" />
                           <span className="text-sm text-neutral-900">{formatDate(income.date)}</span>
                         </div>
                       </td>
-                      <td className="px-3 py-3">
+                      <td className={tableBodyCell()}>
                         <div className="text-sm font-medium text-neutral-900">{income.description}</div>
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
+                      <td className={cx(tableBodyCell(), 'hidden md:table-cell')}>
                         <span className="text-sm text-neutral-600">{income.category}</span>
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap">
+                      <td className={tableBodyCell()}>
                         <span className="text-sm font-semibold text-neutral-900">
                           {formatCurrency(income.amount)}
                         </span>
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
+                      <td className={cx(tableBodyCell(), 'hidden lg:table-cell')}>
                         <span className="text-sm text-neutral-600">{income.paymentMethod}</span>
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap hidden md:table-cell">
+                      <td className={cx(tableBodyCell(), 'hidden md:table-cell')}>
                         {getStatusBadge(income.status)}
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap">
+                      <td className={tableBodyCell()}>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleEdit(income)}
-                            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors"
+                            className={cx(button('sm', 'ghost', 'lg'), 'p-2')}
                             title="Düzenle"
                           >
                             <Edit2 size={16} />
                           </button>
                           <button
                             onClick={() => handleDelete(income.id)}
-                            className="p-2 text-neutral-900 hover:text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors"
+                            className={cx(button('sm', 'ghost', 'lg'), 'p-2')}
                             title="Sil"
                           >
                             <Trash2 size={16} />
@@ -376,22 +376,22 @@ export default function IncomeTab() {
             </div>
 
             {/* Pagination */}
-            <div className="bg-neutral-50 px-6 py-4 flex items-center justify-between border-t border-neutral-200">
-              <div className="text-sm text-neutral-600">
+            <div className={DESIGN_TOKENS?.pagination?.container}>
+              <div className={DESIGN_TOKENS?.pagination?.info}>
                 Sayfa {currentPage} / {totalPages}
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className={cx(button('md', 'outline', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
                 >
                   Önceki
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className={cx(button('md', 'outline', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
                 >
                   Sonraki
                 </button>
