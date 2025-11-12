@@ -336,7 +336,7 @@ export default function TrialBalanceReport() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className={DESIGN_TOKENS?.table?.header}>
+              <thead >
                 <tr>
                   <th className={TABLE_HEADER_CELL}>
                     Hesap Kodu
@@ -358,7 +358,7 @@ export default function TrialBalanceReport() {
                   </th>
                 </tr>
               </thead>
-              <tbody className={DESIGN_TOKENS?.table?.body}>
+              <tbody >
                 {items.map((item, idx) => {
                   const balance = item.debit - item.credit;
                   return (
@@ -466,4 +466,5 @@ export default function TrialBalanceReport() {
     </div>
   );
 }
+
 

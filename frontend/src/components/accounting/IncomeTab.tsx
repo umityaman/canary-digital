@@ -318,7 +318,7 @@ export default function IncomeTab() {
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className={DESIGN_TOKENS?.table?.header}>
+                <thead>
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
                     <th className={TABLE_HEADER_CELL}>Açıklama</th>
@@ -329,7 +329,7 @@ export default function IncomeTab() {
                     <th className={TABLE_HEADER_CELL}>İşlemler</th>
                   </tr>
                 </thead>
-                <tbody className={DESIGN_TOKENS?.table?.body}>
+                <tbody>
                   {incomes.map((income) => (
                     <tr key={income.id} className="hover:bg-neutral-50 transition-colors">
                       <td className={TABLE_BODY_CELL}>

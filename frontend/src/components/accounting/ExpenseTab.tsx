@@ -335,7 +335,7 @@ export default function ExpenseTab() {
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className={DESIGN_TOKENS?.table?.header}>
+                <thead >
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
                     <th className={TABLE_HEADER_CELL}>A��klama</th>
@@ -346,7 +346,7 @@ export default function ExpenseTab() {
                     <th className={TABLE_HEADER_CELL}>��lemler</th>
                   </tr>
                 </thead>
-                <tbody className={DESIGN_TOKENS?.table?.body}>
+                <tbody >
                   {expenses.map((expense) => (
                     <tr key={expense.id} className="hover:bg-neutral-50 transition-colors">
                       <td className={TABLE_BODY_CELL}>
@@ -435,4 +435,5 @@ export default function ExpenseTab() {
     </div>
   )
 }
+
 
