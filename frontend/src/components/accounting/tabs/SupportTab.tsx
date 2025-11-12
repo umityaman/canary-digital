@@ -4,27 +4,27 @@ import {
 } from 'lucide-react'
 import ActionCard from '../../ui/ActionCard'
 import { toast } from 'react-hot-toast'
-import { card, button, DESIGN_TOKENS, cx } from '../../../styles/design-tokens'
+import { button, cx } from '../../../styles/design-tokens'
 
 const SupportTab: React.FC = () => {
   const quickActions = [
     {
-      title: 'Canl˝ Destek',
-      description: 'Anl˝k destek al˝n',
+      title: 'Canlƒ± Destek',
+      description: 'Anlƒ±k destek alƒ±n',
       icon: MessageCircle,
-      onClick: () => toast.success('Canl˝ destek ba˛lat˝l˝yor...'),
+      onClick: () => toast.success('Canlƒ± destek ba≈ülatƒ±lƒ±yor...'),
     },
     {
-      title: 'Dok¸mantasyon',
-      description: 'Kullan˝m k˝lavuzlar˝n˝ inceleyin',
+      title: 'Dok√ºmantasyon',
+      description: 'Kullanƒ±m kƒ±lavuzlarƒ±nƒ± inceleyin',
       icon: BookOpen,
-      onClick: () => toast.success('Dok¸mantasyon aÁ˝l˝yor...'),
+      onClick: () => toast.success('Dok√ºmantasyon a√ßƒ±lƒ±yor...'),
     },
     {
-      title: 'Video Eitimler',
-      description: 'Video eitimlerimize gˆz at˝n',
+      title: 'Video Eƒüitimler',
+      description: 'Video eƒüitimlerimize g√∂z atƒ±n',
       icon: Video,
-      onClick: () => toast.success('Video eitimler aÁ˝l˝yor...'),
+      onClick: () => toast.success('Video eƒüitimler a√ßƒ±lƒ±yor...'),
     },
   ]
 
@@ -45,7 +45,7 @@ const SupportTab: React.FC = () => {
     },
     {
       id: '#SUP-2025-003',
-      subject: 'Fatura d¸zenleme hatas˝',
+      subject: 'Fatura d√ºzenleme hatasƒ±',
       status: 'resolved',
       priority: 'low',
       date: '2025-10-28',
@@ -54,41 +54,41 @@ const SupportTab: React.FC = () => {
 
   const faq = [
     {
-      question: 'E-fatura nas˝l kesilir?',
-      answer: 'Faturalar sekmesinden yeni fatura olu˛tur butonuna t˝klayarak e-fatura kesebilirsiniz.',
+      question: 'E-fatura nasƒ±l kesilir?',
+      answer: 'Faturalar sekmesinden yeni fatura olu≈ütur butonuna tƒ±klayarak e-fatura kesebilirsiniz.',
     },
     {
-      question: 'Ekstre nas˝l payla˛˝l˝r?',
-      answer: 'AraÁlar > Ekstre Payla˛˝m˝ men¸s¸nden m¸˛terinizi seÁerek ekstre gˆnderebilirsiniz.',
+      question: 'Ekstre nasƒ±l payla≈üƒ±lƒ±r?',
+      answer: 'Ara√ßlar > Ekstre Payla≈üƒ±mƒ± men√ºs√ºnden m√º≈üterinizi se√ßerek ekstre g√∂nderebilirsiniz.',
     },
     {
-      question: 'Hat˝rlatma nas˝l kurulur?',
-      answer: 'AraÁlar > Hat˝rlatmalar sekmesinden yeni hat˝rlatma olu˛turabilirsiniz.',
+      question: 'Hatƒ±rlatma nasƒ±l kurulur?',
+      answer: 'Ara√ßlar > Hatƒ±rlatmalar sekmesinden yeni hatƒ±rlatma olu≈üturabilirsiniz.',
     },
     {
-      question: 'Raporlar nas˝l d˝˛a aktar˝l˝r?',
-      answer: 'Raporlar sekmesinde Excel veya PDF butonlar˝n˝ kullanarak raporlar˝n˝z˝ indirebilirsiniz.',
+      question: 'Raporlar nasƒ±l dƒ±≈üa aktarƒ±lƒ±r?',
+      answer: 'Raporlar sekmesinde Excel veya PDF butonlarƒ±nƒ± kullanarak raporlarƒ±nƒ±zƒ± indirebilirsiniz.',
     },
     {
-      question: 'Barkod okuyucu nas˝l kullan˝l˝r?',
-      answer: 'AraÁlar > Barkod Okuyucu men¸s¸nden kamera eri˛imi vererek barkod okutabilirsiniz.',
+      question: 'Barkod okuyucu nasƒ±l kullanƒ±lƒ±r?',
+      answer: 'Ara√ßlar > Barkod Okuyucu men√ºs√ºnden kamera eri≈üimi vererek barkod okutabilirsiniz.',
     },
   ]
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { color: string; text: string }> = {
-      'open': { color: 'bg-neutral-800 text-white', text: 'AÁ˝k' },
+      'open': { color: 'bg-neutral-800 text-white', text: 'A√ßƒ±k' },
       'in-progress': { color: 'bg-neutral-600 text-white', text: 'Devam Ediyor' },
-      'resolved': { color: 'bg-neutral-900 text-white', text: '«ˆz¸ld¸' }
+      'resolved': { color: 'bg-neutral-900 text-white', text: '√á√∂z√ºld√º' }
     }
     return statusMap[status] || { color: 'bg-neutral-300 text-neutral-700', text: status }
   }
 
   const getPriorityBadge = (priority: string) => {
     const priorityMap: Record<string, { color: string; text: string }> = {
-      'high': { color: 'bg-neutral-900 text-white', text: 'Y¸ksek' },
+      'high': { color: 'bg-neutral-900 text-white', text: 'Y√ºksek' },
       'medium': { color: 'bg-neutral-600 text-white', text: 'Orta' },
-      'low': { color: 'bg-neutral-300 text-neutral-700', text: 'D¸˛¸k' }
+      'low': { color: 'bg-neutral-300 text-neutral-700', text: 'D√º≈ü√ºk' }
     }
     return priorityMap[priority] || { color: 'bg-neutral-300 text-neutral-700', text: priority }
   }
@@ -109,11 +109,11 @@ const SupportTab: React.FC = () => {
       </div>
 
       {/* Support Tickets */}
-      <div className={card('md', 'sm')}>
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-neutral-200">
         <div className="flex items-center justify-between mb-6">
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Destek Talepleri</h2>
+          <h2 className="text-xl font-semibold text-neutral-900">Destek Talepleri</h2>
           <button
-            onClick={() => toast.success('Yeni destek talebi olu˛turuluyor...')}
+            onClick={() => toast.success('Yeni destek talebi olu≈üturuluyor...')}
             className={cx(button('md', 'primary'), 'gap-2')}
           >
             <Send size={18} />
@@ -125,12 +125,12 @@ const SupportTab: React.FC = () => {
           {tickets.map((ticket, index) => (
             <div
               key={index}
-              className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-4 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="font-mono text-sm font-semibold text-gray-900">
+                    <span className="font-mono text-sm font-semibold text-neutral-900">
                       {ticket.id}
                     </span>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(ticket.status).color}`}>
@@ -140,14 +140,14 @@ const SupportTab: React.FC = () => {
                       {getPriorityBadge(ticket.priority).text}
                     </span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{ticket.subject}</h3>
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                  <h3 className="font-semibold text-neutral-900 mb-1">{ticket.subject}</h3>
+                  <p className="text-sm text-neutral-600 flex items-center gap-1">
                     <Clock size={14} />
                     {new Date(ticket.date).toLocaleDateString('tr-TR')}
                   </p>
                 </div>
                 <button
-                  onClick={() => toast.success(`${ticket.id} detaylar˝ gˆsteriliyor...`)}
+                  onClick={() => toast.success(`${ticket.id} detaylarƒ± g√∂steriliyor...`)}
                   className={button('sm', 'primary')}
                 >
                   Detay
@@ -159,17 +159,17 @@ const SupportTab: React.FC = () => {
       </div>
 
       {/* FAQ */}
-      <div className={card('md', 'sm')}>
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-neutral-200">
         <div className="flex items-center gap-3 mb-6">
           <HelpCircle className="text-neutral-900" size={24} />
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>S˝k Sorulan Sorular</h2>
+          <h2 className="text-xl font-semibold text-neutral-900">Sƒ±k Sorulan Sorular</h2>
         </div>
 
         <div className="space-y-4">
           {faq.map((item, index) => (
-            <div key={index} className="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
-              <h3 className="font-semibold text-gray-900 mb-2">? {item.question}</h3>
-              <p className="text-gray-600 text-sm">?? {item.answer}</p>
+            <div key={index} className="border-b border-neutral-200 pb-4 last:border-0 last:pb-0">
+              <h3 className="font-semibold text-neutral-900 mb-2">‚ùì {item.question}</h3>
+              <p className="text-neutral-600 text-sm">üí° {item.answer}</p>
             </div>
           ))}
         </div>

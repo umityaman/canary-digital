@@ -134,21 +134,21 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
   return (
     <div className="space-y-6">
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {quickStats.map((stat, index) => (
-          <StatCard
-            key={index}
-            title={stat.title}
-            value={stat.value}
-            icon={stat.icon}
-            gradient={stat.gradient}
-          />
+          <div key={index} className="bg-white rounded-2xl p-6 shadow-sm border border-neutral-200">
+            <div className="flex items-center justify-between mb-3">
+              <stat.icon className="w-8 h-8 text-neutral-900" />
+            </div>
+            <p className="text-2xl font-bold text-neutral-900 mb-1">{stat.value}</p>
+            <p className="text-sm font-medium text-neutral-600">{stat.title}</p>
+          </div>
         ))}
       </div>
 
       {/* Tools Grid */}
-      <div className={card('md', 'sm')}>
-        <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary} mb-6`}>İşletme Kolaylıkları</h2>
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-neutral-200">
+        <h2 className="text-xl font-semibold text-neutral-900 mb-6">İşletme Kolaylıkları</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tools.map((tool, index) => (
@@ -165,9 +165,9 @@ const ToolsTab: React.FC<ToolsTabProps> = ({ onNavigate }) => {
       </div>
 
       {/* Tips Section */}
-      <div className={cx(card('md', 'sm', 'info'), 'bg-neutral-50 border-neutral-200')}>
-        <h3 className={`${DESIGN_TOKENS?.typography?.h3} ${DESIGN_TOKENS?.colors?.text.primary} mb-3`}>💡 İpucu</h3>
-        <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary}`}>
+      <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
+        <h3 className="text-lg font-semibold text-neutral-900 mb-3">💡 İpucu</h3>
+        <p className="text-sm text-neutral-600">
           Araçlar sekmesinden tüm muhasebe işlemlerinize hızlıca erişebilirsiniz. 
           Sık kullandığınız araçları favorilere ekleyerek daha verimli çalışabilirsiniz.
         </p>

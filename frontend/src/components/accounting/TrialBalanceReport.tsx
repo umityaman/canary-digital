@@ -135,34 +135,20 @@ export default function TrialBalanceReport() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2
-            className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}
-          >
-            Mizan Raporu (Trial Balance)
-          </h2>
-          <p
-            className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
-          >
-            Hesap bazï¿½nda borï¿½-alacak dengesi
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={loadTrialBalance} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
-            <RefreshCw className="w-4 h-4" />
-            Yenile
-          </button>
-          <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
-            <Eye className="w-4 h-4" />
-            Yazdï¿½r
-          </button>
-          <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
-            <Download className="w-4 h-4" />
-            Excel ï¿½ndir
-          </button>
-        </div>
+      {/* Actions Bar */}
+      <div className="flex justify-end items-center gap-2">
+        <button onClick={loadTrialBalance} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
+          <RefreshCw className="w-4 h-4" />
+          Yenile
+        </button>
+        <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
+          <Eye className="w-4 h-4" />
+          Yazdır
+        </button>
+        <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
+          <Download className="w-4 h-4" />
+          Excel İndir
+        </button>
       </div>
 
       {/* Summary Cards */}
@@ -179,7 +165,7 @@ export default function TrialBalanceReport() {
           <p
             className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
-            Toplam Borï¿½
+            Toplam Borç
           </p>
         </div>
 

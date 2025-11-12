@@ -119,34 +119,20 @@ export default function IncomeStatementReport() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2
-            className={`${DESIGN_TOKENS?.typography?.heading.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}
-          >
-            Gelir-Gider Tablosu (Income Statement)
-          </h2>
-          <p
-            className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
-          >
-            Dönemsel gelir ve gider analizi
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={loadIncomeStatement} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
-            <RefreshCw className="w-4 h-4" />
-            Yenile
-          </button>
-          <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
-            <Eye className="w-4 h-4" />
-            Yazdır
-          </button>
-          <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
-            <Download className="w-4 h-4" />
-            Excel İndir
-          </button>
-        </div>
+      {/* Actions Bar */}
+      <div className="flex justify-end items-center gap-2">
+        <button onClick={loadIncomeStatement} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
+          <RefreshCw className="w-4 h-4" />
+          Yenile
+        </button>
+        <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
+          <Eye className="w-4 h-4" />
+          Yazdır
+        </button>
+        <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
+          <Download className="w-4 h-4" />
+          Excel İndir
+        </button>
       </div>
 
       {/* Summary Cards */}
