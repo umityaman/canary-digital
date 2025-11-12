@@ -114,17 +114,17 @@ export default function IncomeTab() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Bu gelir kaydýný silmek istediðinizden emin misiniz?')) {
+    if (!confirm('Bu gelir kaydï¿½nï¿½ silmek istediï¿½inizden emin misiniz?')) {
       return
     }
     
     try {
       await accountingAPI.deleteIncome(id)
-      toast.success('Gelir kaydý silindi')
+      toast.success('Gelir kaydï¿½ silindi')
       loadIncomes()
     } catch (error: any) {
       console.error('Failed to delete income:', error)
-      toast.error('Silme iþlemi baþarýsýz: ' + (error.response?.data?.message || error.message))
+      toast.error('Silme iï¿½lemi baï¿½arï¿½sï¿½z: ' + (error.response?.data?.message || error.message))
     }
   }
 
@@ -135,7 +135,7 @@ export default function IncomeTab() {
 
   const handleExport = () => {
     // TODO: Implement CSV/Excel export
-    toast.success('Dýþa aktarma baþlatýldý')
+    toast.success('Dï¿½ï¿½a aktarma baï¿½latï¿½ldï¿½')
   }
 
   const formatCurrency = (amount: number) => {
@@ -181,7 +181,7 @@ export default function IncomeTab() {
             <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{formatCurrency(monthlyIncome)}</h3>
-          <p className="text-xs font-medium text-neutral-600">Aylýk Gelir</p>
+          <p className="text-xs font-medium text-neutral-600">Aylï¿½k Gelir</p>
         </div>
 
         <div className={card('sm', 'sm', 'default', 'lg')}>
@@ -200,24 +200,24 @@ export default function IncomeTab() {
             <div className={statCardIcon('neutral')}>
               <FileText className="text-white" size={16} />
             </div>
-            <span className="text-xs font-medium text-neutral-600">Kayýt</span>
+            <span className="text-xs font-medium text-neutral-600">Kayï¿½t</span>
           </div>
           <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{incomes.length}</h3>
-          <p className="text-xs font-medium text-neutral-600">Gelir Kaydý</p>
+          <p className="text-xs font-medium text-neutral-600">Gelir Kaydï¿½</p>
         </div>
       </div>
 
       {/* Category Breakdown */}
       {categoryStats.length > 0 && (
         <div className={card('sm', 'md', 'default', 'lg')}>
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Daðýlýmý</h3>
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Kategori Daï¿½ï¿½lï¿½mï¿½</h3>
           <div className="space-y-3">
             {categoryStats.map((stat) => (
               <div key={stat.category}>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-neutral-700">{stat.category}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-neutral-500">{stat.count} kayýt</span>
+                    <span className="text-xs text-neutral-500">{stat.count} kayï¿½t</span>
                     <span className="text-sm font-semibold text-neutral-900">
                       {formatCurrency(stat.total)}
                     </span>
@@ -259,12 +259,12 @@ export default function IncomeTab() {
               onChange={(e) => setCategoryFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px]')}
             >
-              <option value="">Tüm Kategoriler</option>
+              <option value="">Tï¿½m Kategoriler</option>
               <option value="Ekipman Kiralama">Ekipman Kiralama</option>
               <option value="Hizmet Bedeli">Hizmet Bedeli</option>
-              <option value="Danýþmanlýk">Danýþmanlýk</option>
-              <option value="Eðitim">Eðitim</option>
-              <option value="Diðer">Diðer</option>
+              <option value="Danï¿½ï¿½manlï¿½k">Danï¿½ï¿½manlï¿½k</option>
+              <option value="Eï¿½itim">Eï¿½itim</option>
+              <option value="Diï¿½er">Diï¿½er</option>
             </select>
 
             <select
@@ -272,10 +272,10 @@ export default function IncomeTab() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
             >
-              <option value="">Tüm Durumlar</option>
-              <option value="received">Alýndý</option>
+              <option value="">Tï¿½m Durumlar</option>
+              <option value="received">Alï¿½ndï¿½</option>
               <option value="pending">Beklemede</option>
-              <option value="cancelled">Ýptal</option>
+              <option value="cancelled">ï¿½ptal</option>
             </select>
 
             <button
@@ -283,7 +283,7 @@ export default function IncomeTab() {
               className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}
             >
               <Download size={18} />
-              <span className="hidden sm:inline">Dýþa Aktar</span>
+              <span className="hidden sm:inline">Dï¿½ï¿½a Aktar</span>
             </button>
 
             <button
@@ -303,12 +303,12 @@ export default function IncomeTab() {
       {/* Income Table */}
       <div className={card('none', 'sm', 'default', 'lg')}>
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yï¿½kleniyor...</div>
         ) : incomes.length === 0 ? (
           <div className="p-12 text-center text-neutral-600">
             <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
-            <p className="text-lg font-medium">Gelir kaydý bulunamadý</p>
-            <p className="text-sm mt-2">Yeni gelir ekleyerek baþlayýn</p>
+            <p className="text-lg font-medium">Gelir kaydï¿½ bulunamadï¿½</p>
+            <p className="text-sm mt-2">Yeni gelir ekleyerek baï¿½layï¿½n</p>
           </div>
         ) : (
           <>
@@ -317,12 +317,12 @@ export default function IncomeTab() {
                 <thead className={DESIGN_TOKENS?.table?.header}>
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
-                    <th className={TABLE_HEADER_CELL}>Açýklama</th>
-                    <th className={cx(TABLE_HEADER_CELL, 'hidden md:table-cell')}>Kategori</th>
+                    <th className={TABLE_HEADER_CELL}>AÃ§Ä±klama</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Kategori</th>
                     <th className={TABLE_HEADER_CELL}>Tutar</th>
-                    <th className={cx(TABLE_HEADER_CELL, 'hidden lg:table-cell')}>Ödeme</th>
-                    <th className={cx(TABLE_HEADER_CELL, 'hidden md:table-cell')}>Durum</th>
-                    <th className={TABLE_HEADER_CELL}>Ýþlemler</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>Ã–deme</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Durum</th>
+                    <th className={TABLE_HEADER_CELL}>Ä°ÅŸlemler</th>
                   </tr>
                 </thead>
                 <tbody className={DESIGN_TOKENS?.table?.body}>
@@ -337,7 +337,7 @@ export default function IncomeTab() {
                       <td className={TABLE_BODY_CELL}>
                         <div className="text-sm font-medium text-neutral-900">{income.description}</div>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'hidden md:table-cell')}>
+                      <td className={`${TABLE_BODY_CELL} hidden md:table-cell`}>
                         <span className="text-sm text-neutral-600">{income.category}</span>
                       </td>
                       <td className={TABLE_BODY_CELL}>
@@ -345,10 +345,10 @@ export default function IncomeTab() {
                           {formatCurrency(income.amount)}
                         </span>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'hidden lg:table-cell')}>
+                      <td className={`${TABLE_BODY_CELL} hidden lg:table-cell`}>
                         <span className="text-sm text-neutral-600">{income.paymentMethod}</span>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'hidden md:table-cell')}>
+                      <td className={`${TABLE_BODY_CELL} hidden md:table-cell`}>
                         {getStatusBadge(income.status)}
                       </td>
                       <td className={TABLE_BODY_CELL}>
@@ -356,7 +356,7 @@ export default function IncomeTab() {
                           <button
                             onClick={() => handleEdit(income)}
                             className={cx(button('sm', 'ghost', 'lg'), 'p-2')}
-                            title="Düzenle"
+                            title="Dï¿½zenle"
                           >
                             <Edit2 size={16} />
                           </button>
@@ -386,7 +386,7 @@ export default function IncomeTab() {
                   disabled={currentPage === 1}
                   className={cx(button('md', 'outline', 'lg'), 'disabled:opacity-50 disabled:cursor-not-allowed')}
                 >
-                  Önceki
+                  ï¿½nceki
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}

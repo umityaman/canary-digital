@@ -340,16 +340,16 @@ export default function TrialBalanceReport() {
                   <th className={TABLE_HEADER_CELL}>
                     Hesap Adý
                   </th>
-                  <th className={cx(TABLE_HEADER_CELL, 'text-center')}>
+                  <th className={`${TABLE_HEADER_CELL} text-center`}>
                     Tip
                   </th>
-                  <th className={cx(TABLE_HEADER_CELL, 'text-right')}>
+                  <th className={`${TABLE_HEADER_CELL} text-right`}>
                     Borç
                   </th>
-                  <th className={cx(TABLE_HEADER_CELL, 'text-right')}>
+                  <th className={`${TABLE_HEADER_CELL} text-right`}>
                     Alacak
                   </th>
-                  <th className={cx(TABLE_HEADER_CELL, 'text-right')}>
+                  <th className={`${TABLE_HEADER_CELL} text-right`}>
                     Bakiye
                   </th>
                 </tr>
@@ -372,7 +372,7 @@ export default function TrialBalanceReport() {
                           {item.accountName}
                         </p>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'text-center')}>
+                      <td className={`${TABLE_BODY_CELL} text-center`}>
                         <span
                           className={`text-xs font-medium ${getAccountTypeColor(
                             item.accountType
@@ -381,17 +381,17 @@ export default function TrialBalanceReport() {
                           {getAccountTypeName(item.accountType)}
                         </span>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'text-right')}>
+                      <td className={`${TABLE_BODY_CELL} text-right`}>
                         <span className="text-sm text-green-600 font-medium">
                           {item.debit > 0 ? formatCurrency(item.debit) : '-'}
                         </span>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'text-right')}>
+                      <td className={`${TABLE_BODY_CELL} text-right`}>
                         <span className="text-sm text-red-600 font-medium">
                           {item.credit > 0 ? formatCurrency(item.credit) : '-'}
                         </span>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'text-right')}>
+                      <td className={`${TABLE_BODY_CELL} text-right`}>
                         <span
                           className={`text-sm font-bold ${
                             balance > 0
@@ -462,3 +462,4 @@ export default function TrialBalanceReport() {
     </div>
   );
 }
+

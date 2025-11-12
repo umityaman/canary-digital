@@ -335,10 +335,10 @@ export default function ExpenseTab() {
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
                     <th className={TABLE_HEADER_CELL}>Açýklama</th>
-                    <th className={cx(TABLE_HEADER_CELL, 'hidden md:table-cell')}>Kategori</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Kategori</th>
                     <th className={TABLE_HEADER_CELL}>Tutar</th>
-                    <th className={cx(TABLE_HEADER_CELL, 'hidden lg:table-cell')}>Ödeme</th>
-                    <th className={cx(TABLE_HEADER_CELL, 'hidden md:table-cell')}>Durum</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>Ödeme</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Durum</th>
                     <th className={TABLE_HEADER_CELL}>Ýþlemler</th>
                   </tr>
                 </thead>
@@ -354,7 +354,7 @@ export default function ExpenseTab() {
                       <td className={TABLE_BODY_CELL}>
                         <div className="text-sm font-medium text-neutral-900">{expense.description}</div>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'hidden md:table-cell')}>
+                      <td className={`${TABLE_BODY_CELL} hidden md:table-cell`}>
                         <span className="text-sm text-neutral-600">{expense.category}</span>
                       </td>
                       <td className={TABLE_BODY_CELL}>
@@ -362,10 +362,10 @@ export default function ExpenseTab() {
                           {formatCurrency(expense.amount)}
                         </span>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'hidden lg:table-cell')}>
+                      <td className={`${TABLE_BODY_CELL} hidden lg:table-cell`}>
                         <span className="text-sm text-neutral-600">{expense.paymentMethod}</span>
                       </td>
-                      <td className={cx(TABLE_BODY_CELL, 'hidden md:table-cell')}>
+                      <td className={`${TABLE_BODY_CELL} hidden md:table-cell`}>
                         {getStatusBadge(expense.status)}
                       </td>
                       <td className={TABLE_BODY_CELL}>
@@ -431,3 +431,4 @@ export default function ExpenseTab() {
     </div>
   )
 }
+

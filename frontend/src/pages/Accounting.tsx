@@ -992,7 +992,7 @@ export default function Accounting() {
                                   <td className={TABLE_BODY_CELL}>{formatCurrency(c.amount || 0)}</td>
                                   <td className={TABLE_BODY_CELL}>{c.dueDate ? formatDate(c.dueDate) : '-'}</td>
                                   <td className={TABLE_BODY_CELL}>{c.status || '-'}</td>
-                                  <td className={cx(TABLE_BODY_CELL, 'whitespace-nowrap')}>
+                                  <td className={`${TABLE_BODY_CELL} whitespace-nowrap`}>
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => { setEditingCheck(c); setCheckModalOpen(true) }}
@@ -1060,7 +1060,7 @@ export default function Accounting() {
                                   <td className={TABLE_BODY_CELL}>{formatCurrency(p.amount || 0)}</td>
                                   <td className={TABLE_BODY_CELL}>{p.dueDate ? formatDate(p.dueDate) : '-'}</td>
                                   <td className={TABLE_BODY_CELL}>{p.status || '-'}</td>
-                                  <td className={cx(TABLE_BODY_CELL, 'whitespace-nowrap')}>
+                                  <td className={`${TABLE_BODY_CELL} whitespace-nowrap`}>
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => { setEditingPromissory(p); setPromissoryModalOpen(true) }}
@@ -2430,3 +2430,4 @@ export default function Accounting() {
     </div>
   )
 }
+
