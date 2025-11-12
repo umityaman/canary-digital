@@ -178,9 +178,9 @@ export default function ExpenseTab() {
   }
 
   return (
-    <div className="space-y-6 w-full">
+    <div className="space-y-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style={{ boxSizing: 'border-box' }}>
         <div className={card('sm', 'sm', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-2">
             <div className={statCardIcon('primary')}>
@@ -261,11 +261,12 @@ export default function ExpenseTab() {
           </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
               className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
+              style={{ boxSizing: 'border-box' }}
             >
               <option value="">Tüm Kategoriler</option>
               <option value="Personel Maaşları">Personel Maaşları</option>
@@ -309,7 +310,7 @@ export default function ExpenseTab() {
       </div>
 
       {/* Expense Table */}
-      <div className={card('none', 'sm', 'default', 'lg')} style={{ overflow: 'hidden' }}>
+      <div className={card('none', 'sm', 'default', 'lg')} style={{ overflow: 'hidden', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
         {loading ? (
           <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : expenses.length === 0 ? (
