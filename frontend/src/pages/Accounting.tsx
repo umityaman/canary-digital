@@ -867,7 +867,7 @@ export default function Accounting() {
           </nav>
 
           {/* Content Area */}
-          <div className="flex-1 p-6 lg:p-8">
+          <div className="flex-1 p-6 lg:p-8 max-w-7xl mx-auto w-full">
             <ErrorBoundary fallbackTitle="Muhasebe Modülü Hatası" fallbackMessage="Muhasebe modülünde bir sorun oluştu. Lütfen sayfayı yenileyin.">
               <Suspense fallback={<LoadingFallback message="İçerik yükleniyor..." />}>
                 {/* Dashboard Tab */}
