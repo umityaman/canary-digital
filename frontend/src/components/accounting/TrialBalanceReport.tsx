@@ -1,4 +1,4 @@
-ï»¿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Scale,
   Calendar,
@@ -12,7 +12,7 @@ import {
   FileSpreadsheet,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { card, button, DESIGN_TOKENS, statCardIcon, tableHeaderCell, tableBodyCell, cx, input } from '../../styles/design-tokens';
+import { card, button, DESIGN_TOKENS, statCardIcon, TABLE_HEADER_CELL, TABLE_BODY_CELL, TABLE_BODY_CELL_MUTED, cx, input } from '../../styles/design-tokens';
 import { exportTrialBalanceToExcel } from '../../utils/excelExport';
 
 interface TrialBalanceItem {
@@ -78,7 +78,7 @@ export default function TrialBalanceReport() {
       });
     } catch (error: any) {
       console.error('Failed to load trial balance:', error);
-      toast.error('Mizan raporu yÃ¼klenemedi');
+      toast.error('Mizan raporu yüklenemedi');
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ export default function TrialBalanceReport() {
       });
       toast.success('Mizan raporu Excel olarak indirildi');
     } catch (error) {
-      toast.error('Excel export baÅŸarÄ±sÄ±z oldu');
+      toast.error('Excel export baþarýsýz oldu');
     }
   };
 
@@ -120,9 +120,9 @@ export default function TrialBalanceReport() {
 
   const getAccountTypeName = (type: string): string => {
     const names: Record<string, string> = {
-      ASSET: 'VarlÄ±k',
-      LIABILITY: 'BorÃ§',
-      EQUITY: 'Ã–zkaynak',
+      ASSET: 'Varlýk',
+      LIABILITY: 'Borç',
+      EQUITY: 'Özkaynak',
       REVENUE: 'Gelir',
       EXPENSE: 'Gider',
     };
@@ -142,7 +142,7 @@ export default function TrialBalanceReport() {
           <p
             className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}
           >
-            Hesap bazÄ±nda borÃ§-alacak dengesi
+            Hesap bazýnda borç-alacak dengesi
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -152,11 +152,11 @@ export default function TrialBalanceReport() {
           </button>
           <button onClick={handlePrint} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
             <Eye className="w-4 h-4" />
-            YazdÄ±r
+            Yazdýr
           </button>
           <button onClick={handleExport} className={cx(button('md', 'primary', 'lg'), 'gap-2')}>
             <Download className="w-4 h-4" />
-            Excel Ä°ndir
+            Excel Ýndir
           </button>
         </div>
       </div>
@@ -175,7 +175,7 @@ export default function TrialBalanceReport() {
           <p
             className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
           >
-            Toplam BorÃ§
+            Toplam Borç
           </p>
         </div>
 
@@ -226,7 +226,7 @@ export default function TrialBalanceReport() {
               summary.isBalanced ? 'text-green-600' : 'text-red-600'
             } mb-1`}
           >
-            {summary.isBalanced ? 'âœ“' : 'âœ—'}
+            {summary.isBalanced ? '?' : '?'}
           </p>
           <p
             className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.secondary}`}
@@ -244,7 +244,7 @@ export default function TrialBalanceReport() {
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
-              BaÅŸlangÄ±Ã§ Tarihi
+              Baþlangýç Tarihi
             </label>
             <input
               type="date"
@@ -259,7 +259,7 @@ export default function TrialBalanceReport() {
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
             >
               <Calendar className="w-4 h-4 inline mr-1" />
-              BitiÅŸ Tarihi
+              Bitiþ Tarihi
             </label>
             <input
               type="date"
@@ -281,10 +281,10 @@ export default function TrialBalanceReport() {
               onChange={(e) => setAccountTypeFilter(e.target.value)}
               className={input('md', 'default', undefined, 'lg')}
             >
-              <option value="ALL">TÃ¼mÃ¼</option>
-              <option value="ASSET">VarlÄ±k</option>
-              <option value="LIABILITY">BorÃ§</option>
-              <option value="EQUITY">Ã–zkaynak</option>
+              <option value="ALL">Tümü</option>
+              <option value="ASSET">Varlýk</option>
+              <option value="LIABILITY">Borç</option>
+              <option value="EQUITY">Özkaynak</option>
               <option value="REVENUE">Gelir</option>
               <option value="EXPENSE">Gider</option>
             </select>
@@ -299,7 +299,7 @@ export default function TrialBalanceReport() {
                 className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
               />
               <span className={`${DESIGN_TOKENS?.typography?.body.sm}`}>
-                SÄ±fÄ±r bakiye gÃ¶ster
+                Sýfýr bakiye göster
               </span>
             </label>
           </div>
@@ -312,7 +312,7 @@ export default function TrialBalanceReport() {
           <h3
             className={`${DESIGN_TOKENS?.typography?.heading.h4} ${DESIGN_TOKENS?.colors?.text.primary}`}
           >
-            Hesap DetaylarÄ±
+            Hesap Detaylarý
           </h3>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <FileSpreadsheet className="w-4 h-4" />
@@ -327,29 +327,29 @@ export default function TrialBalanceReport() {
         ) : items.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <Scale className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>SeÃ§ilen kriterlere uygun kayÄ±t bulunamadÄ±</p>
+            <p>Seçilen kriterlere uygun kayýt bulunamadý</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className={DESIGN_TOKENS?.table?.header}>
                 <tr>
-                  <th className={tableHeaderCell()}>
+                  <th className={TABLE_HEADER_CELL}>
                     Hesap Kodu
                   </th>
-                  <th className={tableHeaderCell()}>
-                    Hesap AdÄ±
+                  <th className={TABLE_HEADER_CELL}>
+                    Hesap Adý
                   </th>
-                  <th className={cx(tableHeaderCell(), 'text-center')}>
+                  <th className={cx(TABLE_HEADER_CELL, 'text-center')}>
                     Tip
                   </th>
-                  <th className={cx(tableHeaderCell(), 'text-right')}>
-                    BorÃ§
+                  <th className={cx(TABLE_HEADER_CELL, 'text-right')}>
+                    Borç
                   </th>
-                  <th className={cx(tableHeaderCell(), 'text-right')}>
+                  <th className={cx(TABLE_HEADER_CELL, 'text-right')}>
                     Alacak
                   </th>
-                  <th className={cx(tableHeaderCell(), 'text-right')}>
+                  <th className={cx(TABLE_HEADER_CELL, 'text-right')}>
                     Bakiye
                   </th>
                 </tr>
@@ -362,17 +362,17 @@ export default function TrialBalanceReport() {
                       key={idx}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      <td className={tableBodyCell()}>
+                      <td className={TABLE_BODY_CELL}>
                         <span className="font-mono text-sm font-medium text-gray-900">
                           {item.accountCode}
                         </span>
                       </td>
-                      <td className={tableBodyCell()}>
+                      <td className={TABLE_BODY_CELL}>
                         <p className="text-sm text-gray-900 font-medium">
                           {item.accountName}
                         </p>
                       </td>
-                      <td className={cx(tableBodyCell(), 'text-center')}>
+                      <td className={cx(TABLE_BODY_CELL, 'text-center')}>
                         <span
                           className={`text-xs font-medium ${getAccountTypeColor(
                             item.accountType
@@ -381,17 +381,17 @@ export default function TrialBalanceReport() {
                           {getAccountTypeName(item.accountType)}
                         </span>
                       </td>
-                      <td className={cx(tableBodyCell(), 'text-right')}>
+                      <td className={cx(TABLE_BODY_CELL, 'text-right')}>
                         <span className="text-sm text-green-600 font-medium">
                           {item.debit > 0 ? formatCurrency(item.debit) : '-'}
                         </span>
                       </td>
-                      <td className={cx(tableBodyCell(), 'text-right')}>
+                      <td className={cx(TABLE_BODY_CELL, 'text-right')}>
                         <span className="text-sm text-red-600 font-medium">
                           {item.credit > 0 ? formatCurrency(item.credit) : '-'}
                         </span>
                       </td>
-                      <td className={cx(tableBodyCell(), 'text-right')}>
+                      <td className={cx(TABLE_BODY_CELL, 'text-right')}>
                         <span
                           className={`text-sm font-bold ${
                             balance > 0
@@ -426,7 +426,7 @@ export default function TrialBalanceReport() {
                         summary.difference === 0 ? 'text-green-600' : 'text-red-600'
                       }
                     >
-                      {summary.isBalanced ? 'âœ“ Dengede' : 'âœ— Dengesiz'}
+                      {summary.isBalanced ? '? Dengede' : '? Dengesiz'}
                     </span>
                   </td>
                 </tr>
@@ -446,14 +446,14 @@ export default function TrialBalanceReport() {
               </div>
             </div>
             <div className="flex-1">
-              <h4 className="text-red-900 font-semibold mb-1">Mizan Dengesi UyuÅŸmuyor</h4>
+              <h4 className="text-red-900 font-semibold mb-1">Mizan Dengesi Uyuþmuyor</h4>
               <p className="text-red-700 text-sm mb-2">
-                Toplam borÃ§ ve alacak tutarlarÄ± eÅŸit deÄŸil. Fark:{' '}
+                Toplam borç ve alacak tutarlarý eþit deðil. Fark:{' '}
                 {formatCurrency(Math.abs(summary.difference))}
               </p>
               <p className="text-red-600 text-xs">
-                LÃ¼tfen yevmiye kayÄ±tlarÄ±nÄ±zÄ± kontrol edin. Her kayÄ±tta borÃ§ ve alacak
-                toplamlarÄ± eÅŸit olmalÄ±dÄ±r.
+                Lütfen yevmiye kayýtlarýnýzý kontrol edin. Her kayýtta borç ve alacak
+                toplamlarý eþit olmalýdýr.
               </p>
             </div>
           </div>

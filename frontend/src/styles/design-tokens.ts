@@ -536,25 +536,23 @@ export const badge = (
 }
 
 /**
- * Build table header cell class name
- * @example tableHeaderCell() // Returns complete table header cell classes
+ * Table cell class name constants (as strings to avoid bundling issues)
+ * @example <th className={TABLE_HEADER_CELL}>Header</th>
  */
-export const tableHeaderCell = () => {
-  const cell = DESIGN_TOKENS_RAW?.table?.header?.cell || 'px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider'
-  const bg = DESIGN_TOKENS_RAW?.table?.header?.bg || 'bg-neutral-50'
-  return cx(cell, bg)
-}
+export const TABLE_HEADER_CELL = 'px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50'
+export const TABLE_BODY_CELL = 'px-6 py-4 text-sm text-neutral-900'
+export const TABLE_BODY_CELL_MUTED = 'px-6 py-4 text-sm text-neutral-600'
 
 /**
- * Build table body cell class name
- * @example tableBodyCell(false) // Returns complete table body cell classes
+ * Legacy function exports (deprecated - use constants above)
+ * @deprecated Use TABLE_HEADER_CELL constant instead
  */
-export const tableBodyCell = (muted = false) => {
-  if (muted) {
-    return DESIGN_TOKENS_RAW?.table?.body?.cellMuted || 'px-6 py-4 text-sm text-neutral-600'
-  }
-  return DESIGN_TOKENS_RAW?.table?.body?.cell || 'px-6 py-4 text-sm text-neutral-900'
-}
+export const tableHeaderCell = () => TABLE_HEADER_CELL
+
+/**
+ * @deprecated Use TABLE_BODY_CELL or TABLE_BODY_CELL_MUTED constants instead
+ */
+export const tableBodyCell = (muted = false) => muted ? TABLE_BODY_CELL_MUTED : TABLE_BODY_CELL
 
 /**
  * Build stat card with icon color
