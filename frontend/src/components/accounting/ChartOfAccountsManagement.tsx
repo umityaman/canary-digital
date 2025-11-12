@@ -187,7 +187,7 @@ export default function ChartOfAccountsManagement() {
               {hasChildren ? (
                 <button
                   onClick={() => toggleNode(account.id)}
-                  className="mr-2 text-gray-400 hover:text-neutral-600"
+                  className="mr-2 text-neutral-400 hover:text-neutral-600"
                 >
                   {isExpanded ? (
                     <ChevronDown className="w-4 h-4" />
@@ -198,7 +198,7 @@ export default function ChartOfAccountsManagement() {
               ) : (
                 <span className="mr-2 w-4" />
               )}
-              <BookOpen className="w-4 h-4 text-gray-400 mr-2" />
+              <BookOpen className="w-4 h-4 text-neutral-400 mr-2" />
               <span className={`${DESIGN_TOKENS?.typography?.body.sm} font-mono font-medium ${DESIGN_TOKENS?.colors?.text.primary}`}>
                 {account.code}
               </span>
@@ -210,7 +210,7 @@ export default function ChartOfAccountsManagement() {
                 {account.name}
               </p>
               {!account.isActive && (
-                <span className="text-xs text-gray-400">(Pasif)</span>
+                <span className="text-xs text-neutral-400">(Pasif)</span>
               )}
             </div>
           </td>
@@ -376,7 +376,7 @@ export default function ChartOfAccountsManagement() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div className="relative md:col-span-2">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Hesap kodu veya adı ara..."
@@ -446,7 +446,7 @@ export default function ChartOfAccountsManagement() {
           </div>
         ) : accounts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
-            <BookOpen className="w-16 h-16 text-gray-300 mb-4" />
+            <BookOpen className="w-16 h-16 text-neutral-300 mb-4" />
             <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
               Hesap Bulunamadı
             </p>
@@ -459,19 +459,19 @@ export default function ChartOfAccountsManagement() {
             <table className="w-full">
               <thead className="bg-neutral-50 border-b-2 border-neutral-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Hesap Kodu
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Hesap Adı
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Tip
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Bakiye
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     İşlemler
                   </th>
                 </tr>

@@ -334,7 +334,7 @@ export default function ExpenseTab() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="min-w-full w-full">
                 <thead >
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>

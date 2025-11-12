@@ -363,7 +363,7 @@ const EInvoiceManagement: React.FC = () => {
             <p className="mt-4 text-neutral-600">Yükleniyor...</p>
           </div>
         ) : filteredInvoices.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-neutral-500">
             e-Fatura bulunamadı
           </div>
         ) : (
@@ -385,13 +385,13 @@ const EInvoiceManagement: React.FC = () => {
                       className="rounded"
                     />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fatura No</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Müşteri</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">UUID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Durum</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarih</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tutar</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">İşlemler</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Fatura No</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Müşteri</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">UUID</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Durum</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Tarih</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Tutar</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase">İşlemler</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -417,13 +417,13 @@ const EInvoiceManagement: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                       {eInvoice.invoice.customer.name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 font-mono">
                       {eInvoice.uuid.substring(0, 8)}...
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getStatusBadge(eInvoice.status)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                       {new Date(eInvoice.invoice.invoiceDate).toLocaleDateString('tr-TR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
@@ -501,7 +501,7 @@ const EInvoiceManagement: React.FC = () => {
                   setCancelReason('');
                   setResponseReason('');
                 }}
-                className="text-gray-400 hover:text-neutral-600"
+                className="text-neutral-400 hover:text-neutral-600"
               >
                 ✕
               </button>

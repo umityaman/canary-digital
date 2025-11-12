@@ -163,7 +163,7 @@ export default function BalanceSheetReport() {
               >
                 {item.accountName}
               </p>
-              <p className="text-xs text-gray-500 font-mono">{item.accountCode}</p>
+              <p className="text-xs text-neutral-500 font-mono">{item.accountCode}</p>
             </div>
           </div>
           <div className="text-right">
@@ -174,7 +174,7 @@ export default function BalanceSheetReport() {
             >
               {formatCurrency(item.amount)}
             </p>
-            <p className="text-xs text-gray-500">{formatPercentage(item.percentage)}</p>
+            <p className="text-xs text-neutral-500">{formatPercentage(item.percentage)}</p>
           </div>
         </div>
         {hasChildren && isExpanded && (
@@ -185,7 +185,7 @@ export default function BalanceSheetReport() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Actions Bar */}
       <div className="flex justify-end items-center gap-2">
         <button onClick={loadBalanceSheet} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
@@ -203,7 +203,7 @@ export default function BalanceSheetReport() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <div className={card('md', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
             <Building2 className="w-8 h-8 text-neutral-900" />
@@ -321,7 +321,7 @@ export default function BalanceSheetReport() {
             {expandedSections.has('assets') && (
               <div className="space-y-1">
                 {data.assets.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-neutral-500">
                     <Building2 className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p className="text-sm">Varlık kaydı bulunamadı</p>
                   </div>
@@ -333,7 +333,7 @@ export default function BalanceSheetReport() {
           </div>
 
           {/* Liabilities & Equity Section */}
-          <div className="space-y-6">
+          <div className="space-y-6 max-w-7xl mx-auto">
             {/* Liabilities */}
             <div className={card('md', 'md', 'default', 'lg')}>
               <div className="border-b border-neutral-200 pb-3 mb-4">
@@ -362,7 +362,7 @@ export default function BalanceSheetReport() {
               {expandedSections.has('liabilities') && (
                 <div className="space-y-1">
                   {data.liabilities.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-neutral-500">
                       <TrendingDown className="w-8 h-8 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">Borç kaydı bulunamadı</p>
                     </div>
@@ -401,7 +401,7 @@ export default function BalanceSheetReport() {
               {expandedSections.has('equity') && (
                 <div className="space-y-1">
                   {data.equity.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-neutral-500">
                       <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">Özkaynak kaydı bulunamadı</p>
                     </div>

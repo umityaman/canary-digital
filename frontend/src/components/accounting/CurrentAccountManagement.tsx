@@ -299,7 +299,7 @@ export default function CurrentAccountManagement() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div className="relative md:col-span-2">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Cari adı, kodu veya vergi no ara..."
@@ -369,7 +369,7 @@ export default function CurrentAccountManagement() {
           </div>
         ) : filteredAccounts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
-            <Users className="w-16 h-16 text-gray-300 mb-4" />
+            <Users className="w-16 h-16 text-neutral-300 mb-4" />
             <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
               Cari Hesap Bulunamadı
             </p>
@@ -384,25 +384,25 @@ export default function CurrentAccountManagement() {
             <table className="w-full">
               <thead className="bg-neutral-50 border-b-2 border-neutral-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Cari Kodu
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Cari Adı
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Tip
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Borç
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Alacak
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Bakiye
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     İşlemler
                   </th>
                 </tr>
@@ -412,7 +412,7 @@ export default function CurrentAccountManagement() {
                   <tr key={account.id} className="hover:bg-neutral-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <Users className="w-4 h-4 text-gray-400 mr-2" />
+                        <Users className="w-4 h-4 text-neutral-400 mr-2" />
                         <span className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.primary} font-medium font-mono`}>
                           {account.code}
                         </span>
@@ -498,7 +498,7 @@ export default function CurrentAccountManagement() {
                 </div>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="text-gray-400 hover:text-neutral-600 transition-colors"
+                  className="text-neutral-400 hover:text-neutral-600 transition-colors"
                 >
                   <AlertCircle className="w-6 h-6" />
                 </button>
@@ -580,7 +580,7 @@ export default function CurrentAccountManagement() {
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-neutral-600"></div>
                   </div>
                 ) : !selectedAccount.transactions || selectedAccount.transactions.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-neutral-500">
                     Henüz hareket bulunmamaktadır
                   </div>
                 ) : (
@@ -588,22 +588,22 @@ export default function CurrentAccountManagement() {
                     <table className="w-full border border-neutral-200 rounded-lg">
                       <thead className="bg-neutral-50">
                         <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                             Tarih
                           </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                             Açıklama
                           </th>
-                          <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-center text-xs font-medium text-neutral-500 uppercase">
                             Fatura No
                           </th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                             Borç
                           </th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                             Alacak
                           </th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                             Bakiye
                           </th>
                         </tr>

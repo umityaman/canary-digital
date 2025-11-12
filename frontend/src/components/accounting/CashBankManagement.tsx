@@ -196,7 +196,7 @@ export default function CashBankManagement() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Kasa ve Banka Yönetimi</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-neutral-500 mt-1">
             Nakit akışı, kasa ve banka hesaplarınızı takip edin
           </p>
         </div>
@@ -370,7 +370,7 @@ export default function CashBankManagement() {
                 <h3 className="text-lg font-semibold text-neutral-900 mb-4">Son Hareketler</h3>
                 <div className="space-y-2">
                   {cashTransactions.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-neutral-500">
                       <p>Henüz kasa hareketi bulunmuyor</p>
                       <button
                         onClick={() => setShowTransactionForm(true)}
@@ -395,7 +395,7 @@ export default function CashBankManagement() {
                         </div>
                         <div>
                           <p className="font-medium text-neutral-900">{transaction.description}</p>
-                          <p className="text-sm text-gray-500">{formatDate(transaction.date)}</p>
+                          <p className="text-sm text-neutral-500">{formatDate(transaction.date)}</p>
                         </div>
                       </div>
                       <p className="text-lg font-bold text-neutral-900">
@@ -418,22 +418,22 @@ export default function CashBankManagement() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-neutral-50">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                         Banka
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                         Hesap No
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                         IBAN
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                         Bakiye
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                         Durum
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                         İşlemler
                       </th>
                     </tr>
@@ -445,7 +445,7 @@ export default function CashBankManagement() {
                           <div>
                             <p className="font-medium text-neutral-900">{account.bankName}</p>
                             {account.branch && (
-                              <p className="text-sm text-gray-500">{account.branch}</p>
+                              <p className="text-sm text-neutral-500">{account.branch}</p>
                             )}
                           </div>
                         </td>
@@ -458,7 +458,7 @@ export default function CashBankManagement() {
                             <p className="font-semibold text-neutral-900">
                               {formatCurrency(account.balance)}
                             </p>
-                            <p className="text-xs text-gray-500">{account.currency}</p>
+                            <p className="text-xs text-neutral-500">{account.currency}</p>
                           </div>
                         </td>
                         <td className="px-4 py-3">
@@ -504,7 +504,7 @@ export default function CashBankManagement() {
                   </button>
                 </div>
               </div>
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-neutral-500">
                 <Wallet className="w-16 h-16 mx-auto mb-4 opacity-30" />
                 <p className="text-lg font-medium">Kasa hareketi yok</p>
                 <p className="text-sm mt-1">Yeni bir işlem ekleyerek başlayın</p>
@@ -535,7 +535,7 @@ export default function CashBankManagement() {
               </div>
 
               {cashFlowData.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-neutral-500">
                   <Calendar className="w-16 h-16 mx-auto mb-4 opacity-30" />
                   <p className="text-lg font-medium">Bu yıl için veri bulunamadı</p>
                   <p className="text-sm mt-1">İşlem eklediğinizde burada görünecektir</p>
@@ -554,7 +554,7 @@ export default function CashBankManagement() {
                           cashFlowData.reduce((sum, month) => sum + month.income, 0)
                         )}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
+                      <p className="text-xs text-neutral-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
 
                     <div className="p-4 bg-neutral-100 rounded-lg border border-neutral-300">
@@ -567,7 +567,7 @@ export default function CashBankManagement() {
                           cashFlowData.reduce((sum, month) => sum + month.expense, 0)
                         )}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
+                      <p className="text-xs text-neutral-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
 
                     <div className="p-4 bg-neutral-200 rounded-lg border border-neutral-400">
@@ -580,7 +580,7 @@ export default function CashBankManagement() {
                           cashFlowData.reduce((sum, month) => sum + month.net, 0)
                         )}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{cashFlowYear} yılı</p>
+                      <p className="text-xs text-neutral-500 mt-1">{cashFlowYear} yılı</p>
                     </div>
                   </div>
 
@@ -589,16 +589,16 @@ export default function CashBankManagement() {
                     <table className="min-w-full">
                       <thead className="bg-neutral-50">
                         <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                             Ay
                           </th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                             Giriş
                           </th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                             Çıkış
                           </th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                          <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                             Net
                           </th>
                         </tr>
@@ -641,7 +641,7 @@ export default function CashBankManagement() {
               <h3 className="text-lg font-semibold text-neutral-900">Yeni İşlem</h3>
               <button
                 onClick={() => setShowTransactionForm(false)}
-                className="p-2 text-gray-400 hover:text-neutral-600"
+                className="p-2 text-neutral-400 hover:text-neutral-600"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -662,7 +662,7 @@ export default function CashBankManagement() {
                   >
                     <ArrowDownLeft
                       className={`w-6 h-6 mx-auto mb-1 ${
-                        transactionType === 'in' ? 'text-neutral-900' : 'text-gray-400'
+                        transactionType === 'in' ? 'text-neutral-900' : 'text-neutral-400'
                       }`}
                     />
                     <span className="text-sm font-medium">Giriş</span>
@@ -677,7 +677,7 @@ export default function CashBankManagement() {
                   >
                     <ArrowUpRight
                       className={`w-6 h-6 mx-auto mb-1 ${
-                        transactionType === 'out' ? 'text-neutral-800' : 'text-gray-400'
+                        transactionType === 'out' ? 'text-neutral-800' : 'text-neutral-400'
                       }`}
                     />
                     <span className="text-sm font-medium">Çıkış</span>

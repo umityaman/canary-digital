@@ -194,7 +194,7 @@ export default function JournalEntryList() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Fiş no veya açıklama ara..."
@@ -218,7 +218,7 @@ export default function JournalEntryList() {
 
           {/* Date From */}
           <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             <input
               type="date"
               value={dateFrom}
@@ -229,7 +229,7 @@ export default function JournalEntryList() {
 
           {/* Date To */}
           <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             <input
               type="date"
               value={dateTo}
@@ -279,7 +279,7 @@ export default function JournalEntryList() {
           </div>
         ) : filteredEntries.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center p-6">
-            <FileText className="w-16 h-16 text-gray-300 mb-4" />
+            <FileText className="w-16 h-16 text-neutral-300 mb-4" />
             <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>
               Muhasebe Fişi Bulunamadı
             </p>
@@ -294,25 +294,25 @@ export default function JournalEntryList() {
             <table className="w-full">
               <thead className="bg-neutral-50 border-b-2 border-neutral-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Fiş No
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Tarih
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Açıklama
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Borç
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Alacak
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Durum
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     İşlemler
                   </th>
                 </tr>
@@ -322,7 +322,7 @@ export default function JournalEntryList() {
                   <tr key={entry.id} className="hover:bg-neutral-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <FileText className="w-4 h-4 text-gray-400 mr-2" />
+                        <FileText className="w-4 h-4 text-neutral-400 mr-2" />
                         <span className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.primary} font-medium`}>
                           {entry.entryNumber}
                         </span>
@@ -413,7 +413,7 @@ export default function JournalEntryList() {
                 </div>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="text-gray-400 hover:text-neutral-600 transition-colors"
+                  className="text-neutral-400 hover:text-neutral-600 transition-colors"
                 >
                   <XCircle className="w-6 h-6" />
                 </button>
@@ -475,19 +475,19 @@ export default function JournalEntryList() {
                   <table className="w-full border border-neutral-200 rounded-lg">
                     <thead className="bg-neutral-50">
                       <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                           Hesap Kodu
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                           Hesap Adı
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                           Açıklama
                         </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                           Borç
                         </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                           Alacak
                         </th>
                       </tr>

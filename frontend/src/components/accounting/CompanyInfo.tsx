@@ -673,19 +673,19 @@ const CompanyInfo: React.FC = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-neutral-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                       Banka
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                       Hesap No
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                       IBAN
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                       Bakiye
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                       Durum
                     </th>
                   </tr>
@@ -710,7 +710,7 @@ const CompanyInfo: React.FC = () => {
                           <p className="font-semibold text-neutral-900">
                             {formatCurrency(account.balance)}
                           </p>
-                          <p className="text-xs text-gray-500">{account.currency}</p>
+                          <p className="text-xs text-neutral-500">{account.currency}</p>
                         </div>
                       </td>
                       <td className="px-4 py-3">

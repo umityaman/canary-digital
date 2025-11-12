@@ -887,7 +887,7 @@ export default function Accounting() {
 
             {/* Reports Tab - Advanced Reporting with Sub-tabs */}
             {activeTab === 'reports' && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-7xl mx-auto">
                 <h2 className={DESIGN_TOKENS?.typography?.h2}>
                   Raporlar
                 </h2>
@@ -930,7 +930,7 @@ export default function Accounting() {
 
             {/* Receivables Management Tab - ï¿½ekler, Senetler, Yaï¿½landï¿½rma */}
             {activeTab === 'receivables' && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-7xl mx-auto">
                 <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Yï¿½netimi</h2>
                 
                 {/* Sub-tabs for Checks, Promissory, Aging */}
@@ -976,7 +976,7 @@ export default function Accounting() {
                         <div className="p-12 text-center text-neutral-600">ï¿½ek bulunamadï¿½</div>
                       ) : (
                         <div className="overflow-x-auto">
-                          <table className="w-full">
+                          <table className="min-w-full w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
                                 <th className={TABLE_HEADER_CELL}>No</th>
@@ -1044,7 +1044,7 @@ export default function Accounting() {
                         <div className="p-12 text-center text-neutral-600">Senet bulunamadï¿½</div>
                       ) : (
                         <div className="overflow-x-auto">
-                          <table className="w-full">
+                          <table className="min-w-full w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                               <tr>
                                 <th className={TABLE_HEADER_CELL}>No</th>
@@ -1103,7 +1103,7 @@ export default function Accounting() {
             {/* Invoice Tab */}
             {activeTab === 'invoice' && (
               <ErrorBoundary fallbackTitle="Fatura Listesi Hatasï¿½" fallbackMessage="Fatura listesi yï¿½klenirken bir sorun oluï¿½tu.">
-                <div className="space-y-6">
+                <div className="space-y-6 max-w-7xl mx-auto">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Fatura Yï¿½netimi</h2>
                     <div className="flex gap-2">
@@ -1128,7 +1128,7 @@ export default function Accounting() {
                 {/* Filters */}
                 <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm space-y-4">
                   {/* Basic Filters */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {/* Search */}
                     <div className="relative">
                       <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
@@ -1312,7 +1312,7 @@ export default function Accounting() {
                       )}
 
                       <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="min-w-full w-full">
                           <thead className={`${DESIGN_TOKENS?.colors?.bg?.subtle} ${DESIGN_TOKENS?.colors?.border?.light} border-b`}>
                             <tr>
                               <th className={`px-6 py-3 text-left`}>
@@ -1486,7 +1486,7 @@ export default function Accounting() {
             {/* Offer Tab */}
             {activeTab === 'offer' && (
               <ErrorBoundary fallbackTitle="Teklif Listesi Hatasï¿½" fallbackMessage="Teklif listesi yï¿½klenirken bir sorun oluï¿½tu.">
-                <div className="space-y-6">
+                <div className="space-y-6 max-w-7xl mx-auto">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className={`${DESIGN_TOKENS?.typography?.h2 || 'text-xl font-semibold'} ${DESIGN_TOKENS?.colors?.text?.primary || 'text-neutral-900'}`}>Teklif Listesi</h2>
                   <button 
@@ -1501,7 +1501,7 @@ export default function Accounting() {
                 {/* Filters */}
                 <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm space-y-4">
                   {/* Basic Filters */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {/* Search */}
                     <div className="relative">
                       <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
@@ -1686,7 +1686,7 @@ export default function Accounting() {
                       )}
 
                       <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="min-w-full w-full">
                           <thead className={`${DESIGN_TOKENS?.colors?.bg?.subtle} ${DESIGN_TOKENS?.colors?.border?.light} border-b`}>
                             <tr>
                               <th className="px-6 py-3 text-left">
@@ -1924,7 +1924,7 @@ export default function Accounting() {
 
             {/* Tools Tab OLD - BACKUP */}
             {false && activeTab === 'tools' && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-7xl mx-auto">
                 <h2 className="text-xl font-semibold text-neutral-900 mb-4">ï¿½ï¿½letme Kolaylï¿½klarï¿½</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -2041,14 +2041,14 @@ export default function Accounting() {
 
             {/* Advisor Tab OLD - BACKUP */}
             {false && activeTab === 'advisor' && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-7xl mx-auto">
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900">Mali Mï¿½ï¿½avir Paneli</h2>
                   <p className="text-sm text-neutral-600 mt-1">Mï¿½kellef yï¿½netimi ve toplu iï¿½lemler</p>
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-medium text-blue-900">Toplam Mï¿½kellef</h4>
@@ -2146,7 +2146,7 @@ export default function Accounting() {
 
             {/* Support Tab OLD - BACKUP */}
             {false && activeTab === 'support' && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-7xl mx-auto">
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900">Destek Sistemi</h2>
                   <p className="text-sm text-neutral-600 mt-1">Yardï¿½m, dokï¿½mantasyon ve canlï¿½ destek</p>
@@ -2268,7 +2268,7 @@ export default function Accounting() {
 
             {/* Notifications Tab OLD - BACKUP */}
             {false && activeTab === 'notifications' && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-7xl mx-auto">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-neutral-900">Bildirim Merkezi</h2>
@@ -2280,7 +2280,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-medium text-blue-900">Toplam</h4>

@@ -206,7 +206,7 @@ export default function CostAccounting() {
             <div>
               <p className="text-sm text-neutral-600">Toplam Maliyet</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalCost)}</p>
-              <p className="text-xs text-gray-500 mt-1">Bu dönem</p>
+              <p className="text-xs text-neutral-500 mt-1">Bu dönem</p>
             </div>
             <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center">
               <Calculator className="text-white" size={24} />
@@ -219,7 +219,7 @@ export default function CostAccounting() {
             <div>
               <p className="text-sm text-neutral-600">Hammadde</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalMaterialCost)}</p>
-              <p className="text-xs text-gray-500 mt-1">{((totalMaterialCost / totalCost) * 100).toFixed(1)}% oran</p>
+              <p className="text-xs text-neutral-500 mt-1">{((totalMaterialCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
             <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
               <Package className="text-neutral-900" size={24} />
@@ -232,7 +232,7 @@ export default function CostAccounting() {
             <div>
               <p className="text-sm text-neutral-600">İşçilik</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalLaborCost)}</p>
-              <p className="text-xs text-gray-500 mt-1">{((totalLaborCost / totalCost) * 100).toFixed(1)}% oran</p>
+              <p className="text-xs text-neutral-500 mt-1">{((totalLaborCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
             <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
               <Users className="text-neutral-900" size={24} />
@@ -245,7 +245,7 @@ export default function CostAccounting() {
             <div>
               <p className="text-sm text-neutral-600">Genel Gider</p>
               <p className="text-2xl font-bold text-neutral-900 mt-1">{formatCurrency(totalOverheadCost)}</p>
-              <p className="text-xs text-gray-500 mt-1">{((totalOverheadCost / totalCost) * 100).toFixed(1)}% oran</p>
+              <p className="text-xs text-neutral-500 mt-1">{((totalOverheadCost / totalCost) * 100).toFixed(1)}% oran</p>
             </div>
             <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
               <Zap className="text-neutral-900" size={24} />

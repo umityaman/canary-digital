@@ -118,7 +118,7 @@ export default function IncomeStatementReport() {
   const isProfitable = data.summary.netProfit >= 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Actions Bar */}
       <div className="flex justify-end items-center gap-2">
         <button onClick={loadIncomeStatement} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
@@ -136,7 +136,7 @@ export default function IncomeStatementReport() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
             <div className={statCardIcon('primary')}>
@@ -301,7 +301,7 @@ export default function IncomeStatementReport() {
             </div>
 
             {data.revenues.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-neutral-500">
                 <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">Gelir kaydı bulunamadı</p>
               </div>
@@ -317,7 +317,7 @@ export default function IncomeStatementReport() {
                         {item.accountName}
                       </p>
                       {viewType === 'detailed' && (
-                        <p className="text-xs text-gray-500 font-mono">
+                        <p className="text-xs text-neutral-500 font-mono">
                           {item.accountCode}
                         </p>
                       )}
@@ -327,7 +327,7 @@ export default function IncomeStatementReport() {
                         {formatCurrency(item.amount)}
                       </p>
                       {viewType === 'detailed' && (
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-neutral-500">
                           {formatPercentage(item.percentage)}
                         </p>
                       )}
@@ -352,7 +352,7 @@ export default function IncomeStatementReport() {
             </div>
 
             {data.expenses.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-neutral-500">
                 <TrendingDown className="w-8 h-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">Gider kaydı bulunamadı</p>
               </div>
@@ -368,7 +368,7 @@ export default function IncomeStatementReport() {
                         {item.accountName}
                       </p>
                       {viewType === 'detailed' && (
-                        <p className="text-xs text-gray-500 font-mono">
+                        <p className="text-xs text-neutral-500 font-mono">
                           {item.accountCode}
                         </p>
                       )}
@@ -378,7 +378,7 @@ export default function IncomeStatementReport() {
                         {formatCurrency(item.amount)}
                       </p>
                       {viewType === 'detailed' && (
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-neutral-500">
                           {formatPercentage(item.percentage)}
                         </p>
                       )}

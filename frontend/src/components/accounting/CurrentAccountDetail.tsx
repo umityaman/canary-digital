@@ -355,7 +355,7 @@ export default function CurrentAccountDetail() {
           </h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <Building className="w-5 h-5 text-gray-400 mt-0.5" />
+              <Building className="w-5 h-5 text-neutral-400 mt-0.5" />
               <div>
                 <p
                   className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
@@ -376,7 +376,7 @@ export default function CurrentAccountDetail() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
+              <Phone className="w-5 h-5 text-neutral-400 mt-0.5" />
               <div>
                 <p
                   className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
@@ -392,7 +392,7 @@ export default function CurrentAccountDetail() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
+              <Mail className="w-5 h-5 text-neutral-400 mt-0.5" />
               <div>
                 <p
                   className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
@@ -408,7 +408,7 @@ export default function CurrentAccountDetail() {
             </div>
 
             <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+              <MapPin className="w-5 h-5 text-neutral-400 mt-0.5" />
               <div>
                 <p
                   className={`${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}
@@ -589,7 +589,7 @@ export default function CurrentAccountDetail() {
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-neutral-600"></div>
           </div>
         ) : transactions.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-neutral-500">
             <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>Hen�z hareket bulunmamaktad�r</p>
           </div>
@@ -599,25 +599,25 @@ export default function CurrentAccountDetail() {
               <table className="w-full">
                 <thead className="bg-neutral-50 border-b-2 border-neutral-200">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                       Tarih
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">
                       A��klama
                     </th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-center text-xs font-medium text-neutral-500 uppercase">
                       Referans
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                       Bor�
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                       Alacak
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">
                       Bakiye
                     </th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-4 py-3 text-center text-xs font-medium text-neutral-500 uppercase">
                       ��lem
                     </th>
                   </tr>
@@ -632,7 +632,7 @@ export default function CurrentAccountDetail() {
                         <div>
                           <p>{txn.description}</p>
                           {txn.paymentMethod && (
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-neutral-500 mt-1">
                               {txn.paymentMethod}
                             </p>
                           )}

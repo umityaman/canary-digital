@@ -134,7 +134,7 @@ export default function TrialBalanceReport() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Actions Bar */}
       <div className="flex justify-end items-center gap-2">
         <button onClick={loadTrialBalance} className={cx(button('md', 'outline', 'lg'), 'gap-2')}>
@@ -152,7 +152,7 @@ export default function TrialBalanceReport() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <div className={card('sm', 'md', 'default', 'lg')}>
           <div className="flex items-center justify-between mb-3">
             <div className={statCardIcon('primary')}>
@@ -228,7 +228,7 @@ export default function TrialBalanceReport() {
 
       {/* Filters */}
       <div className={card('md', 'md', 'default', 'lg')}>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <div>
             <label
               className={`block ${DESIGN_TOKENS?.typography?.label.sm} ${DESIGN_TOKENS?.colors?.text.primary} mb-1`}
@@ -315,13 +315,13 @@ export default function TrialBalanceReport() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-600"></div>
           </div>
         ) : items.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-neutral-500">
             <Scale className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>Seï¿½ilen kriterlere uygun kayï¿½t bulunamadï¿½</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="min-w-full w-full">
               <thead >
                 <tr>
                   <th className={TABLE_HEADER_CELL}>

@@ -131,7 +131,7 @@ const NotificationsTab: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveFilter('system')}
-            className={cx(button('sm', activeFilter === 'system' ? 'primary' : 'ghost'), activeFilter === 'system' && 'bg-gray-600 hover:bg-gray-700')}
+            className={cx(button('sm', activeFilter === 'system' ? 'primary' : 'ghost'), activeFilter === 'system' && 'bg-neutral-600 hover:bg-neutral-700')}
           >
             ⚙️ Sistem
           </button>
@@ -209,7 +209,7 @@ const NotificationsTab: React.FC = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-gray-500">{formatTimestamp(notification.timestamp)}</p>
+                  <p className="text-xs text-neutral-500">{formatTimestamp(notification.timestamp)}</p>
                 </div>
               </div>
             </div>

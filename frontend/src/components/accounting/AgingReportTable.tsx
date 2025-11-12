@@ -112,7 +112,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
   if (!data || !data.customers || data.customers.length === 0) {
     return (
       <div className={card('md', 'xl', 'default', 'lg')}>
-        <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <AlertCircle className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
         <p className={`${DESIGN_TOKENS?.typography?.body.lg} ${DESIGN_TOKENS?.colors?.text.primary} mb-2`}>Yaşlandırma Verisi Bulunamadı</p>
         <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary}`}>
           Müşterilerinizin borç durumunu görmek için fatura ve tahsilat işlemlerini kaydedin.
@@ -300,13 +300,13 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                     </td>
                     <td className="px-6 py-4 text-right">
                       <p className={`font-bold ${DESIGN_TOKENS?.colors?.text.primary}`}>{formatCurrency(customer.totalDebt)}</p>
-                      <p className="text-xs text-gray-500">{customer.currency}</p>
+                      <p className="text-xs text-neutral-500">{customer.currency}</p>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getAgeGroupColor(0)}`}>
                         {formatCurrency(customer.current)}
                       </span>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-neutral-500 mt-1">
                         {formatPercentage(customer.current, customer.totalDebt)}
                       </p>
                     </td>
@@ -314,7 +314,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                       <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getAgeGroupColor(30)}`}>
                         {formatCurrency(customer.days30)}
                       </span>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-neutral-500 mt-1">
                         {formatPercentage(customer.days30, customer.totalDebt)}
                       </p>
                     </td>
@@ -322,7 +322,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                       <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getAgeGroupColor(60)}`}>
                         {formatCurrency(customer.days60)}
                       </span>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-neutral-500 mt-1">
                         {formatPercentage(customer.days60, customer.totalDebt)}
                       </p>
                     </td>
@@ -330,7 +330,7 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
                       <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getAgeGroupColor(90)}`}>
                         {formatCurrency(customer.days90Plus)}
                       </span>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-neutral-500 mt-1">
                         {formatPercentage(customer.days90Plus, customer.totalDebt)}
                       </p>
                     </td>

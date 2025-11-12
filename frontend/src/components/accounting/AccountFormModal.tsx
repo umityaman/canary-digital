@@ -208,7 +208,7 @@ export default function AccountFormModal({
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-neutral-600 transition-colors"
+              className="text-neutral-400 hover:text-neutral-600 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -233,7 +233,7 @@ export default function AccountFormModal({
                 className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 font-mono"
                 required
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-neutral-500 mt-1">
                 Format: 3 basamak (100) veya 100.01 veya 100.01.01
               </p>
             </div>
@@ -300,7 +300,7 @@ export default function AccountFormModal({
                 placeholder="Üst hesap ara veya boş bırak (ana hesap)"
                 className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 pr-8"
               />
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             </div>
 
             {formData.parentId && (
@@ -325,13 +325,13 @@ export default function AccountFormModal({
                   className="w-full px-4 py-2 text-left hover:bg-neutral-100 transition-colors border-b"
                 >
                   <div className="font-medium text-neutral-700">Ana Hesap (Üst hesap yok)</div>
-                  <div className="text-sm text-gray-500">En üst seviyede hesap oluştur</div>
+                  <div className="text-sm text-neutral-500">En üst seviyede hesap oluştur</div>
                 </button>
 
                 {loading ? (
-                  <div className="p-4 text-center text-gray-500">Yükleniyor...</div>
+                  <div className="p-4 text-center text-neutral-500">Yükleniyor...</div>
                 ) : getFilteredParentAccounts().length === 0 ? (
-                  <div className="p-4 text-center text-gray-500">Hesap bulunamadı</div>
+                  <div className="p-4 text-center text-neutral-500">Hesap bulunamadı</div>
                 ) : (
                   getFilteredParentAccounts().map((account) => (
                     <button
@@ -348,7 +348,7 @@ export default function AccountFormModal({
               </div>
             )}
 
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-neutral-500 mt-1">
               Alt hesap oluşturmak için bir üst hesap seçin. Boş bırakırsanız ana hesap
               olur.
             </p>
@@ -385,7 +385,7 @@ export default function AccountFormModal({
             >
               Hesap Aktif
             </label>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-neutral-500">
               (Pasif hesaplar yeni işlemlerde kullanılamaz)
             </span>
           </div>

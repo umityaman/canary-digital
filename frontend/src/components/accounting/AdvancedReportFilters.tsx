@@ -167,7 +167,7 @@ export default function AdvancedReportFilters({
             Başlangıç Tarihi
           </label>
           <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             <input
               type="date"
               value={filters.dateFrom}
@@ -183,7 +183,7 @@ export default function AdvancedReportFilters({
             Bitiş Tarihi
           </label>
           <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
             <input
               type="date"
               value={filters.dateTo}
@@ -237,7 +237,7 @@ export default function AdvancedReportFilters({
             </h3>
             <button
               onClick={() => setShowAdvanced(false)}
-              className="text-gray-400 hover:text-neutral-600"
+              className="text-neutral-400 hover:text-neutral-600"
             >
               <X className="w-5 h-5" />
             </button>
@@ -252,7 +252,7 @@ export default function AdvancedReportFilters({
               </label>
               <div className="space-y-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
                   <input
                     type="text"
                     placeholder="Müşteri ara..."
@@ -307,7 +307,7 @@ export default function AdvancedReportFilters({
               </label>
               <div className="space-y-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
                   <input
                     type="text"
                     placeholder="Tedarikçi ara..."

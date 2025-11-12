@@ -318,7 +318,7 @@ export default function CategoryTagManagement() {
               ))}
 
               {filteredCategories.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-neutral-500">
                   <Filter className="w-12 h-12 mx-auto mb-3 opacity-30" />
                   <p>Kategori bulunamadı</p>
                 </div>
@@ -441,7 +441,7 @@ export default function CategoryTagManagement() {
               ))}
 
               {tags.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-neutral-500">
                   <Tag className="w-12 h-12 mx-auto mb-3 opacity-30" />
                   <p>Henüz etiket yok</p>
                   <p className="text-sm mt-1">Yeni bir etiket oluşturun</p>

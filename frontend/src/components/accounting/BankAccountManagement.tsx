@@ -247,23 +247,23 @@ const BankAccountManagement: React.FC = () => {
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-sm text-gray-500">Toplam Hesap</div>
+            <div className="text-sm text-neutral-500">Toplam Hesap</div>
             <div className="text-2xl font-bold">{stats.totalAccounts}</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-sm text-gray-500">Aktif Hesap</div>
+            <div className="text-sm text-neutral-500">Aktif Hesap</div>
             <div className="text-2xl font-bold text-neutral-900">{stats.activeAccounts}</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-sm text-gray-500">Toplam Bakiye</div>
+            <div className="text-sm text-neutral-500">Toplam Bakiye</div>
             <div className="text-2xl font-bold">{formatCurrency(stats.totalBalance)}</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-sm text-gray-500">Son 7 Gün İşlem</div>
+            <div className="text-sm text-neutral-500">Son 7 Gün İşlem</div>
             <div className="text-2xl font-bold">{stats.recentTransactions}</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-sm text-gray-500">Mutabakat Bekleyen</div>
+            <div className="text-sm text-neutral-500">Mutabakat Bekleyen</div>
             <div className="text-2xl font-bold text-neutral-900">{stats.unreconciledCount}</div>
           </div>
         </div>
@@ -280,7 +280,7 @@ const BankAccountManagement: React.FC = () => {
             <button
               onClick={() => handleSyncAccounts()}
               disabled={syncing || registeredBanks.length === 0}
-              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:bg-gray-400"
+              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:bg-neutral-400"
             >
               <FaSync className={syncing ? 'animate-spin' : ''} />
               {syncing ? 'Senkronize Ediliyor...' : 'Tümünü Senkronize Et'}
@@ -293,7 +293,7 @@ const BankAccountManagement: React.FC = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-600 mx-auto"></div>
           </div>
         ) : accounts.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-neutral-500">
             <FaUniversity className="mx-auto text-4xl mb-2 opacity-50" />
             <p>Henüz banka hesabı yok</p>
             <p className="text-sm mt-2">
@@ -317,7 +317,7 @@ const BankAccountManagement: React.FC = () => {
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
                     <h3 className="font-semibold">{account.accountName}</h3>
-                    <p className="text-sm text-gray-500">{account.bankName}</p>
+                    <p className="text-sm text-neutral-500">{account.bankName}</p>
                   </div>
                   {account.isActive ? (
                     <FaCheckCircle className="text-neutral-900" />
@@ -332,18 +332,18 @@ const BankAccountManagement: React.FC = () => {
                 </div>
                 <div className="mt-3 pt-3 border-t">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">Bakiye:</span>
+                    <span className="text-sm text-neutral-500">Bakiye:</span>
                     <span className="font-bold text-lg">{formatCurrency(account.balance, account.currency)}</span>
                   </div>
                   <div className="flex justify-between items-center mt-1">
-                    <span className="text-sm text-gray-500">Kullanılabilir:</span>
+                    <span className="text-sm text-neutral-500">Kullanılabilir:</span>
                     <span className="font-semibold">
                       {formatCurrency(account.availableBalance, account.currency)}
                     </span>
                   </div>
                 </div>
                 {account.lastSyncAt && (
-                  <p className="text-xs text-gray-400 mt-2">Son senkr: {formatDate(account.lastSyncAt)}</p>
+                  <p className="text-xs text-neutral-400 mt-2">Son senkr: {formatDate(account.lastSyncAt)}</p>
                 )}
               </div>
             ))}
@@ -363,7 +363,7 @@ const BankAccountManagement: React.FC = () => {
               <button
                 onClick={handleSyncTransactions}
                 disabled={syncing}
-                className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:bg-gray-400"
+                className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:bg-neutral-400"
               >
                 <FaSync className={syncing ? 'animate-spin' : ''} />
                 İşlemleri Senkronize Et
@@ -413,7 +413,7 @@ const BankAccountManagement: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">Ara</label>
               <div className="relative">
-                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                <FaSearch className="absolute left-3 top-3 text-neutral-400" />
                 <input
                   type="text"
                   placeholder="Açıklama, karşı taraf..."
@@ -430,19 +430,19 @@ const BankAccountManagement: React.FC = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-neutral-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarih</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlem No</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Açıklama</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Karşı Taraf</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tip</th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Tutar</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Mutabakat</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Tarih</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">İşlem No</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Açıklama</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Karşı Taraf</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Tip</th>
+                  <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 uppercase">Tutar</th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-neutral-500 uppercase">Mutabakat</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredTransactions.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
+                    <td colSpan={7} className="px-4 py-8 text-center text-neutral-500">
                       İşlem bulunamadı
                     </td>
                   </tr>
