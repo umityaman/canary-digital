@@ -885,7 +885,7 @@ export default function Accounting() {
                 {activeTab === 'chart-of-accounts' && <ChartOfAccountsManagement />}
 
                 {/* Current Accounts Tab */}
-                {activeTab === 'current-accounts' && <CurrentAccountManagement />}
+                {activeTab === 'current-accounts' && <AccountCardList />}
 
             {/* Reports Tab - Advanced Reporting with Sub-tabs */}
             {activeTab === 'reports' && (
