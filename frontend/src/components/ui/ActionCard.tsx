@@ -17,7 +17,7 @@ const ActionCard = React.memo<ActionCardProps>(({
   description, 
   icon: Icon,
   iconColor = 'text-white',
-  gradient = 'from-purple-500 to-purple-600',
+  gradient = 'from-neutral-800 to-neutral-900',
   onClick,
   disabled = false,
   badge
@@ -26,15 +26,15 @@ const ActionCard = React.memo<ActionCardProps>(({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`relative bg-gradient-to-br ${gradient} p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 text-left w-full group ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}`}
+      className={`relative bg-gradient-to-br ${gradient} p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 text-left w-full group border border-neutral-200 ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]'}`}
     >
       {badge !== undefined && (
-        <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+        <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">
           {badge}
         </div>
       )}
       
-      <div className={`p-3 rounded-lg bg-white/20 ${iconColor} inline-flex mb-4 group-hover:scale-110 transition-transform duration-200`}>
+      <div className={`p-3 rounded-xl bg-white/10 ${iconColor} inline-flex mb-4 group-hover:scale-110 transition-transform duration-200`}>
         <Icon size={24} />
       </div>
       
