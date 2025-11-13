@@ -1,7 +1,7 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import {
   Package, Plus, Eye, FileText, Truck, XCircle, 
-  Download, CheckCircle, Clock, Filter, Search, Calendar
+  Download, CheckCircle, Clock, Search, Calendar
 } from 'lucide-react';
 import { deliveryNoteService, DeliveryNote } from '../../services/deliveryNoteService';
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +31,8 @@ export default function DeliveryNoteList() {
   const [deliveryNotes, setDeliveryNotes] = useState<DeliveryNote[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [selectedNote, setSelectedNote] = useState<DeliveryNote | null>(null);
   const [convertDialogOpen, setConvertDialogOpen] = useState(false);
@@ -126,6 +128,36 @@ export default function DeliveryNoteList() {
     }, 0);
   };
 
+  const renderStatusBadge = (status: string) => {
+    const colorMap: { [key: string]: string } = {
+      pending: 'bg-orange-100 text-orange-800',
+      delivered: 'bg-green-100 text-green-800',
+      invoiced: 'bg-blue-100 text-blue-800',
+      cancelled: 'bg-red-100 text-red-800'
+    };
+    
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colorMap[status] || 'bg-neutral-100 text-neutral-800'}`}>
+        {statusLabels[status] || status}
+      </span>
+    );
+  };
+
+  // Filter and search
+  const filteredNotes = deliveryNotes.filter(note => {
+    const matchesSearch = searchTerm === '' || 
+      note.deliveryNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      note.customer.name.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesCategory = categoryFilter === '' || 
+      note.deliveryType === categoryFilter;
+    
+    const matchesStatus = statusFilter === '' || 
+      note.status === statusFilter;
+
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -136,26 +168,6 @@ export default function DeliveryNoteList() {
 
   return (
     <div className="space-y-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className={`${DESIGN_TOKENS?.typography?.h1} ${DESIGN_TOKENS?.colors?.text.primary} flex items-center gap-3`}>
-            <Package className="w-8 h-8 text-blue-600" />
-            İrsaliyeler
-          </h1>
-          <p className={`${DESIGN_TOKENS?.typography?.body.md} ${DESIGN_TOKENS?.colors?.text.secondary} mt-1`}>
-            Sevk ve tahsilat irsaliyelerini yönetin
-          </p>
-        </div>
-        <button
-          onClick={() => navigate('/delivery-notes/new')}
-          className={cx(button('md', 'primary', 'md'), 'gap-2')}
-        >
-          <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">Yeni İrsaliye</span>
-        </button>
-      </div>
-
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4">
           <p className="text-red-800 text-sm">{error}</p>
@@ -215,38 +227,72 @@ export default function DeliveryNoteList() {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Actions Bar */}
       <div className={card('sm', 'sm', 'default', 'lg')}>
-        <div className="flex items-center gap-3 mb-4">
-          <Filter className="text-neutral-600" size={20} />
-          <h3 className="text-sm font-semibold text-neutral-900">Filtrele</h3>
-        </div>
-        
-        <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
-            style={{ boxSizing: 'border-box' }}
-          >
-            <option value="">Tüm Durumlar</option>
-            <option value="pending">Beklemede</option>
-            <option value="delivered">Teslim Edildi</option>
-            <option value="invoiced">Faturalandı</option>
-            <option value="cancelled">İptal</option>
-          </select>
+        <div className="flex flex-col gap-4">
+          {/* Search */}
+          <div className="flex-1">
+            <div className="relative">
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
+              <input
+                type="text"
+                placeholder="İrsaliye ara..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
+              />
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
+              style={{ boxSizing: 'border-box' }}
+            >
+              <option value="">Tüm Kategoriler</option>
+              <option value="sevk">Sevk</option>
+              <option value="tahsilat">Tahsilat</option>
+            </select>
+
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
+            >
+              <option value="">Tüm Durumlar</option>
+              <option value="pending">Beklemede</option>
+              <option value="delivered">Teslim Edildi</option>
+              <option value="invoiced">Faturalandı</option>
+              <option value="cancelled">İptal</option>
+            </select>
+
+            <button
+              onClick={() => navigate('/delivery-notes/new')}
+              className={cx(button('md', 'primary', 'md'), 'gap-2 whitespace-nowrap')}
+            >
+              <Plus size={18} />
+              <span>Yeni İrsaliye</span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Table */}
-      <div className={card('none', 'sm', 'default', 'lg')} style={{ overflow: 'hidden', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+      <div className={card('sm', 'sm', 'default', 'lg')} style={{ overflow: 'hidden', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
         {loading ? (
           <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
-        ) : deliveryNotes.length === 0 ? (
+        ) : filteredNotes.length === 0 ? (
           <div className="p-12 text-center text-neutral-600">
             <Package className="mx-auto mb-4 text-neutral-400" size={48} />
             <p className="text-lg font-medium">İrsaliye bulunamadı</p>
-            <p className="text-sm mt-2">Yeni irsaliye ekleyerek başlayın</p>
+            <p className="text-sm mt-2">
+              {searchTerm || categoryFilter || statusFilter 
+                ? 'Arama kriterlerinize uygun irsaliye bulunamadı' 
+                : 'Yeni irsaliye ekleyerek başlayın'}
+            </p>
           </div>
         ) : (
           <>
@@ -264,7 +310,7 @@ export default function DeliveryNoteList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {deliveryNotes.map((note) => (
+                  {filteredNotes.map((note) => (
                     <tr key={note.id} className="hover:bg-neutral-50 transition-colors">
                       <td className={TABLE_BODY_CELL}>
                         <div className="font-medium text-neutral-900">{note.deliveryNumber}</div>
@@ -279,7 +325,7 @@ export default function DeliveryNoteList() {
                         <div className="font-medium text-neutral-900">{note.customer.name}</div>
                       </td>
                       <td className={`${TABLE_BODY_CELL} hidden md:table-cell`}>
-                        <span className={badge('sm', 'default')}>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">
                           {note.deliveryType === 'sevk' ? 'Sevk' : 'Tahsilat'}
                         </span>
                       </td>
@@ -287,9 +333,7 @@ export default function DeliveryNoteList() {
                         <span className="font-medium text-neutral-900">{formatCurrency(calculateTotal(note))}</span>
                       </td>
                       <td className={TABLE_BODY_CELL}>
-                        <span className={badge('sm', statusColors[note.status] || 'default')}>
-                          {statusLabels[note.status] || note.status}
-                        </span>
+                        {renderStatusBadge(note.status)}
                       </td>
                       <td className={TABLE_BODY_CELL}>
                         <div className="flex items-center gap-2">
