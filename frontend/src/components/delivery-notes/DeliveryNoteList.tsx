@@ -1,12 +1,16 @@
 ﻿import React, { useState, useEffect } from 'react';
 import {
   Package, Plus, Eye, FileText, Truck, XCircle, 
-  Download, CheckCircle, Clock, Filter, Search
+  Download, CheckCircle, Clock, Filter, Search, Calendar
 } from 'lucide-react';
 import { deliveryNoteService, DeliveryNote } from '../../services/deliveryNoteService';
 import { useNavigate } from 'react-router-dom';
-import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
+import { card, button, input, badge, DESIGN_TOKENS, cx, statCardIcon } from '../../styles/design-tokens';
 import toast from 'react-hot-toast';
+
+// Hardcoded table cell classes
+const TABLE_HEADER_CELL = 'px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50'
+const TABLE_BODY_CELL = 'px-6 py-4 text-sm text-neutral-900'
 
 const statusColors: { [key: string]: 'warning' | 'success' | 'info' | 'danger' | 'default' } = {
   pending: 'warning',
@@ -131,7 +135,7 @@ export default function DeliveryNoteList() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -159,134 +163,136 @@ export default function DeliveryNoteList() {
       )}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className={card('md', 'lg', 'default', 'xl')}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600">Toplam</p>
-              <p className="text-2xl font-bold text-neutral-900 mt-1">{deliveryNotes.length}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style={{ boxSizing: 'border-box' }}>
+        <div className={card('sm', 'sm', 'default', 'lg')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('primary')}>
+              <Package className="text-white" size={16} />
             </div>
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-              <Package className="text-blue-600" size={24} />
-            </div>
+            <span className="text-xs font-medium text-neutral-600">Toplam</span>
           </div>
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">{deliveryNotes.length}</h3>
+          <p className="text-xs font-medium text-neutral-600">İrsaliye</p>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600">Beklemede</p>
-              <p className="text-2xl font-bold text-orange-600 mt-1">
-                {deliveryNotes.filter(n => n.status === 'pending').length}
-              </p>
+        <div className={card('sm', 'sm', 'default', 'lg')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('warning')}>
+              <Clock className="text-white" size={16} />
             </div>
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-              <Clock className="text-orange-600" size={24} />
-            </div>
+            <span className="text-xs font-medium text-neutral-600">Beklemede</span>
           </div>
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+            {deliveryNotes.filter(n => n.status === 'pending').length}
+          </h3>
+          <p className="text-xs font-medium text-neutral-600">İrsaliye</p>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600">Teslim Edildi</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">
-                {deliveryNotes.filter(n => n.status === 'delivered').length}
-              </p>
+        <div className={card('sm', 'sm', 'default', 'lg')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('success')}>
+              <CheckCircle className="text-white" size={16} />
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-              <CheckCircle className="text-green-600" size={24} />
-            </div>
+            <span className="text-xs font-medium text-neutral-600">Teslim Edildi</span>
           </div>
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+            {deliveryNotes.filter(n => n.status === 'delivered').length}
+          </h3>
+          <p className="text-xs font-medium text-neutral-600">İrsaliye</p>
         </div>
 
-        <div className={card('md', 'lg', 'default', 'xl')}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-neutral-600">Faturalandı</p>
-              <p className="text-2xl font-bold text-blue-600 mt-1">
-                {deliveryNotes.filter(n => n.status === 'invoiced').length}
-              </p>
+        <div className={card('sm', 'sm', 'default', 'lg')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('info')}>
+              <FileText className="text-white" size={16} />
             </div>
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-              <FileText className="text-blue-600" size={24} />
-            </div>
+            <span className="text-xs font-medium text-neutral-600">Faturalandı</span>
           </div>
+          <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+            {deliveryNotes.filter(n => n.status === 'invoiced').length}
+          </h3>
+          <p className="text-xs font-medium text-neutral-600">İrsaliye</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className={card('md', 'lg', 'default', 'xl')}>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <label className={cx(DESIGN_TOKENS?.typography?.label.lg, DESIGN_TOKENS?.colors?.text.secondary, 'block mb-2')}>
-              Durum Filtrele
-            </label>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className={input('md', 'default', undefined, 'md')}
-            >
-              <option value="">Tümü</option>
-              <option value="pending">Beklemede</option>
-              <option value="delivered">Teslim Edildi</option>
-              <option value="invoiced">Faturalandı</option>
-              <option value="cancelled">İptal</option>
-            </select>
-          </div>
+      <div className={card('sm', 'sm', 'default', 'lg')}>
+        <div className="flex items-center gap-3 mb-4">
+          <Filter className="text-neutral-600" size={20} />
+          <h3 className="text-sm font-semibold text-neutral-900">Filtrele</h3>
+        </div>
+        
+        <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
+            style={{ boxSizing: 'border-box' }}
+          >
+            <option value="">Tüm Durumlar</option>
+            <option value="pending">Beklemede</option>
+            <option value="delivered">Teslim Edildi</option>
+            <option value="invoiced">Faturalandı</option>
+            <option value="cancelled">İptal</option>
+          </select>
         </div>
       </div>
 
       {/* Table */}
-      <div className={card('none', 'none', 'default', 'xl')}>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-neutral-50 border-b border-neutral-200">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase">İrsaliye No</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase hidden lg:table-cell">Tarih</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase">Müşteri</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-neutral-700 uppercase hidden md:table-cell">Tip</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-neutral-700 uppercase">Tutar</th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-neutral-700 uppercase">Durum</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-neutral-700 uppercase">İşlemler</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {deliveryNotes.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center">
-                    <Package className="mx-auto mb-3 text-gray-400" size={48} />
-                    <p className="text-neutral-600">İrsaliye bulunamadı</p>
-                  </td>
-                </tr>
-              ) : (
-                deliveryNotes.map((note) => (
-                  <tr key={note.id} className="hover:bg-neutral-50 transition-colors">
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="font-medium text-neutral-900">{note.deliveryNumber}</div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-neutral-600 hidden lg:table-cell">
-                      {formatDate(note.deliveryDate)}
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="font-medium text-neutral-900">{note.customer.name}</div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap hidden md:table-cell">
-                      <span className={badge('sm', 'default')}>
-                        {note.deliveryType === 'sevk' ? 'Sevk' : 'Tahsilat'}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-right font-medium text-neutral-900">
-                      {formatCurrency(calculateTotal(note))}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-center">
-                      <span className={badge('sm', statusColors[note.status] || 'default')}>
-                        {statusLabels[note.status] || note.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-2">
+      <div className={card('none', 'sm', 'default', 'lg')} style={{ overflow: 'hidden', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+        {loading ? (
+          <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
+        ) : deliveryNotes.length === 0 ? (
+          <div className="p-12 text-center text-neutral-600">
+            <Package className="mx-auto mb-4 text-neutral-400" size={48} />
+            <p className="text-lg font-medium">İrsaliye bulunamadı</p>
+            <p className="text-sm mt-2">Yeni irsaliye ekleyerek başlayın</p>
+          </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto" style={{ maxWidth: '100%', width: '100%' }}>
+              <table className="w-full" style={{ tableLayout: 'fixed', width: '100%', maxWidth: '100%' }}>
+                <thead>
+                  <tr>
+                    <th className={TABLE_HEADER_CELL}>İrsaliye No</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden lg:table-cell`}>Tarih</th>
+                    <th className={TABLE_HEADER_CELL}>Müşteri</th>
+                    <th className={`${TABLE_HEADER_CELL} hidden md:table-cell`}>Tip</th>
+                    <th className={TABLE_HEADER_CELL}>Tutar</th>
+                    <th className={TABLE_HEADER_CELL}>Durum</th>
+                    <th className={TABLE_HEADER_CELL}>İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {deliveryNotes.map((note) => (
+                    <tr key={note.id} className="hover:bg-neutral-50 transition-colors">
+                      <td className={TABLE_BODY_CELL}>
+                        <div className="font-medium text-neutral-900">{note.deliveryNumber}</div>
+                      </td>
+                      <td className={`${TABLE_BODY_CELL} hidden lg:table-cell`}>
+                        <div className="flex items-center gap-1">
+                          <Calendar size={14} className="text-neutral-400" />
+                          <span className="text-sm text-neutral-900">{formatDate(note.deliveryDate)}</span>
+                        </div>
+                      </td>
+                      <td className={TABLE_BODY_CELL}>
+                        <div className="font-medium text-neutral-900">{note.customer.name}</div>
+                      </td>
+                      <td className={`${TABLE_BODY_CELL} hidden md:table-cell`}>
+                        <span className={badge('sm', 'default')}>
+                          {note.deliveryType === 'sevk' ? 'Sevk' : 'Tahsilat'}
+                        </span>
+                      </td>
+                      <td className={TABLE_BODY_CELL}>
+                        <span className="font-medium text-neutral-900">{formatCurrency(calculateTotal(note))}</span>
+                      </td>
+                      <td className={TABLE_BODY_CELL}>
+                        <span className={badge('sm', statusColors[note.status] || 'default')}>
+                          {statusLabels[note.status] || note.status}
+                        </span>
+                      </td>
+                      <td className={TABLE_BODY_CELL}>
+                        <div className="flex items-center gap-2">
                         <button
                           onClick={() => navigate(`/delivery-notes/${note.id}`)}
                           className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
@@ -331,14 +337,15 @@ export default function DeliveryNoteList() {
                             <XCircle className="text-red-600" size={16} />
                           </button>
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Convert to Invoice Dialog */}
