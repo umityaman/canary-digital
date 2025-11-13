@@ -561,14 +561,14 @@ export default function Accounting() {
   }
 
   const handleSendEmail = (_invoice: any) => {
-    toast('Email g�nderme �zelli�i yak�nda eklenecek!', { icon: '??' })
+    toast('Email gönderme özelliği yakında eklenecek!', { icon: '📧' })
     setOpenInvoiceDropdown(null)
   }
 
   const handleSendWhatsApp = (invoice: any) => {
     const customer = invoice.customer
     if (!customer?.phone) {
-      toast.error('M��terinin telefon numaras� bulunamad�')
+      toast.error('Müşterinin telefon numarası bulunamadı')
       return
     }
     const message = `Merhaba, ${invoice.invoiceNumber} numaral� faturan�z haz�r. Toplam: ${invoice.total?.toFixed(2)} TL`
@@ -621,14 +621,14 @@ export default function Accounting() {
   }
 
   const handleSendOfferEmail = (_offer: any) => {
-    toast('Email g�nderme �zelli�i yak�nda eklenecek!', { icon: '??' })
+    toast('Email gönderme özelliği yakında eklenecek!', { icon: '📧' })
     setOpenOfferDropdown(null)
   }
 
   const handleSendOfferWhatsApp = (offer: any) => {
     const customer = offer.customer
     if (!customer?.phone) {
-      toast.error('M��terinin telefon numaras� bulunamad�')
+      toast.error('Müşterinin telefon numarası bulunamadı')
       return
     }
     const message = `Merhaba, ${offer.offerNumber} numaral� teklifimiz haz�r. Toplam: ${offer.total?.toFixed(2)} TL`
@@ -900,7 +900,7 @@ export default function Accounting() {
                     onClick={() => setReportsSubTab('advanced')}
                     className={tab(reportsSubTab === 'advanced', 'underline')}
                   >
-                    Geli�mi� Raporlar
+                    Gelişmiş Raporlar
                   </button>
                   <button
                     onClick={() => setReportsSubTab('trial-balance')}
@@ -918,7 +918,7 @@ export default function Accounting() {
                     onClick={() => setReportsSubTab('balance-sheet')}
                     className={tab(reportsSubTab === 'balance-sheet', 'underline')}
                   >
-                    Bilan�o
+                    Bilanço
                   </button>
                 </div>
 
@@ -1171,9 +1171,9 @@ export default function Accounting() {
                       <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <FileText className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Ekstre Payla��m�</h3>
+                      <h3 className="font-semibold text-neutral-900">Ekstre Paylaşımı</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">M��terilere hesap ekstresi g�nderin</p>
+                    <p className="text-sm text-neutral-600">Müşterilere hesap ekstresi gönderin</p>
                   </button>
 
                   {/* Barkod Okuma */}
@@ -1192,7 +1192,7 @@ export default function Accounting() {
 
                   {/* Toplu Email */}
                   <button
-                    onClick={() => toast('Toplu email �zelli�i haz�rlan�yor!', { icon: '??', duration: 3000 })}
+                    onClick={() => toast('Toplu email özelliği hazırlanıyor!', { icon: '📧', duration: 3000 })}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
@@ -1201,8 +1201,8 @@ export default function Accounting() {
                       </div>
                       <h3 className="font-semibold text-neutral-900">Toplu Email</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Fatura ve teklifleri toplu g�nderin</p>
-                    <div className="mt-3 text-xs text-orange-600 font-medium">Yak�nda</div>
+                    <p className="text-sm text-neutral-600">Fatura ve teklifleri toplu gönderin</p>
+                    <div className="mt-3 text-xs text-orange-600 font-medium">Yakında</div>
                   </button>
 
                   {/* Raporlar */}
@@ -1214,9 +1214,9 @@ export default function Accounting() {
                       <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <BarChart3 className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Geli�mi� Raporlar</h3>
+                      <h3 className="font-semibold text-neutral-900">Gelişmiş Raporlar</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Detayl� analiz ve �zel raporlar</p>
+                    <p className="text-sm text-neutral-600">Detaylı analiz ve özel raporlar</p>
                   </button>
                 </div>
 
@@ -1228,12 +1228,12 @@ export default function Accounting() {
                       <Tag className="text-blue-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-blue-900">12</p>
-                    <p className="text-xs text-blue-600 mt-1">Son 30 g�n</p>
+                    <p className="text-xs text-blue-600 mt-1">Son 30 gün</p>
                   </div>
 
                   <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-green-900">Hat�rlatmalar</h4>
+                      <h4 className="text-sm font-medium text-green-900">Hatırlatmalar</h4>
                       <Clock className="text-green-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-green-900">5</p>
@@ -1242,7 +1242,7 @@ export default function Accounting() {
 
                   <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-purple-900">G�nderilen Ekstre</h4>
+                      <h4 className="text-sm font-medium text-purple-900">Gönderilen Ekstre</h4>
                       <FileText className="text-purple-600" size={20} />
                     </div>
                     <p className="text-3xl font-bold text-purple-900">28</p>

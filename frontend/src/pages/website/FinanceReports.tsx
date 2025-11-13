@@ -10,6 +10,7 @@ import {
   Users,
   ShoppingCart,
   Percent,
+  Search,
 } from 'lucide-react';
 import {
   LineChart,
@@ -22,6 +23,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { card, button, input, statCardIcon, cx } from '../../styles/design-tokens';
 
 interface Payment {
   id: number;
@@ -156,106 +158,140 @@ const FinanceReports: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-neutral-50 min-h-screen">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-neutral-900 flex items-center gap-3">
-              <DollarSign size={32} className="text-neutral-900" />
-              Finans & Raporlama
-            </h1>
-            <p className="text-neutral-600 mt-1">
-              Gelir-gider takibi ve mali raporlar
-            </p>
+    <div className="space-y-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+      {/* Page Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-neutral-900 flex items-center gap-3">
+          <DollarSign size={32} className="text-neutral-900" />
+          Finans & Raporlama
+        </h1>
+        <p className="text-neutral-600 mt-1">
+          Gelir-gider takibi ve mali raporlar
+        </p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style={{ boxSizing: 'border-box' }}>
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('success')}>
+              <TrendingUp className="text-green-700" size={20} />
+            </div>
+            <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
           </div>
-          <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors font-medium">
-              <Filter size={18} />
-              Filtrele
-            </button>
-            <button className="flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors font-medium shadow-lg">
-              <Download size={20} />
-              Excel İndir
-            </button>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">₺355K</h3>
+          <p className="text-xs font-medium text-neutral-600">Toplam Gelir</p>
+          <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
+            <TrendingUp size={12} />
+            +18% artış
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Toplam Gelir</span>
-              <TrendingUp size={20} className="text-neutral-700" />
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('error')}>
+              <TrendingDown className="text-red-700" size={20} />
             </div>
-            <div className="text-3xl font-bold text-neutral-900">₺355K</div>
-            <div className="flex items-center gap-1 text-xs text-neutral-700 mt-1">
-              <TrendingUp size={12} />
-              +18% bu ay
+            <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">₺120K</h3>
+          <p className="text-xs font-medium text-neutral-600">Toplam Gider</p>
+          <div className="flex items-center gap-1 text-xs text-neutral-600 mt-1">
+            <TrendingDown size={12} />
+            -5% azalış
+          </div>
+        </div>
+
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('info')}>
+              <DollarSign className="text-blue-700" size={20} />
+            </div>
+            <span className="text-xs font-medium text-neutral-600">Kar Marjı</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">₺235K</h3>
+          <p className="text-xs font-medium text-neutral-600">Net Kar</p>
+          <div className="text-xs text-neutral-600 mt-1">%66 marj oranı</div>
+        </div>
+
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('warning')}>
+              <Percent className="text-orange-700" size={20} />
+            </div>
+            <span className="text-xs font-medium text-neutral-600">335 Sipariş</span>
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">₺54.5K</h3>
+          <p className="text-xs font-medium text-neutral-600">Komisyon Geliri</p>
+          <div className="text-xs text-neutral-600 mt-1">Ort. ₺163/sipariş</div>
+        </div>
+      </div>
+
+      {/* Actions Bar */}
+      <div className={card('sm', 'sm', 'default', 'lg')}>
+        <div className="flex flex-col gap-4">
+          {/* Search */}
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={18} />
+              <input
+                type="text"
+                placeholder="Rapor ara..."
+                className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
+              />
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Toplam Gider</span>
-              <TrendingDown size={20} className="text-neutral-700" />
-            </div>
-            <div className="text-3xl font-bold text-neutral-900">₺120K</div>
-            <div className="flex items-center gap-1 text-xs text-neutral-600 mt-1">
-              <TrendingDown size={12} />
-              -5% bu ay
-            </div>
-          </div>
+          {/* Filters + Action Buttons */}
+          <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+            <select className="flex-1 min-w-[150px] max-w-[200px] px-4 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all">
+              <option value="">Rapor Tipi</option>
+              <option value="financial">Finansal Raporlar</option>
+              <option value="customer">Müşteri Raporları</option>
+              <option value="inventory">Stok Raporları</option>
+              <option value="tax">Vergi Raporları</option>
+            </select>
 
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Net Kar</span>
-              <DollarSign size={20} className="text-neutral-700" />
-            </div>
-            <div className="text-3xl font-bold text-neutral-900">₺235K</div>
-            <div className="text-xs text-neutral-600 mt-1">Kar marjı: 66%</div>
-          </div>
+            <select className="flex-1 min-w-[130px] px-4 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all">
+              <option value="">Tarih Aralığı</option>
+              <option value="today">Bugün</option>
+              <option value="week">Bu Hafta</option>
+              <option value="month">Bu Ay</option>
+              <option value="quarter">Bu Çeyrek</option>
+              <option value="year">Bu Yıl</option>
+              <option value="custom">Özel Aralık</option>
+            </select>
 
-          <div className="bg-white p-6 rounded-xl border border-neutral-200">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-neutral-600 text-sm">Komisyon</span>
-              <Percent size={20} className="text-neutral-700" />
-            </div>
-            <div className="text-3xl font-bold text-neutral-900">₺54.5K</div>
-            <div className="text-xs text-neutral-600 mt-1">335 sipariş</div>
+            <button className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}>
+              <Filter size={18} />
+              <span className="hidden sm:inline">Filtrele</span>
+            </button>
+
+            <button className={cx(button('md', 'primary', 'md'), 'gap-2 whitespace-nowrap')}>
+              <Download size={18} />
+              <span>Excel İndir</span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-2">
+      <div className="flex gap-2">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2 rounded-xl font-medium transition-colors ${
-            activeTab === 'overview'
-              ? 'bg-neutral-900 text-white'
-              : 'bg-white text-neutral-700 hover:bg-neutral-100 border border-neutral-200'
-          }`}
+          className={activeTab === 'overview' ? button('md', 'primary', 'lg') : button('md', 'outline', 'lg')}
         >
           Genel Bakış
         </button>
         <button
           onClick={() => setActiveTab('payments')}
-          className={`px-4 py-2 rounded-xl font-medium transition-colors ${
-            activeTab === 'payments'
-              ? 'bg-neutral-900 text-white'
-              : 'bg-white text-neutral-700 hover:bg-neutral-100 border border-neutral-200'
-          }`}
+          className={activeTab === 'payments' ? button('md', 'primary', 'lg') : button('md', 'outline', 'lg')}
         >
           Ödemeler
         </button>
         <button
           onClick={() => setActiveTab('sellers')}
-          className={`px-4 py-2 rounded-xl font-medium transition-colors ${
-            activeTab === 'sellers'
-              ? 'bg-neutral-900 text-white'
-              : 'bg-white text-neutral-700 hover:bg-neutral-100 border border-neutral-200'
-          }`}
+          className={activeTab === 'sellers' ? button('md', 'primary', 'lg') : button('md', 'outline', 'lg')}
         >
           Satıcı Raporları
         </button>
@@ -265,7 +301,7 @@ const FinanceReports: React.FC = () => {
       {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* Revenue Chart */}
-          <div className="bg-white rounded-xl border border-neutral-200 p-6">
+          <div className={card('md', 'sm', 'default', 'xl')}>
             <h3 className="text-lg font-bold text-neutral-900 mb-6">
               Gelir-Gider Grafiği
             </h3>
@@ -300,7 +336,7 @@ const FinanceReports: React.FC = () => {
           </div>
 
           {/* Category Performance */}
-          <div className="bg-white rounded-xl border border-neutral-200 p-6">
+          <div className={card('md', 'sm', 'default', 'xl')}>
             <h3 className="text-lg font-bold text-neutral-900 mb-6">
               Kategori Bazlı Gelir
             </h3>
@@ -323,7 +359,7 @@ const FinanceReports: React.FC = () => {
 
           {/* Quick Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+            <div className={card('md', 'sm', 'default', 'xl')}>
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-sm font-medium text-neutral-600">Ödeme Yöntemleri</h4>
                 <CreditCard size={20} className="text-neutral-700" />
@@ -346,7 +382,7 @@ const FinanceReports: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+            <div className={card('md', 'sm', 'default', 'xl')}>
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-sm font-medium text-neutral-600">Müşteri Dağılımı</h4>
                 <Users size={20} className="text-neutral-700" />
@@ -369,7 +405,7 @@ const FinanceReports: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+            <div className={card('md', 'sm', 'default', 'xl')}>
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-sm font-medium text-neutral-600">Sipariş İstatistikleri</h4>
                 <ShoppingCart size={20} className="text-neutral-700" />
@@ -395,7 +431,7 @@ const FinanceReports: React.FC = () => {
 
       {/* Payments Tab */}
       {activeTab === 'payments' && (
-        <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+        <div className={card('flat', 'sm', 'default', 'xl')}>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-neutral-50 border-b border-neutral-200">
@@ -477,7 +513,7 @@ const FinanceReports: React.FC = () => {
 
       {/* Sellers Tab */}
       {activeTab === 'sellers' && (
-        <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+        <div className={card('flat', 'sm', 'default', 'xl')}>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-neutral-50 border-b border-neutral-200">
