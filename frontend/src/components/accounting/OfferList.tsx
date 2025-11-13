@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
   Search, Filter, TrendingUp, Clock, CheckCircle, Calendar,
-  Eye, Download, Mail, Edit
+  Eye, Download, Mail, Edit, Plus
 } from 'lucide-react'
 import { card, button, input, badge, statCardIcon, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 import { offerAPI } from '../../services/api'
@@ -184,31 +184,28 @@ const OfferList: React.FC = () => {
       </div>
 
       {/* Actions Bar */}
-      <div 
-        className={cx(card('md', 'sm', 'default', 'lg'), 'p-4')}
-        style={{ boxSizing: 'border-box' }}
-      >
-        <div className="flex flex-col sm:flex-row gap-3">
+      <div className={card('sm', 'none', 'default', 'lg')}>
+        <div className="flex flex-col gap-4">
           {/* Search */}
-          <div className="relative flex-1">
-            <Search className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
-            <input
-              type="text"
-              placeholder="Teklif ara..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={cx(input('md', 'default', undefined, 'md'), 'pl-10 w-full')}
-              style={{ boxSizing: 'border-box' }}
-            />
+          <div className="flex-1">
+            <div className="relative">
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
+              <input
+                type="text"
+                placeholder="Teklif ara..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
+              />
+            </div>
           </div>
 
-          {/* Status Filter */}
-          <div className="relative min-w-[180px]">
-            <Filter className={`absolute left-3 top-3 ${DESIGN_TOKENS?.colors?.text?.muted}`} size={18} />
+          {/* Filters */}
+          <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className={cx(input('md', 'default', undefined, 'md'), 'pl-10 w-full appearance-none')}
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
               style={{ boxSizing: 'border-box' }}
             >
               <option value="">Tüm Durumlar</option>
@@ -219,15 +216,15 @@ const OfferList: React.FC = () => {
               <option value="CONVERTED">Faturaya Dönüştü</option>
               <option value="EXPIRED">Süresi Doldu</option>
             </select>
-          </div>
 
-          {/* New Quote Button */}
-          <button
-            onClick={() => navigate('/accounting/quote/new')}
-            className={cx(button('md', 'primary', 'md'), 'whitespace-nowrap')}
-          >
-            Yeni Teklif
-          </button>
+            <button
+              onClick={() => navigate('/accounting/quote/new')}
+              className={cx(button('md', 'primary', 'md'), 'gap-2 whitespace-nowrap')}
+            >
+              <Plus size={18} />
+              <span>Yeni Teklif</span>
+            </button>
+          </div>
         </div>
       </div>
 

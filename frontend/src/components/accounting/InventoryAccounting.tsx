@@ -597,42 +597,55 @@ export default function InventoryAccounting() {
       {/* Overview View */}
       {activeView === 'overview' && (
         <div className="space-y-4">
-          {/* Filters */}
+          {/* Actions Bar */}
           <div className={cx(card('sm', 'sm', 'default', 'lg'))}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className={cx(input('md', 'default', undefined, 'md'), 'w-full')}
-              >
-                <option value="all">Tüm İşlem Tipleri</option>
-                <option value="purchase">Satın Alma</option>
-                <option value="sale">Satış</option>
-                <option value="rental_out">Kiralama</option>
-                <option value="rental_return">İade</option>
-                <option value="adjustment">Düzeltme</option>
-                <option value="transfer">Transfer</option>
-              </select>
+            <div className="flex flex-col gap-4">
+              {/* Filters */}
+              <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+                <select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
+                  style={{ boxSizing: 'border-box' }}
+                >
+                  <option value="all">Tüm İşlem Tipleri</option>
+                  <option value="purchase">Satın Alma</option>
+                  <option value="sale">Satış</option>
+                  <option value="rental_out">Kiralama</option>
+                  <option value="rental_return">İade</option>
+                  <option value="adjustment">Düzeltme</option>
+                  <option value="transfer">Transfer</option>
+                </select>
 
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className={cx(input('md', 'default', undefined, 'md'), 'w-full')}
-              >
-                <option value="all">Tüm Durumlar</option>
-                <option value="pending">Bekliyor</option>
-                <option value="recorded">Kaydedildi</option>
-                <option value="error">Hata</option>
-              </select>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
+                >
+                  <option value="all">Tüm Durumlar</option>
+                  <option value="pending">Bekliyor</option>
+                  <option value="recorded">Kaydedildi</option>
+                  <option value="error">Hata</option>
+                </select>
 
-              <button
-                onClick={() => loadInventoryTransactions()}
-                disabled={loading}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors disabled:opacity-50"
-              >
-                <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
-                <span>Yenile</span>
-              </button>
+                <button
+                  onClick={() => loadInventoryTransactions()}
+                  disabled={loading}
+                  className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}
+                >
+                  <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+                  <span className="hidden sm:inline">Yenile</span>
+                </button>
+
+                <button
+                  onClick={handleBulkRecord}
+                  disabled={loading || stats.pendingRecords === 0}
+                  className={cx(button('md', 'primary', 'md'), 'gap-2 whitespace-nowrap')}
+                >
+                  <CheckCircle size={18} />
+                  <span>Toplu Kaydet ({stats.pendingRecords})</span>
+                </button>
+              </div>
             </div>
           </div>
 

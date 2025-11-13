@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import {
   Search, Download, Filter, Users, TrendingUp, TrendingDown,
-  Eye, FileText, Clock, AlertCircle, ChevronRight, Phone, Mail
+  Eye, FileText, Clock, AlertCircle, ChevronRight, Phone, Mail, Plus
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
@@ -165,7 +165,7 @@ export default function AccountCardList() {
             </div>
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Vadesi Geï¿½miï¿½</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Vadesi Geçmiş</p>
         </div>
 
         <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
@@ -175,20 +175,20 @@ export default function AccountCardList() {
             </div>
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{getOverdueAccountsCount()}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gecikmişï¿½ Hesap</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gecikmiş Hesap</p>
         </div>
       </div>
 
-      {/* Filters and Search */}
-      <div className={card('md', 'sm', 'default', 'lg')}>
-        <div className="flex flex-col lg:flex-row gap-4">
+      {/* Actions Bar */}
+      <div className={card('sm', 'sm', 'default', 'lg')}>
+        <div className="flex flex-col gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${DESIGN_TOKENS?.colors?.text.muted}`} size={18} />
               <input
                 type="text"
-                placeholder="Mï¿½ï¿½teri adï¿½, email veya telefon ara..."
+                placeholder="Müşteri adı, email veya telefon ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
@@ -196,27 +196,45 @@ export default function AccountCardList() {
             </div>
           </div>
 
-          {/* Filter Type */}
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value as any)}
-            className={input('md', 'default', undefined, 'md')}
-          >
-            <option value="all">Tï¿½m Hesaplar</option>
-            <option value="active">Aktif Borï¿½lar</option>
-            <option value="overdue">Vadesi Geï¿½miï¿½</option>
-          </select>
+          {/* Filters */}
+          <div className="flex flex-wrap gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value as any)}
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[150px] max-w-[200px]')}
+              style={{ boxSizing: 'border-box' }}
+            >
+              <option value="all">Tüm Hesaplar</option>
+              <option value="active">Aktif Borçlar</option>
+              <option value="overdue">Vadesi Geçmiş</option>
+            </select>
 
-          {/* Sort */}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className={input('md', 'default', undefined, 'md')}
-          >
-            <option value="debt">Borca Gï¿½re</option>
-            <option value="overdue">Vadeye Gï¿½re</option>
-            <option value="name">ï¿½sme Gï¿½re</option>
-          </select>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className={cx(input('md', 'default', undefined, 'md'), 'flex-1 min-w-[130px]')}
+            >
+              <option value="debt">Borca Göre</option>
+              <option value="overdue">Vadeye Göre</option>
+              <option value="name">İsme Göre</option>
+            </select>
+
+            <button
+              onClick={() => toast.success('Dışa aktarma özelliği yakında eklenecek')}
+              className={cx(button('md', 'outline', 'md'), 'gap-2 whitespace-nowrap')}
+            >
+              <Download size={18} />
+              <span className="hidden sm:inline">Dışa Aktar</span>
+            </button>
+
+            <button
+              onClick={() => toast.success('Yeni cari hesap ekleme özelliği yakında eklenecek')}
+              className={cx(button('md', 'primary', 'md'), 'gap-2 whitespace-nowrap')}
+            >
+              <Plus size={18} />
+              <span>Yeni Cari Hesap</span>
+            </button>
+          </div>
         </div>
       </div>
 
