@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import {
   Search, Download, Filter, Users, TrendingUp, TrendingDown,
   Eye, FileText, Clock, AlertCircle, ChevronRight, Phone, Mail
@@ -43,7 +43,7 @@ export default function AccountCardList() {
       setAccounts(data)
     } catch (error: any) {
       console.error('Failed to load accounts:', error)
-      toast.error('Cari hesaplar y�klenemedi')
+      toast.error('Cari hesaplar yÃ¼klenemedi')
     } finally {
       setLoading(false)
     }
@@ -107,7 +107,7 @@ export default function AccountCardList() {
   }
 
   const exportToExcel = () => {
-    toast.success('Excel d��a aktarma �zelli�i yak�nda eklenecek')
+    toast.success('Excel dï¿½ï¿½a aktarma ï¿½zelliï¿½i yakï¿½nda eklenecek')
   }
 
   if (selectedCustomerId) {
@@ -124,15 +124,15 @@ export default function AccountCardList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Cari Hesap Kartlar�</h2>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>M��teri bazl� alacak-bor� takibi</p>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Cari Hesap KartlarÄ±</h2>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>MÃ¼ÅŸteri bazlÄ± alacak-borÃ§ takibi</p>
         </div>
         <button
           onClick={exportToExcel}
-          className={cx(button('md', 'dark', 'md'), 'gap-2')}
+          className={cx(button('md', 'secondary', 'md'), 'gap-2')}
         >
           <Download size={18} />
-          <span className="hidden sm:inline">D��a Aktar</span>
+          <span className="hidden sm:inline">DÄ±ÅŸa Aktar</span>
         </button>
       </div>
 
@@ -165,7 +165,7 @@ export default function AccountCardList() {
             </div>
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Vadesi Ge�mi�</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Vadesi Geï¿½miï¿½</p>
         </div>
 
         <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
@@ -175,7 +175,7 @@ export default function AccountCardList() {
             </div>
           </div>
           <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{getOverdueAccountsCount()}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gecikmi� Hesap</p>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gecikmişï¿½ Hesap</p>
         </div>
       </div>
 
@@ -188,7 +188,7 @@ export default function AccountCardList() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
               <input
                 type="text"
-                placeholder="M��teri ad�, email veya telefon ara..."
+                placeholder="Mï¿½ï¿½teri adï¿½, email veya telefon ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={cx(input('md', 'default', undefined, 'md'), 'pl-10')}
@@ -202,9 +202,9 @@ export default function AccountCardList() {
             onChange={(e) => setFilterType(e.target.value as any)}
             className={input('md', 'default', undefined, 'md')}
           >
-            <option value="all">T�m Hesaplar</option>
-            <option value="active">Aktif Bor�lar</option>
-            <option value="overdue">Vadesi Ge�mi�</option>
+            <option value="all">Tï¿½m Hesaplar</option>
+            <option value="active">Aktif Borï¿½lar</option>
+            <option value="overdue">Vadesi Geï¿½miï¿½</option>
           </select>
 
           {/* Sort */}
@@ -213,24 +213,24 @@ export default function AccountCardList() {
             onChange={(e) => setSortBy(e.target.value as any)}
             className={input('md', 'default', undefined, 'md')}
           >
-            <option value="debt">Borca G�re</option>
-            <option value="overdue">Vadeye G�re</option>
-            <option value="name">�sme G�re</option>
+            <option value="debt">Borca Gï¿½re</option>
+            <option value="overdue">Vadeye Gï¿½re</option>
+            <option value="name">ï¿½sme Gï¿½re</option>
           </select>
         </div>
       </div>
 
       {/* Account List */}
-      <div className={cx(card('md', 'none', 'default', 'lg'), 'overflow-hidden')}>
+      <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">Y�kleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yï¿½kleniyor...</div>
         ) : filteredAccounts.length === 0 ? (
           <div className="p-12 text-center">
             <Users className="mx-auto text-neutral-400 mb-3" size={48} />
             <p className="text-neutral-600">
               {searchTerm || filterType !== 'all' 
-                ? 'Arama kriterlerine uygun cari hesap bulunamad�' 
-                : 'Hen�z cari hesap bulunmuyor'}
+                ? 'Arama kriterlerine uygun cari hesap bulunamadıï¿½' 
+                : 'Henï¿½z cari hesap bulunmuyor'}
             </p>
           </div>
         ) : (
@@ -239,19 +239,19 @@ export default function AccountCardList() {
               <thead className="bg-neutral-50 border-b border-neutral-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    M��teri Bilgileri
+                    Mï¿½ï¿½teri Bilgileri
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Toplam Bor�
+                    Toplam Borï¿½
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Vadesi Ge�mi�
+                    Vadesi Geï¿½miï¿½
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Fatura Say�s�
+                    Fatura Sayï¿½sï¿½
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    ��lemler
+                    ï¿½ï¿½lemler
                   </th>
                 </tr>
               </thead>
@@ -293,11 +293,11 @@ export default function AccountCardList() {
                             {formatCurrency(account.overdueDebt)}
                           </span>
                           <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full font-medium">
-                            Gecikmi�
+                            Gecikmişï¿½
                           </span>
                         </div>
                       ) : (
-                        <span className="text-neutral-400">�</span>
+                        <span className="text-neutral-400">ï¿½</span>
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -330,7 +330,7 @@ export default function AccountCardList() {
       {/* Results Info */}
       {!loading && filteredAccounts.length > 0 && (
         <div className="text-sm text-neutral-600 text-center">
-          {filteredAccounts.length} cari hesap g�steriliyor
+          {filteredAccounts.length} cari hesap gï¿½steriliyor
           {accounts.length !== filteredAccounts.length && ` (toplam ${accounts.length} hesap)`}
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
   Search, Filter, TrendingUp, Clock, CheckCircle, Calendar,
@@ -40,7 +40,7 @@ const OfferList: React.FC = () => {
       const response = await offerAPI.getAll()
       setOffers(response.data || [])
     } catch (error) {
-      console.error('Teklifler yüklenirken hata:', error)
+      console.error('Teklifler yÃ¼klenirken hata:', error)
       setOffers([])
     } finally {
       setLoading(false)
@@ -79,19 +79,10 @@ const OfferList: React.FC = () => {
   }
 
   const renderStatusBadge = (status: string) => {
-    const statusConfig = {
-      DRAFT: { label: 'Taslak', variant: 'neutral' as const },
-      SENT: { label: 'Gönderildi', variant: 'info' as const },
-      ACCEPTED: { label: 'Kabul Edildi', variant: 'success' as const },
-      REJECTED: { label: 'Reddedildi', variant: 'danger' as const },
-      CONVERTED: { label: 'Faturaya Dönüştü', variant: 'success' as const },
-      EXPIRED: { label: 'Süresi Doldu', variant: 'warning' as const }
-    }
-
-    const config = statusConfig[status as keyof typeof statusConfig] || { label: status, variant: 'neutral' as const }
+    const badgeData = badge(status, 'offer', 'sm', 'solid')
     return (
-      <span className={badge('sm', config.variant, 'full')}>
-        {config.label}
+      <span className={badgeData.className}>
+        {badgeData.label}
       </span>
     )
   }
@@ -120,13 +111,13 @@ const OfferList: React.FC = () => {
       >
         {/* Total Quotes Value */}
         <div 
-          className={cx(card('md', 'default', 'lg'), 'p-6')}
+          className={cx(card('md', 'sm', 'default', 'lg'), 'p-6')}
           style={{ boxSizing: 'border-box' }}
         >
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <p className={`${DESIGN_TOKENS?.typography?.label?.lg} ${DESIGN_TOKENS?.colors?.text?.tertiary} mb-1`}>
-                Toplam Teklif Değeri
+                Toplam Teklif DeÄŸeri
               </p>
               <p className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text?.primary} mb-2`}>
                 {formatCurrency(totalValue)}
@@ -143,7 +134,7 @@ const OfferList: React.FC = () => {
 
         {/* Accepted Quotes */}
         <div 
-          className={cx(card('md', 'default', 'lg'), 'p-6')}
+          className={cx(card('md', 'sm', 'default', 'lg'), 'p-6')}
           style={{ boxSizing: 'border-box' }}
         >
           <div className="flex items-center justify-between">
@@ -166,7 +157,7 @@ const OfferList: React.FC = () => {
 
         {/* Pending Offers */}
         <div 
-          className={cx(card('md', 'default', 'lg'), 'p-6')}
+          className={cx(card('md', 'sm', 'default', 'lg'), 'p-6')}
           style={{ boxSizing: 'border-box' }}
         >
           <div className="flex items-center justify-between">
@@ -190,7 +181,7 @@ const OfferList: React.FC = () => {
 
       {/* Actions Bar */}
       <div 
-        className={cx(card('md', 'default', 'lg'), 'p-4')}
+        className={cx(card('md', 'sm', 'default', 'lg'), 'p-4')}
         style={{ boxSizing: 'border-box' }}
       >
         <div className="flex flex-col sm:flex-row gap-3">
@@ -216,13 +207,13 @@ const OfferList: React.FC = () => {
               className={cx(input('md', 'default', undefined, 'md'), 'pl-10 w-full appearance-none')}
               style={{ boxSizing: 'border-box' }}
             >
-              <option value="">Tüm Durumlar</option>
+              <option value="">TÃ¼m Durumlar</option>
               <option value="DRAFT">Taslak</option>
-              <option value="SENT">Gönderildi</option>
+              <option value="SENT">GÃ¶nderildi</option>
               <option value="ACCEPTED">Kabul Edildi</option>
               <option value="REJECTED">Reddedildi</option>
-              <option value="CONVERTED">Faturaya Dönüştü</option>
-              <option value="EXPIRED">Süresi Doldu</option>
+              <option value="CONVERTED">Faturaya DÃ¶nÃ¼ÅŸtÃ¼</option>
+              <option value="EXPIRED">SÃ¼resi Doldu</option>
             </select>
           </div>
 
@@ -238,7 +229,7 @@ const OfferList: React.FC = () => {
 
       {/* Table */}
       <div 
-        className={cx(card('md', 'default', 'lg'), 'overflow-hidden')}
+        className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}
         style={{ 
           width: '100%',
           maxWidth: '100%',
@@ -264,12 +255,12 @@ const OfferList: React.FC = () => {
             <thead>
               <tr>
                 <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>Teklif No</th>
-                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>Müşteri</th>
+                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>MÃ¼ÅŸteri</th>
                 <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>Tarih</th>
-                <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>Geçerlilik</th>
+                <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>GeÃ§erlilik</th>
                 <th className={TABLE_HEADER_CELL} style={{ width: '15%' }}>Tutar</th>
                 <th className={TABLE_HEADER_CELL} style={{ width: '13%' }}>Durum</th>
-                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>İşlemler</th>
+                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>Ä°ÅŸlemler</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
@@ -279,14 +270,14 @@ const OfferList: React.FC = () => {
                     <div className="flex flex-col items-center gap-2">
                       <Calendar className={DESIGN_TOKENS?.colors?.text?.muted} size={48} />
                       <p className={`${DESIGN_TOKENS?.typography?.body?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>
-                        {searchTerm || statusFilter ? 'Arama kriterlerine uygun teklif bulunamadı' : 'Henüz teklif bulunmuyor'}
+                        {searchTerm || statusFilter ? 'Arama kriterlerine uygun teklif bulunamadÄ±' : 'HenÃ¼z teklif bulunmuyor'}
                       </p>
                       {!searchTerm && !statusFilter && (
                         <button
                           onClick={() => navigate('/accounting/quote/new')}
                           className={cx(button('md', 'primary', 'md'), 'mt-2')}
                         >
-                          İlk Teklifi Oluştur
+                          Ä°lk Teklifi OluÅŸtur
                         </button>
                       )}
                     </div>
@@ -324,28 +315,28 @@ const OfferList: React.FC = () => {
                         <button
                           onClick={() => navigate(`/accounting/quote/${offer.id}`)}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="Görüntüle"
+                          title="GÃ¶rÃ¼ntÃ¼le"
                         >
                           <Eye size={18} />
                         </button>
                         <button
                           onClick={() => navigate(`/accounting/quote/${offer.id}/edit`)}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="Düzenle"
+                          title="DÃ¼zenle"
                         >
                           <Edit size={18} />
                         </button>
                         <button
                           onClick={() => {/* PDF download handler */}}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="PDF İndir"
+                          title="PDF Ä°ndir"
                         >
                           <Download size={18} />
                         </button>
                         <button
                           onClick={() => {/* Email handler */}}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="Email Gönder"
+                          title="Email GÃ¶nder"
                         >
                           <Mail size={18} />
                         </button>
@@ -363,3 +354,4 @@ const OfferList: React.FC = () => {
 }
 
 export default OfferList
+
