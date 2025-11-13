@@ -38,9 +38,13 @@ const OfferList: React.FC = () => {
     try {
       setLoading(true)
       const response = await offerAPI.getAll()
-      setOffers(response.data || [])
+      if (response.data.success) {
+        setOffers(response.data.data || [])
+      } else {
+        setOffers([])
+      }
     } catch (error) {
-      console.error('Teklifler yÃ¼klenirken hata:', error)
+      console.error('Teklifler yüklenirken hata:', error)
       setOffers([])
     } finally {
       setLoading(false)
@@ -270,7 +274,7 @@ const OfferList: React.FC = () => {
                     <div className="flex flex-col items-center gap-2">
                       <Calendar className={DESIGN_TOKENS?.colors?.text?.muted} size={48} />
                       <p className={`${DESIGN_TOKENS?.typography?.body?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>
-                        {searchTerm || statusFilter ? 'Arama kriterlerine uygun teklif bulunamadÄ±' : 'HenÃ¼z teklif bulunmuyor'}
+                        {searchTerm || statusFilter ? 'Arama kriterlerine uygun teklif bulunamadı±' : 'HenÃ¼z teklif bulunmuyor'}
                       </p>
                       {!searchTerm && !statusFilter && (
                         <button
