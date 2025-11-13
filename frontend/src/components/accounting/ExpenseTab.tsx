@@ -321,8 +321,8 @@ export default function ExpenseTab() {
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
-              <table className="min-w-full w-full">
+            <div className="overflow-x-auto" style={{ maxWidth: '100%', width: '100%' }}>
+              <table className="w-full" style={{ tableLayout: 'fixed', width: '100%', maxWidth: '100%' }}>
                 <thead>
                   <tr>
                     <th className={TABLE_HEADER_CELL}>Tarih</th>
