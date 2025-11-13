@@ -226,7 +226,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
   }
 
   const exportStatement = () => {
-    toast.success('Ekstre PDF olarak indirilecek (yakında)')
+    toast.success('Ekstre PDF olarak indirilecek (yakÄ±nda)')
   }
 
   if (loading) {
@@ -265,7 +265,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
           </button>
           <div>
             <h2 className="text-2xl font-bold text-neutral-900">{customer.fullName}</h2>
-            <p className="text-sm text-neutral-600 mt-1">Cari Hesap Kartı</p>
+            <p className="text-sm text-neutral-600 mt-1">Cari Hesap KartÄ±</p>
           </div>
         </div>
         <button
@@ -273,7 +273,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
           className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors"
         >
           <Download size={18} />
-          <span className="hidden sm:inline">Ekstre İndir</span>
+          <span className="hidden sm:inline">Ekstre Ä°ndir</span>
         </button>
       </div>
 
@@ -350,7 +350,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
             </div>
           </div>
           <h3 className="text-2xl font-bold text-neutral-900 mb-1">{formatCurrency(totalDebt)}</h3>
-          <p className="text-sm text-neutral-700">Toplam Borç</p>
+          <p className="text-sm text-neutral-700">Toplam Borç§</p>
         </div>
 
         <div className="bg-neutral-50 rounded-2xl p-5 border border-neutral-200">
@@ -378,10 +378,10 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
       <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
         <div className="flex border-b border-neutral-200 overflow-x-auto">
           {[
-            { id: 'overview', label: 'Genel Bakış', icon: <BarChart3 size={16} /> },
+            { id: 'overview', label: 'Genel BakÄ±ÅŸ', icon: <BarChart3 size={16} /> },
             { id: 'invoices', label: 'Faturalar', icon: <FileText size={16} /> },
             { id: 'transactions', label: 'Hesap Hareketleri', icon: <CreditCard size={16} /> },
-            { id: 'aging', label: 'Yaşlandırma', icon: <Clock size={16} /> },
+            { id: 'aging', label: 'YaÅŸlandÄ±rma', icon: <Clock size={16} /> },
           ].map(view => (
             <button
               key={view.id}
@@ -405,7 +405,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
               {/* Monthly Trend Chart */}
               {getMonthlyTrend().length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">Aylık Trend</h3>
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">AylÄ±k Trend</h3>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={getMonthlyTrend()}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -423,7 +423,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
               {/* Quick Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-neutral-50 rounded-xl p-4">
-                  <p className="text-sm text-neutral-600 mb-1">Tahsilat Oranı</p>
+                  <p className="text-sm text-neutral-600 mb-1">Tahsilat OranÄ±</p>
                   <p className="text-2xl font-bold text-neutral-900">
                     {invoices.length > 0 
                       ? `${Math.round((totalPaid / (totalDebt + totalPaid)) * 100)}%`
@@ -536,10 +536,10 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
                           </div>
                         </td>
                         <td className="px-4 py-3 text-right font-semibold text-neutral-900">
-                          {txn.debit > 0 ? formatCurrency(txn.debit) : '—'}
+                          {txn.debit > 0 ? formatCurrency(txn.debit) : 'â€”'}
                         </td>
                         <td className="px-4 py-3 text-right font-semibold text-neutral-900">
-                          {txn.credit > 0 ? formatCurrency(txn.credit) : '—'}
+                          {txn.credit > 0 ? formatCurrency(txn.credit) : 'â€”'}
                         </td>
                         <td className="px-4 py-3 text-right font-bold text-neutral-900">
                           {formatCurrency(txn.balance)}
@@ -616,3 +616,4 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
     </div>
   )
 }
+

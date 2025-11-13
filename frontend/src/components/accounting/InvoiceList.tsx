@@ -220,8 +220,8 @@ export default function InvoiceList() {
             <p className="text-lg font-medium">Fatura bulunamadı</p>
             <p className="text-sm mt-2">
               {searchTerm || statusFilter || typeFilter
-                ? 'Arama kriterlerinize uygun fatura bulunamadı'
-                : 'Yeni fatura ekleyerek başlayın'}
+                ? 'Arama kriterlerinize uygun fatura bulunamAdı±'
+                : 'Yeni fatura ekleyerek baÅŸlayÄ±n'}
             </p>
           </div>
         ) : (
@@ -299,3 +299,4 @@ export default function InvoiceList() {
     </div>
   );
 }
+
