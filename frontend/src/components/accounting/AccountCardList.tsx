@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Search, Download, Filter, Users, TrendingUp, TrendingDown,
   Eye, FileText, Clock, AlertCircle, ChevronRight, Phone, Mail
@@ -43,7 +43,7 @@ export default function AccountCardList() {
       setAccounts(data)
     } catch (error: any) {
       console.error('Failed to load accounts:', error)
-      toast.error('Cari hesaplar yÃ¼klenemedi')
+      toast.error('Cari hesaplar yüklenemedi')
     } finally {
       setLoading(false)
     }
@@ -124,8 +124,8 @@ export default function AccountCardList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Cari Hesap KartlarÄ±</h2>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>MÃ¼ÅŸteri bazlÄ± alacak-borÃ§ takibi</p>
+          <h2 className={`${DESIGN_TOKENS?.typography?.h2} ${DESIGN_TOKENS?.colors?.text.primary}`}>Cari Hesap Kartları</h2>
+          <p className={`${DESIGN_TOKENS?.typography?.body.sm} ${DESIGN_TOKENS?.colors?.text.tertiary} mt-1`}>Müşteri bazlı alacak-borç takibi</p>
         </div>
         <button
           onClick={exportToExcel}
@@ -229,7 +229,7 @@ export default function AccountCardList() {
             <Users className="mx-auto text-neutral-400 mb-3" size={48} />
             <p className="text-neutral-600">
               {searchTerm || filterType !== 'all' 
-                ? 'Arama kriterlerine uygun cari hesap bulunamadıï¿½' 
+                ? 'Arama kriterlerine uygun cari hesap bulunamadı¿½' 
                 : 'Henï¿½z cari hesap bulunmuyor'}
             </p>
           </div>
@@ -337,4 +337,5 @@ export default function AccountCardList() {
     </div>
   )
 }
+
 

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
   Search, Filter, TrendingUp, Clock, CheckCircle, Calendar,
@@ -211,13 +211,13 @@ const OfferList: React.FC = () => {
               className={cx(input('md', 'default', undefined, 'md'), 'pl-10 w-full appearance-none')}
               style={{ boxSizing: 'border-box' }}
             >
-              <option value="">TÃ¼m Durumlar</option>
+              <option value="">Tüm Durumlar</option>
               <option value="DRAFT">Taslak</option>
-              <option value="SENT">GÃ¶nderildi</option>
+              <option value="SENT">Gönderildi</option>
               <option value="ACCEPTED">Kabul Edildi</option>
               <option value="REJECTED">Reddedildi</option>
-              <option value="CONVERTED">Faturaya DÃ¶nÃ¼ÅŸtÃ¼</option>
-              <option value="EXPIRED">SÃ¼resi Doldu</option>
+              <option value="CONVERTED">Faturaya Dönüştü</option>
+              <option value="EXPIRED">Süresi Doldu</option>
             </select>
           </div>
 
@@ -259,12 +259,12 @@ const OfferList: React.FC = () => {
             <thead>
               <tr>
                 <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>Teklif No</th>
-                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>MÃ¼ÅŸteri</th>
+                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>Müşteri</th>
                 <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>Tarih</th>
-                <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>GeÃ§erlilik</th>
+                <th className={TABLE_HEADER_CELL} style={{ width: '12%' }}>Geçerlilik</th>
                 <th className={TABLE_HEADER_CELL} style={{ width: '15%' }}>Tutar</th>
                 <th className={TABLE_HEADER_CELL} style={{ width: '13%' }}>Durum</th>
-                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>Ä°ÅŸlemler</th>
+                <th className={TABLE_HEADER_CELL} style={{ width: '18%' }}>İşlemler</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
@@ -274,14 +274,14 @@ const OfferList: React.FC = () => {
                     <div className="flex flex-col items-center gap-2">
                       <Calendar className={DESIGN_TOKENS?.colors?.text?.muted} size={48} />
                       <p className={`${DESIGN_TOKENS?.typography?.body?.lg} ${DESIGN_TOKENS?.colors?.text?.secondary}`}>
-                        {searchTerm || statusFilter ? 'Arama kriterlerine uygun teklif bulunamadı±' : 'HenÃ¼z teklif bulunmuyor'}
+                        {searchTerm || statusFilter ? 'Arama kriterlerine uygun teklif bulunamadı' : 'Henüz teklif bulunmuyor'}
                       </p>
                       {!searchTerm && !statusFilter && (
                         <button
                           onClick={() => navigate('/accounting/quote/new')}
                           className={cx(button('md', 'primary', 'md'), 'mt-2')}
                         >
-                          Ä°lk Teklifi OluÅŸtur
+                          İlk Teklifi Oluştur
                         </button>
                       )}
                     </div>
@@ -319,28 +319,28 @@ const OfferList: React.FC = () => {
                         <button
                           onClick={() => navigate(`/accounting/quote/${offer.id}`)}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="GÃ¶rÃ¼ntÃ¼le"
+                          title="Görüntüle"
                         >
                           <Eye size={18} />
                         </button>
                         <button
                           onClick={() => navigate(`/accounting/quote/${offer.id}/edit`)}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="DÃ¼zenle"
+                          title="Düzenle"
                         >
                           <Edit size={18} />
                         </button>
                         <button
                           onClick={() => {/* PDF download handler */}}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="PDF Ä°ndir"
+                          title="PDF İndir"
                         >
                           <Download size={18} />
                         </button>
                         <button
                           onClick={() => {/* Email handler */}}
                           className={`${DESIGN_TOKENS?.colors?.text?.secondary} hover:${DESIGN_TOKENS?.colors?.text?.primary} transition-colors`}
-                          title="Email GÃ¶nder"
+                          title="Email Gönder"
                         >
                           <Mail size={18} />
                         </button>
@@ -358,4 +358,5 @@ const OfferList: React.FC = () => {
 }
 
 export default OfferList
+
 
