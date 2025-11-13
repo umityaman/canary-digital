@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Tag, TrendingUp, TrendingDown, Save, X } from 'lucide-react'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
@@ -312,4 +312,5 @@ export default function CategoryManagement() {
     </div>
   )
 }
+
 

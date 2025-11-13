@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Scale,
   Calendar,
@@ -436,14 +436,14 @@ export default function TrialBalanceReport() {
               </div>
             </div>
             <div className="flex-1">
-              <h4 className="text-neutral-900 font-semibold mb-1">Mizan Dengesi Uyuï¿½muyor</h4>
+              <h4 className="text-neutral-900 font-semibold mb-1">Mizan Dengesi Uyuşmuyor</h4>
               <p className="text-neutral-900 text-sm mb-2">
-                Toplam borï¿½ ve alacak tutarlarï¿½ eï¿½it deï¿½il. Fark:{' '}
+                Toplam borç ve alacak tutarları eşit değil. Fark:{' '}
                 {formatCurrency(Math.abs(summary.difference))}
               </p>
               <p className="text-neutral-900 text-xs">
-                Lï¿½tfen yevmiye kayï¿½tlarï¿½nï¿½zï¿½ kontrol edin. Her kayï¿½tta borï¿½ ve alacak
-                toplamlarï¿½ eï¿½it olmalï¿½dï¿½r.
+                Lütfen yevmiye kayıtlarınızı kontrol edin. Her kayıtta borç ve alacak
+                toplamları eşit olmalıdır.
               </p>
             </div>
           </div>
@@ -452,6 +452,7 @@ export default function TrialBalanceReport() {
     </div>
   );
 }
+
 
 
 

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { X, Upload } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
@@ -341,5 +341,6 @@ export default function ExpenseModal({ open, onClose, onSaved, initial }: Expens
     </div>
   )
 }
+
 
 

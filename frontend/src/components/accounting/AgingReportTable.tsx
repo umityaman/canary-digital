@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Download,
   FileText,
@@ -344,3 +344,4 @@ export default function AgingReportTable({ data, loading }: AgingReportTableProp
     </div>
   );
 }
+

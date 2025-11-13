@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { promissoryAPI } from '../../services/api';
 import { X } from 'lucide-react';
 import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
@@ -279,4 +279,5 @@ export default function PromissoryNoteFormModal({ open, onClose, onSaved, initia
     </div>
   );
 }
+
 

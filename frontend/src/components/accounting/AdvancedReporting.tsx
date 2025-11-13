@@ -1,4 +1,4 @@
-﻿// Advanced Reporting Component - Updated 2025-11-05 10:20
+// Advanced Reporting Component - Updated 2025-11-05 10:20
 import { useState, useEffect } from 'react'
 import { 
   TrendingUp, TrendingDown, DollarSign, Calendar, Download, 
@@ -1134,3 +1134,4 @@ export default function AdvancedReporting() {
     </div>
   )
 }
+

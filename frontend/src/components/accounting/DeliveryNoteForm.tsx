@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowLeft, Plus, Trash2, Save, Truck, User, MapPin, Package, Calendar } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -482,4 +482,5 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
     </div>
   )
 }
+
 

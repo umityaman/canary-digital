@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Filter,
   Calendar,
@@ -527,3 +527,4 @@ export default function AdvancedReportFilters({
     </div>
   );
 }
+

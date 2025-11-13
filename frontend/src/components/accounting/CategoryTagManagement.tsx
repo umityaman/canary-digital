@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Edit2, Trash2, Tag, TrendingUp, TrendingDown, Save, X, Plus, Filter } from 'lucide-react';
 import { apiClient } from '../../utils/api';
 import { toast } from 'react-hot-toast';
@@ -454,4 +454,5 @@ export default function CategoryTagManagement() {
     </div>
   );
 }
+
 

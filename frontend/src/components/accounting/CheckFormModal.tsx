@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { checksAPI } from '../../services/api'
 import { card, button, input, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
@@ -79,3 +79,4 @@ export default function CheckFormModal({ open, onClose, onSaved, initial }: Prop
     </div>
   )
 }
+

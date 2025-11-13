@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Package, TrendingUp, TrendingDown, DollarSign, AlertCircle, 
   CheckCircle, ArrowRight, Settings, Filter, Calendar, FileText,
@@ -935,3 +935,4 @@ export default function InventoryAccounting() {
     </div>
   )
 }
+

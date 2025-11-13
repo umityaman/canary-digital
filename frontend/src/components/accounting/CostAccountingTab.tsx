@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { DollarSign, TrendingUp, Target } from 'lucide-react'
 import CostCenterHierarchy from '../cost-accounting/CostCenterHierarchy'
 import BudgetTracking from '../cost-accounting/BudgetTracking'
@@ -48,3 +48,4 @@ export default function CostAccountingTab() {
     </div>
   )
 }
+

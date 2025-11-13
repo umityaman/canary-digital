@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Building2,
   Phone,
@@ -737,4 +737,5 @@ const CompanyInfo: React.FC = () => {
 };
 
 export default CompanyInfo;
+
 

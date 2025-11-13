@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Wallet,
   Building2,
@@ -767,4 +767,5 @@ export default function CashBankManagement() {
     </div>
   );
 }
+
 

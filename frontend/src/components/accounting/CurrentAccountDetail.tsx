@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -112,7 +112,7 @@ export default function CurrentAccountDetail() {
       setAccount(data.data || data);
     } catch (error: any) {
       console.error('Failed to load account:', error);
-      toast.error('Cari hesap y�klenemedi');
+      toast.error('Cari hesap yüklenemedi');
       navigate('/accounting');
     } finally {
       setLoading(false);
@@ -315,10 +315,10 @@ export default function CurrentAccountDetail() {
             Net Bakiye
           </p>
           {account.balance > 0 && (
-            <p className="text-xs text-neutral-900 mt-1">Alacakl�</p>
+            <p className="text-xs text-neutral-900 mt-1">Alacaklı</p>
           )}
           {account.balance < 0 && (
-            <p className="text-xs text-neutral-800 mt-1">Bor�lu</p>
+            <p className="text-xs text-neutral-800 mt-1">Borçlu</p>
           )}
         </div>
 
@@ -705,3 +705,4 @@ export default function CurrentAccountDetail() {
     </div>
   );
 }
+

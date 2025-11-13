@@ -229,8 +229,8 @@ export default function AccountCardList() {
             <Users className="mx-auto text-neutral-400 mb-3" size={48} />
             <p className="text-neutral-600">
               {searchTerm || filterType !== 'all' 
-                ? 'Arama kriterlerine uygun cari hesap bulunamadı¿½' 
-                : 'Henï¿½z cari hesap bulunmuyor'}
+                ? 'Arama kriterlerine uygun cari hesap bulunamadı' 
+                : 'Henüz cari hesap bulunmuyor'}
             </p>
           </div>
         ) : (
@@ -330,7 +330,7 @@ export default function AccountCardList() {
       {/* Results Info */}
       {!loading && filteredAccounts.length > 0 && (
         <div className="text-sm text-neutral-600 text-center">
-          {filteredAccounts.length} cari hesap gï¿½steriliyor
+          {filteredAccounts.length} cari hesap gösteriliyor
           {accounts.length !== filteredAccounts.length && ` (toplam ${accounts.length} hesap)`}
         </div>
       )}

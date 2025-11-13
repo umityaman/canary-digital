@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
@@ -263,3 +263,4 @@ export default function IncomeModal({ open, onClose, onSaved, initial }: IncomeM
     </div>
   )
 }
+

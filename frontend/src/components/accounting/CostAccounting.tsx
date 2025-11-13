@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Calculator, 
   Package, 
@@ -510,3 +510,4 @@ export default function CostAccounting() {
     </div>
   );
 }
+

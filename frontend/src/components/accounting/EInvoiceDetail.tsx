@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { ArrowLeft, Download, Send, X, CheckCircle, FileText, Calendar, User, DollarSign, RefreshCw, File, Hash } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -557,4 +557,5 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
     </div>
   )
 }
+
 

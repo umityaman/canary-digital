@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Save, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { button, DESIGN_TOKENS } from '../../styles/design-tokens';
@@ -435,4 +435,5 @@ export default function AccountFormModal({
     </div>
   );
 }
+
 

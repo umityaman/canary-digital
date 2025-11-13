@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { ArrowLeft, Package, User, MapPin, FileText, CheckCircle, Truck, Clock, Download, Receipt, X, Edit2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
@@ -405,4 +405,5 @@ export default function DeliveryNoteDetail({
     </div>
   )
 }
+
 

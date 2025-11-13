@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus, Search, Filter, Download, TrendingUp, Calendar, DollarSign, FileText, Trash2, Edit2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
@@ -419,4 +419,5 @@ export default function IncomeTab() {
     </div>
   )
 }
+
 

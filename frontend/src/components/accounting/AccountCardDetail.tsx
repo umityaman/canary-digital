@@ -265,7 +265,7 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
           </button>
           <div>
             <h2 className="text-2xl font-bold text-neutral-900">{customer.fullName}</h2>
-            <p className="text-sm text-neutral-600 mt-1">Cari Hesap KartÄ±</p>
+            <p className="text-sm text-neutral-600 mt-1">Cari Hesap Kartı</p>
           </div>
         </div>
         <button

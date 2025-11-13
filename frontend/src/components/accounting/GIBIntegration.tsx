@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { 
@@ -395,4 +395,5 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
 }
 
 export default GIBIntegration
+
 

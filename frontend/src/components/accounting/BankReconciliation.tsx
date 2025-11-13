@@ -1,4 +1,4 @@
-﻿import { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { 
   Building2, Upload, Download, CheckCircle, AlertCircle, 
   Filter, Search, RefreshCw, Link2, XCircle, Eye, FileText,
@@ -867,3 +867,4 @@ export default function BankReconciliation() {
     </div>
   )
 }
+

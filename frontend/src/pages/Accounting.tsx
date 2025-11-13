@@ -298,7 +298,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load accounting stats:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('�statistikler y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('İstatistikler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setLoading(false)
     }
@@ -320,7 +320,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load invoices:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('Faturalar y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Faturalar yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setInvoicesLoading(false)
     }
@@ -347,7 +347,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load offers:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('Teklifler y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('Teklifler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setOffersLoading(false)
     }
@@ -361,30 +361,30 @@ export default function Accounting() {
   const handleOfferStatusUpdate = async (offerId: number, status: string) => {
     try {
       await offerAPI.updateStatus(offerId, status)
-      toast.success('Teklif durumu g�ncellendi')
+      toast.success('Teklif durumu güncellendi')
       loadOffers()
     } catch (error: any) {
       console.error('Failed to update offer status:', error)
-      toast.error('Durum g�ncellenemedi')
+      toast.error('Durum güncellenemedi')
     }
   }
 
   const handleConvertToInvoice = async (offerId: number) => {
-    if (!confirm('Bu teklifi faturaya d�n��t�rmek istedi�inizden emin misiniz?')) {
+    if (!confirm('Bu teklifi faturaya dönüştürmek istediğinizden emin misiniz?')) {
       return
     }
     
     try {
-      // Note: Bu endpoint i�in orderId, startDate, endDate gerekiyor
-      // Basitle�tirilmi� versiyon - ger�ek implementasyonda modal ile bu bilgileri almal�s�n�z
+      // Note: Bu endpoint için orderId, startDate, endDate gerekiyor
+      // Basitleştirilmiş versiyon - gerçek implementasyonda modal ile bu bilgileri almalısınız
       const today = new Date().toISOString().split('T')[0]
       const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]
       
       const response = await offerAPI.convertToInvoice(offerId, {
-        orderId: offerId, // Ge�ici olarak offerId kullan�yoruz
+        orderId: offerId, // Geçici olarak offerId kullanıyoruz
         startDate: today,
         endDate: nextMonth,
-        notes: 'Tekliften otomatik olu�turuldu'
+        notes: 'Tekliften otomatik oluşturuldu'
       })
       
       toast.success('Teklif ba�ar�yla faturaya d�n��t�r�ld�')
@@ -765,17 +765,17 @@ export default function Accounting() {
     { id: 'expense' as const, label: 'Giderler', icon: <TrendingDown size={18} /> },
     { id: 'reports' as const, label: 'Raporlar', icon: <PieChart size={18} /> },
     { id: 'invoice' as const, label: 'Fatura Takibi', icon: <FileText size={18} /> },
-    { id: 'offer' as const, label: 'Teklif Y�netimi', icon: <Receipt size={18} /> },
+    { id: 'offer' as const, label: 'Teklif Yönetimi', icon: <Receipt size={18} /> },
     { id: 'current-accounts' as const, label: 'Cari Hesaplar', icon: <Users size={18} /> },
-    { id: 'receivables' as const, label: 'Alacak Y�netimi', icon: <DollarSign size={18} /> },
-    { id: 'chart-of-accounts' as const, label: 'Hesap Plan�', icon: <BarChart3 size={18} /> },
+    { id: 'receivables' as const, label: 'Alacak Yönetimi', icon: <DollarSign size={18} /> },
+    { id: 'chart-of-accounts' as const, label: 'Hesap Planı', icon: <BarChart3 size={18} /> },
     { id: 'inventory' as const, label: 'Stok Muhasebesi', icon: <Package size={18} /> },
-    { id: 'company' as const, label: '�irket Bilgileri', icon: <Building2 size={18} /> },
+    { id: 'company' as const, label: 'Şirket Bilgileri', icon: <Building2 size={18} /> },
     { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
-    { id: 'delivery' as const, label: '�rsaliye', icon: <Package size={18} /> },
+    { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
-    { id: 'tools' as const, label: '��letme Kolayl�klar�', icon: <Settings size={18} /> },
-    { id: 'support' as const, label: 'Yard�m & Ara�lar', icon: <Globe size={18} /> },
+    { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
+    { id: 'support' as const, label: 'Yardım & Araçlar', icon: <Globe size={18} /> },
   ]
 
   return (
@@ -933,7 +933,7 @@ export default function Accounting() {
             {/* Receivables Management Tab - �ekler, Senetler, Ya�land�rma */}
             {activeTab === 'receivables' && (
               <div className="space-y-6 max-w-7xl mx-auto">
-                <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Y�netimi</h2>
+                <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Yönetimi</h2>
                 
                 {/* Sub-tabs for Checks, Promissory, Aging */}
                 <div className="flex gap-4 border-b border-neutral-200 mb-6">
