@@ -6,7 +6,7 @@ import {
 import { toast } from 'react-hot-toast'
 import { accountingAPI } from '../../services/api'
 import AccountCardDetail from './AccountCardDetail'
-import { card, button, input, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
+import { card, button, input, badge, DESIGN_TOKENS, cx, statCardIcon } from '../../styles/design-tokens'
 
 interface AccountCard {
   customerId: number
@@ -107,7 +107,7 @@ export default function AccountCardList() {
   }
 
   const exportToExcel = () => {
-    toast.success('Excel dï¿½ï¿½a aktarma ï¿½zelliï¿½i yakï¿½nda eklenecek')
+    toast.success('Excel dışa aktarma özelliği yakında eklenecek')
   }
 
   if (selectedCustomerId) {
@@ -132,50 +132,54 @@ export default function AccountCardList() {
           className={cx(button('md', 'secondary', 'md'), 'gap-2')}
         >
           <Download size={18} />
-          <span className="hidden sm:inline">DÄ±ÅŸa Aktar</span>
+          <span className="hidden sm:inline">Dışa Aktar</span>
         </button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
-              <Users className="text-white" size={20} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style={{ boxSizing: 'border-box' }}>
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('neutral')}>
+              <Users className="text-neutral-700" size={20} />
             </div>
+            <span className="text-xs font-medium text-neutral-600">Aktif</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{accounts.length}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Toplam Cari</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">{accounts.length}</h3>
+          <p className="text-xs font-medium text-neutral-600">Toplam Cari</p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center">
-              <TrendingUp className="text-white" size={20} />
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('success')}>
+              <TrendingUp className="text-green-700" size={20} />
             </div>
+            <span className="text-xs font-medium text-neutral-600">Alacak</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{formatCurrency(calculateTotalDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Toplam Alacak</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">{formatCurrency(calculateTotalDebt())}</h3>
+          <p className="text-xs font-medium text-neutral-600">Toplam Alacak</p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center">
-              <AlertCircle className="text-white" size={20} />
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('error')}>
+              <AlertCircle className="text-red-700" size={20} />
             </div>
+            <span className="text-xs font-medium text-neutral-600">Gecikmiş</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{formatCurrency(calculateOverdueDebt())}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Vadesi Geçmiş</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">{formatCurrency(calculateOverdueDebt())}</h3>
+          <p className="text-xs font-medium text-neutral-600">Vadesi Geçmiş</p>
         </div>
 
-        <div className={cx(card('md', 'md', 'subtle', 'lg'), 'bg-neutral-50 border-neutral-200')}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-neutral-700 rounded-xl flex items-center justify-center">
-              <Clock className="text-white" size={20} />
+        <div className={card('md', 'sm', 'default', 'xl')}>
+          <div className="flex items-center justify-between mb-2">
+            <div className={statCardIcon('warning')}>
+              <Clock className="text-orange-700" size={20} />
             </div>
+            <span className="text-xs font-medium text-neutral-600">Risk</span>
           </div>
-          <h3 className={`${DESIGN_TOKENS?.typography?.stat.md} text-neutral-900 mb-1`}>{getOverdueAccountsCount()}</h3>
-          <p className={`${DESIGN_TOKENS?.typography?.body.sm} text-neutral-700`}>Gecikmiş Hesap</p>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-0.5">{getOverdueAccountsCount()}</h3>
+          <p className="text-xs font-medium text-neutral-600">Gecikmiş Hesap</p>
         </div>
       </div>
 
@@ -239,9 +243,9 @@ export default function AccountCardList() {
       </div>
 
       {/* Account List */}
-      <div className={cx(card('md', 'sm', 'default', 'lg'), 'overflow-hidden')}>
+      <div className={cx(card('md', 'sm', 'default', 'xl'), 'overflow-hidden')}>
         {loading ? (
-          <div className="p-12 text-center text-neutral-600">Yï¿½kleniyor...</div>
+          <div className="p-12 text-center text-neutral-600">Yükleniyor...</div>
         ) : filteredAccounts.length === 0 ? (
           <div className="p-12 text-center">
             <Users className="mx-auto text-neutral-400 mb-3" size={48} />
@@ -257,19 +261,19 @@ export default function AccountCardList() {
               <thead className="bg-neutral-50 border-b border-neutral-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Mï¿½ï¿½teri Bilgileri
+                    Müşteri Bilgileri
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Toplam Borï¿½
+                    Toplam Borç
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Vadesi Geï¿½miï¿½
+                    Vadesi Geçmiş
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    Fatura Sayï¿½sï¿½
+                    Fatura Sayısı
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-neutral-700 uppercase tracking-wider">
-                    ï¿½ï¿½lemler
+                    İşlemler
                   </th>
                 </tr>
               </thead>
@@ -311,11 +315,11 @@ export default function AccountCardList() {
                             {formatCurrency(account.overdueDebt)}
                           </span>
                           <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full font-medium">
-                            Gecikmişï¿½
+                            Gecikmiş
                           </span>
                         </div>
                       ) : (
-                        <span className="text-neutral-400">ï¿½</span>
+                        <span className="text-neutral-400">—</span>
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
