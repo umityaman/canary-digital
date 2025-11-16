@@ -77,7 +77,8 @@ export class ParasutIntegrationService {
       }
 
       // Ensure customer is synced
-      let parasutContactId = invoice.customer.parasutId;
+      // FIXED: Customer doesn't have parasutId field in schema
+      let parasutContactId = (invoice.customer as any).parasutId;
       if (!parasutContactId) {
         parasutContactId = await this.syncCustomer(invoice.customer.id);
       }

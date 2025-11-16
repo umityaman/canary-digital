@@ -35,7 +35,7 @@ router.get('/accounts', async (req, res) => {
         companyId: parseInt(companyId as string),
         isActive: true,
       },
-      orderBy: { accountName: 'asc' },
+      orderBy: { accountNumber: 'asc' }, // FIXED: accountName -> accountNumber
     });
 
     res.json({
@@ -147,7 +147,7 @@ router.get('/transactions', async (req, res) => {
           account: {
             select: {
               id: true,
-              accountName: true,
+              // accountName: true, // FIXED: Field doesn't exist in schema
               accountNumber: true,
               iban: true,
               bankName: true,

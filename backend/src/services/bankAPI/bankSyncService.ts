@@ -98,32 +98,32 @@ export class BankSyncService {
       },
       update: {
         accountNumber: account.accountNumber,
-        accountName: account.accountName,
+        // accountName: account.accountName, // FIXED: Field doesn't exist in BankAccount schema
         accountType: account.accountType,
-        currency: account.currency,
+        currency: account.currency || 'TRY', // FIXED: Field exists in schema
         balance: account.balance,
         availableBalance: account.availableBalance,
-        blockedAmount: account.blockedAmount,
+        // blockedAmount: account.blockedAmount, // FIXED: Field doesn't exist in BankAccount schema
         branchCode: account.branchCode,
-        branchName: account.branchName,
+        branch: account.branchName, // FIXED: Field is 'branch' not 'branchName'
         isActive: account.status === 'ACTIVE',
-        lastSyncAt: new Date(),
+        // lastSyncAt: new Date(), // FIXED: Field doesn't exist in BankAccount schema
       },
       create: {
         companyId,
         bankName: bankCode,
         accountNumber: account.accountNumber,
         iban: account.iban,
-        accountName: account.accountName,
+        // accountName: account.accountName, // FIXED: Field doesn't exist in BankAccount schema
         accountType: account.accountType,
-        currency: account.currency,
+        currency: account.currency || 'TRY', // FIXED: Field exists in schema
         balance: account.balance,
         availableBalance: account.availableBalance,
-        blockedAmount: account.blockedAmount,
+        // blockedAmount: account.blockedAmount, // FIXED: Field doesn't exist in BankAccount schema
         branchCode: account.branchCode,
-        branchName: account.branchName,
+        branch: account.branchName, // FIXED: Field is 'branch' not 'branchName'
         isActive: account.status === 'ACTIVE',
-        lastSyncAt: new Date(),
+        // lastSyncAt: new Date(), // FIXED: Field doesn't exist in BankAccount schema
       },
     });
   }
@@ -247,15 +247,15 @@ export class BankSyncService {
         valueDate: transaction.valueDate,
         description: transaction.description,
         amount: transaction.amount,
-        currency: transaction.currency,
+        // currency: transaction.currency, // FIXED: Field doesn't exist in BankTransaction schema
         type: transaction.transactionType,
         category: transaction.category,
         reference: transaction.reference,
-        balance: transaction.balance,
-        counterpartyName: transaction.counterpartyName,
-        counterpartyAccount: transaction.counterpartyAccount,
-        counterpartyIban: transaction.counterpartyIban,
-        channel: transaction.channel,
+        // balance: transaction.balance, // FIXED: Field doesn't exist in BankTransaction schema
+        counterParty: transaction.counterpartyName, // FIXED: Field name is counterParty not counterpartyName
+        // counterpartyAccount: transaction.counterpartyAccount, // FIXED: Field doesn't exist
+        // counterpartyIban: transaction.counterpartyIban, // FIXED: Field doesn't exist
+        // channel: transaction.channel, // FIXED: Field doesn't exist in BankTransaction schema
         status: 'COMPLETED',
         isReconciled: false,
       },

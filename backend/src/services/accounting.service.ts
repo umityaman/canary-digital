@@ -1477,6 +1477,7 @@ export class AccountingService {
     } catch (error) {
       log.error('Failed to get expenses:', error);
       // Return empty data instead of throwing to prevent 500 errors
+      const { page = 1, limit = 10 } = params; // FIXED: Extract from params for error handler scope
       return {
         data: [],
         pagination: {
@@ -2539,11 +2540,12 @@ export class AccountingService {
         data: {
           companyId: data.companyId,
           bankName: data.bankName,
+          accountNumber: data.iban, // FIXED: Required field - using IBAN as account number
           accountType: data.accountType,
           iban: data.iban,
-          branch: data.branch,
+          branch: data.branch || '',
           balance: data.balance || 0,
-          currency: data.currency || 'TRY',
+          currency: data.currency || 'TRY', // FIXED: Field exists in schema
           isActive: true,
         },
       });
@@ -4008,10 +4010,11 @@ export class AccountingService {
     }
   }
 
+  /* TEMPORARY: Duplicate function - second implementation commented out
   /**
    * Balance Sheet Report (Bilanço) - Enhanced Version
-   */
-  async getBalanceSheetReport(params: { companyId: number; date: Date }) {
+   *
+  async getBalanceSheetReport_NEW(params: { companyId: number; date: Date }) {
     try {
       log.info('Generating balance sheet report...');
 
@@ -4134,6 +4137,7 @@ export class AccountingService {
       throw error;
     }
   }
+  */ // END TEMPORARY - Duplicate function
 }
 
 export const accountingService = new AccountingService();

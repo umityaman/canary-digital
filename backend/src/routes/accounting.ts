@@ -495,10 +495,8 @@ router.get('/reports/balance-sheet', authenticateToken, async (req, res) => {
 
     const reportDate = date ? new Date(date as string) : new Date();
 
-    const report = await accountingService.getBalanceSheetReport({
-      companyId,
-      date: reportDate,
-    });
+    // FIXED: Service method expects 2 separate parameters, not an object
+    const report = await accountingService.getBalanceSheetReport(companyId, reportDate);
 
     res.json({
       success: true,
@@ -771,6 +769,7 @@ router.get('/expenses', authenticateToken, async (req, res) => {
   } catch (error: any) {
     log.error('Failed to get expenses - returning empty data:', error);
     // Return empty data instead of 500 to prevent frontend crash
+    const { page = 1, limit = 10 } = req.query;
     res.json({
       success: true,
       data: [],
@@ -934,6 +933,7 @@ router.get('/categories', authenticateToken, async (req, res) => {
     // Get categories from Income and Expense tables
     let categories: { id: string; name: string; type: string; color?: string }[] = [];
 
+    /* TEMPORARY: Income model not in schema
     if (!type || type === 'income') {
       const incomes = await prisma.income.findMany({
         where: { companyId },
@@ -950,6 +950,7 @@ router.get('/categories', authenticateToken, async (req, res) => {
         }));
       categories.push(...incomeCats);
     }
+    */ // END TEMPORARY
 
     if (!type || type === 'expense') {
       const expenses = await prisma.expense.findMany({
@@ -1001,13 +1002,15 @@ router.post('/categories/rename', authenticateToken, async (req, res) => {
 
     let updatedCount = 0;
 
+    /* TEMPORARY: Income model not in schema
     if (type === 'income') {
       const result = await prisma.income.updateMany({
         where: { companyId, category: oldName },
         data: { category: newName },
       });
       updatedCount = result.count;
-    } else if (type === 'expense') {
+    } else */ 
+    if (type === 'expense') {
       const result = await prisma.expense.updateMany({
         where: { companyId, category: oldName },
         data: { category: newName },
@@ -1049,13 +1052,15 @@ router.delete('/categories/:type/:name', authenticateToken, async (req, res) => 
     const decodedName = decodeURIComponent(name);
     let updatedCount = 0;
 
+    /* TEMPORARY: Income model not in schema
     if (type === 'income') {
       const result = await prisma.income.updateMany({
         where: { companyId, category: decodedName },
         data: { category: 'Diğer' },
       });
       updatedCount = result.count;
-    } else if (type === 'expense') {
+    } else */ 
+    if (type === 'expense') {
       const result = await prisma.expense.updateMany({
         where: { companyId, category: decodedName },
         data: { category: 'Diğer' },

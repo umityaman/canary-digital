@@ -132,16 +132,18 @@ export class JournalEntryService {
           totalDebit: totalDebit,
           totalCredit: totalCredit,
           reference: params.reference,
-          referenceId: params.referenceId,
+          // referenceId: params.referenceId, // FIXED: Field doesn't exist in JournalEntry schema
           createdBy: params.createdBy,
           journalEntryItems: {
-            create: itemsWithAccountIds.map((item) => ({
-              accountId: item.accountId!,
-              debitAmount: item.debitAmount,
-              creditAmount: item.creditAmount,
+            create: itemsWithAccountIds.map((item, index) => ({
+              accountCode: item.accountCode!, // FIXED: Field is accountCode not accountId
+              debit: item.debitAmount, // FIXED: Field is debit not debitAmount
+              credit: item.creditAmount, // FIXED: Field is credit not creditAmount
               description: item.description || params.description,
-              customerId: item.customerId,
-              supplierId: item.supplierId,
+              lineNumber: index + 1, // FIXED: Required field
+              companyId: params.companyId, // FIXED: Required field
+              // customerId: item.customerId, // FIXED: Field doesn't exist
+              // supplierId: item.supplierId, // FIXED: Field doesn't exist
             })),
           },
         },
@@ -353,6 +355,7 @@ export class JournalEntryService {
         return;
       }
 
+      /* TEMPORARY: totalDebit/totalCredit fields don't exist in ChartOfAccounts schema
       const newTotalDebit = account.totalDebit + debitAmount;
       const newTotalCredit = account.totalCredit + creditAmount;
       const newBalance = newTotalDebit - newTotalCredit;
@@ -363,6 +366,16 @@ export class JournalEntryService {
           totalDebit: newTotalDebit,
           totalCredit: newTotalCredit,
           balance: newBalance,
+        },
+      });
+      */ // END TEMPORARY
+      
+      // Update current balance instead
+      const newBalance = account.currentBalance + (debitAmount - creditAmount);
+      await prisma.chartOfAccounts.update({
+        where: { id: accountId },
+        data: {
+          currentBalance: newBalance,
         },
       });
 
@@ -389,12 +402,13 @@ export class JournalEntryService {
           companyId,
           code: accountCode,
           name: accountInfo.name,
-          accountType: accountInfo.type,
-          currency: 'TRY',
+          type: accountInfo.type, // FIXED: Field is 'type' not 'accountType'
+          category: accountInfo.type, // FIXED: Required field
+          // currency: 'TRY', // FIXED: Field doesn't exist in ChartOfAccounts schema
           isActive: true,
-          totalDebit: 0,
-          totalCredit: 0,
-          balance: 0,
+          // totalDebit: 0, // FIXED: Field doesn't exist
+          // totalCredit: 0, // FIXED: Field doesn't exist
+          currentBalance: 0, // FIXED: Using currentBalance instead of balance
         },
       });
 

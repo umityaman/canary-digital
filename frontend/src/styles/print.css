@@ -1,0 +1,229 @@
+/* Print Optimization for Accounting Dashboard */
+@media print {
+  /* Hide non-essential elements */
+  header,
+  nav,
+  .no-print,
+  button:not(.print-show),
+  [role="navigation"],
+  .fixed,
+  .sticky {
+    display: none !important;
+  }
+
+  /* Show print-specific elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 1.5cm;
+    size: A4 portrait;
+  }
+
+  body {
+    font-size: 10pt;
+    line-height: 1.3;
+    color: #000;
+    background: #fff;
+  }
+
+  /* Remove shadows and transitions */
+  * {
+    box-shadow: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Optimize charts for print */
+  .recharts-wrapper {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Card styles for print */
+  .card,
+  [class*="rounded"] {
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 1cm;
+  }
+
+  /* Ensure proper spacing */
+  .grid {
+    display: block !important;
+  }
+
+  .grid > * {
+    margin-bottom: 0.5cm;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Headers */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+    color: #000;
+  }
+
+  h1 { font-size: 16pt; }
+  h2 { font-size: 14pt; }
+  h3 { font-size: 12pt; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  /* Links - show URLs */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #666;
+  }
+
+  /* Remove background colors */
+  * {
+    background: transparent !important;
+    color: #000 !important;
+  }
+
+  /* Preserve chart colors */
+  svg,
+  canvas,
+  img {
+    background: #fff !important;
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Charts - ensure visibility */
+  .recharts-surface,
+  .recharts-wrapper svg {
+    background: #fff !important;
+  }
+
+  /* Stats cards */
+  .stat-card {
+    border: 1px solid #ddd !important;
+    padding: 0.5cm !important;
+    margin-bottom: 0.3cm;
+  }
+
+  /* Hide FAB and floating elements */
+  [class*="fixed"],
+  [class*="z-50"],
+  [class*="floating"] {
+    display: none !important;
+  }
+
+  /* Print header */
+  .print-header {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 1cm;
+    border-bottom: 2px solid #000;
+    padding-bottom: 0.5cm;
+  }
+
+  .print-footer {
+    display: block !important;
+    text-align: center;
+    margin-top: 1cm;
+    border-top: 1px solid #ddd;
+    padding-top: 0.5cm;
+    font-size: 8pt;
+    color: #666;
+  }
+
+  /* Optimize typography */
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Charts legend */
+  .recharts-legend-wrapper {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Ensure proper spacing between sections */
+  section,
+  article,
+  .section {
+    page-break-before: auto;
+    page-break-after: auto;
+    margin-bottom: 0.5cm;
+  }
+
+  /* Force chart visibility */
+  .recharts-cartesian-grid,
+  .recharts-line,
+  .recharts-area {
+    stroke: #000 !important;
+    fill: none !important;
+  }
+
+  .recharts-pie {
+    stroke: #fff !important;
+    stroke-width: 1px !important;
+  }
+}
+
+/* Print button styles (visible on screen only) */
+@media screen {
+  .print-only {
+    display: none;
+  }
+
+  .print-button {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 40;
+    padding: 12px 24px;
+    background: #171717;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .print-button:hover {
+    background: #262626;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .print-button:active {
+    transform: translateY(0);
+  }
+}
