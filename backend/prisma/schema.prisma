@@ -148,7 +148,6 @@ model User {
   sharedWithDocuments      DocumentShare[]         @relation("SharedWithUser")
   generatedReports         GeneratedReport[]       @relation("GeneratedReportCreator")
   inspections              Inspection[]
-  invoices                 Invoice[]
   uploadedMedia            MediaFile[]
   notifications            Notification[]
   notificationPreference   NotificationPreference?
@@ -273,6 +272,7 @@ model Customer {
   inspections       Inspection[]
   orders            Order[]
   workOrders        WorkOrder[]
+  invoices          Invoice[]
   // Accounting relations
   checks            Check[]
   promissoryNotes   PromissoryNote[]
@@ -1092,7 +1092,7 @@ model Invoice {
   // accountCardId    Int?  // TODO: Add migration for Cloud SQL
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
-  customer         User              @relation(fields: [customerId], references: [id])
+  customer         Customer          @relation(fields: [customerId], references: [id])
   order            Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
   // accountCard      AccountCard?      @relation("AccountCardInvoices", fields: [accountCardId], references: [id])
   items            InvoiceItem[]
