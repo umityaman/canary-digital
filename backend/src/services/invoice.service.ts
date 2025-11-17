@@ -384,9 +384,10 @@ export class InvoiceService {
         throw new Error('Order not found');
       }
 
-      // Get customer's Paraşüt contact ID
+      // Get customer's Paraşüt contact ID and email
       const customer = await p.customer.findUnique({ where: { id: order.customerId } });
       const parasutContactIdFromCustomer = customer?.parasutContactId;
+      const customerEmail = customer?.email;
 
       if (!parasutContactIdFromCustomer) {
         throw new Error('Customer not found in Paraşüt');
@@ -435,7 +436,9 @@ export class InvoiceService {
       });
 
       // e-Arşiv gönder
-  await parasutClient.sendInvoice(parasutInvoice.id, order.customer.email);
+      if (customerEmail) {
+        await parasutClient.sendInvoice(parasutInvoice.id, customerEmail);
+      }
 
       log.info('Invoice Service: Gecikme cezası faturası oluşturuldu:', dbInvoice.id);
 
@@ -473,9 +476,10 @@ export class InvoiceService {
         throw new Error('Order not found');
       }
 
-      // Get customer's Paraşüt contact ID
+      // Get customer's Paraşüt contact ID and email
       const depositCustomer = await p.customer.findUnique({ where: { id: order.customerId } });
       const parasutContactIdForDeposit = depositCustomer?.parasutContactId;
+      const depositCustomerEmail = depositCustomer?.email;
 
       if (!parasutContactIdForDeposit) {
         throw new Error('Customer not found in Paraşüt');
@@ -519,7 +523,9 @@ export class InvoiceService {
         },
       });
 
-      await parasutClient.sendInvoice(parasutInvoice.id, order.customer.email);
+      if (depositCustomerEmail) {
+        await parasutClient.sendInvoice(parasutInvoice.id, depositCustomerEmail);
+      }
 
       log.info('Invoice Service: Depozito iade faturası oluşturuldu:', dbInvoice.id);
 
