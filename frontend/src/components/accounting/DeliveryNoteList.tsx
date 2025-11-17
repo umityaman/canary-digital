@@ -51,73 +51,58 @@ export default function DeliveryNoteList() {
   const loadDeliveryNotes = async () => {
     setLoading(true)
     try {
-      // Mock data - ger�ek API geldi�inde de�i�tirilecek
-      const mockData: DeliveryNote[] = [
-        {
-          id: 1,
-          deliveryNumber: 'IRS-2024-001',
-          orderId: 1,
-          orderNumber: 'ORD-2024-001',
-          customerId: 2,
-          customerName: 'ABC Prod�ksiyon',
-          deliveryDate: '2024-11-01',
-          deliveryAddress: 'Beyo�lu, �stanbul',
-          status: 'delivered',
-          invoiceId: 1,
-          invoiceNumber: 'INV-2024-001',
-          items: [
-            { description: 'Canon EOS 5D Mark IV', quantity: 2, unit: 'Adet' },
-            { description: 'Sony A7 III', quantity: 1, unit: 'Adet' }
-          ],
-          notes: 'Dikkatli ta��ns�n',
-          totalItems: 3,
-          createdAt: '2024-10-28'
-        },
-        {
-          id: 2,
-          deliveryNumber: 'IRS-2024-002',
-          orderId: 2,
-          orderNumber: 'ORD-2024-002',
-          customerId: 3,
-          customerName: 'XYZ Film',
-          deliveryDate: '2024-11-02',
-          deliveryAddress: 'Kad�k�y, �stanbul',
-          status: 'shipped',
-          invoiceId: null,
-          invoiceNumber: null,
-          items: [
-            { description: 'DJI Ronin 4D', quantity: 1, unit: 'Adet' },
-            { description: 'Tripod', quantity: 2, unit: 'Adet' }
-          ],
-          notes: null,
-          totalItems: 3,
-          createdAt: '2024-10-29'
-        },
-        {
-          id: 3,
-          deliveryNumber: 'IRS-2024-003',
-          orderId: null,
-          orderNumber: null,
-          customerId: 4,
-          customerName: 'Test M��teri',
-          deliveryDate: '2024-11-03',
-          deliveryAddress: '�i�li, �stanbul',
-          status: 'prepared',
-          invoiceId: null,
-          invoiceNumber: null,
-          items: [
-            { description: 'I��k Seti', quantity: 1, unit: 'Set' }
-          ],
-          notes: 'Ak�am teslimat',
-          totalItems: 1,
-          createdAt: '2024-10-30'
+      const token = localStorage.getItem('auth_token')
+      if (!token) {
+        toast.error('Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.')
+        return
+      }
+
+      const response = await fetch('/api/accounting/delivery-notes', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      ]
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to load delivery notes')
+      }
+
+      const data = await response.json()
+      const notes = data.data || data || []
       
-      setDeliveryNotes(mockData)
+      // Backend response mapping
+      const mappedNotes: DeliveryNote[] = notes.map((note: any) => ({
+        id: note.id,
+        deliveryNumber: note.deliveryNumber || `IRS-${note.id}`,
+        orderId: note.orderId,
+        orderNumber: note.order?.orderNumber || note.orderNumber,
+        customerId: note.customerId,
+        customerName: note.customer?.name || note.customerName || 'N/A',
+        deliveryDate: note.deliveryDate || note.createdAt,
+        deliveryAddress: note.deliveryAddress || note.customer?.address || 'N/A',
+        status: note.status || 'prepared',
+        invoiceId: note.invoiceId,
+        invoiceNumber: note.invoice?.invoiceNumber || note.invoiceNumber,
+        items: note.items || note.deliveryNoteItems?.map((item: any) => ({
+          description: item.description || item.equipment?.name || 'N/A',
+          quantity: item.quantity || 0,
+          unit: item.unit || 'Adet'
+        })) || [],
+        notes: note.notes,
+        totalItems: note.items?.length || note.deliveryNoteItems?.length || 0,
+        createdAt: note.createdAt
+      }))
+      
+      setDeliveryNotes(mappedNotes)
+      
+      if (mappedNotes.length === 0) {
+        toast('Henüz irsaliye kaydı bulunmuyor', { icon: 'ℹ️' })
+      }
     } catch (error: any) {
       console.error('Failed to load delivery notes:', error)
-      toast.error('�rsaliyeler y�klenemedi')
+      toast.error('İrsaliyeler yüklenemedi')
+      setDeliveryNotes([])
     } finally {
       setLoading(false)
     }
