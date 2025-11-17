@@ -47,7 +47,7 @@ export class InvoiceService {
       log.info('Invoice Service: Kiralama faturası oluşturuluyor...', { orderId });
 
       // Müşteri bilgilerini al
-      const customer = await p.user.findUnique({
+      const customer = await p.customer.findUnique({
         where: { id: customerId },
       });
 
@@ -85,7 +85,7 @@ export class InvoiceService {
 
         // Contact ID'yi veritabanına kaydet
         parasutContactId = parasutContact.id;
-        await p.user.update({
+        await p.customer.update({
           where: { id: customerId },
           data: { parasutContactId: parasutContact.id },
         });
@@ -384,7 +384,7 @@ export class InvoiceService {
       }
 
       const parasutContactIdFromCustomer = (order as any).customer?.parasutContactId
-        ?? (await p.user.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
+        ?? (await p.customer.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
 
       if (!parasutContactIdFromCustomer) {
         throw new Error('Customer not found in Paraşüt');
@@ -472,7 +472,7 @@ export class InvoiceService {
       }
 
       const parasutContactIdForDeposit = (order as any).customer?.parasutContactId
-        ?? (await p.user.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
+        ?? (await p.customer.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
 
       if (!parasutContactIdForDeposit) {
         throw new Error('Customer not found in Paraşüt');
