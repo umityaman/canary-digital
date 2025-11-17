@@ -46,31 +46,29 @@ export class InvoiceService {
     try {
       log.info('Invoice Service: Kiralama faturası oluşturuluyor...', { orderId });
 
-      // Müşteri bilgilerini al
-      console.log('🔍 DEBUG 2: Fetching customer', customerId);
-      const customer = await p.customer.findUnique({
-        where: { id: customerId },
-      });
-      console.log('🔍 DEBUG 3: Customer fetched', !!customer);
-
-      if (!customer) {
-        throw new Error('Customer not found');
-      }
-
       // Sipariş bilgilerini al (equipment relation is via orderItems -> equipment)
-      console.log('🔍 DEBUG 4: Fetching order', orderId);
+      console.log('🔍 DEBUG 2: Fetching order', orderId);
       const order = await p.order.findUnique({
         where: { id: orderId },
         include: {
           orderItems: { include: { equipment: true } },
-          customer: true, // Customer relation needed for email sending
+          customer: true, // Customer relation needed for email and parasut
         },
       });
-      console.log('🔍 DEBUG 5: Order fetched', !!order, 'hasCustomer?', !!order?.customer);
+      console.log('🔍 DEBUG 3: Order fetched', !!order, 'hasCustomer?', !!order?.customer);
 
       if (!order) {
         throw new Error('Order not found');
       }
+
+      if (!order.customer) {
+        throw new Error('Order has no customer relation');
+      }
+
+      // Use customer from order relation (not from parameter)
+      const customer = order.customer;
+      const actualCustomerId = order.customerId;
+      console.log('🔍 DEBUG 4: Using customer from order', actualCustomerId);
 
       // Paraşüt'te müşteri var mı kontrol et veya oluştur
       let parasutContactId = customer.parasutContactId;
@@ -168,7 +166,7 @@ export class InvoiceService {
       const dbInvoice = await p.invoice.create({
         data: {
           orderId,
-          customerId,
+          customerId: actualCustomerId,
           parasutInvoiceId,
           invoiceNumber,
           invoiceDate: parasutInvoice ? new Date(parasutInvoice.attributes.invoice_date) : startDate,
@@ -209,7 +207,7 @@ export class InvoiceService {
             invoiceId: dbInvoice.id,
             orderId: orderId,
             companyId: order.companyId,
-            performedBy: customerId, // TODO: Gerçek user ID'yi al
+            performedBy: actualCustomerId, // Using customer from order
             notes: `Fatura #${dbInvoice.invoiceNumber} - ${item.description}`,
           });
 
