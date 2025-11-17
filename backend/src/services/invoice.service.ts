@@ -163,6 +163,7 @@ export class InvoiceService {
       }
 
       // Veritabanına kaydet
+      console.log('🔍 DEBUG 5: Creating invoice with customerId:', actualCustomerId, 'orderId:', orderId);
       const dbInvoice = await p.invoice.create({
         data: {
           orderId,
