@@ -10,6 +10,7 @@ const p = prisma;
 interface CreateInvoiceParams {
   orderId: number;
   customerId: number;
+  userId?: number; // User performing the action (for stock movements)
   items: Array<{
     equipmentId: number;
     description: string;
@@ -41,7 +42,7 @@ export class InvoiceService {
    * Paraşüt'te otomatik olarak e-Fatura veya e-Arşiv oluşturur
    */
   async createRentalInvoice(params: CreateInvoiceParams) {
-    const { orderId, customerId, items, startDate, endDate, notes } = params;
+    const { orderId, customerId, userId, items, startDate, endDate, notes } = params;
 
     try {
       log.info('Invoice Service: Kiralama faturası oluşturuluyor...', { orderId });
@@ -208,7 +209,7 @@ export class InvoiceService {
             invoiceId: dbInvoice.id,
             orderId: orderId,
             companyId: order.companyId,
-            performedBy: actualCustomerId, // Using customer from order
+            performedBy: userId, // User ID from auth (NOT customer ID)
             notes: `Fatura #${dbInvoice.invoiceNumber} - ${item.description}`,
           });
 

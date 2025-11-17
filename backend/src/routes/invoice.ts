@@ -160,6 +160,8 @@ router.get('/', authenticateToken, async (req, res) => {
 router.post('/rental', authenticateToken, async (req, res) => {
   try {
     const { orderId, customerId, items, startDate, endDate, notes } = req.body;
+    const authReq = req as AuthRequest;
+    const userId = authReq.user?.userId;
 
     // Validation
     if (!orderId || !customerId || !items || !startDate || !endDate) {
@@ -179,6 +181,7 @@ router.post('/rental', authenticateToken, async (req, res) => {
     const invoice = await invoiceService.createRentalInvoice({
       orderId: parseInt(orderId),
       customerId: parseInt(customerId),
+      userId: userId, // Add userId for performedBy
       items: items.map((item: any) => ({
         equipmentId: parseInt(item.equipmentId),
         description: item.description,
