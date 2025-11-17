@@ -198,4 +198,27 @@
 
 ---
 
-**Test Incomplete:** Cannot proceed with Invoice → StockMovement → JournalEntry testing until invoice API is deployed.
+## 🚀 Deployment Actions Taken
+
+**Date:** 2025-11-17 14:30  
+**Action:** Backend v0.1.2 deployed to production
+
+**Changes:**
+- Backend version bumped to trigger GitHub Actions deployment
+- Commit: `031b162` - "chore(backend): Bump version to 0.1.2 - trigger production deployment"
+- Workflow: `.github/workflows/deploy-backend-v2.yml`
+- Target: Cloud Run service `canary-backend` (europe-west1)
+
+**Expected Fix:**
+- Invoice routes (`/api/invoices`) should now be available in production
+- All 60+ routes properly initialized including accounting routes
+
+**Verification Pending:**
+Once deployment completes (~5-10 minutes), re-test:
+1. `POST /api/invoices` - Invoice creation
+2. `GET /api/invoices` - Invoice listing
+3. Full entity flow: Order → Invoice → StockMovement → JournalEntry
+
+---
+
+**Test Status:** Blocked - Waiting for production deployment to complete

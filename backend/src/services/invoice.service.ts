@@ -180,14 +180,25 @@ export class InvoiceService {
 
       log.info('Invoice Service: Fatura veritabanına kaydedildi:', dbInvoice.id);
 
+      // 🔥 DEBUG: Order objesi kontrolü
+      console.log('🔍 DEBUG order object:', JSON.stringify({
+        orderNumber: order.orderNumber,
+        customerId: order.customerId,
+        companyId: order.companyId,
+        hasCustomer: !!order.customer,
+        customerEmail: order.customer?.email
+      }, null, 2));
+
       // 🔥 CRITICAL: Stok hareketi kayıtlarını oluştur (otomatik)
       log.info('Invoice Service: Stok hareketleri kaydediliyor...', { 
         invoiceId: dbInvoice.id, 
         itemCount: items.length 
       });
 
+      console.log('🔍 DEBUG: About to call stockMovementService.recordSale');
       try {
         for (const item of items) {
+          console.log('🔍 DEBUG: Calling recordSale for item:', item.equipmentId);
           await stockMovementService.recordSale({
             equipmentId: item.equipmentId,
             quantity: item.quantity,
