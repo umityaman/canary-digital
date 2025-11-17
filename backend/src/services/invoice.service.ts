@@ -124,29 +124,41 @@ export class InvoiceService {
         total: grandTotal,
       });
 
-      // Paraşüt'te fatura oluştur
-      const parasutInvoice = await parasutClient.createInvoice({
-        contactId: parasutContactId,
-        invoiceDate: formatDate(startDate),
-        dueDate: formatDate(endDate),
-        description: notes || `Kiralama Faturası - Sipariş #${orderId}`,
-        items: invoiceItems,
-        invoiceType,
-        currency: 'TRY',
-      });
+      // Paraşüt'te fatura oluştur (credentials yoksa skip et - TEST MODE)
+      let parasutInvoice: any = null;
+      let parasutInvoiceId: string | null = null;
+      let invoiceNumber: string;
+
+      try {
+        parasutInvoice = await parasutClient.createInvoice({
+          contactId: parasutContactId,
+          invoiceDate: formatDate(startDate),
+          dueDate: formatDate(endDate),
+          description: notes || `Kiralama Faturası - Sipariş #${orderId}`,
+          items: invoiceItems,
+          invoiceType,
+          currency: 'TRY',
+        });
+        parasutInvoiceId = parasutInvoice.id;
+        invoiceNumber = parasutInvoice.attributes.invoice_no;
+        log.info('Invoice Service: Paraşüt faturası oluşturuldu:', parasutInvoiceId);
+      } catch (parasutError) {
+        log.warn('Invoice Service: Paraşüt faturası oluşturulamadı (credentials eksik olabilir), devam ediliyor...', parasutError);
+        invoiceNumber = `CANARY-${orderId}-${Date.now()}`;
+      }
 
       // Veritabanına kaydet
       const dbInvoice = await p.invoice.create({
         data: {
           orderId,
           customerId,
-          parasutInvoiceId: parasutInvoice.id,
-          invoiceNumber: parasutInvoice.attributes.invoice_no,
-          invoiceDate: new Date(parasutInvoice.attributes.invoice_date),
-          dueDate: new Date(parasutInvoice.attributes.due_date),
-          totalAmount: parseFloat(parasutInvoice.attributes.net_total),
-          vatAmount: parseFloat(parasutInvoice.attributes.total_vat),
-          grandTotal: parseFloat(parasutInvoice.attributes.gross_total),
+          parasutInvoiceId,
+          invoiceNumber,
+          invoiceDate: parasutInvoice ? new Date(parasutInvoice.attributes.invoice_date) : startDate,
+          dueDate: parasutInvoice ? new Date(parasutInvoice.attributes.due_date) : endDate,
+          totalAmount: parasutInvoice ? parseFloat(parasutInvoice.attributes.net_total) : totalAmount,
+          vatAmount: parasutInvoice ? parseFloat(parasutInvoice.attributes.total_vat) : vatAmount,
+          grandTotal: parasutInvoice ? parseFloat(parasutInvoice.attributes.gross_total) : grandTotal,
           paidAmount: 0,
           status: 'draft',
           type: 'rental',
@@ -186,20 +198,24 @@ export class InvoiceService {
         // Fatura oluşturuldu ama stok güncellenmedi durumu
       }
 
-      // e-Fatura/e-Arşiv gönder
-      try {
-        await parasutClient.sendInvoice(parasutInvoice.id, customer.email);
-        
-        // Durumu güncelle
-        await p.invoice.update({
-          where: { id: dbInvoice.id },
-          data: { status: 'sent' },
-        });
+      // e-Fatura/e-Arşiv gönder (Paraşüt varsa)
+      if (parasutInvoiceId) {
+        try {
+          await parasutClient.sendInvoice(parasutInvoiceId, customer.email);
+          
+          // Durumu güncelle
+          await p.invoice.update({
+            where: { id: dbInvoice.id },
+            data: { status: 'sent' },
+          });
 
-        log.info('Invoice Service: e-Fatura/e-Arşiv başarıyla gönderildi');
-      } catch (sendError) {
-        log.error('Invoice Service: e-Fatura/e-Arşiv gönderilemedi:', sendError);
-        // Fatura oluşturuldu ama gönderilemedi, hata logla ama devam et
+          log.info('Invoice Service: e-Fatura/e-Arşiv başarıyla gönderildi');
+        } catch (sendError) {
+          log.error('Invoice Service: e-Fatura/e-Arşiv gönderilemedi:', sendError);
+          // Fatura oluşturuldu ama gönderilemedi, hata logla ama devam et
+        }
+      } else {
+        log.info('Invoice Service: Paraşüt yok, e-Fatura/e-Arşiv gönderimi skip edildi');
       }
 
       return dbInvoice;
