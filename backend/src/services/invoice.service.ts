@@ -384,8 +384,9 @@ export class InvoiceService {
         throw new Error('Order not found');
       }
 
-      const parasutContactIdFromCustomer = (order as any).customer?.parasutContactId
-        ?? (await p.customer.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
+      // Get customer's Paraşüt contact ID
+      const customer = await p.customer.findUnique({ where: { id: order.customerId } });
+      const parasutContactIdFromCustomer = customer?.parasutContactId;
 
       if (!parasutContactIdFromCustomer) {
         throw new Error('Customer not found in Paraşüt');
@@ -472,8 +473,9 @@ export class InvoiceService {
         throw new Error('Order not found');
       }
 
-      const parasutContactIdForDeposit = (order as any).customer?.parasutContactId
-        ?? (await p.customer.findUnique({ where: { id: order.customerId } }))?.parasutContactId;
+      // Get customer's Paraşüt contact ID
+      const depositCustomer = await p.customer.findUnique({ where: { id: order.customerId } });
+      const parasutContactIdForDeposit = depositCustomer?.parasutContactId;
 
       if (!parasutContactIdForDeposit) {
         throw new Error('Customer not found in Paraşüt');
