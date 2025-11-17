@@ -60,6 +60,7 @@ export class InvoiceService {
         where: { id: orderId },
         include: {
           orderItems: { include: { equipment: true } },
+          customer: true, // Customer relation needed for email sending
         },
       });
 
