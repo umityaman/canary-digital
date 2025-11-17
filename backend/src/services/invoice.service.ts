@@ -71,7 +71,10 @@ export class InvoiceService {
       // Paraşüt'te müşteri var mı kontrol et veya oluştur
       let parasutContactId = customer.parasutContactId;
 
-      if (!parasutContactId) {
+      // TEMP DEBUG: Skip Paraşüt if no credentials
+      const hasParasutCredentials = process.env.PARASUT_CLIENT_ID && process.env.PARASUT_CLIENT_SECRET;
+      
+      if (!parasutContactId && hasParasutCredentials) {
         log.info('Invoice Service: Müşteri Paraşüt\'te yok, oluşturuluyor...');
         
         try {
@@ -134,21 +137,26 @@ export class InvoiceService {
       let parasutInvoiceId: string | null = null;
       let invoiceNumber: string;
 
-      try {
-        parasutInvoice = await parasutClient.createInvoice({
-          contactId: parasutContactId,
-          invoiceDate: formatDate(startDate),
-          dueDate: formatDate(endDate),
-          description: notes || `Kiralama Faturası - Sipariş #${orderId}`,
-          items: invoiceItems,
-          invoiceType,
-          currency: 'TRY',
-        });
-        parasutInvoiceId = parasutInvoice.id;
-        invoiceNumber = parasutInvoice.attributes.invoice_no;
-        log.info('Invoice Service: Paraşüt faturası oluşturuldu:', parasutInvoiceId);
-      } catch (parasutError) {
-        log.warn('Invoice Service: Paraşüt faturası oluşturulamadı (credentials eksik olabilir), devam ediliyor...', parasutError);
+      if (hasParasutCredentials && parasutContactId) {
+        try {
+          parasutInvoice = await parasutClient.createInvoice({
+            contactId: parasutContactId,
+            invoiceDate: formatDate(startDate),
+            dueDate: formatDate(endDate),
+            description: notes || `Kiralama Faturası - Sipariş #${orderId}`,
+            items: invoiceItems,
+            invoiceType,
+            currency: 'TRY',
+          });
+          parasutInvoiceId = parasutInvoice.id;
+          invoiceNumber = parasutInvoice.attributes.invoice_no;
+          log.info('Invoice Service: Paraşüt faturası oluşturuldu:', parasutInvoiceId);
+        } catch (parasutError) {
+          log.warn('Invoice Service: Paraşüt faturası oluşturulamadı, devam ediliyor...', parasutError);
+          invoiceNumber = `CANARY-${orderId}-${Date.now()}`;
+        }
+      } else {
+        log.info('Invoice Service: Paraşüt credentials yok, local invoice oluşturuluyor...');
         invoiceNumber = `CANARY-${orderId}-${Date.now()}`;
       }
 
