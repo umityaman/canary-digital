@@ -6,6 +6,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 export interface AuthRequest extends Request {
   userId?: number
   companyId?: number
+  user?: {
+    id: number
+    userId: number
+    companyId: number
+    username?: string
+  }
 }
 
 export const authenticateToken = (
@@ -24,6 +30,13 @@ export const authenticateToken = (
     const decoded = jwt.verify(token, JWT_SECRET) as any
     req.userId = decoded.userId
     req.companyId = decoded.companyId
+    // Set req.user for backwards compatibility with routes expecting req.user
+    req.user = {
+      id: decoded.userId,
+      userId: decoded.userId,
+      companyId: decoded.companyId,
+      username: decoded.username
+    }
     next()
   } catch (error) {
     return res.status(403).json({ message: 'Geçersiz token' })
