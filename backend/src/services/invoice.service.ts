@@ -1,5 +1,5 @@
 import { parasutClient, formatDate } from '../config/parasut';
-import { prisma } from '../index';
+import { prisma } from '../lib/prisma';
 import { log } from '../config/logger';
 import stockMovementService from './stockMovementService';
 import journalEntryService from './journalEntryService';

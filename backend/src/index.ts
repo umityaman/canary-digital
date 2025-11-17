@@ -2,15 +2,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import app from './app';
-import { PrismaClient } from '@prisma/client';
 import { startAllSchedulers } from './services/scheduler';
 import { initializeTwilio } from './services/whatsapp.service';
 import logger from './config/logger';
 
-// Initialize Prisma Client
-export const prisma = new PrismaClient({
-  log: ['error', 'warn'],
-});
+// Re-export prisma for backward compatibility
+export { prisma } from './lib/prisma';
 
 const PORT = process.env.PORT || 4000;
 
