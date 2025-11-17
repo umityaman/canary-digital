@@ -47,15 +47,18 @@ export class InvoiceService {
       log.info('Invoice Service: Kiralama faturası oluşturuluyor...', { orderId });
 
       // Müşteri bilgilerini al
+      console.log('🔍 DEBUG 2: Fetching customer', customerId);
       const customer = await p.customer.findUnique({
         where: { id: customerId },
       });
+      console.log('🔍 DEBUG 3: Customer fetched', !!customer);
 
       if (!customer) {
         throw new Error('Customer not found');
       }
 
       // Sipariş bilgilerini al (equipment relation is via orderItems -> equipment)
+      console.log('🔍 DEBUG 4: Fetching order', orderId);
       const order = await p.order.findUnique({
         where: { id: orderId },
         include: {
@@ -63,6 +66,7 @@ export class InvoiceService {
           customer: true, // Customer relation needed for email sending
         },
       });
+      console.log('🔍 DEBUG 5: Order fetched', !!order, 'hasCustomer?', !!order?.customer);
 
       if (!order) {
         throw new Error('Order not found');
@@ -79,7 +83,7 @@ export class InvoiceService {
         
         try {
           const parasutContact = await parasutClient.createContact({
-            name: customer.fullName || customer.email,
+            name: customer.name || customer.email,
             email: customer.email,
             phone: customer.phone || undefined,
             taxOffice: customer.taxOffice || undefined,
