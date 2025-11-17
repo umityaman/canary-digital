@@ -200,10 +200,16 @@ router.post('/rental', authenticateToken, async (req, res) => {
       data: invoice,
     });
   } catch (error: any) {
-    log.error('Failed to create invoice:', error);
+    log.error('Failed to create invoice:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      error: error,
+    });
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to create invoice',
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
 });
