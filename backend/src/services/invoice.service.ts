@@ -74,24 +74,29 @@ export class InvoiceService {
       if (!parasutContactId) {
         log.info('Invoice Service: Müşteri Paraşüt\'te yok, oluşturuluyor...');
         
-        const parasutContact = await parasutClient.createContact({
-          name: customer.fullName || customer.email,
-          email: customer.email,
-          phone: customer.phone || undefined,
-          taxOffice: customer.taxOffice || undefined,
-          taxNumber: customer.taxNumber || undefined,
-          address: customer.address || undefined,
-          contactType: customer.taxNumber ? 'company' : 'person',
-        });
+        try {
+          const parasutContact = await parasutClient.createContact({
+            name: customer.fullName || customer.email,
+            email: customer.email,
+            phone: customer.phone || undefined,
+            taxOffice: customer.taxOffice || undefined,
+            taxNumber: customer.taxNumber || undefined,
+            address: customer.address || undefined,
+            contactType: customer.taxNumber ? 'company' : 'person',
+          });
 
-        // Contact ID'yi veritabanına kaydet
-        parasutContactId = parasutContact.id;
-        await p.customer.update({
-          where: { id: customerId },
-          data: { parasutContactId: parasutContact.id },
-        });
+          // Contact ID'yi veritabanına kaydet
+          parasutContactId = parasutContact.id;
+          await p.customer.update({
+            where: { id: customerId },
+            data: { parasutContactId: parasutContact.id },
+          });
 
-        log.info('Invoice Service: Müşteri Paraşüt\'te oluşturuldu:', parasutContactId);
+          log.info('Invoice Service: Müşteri Paraşüt\'te oluşturuldu:', parasutContactId);
+        } catch (contactError) {
+          log.warn('Invoice Service: Paraşüt contact oluşturulamadı (credentials eksik), devam ediliyor...', contactError);
+          // parasutContactId null kalacak, invoice oluşturulabilir
+        }
       }
 
       // Fatura kalemlerini hazırla
