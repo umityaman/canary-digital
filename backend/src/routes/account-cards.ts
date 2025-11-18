@@ -1,15 +1,16 @@
 import express from 'express'
 import { PrismaClient } from '@prisma/client'
-import { authenticateToken } from '../middleware/auth'
+import { authenticateToken, AuthRequest } from '../middleware/auth'
 
 const router = express.Router()
 const prisma = new PrismaClient()
 
 // Get all account cards with filters
-router.get('/', authenticateToken, async (req: any, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
+    const authReq = req as AuthRequest
     const { type, isActive, search, page = 1, limit = 50 } = req.query
-    const companyId = req.user.companyId
+    const companyId = authReq.user?.companyId || 1
 
     const where: any = { companyId }
 
@@ -70,10 +71,10 @@ router.get('/', authenticateToken, async (req: any, res) => {
 })
 
 // Get single account card with details
-router.get('/:id', authenticateToken, async (req: any, res) => {
+router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params
-    const companyId = req.user.companyId
+    const authReq = req as AuthRequest; const companyId = authReq.user?.companyId || 1
 
     const accountCard = await prisma.accountCard.findFirst({
       where: { id: parseInt(id), companyId },
@@ -110,10 +111,10 @@ router.get('/:id', authenticateToken, async (req: any, res) => {
 })
 
 // Create account card
-router.post('/', authenticateToken, async (req: any, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
-    const companyId = req.user.companyId
-    const userId = req.user.id
+    const authReq = req as AuthRequest; const companyId = authReq.user?.companyId || 1
+    const userId = authReq.user?.userId || 1
 
     const {
       code,
@@ -190,10 +191,10 @@ router.post('/', authenticateToken, async (req: any, res) => {
 })
 
 // Update account card
-router.put('/:id', authenticateToken, async (req: any, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params
-    const companyId = req.user.companyId
+    const authReq = req as AuthRequest; const companyId = authReq.user?.companyId || 1
 
     const accountCard = await prisma.accountCard.findFirst({
       where: { id: parseInt(id), companyId }
@@ -219,10 +220,10 @@ router.put('/:id', authenticateToken, async (req: any, res) => {
 })
 
 // Delete account card (soft delete - set isActive to false)
-router.delete('/:id', authenticateToken, async (req: any, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params
-    const companyId = req.user.companyId
+    const authReq = req as AuthRequest; const companyId = authReq.user?.companyId || 1
 
     const accountCard = await prisma.accountCard.findFirst({
       where: { id: parseInt(id), companyId }
@@ -245,11 +246,11 @@ router.delete('/:id', authenticateToken, async (req: any, res) => {
 })
 
 // Get account card transactions
-router.get('/:id/transactions', authenticateToken, async (req: any, res) => {
+router.get('/:id/transactions', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params
     const { page = 1, limit = 50, startDate, endDate, type } = req.query
-    const companyId = req.user.companyId
+    const authReq = req as AuthRequest; const companyId = authReq.user?.companyId || 1
 
     const accountCard = await prisma.accountCard.findFirst({
       where: { id: parseInt(id), companyId }
@@ -303,11 +304,11 @@ router.get('/:id/transactions', authenticateToken, async (req: any, res) => {
 })
 
 // Add transaction to account card
-router.post('/:id/transactions', authenticateToken, async (req: any, res) => {
+router.post('/:id/transactions', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params
-    const companyId = req.user.companyId
-    const userId = req.user.id
+    const authReq = req as AuthRequest; const companyId = authReq.user?.companyId || 1
+    const userId = authReq.user?.userId || 1
 
     const accountCard = await prisma.accountCard.findFirst({
       where: { id: parseInt(id), companyId }
@@ -359,10 +360,10 @@ router.post('/:id/transactions', authenticateToken, async (req: any, res) => {
 })
 
 // Get account card summary/stats
-router.get('/:id/summary', authenticateToken, async (req: any, res) => {
+router.get('/:id/summary', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params
-    const companyId = req.user.companyId
+    const authReq = req as AuthRequest; const companyId = authReq.user?.companyId || 1
 
     const accountCard = await prisma.accountCard.findFirst({
       where: { id: parseInt(id), companyId }
