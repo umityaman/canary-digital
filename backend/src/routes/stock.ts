@@ -1,8 +1,10 @@
 import { Router, Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
 import stockMovementService from '../services/stockMovementService';
 import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
+const prisma = new PrismaClient();
 
 // All routes require authentication
 router.use(authenticateToken);
@@ -147,6 +149,51 @@ router.post('/adjust', async (req: Request, res: Response) => {
       data: movement
     });
   } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/stock/movements
+ * Get all stock movements (with optional filters)
+ */
+router.get('/movements', async (req: Request, res: Response) => {
+  try {
+    const user = req.user as any;
+    const companyId = user?.companyId || 1; // Default to company 1
+    const { movementType, startDate, endDate, limit, offset } = req.query;
+    
+    const where: any = { companyId };
+    if (movementType) where.movementType = movementType as string;
+    if (startDate || endDate) {
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate as string);
+      if (endDate) where.createdAt.lte = new Date(endDate as string);
+    }
+
+    const movements = await prisma.stockMovement.findMany({
+      where,
+      include: {
+        equipment: { select: { id: true, name: true, code: true } },
+        invoice: { select: { id: true, invoiceNumber: true, status: true } },
+        order: { select: { id: true, orderNumber: true } },
+        user: { select: { id: true, name: true, email: true } }
+      },
+      orderBy: { createdAt: 'desc' },
+      take: limit ? parseInt(limit as string) : 50,
+      skip: offset ? parseInt(offset as string) : 0
+    });
+
+    res.json({
+      success: true,
+      data: movements,
+      count: movements.length
+    });
+  } catch (error: any) {
+    console.error('❌ GET /api/stock/movements error:', error);
     res.status(400).json({
       success: false,
       error: error.message

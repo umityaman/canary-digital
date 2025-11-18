@@ -93,8 +93,8 @@ export default function InventoryAccounting() {
   const loadInventoryTransactions = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const token = localStorage.getItem('auth_token');
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
       
       const response = await fetch(`${API_URL}/api/stock/movements`, {
         headers: {
@@ -108,34 +108,38 @@ export default function InventoryAccounting() {
       }
 
       const data = await response.json();
+      console.log('📦 Stock movements API response:', data);
       
       // Backend response'u frontend formatına dönüştür
-      const transactions: InventoryTransaction[] = data.movements?.map((movement: any) => ({
-        id: movement.id.toString(),
-        date: new Date(movement.createdAt).toISOString().split('T')[0],
-        type: mapMovementType(movement.movementType, movement.movementReason),
-        equipmentId: movement.equipmentId?.toString() || '',
-        equipmentName: movement.equipment?.name || 'Bilinmeyen Ekipman',
-        quantity: movement.quantity,
-        unitCost: movement.equipment?.dailyRate || 0,
-        totalCost: movement.quantity * (movement.equipment?.dailyRate || 0),
-        orderId: movement.orderId?.toString(),
-        orderNumber: movement.order?.orderNumber,
-        customerId: movement.order?.customerId?.toString(),
-        customerName: movement.order?.customer?.fullName,
-        accountingStatus: movement.invoiceId ? 'recorded' : 'pending',
-        accountingEntryId: movement.id.toString(),
-        notes: movement.notes || ''
-      })) || [];
+      const movements = data.data || data.movements || [];
+      const transactions: InventoryTransaction[] = movements.map((movement: any) => {
+        // Muhasebe durumunu belirle: Fatura "paid" veya "completed" ise "recorded", değilse "pending"
+        const invoiceStatus = movement.invoice?.status?.toLowerCase();
+        const isPaid = invoiceStatus === 'paid' || invoiceStatus === 'completed';
+        
+        return {
+          id: movement.id.toString(),
+          date: new Date(movement.createdAt).toISOString().split('T')[0],
+          type: mapMovementType(movement.movementType, movement.movementReason),
+          equipmentId: movement.equipmentId?.toString() || '',
+          equipmentName: movement.equipment?.name || 'Bilinmeyen Ekipman',
+          quantity: movement.quantity,
+          unitCost: movement.equipment?.dailyRate || 0,
+          totalCost: movement.quantity * (movement.equipment?.dailyRate || 0),
+          orderId: movement.orderId?.toString(),
+          orderNumber: movement.order?.orderNumber,
+          customerId: movement.order?.customerId?.toString(),
+          customerName: movement.order?.customer?.fullName,
+          accountingStatus: isPaid ? 'recorded' : 'pending',
+          accountingEntryId: movement.id.toString(),
+          notes: movement.notes || ''
+        };
+      }) || [];
 
       setInventoryTransactions(transactions);
     } catch (error) {
       console.error('Stok hareketleri yüklenirken hata:', error);
-      toast({
-        title: 'Hata',
-        description: 'Stok hareketleri yüklenemedi',
-        variant: 'destructive',
-      });
+      toast.error('Stok hareketleri yüklenemedi');
     } finally {
       setLoading(false);
     }
@@ -829,56 +833,85 @@ export default function InventoryAccounting() {
 
       {/* Recorded View */}
       {activeView === 'recorded' && (
-        <div className={cx(card('sm', 'none', 'default', 'lg'))}>
-          <div className="px-4 py-3 border-b border-neutral-200">
-            <h3 className="text-sm font-semibold text-neutral-900">Muhasebe Kayıtları ({accountingEntries.length})</h3>
-          </div>
-
-          <div className="divide-y divide-neutral-100">
-            {accountingEntries.map((entry) => {
-              const transaction = inventoryTransactions.find(t => t.id === entry.inventoryTransactionId)
-              return (
-                <div key={entry.id} className="p-4 hover:bg-neutral-50 transition-colors">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="font-medium text-neutral-900 mb-1">{entry.description}</div>
-                      <div className="text-sm text-neutral-600">{formatDate(entry.date)}</div>
-                    </div>
-                    <div className="text-right ml-4">
-                      <div className="text-lg font-bold text-neutral-900">{formatCurrency(entry.amount)}</div>
-                      <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full">
-                        {entry.status === 'posted' ? 'Aktarıldı' : 'Taslak'}
+        <div className="space-y-3">
+          {filteredTransactions.filter(t => t.accountingStatus === 'recorded').map((transaction) => (
+            <div key={transaction.id} className={cx(card('sm', 'md', 'default', 'lg'))}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="p-2 bg-green-50 rounded-lg">
+                    {getTypeIcon(transaction.type)}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-semibold text-neutral-900">{transaction.equipmentName}</h4>
+                      <span className={cx(
+                        badge(),
+                        transaction.accountingStatus === 'recorded' ? 'bg-green-50 text-green-700' :
+                        transaction.accountingStatus === 'pending' ? 'bg-yellow-50 text-yellow-700' :
+                        'bg-red-50 text-red-700'
+                      )}>
+                        {transaction.accountingStatus === 'recorded' ? 'Kaydedildi' :
+                         transaction.accountingStatus === 'pending' ? 'Beklemede' : 'Hata'}
                       </span>
                     </div>
+                    <div className="text-sm text-neutral-600 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Calendar size={14} />
+                        <span>{formatDate(transaction.date)}</span>
+                        <span className="text-neutral-400">•</span>
+                        <span className="capitalize">{transaction.type}</span>
+                      </div>
+                      {transaction.customerName && (
+                        <div className="flex items-center gap-2">
+                          <User size={14} />
+                          <span>{transaction.customerName}</span>
+                          {transaction.orderNumber && (
+                            <>
+                              <span className="text-neutral-400">•</span>
+                              <span className="font-mono text-xs">{transaction.orderNumber}</span>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div className="flex items-center gap-2 text-sm">
-                      <TrendingUp className="text-neutral-900" size={16} />
-                      <span className="text-neutral-600">Borç:</span>
-                      <span className="font-medium text-neutral-900">{entry.debitAccount}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <TrendingDown className="text-neutral-900" size={16} />
-                      <span className="text-neutral-600">Alacak:</span>
-                      <span className="font-medium text-neutral-900">{entry.creditAccount}</span>
-                    </div>
-                  </div>
-
-                  {transaction && (
-                    <div className="mt-3 pt-3 border-t border-neutral-100 text-xs text-neutral-500">
-                      İşlem Ref: {transaction.id} • {transaction.equipmentName}
-                    </div>
-                  )}
                 </div>
-              )
-            })}
-          </div>
+                <div className="text-right">
+                  <div className="text-lg font-bold text-neutral-900">{formatCurrency(transaction.totalCost)}</div>
+                  <div className="text-xs text-neutral-500">
+                    {transaction.quantity} x {formatCurrency(transaction.unitCost)}
+                  </div>
+                </div>
+              </div>
 
-          {accountingEntries.length === 0 && (
-            <div className="p-12 text-center text-neutral-600">
+              {transaction.notes && (
+                <div className="text-sm text-neutral-600 mb-3 p-2 bg-neutral-50 rounded">
+                  {transaction.notes}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
+                <div className="text-sm text-neutral-500">
+                  Kayıt No: #{transaction.accountingEntryId}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => console.log('View details:', transaction.id)}
+                    className={cx(button('sm', 'outline'))}
+                  >
+                    <FileText size={16} />
+                    <span>Detay</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {filteredTransactions.filter(t => t.accountingStatus === 'recorded').length === 0 && (
+            <div className={cx(card('sm', 'lg', 'default', 'lg'), 'text-center')}>
               <FileText className="mx-auto mb-4 text-neutral-400" size={48} />
-              <p>Henüz muhasebe kaydı yok</p>
+              <p className="text-lg font-medium text-neutral-900">Henüz kaydedilmiş işlem yok</p>
+              <p className="text-sm text-neutral-600 mt-2">Bekleyen işlemleri "Kaydet" butonu ile kaydedebilirsiniz</p>
             </div>
           )}
         </div>
