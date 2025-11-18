@@ -348,17 +348,29 @@ export class InvoiceService {
         where: { id: invoiceId },
       });
 
-      if (!invoice || !invoice.parasutInvoiceId) {
+      if (!invoice) {
         throw new Error('Invoice not found');
       }
 
-      // Paraşüt'te ödeme kaydet
-      const parasutPayment = await parasutClient.recordPayment({
-        invoiceId: invoice.parasutInvoiceId,
-        amount: paymentData.amount,
-        date: formatDate(paymentData.paymentDate),
-        description: `${paymentData.paymentMethod} ile ödeme${paymentData.notes ? ` - ${paymentData.notes}` : ''}`,
-      });
+      // Paraşüt'te ödeme kaydet (eğer varsa)
+      let parasutPaymentId = null;
+      if (invoice.parasutInvoiceId && hasParasutCredentials) {
+        try {
+          const parasutPayment = await parasutClient.recordPayment({
+            invoiceId: invoice.parasutInvoiceId,
+            amount: paymentData.amount,
+            date: formatDate(paymentData.paymentDate),
+            description: `${paymentData.paymentMethod} ile ödeme${paymentData.notes ? ` - ${paymentData.notes}` : ''}`,
+          });
+          parasutPaymentId = parasutPayment.id;
+          log.info('Invoice Service: Paraşüt\'te ödeme kaydedildi');
+        } catch (parasutError) {
+          log.error('Invoice Service: Paraşüt ödeme kaydı başarısız (devam ediliyor):', parasutError);
+          // Paraşüt hatası ödeme işlemini iptal etmemeli
+        }
+      } else {
+        log.info('Invoice Service: Paraşüt yok, local ödeme kaydı oluşturuluyor');
+      }
 
       // Veritabanına kaydet
       const payment = await p.payment.create({
@@ -368,7 +380,7 @@ export class InvoiceService {
           paymentDate: paymentData.paymentDate,
           paymentMethod: paymentData.paymentMethod,
           transactionId: paymentData.transactionId,
-          parasutPaymentId: parasutPayment.id,
+          parasutPaymentId: parasutPaymentId,
         },
       });
 
