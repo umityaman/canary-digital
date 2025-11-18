@@ -1,6 +1,6 @@
 {
   "name": "canary-backend",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "private": true,
   "main": "dist/index.js",
   "scripts": {

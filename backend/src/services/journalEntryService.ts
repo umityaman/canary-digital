@@ -124,7 +124,7 @@ export class JournalEntryService {
       // Yevmiye fişini oluştur
       const journalEntry = await prisma.journalEntry.create({
         data: {
-          companyId: params.companyId,
+          company: { connect: { id: params.companyId } },
           entryNumber,
           entryDate: params.entryDate,
           entryType: params.entryType,
@@ -133,7 +133,7 @@ export class JournalEntryService {
           totalCredit: totalCredit,
           reference: params.reference,
           // referenceId: params.referenceId, // FIXED: Field doesn't exist in JournalEntry schema
-          createdBy: params.createdBy,
+          creator: { connect: { id: params.createdBy || 1 } }, // Default to user 1 if not provided
           journalEntryItems: {
             create: itemsWithAccountIds.map((item, index) => ({
               accountCode: item.accountCode!, // FIXED: Field is accountCode not accountId
