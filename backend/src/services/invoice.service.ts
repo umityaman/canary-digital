@@ -226,6 +226,30 @@ export class InvoiceService {
         // Fatura oluşturuldu ama stok güncellenmedi durumu
       }
 
+      // 🔥 CRITICAL: Muhasebe fişi oluştur (otomatik)
+      log.info('Invoice Service: Muhasebe fişi kaydediliyor...', {
+        invoiceId: dbInvoice.id,
+        totalAmount: dbInvoice.totalAmount,
+        vatAmount: dbInvoice.vatAmount,
+      });
+
+      try {
+        await journalEntryService.createInvoiceEntry(
+          dbInvoice.id,
+          order.companyId,
+          actualCustomerId,
+          dbInvoice.grandTotal, // Total with VAT
+          dbInvoice.vatAmount,
+          dbInvoice.invoiceNumber
+        );
+
+        log.info('Invoice Service: Muhasebe fişi başarıyla kaydedildi');
+      } catch (journalError: any) {
+        log.error('Invoice Service: Muhasebe fişi kaydedilemedi:', journalError);
+        // Journal hatası fatura işlemini iptal etmemeli, sadece logla
+        // Fatura ve stok oluşturuldu ama muhasebe kaydı yapılamadı durumu
+      }
+
       // e-Fatura/e-Arşiv gönder (Paraşüt varsa)
       if (parasutInvoiceId) {
         try {
