@@ -346,11 +346,18 @@ export class InvoiceService {
 
       const invoice = await p.invoice.findUnique({
         where: { id: invoiceId },
+        include: {
+          order: {
+            select: { companyId: true }
+          }
+        }
       });
 
       if (!invoice) {
         throw new Error('Invoice not found');
       }
+      
+      const companyId = invoice.order?.companyId || 1; // Default to company 1
 
       // Paraşüt'te ödeme kaydet (eğer varsa)
       let parasutPaymentId = null;
@@ -412,7 +419,7 @@ export class InvoiceService {
         await journalEntryService.createPaymentEntry(
           payment.id,
           invoiceId,
-          invoice.companyId,
+          companyId,
           invoice.customerId,
           paymentData.amount,
           paymentData.paymentMethod,
