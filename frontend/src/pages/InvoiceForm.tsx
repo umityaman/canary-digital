@@ -539,13 +539,13 @@ const InvoiceForm: React.FC = () => {
 
             {/* Table Header */}
             <div className="grid grid-cols-13 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700 uppercase">
-              <div className="col-span-4">HİZMET / ÜRÜN</div>
+              <div className="col-span-3">HİZMET / ÜRÜN</div>
               <div className="col-span-1 text-center">MİKTAR</div>
               <div className="col-span-1 text-center">BİRİM</div>
               <div className="col-span-2 text-center">BR. FİYAT</div>
               <div className="col-span-2 text-center">VERGİ</div>
               <div className="col-span-2 text-right">TOPLAM</div>
-              <div className="col-span-1 text-center"></div>
+              <div className="col-span-2 text-center"></div>
             </div>
 
             <div className="space-y-2">
@@ -553,7 +553,7 @@ const InvoiceForm: React.FC = () => {
                 <div key={item.id} className="border border-neutral-200 rounded-lg p-3">
                   <div className="grid grid-cols-13 gap-2 items-start">
                     {/* Service/Product Description */}
-                    <div className="col-span-4">
+                    <div className="col-span-3">
                       <div className="relative">
                         <input
                           type="text"
