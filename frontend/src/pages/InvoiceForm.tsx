@@ -543,8 +543,8 @@ const InvoiceForm: React.FC = () => {
               <div className="col-span-1 text-center">MİKTAR</div>
               <div className="col-span-1 text-center">BİRİM</div>
               <div className="col-span-2 text-center">BR. FİYAT</div>
-              <div className="col-span-1 text-center">VERGİ</div>
-              <div className="col-span-2 text-right">TOPLAM</div>
+              <div className="col-span-2 text-center">VERGİ</div>
+              <div className="col-span-1 text-right">TOPLAM</div>
               <div className="col-span-1 text-center"></div>
             </div>
 
@@ -617,14 +617,13 @@ const InvoiceForm: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Tax (VERGİ) - KDV label + percentage dropdown */}
-                    <div className="col-span-1">
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-neutral-600 font-medium">KDV</span>
+                    {/* Tax (VERGİ) - KDV inside frame */}
+                    <div className="col-span-2">
+                      <div className="relative">
                         <select
                           value={item.taxRate}
                           onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
-                          className="flex-1 px-1 py-1.5 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs"
+                          className="w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs"
                         >
                           <option value="20">%20</option>
                           <option value="10">%10</option>
@@ -632,11 +631,12 @@ const InvoiceForm: React.FC = () => {
                           <option value="1">%1</option>
                           <option value="0">%0</option>
                         </select>
+                        <span className="absolute left-3 top-2.5 text-neutral-600 text-xs font-medium">KDV</span>
                       </div>
                     </div>
 
                     {/* Total */}
-                    <div className="col-span-2">
+                    <div className="col-span-1">
                       <div className="relative">
                         <input
                           type="text"
