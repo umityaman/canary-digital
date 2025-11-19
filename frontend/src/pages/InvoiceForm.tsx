@@ -639,9 +639,18 @@ const InvoiceForm: React.FC = () => {
                     </div>
 
                     {/* Total */}
-                    <div className="col-span-2 text-right">
-                      <div className="text-sm font-medium text-neutral-900">
-                        {item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
+                    <div className="col-span-2">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(',', '.');
+                            handleItemChange(item.id, 'grandTotal', parseFloat(val) || 0);
+                          }}
+                          className="w-full pl-3 pr-8 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
+                        />
+                        <span className="absolute right-3 top-2.5 text-neutral-500 text-sm">₺</span>
                       </div>
                     </div>
 
