@@ -63,6 +63,14 @@ jobs:
           rm -rf node_modules/.vite
           echo "Build artifacts cleaned"
       
+      - name: Build Frontend
+        run: |
+          cd frontend
+          echo "Building frontend with Vite..."
+          npm run build
+          echo "✅ Frontend build completed"
+          ls -la dist/ || echo "❌ dist folder not found!"
+      
       - name: Verify .dockerignore exists
         run: |
           cd frontend
