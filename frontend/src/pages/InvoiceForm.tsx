@@ -543,8 +543,8 @@ const InvoiceForm: React.FC = () => {
               <div className="col-span-1 text-center">MİKTAR</div>
               <div className="col-span-1 text-center">BİRİM</div>
               <div className="col-span-2 text-center">BR. FİYAT</div>
-              <div className="col-span-1 text-center">VERGİ</div>
-              <div className="col-span-2 text-right">TOPLAM</div>
+              <div className="col-span-2 text-center">VERGİ</div>
+              <div className="col-span-1 text-right">TOPLAM</div>
               <div className="col-span-1 text-center"></div>
             </div>
 
@@ -618,7 +618,7 @@ const InvoiceForm: React.FC = () => {
                     </div>
 
                     {/* Tax (VERGİ) - Two dropdowns: type + rate */}
-                    <div className="col-span-1">
+                    <div className="col-span-2">
                       <div className="flex gap-1">
                         <select className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs">
                           <option value="KDV">KDV</option>
@@ -639,7 +639,7 @@ const InvoiceForm: React.FC = () => {
                     </div>
 
                     {/* Total */}
-                    <div className="col-span-2">
+                    <div className="col-span-1">
                       <div className="relative">
                         <input
                           type="text"
