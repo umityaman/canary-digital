@@ -538,41 +538,50 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700">
-              <div className="col-span-3">HİZMET / ÜRÜN</div>
+            <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700 uppercase">
+              <div className="col-span-4">HİZMET / ÜRÜN</div>
               <div className="col-span-1 text-center">MİKTAR</div>
               <div className="col-span-1 text-center">BİRİM</div>
-              <div className="col-span-2 text-right">BR. FİYAT</div>
+              <div className="col-span-2 text-center">BR. FİYAT</div>
               <div className="col-span-1 text-center">VERGİ</div>
               <div className="col-span-2 text-right">TOPLAM</div>
-              <div className="col-span-2 text-center"></div>
+              <div className="col-span-1 text-center"></div>
             </div>
 
             <div className="space-y-2">
               {items.map((item, index) => (
                 <div key={item.id} className="border border-neutral-200 rounded-lg p-3">
-                  <div className="grid grid-cols-12 gap-2 items-center">
+                  <div className="grid grid-cols-12 gap-2 items-start">
                     {/* Service/Product Description */}
-                    <div className="col-span-3">
-                      <input
-                        type="text"
-                        value={item.description}
-                        onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
-                        placeholder="Ürün/Hizmet açıklaması"
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                        required
-                      />
+                    <div className="col-span-4">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={item.description}
+                          onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
+                          placeholder="Ürün/Hizmet açıklaması"
+                          className="w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                          required
+                        />
+                        <div className="absolute left-3 top-2.5 text-neutral-400">
+                          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                          </svg>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Quantity */}
                     <div className="col-span-1">
                       <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                        placeholder="1"
-                        min="0"
-                        step="0.01"
+                        type="text"
+                        value={item.quantity.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(',', '.');
+                          handleItemChange(item.id, 'quantity', parseFloat(val) || 0);
+                        }}
+                        placeholder="1,00"
                         className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-center"
                         required
                       />
@@ -580,9 +589,7 @@ const InvoiceForm: React.FC = () => {
 
                     {/* Unit (Birim) */}
                     <div className="col-span-1">
-                      <select
-                        className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                      >
+                      <select className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm">
                         <option value="Adet">Adet</option>
                         <option value="KG">KG</option>
                         <option value="LT">LT</option>
@@ -592,47 +599,60 @@ const InvoiceForm: React.FC = () => {
                       </select>
                     </div>
 
-                    {/* Unit Price */}
+                    {/* Unit Price with Currency and Discount */}
                     <div className="col-span-2">
-                      <div className="relative">
-                        <input
-                          type="number"
-                          value={item.unitPrice}
-                          onChange={(e) => handleItemChange(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
-                          placeholder="0,00"
-                          min="0"
-                          step="0.01"
-                          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                          required
-                        />
+                      <input
+                        type="text"
+                        value={item.unitPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(',', '.');
+                          handleItemChange(item.id, 'unitPrice', parseFloat(val) || 0);
+                        }}
+                        placeholder="0,00"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
+                        required
+                      />
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-neutral-500">₺</span>
+                        <span className="text-xs text-neutral-500">%</span>
+                        <select className="flex-1 text-xs px-1 py-0.5 border border-neutral-300 rounded bg-neutral-50">
+                          <option value="20">20</option>
+                          <option value="10">10</option>
+                          <option value="0">0</option>
+                        </select>
                       </div>
-                      <div className="text-xs text-neutral-500 mt-0.5">₺</div>
                     </div>
 
-                    {/* Tax Rate (KDV/ÖTV) */}
+                    {/* Tax (VERGİ) - Two dropdowns */}
                     <div className="col-span-1">
-                      <select
-                        value={item.taxRate}
-                        onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
-                        className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                      >
-                        <option value="20">KDV %20</option>
-                        <option value="10">KDV %10</option>
-                        <option value="8">KDV %8</option>
-                        <option value="1">KDV %1</option>
-                        <option value="0">KDV %0</option>
-                      </select>
+                      <div className="flex gap-1">
+                        <select className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs bg-neutral-50">
+                          <option value="KDV">KDV</option>
+                          <option value="ÖTV">ÖTV</option>
+                        </select>
+                        <select
+                          value={item.taxRate}
+                          onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
+                          className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs"
+                        >
+                          <option value="20">%20</option>
+                          <option value="10">%10</option>
+                          <option value="8">%8</option>
+                          <option value="1">%1</option>
+                          <option value="0">%0</option>
+                        </select>
+                      </div>
                     </div>
 
                     {/* Total */}
-                    <div className="col-span-2">
-                      <div className="text-sm font-semibold text-neutral-900">
-                        {item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}₺
+                    <div className="col-span-2 text-right">
+                      <div className="text-sm font-medium text-neutral-900">
+                        {item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
                       </div>
                     </div>
 
-                    {/* Action Buttons - Stock Tracking & Delete */}
-                    <div className="col-span-2 flex items-center justify-center gap-2">
+                    {/* Action Buttons */}
+                    <div className="col-span-1 flex items-start justify-end gap-1">
                       {/* Stock Tracking Dropdown */}
                       <div className="relative">
                         <button
@@ -756,48 +776,30 @@ const InvoiceForm: React.FC = () => {
               </button>
             </div>
 
-            {/* Discount and Totals Section */}
+            {/* Summary Section - Matching Reference */}
             <div className="mt-6 pt-6 border-t border-neutral-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Left Side - Discount */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
-                    <Percent size={16} />
-                    İndirim Oranı
-                  </label>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="number"
-                      value={formData.discountPercentage}
-                      onChange={(e) => setFormData({ ...formData, discountPercentage: parseFloat(e.target.value) || 0 })}
-                      placeholder="0"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      className="w-20 px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-center"
-                    />
-                    <span className="text-sm text-neutral-600">%</span>
+              <div className="flex justify-end">
+                <div className="w-full md:w-1/2 space-y-2 text-sm">
+                  <div className="flex justify-between items-center py-2 border-b border-neutral-200">
+                    <span className="text-neutral-600 uppercase text-xs font-semibold">TOPLAM KÂR:</span>
+                    <span className="font-medium">—</span>
                   </div>
-                </div>
-
-                {/* Right Side - Totals Summary */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-neutral-600">Ara Toplam:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-neutral-200">
+                    <span className="text-neutral-600 uppercase text-xs font-semibold">ARA TOPLAM</span>
                     <span className="font-medium">
-                      ₺{calculateSubtotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      {calculateSubtotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-neutral-600">Toplam KDV:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-neutral-200">
+                    <span className="text-neutral-600 uppercase text-xs font-semibold">TOPLAM KDV</span>
                     <span className="font-medium">
-                      ₺{calculateTotalTax().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      {calculateTotalTax().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-base font-bold pt-3 border-t border-neutral-200">
-                    <span>Genel Toplam:</span>
-                    <span className="text-neutral-900">
-                      ₺{calculateTotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                  <div className="flex justify-between items-center py-3 bg-neutral-100 rounded-lg px-3 mt-2">
+                    <span className="text-neutral-900 uppercase text-sm font-bold">GENEL TOPLAM</span>
+                    <span className="text-neutral-900 font-bold text-lg">
+                      {calculateTotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
                     </span>
                   </div>
                 </div>
