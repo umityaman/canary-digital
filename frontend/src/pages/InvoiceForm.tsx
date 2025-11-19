@@ -18,6 +18,7 @@ interface InvoiceItem {
   total: number
   taxAmount: number
   grandTotal: number
+  stockTracking?: boolean
 }
 
 interface Customer {
@@ -25,6 +26,8 @@ interface Customer {
   name: string
   email: string
   phone: string
+  taxNumber?: string
+  company?: string
 }
 
 interface Equipment {
@@ -58,6 +61,7 @@ const InvoiceForm: React.FC = () => {
   
   const [formData, setFormData] = useState({
     invoiceNumber: '',
+    invoiceName: '',
     customerId: '',
     issueDate: new Date().toISOString().split('T')[0],
     dueDate: '',
@@ -68,7 +72,7 @@ const InvoiceForm: React.FC = () => {
   })
 
   const [items, setItems] = useState<InvoiceItem[]>([
-    { id: '1', description: '', quantity: 1, unitPrice: 0, taxRate: 20, total: 0, taxAmount: 0, grandTotal: 0 }
+    { id: '1', description: '', quantity: 1, unitPrice: 0, taxRate: 20, total: 0, taxAmount: 0, grandTotal: 0, stockTracking: false }
   ])
 
   useEffect(() => {
@@ -84,7 +88,10 @@ const InvoiceForm: React.FC = () => {
       const response = await axios.get(`${API_URL}/customers`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
       })
-      setCustomers(response.data.data || response.data || [])
+      const customerData = Array.isArray(response.data) ? response.data : (response.data.data || [])
+      console.log('Loaded customers:', customerData.length, customerData)
+      setCustomers(customerData)
+      setFilteredCustomers(customerData)
     } catch (error) {
       console.error('Failed to load customers:', error)
       toast.error('Müşteriler yüklenemedi')
@@ -103,6 +110,8 @@ const InvoiceForm: React.FC = () => {
   // Customer search filter
   const handleCustomerSearch = (value: string) => {
     setCustomerSearch(value)
+    console.log('Searching for:', value, 'Total customers:', customers.length)
+    
     if (value.trim().length > 0) {
       const filtered = customers.filter(customer =>
         customer.name.toLowerCase().includes(value.toLowerCase()) ||
@@ -110,11 +119,12 @@ const InvoiceForm: React.FC = () => {
         customer.phone?.includes(value) ||
         customer.taxNumber?.includes(value)
       )
+      console.log('Filtered results:', filtered.length)
       setFilteredCustomers(filtered)
       setShowCustomerDropdown(true)
     } else {
-      setFilteredCustomers([])
-      setShowCustomerDropdown(false)
+      setFilteredCustomers(customers)
+      setShowCustomerDropdown(true)
     }
   }
 
@@ -166,7 +176,8 @@ const InvoiceForm: React.FC = () => {
       taxRate: 20,
       total: 0,
       taxAmount: 0,
-      grandTotal: 0
+      grandTotal: 0,
+      stockTracking: false
     }
     setItems([...items, newItem])
   }
@@ -179,7 +190,7 @@ const InvoiceForm: React.FC = () => {
     setItems(items.filter(item => item.id !== id))
   }
 
-  const handleItemChange = (id: string, field: keyof InvoiceItem, value: string | number) => {
+  const handleItemChange = (id: string, field: keyof InvoiceItem, value: string | number | boolean) => {
     setItems(items.map(item => {
       if (item.id === id) {
         const updated = { ...item, [field]: value }
@@ -235,11 +246,6 @@ const InvoiceForm: React.FC = () => {
       return
     }
 
-    if (!formData.invoiceNumber) {
-      toast.error('Lütfen fatura numarası girin')
-      return
-    }
-
     if (items.some(item => !item.description || item.quantity <= 0 || item.unitPrice <= 0)) {
       toast.error('Lütfen tüm ürün bilgilerini doldurun')
       return
@@ -247,25 +253,43 @@ const InvoiceForm: React.FC = () => {
 
     try {
       setLoading(true)
-      const payload = {
-        ...formData,
+      
+      // Backend /rental endpoint için payload formatı
+      const rentalPayload = {
+        orderId: formData.orderId ? parseInt(formData.orderId as any) : null,
         customerId: parseInt(formData.customerId as any),
-        invoiceType,
-        items,
-        subtotal: calculateSubtotal(),
-        taxAmount: calculateTotalTax(),
-        discountAmount: calculateDiscountAmount(),
-        withholdingAmount: calculateWithholdingAmount(),
-        totalAmount: calculateTotal()
+        items: items.map(item => ({
+          equipmentId: item.equipmentId,
+          description: item.description,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          days: item.days || 1,
+          discountPercentage: item.discountPercentage || 0
+        })),
+        startDate: formData.invoiceDate || new Date().toISOString(),
+        endDate: formData.dueDate || new Date().toISOString(),
+        notes: formData.notes || ''
       }
 
       if (isEdit) {
-        await axios.put(`${API_URL}/invoices/${id}`, payload, {
+        // Edit için farklı endpoint kullanılacak
+        const payload = {
+          ...formData,
+          customerId: parseInt(formData.customerId as any),
+          invoiceType,
+          items,
+          subtotal: calculateSubtotal(),
+          taxAmount: calculateTotalTax(),
+          discountAmount: calculateDiscountAmount(),
+          withholdingAmount: calculateWithholdingAmount(),
+          totalAmount: calculateTotal()
+        }
+        await axios.put(`${API_URL}/api/invoices/${id}`, payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
         })
         toast.success('Fatura güncellendi')
       } else {
-        await axios.post(`${API_URL}/invoices`, payload, {
+        await axios.post(`${API_URL}/api/invoices/rental`, rentalPayload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
         })
         toast.success('Fatura oluşturuldu')
@@ -318,15 +342,27 @@ const InvoiceForm: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Fatura Numarası *
+                  Fatura Numarası <span className="text-xs text-neutral-500">(opsiyonel - otomatik oluşturulur)</span>
                 </label>
                 <input
                   type="text"
                   value={formData.invoiceNumber}
                   onChange={(e) => setFormData({ ...formData, invoiceNumber: e.target.value })}
-                  placeholder="INV-2025-001"
+                  placeholder="Boş bırakın, otomatik oluşturulacak"
                   className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
-                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Fatura İsmi <span className="text-xs text-neutral-500">(opsiyonel)</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.invoiceName}
+                  onChange={(e) => setFormData({ ...formData, invoiceName: e.target.value })}
+                  placeholder="Örn: Kasım Ayı Kiralama Faturası"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
                 />
               </div>
 
@@ -432,6 +468,13 @@ const InvoiceForm: React.FC = () => {
                 />
                 <div className="mt-2 flex gap-2 flex-wrap">
                   <span className="text-xs text-neutral-600">Hızlı seç:</span>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, dueDate: new Date().toISOString().split('T')[0] })}
+                    className="text-xs px-2 py-1 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-neutral-700 transition-colors"
+                  >
+                    Bugün
+                  </button>
                   {[30, 45, 60, 90, 120].map(days => (
                     <button
                       key={days}
@@ -492,40 +535,25 @@ const InvoiceForm: React.FC = () => {
                 <DollarSign size={20} />
                 Ürün/Hizmetler
               </h2>
-              <button
-                type="button"
-                onClick={handleAddItem}
-                className="px-4 py-2 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-2 text-sm"
-              >
-                <Plus size={16} />
-                Ürün Ekle
-              </button>
             </div>
 
-            <div className="space-y-3">
-              {items.map((item) => (
-                <div key={item.id} className="p-4 bg-neutral-50 rounded-xl space-y-3">
-                  <div className="grid grid-cols-12 gap-3 items-start">
-                    {/* Equipment Select */}
-                    <div className="col-span-12 md:col-span-6">
-                      <label className="block text-xs text-neutral-600 mb-1">Ekipman (Opsiyonel)</label>
-                      <select
-                        value={item.equipmentId || ''}
-                        onChange={(e) => handleEquipmentSelect(item.id, parseInt(e.target.value))}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                      >
-                        <option value="">Ekipman seçin veya manuel girin...</option>
-                        {equipments.map(equipment => (
-                          <option key={equipment.id} value={equipment.id}>
-                            {equipment.name} - {equipment.serialNumber}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+            {/* Table Header */}
+            <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700">
+              <div className="col-span-3">HİZMET / ÜRÜN</div>
+              <div className="col-span-1 text-center">MİKTAR</div>
+              <div className="col-span-1 text-center">BİRİM</div>
+              <div className="col-span-2 text-right">BR. FİYAT</div>
+              <div className="col-span-1 text-center">VERGİ</div>
+              <div className="col-span-2 text-right">TOPLAM</div>
+              <div className="col-span-2 text-center"></div>
+            </div>
 
-                    {/* Description */}
-                    <div className="col-span-12 md:col-span-6">
-                      <label className="block text-xs text-neutral-600 mb-1">Açıklama *</label>
+            <div className="space-y-2">
+              {items.map((item, index) => (
+                <div key={item.id} className="border border-neutral-200 rounded-lg p-3">
+                  <div className="grid grid-cols-12 gap-2 items-center">
+                    {/* Service/Product Description */}
+                    <div className="col-span-3">
                       <input
                         type="text"
                         value={item.description}
@@ -537,90 +565,193 @@ const InvoiceForm: React.FC = () => {
                     </div>
 
                     {/* Quantity */}
-                    <div className="col-span-6 md:col-span-2">
-                      <label className="block text-xs text-neutral-600 mb-1">Miktar *</label>
+                    <div className="col-span-1">
                       <input
                         type="number"
                         value={item.quantity}
                         onChange={(e) => handleItemChange(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                        placeholder="0"
+                        placeholder="1"
                         min="0"
                         step="0.01"
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                        className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-center"
                         required
                       />
                     </div>
 
+                    {/* Unit (Birim) */}
+                    <div className="col-span-1">
+                      <select
+                        className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                      >
+                        <option value="Adet">Adet</option>
+                        <option value="KG">KG</option>
+                        <option value="LT">LT</option>
+                        <option value="M">M</option>
+                        <option value="Gün">Gün</option>
+                        <option value="Saat">Saat</option>
+                      </select>
+                    </div>
+
                     {/* Unit Price */}
-                    <div className="col-span-6 md:col-span-2">
-                      <label className="block text-xs text-neutral-600 mb-1">Birim Fiyat *</label>
+                    <div className="col-span-2">
                       <input
                         type="number"
                         value={item.unitPrice}
                         onChange={(e) => handleItemChange(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
-                        placeholder="0.00"
+                        placeholder="0,00"
                         min="0"
                         step="0.01"
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
                         required
                       />
+                      <div className="text-xs text-neutral-500 mt-1 text-right">₺</div>
                     </div>
 
-                    {/* Tax Rate */}
-                    <div className="col-span-6 md:col-span-2">
-                      <label className="block text-xs text-neutral-600 mb-1">KDV Oranı</label>
+                    {/* Tax Rate (KDV/ÖTV) */}
+                    <div className="col-span-1">
                       <select
                         value={item.taxRate}
                         onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                        className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
                       >
-                        {TAX_RATES.map(rate => (
-                          <option key={rate.value} value={rate.value}>
-                            {rate.label}
-                          </option>
-                        ))}
+                        <option value="20">KDV %20</option>
+                        <option value="10">KDV %10</option>
+                        <option value="8">KDV %8</option>
+                        <option value="1">KDV %1</option>
+                        <option value="0">KDV %0</option>
                       </select>
                     </div>
 
-                    {/* Subtotal */}
-                    <div className="col-span-6 md:col-span-2">
-                      <label className="block text-xs text-neutral-600 mb-1">Tutar</label>
-                      <div className="px-3 py-2 bg-neutral-100 rounded-lg text-sm font-medium text-neutral-900">
-                        ₺{item.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                    {/* Total */}
+                    <div className="col-span-2">
+                      <div className="px-3 py-2 bg-neutral-100 rounded-lg text-sm font-semibold text-neutral-900 text-right">
+                        {item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}₺
                       </div>
                     </div>
 
-                    {/* Tax Amount */}
-                    <div className="col-span-6 md:col-span-2">
-                      <label className="block text-xs text-neutral-600 mb-1">KDV</label>
-                      <div className="px-3 py-2 bg-neutral-100 rounded-lg text-sm font-medium text-neutral-700">
-                        ₺{item.taxAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                    {/* Action Buttons - Stock Tracking & Delete */}
+                    <div className="col-span-2 flex items-center justify-center gap-2">
+                      {/* Stock Tracking Dropdown */}
+                      <div className="relative">
+                        <button
+                          type="button"
+                          className="p-2 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-neutral-700 text-xs font-medium"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const dropdown = e.currentTarget.nextElementSibling as HTMLElement
+                            dropdown.classList.toggle('hidden')
+                          }}
+                        >
+                          +
+                        </button>
+                        <div className="hidden absolute right-0 mt-1 w-56 bg-white border border-neutral-200 rounded-lg shadow-lg z-10">
+                          <div className="p-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleItemChange(item.id, 'stockTracking', true)
+                                document.querySelectorAll('.hidden').forEach(el => el.classList.add('hidden'))
+                              }}
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-50 rounded"
+                            >
+                              AÇIKLAMA EKLE
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleItemChange(item.id, 'stockTracking', true)
+                                document.querySelectorAll('.hidden').forEach(el => el.classList.add('hidden'))
+                              }}
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-50 rounded"
+                            >
+                              İNDİRİM EKLE
+                            </button>
+                            <button
+                              type="button"
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-50 rounded"
+                            >
+                              ÖTV EKLE
+                            </button>
+                            <button
+                              type="button"
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-50 rounded"
+                            >
+                              ÖİV EKLE
+                            </button>
+                            <button
+                              type="button"
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-50 rounded"
+                            >
+                              TEVKİFAT EKLE
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleItemChange(item.id, 'stockTracking', true)
+                                document.querySelectorAll('.hidden').forEach(el => el.classList.add('hidden'))
+                              }}
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-50 rounded"
+                            >
+                              KONAKLAMA VER. EKLE
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleItemChange(item.id, 'stockTracking', true)
+                                document.querySelectorAll('.hidden').forEach(el => el.classList.add('hidden'))
+                              }}
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-50 rounded"
+                            >
+                              İHRAÇ KAYITLI KOD EKLE
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Grand Total */}
-                    <div className="col-span-6 md:col-span-2">
-                      <label className="block text-xs text-neutral-600 mb-1">Toplam</label>
-                      <div className="px-3 py-2 bg-neutral-900 text-white rounded-lg text-sm font-bold">
-                        ₺{item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                      </div>
-                    </div>
-
-                    {/* Delete Button */}
-                    <div className="col-span-12 md:col-span-1 flex md:items-end md:justify-end">
+                      {/* Delete Button */}
                       <button
                         type="button"
                         onClick={() => handleRemoveItem(item.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors self-end"
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         disabled={items.length === 1}
-                        title="Ürünü Kaldır"
+                        title="Satırı Kaldır"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
+
+                  {/* Stock Tracking Section */}
+                  {item.stockTracking && (
+                    <div className="mt-3 pt-3 border-t border-neutral-200">
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center gap-2 text-sm text-neutral-700">
+                          <input
+                            type="checkbox"
+                            checked={item.stockTracking}
+                            onChange={(e) => handleItemChange(item.id, 'stockTracking', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          Stok Çıkışı Yapılsın
+                        </label>
+                        <span className="text-xs text-neutral-500">(Bu ürün için otomatik stok çıkışı yapılacak)</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
+            </div>
+
+            {/* Add New Row Button */}
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={handleAddItem}
+                className="w-full px-4 py-3 border-2 border-dashed border-neutral-300 rounded-xl hover:border-neutral-400 hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2 text-sm text-neutral-600 font-medium"
+              >
+                <Plus size={18} />
+                Yeni Satır Ekle
+              </button>
             </div>
 
             {/* Totals */}
