@@ -599,49 +599,37 @@ const InvoiceForm: React.FC = () => {
                       </select>
                     </div>
 
-                    {/* Unit Price with Currency and Discount */}
+                    {/* Unit Price with Currency Symbol */}
                     <div className="col-span-2">
-                      <input
-                        type="text"
-                        value={item.unitPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                        onChange={(e) => {
-                          const val = e.target.value.replace(',', '.');
-                          handleItemChange(item.id, 'unitPrice', parseFloat(val) || 0);
-                        }}
-                        placeholder="0,00"
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
-                        required
-                      />
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs text-neutral-500">₺</span>
-                        <span className="text-xs text-neutral-500">%</span>
-                        <select className="flex-1 text-xs px-1 py-0.5 border border-neutral-300 rounded bg-neutral-50">
-                          <option value="20">20</option>
-                          <option value="10">10</option>
-                          <option value="0">0</option>
-                        </select>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={item.unitPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(',', '.');
+                            handleItemChange(item.id, 'unitPrice', parseFloat(val) || 0);
+                          }}
+                          placeholder="0,00"
+                          className="w-full pl-3 pr-8 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
+                          required
+                        />
+                        <span className="absolute right-3 top-2.5 text-neutral-500 text-sm">₺</span>
                       </div>
                     </div>
 
-                    {/* Tax (VERGİ) - Two dropdowns */}
+                    {/* Tax (VERGİ) - Single dropdown */}
                     <div className="col-span-1">
-                      <div className="flex gap-1">
-                        <select className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs bg-neutral-50">
-                          <option value="KDV">KDV</option>
-                          <option value="ÖTV">ÖTV</option>
-                        </select>
-                        <select
-                          value={item.taxRate}
-                          onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
-                          className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs"
-                        >
-                          <option value="20">%20</option>
-                          <option value="10">%10</option>
-                          <option value="8">%8</option>
-                          <option value="1">%1</option>
-                          <option value="0">%0</option>
-                        </select>
-                      </div>
+                      <select
+                        value={item.taxRate}
+                        onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
+                        className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                      >
+                        <option value="20">KDV %20</option>
+                        <option value="10">KDV %10</option>
+                        <option value="8">KDV %8</option>
+                        <option value="1">KDV %1</option>
+                        <option value="0">KDV %0</option>
+                      </select>
                     </div>
 
                     {/* Total */}
