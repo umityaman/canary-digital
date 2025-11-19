@@ -617,19 +617,25 @@ const InvoiceForm: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Tax (VERGİ) - Single dropdown */}
+                    {/* Tax (VERGİ) - Two dropdowns: type + rate */}
                     <div className="col-span-1">
-                      <select
-                        value={item.taxRate}
-                        onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
-                        className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-                      >
-                        <option value="20">KDV %20</option>
-                        <option value="10">KDV %10</option>
-                        <option value="8">KDV %8</option>
-                        <option value="1">KDV %1</option>
-                        <option value="0">KDV %0</option>
-                      </select>
+                      <div className="flex gap-1">
+                        <select className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs">
+                          <option value="KDV">KDV</option>
+                          <option value="ÖTV">ÖTV</option>
+                        </select>
+                        <select
+                          value={item.taxRate}
+                          onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
+                          className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs"
+                        >
+                          <option value="20">%20</option>
+                          <option value="10">%10</option>
+                          <option value="8">%8</option>
+                          <option value="1">%1</option>
+                          <option value="0">%0</option>
+                        </select>
+                      </div>
                     </div>
 
                     {/* Total */}
