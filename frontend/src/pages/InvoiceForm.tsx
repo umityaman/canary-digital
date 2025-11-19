@@ -594,17 +594,19 @@ const InvoiceForm: React.FC = () => {
 
                     {/* Unit Price */}
                     <div className="col-span-2">
-                      <input
-                        type="number"
-                        value={item.unitPrice}
-                        onChange={(e) => handleItemChange(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
-                        placeholder="0,00"
-                        min="0"
-                        step="0.01"
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
-                        required
-                      />
-                      <div className="text-xs text-neutral-500 mt-1 text-right">₺</div>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          value={item.unitPrice}
+                          onChange={(e) => handleItemChange(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                          placeholder="0,00"
+                          min="0"
+                          step="0.01"
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                          required
+                        />
+                      </div>
+                      <div className="text-xs text-neutral-500 mt-0.5">₺</div>
                     </div>
 
                     {/* Tax Rate (KDV/ÖTV) */}
@@ -624,7 +626,7 @@ const InvoiceForm: React.FC = () => {
 
                     {/* Total */}
                     <div className="col-span-2">
-                      <div className="px-3 py-2 bg-neutral-100 rounded-lg text-sm font-semibold text-neutral-900 text-right">
+                      <div className="text-sm font-semibold text-neutral-900">
                         {item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}₺
                       </div>
                     </div>
@@ -754,16 +756,16 @@ const InvoiceForm: React.FC = () => {
               </button>
             </div>
 
-            {/* Totals */}
+            {/* Discount and Totals Section */}
             <div className="mt-6 pt-6 border-t border-neutral-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Discount Input */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Left Side - Discount */}
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                     <Percent size={16} />
                     İndirim Oranı
                   </label>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 items-center">
                     <input
                       type="number"
                       value={formData.discountPercentage}
@@ -772,42 +774,27 @@ const InvoiceForm: React.FC = () => {
                       min="0"
                       max="100"
                       step="0.01"
-                      className="flex-1 px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                      className="w-20 px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-center"
                     />
-                    <div className="px-4 py-2 bg-neutral-100 rounded-xl font-medium">
-                      %
-                    </div>
+                    <span className="text-sm text-neutral-600">%</span>
                   </div>
-                  {formData.discountPercentage > 0 && (
-                    <p className="text-xs text-neutral-600 mt-1">
-                      İndirim Tutarı: ₺{calculateDiscountAmount().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                    </p>
-                  )}
                 </div>
 
-                {/* Totals Summary */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                {/* Right Side - Totals Summary */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center text-sm">
                     <span className="text-neutral-600">Ara Toplam:</span>
                     <span className="font-medium">
                       ₺{calculateSubtotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between items-center text-sm">
                     <span className="text-neutral-600">Toplam KDV:</span>
                     <span className="font-medium">
                       ₺{calculateTotalTax().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
-                  {formData.discountPercentage > 0 && (
-                    <div className="flex justify-between text-sm text-green-600">
-                      <span>İndirim ({formData.discountPercentage}%):</span>
-                      <span className="font-medium">
-                        -₺{calculateDiscountAmount().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-neutral-200">
+                  <div className="flex justify-between items-center text-base font-bold pt-3 border-t border-neutral-200">
                     <span>Genel Toplam:</span>
                     <span className="text-neutral-900">
                       ₺{calculateTotal().toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
