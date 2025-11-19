@@ -69,7 +69,6 @@ router.get('/', authenticateToken, async (req, res) => {
             select: {
               id: true,
               name: true,
-              fullName: true,
               email: true,
               phone: true,
               taxNumber: true,
@@ -162,12 +161,14 @@ router.post('/rental', authenticateToken, async (req, res) => {
     const { orderId, customerId, items, startDate, endDate, notes } = req.body;
     const authReq = req as AuthRequest;
     const userId = authReq.user?.userId;
+    const companyId = authReq.user?.companyId || 1; // Get companyId from authenticated user (default to 1 for backward compat)
 
     // Validation
-    if (!orderId || !customerId || !items || !startDate || !endDate) {
+    if (!customerId || !items || !startDate || !endDate) {
+      log.error('Missing required fields:', { orderId, customerId, items: items?.length, startDate, endDate });
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields',
+        message: 'Missing required fields: customerId, items, startDate, endDate',
       });
     }
 
@@ -179,9 +180,10 @@ router.post('/rental', authenticateToken, async (req, res) => {
     }
 
     const invoice = await invoiceService.createRentalInvoice({
-      orderId: parseInt(orderId),
+      orderId: orderId ? parseInt(orderId) : undefined,
       customerId: parseInt(customerId),
       userId: userId, // Add userId for performedBy
+      companyId: companyId, // Add companyId from authenticated user
       items: items.map((item: any) => ({
         equipmentId: parseInt(item.equipmentId),
         description: item.description,

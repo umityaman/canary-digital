@@ -62,6 +62,11 @@ export default function InvoiceDetail() {
   const navigate = useNavigate()
   const [invoice, setInvoice] = useState<InvoiceDetail | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [paymentAmount, setPaymentAmount] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState('cash')
+  const [paymentNotes, setPaymentNotes] = useState('')
+  const [savingPayment, setSavingPayment] = useState(false)
 
   useEffect(() => {
     if (id) {
@@ -158,6 +163,45 @@ export default function InvoiceDetail() {
       month: 'long',
       day: 'numeric',
     })
+  }
+
+  const handleSavePayment = async () => {
+    if (!invoice) return
+    
+    const amount = parseFloat(paymentAmount)
+    if (isNaN(amount) || amount <= 0) {
+      toast.error('Geçerli bir tutar girin')
+      return
+    }
+    
+    if (amount > invoice.remainingAmount) {
+      toast.error(`Ödeme tutarı kalan tutardan (${formatCurrency(invoice.remainingAmount)}) fazla olamaz`)
+      return
+    }
+
+    try {
+      setSavingPayment(true)
+      const response = await invoiceAPI.recordPayment(invoice.id, {
+        amount,
+        paymentDate: new Date().toISOString(),
+        paymentMethod,
+        notes: paymentNotes || undefined
+      })
+      
+      toast.success('Ödeme başarıyla kaydedildi')
+      setShowPaymentModal(false)
+      setPaymentAmount('')
+      setPaymentMethod('cash')
+      setPaymentNotes('')
+      
+      // Reload invoice to show updated payment info
+      await loadInvoice()
+    } catch (error: any) {
+      console.error('Failed to save payment:', error)
+      toast.error('Ödeme kaydedilemedi: ' + (error.response?.data?.message || error.message))
+    } finally {
+      setSavingPayment(false)
+    }
   }
 
   const getStatusBadge = (status: string) => {
@@ -365,7 +409,7 @@ export default function InvoiceDetail() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-200">
-                    {invoice.items.map((item) => (
+                    {invoice.items?.map((item) => (
                       <tr key={item.id}>
                         <td className="px-6 py-4">
                           <div>
@@ -395,7 +439,7 @@ export default function InvoiceDetail() {
                     <span className="font-medium">{formatCurrency(invoice.subtotal)}</span>
                   </div>
 
-                  {invoice.discountAmount && invoice.discountAmount > 0 && (
+                  {invoice.discountAmount != null && invoice.discountAmount > 0 && (
                     <div className="flex justify-between text-neutral-700">
                       <span>İndirim</span>
                       <span className="font-medium text-red-600">-{formatCurrency(invoice.discountAmount)}</span>
@@ -463,7 +507,10 @@ export default function InvoiceDetail() {
                 </div>
 
                 {invoice.remainingAmount > 0 && (
-                  <button className="w-full mt-4 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors">
+                  <button 
+                    onClick={() => setShowPaymentModal(true)}
+                    className="w-full mt-4 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
+                  >
                     Ödeme Kaydet
                   </button>
                 )}
@@ -496,10 +543,11 @@ export default function InvoiceDetail() {
             <div className="bg-white rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">İşlem Geçmişi</h3>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
+                {/* Creation */}
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-sm font-medium text-neutral-900">Fatura oluşturuldu</p>
                     <p className="text-xs text-neutral-600">{formatDate(invoice.createdAt)}</p>
                     {invoice.createdBy && (
@@ -508,10 +556,39 @@ export default function InvoiceDetail() {
                   </div>
                 </div>
 
+                {/* Payments */}
+                {invoice.payments && invoice.payments.length > 0 && 
+                  invoice.payments
+                    .sort((a, b) => new Date(b.paymentDate).getTime() - new Date(a.paymentDate).getTime())
+                    .map((payment) => (
+                      <div key={payment.id} className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-neutral-900">
+                            Ödeme alındı - {formatCurrency(payment.amount)}
+                          </p>
+                          <p className="text-xs text-neutral-600">
+                            {formatDate(payment.paymentDate)} • {
+                              payment.paymentMethod === 'cash' ? 'Nakit' :
+                              payment.paymentMethod === 'bank_transfer' ? 'Banka Transferi' :
+                              payment.paymentMethod === 'credit_card' ? 'Kredi Kartı' :
+                              payment.paymentMethod === 'check' ? 'Çek' :
+                              payment.paymentMethod
+                            }
+                          </p>
+                          {payment.notes && (
+                            <p className="text-xs text-neutral-500 mt-1">{payment.notes}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                }
+
+                {/* Last Update */}
                 {invoice.updatedAt !== invoice.createdAt && (
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-yellow-600 rounded-full mt-2"></div>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-sm font-medium text-neutral-900">Fatura güncellendi</p>
                       <p className="text-xs text-neutral-600">{formatDate(invoice.updatedAt)}</p>
                     </div>
@@ -522,6 +599,87 @@ export default function InvoiceDetail() {
           </div>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <h3 className="text-xl font-semibold text-neutral-900 mb-4">Ödeme Kaydet</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Ödeme Tutarı
+                </label>
+                <input
+                  type="number"
+                  value={paymentAmount}
+                  onChange={(e) => setPaymentAmount(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  step="0.01"
+                  min="0"
+                  max={invoice?.remainingAmount}
+                />
+                <p className="text-xs text-neutral-600 mt-1">
+                  Kalan tutar: {formatCurrency(invoice?.remainingAmount || 0)}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Ödeme Yöntemi
+                </label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                >
+                  <option value="cash">Nakit</option>
+                  <option value="bank_transfer">Banka Transferi</option>
+                  <option value="credit_card">Kredi Kartı</option>
+                  <option value="check">Çek</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  Not (Opsiyonel)
+                </label>
+                <textarea
+                  value={paymentNotes}
+                  onChange={(e) => setPaymentNotes(e.target.value)}
+                  placeholder="Ödeme hakkında notlar..."
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                  rows={3}
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowPaymentModal(false)
+                  setPaymentAmount('')
+                  setPaymentMethod('cash')
+                  setPaymentNotes('')
+                }}
+                disabled={savingPayment}
+                className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 transition-colors disabled:opacity-50"
+              >
+                İptal
+              </button>
+              <button
+                onClick={handleSavePayment}
+                disabled={savingPayment}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+              >
+                {savingPayment ? 'Kaydediliyor...' : 'Kaydet'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

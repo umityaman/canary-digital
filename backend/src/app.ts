@@ -221,10 +221,10 @@ safeLoadRoute('/api/social-media', './routes/social-media', 'Social Media');
 safeLoadRoute('/api/stock', './routes/stock', 'Stock Management');
 safeLoadRoute('/api/cost-accounting', './routes/costAccounting', 'Cost Accounting');
 
-// Accounting Core Routes (MUST BE BEFORE /api/accounting base route)
-safeLoadRoute('/api/accounting/journal-entries', './routes/journalEntries', 'Journal Entries');
-safeLoadRoute('/api/accounting/chart-of-accounts', './routes/chartOfAccounts', 'Chart of Accounts');
-// NOW load general /api/accounting route (catches remaining /api/accounting/* requests)
+// Accounting Core Routes - LOADED VIA /api/accounting route (includes journal-entries & chart-of-accounts)
+// safeLoadRoute('/api/accounting/journal-entries', './routes/journalEntries', 'Journal Entries'); // DUPLICATE - removed
+// safeLoadRoute('/api/accounting/chart-of-accounts', './routes/chartOfAccounts', 'Chart of Accounts'); // DUPLICATE - removed
+// NOW load general /api/accounting route (includes all sub-routes)
 safeLoadRoute('/api/accounting', './routes/accounting', 'Accounting & Stats');
 
 // Company & Bank Account Routes

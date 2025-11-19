@@ -11,6 +11,7 @@ interface CreateInvoiceParams {
   orderId: number;
   customerId: number;
   userId?: number; // User performing the action (for stock movements)
+  companyId: number; // Company ID for invoice numbering and multi-tenant support
   items: Array<{
     equipmentId: number;
     description: string;
@@ -42,34 +43,52 @@ export class InvoiceService {
    * Paraşüt'te otomatik olarak e-Fatura veya e-Arşiv oluşturur
    */
   async createRentalInvoice(params: CreateInvoiceParams) {
-    const { orderId, customerId, userId, items, startDate, endDate, notes } = params;
+    const { orderId, customerId, userId, companyId, items, startDate, endDate, notes } = params;
 
     try {
-      log.info('Invoice Service: Kiralama faturası oluşturuluyor...', { orderId });
+      log.info('Invoice Service: Kiralama faturası oluşturuluyor...', { orderId, customerId });
 
-      // Sipariş bilgilerini al (equipment relation is via orderItems -> equipment)
-      console.log('🔍 DEBUG 2: Fetching order', orderId);
-      const order = await p.order.findUnique({
-        where: { id: orderId },
-        include: {
-          orderItems: { include: { equipment: true } },
-          customer: true, // Customer relation needed for email and parasut
-        },
-      });
-      console.log('🔍 DEBUG 3: Order fetched', !!order, 'hasCustomer?', !!order?.customer);
+      let order = null;
+      let customer = null;
+      let actualCustomerId = customerId;
 
-      if (!order) {
-        throw new Error('Order not found');
+      // Eğer orderId varsa, sipariş bilgilerini al
+      if (orderId) {
+        console.log('🔍 DEBUG 2: Fetching order', orderId);
+        order = await p.order.findUnique({
+          where: { id: orderId },
+          include: {
+            orderItems: { include: { equipment: true } },
+            customer: true,
+          },
+        });
+        console.log('🔍 DEBUG 3: Order fetched', !!order, 'hasCustomer?', !!order?.customer);
+
+        if (!order) {
+          throw new Error('Order not found');
+        }
+
+        if (!order.customer) {
+          throw new Error('Order has no customer relation');
+        }
+
+        customer = order.customer;
+        actualCustomerId = order.customerId;
+      } else {
+        // OrderId yoksa, customerId'den müşteri bilgisini al
+        console.log('🔍 DEBUG 2b: No orderId, fetching customer', customerId);
+        customer = await p.customer.findUnique({
+          where: { id: customerId },
+        });
+
+        if (!customer) {
+          throw new Error('Customer not found');
+        }
       }
-
-      if (!order.customer) {
-        throw new Error('Order has no customer relation');
-      }
-
-      // Use customer from order relation (not from parameter)
-      const customer = order.customer;
-      const actualCustomerId = order.customerId;
       console.log('🔍 DEBUG 4: Using customer from order', actualCustomerId);
+
+      // CompanyId'yi al (order varsa order'dan, yoksa customer'dan)
+      const companyId = order?.companyId || customer.companyId || 1;
 
       // Paraşüt'te müşteri var mı kontrol et veya oluştur
       let parasutContactId = customer.parasutContactId;
@@ -156,41 +175,81 @@ export class InvoiceService {
           log.info('Invoice Service: Paraşüt faturası oluşturuldu:', parasutInvoiceId);
         } catch (parasutError) {
           log.warn('Invoice Service: Paraşüt faturası oluşturulamadı, devam ediliyor...', parasutError);
-          invoiceNumber = `CANARY-${orderId}-${Date.now()}`;
+          // Auto-generate invoice number
+          const year = new Date().getFullYear();
+          const month = String(new Date().getMonth() + 1).padStart(2, '0');
+          const prefix = `INV-${year}${month}`;
+          
+          const lastInvoice = await p.invoice.findFirst({
+            where: { 
+              companyId,
+              invoiceNumber: { startsWith: prefix }
+            },
+            orderBy: { createdAt: 'desc' }
+          });
+          
+          const nextNumber = lastInvoice 
+            ? parseInt(lastInvoice.invoiceNumber.split('-').pop() || '0') + 1
+            : 1;
+          invoiceNumber = `${prefix}-${String(nextNumber).padStart(4, '0')}`;
         }
       } else {
         log.info('Invoice Service: Paraşüt credentials yok, local invoice oluşturuluyor...');
-        invoiceNumber = `CANARY-${orderId}-${Date.now()}`;
+        // Auto-generate invoice number
+        const year = new Date().getFullYear();
+        const month = String(new Date().getMonth() + 1).padStart(2, '0');
+        const lastInvoice = await p.invoice.findFirst({
+          where: { 
+            companyId,
+            invoiceNumber: { startsWith: `INV-${year}${month}` }
+          },
+          orderBy: { createdAt: 'desc' }
+        });
+        const nextNumber = lastInvoice 
+          ? parseInt(lastInvoice.invoiceNumber.split('-').pop() || '0') + 1
+          : 1;
+        invoiceNumber = `INV-${year}${month}-${String(nextNumber).padStart(4, '0')}`;
       }
 
       // Veritabanına kaydet
       console.log('🔍 DEBUG 5: Creating invoice with customerId:', actualCustomerId, 'orderId:', orderId);
-      const dbInvoice = await p.invoice.create({
-        data: {
-          orderId,
-          customerId: actualCustomerId,
-          parasutInvoiceId,
-          invoiceNumber,
-          invoiceDate: parasutInvoice ? new Date(parasutInvoice.attributes.invoice_date) : startDate,
-          dueDate: parasutInvoice ? new Date(parasutInvoice.attributes.due_date) : endDate,
-          totalAmount: parasutInvoice ? parseFloat(parasutInvoice.attributes.net_total) : totalAmount,
-          vatAmount: parasutInvoice ? parseFloat(parasutInvoice.attributes.total_vat) : vatAmount,
-          grandTotal: parasutInvoice ? parseFloat(parasutInvoice.attributes.gross_total) : grandTotal,
-          paidAmount: 0,
-          status: 'draft',
-          type: 'rental',
+      
+      const invoiceData: any = {
+        parasutInvoiceId,
+        invoiceNumber,
+        invoiceDate: parasutInvoice ? new Date(parasutInvoice.attributes.invoice_date) : startDate,
+        dueDate: parasutInvoice ? new Date(parasutInvoice.attributes.due_date) : endDate,
+        totalAmount: parasutInvoice ? parseFloat(parasutInvoice.attributes.net_total) : totalAmount,
+        vatAmount: parasutInvoice ? parseFloat(parasutInvoice.attributes.total_vat) : vatAmount,
+        grandTotal: parasutInvoice ? parseFloat(parasutInvoice.attributes.gross_total) : grandTotal,
+        paidAmount: 0,
+        status: 'draft',
+        type: 'rental',
+        customer: {
+          connect: { id: actualCustomerId }
         },
+      };
+
+      // Order varsa ekle
+      if (orderId) {
+        invoiceData.order = {
+          connect: { id: orderId }
+        };
+      }
+
+      const dbInvoice = await p.invoice.create({
+        data: invoiceData,
       });
 
       log.info('Invoice Service: Fatura veritabanına kaydedildi:', dbInvoice.id);
 
       // 🔥 DEBUG: Order objesi kontrolü
       console.log('🔍 DEBUG order object:', JSON.stringify({
-        orderNumber: order.orderNumber,
-        customerId: order.customerId,
-        companyId: order.companyId,
-        hasCustomer: !!order.customer,
-        customerEmail: order.customer?.email
+        orderNumber: order?.orderNumber || 'N/A',
+        customerId: actualCustomerId,
+        companyId: companyId,
+        hasCustomer: !!customer,
+        customerEmail: customer?.email
       }, null, 2));
 
       // 🔥 CRITICAL: Stok hareketi kayıtlarını oluştur (otomatik)
@@ -208,7 +267,7 @@ export class InvoiceService {
             quantity: item.quantity,
             invoiceId: dbInvoice.id,
             orderId: orderId,
-            companyId: order.companyId,
+            companyId: companyId,
             performedBy: userId, // User ID from auth (NOT customer ID)
             notes: `Fatura #${dbInvoice.invoiceNumber} - ${item.description}`,
           });
@@ -236,7 +295,7 @@ export class InvoiceService {
       try {
         await journalEntryService.createInvoiceEntry(
           dbInvoice.id,
-          order.companyId,
+          companyId,
           actualCustomerId,
           dbInvoice.grandTotal, // Total with VAT
           dbInvoice.vatAmount,
@@ -631,6 +690,7 @@ export class InvoiceService {
       const invoice = await p.invoice.findUnique({
         where: { id: invoiceId },
         include: {
+          items: true, // FIXED: Include invoice items
           order: {
             include: {
               orderItems: { include: { equipment: true } },
@@ -664,6 +724,26 @@ export class InvoiceService {
       if (!invoice) {
         throw new Error('Invoice not found');
       }
+
+      // Calculate totals from items
+      if (invoice.items && invoice.items.length > 0) {
+        const subtotal = invoice.items.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+        const taxAmount = invoice.items.reduce((sum, item) => {
+          const itemSubtotal = item.unitPrice * item.quantity;
+          return sum + (itemSubtotal * item.vatRate / 100);
+        }, 0);
+        const discountAmount = invoice.items.reduce((sum, item) => sum + (item.discount || 0), 0);
+        
+        invoice.subtotal = subtotal;
+        invoice.taxAmount = taxAmount;
+        invoice.discountAmount = discountAmount;
+        invoice.grandTotal = subtotal + taxAmount - discountAmount;
+      }
+
+      // Calculate payment totals
+      const totalPaid = invoice.payments?.reduce((sum, payment) => sum + payment.amount, 0) || 0;
+      invoice.paidAmount = totalPaid;
+      invoice.remainingAmount = invoice.grandTotal - totalPaid;
 
       // Paraşüt'ten güncel durumu al
       if (invoice.parasutInvoiceId) {
