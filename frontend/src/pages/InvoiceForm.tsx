@@ -538,7 +538,7 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700 uppercase">
+            <div className="grid grid-cols-13 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700 uppercase">
               <div className="col-span-4">HİZMET / ÜRÜN</div>
               <div className="col-span-1 text-center">MİKTAR</div>
               <div className="col-span-1 text-center">BİRİM</div>
@@ -551,7 +551,7 @@ const InvoiceForm: React.FC = () => {
             <div className="space-y-2">
               {items.map((item, index) => (
                 <div key={item.id} className="border border-neutral-200 rounded-lg p-3">
-                  <div className="grid grid-cols-12 gap-2 items-start">
+                  <div className="grid grid-cols-13 gap-2 items-start">
                     {/* Service/Product Description */}
                     <div className="col-span-4">
                       <div className="relative">
