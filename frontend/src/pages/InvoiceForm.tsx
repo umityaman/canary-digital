@@ -659,7 +659,7 @@ const InvoiceForm: React.FC = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="col-span-1 flex items-start justify-end gap-1">
+                    <div className="col-span-2 flex items-start justify-end gap-1">
                       {/* Stock Tracking Dropdown */}
                       <div className="relative">
                         <button
