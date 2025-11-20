@@ -8,7 +8,8 @@
  */
 
 // Raw environment value (might include '/api' or trailing slash)
-const RAW = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+// Default to production backend if VITE_API_URL is not set
+const RAW = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app';
 
 // Normalize: remove trailing slashes and trailing '/api' if present
 function normalizeBase(raw: string): string {

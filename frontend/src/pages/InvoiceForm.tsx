@@ -538,22 +538,22 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             {/* Table Header */}
-            <div className="grid grid-cols-13 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700 uppercase">
-              <div className="col-span-3">HİZMET / ÜRÜN</div>
+            <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-neutral-100 rounded-lg mb-2 text-xs font-semibold text-neutral-700 uppercase">
+              <div className="col-span-4">HİZMET / ÜRÜN</div>
               <div className="col-span-1 text-center">MİKTAR</div>
               <div className="col-span-1 text-center">BİRİM</div>
               <div className="col-span-2 text-center">BR. FİYAT</div>
-              <div className="col-span-2 text-center">VERGİ</div>
+              <div className="col-span-1 text-center">VERGİ</div>
               <div className="col-span-2 text-right">TOPLAM</div>
-              <div className="col-span-2 text-center"></div>
+              <div className="col-span-1 text-center"></div>
             </div>
 
             <div className="space-y-2">
               {items.map((item, index) => (
                 <div key={item.id} className="border border-neutral-200 rounded-lg p-3">
-                  <div className="grid grid-cols-13 gap-2 items-start">
+                  <div className="grid grid-cols-12 gap-2 items-start">
                     {/* Service/Product Description */}
-                    <div className="col-span-3">
+                    <div className="col-span-4">
                       <div className="relative">
                         <input
                           type="text"
@@ -599,39 +599,41 @@ const InvoiceForm: React.FC = () => {
                       </select>
                     </div>
 
-                    {/* Unit Price with Currency Symbol */}
+                    {/* Unit Price with Currency and Discount */}
                     <div className="col-span-2">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={item.unitPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(',', '.');
-                            handleItemChange(item.id, 'unitPrice', parseFloat(val) || 0);
-                          }}
-                          placeholder="0,00"
-                          className="w-full pl-3 pr-8 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
-                          required
-                        />
-                        <span className="absolute right-3 top-2.5 text-neutral-500 text-sm">₺</span>
+                      <input
+                        type="text"
+                        value={item.unitPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(',', '.');
+                          handleItemChange(item.id, 'unitPrice', parseFloat(val) || 0);
+                        }}
+                        placeholder="0,00"
+                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
+                        required
+                      />
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-neutral-500">₺</span>
+                        <span className="text-xs text-neutral-500">%</span>
+                        <select className="flex-1 text-xs px-1 py-0.5 border border-neutral-300 rounded bg-neutral-50">
+                          <option value="20">20</option>
+                          <option value="10">10</option>
+                          <option value="0">0</option>
+                        </select>
                       </div>
                     </div>
 
-                    {/* Tax (VERGİ) - Two separate frames: KDV + Rate dropdown */}
-                    <div className="col-span-2">
+                    {/* Tax (VERGİ) - Two dropdowns */}
+                    <div className="col-span-1">
                       <div className="flex gap-1">
-                        {/* KDV Frame */}
-                        <input
-                          type="text"
-                          value="KDV"
-                          readOnly
-                          className="w-16 px-2 py-2 border border-neutral-300 rounded-lg bg-neutral-50 text-xs font-medium text-neutral-600 text-center"
-                        />
-                        {/* Rate Dropdown Frame */}
+                        <select className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs bg-neutral-50">
+                          <option value="KDV">KDV</option>
+                          <option value="ÖTV">ÖTV</option>
+                        </select>
                         <select
                           value={item.taxRate}
                           onChange={(e) => handleItemChange(item.id, 'taxRate', parseInt(e.target.value))}
-                          className="flex-1 px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs"
+                          className="flex-1 px-1 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-xs"
                         >
                           <option value="20">%20</option>
                           <option value="10">%10</option>
@@ -643,23 +645,14 @@ const InvoiceForm: React.FC = () => {
                     </div>
 
                     {/* Total */}
-                    <div className="col-span-2">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(',', '.');
-                            handleItemChange(item.id, 'grandTotal', parseFloat(val) || 0);
-                          }}
-                          className="w-full pl-3 pr-8 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm text-right"
-                        />
-                        <span className="absolute right-3 top-2.5 text-neutral-500 text-sm">₺</span>
+                    <div className="col-span-2 text-right">
+                      <div className="text-sm font-medium text-neutral-900">
+                        {item.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
                       </div>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="col-span-2 flex items-start justify-end gap-1">
+                    <div className="col-span-1 flex items-start justify-end gap-1">
                       {/* Stock Tracking Dropdown */}
                       <div className="relative">
                         <button
