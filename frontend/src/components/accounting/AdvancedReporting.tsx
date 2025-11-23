@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { card, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app'
 const API_BASE = API_URL.endsWith('/api') ? API_URL : `${API_URL}/api`
 
 type ReportType = 'cashflow' | 'profitloss' | 'balance' | 'vat'

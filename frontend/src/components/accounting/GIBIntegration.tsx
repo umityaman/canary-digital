@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { card, button, DESIGN_TOKENS, cx } from '../../styles/design-tokens'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app'
 
 interface GIBIntegrationProps {
   invoiceId?: string

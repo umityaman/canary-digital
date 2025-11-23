@@ -4,7 +4,7 @@ import { Plus, Search, Filter, Users, TrendingUp, TrendingDown, DollarSign, Edit
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app/api'
 
 interface AccountCard {
   id: number

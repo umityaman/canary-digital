@@ -419,7 +419,7 @@ export default function Accounting() {
     
     try {
       // Bu i�lem her faturay� tek tek silecek - idealde backend'de bulk delete endpoint olmal�
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app/api'
       for (const id of selectedInvoices) {
         await axios.delete(`${API_URL}/invoices/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
@@ -457,7 +457,7 @@ export default function Accounting() {
     }
     
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app/api'
       for (const id of selectedOffers) {
         await axios.delete(`${API_URL}/quotes/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }

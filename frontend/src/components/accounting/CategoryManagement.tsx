@@ -25,7 +25,7 @@ export default function CategoryManagement() {
   const loadCategories = async () => {
     try {
       setLoading(true)
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app'
       const token = localStorage.getItem('token')
 
       if (!token) {
@@ -53,7 +53,7 @@ export default function CategoryManagement() {
     }
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app'
       const token = localStorage.getItem('token')
 
       await axios.post(
@@ -84,11 +84,11 @@ export default function CategoryManagement() {
     }
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app'
       const token = localStorage.getItem('token')
 
       await axios.delete(
-        `${API_URL}/api/accounting/categories/${category.type}/${encodeURIComponent(category.name)}`,
+        `${API_URL}/api/accounting/categories/${category.type}/${encodeURIComponent(category.name)},
         {
           headers: { Authorization: `Bearer ${token}` }
         }

@@ -72,7 +72,7 @@ export default function CostAccounting() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app';
 
       // 🔥 Gerçek API'den maliyet verilerini yükle
       const costResponse = await fetch(`${API_URL}/api/cost-accounting/reports/cost`, {

@@ -65,7 +65,7 @@ export default function AccountingDashboard() {
     }
     try {
       // API endpoint and auth header setup
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app'
       
       // Get token from localStorage
       const token = localStorage.getItem('auth_token') || localStorage.getItem('token')

@@ -94,7 +94,7 @@ export default function InventoryAccounting() {
     setLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app';
       
       const response = await fetch(`${API_URL}/api/stock/movements`, {
         headers: {
