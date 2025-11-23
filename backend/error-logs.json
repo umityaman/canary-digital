@@ -1,0 +1,42 @@
+﻿[
+  {
+    "insertId": "691b7605000632e5c8240478",
+    "labels": {
+      "instanceId": "0014778296836b9431e23e7ba38035b2dfb5ce0c26b9d0b06c2106437d85bff767df73afb933c05b7c9ec44672219273d3da25cb95a2e288739f87d46bb9ecf5e4952df0291434ab72757eb1c0"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2025-11-17T19:22:45.742376456Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00627-cxh",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "2025-11-17 19:22:45:2245 \u001b[31merror\u001b[39m: \u001b[31mFailed to create invoice: Cannot read properties of undefined (reading 'customer')\u001b[39m",
+    "timestamp": "2025-11-17T19:22:45.406245Z"
+  },
+  {
+    "insertId": "691b7605000630d3f614b14f",
+    "labels": {
+      "instanceId": "0014778296836b9431e23e7ba38035b2dfb5ce0c26b9d0b06c2106437d85bff767df73afb933c05b7c9ec44672219273d3da25cb95a2e288739f87d46bb9ecf5e4952df0291434ab72757eb1c0"
+    },
+    "logName": "projects/canary-digital-475319/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2025-11-17T19:22:45.407878080Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "canary-backend",
+        "location": "europe-west1",
+        "project_id": "canary-digital-475319",
+        "revision_name": "canary-backend-00627-cxh",
+        "service_name": "canary-backend"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "2025-11-17 19:22:45:2245 \u001b[31merror\u001b[39m: \u001b[31mInvoice Service: Fatura olu?turulamad?: Cannot read properties of undefined (reading 'customer')\u001b[39m",
+    "timestamp": "2025-11-17T19:22:45.405715Z"
+  }
+]

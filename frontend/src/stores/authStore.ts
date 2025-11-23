@@ -40,7 +40,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   login: async (credentials) => {
     set({ isLoading: true })
     try {
+      console.log('🔐 Login attempt:', credentials.email)
       const response = await authAPI.login(credentials)
+      console.log('✅ Login response:', response.data)
       const { user, token } = response.data
 
       // localStorage'a kaydet
@@ -53,9 +55,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isAuthenticated: true, 
         isLoading: false 
       })
+      console.log('✅ Login successful, user:', user.email)
     } catch (error: any) {
+      console.error('❌ Login failed:', error)
+      console.error('❌ Error response:', error.response?.data)
+      console.error('❌ Error status:', error.response?.status)
       set({ isLoading: false })
-      throw new Error(error.response?.data?.error || 'Login failed')
+      throw new Error(error.response?.data?.error || error.response?.data?.message || 'Login failed')
     }
   },
 

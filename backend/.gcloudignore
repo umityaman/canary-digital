@@ -1,0 +1,17 @@
+# Ignore node_modules to speed up deployment
+node_modules/
+# Ignore test files
+*.test.ts
+*.test.js
+tests/
+# Ignore local files
+.env
+.env.local
+*.log
+# Ignore development files
+test-*.ts
+check-*.ts
+check-*.js
+*.json.bak
+# Ignore prisma client generated files (will be regenerated in build)
+prisma/generated/
