@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { card, button, badge, DESIGN_TOKENS, cx } from '../../styles/design-tokens';
-import AccountFormModal from './AccountFormModal';
+import ChartOfAccountsModal from './ChartOfAccountsModal';
 import { exportChartOfAccountsToExcel } from '../../utils/excelExport';
 
 interface ChartOfAccount {
@@ -485,7 +485,7 @@ export default function ChartOfAccountsManagement() {
       </div>
 
       {/* Create/Edit Modal */}
-      <AccountFormModal
+      <ChartOfAccountsModal
         open={showCreateModal}
         onClose={() => {
           setShowCreateModal(false);
