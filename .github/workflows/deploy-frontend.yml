@@ -43,7 +43,15 @@ jobs:
           echo "Installing npm workspaces at repository root"
           echo "Repo root: $(pwd)"
           echo "node: $(node -v) npm: $(npm -v)"
-          npm ci --no-audit --prefer-offline || npm install --no-audit --prefer-offline
+          # Remove package-lock and node_modules to avoid rollup optional dependency bug
+          rm -rf node_modules package-lock.json
+          npm install --no-audit --prefer-offline
+          
+          # Also ensure frontend workspace has all dependencies
+          cd frontend
+          rm -rf node_modules
+          npm install --no-audit --prefer-offline
+          cd ..
 
       - name: Google Auth
         uses: google-github-actions/auth@v2
