@@ -9,7 +9,15 @@
 
 // Raw environment value (might include '/api' or trailing slash)
 // Default to production backend if VITE_API_URL is not set
+// CRITICAL: Always use production backend (env vars not loading in Cloud Run)
 const RAW = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app';
+
+// Log what we're actually getting from environment
+console.log('🔍 ENV CHECK:', {
+  'import.meta.env.VITE_API_URL': import.meta.env.VITE_API_URL,
+  'import.meta.env.MODE': import.meta.env.MODE,
+  'RAW (before normalize)': RAW,
+});
 
 // Normalize: remove trailing slashes and trailing '/api' if present
 function normalizeBase(raw: string): string {

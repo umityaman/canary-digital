@@ -72,9 +72,12 @@ jobs:
           echo "Build artifacts cleaned"
       
       - name: Build Frontend
+        env:
+          VITE_API_URL: ${{ env.BACKEND_URL }}
         run: |
           cd frontend
           echo "Building frontend with Vite..."
+          echo "VITE_API_URL is set to: $VITE_API_URL"
           npm run build
           echo "✅ Frontend build completed"
           ls -la dist/ || echo "❌ dist folder not found!"
