@@ -17,7 +17,7 @@ on:
           - staging
 
 env:
-  PROJECT_ID: canary-digital-475319
+  PROJECT_ID: canary-digital-2026
   REGION: europe-west1
 
 jobs:
@@ -90,19 +90,18 @@ jobs:
             --max-instances=10 \
             --memory=1Gi \
             --cpu=1 \
-            --port=4000 \
+            --port=8080 \
             --timeout=300 \
-            --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
-            --update-secrets=JWT_SECRET=jwt-secret:latest \
-            --update-secrets=JWT_REFRESH_SECRET=jwt-secret:latest \
-            --update-secrets=DATABASE_URL=database-url:latest \
+            --set-secrets=JWT_SECRET=JWT_SECRET:latest \
+            --set-secrets=DATABASE_URL=DATABASE_URL:latest \
+            --set-secrets=EMAIL_PASSWORD=EMAIL_PASSWORD:latest \
             --set-env-vars="NODE_ENV=production"
 
       - name: Get Backend URL
         id: get-backend-url
         run: |
           # Use hardcoded stable backend URL instead of dynamic retrieval
-          URL="https://canary-backend-672344972017.europe-west1.run.app"
+          URL="https://canary-backend-242329244691.europe-west1.run.app"
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "Backend URL: $URL"
 

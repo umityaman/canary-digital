@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  PROJECT_ID: canary-digital-475319
+  PROJECT_ID: canary-digital-2026
   REGION: europe-west1
   SERVICE_NAME: canary-backend
 
@@ -176,7 +176,7 @@ jobs:
         id: build
         run: |
           cd backend
-          IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/canary/backend:${{ github.sha }}"
+          IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-run-source-deploy/canary-backend:${{ github.sha }}"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           
           echo "📦 Submitting build to Cloud Build..."
@@ -227,12 +227,11 @@ jobs:
             --max-instances=10 \
             --memory=1Gi \
             --cpu=1 \
-            --port=4000 \
+            --port=8080 \
             --timeout=300 \
-            --set-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:canary-postgres \
-            --update-secrets=JWT_SECRET=jwt-secret:latest \
-            --update-secrets=JWT_REFRESH_SECRET=jwt-secret:latest \
-            --update-secrets=DATABASE_URL=database-url:latest \
+            --set-secrets=JWT_SECRET=JWT_SECRET:latest \
+            --set-secrets=DATABASE_URL=DATABASE_URL:latest \
+            --set-secrets=EMAIL_PASSWORD=EMAIL_PASSWORD:latest \
             --set-env-vars="NODE_ENV=production"
 
       - name: Get Build Logs on Failure
