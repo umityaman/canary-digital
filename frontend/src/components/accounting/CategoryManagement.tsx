@@ -26,7 +26,7 @@ export default function CategoryManagement() {
     try {
       setLoading(true)
       const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app'
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
 
       if (!token) {
         toast.error('Oturum bilgisi bulunamadı')
@@ -54,7 +54,7 @@ export default function CategoryManagement() {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app'
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
 
       await axios.post(
         `${API_URL}/api/accounting/categories/rename`,
@@ -85,7 +85,7 @@ export default function CategoryManagement() {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app'
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token')
 
       await axios.delete(
         `${API_URL}/api/accounting/categories/${category.type}/${encodeURIComponent(category.name)},

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -100,9 +101,9 @@ export default function CurrentAccountDetail() {
   const loadAccount = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/accounting/current-accounts/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/current-accounts/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 
@@ -136,7 +137,7 @@ export default function CurrentAccountDetail() {
         `/api/accounting/current-accounts/${id}/transactions?${params}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
           },
         }
       );

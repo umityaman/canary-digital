@@ -82,7 +82,7 @@ const AccountCardDetail: React.FC = () => {
     try {
       setLoading(true)
       const response = await axios.get(`${API_URL}/account-cards/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
       })
       setAccountCard(response.data)
     } catch (error: any) {
@@ -96,7 +96,7 @@ const AccountCardDetail: React.FC = () => {
   const loadSummary = async () => {
     try {
       const response = await axios.get(`${API_URL}/account-cards/${id}/summary`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
       })
       setSummary(response.data)
     } catch (error: any) {

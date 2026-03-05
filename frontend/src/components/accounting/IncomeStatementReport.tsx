@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import {
   TrendingUp,
@@ -66,9 +67,9 @@ export default function IncomeStatementReport() {
         endDate: dateTo,
       });
 
-      const response = await fetch(`/api/accounting/reports/income-statement?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/reports/income-statement?${params}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 

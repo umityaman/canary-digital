@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import { useState, useEffect } from 'react'
 import { ArrowLeft, Plus, Trash2, Save, Send, User, FileText } from 'lucide-react'
 import { toast } from 'react-hot-toast'
@@ -62,7 +63,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
     try {
       const response = await fetch('/api/customers', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
 
@@ -188,7 +189,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
       const response = await fetch(url, {
         method,
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(invoiceData)
@@ -201,7 +202,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
       // If sending immediately, also send e-document
       if (sendImmediately && result.data?.id) {
         try {
-          const token = localStorage.getItem('token')
+          const token = localStorage.getItem('auth_token')
           if (!token) {
             throw new Error('Oturum bilgisi bulunamadı')
           }
@@ -211,7 +212,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
           }
 
           if (invoiceData.invoiceType === 'e-fatura') {
-            const generateResponse = await fetch(`/api/einvoice/generate/${result.data.id}`, {
+            const generateResponse = await fetch(`${API_BASE_URL}/einvoice/generate/${result.data.id}`, {
               method: 'POST',
               headers,
             })
@@ -220,7 +221,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
               throw new Error(generatePayload?.message || 'E-Fatura XML oluşturulamadı')
             }
 
-            const sendResponse = await fetch(`/api/einvoice/send/${result.data.id}`, {
+            const sendResponse = await fetch(`${API_BASE_URL}/einvoice/send/${result.data.id}`, {
               method: 'POST',
               headers,
             })
@@ -233,7 +234,7 @@ export default function EInvoiceForm({ onClose, onSuccess, editInvoice }: EInvoi
               ...headers,
               'Content-Type': 'application/json',
             }
-            const archiveResponse = await fetch(`/api/invoices/${result.data.id}/send-edocument`, {
+            const archiveResponse = await fetch(`${API_BASE_URL}/invoices/${result.data.id}/send-edocument`, {
               method: 'POST',
               headers: archiveHeaders,
             })

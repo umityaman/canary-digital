@@ -50,7 +50,7 @@ const AccountCardList: React.FC = () => {
 
       const response = await axios.get(`${API_URL}/account-cards`, {
         params,
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
       })
 
       setAccountCards(response.data.accountCards)

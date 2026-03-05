@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import {
   FileText,
@@ -66,9 +67,9 @@ export default function JournalEntryList() {
       if (dateFrom) params.append('dateFrom', dateFrom);
       if (dateTo) params.append('dateTo', dateTo);
 
-      const response = await fetch(`/api/accounting/journal-entries?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/journal-entries?${params}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 
@@ -93,10 +94,10 @@ export default function JournalEntryList() {
     if (!confirm('Bu muhasebe fişini silmek istediğinize emin misiniz?')) return;
 
     try {
-      const response = await fetch(`/api/accounting/journal-entries/${entryId}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/journal-entries/${entryId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 

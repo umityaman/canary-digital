@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import {
   Scale,
@@ -62,9 +63,9 @@ export default function TrialBalanceReport() {
       if (accountTypeFilter !== 'ALL') params.append('accountType', accountTypeFilter);
       params.append('includeZeroBalance', showZeroBalances.toString());
 
-      const response = await fetch(`/api/accounting/reports/trial-balance?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/reports/trial-balance?${params}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 

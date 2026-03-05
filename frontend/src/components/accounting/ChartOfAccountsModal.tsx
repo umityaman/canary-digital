@@ -62,7 +62,7 @@ export default function ChartOfAccountsModal({ open, onClose, onSaved, initialDa
       setLoading(true)
       const response = await fetch('/api/accounting/chart-of-accounts', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
       
@@ -110,7 +110,7 @@ export default function ChartOfAccountsModal({ open, onClose, onSaved, initialDa
         method: initialData ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify(formData)
       })

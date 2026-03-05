@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -59,7 +60,7 @@ const EInvoiceManagement: React.FC = () => {
         params.append('status', selectedStatus);
       }
 
-      const response = await fetch(`/api/gib/invoices?${params}`);
+      const response = await fetch(`${API_BASE_URL}/gib/invoices?${params}`);
       if (!response.ok) throw new Error('Failed to fetch e-Invoices');
 
       const data = await response.json();
@@ -76,7 +77,7 @@ const EInvoiceManagement: React.FC = () => {
 
   const handleSendInvoice = async (invoiceId: number) => {
     try {
-      const response = await fetch(`/api/gib/invoices/${invoiceId}/send`, {
+      const response = await fetch(`${API_BASE_URL}/gib/invoices/${invoiceId}/send`, {
         method: 'POST',
       });
 
@@ -96,7 +97,7 @@ const EInvoiceManagement: React.FC = () => {
 
   const handleCheckStatus = async (invoiceId: number) => {
     try {
-      const response = await fetch(`/api/gib/invoices/${invoiceId}/status`);
+      const response = await fetch(`${API_BASE_URL}/gib/invoices/${invoiceId}/status`);
       const data = await response.json();
 
       if (data.success) {
@@ -118,7 +119,7 @@ const EInvoiceManagement: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/gib/invoices/${invoiceId}/cancel`, {
+      const response = await fetch(`${API_BASE_URL}/gib/invoices/${invoiceId}/cancel`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: cancelReason }),
@@ -142,7 +143,7 @@ const EInvoiceManagement: React.FC = () => {
 
   const handleDownloadReport = async (invoiceId: number, format: 'PDF' | 'HTML') => {
     try {
-      const response = await fetch(`/api/gib/invoices/${invoiceId}/report?format=${format}`);
+      const response = await fetch(`${API_BASE_URL}/gib/invoices/${invoiceId}/report?format=${format}`);
       
       if (!response.ok) throw new Error('Failed to download report');
 
@@ -170,7 +171,7 @@ const EInvoiceManagement: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/gib/invoices/${uuid}/response`, {
+      const response = await fetch(`${API_BASE_URL}/gib/invoices/${uuid}/response`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import {
   BookOpen,
@@ -50,9 +51,9 @@ export default function ChartOfAccountsManagement() {
       const params = new URLSearchParams();
       if (typeFilter !== 'ALL') params.append('type', typeFilter);
 
-      const response = await fetch(`/api/accounting/chart-of-accounts?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/chart-of-accounts?${params}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 
@@ -118,10 +119,10 @@ export default function ChartOfAccountsManagement() {
     if (!confirm('Bu hesabı silmek istediğinize emin misiniz?')) return;
 
     try {
-      const response = await fetch(`/api/accounting/chart-of-accounts/${accountId}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/chart-of-accounts/${accountId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 

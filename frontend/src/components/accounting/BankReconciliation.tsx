@@ -67,7 +67,7 @@ export default function BankReconciliation() {
     
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('auth_token');
       const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app';
       
       const response = await fetch(

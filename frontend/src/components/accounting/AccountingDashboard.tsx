@@ -68,7 +68,7 @@ export default function AccountingDashboard() {
       const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app'
       
       // Get token from localStorage
-      const token = localStorage.getItem('auth_token') || localStorage.getItem('token')
+      const token = localStorage.getItem('auth_token') || localStorage.getItem('auth_token')
       
       if (!token) {
         console.warn('?? No auth token found, showing empty dashboard')

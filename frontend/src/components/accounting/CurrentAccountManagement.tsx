@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -72,9 +73,9 @@ export default function CurrentAccountManagement() {
       if (typeFilter !== 'ALL') params.append('type', typeFilter);
       if (balanceFilter !== 'ALL') params.append('balanceType', balanceFilter);
 
-      const response = await fetch(`/api/accounting/current-accounts?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/current-accounts?${params}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 
@@ -94,9 +95,9 @@ export default function CurrentAccountManagement() {
     try {
       setTransactionsLoading(true);
 
-      const response = await fetch(`/api/accounting/current-accounts/${accountId}/transactions`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/current-accounts/${accountId}/transactions`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 
@@ -126,10 +127,10 @@ export default function CurrentAccountManagement() {
     if (!confirm('Bu cari hesabı silmek istediğinize emin misiniz?')) return;
 
     try {
-      const response = await fetch(`/api/accounting/current-accounts/${accountId}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/current-accounts/${accountId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 

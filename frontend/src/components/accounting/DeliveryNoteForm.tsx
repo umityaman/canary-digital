@@ -94,7 +94,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
     try {
       const response = await fetch('/api/customers', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
 
@@ -112,7 +112,7 @@ export default function DeliveryNoteForm({ onClose, onSuccess, editNote }: Deliv
     try {
       const response = await fetch('/api/orders', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
 

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import { useState, useEffect } from 'react'
 import {
   Search, Download, FileText, Send, X, CheckCircle,
@@ -50,7 +51,7 @@ export default function EInvoiceList() {
   const [actionInvoiceId, setActionInvoiceId] = useState<number | null>(null)
 
   const buildHeaders = (withJson = false) => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
     if (!token) {
       toast.error('Oturum bilgisi bulunamad�')
       return null
@@ -80,7 +81,7 @@ export default function EInvoiceList() {
     try {
       const response = await fetch('/api/invoices', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
 
@@ -178,7 +179,7 @@ export default function EInvoiceList() {
       try {
         setActionInvoiceId(invoice.id)
 
-        const generateResponse = await fetch(`/api/einvoice/generate/${invoice.id}`, {
+        const generateResponse = await fetch(`${API_BASE_URL}/einvoice/generate/${invoice.id}`, {
           method: 'POST',
           headers,
         })
@@ -187,7 +188,7 @@ export default function EInvoiceList() {
           throw new Error(generatePayload?.message || 'E-Fatura XML olu�turulamad�')
         }
 
-        const sendResponse = await fetch(`/api/einvoice/send/${invoice.id}`, {
+        const sendResponse = await fetch(`${API_BASE_URL}/einvoice/send/${invoice.id}`, {
           method: 'POST',
           headers,
         })
@@ -219,7 +220,7 @@ export default function EInvoiceList() {
     try {
       setActionInvoiceId(invoice.id)
 
-      const response = await fetch(`/api/invoices/${invoice.id}/send-edocument`, {
+      const response = await fetch(`${API_BASE_URL}/invoices/${invoice.id}/send-edocument`, {
         method: 'POST',
         headers,
       })
@@ -250,7 +251,7 @@ export default function EInvoiceList() {
     try {
       setActionInvoiceId(invoice.id)
 
-      const response = await fetch(`/api/einvoice/status/${invoice.id}`, {
+      const response = await fetch(`${API_BASE_URL}/einvoice/status/${invoice.id}`, {
         method: 'GET',
         headers,
       })
@@ -281,7 +282,7 @@ export default function EInvoiceList() {
     try {
       setActionInvoiceId(invoice.id)
 
-      const response = await fetch(`/api/einvoice/xml/${invoice.id}`, {
+      const response = await fetch(`${API_BASE_URL}/einvoice/xml/${invoice.id}`, {
         method: 'GET',
         headers,
       })
@@ -317,10 +318,10 @@ export default function EInvoiceList() {
     }
 
     try {
-      const response = await fetch(`/api/invoices/${invoice.id}/cancel`, {
+      const response = await fetch(`${API_BASE_URL}/invoices/${invoice.id}/cancel`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
           'Content-Type': 'application/json'
         }
       })

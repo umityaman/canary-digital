@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import { useState } from 'react'
 import { ArrowLeft, Download, Send, X, CheckCircle, FileText, Calendar, User, DollarSign, RefreshCw, File, Hash } from 'lucide-react'
 import { toast } from 'react-hot-toast'
@@ -12,7 +13,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
   const [loading, setLoading] = useState(false)
 
   const buildHeaders = (withJson = false) => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
     if (!token) {
       toast.error('Oturum bilgisi bulunamadı')
       return null
@@ -53,7 +54,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
       setLoading(true)
       try {
-        const generateResponse = await fetch(`/api/einvoice/generate/${invoice.id}`, {
+        const generateResponse = await fetch(`${API_BASE_URL}/einvoice/generate/${invoice.id}`, {
           method: 'POST',
           headers,
         })
@@ -62,7 +63,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
           throw new Error(generatePayload?.message || 'E-Fatura XML oluşturulamadı')
         }
 
-        const sendResponse = await fetch(`/api/einvoice/send/${invoice.id}`, {
+        const sendResponse = await fetch(`${API_BASE_URL}/einvoice/send/${invoice.id}`, {
           method: 'POST',
           headers,
         })
@@ -93,7 +94,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
     setLoading(true)
     try {
-      const response = await fetch(`/api/invoices/${invoice.id}/send-edocument`, {
+      const response = await fetch(`${API_BASE_URL}/invoices/${invoice.id}/send-edocument`, {
         method: 'POST',
         headers,
       })
@@ -123,7 +124,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
     setLoading(true)
     try {
-      const response = await fetch(`/api/einvoice/status/${invoice.id}`, {
+      const response = await fetch(`${API_BASE_URL}/einvoice/status/${invoice.id}`, {
         method: 'GET',
         headers,
       })
@@ -153,7 +154,7 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
     setLoading(true)
     try {
-      const response = await fetch(`/api/einvoice/xml/${invoice.id}`, {
+      const response = await fetch(`${API_BASE_URL}/einvoice/xml/${invoice.id}`, {
         method: 'GET',
         headers,
       })
@@ -190,10 +191,10 @@ export default function EInvoiceDetail({ invoice, onBack, onUpdate }: EInvoiceDe
 
     setLoading(true)
     try {
-      const response = await fetch(`/api/invoices/${invoice.id}/cancel`, {
+      const response = await fetch(`${API_BASE_URL}/invoices/${invoice.id}/cancel`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
 

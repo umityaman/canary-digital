@@ -98,7 +98,7 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
 
   const testConnection = async () => {
     setTestingConnection(true)
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
 
     try {
       const response = await axios.get(
@@ -123,7 +123,7 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
 
   const generateXML = async () => {
     setLoading(true)
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
 
     try {
       const invoiceData = getSampleInvoiceData()
@@ -146,7 +146,7 @@ const GIBIntegration: React.FC<GIBIntegrationProps> = ({ invoiceId, onSuccess })
 
   const sendToGIB = async (invoiceType: 'efatura' | 'earsiv') => {
     setLoading(true)
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
 
     try {
       const invoiceData = getSampleInvoiceData()

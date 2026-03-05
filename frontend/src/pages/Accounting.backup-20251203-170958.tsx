@@ -347,7 +347,7 @@ export default function Accounting() {
     } catch (error: any) {
       console.error('? Failed to load offers:', error)
       console.error('Error details:', error.response?.data)
-      toast.error('Teklifler yüklenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('TÇeklifler yüklenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setOffersLoading(false)
     }
@@ -361,7 +361,7 @@ export default function Accounting() {
   const handleOfferStatusUpdate = async (offerId: number, status: string) => {
     try {
       await offerAPI.updateStatus(offerId, status)
-      toast.success('Teklif durumu güncellendi')
+      toast.success('TÇeklif durumu güncellendi')
       loadOffers()
     } catch (error: any) {
       console.error('Failed to update offer status:', error)
@@ -370,24 +370,24 @@ export default function Accounting() {
   }
 
   const handleConvertToInvoice = async (offerId: number) => {
-    if (!confirm('Bu teklifi faturaya dönüştürmek istediğinizden emin misiniz?')) {
+    if (!confirm('Bu tÇeklifi faturaya dönüştürmÇek istediğinizden emin misiniz?')) {
       return
     }
     
     try {
-      // Note: Bu endpoint için orderId, startDate, endDate gerekiyor
-      // Basitleştirilmiş versiyon - gerçek implementasyonda modal ile bu bilgileri almalısınız
+      // Note: Bu endpoint için orderId, startDate, endDate gerÇekiyor
+      // Basitleştirilmiş versiyon - gerçÇek impİşlementasyonda modal ile bu bilgileri almalısınız
       const today = new Date().toISOString().split('T')[0]
-      const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]
+      const nexTümüonth = new Date(new Date().seTümüonth(new Date().geTümüonth() + 1)).toISOString().split('T')[0]
       
       const response = await offerAPI.convertToInvoice(offerId, {
         orderId: offerId, // Geçici olarak offerId kullanıyoruz
         startDate: today,
-        endDate: nextMonth,
-        notes: 'Tekliften otomatik oluşturuldu'
+        endDate: nexTümüonth,
+        notes: 'TÇekliften otomatik oluşturuldu'
       })
       
-      toast.success('Teklif ba�ar�yla faturaya d�n��t�r�ld�')
+      toast.success('TÇeklif ba�ar�yla faturaya d�n��t�r�ld�')
       navigate(`/accounting/invoice/${response.data.invoice.id}`)
     } catch (error: any) {
       console.error('Failed to convert offer:', error)
@@ -413,13 +413,13 @@ export default function Accounting() {
   }
 
   const handleBulkDeleteInvoices = async () => {
-    if (!confirm(`${selectedInvoices.length} faturay� silmek istedi�inizden emin misiniz?`)) {
+    if (!confirm(`${selectedInvoices.length} faturay� silmÇek istedi�inizden emin misiniz?`)) {
       return
     }
     
     try {
-      // Bu i�lem her faturay� tek tek silecek - idealde backend'de bulk delete endpoint olmal�
-      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app/api'
+      // Bu i�İşlem her faturay� tÇek tÇek silecÇek - idealde backend'de bulk delete endpoint olmal�
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
       for (const id of selectedInvoices) {
         await axios.delete(`${API_URL}/invoices/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
@@ -452,18 +452,18 @@ export default function Accounting() {
   }
 
   const handleBulkDeleteOffers = async () => {
-    if (!confirm(`${selectedOffers.length} teklifi silmek istedi�inizden emin misiniz?`)) {
+    if (!confirm(`${selectedOffers.length} tÇeklifi silmÇek istedi�inizden emin misiniz?`)) {
       return
     }
     
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app/api'
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
       for (const id of selectedOffers) {
         await axios.delete(`${API_URL}/quotes/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
         })
       }
-      toast.success(`${selectedOffers.length} teklif silindi`)
+      toast.success(`${selectedOffers.length} tÇeklif silindi`)
       setSelectedOffers([])
       loadOffers()
     } catch (error: any) {
@@ -544,7 +544,7 @@ export default function Accounting() {
         headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
       })
       const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement('a')
+      const link = document.createEİşlement('a')
       link.href = url
       link.setAttribute('download', `fatura-${invoice.invoiceNumber || invoice.id}.pdf`)
       document.body.appendChild(link)
@@ -554,14 +554,14 @@ export default function Accounting() {
       toast.success('PDF indirildi!')
     } catch (error) {
       toast.dismiss()
-      toast.error('PDF indirilemedi')
+      toast.error('PDF indiriİşlemedi')
       console.error('Download error:', error)
     }
     setOpenInvoiceDropdown(null)
   }
 
   const handleSendEmail = (_invoice: any) => {
-    toast('Email gönderme özelliği yakında eklenecek!', { icon: '📧' })
+    toast('Email gönderme özelliği yakında ÇeklenecÇek!', { icon: '📧' })
     setOpenInvoiceDropdown(null)
   }
 
@@ -604,9 +604,9 @@ export default function Accounting() {
         headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
       })
       const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement('a')
+      const link = document.createEİşlement('a')
       link.href = url
-      link.setAttribute('download', `teklif-${offer.offerNumber || offer.id}.pdf`)
+      link.setAttribute('download', `tÇeklif-${offer.offerNumber || offer.id}.pdf`)
       document.body.appendChild(link)
       link.click()
       link.remove()
@@ -614,14 +614,14 @@ export default function Accounting() {
       toast.success('PDF indirildi!')
     } catch (error) {
       toast.dismiss()
-      toast.error('PDF indirilemedi')
+      toast.error('PDF indiriİşlemedi')
       console.error('Download error:', error)
     }
     setOpenOfferDropdown(null)
   }
 
   const handleSendOfferEmail = (_offer: any) => {
-    toast('Email gönderme özelliği yakında eklenecek!', { icon: '📧' })
+    toast('Email gönderme özelliği yakında ÇeklenecÇek!', { icon: '📧' })
     setOpenOfferDropdown(null)
   }
 
@@ -631,7 +631,7 @@ export default function Accounting() {
       toast.error('Müşterinin telefon numarası bulunamadı')
       return
     }
-    const message = `Merhaba, ${offer.offerNumber} numaral� teklifimiz haz�r. Toplam: ${offer.total?.toFixed(2)} TL`
+    const message = `Merhaba, ${offer.offerNumber} numaral� tÇeklifimiz haz�r. Toplam: ${offer.total?.toFixed(2)} TL`
     const whatsappUrl = `https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
     toast.success('WhatsApp a��l�yor...')
@@ -646,9 +646,9 @@ export default function Accounting() {
 
   const handleCopyOffer = async (offer: any) => {
     try {
-      const offerText = `Teklif No: ${offer.offerNumber}\nM��teri: ${offer.customer?.name}\nTutar: ${offer.total?.toFixed(2)} TL`
+      const offerText = `TÇeklif No: ${offer.offerNumber}\nM��teri: ${offer.customer?.name}\nTutar: ${offer.total?.toFixed(2)} TL`
       await navigator.clipboard.writeText(offerText)
-      toast.success('Teklif bilgileri kopyaland�!')
+      toast.success('TÇeklif bilgileri kopyaland�!')
     } catch (error) {
       toast.error('Kopyalama ba�ar�s�z')
     }
@@ -662,7 +662,7 @@ export default function Accounting() {
       setChecks(res.data.data || res.data)
     } catch (error: any) {
       console.error('Failed to load checks:', error)
-      toast.error('�ekler y�klenemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('�Çekler y�klenemedi: ' + (error.response?.data?.message || error.message))
     } finally {
       setChecksLoading(false)
     }
@@ -682,22 +682,22 @@ export default function Accounting() {
   }
 
   const handleDeleteCheck = async (id: number) => {
-    if (!confirm('Bu �eki silmek istedi�inizden emin misiniz?')) {
+    if (!confirm('Bu �Çeki silmÇek istedi�inizden emin misiniz?')) {
       return
     }
     
     try {
       await checksAPI.delete(id)
-      toast.success('�ek ba�ar�yla silindi')
+      toast.success('�Çek ba�ar�yla silindi')
       loadChecks()
     } catch (error: any) {
       console.error('Failed to delete check:', error)
-      toast.error('�ek silinemedi: ' + (error.response?.data?.message || error.message))
+      toast.error('�Çek silinemedi: ' + (error.response?.data?.message || error.message))
     }
   }
 
   const handleDeletePromissory = async (id: number) => {
-    if (!confirm('Bu senedi silmek istedi�inizden emin misiniz?')) {
+    if (!confirm('Bu senedi silmÇek istedi�inizden emin misiniz?')) {
       return
     }
     
@@ -774,9 +774,11 @@ export default function Accounting() {
     { id: 'cash-bank' as const, label: 'Kasa & Banka', icon: <Banknote size={18} /> },
     { id: 'delivery' as const, label: 'İrsaliye', icon: <Package size={18} /> },
     { id: 'reconciliation' as const, label: 'Banka Mutabakat', icon: <Building2 size={18} /> },
-    { id: 'tools' as const, label: 'İşletme Kolaylıkları', icon: <Settings size={18} /> },
+    { id: 'tools' as const, label: 'İşleme Kolaylıkları', icon: <Settings size={18} /> },
     { id: 'support' as const, label: 'Yardım & Araçlar', icon: <Globe size={18} /> },
   ]
+
+  // Note: 'advisor' (Mali Müşavir) tab removed as per requirements
 
   return (
     <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6 space-y-4 pb-10">
@@ -786,73 +788,67 @@ export default function Accounting() {
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Bu Ay Gelir */}
-          <div className={card('sm', 'sm', 'default', 'xl')}>
-            <div className="flex items-center justify-between mb-3">
+          <div className={card('sm', 'sm', 'default', 'lg')}>
+            <div className="flex items-center justify-between mb-2">
               <div className={statCardIcon('success')}>
-                <TrendingUp size={20} />
+                <TrendingUp className="text-white" size={16} />
               </div>
-              {stats && stats.invoiceCount > 0 && (
-                <span className={DESIGN_TOKENS?.statCard?.badge}>
-                  {stats.invoiceCount} fatura
-                </span>
-              )}
+              <span className="text-xs font-medium text-neutral-600">
+                {stats && stats.invoiceCount > 0 ? `${stats.invoiceCount} fatura` : 'Bu Ay'}
+              </span>
             </div>
-            <h3 className={DESIGN_TOKENS?.statCard?.value}>
-              {stats ? formatCurrency(stats.totalRevenue) : '?0'}
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+              {stats ? formatCurrency(stats.totalRevenue) : '₺0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Bu Ay Gelir</p>
+            <p className="text-xs font-medium text-neutral-600">Gelir</p>
           </div>
 
           {/* Bu Ay Gider */}
-          <div className={card('sm', 'sm', 'default', 'xl')}>
-            <div className="flex items-center justify-between mb-3">
+          <div className={card('sm', 'sm', 'default', 'lg')}>
+            <div className="flex items-center justify-between mb-2">
               <div className={statCardIcon('error')}>
-                <TrendingDown size={20} />
+                <TrendingDown className="text-white" size={16} />
               </div>
+              <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
             </div>
-            <h3 className={DESIGN_TOKENS?.statCard?.value}>
-              {stats ? formatCurrency(stats.totalExpenses) : '?0'}
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+              {stats ? formatCurrency(stats.totalExpenses) : '₺0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Bu Ay Gider</p>
+            <p className="text-xs font-medium text-neutral-600">Gider</p>
           </div>
 
-          {/* Net K�r */}
-          <div className={card('sm', 'sm', 'default', 'xl')}>
-            <div className="flex items-center justify-between mb-3">
+          {/* Net Kar */}
+          <div className={card('sm', 'sm', 'default', 'lg')}>
+            <div className="flex items-center justify-between mb-2">
               <div className={statCardIcon('info')}>
-                <DollarSign size={20} />
+                <DollarSign className="text-white" size={16} />
               </div>
-              <span className={DESIGN_TOKENS?.statCard?.badge}>Net</span>
+              <span className="text-xs font-medium text-neutral-600">Net</span>
             </div>
-            <h3 className={DESIGN_TOKENS?.statCard?.value}>
-              {stats ? formatCurrency(stats.netProfit) : '?0'}
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+              {stats ? formatCurrency(stats.netProfit) : '₺0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Net K�r</p>
+            <p className="text-xs font-medium text-neutral-600">Kar</p>
           </div>
 
           {/* Tahsilat / Bekleyen */}
-          <div className={card('sm', 'sm', 'default', 'xl')}>
-            <div className="flex items-center justify-between mb-3">
+          <div className={card('sm', 'sm', 'default', 'lg')}>
+            <div className="flex items-center justify-between mb-2">
               <div className={statCardIcon('warning')}>
-                <Clock size={20} />
+                <Clock className="text-white" size={16} />
               </div>
-              <span className={DESIGN_TOKENS?.statCard?.badge}>Bekleyen</span>
+              <span className="text-xs font-medium text-neutral-600">Bekleyen</span>
             </div>
-            <h3 className={DESIGN_TOKENS?.statCard?.value}>
-              {stats ? formatCurrency(stats.totalOverdue) : '?0'}
+            <h3 className="text-lg font-bold text-neutral-900 mb-0.5">
+              {stats ? formatCurrency(stats.totalOverdue) : '₺0'}
             </h3>
-            <p className={DESIGN_TOKENS?.statCard?.label}>Vade Ge�mi�</p>
-            {stats && stats.totalCollections > 0 && (
-              <p className={DESIGN_TOKENS?.statCard?.subtitle}>
-                Bu ay: {formatCurrency(stats.totalCollections)}
-              </p>
-            )}
+            <p className="text-xs font-medium text-neutral-600">Vade Geçmiş</p>
           </div>
         </div>
       )}
 
       {/* Tabs - Vertical Layout */}
-      <div className={card('none', 'sm', 'default', 'xl')}>
+      <div className={card('none', 'sm', 'default', 'lg')}>
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar Tabs */}
           <nav className="flex flex-row gap-1 overflow-x-auto border-b border-neutral-200 lg:border-b-0 lg:border-r lg:w-56 lg:flex-col p-2 flex-shrink-0">
@@ -871,7 +867,7 @@ export default function Accounting() {
           {/* Content Area */}
           <div className="flex-1 p-6 lg:p-8 max-w-7xl mx-auto w-full">
             <ErrorBoundary fallbackTitle="Muhasebe Mod�l� Hatas�" fallbackMessage="Muhasebe mod�l�nde bir sorun olu�tu. L�tfen sayfay� yenileyin.">
-              <Suspense fallback={<LoadingFallback message="��erik y�kleniyor..." />}>
+              <Suspense fallback={<LoadingFallback message="��İçerik y�kleniyor..." />}>
                 {/* Dashboard Tab */}
                 {activeTab === 'dashboard' && <AccountingDashboard />}
 
@@ -930,7 +926,7 @@ export default function Accounting() {
               </div>
             )}
 
-            {/* Receivables Management Tab - �ekler, Senetler, Ya�land�rma */}
+            {/* Receivables Management Tab - �Çekler, Senetler, Ya�land�rma */}
             {activeTab === 'receivables' && (
               <div className="space-y-6 max-w-7xl mx-auto">
                 <h2 className={DESIGN_TOKENS?.typography?.h2}>Alacak Yönetimi</h2>
@@ -941,7 +937,7 @@ export default function Accounting() {
                     onClick={() => setReceivablesSubTab('checks')}
                     className={tab(receivablesSubTab === 'checks', 'underline')}
                   >
-                    �ekler
+                    �Çekler
                   </button>
                   <button
                     onClick={() => setReceivablesSubTab('promissory')}
@@ -961,21 +957,21 @@ export default function Accounting() {
                 {receivablesSubTab === 'checks' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className={DESIGN_TOKENS?.typography?.h3}>�ekler</h3>
+                      <h3 className={DESIGN_TOKENS?.typography?.h3}>�Çekler</h3>
                       <button
                         onClick={() => { setEditingCheck(null); setCheckModalOpen(true) }}
                         className={cx(button('md', 'primary', 'xl'), 'gap-2')}
                       >
                         <FileText size={18} />
-                        Yeni �ek
+                        Yeni �Çek
                       </button>
                     </div>
 
                     <div className={card('none', 'sm', 'default', 'xl')}>
                       {checksLoading ? (
-                        <div className="p-12 text-center text-neutral-600">�ekler y�kleniyor...</div>
+                        <div className="p-12 text-center text-neutral-600">�Çekler y�kleniyor...</div>
                       ) : checks.length === 0 ? (
-                        <div className="p-12 text-center text-neutral-600">�ek bulunamad�</div>
+                        <div className="p-12 text-center text-neutral-600">�Çek bulunamad�</div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="min-w-full w-full">
@@ -986,7 +982,7 @@ export default function Accounting() {
                                 <th className={TABLE_HEADER_CELL}>Tutar</th>
                                 <th className={TABLE_HEADER_CELL}>Vade</th>
                                 <th className={TABLE_HEADER_CELL}>Durum</th>
-                                <th className={TABLE_HEADER_CELL}>��lemler</th>
+                                <th className={TABLE_HEADER_CELL}>��İşlemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-100">
@@ -1001,14 +997,14 @@ export default function Accounting() {
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => { setEditingCheck(c); setCheckModalOpen(true) }}
-                                        className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
+                                        className="text-neutral-600 hover:text-neutral-900 transition-colors p-1 rounded hover:bg-neutral-100"
                                         title="D�zenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
                                       <button
                                         onClick={() => handleDeleteCheck(c.id)}
-                                        className="text-red-600 hover:text-red-800 transition-colors p-1 rounded hover:bg-red-50"
+                                        className="text-neutral-600 hover:text-neutral-900 transition-colors p-1 rounded hover:bg-neutral-100"
                                         title="Sil"
                                       >
                                         <Trash2 size={16} />
@@ -1054,7 +1050,7 @@ export default function Accounting() {
                                 <th className={TABLE_HEADER_CELL}>Tutar</th>
                                 <th className={TABLE_HEADER_CELL}>Vade</th>
                                 <th className={TABLE_HEADER_CELL}>Durum</th>
-                                <th className={TABLE_HEADER_CELL}>��lemler</th>
+                                <th className={TABLE_HEADER_CELL}>��İşlemler</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-neutral-100">
@@ -1069,14 +1065,14 @@ export default function Accounting() {
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => { setEditingPromissory(p); setPromissoryModalOpen(true) }}
-                                        className="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
+                                        className="text-neutral-600 hover:text-neutral-900 transition-colors p-1 rounded hover:bg-neutral-100"
                                         title="D�zenle"
                                       >
                                         <Edit2 size={16} />
                                       </button>
                                       <button
                                         onClick={() => handleDeletePromissory(p.id)}
-                                        className="text-red-600 hover:text-red-800 transition-colors p-1 rounded hover:bg-red-50"
+                                        className="text-neutral-600 hover:text-neutral-900 transition-colors p-1 rounded hover:bg-neutral-100"
                                         title="Sil"
                                       >
                                         <Trash2 size={16} />
@@ -1113,7 +1109,7 @@ export default function Accounting() {
 
             {/* Offer Tab */}
             {activeTab === 'offer' && (
-              <ErrorBoundary fallbackTitle="Teklif Listesi Hatası" fallbackMessage="Teklif listesi yüklenirken bir sorun oluştu.">
+              <ErrorBoundary fallbackTitle="TÇeklif Listesi Hatası" fallbackMessage="TÇeklif listesi yüklenirken bir sorun oluştu.">
                 <Suspense fallback={<div className="p-8 text-center">Yükleniyor...</div>}>
                   <OfferList />
                 </Suspense>
@@ -1145,35 +1141,35 @@ export default function Accounting() {
             {/* Tools Tab OLD - BACKUP */}
             {false && activeTab === 'tools' && (
               <div className="space-y-6 max-w-7xl mx-auto">
-                <h2 className="text-xl font-semibold text-neutral-900 mb-4">��letme Kolayl�klar�</h2>
+                <h2 className="text-xl font-semibold text-neutral-900 mb-4">��leTümüe Kolayl�klar�</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {/* Hat�rlatmalar */}
+                  {/* Hat�rlaTümüalar */}
                   <button
                     onClick={() => setActiveTab('reminders')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <Clock className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Hat�rlatmalar</h3>
+                      <h3 className="font-semibold text-neutral-900">Hat�rlaTümüalar</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">�deme bildirimleri ve vade uyar�lar�</p>
+                    <p className="text-sm text-neutral-600">�Ödeme bildirimleri ve vade uyar�lar�</p>
                   </button>
 
-                  {/* Ekstre Payla��m� */}
+                  {/* Çekstre Payla��m� */}
                   <button
                     onClick={() => setActiveTab('statements')}
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <FileText className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
-                      <h3 className="font-semibold text-neutral-900">Ekstre Paylaşımı</h3>
+                      <h3 className="font-semibold text-neutral-900">Çekstre Paylaşımı</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Müşterilere hesap ekstresi gönderin</p>
+                    <p className="text-sm text-neutral-600">Müşterilere hesap Çekstresi gönderin</p>
                   </button>
 
                   {/* Barkod Okuma */}
@@ -1182,7 +1178,7 @@ export default function Accounting() {
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <Package className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
                       <h3 className="font-semibold text-neutral-900">Barkod Okuma</h3>
@@ -1196,12 +1192,12 @@ export default function Accounting() {
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <Mail className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
                       <h3 className="font-semibold text-neutral-900">Toplu Email</h3>
                     </div>
-                    <p className="text-sm text-neutral-600">Fatura ve teklifleri toplu gönderin</p>
+                    <p className="text-sm text-neutral-600">Fatura ve tÇeklifleri toplu gönderin</p>
                     <div className="mt-3 text-xs text-orange-600 font-medium">Yakında</div>
                   </button>
 
@@ -1211,7 +1207,7 @@ export default function Accounting() {
                     className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
                         <BarChart3 className="text-neutral-700 group-hover:text-white transition-colors" size={24} />
                       </div>
                       <h3 className="font-semibold text-neutral-900">Gelişmiş Raporlar</h3>
@@ -1222,31 +1218,37 @@ export default function Accounting() {
 
                 {/* Quick Stats for Tools */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-blue-900">Aktif Etiketler</h4>
-                      <Tag className="text-blue-600" size={20} />
+                      <div className={statCardIcon('primary')}>
+                        <Tag className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Son 30 gün</span>
                     </div>
-                    <p className="text-3xl font-bold text-blue-900">12</p>
-                    <p className="text-xs text-blue-600 mt-1">Son 30 gün</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">12</h3>
+                    <p className="text-xs font-medium text-neutral-600">Aktif Etiketler</p>
                   </div>
 
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-green-900">Hatırlatmalar</h4>
-                      <Clock className="text-green-600" size={20} />
+                      <div className={statCardIcon('warning')}>
+                        <Clock className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Bu hafta</span>
                     </div>
-                    <p className="text-3xl font-bold text-green-900">5</p>
-                    <p className="text-xs text-green-600 mt-1">Bu hafta</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">5</h3>
+                    <p className="text-xs font-medium text-neutral-600">HatırlaTümüalar</p>
                   </div>
 
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-purple-900">Gönderilen Ekstre</h4>
-                      <FileText className="text-purple-600" size={20} />
+                      <div className={statCardIcon('primary')}>
+                        <FileText className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Bu ay</span>
                     </div>
-                    <p className="text-3xl font-bold text-purple-900">28</p>
-                    <p className="text-xs text-purple-600 mt-1">Bu ay</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">28</h3>
+                    <p className="text-xs font-medium text-neutral-600">Gönderilen Çekstre</p>
                   </div>
                 </div>
               </div>
@@ -1264,38 +1266,50 @@ export default function Accounting() {
               <div className="space-y-6 max-w-7xl mx-auto">
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900">Mali M��avir Paneli</h2>
-                  <p className="text-sm text-neutral-600 mt-1">M�kellef y�netimi ve toplu i�lemler</p>
+                  <p className="text-sm text-neutral-600 mt-1">M�kellef y�netimi ve toplu i�İşlemler</p>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-blue-900">Toplam M�kellef</h4>
-                      <Users className="text-blue-600" size={20} />
+                      <div className={statCardIcon('primary')}>
+                        <Users className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Toplam</span>
                     </div>
-                    <p className="text-3xl font-bold text-blue-900">42</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">42</h3>
+                    <p className="text-xs font-medium text-neutral-600">Mükellef</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-green-900">Aktif D�nem</h4>
-                      <Calendar className="text-green-600" size={20} />
+                      <div className={statCardIcon('primary')}>
+                        <Calendar className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Aktif</span>
                     </div>
-                    <p className="text-3xl font-bold text-green-900">2025/10</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">2025/10</h3>
+                    <p className="text-xs font-medium text-neutral-600">Dönem</p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-orange-900">Bu Ay ��lem</h4>
-                      <FileText className="text-orange-600" size={20} />
+                      <div className={statCardIcon('primary')}>
+                        <FileText className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Bu Ay</span>
                     </div>
-                    <p className="text-3xl font-bold text-orange-900">1,247</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">1,247</h3>
+                    <p className="text-xs font-medium text-neutral-600">İşİşlem</p>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-purple-900">E-Belge</h4>
-                      <Globe className="text-purple-600" size={20} />
+                      <div className={statCardIcon('primary')}>
+                        <Globe className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Toplam</span>
                     </div>
-                    <p className="text-3xl font-bold text-purple-900">384</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">384</h3>
+                    <p className="text-xs font-medium text-neutral-600">E-Belge</p>
                   </div>
                 </div>
 
@@ -1303,8 +1317,8 @@ export default function Accounting() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <button onClick={() => toast('XML d��a aktarma haz�rlan�yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-600 rounded-xl flex items-center justify-center transition-colors">
-                        <Download className="text-blue-600 group-hover:text-white" size={24} />
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <Download className="text-white" size={24} />
                       </div>
                       <h3 className="font-semibold">XML D��a Aktar</h3>
                     </div>
@@ -1313,8 +1327,8 @@ export default function Accounting() {
 
                   <button onClick={() => toast('Excel raporu olu�turuluyor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-green-100 group-hover:bg-green-600 rounded-xl flex items-center justify-center transition-colors">
-                        <BarChart3 className="text-green-600 group-hover:text-white" size={24} />
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <BarChart3 className="text-white" size={24} />
                       </div>
                       <h3 className="font-semibold">Excel Rapor</h3>
                     </div>
@@ -1323,8 +1337,8 @@ export default function Accounting() {
 
                   <button onClick={() => toast('E-Belge g�nderimi ba�lat�l�yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-900 hover:shadow-lg transition-all text-left group">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-purple-100 group-hover:bg-purple-600 rounded-xl flex items-center justify-center transition-colors">
-                        <Mail className="text-purple-600 group-hover:text-white" size={24} />
+                      <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center transition-colors">
+                        <Mail className="text-white" size={24} />
                       </div>
                       <h3 className="font-semibold">Toplu E-Belge</h3>
                     </div>
@@ -1333,7 +1347,7 @@ export default function Accounting() {
                 </div>
 
                 {/* Client List */}
-                <div className="bg-white rounded-2xl p-6 border border-neutral-200">
+                <div className={card('sm', 'md', 'default', 'lg')}>
                   <h3 className="font-semibold text-neutral-900 mb-4">M�kellef Listesi</h3>
                   <div className="space-y-3">
                     {[1, 2, 3, 4, 5].map(i => (
@@ -1368,36 +1382,36 @@ export default function Accounting() {
             {false && activeTab === 'support' && (
               <div className="space-y-6 max-w-7xl mx-auto">
                 <div>
-                  <h2 className="text-2xl font-bold text-neutral-900">Destek Sistemi</h2>
-                  <p className="text-sm text-neutral-600 mt-1">Yard�m, dok�mantasyon ve canl� destek</p>
+                  <h2 className="text-2xl font-bold text-neutral-900">DestÇek Sistemi</h2>
+                  <p className="text-sm text-neutral-600 mt-1">Yard�m, dok�mantasyon ve canl� destÇek</p>
                 </div>
 
                 {/* Quick Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <button onClick={() => toast('Canl� destek ba�lat�l�yor...', { icon: '??' })} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200 hover:shadow-lg transition-all text-left group">
-                    <MessageCircle className="text-blue-600 mb-3" size={32} />
-                    <h3 className="font-semibold text-blue-900 mb-2">Canl� Destek</h3>
-                    <p className="text-sm text-blue-700">7/24 online destek ekibi</p>
+                  <button onClick={() => toast('Canl� destÇek ba�lat�l�yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-300 hover:shadow-lg transition-all text-left group">
+                    <MessageCircle className="text-neutral-600 mb-3" size={32} />
+                    <h3 className="font-semibold text-neutral-900 mb-2">Canl� DestÇek</h3>
+                    <p className="text-sm text-neutral-600">7/24 online destÇek Çekibi</p>
                   </button>
 
-                  <button onClick={() => toast('Dok�mantasyon a��l�yor...', { icon: '??' })} className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-all text-left group">
-                    <FileText className="text-green-600 mb-3" size={32} />
-                    <h3 className="font-semibold text-green-900 mb-2">Dok�mantasyon</h3>
-                    <p className="text-sm text-green-700">Kapsaml� kullan�m k�lavuzu</p>
+                  <button onClick={() => toast('Dok�mantasyon a��l�yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-300 hover:shadow-lg transition-all text-left group">
+                    <FileText className="text-neutral-600 mb-3" size={32} />
+                    <h3 className="font-semibold text-neutral-900 mb-2">Dok�mantasyon</h3>
+                    <p className="text-sm text-neutral-600">Kapsaml� kullan�m k�lavuzu</p>
                   </button>
 
-                  <button onClick={() => toast('Video e�itimleri haz�rlan�yor...', { icon: '??' })} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-lg transition-all text-left group">
-                    <Globe className="text-purple-600 mb-3" size={32} />
-                    <h3 className="font-semibold text-purple-900 mb-2">Video E�itimler</h3>
-                    <p className="text-sm text-purple-700">Ad�m ad�m videolar</p>
+                  <button onClick={() => toast('Video e�itimleri haz�rlan�yor...', { icon: '??' })} className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-neutral-300 hover:shadow-lg transition-all text-left group">
+                    <Globe className="text-neutral-600 mb-3" size={32} />
+                    <h3 className="font-semibold text-neutral-900 mb-2">Video E�itimler</h3>
+                    <p className="text-sm text-neutral-600">Ad�m ad�m videolar</p>
                   </button>
                 </div>
 
                 {/* Support Tickets */}
                 <div className="bg-white rounded-2xl p-6 border border-neutral-200">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-neutral-900">Destek Talepleri</h3>
-                    <button onClick={() => toast('Yeni destek talebi olu�turuluyor...', { icon: '??' })} className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-xl hover:bg-neutral-800 transition-colors">
+                    <h3 className="font-semibold text-neutral-900">DestÇek Talepleri</h3>
+                    <button onClick={() => toast('Yeni destÇek talebi olu�turuluyor...', { icon: '??' })} className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-xl hover:bg-neutral-800 transition-colors">
                       <Plus size={16} />
                       Yeni Talep
                     </button>
@@ -1406,7 +1420,7 @@ export default function Accounting() {
                   <div className="space-y-3">
                     {[
                       { id: 1, subject: 'E-Fatura Entegrasyonu', status: 'open', priority: 'high' },
-                      { id: 2, subject: 'Ekstre G�nderimi Sorunu', status: 'in-progress', priority: 'medium' },
+                      { id: 2, subject: 'Çekstre G�nderimi Sorunu', status: 'in-progress', priority: 'medium' },
                       { id: 3, subject: 'Barkod Okuma Deste�i', status: 'resolved', priority: 'low' },
                     ].map(ticket => (
                       <div key={ticket.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
@@ -1418,14 +1432,14 @@ export default function Accounting() {
                               ticket.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
                               'bg-green-100 text-green-700'
                             }`}>
-                              {ticket.status === 'open' ? 'A��k' : ticket.status === 'in-progress' ? '��lemde' : '��z�ld�'}
+                              {ticket.status === 'open' ? 'A��k' : ticket.status === 'in-progress' ? '��İşlemde' : '��z�ld�'}
                             </span>
                             <span className={`px-2 py-1 text-xs rounded-full ${
                               ticket.priority === 'high' ? 'bg-red-100 text-red-700' :
                               ticket.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
                               'bg-blue-100 text-blue-700'
                             }`}>
-                              {ticket.priority === 'high' ? 'Y�ksek' : ticket.priority === 'medium' ? 'Orta' : 'D���k'}
+                              {ticket.priority === 'high' ? 'Y�ksÇek' : ticket.priority === 'medium' ? 'Orta' : 'D���k'}
                             </span>
                           </div>
                           <p className="text-sm text-neutral-600">2 saat �nce g�ncellendi</p>
@@ -1445,9 +1459,9 @@ export default function Accounting() {
                     {[
                       'E-Fatura nas�l olu�turulur?',
                       'Barkod okuyucu nas�l kullan�l�r?',
-                      'Ekstre payla��m� nas�l yap�l�r?',
-                      'Hat�rlatmalar nas�l ayarlan�r?',
-                      'Mali m��avir paneli �zellikleri nelerdir?',
+                      'Çekstre payla��m� nas�l yap�l�r?',
+                      'Hat�rlaTümüalar nas�l ayarlan�r?',
+                      'Mali m��avir paneli �Özellikleri nelerdir?',
                     ].map((q, i) => (
                       <button key={i} onClick={() => toast('Cevap a��l�yor...', { icon: '?' })} className="w-full text-left p-4 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                         <p className="text-sm text-neutral-900">{q}</p>
@@ -1494,48 +1508,60 @@ export default function Accounting() {
                     <h2 className="text-2xl font-bold text-neutral-900">Bildirim Merkezi</h2>
                     <p className="text-sm text-neutral-600 mt-1">T�m sistem bildirimleri ve uyar�lar</p>
                   </div>
-                  <button onClick={() => toast('T�m bildirimler okundu olarak i�aretlendi', { icon: '?' })} className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors">
-                    T�m�n� Okundu ��aretle
+                  <button onClick={() => toast('T�m bildirimler okundu olarak i�İşaretlendi', { icon: '?' })} className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-xl transition-colors">
+                    T�m�n� okundu ��İşaretle
                   </button>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-neutral-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-blue-900">Toplam</h4>
-                      <Bell className="text-blue-600" size={20} />
+                      <div className={statCardIcon('primary')}>
+                        <Bell className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Tümü</span>
                     </div>
-                    <p className="text-3xl font-bold text-blue-900">127</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">127</h3>
+                    <p className="text-xs font-medium text-neutral-600">Toplam</p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-orange-900">Okunmam��</h4>
-                      <AlertCircle className="text-orange-600" size={20} />
+                      <div className={statCardIcon('warning')}>
+                        <AlertCircle className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Bekleyen</span>
                     </div>
-                    <p className="text-3xl font-bold text-orange-900">8</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">8</h3>
+                    <p className="text-xs font-medium text-neutral-600">Okunmamışış</p>
                   </div>
-                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-red-900">Acil</h4>
-                      <XCircle className="text-red-600" size={20} />
+                      <div className={statCardIcon('error')}>
+                        <XCircle className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">Önemli</span>
                     </div>
-                    <p className="text-3xl font-bold text-red-900">3</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">3</h3>
+                    <p className="text-xs font-medium text-neutral-600">Acil</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                  <div className={card('sm', 'sm', 'default', 'lg')}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-green-900">Bu Hafta</h4>
-                      <CheckCircle className="text-green-600" size={20} />
+                      <div className={statCardIcon('success')}>
+                        <CheckCircle className="text-white" size={16} />
+                      </div>
+                      <span className="text-xs font-medium text-neutral-600">7 Gün</span>
                     </div>
-                    <p className="text-3xl font-bold text-green-900">42</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-0.5">42</h3>
+                    <p className="text-xs font-medium text-neutral-600">Bu Hafta</p>
                   </div>
                 </div>
 
                 {/* Filters */}
-                <div className="bg-white rounded-2xl p-4 border border-neutral-200">
+                <div className={card('xs', 'sm', 'default', 'lg')}>
                   <div className="flex items-center gap-3 flex-wrap">
                     <Filter size={20} className="text-neutral-600" />
-                    {['T�m�', 'Okunmam��', '�demeler', 'Faturalar', 'Hat�rlatmalar', 'Sistem'].map(filter => (
+                    {['T�m�', 'Okunmamış��', '�Ödemeler', 'Faturalar', 'Hat�rlaTümüalar', 'Sistem'].map(filter => (
                       <button key={filter} className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-900 hover:text-white transition-colors">
                         {filter}
                       </button>
@@ -1546,36 +1572,30 @@ export default function Accounting() {
                 {/* Notifications List */}
                 <div className="space-y-3">
                   {[
-                    { id: 1, type: 'payment', title: '�deme Hat�rlatmas�', message: 'ABC Ltd.�ti. i�in 15,000 ? �deme vadesi yar�n dolacak', time: '5 dk �nce', unread: true, urgent: true },
+                    { id: 1, type: 'payment', title: '�Ödeme Hat�rlaTümüas�', message: 'ABC Ltd.�ti. i�in 15,000 ? �Ödeme vadesi yar�n dolacak', time: '5 dk �nce', unread: true, urgent: true },
                     { id: 2, type: 'invoice', title: 'Yeni Fatura', message: 'XYZ A.�. i�in #INV-2025-042 numaral� fatura olu�turuldu', time: '1 saat �nce', unread: true, urgent: false },
                     { id: 3, type: 'reminder', title: 'Vade Tarihi Yakla��yor', message: '3 fatura i�in vade tarihi bu hafta i�inde', time: '2 saat �nce', unread: true, urgent: false },
-                    { id: 4, type: 'system', title: 'Sistem G�ncellemesi', message: 'Yeni �zellikler eklendi: Barkod okuyucu aktif', time: '3 saat �nce', unread: false, urgent: false },
-                    { id: 5, type: 'statement', title: 'Ekstre G�nderildi', message: 'DEF Ticaret i�in hesap ekstresi email ile g�nderildi', time: '5 saat �nce', unread: false, urgent: false },
-                    { id: 6, type: 'payment', title: '�deme Al�nd�', message: 'GHI Ltd. 8,500 ? �deme ger�ekle�tirdi', time: '1 g�n �nce', unread: false, urgent: false },
+                    { id: 4, type: 'system', title: 'Sistem G�ncelİşlemesi', message: 'Yeni �zellikler Çeklendi: Barkod okuyucu aktif', time: '3 saat �nce', unread: false, urgent: false },
+                    { id: 5, type: 'statement', title: 'Çekstre G�nderildi', message: 'DEF Ticaret i�in hesap Çekstresi email ile g�nderildi', time: '5 saat �nce', unread: false, urgent: false },
+                    { id: 6, type: 'payment', title: '�Ödeme Al�nd�', message: 'GHI Ltd. 8,500 ? �Ödeme ger�Çekle�tirdi', time: '1 g�n �nce', unread: false, urgent: false },
                   ].map(notif => (
                     <div key={notif.id} className={`bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-lg ${
                       notif.unread ? 'border-neutral-200 bg-blue-50' : 'border-neutral-200'
                     } ${notif.urgent ? 'ring-2 ring-red-300' : ''}`}>
                       <div className="flex items-start gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                          notif.type === 'payment' ? 'bg-green-100' :
-                          notif.type === 'invoice' ? 'bg-blue-100' :
-                          notif.type === 'reminder' ? 'bg-orange-100' :
-                          notif.type === 'statement' ? 'bg-purple-100' :
-                          'bg-neutral-100'
-                        }`}>
-                          {notif.type === 'payment' && <DollarSign className="text-green-600" size={24} />}
-                          {notif.type === 'invoice' && <FileText className="text-blue-600" size={24} />}
-                          {notif.type === 'reminder' && <Clock className="text-orange-600" size={24} />}
-                          {notif.type === 'statement' && <Mail className="text-purple-600" size={24} />}
-                          {notif.type === 'system' && <Settings className="text-neutral-600" size={24} />}
+                        <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center">
+                          {notif.type === 'payment' && <DollarSign className="text-white" size={24} />}
+                          {notif.type === 'invoice' && <FileText className="text-white" size={24} />}
+                          {notif.type === 'reminder' && <Clock className="text-white" size={24} />}
+                          {notif.type === 'statement' && <Mail className="text-white" size={24} />}
+                          {notif.type === 'system' && <Settings className="text-white" size={24} />}
                         </div>
                         
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-1">
                             <h3 className="font-semibold text-neutral-900">{notif.title}</h3>
                             {notif.unread && (
-                              <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                              <span className="w-2 h-2 bg-neutral-900 rounded-full"></span>
                             )}
                             {notif.urgent && (
                               <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
@@ -1589,11 +1609,11 @@ export default function Accounting() {
 
                         <div className="flex items-center gap-2">
                           {notif.unread && (
-                            <button onClick={() => toast('Bildirim okundu olarak i�aretlendi', { icon: '?' })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Okundu i�aretle">
+                            <button onClick={() => toast('Bildirim okundu olarak i�İşaretlendi', { icon: '?' })} className="p-2 text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors" title="okundu i�İşaretle">
                               <CheckCircle size={20} />
                             </button>
                           )}
-                          <button onClick={() => toast('Bildirim silindi', { icon: '???' })} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
+                          <button onClick={() => toast('Bildirim silindi', { icon: '???' })} className="p-2 text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors" title="Sil">
                             <Trash2 size={20} />
                           </button>
                         </div>
@@ -1610,9 +1630,9 @@ export default function Accounting() {
                       { label: 'Email Bildirimleri', checked: true },
                       { label: 'SMS Bildirimleri', checked: false },
                       { label: 'Push Bildirimleri', checked: true },
-                      { label: '�deme Hat�rlatmalar�', checked: true },
+                      { label: '�Ödeme Hat�rlaTümüalar�', checked: true },
                       { label: 'Fatura Bildirimleri', checked: true },
-                      { label: 'Sistem G�ncellemeleri', checked: false },
+                      { label: 'Sistem G�ncelİşlemeleri', checked: false },
                     ].map((pref, i) => (
                       <label key={i} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors cursor-pointer">
                         <input type="checkbox" defaultChecked={pref.checked} className="w-5 h-5 text-neutral-900 rounded" />

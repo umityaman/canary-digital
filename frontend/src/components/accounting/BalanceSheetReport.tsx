@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import {
   Building2,
@@ -68,9 +69,9 @@ export default function BalanceSheetReport() {
         date: reportDate,
       });
 
-      const response = await fetch(`/api/accounting/reports/balance-sheet?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/accounting/reports/balance-sheet?${params}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
       });
 

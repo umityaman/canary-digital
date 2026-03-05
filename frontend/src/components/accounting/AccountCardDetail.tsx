@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../config/api';
 import { useState, useEffect } from 'react'
 import {
   ArrowLeft, Download, FileText, Calendar, TrendingUp, TrendingDown,
@@ -64,9 +65,9 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
     setLoading(true)
     try {
       // Load customer info and invoices
-      const response = await fetch(`/api/customers/${customerId}`, {
+      const response = await fetch(`${API_BASE_URL}/customers/${customerId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
       
@@ -76,9 +77,9 @@ export default function AccountCardDetail({ customerId, onBack }: AccountCardDet
       setCustomer(data.data)
 
       // Load invoices
-      const invoicesResponse = await fetch(`/api/invoices?customerId=${customerId}`, {
+      const invoicesResponse = await fetch(`${API_BASE_URL}/invoices?customerId=${customerId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
       })
       

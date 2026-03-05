@@ -76,7 +76,7 @@ export default function AdvancedReporting() {
   const loadReportData = async () => {
     const reportType = activeReport
     setLoading(true)
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth_token')
 
     if (!token) {
       toast.error('Oturum bilgisi bulunamadı. Lütfen tekrar giriş yapın.')

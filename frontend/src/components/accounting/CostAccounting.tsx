@@ -71,7 +71,7 @@ export default function CostAccounting() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('auth_token');
       const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app';
 
       // 🔥 Gerçek API'den maliyet verilerini yükle
