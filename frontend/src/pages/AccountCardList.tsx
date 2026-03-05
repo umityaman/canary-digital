@@ -1,10 +1,10 @@
-ï»¿import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search, Filter, Users, TrendingUp, TrendingDown, DollarSign, Edit2, Eye } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app/api'
+const API_URL = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app/api'
 
 interface AccountCard {
   id: number
@@ -57,7 +57,7 @@ const AccountCardList: React.FC = () => {
       setTotalPages(response.data.pagination.totalPages)
     } catch (error: any) {
       console.error('Load account cards error:', error)
-      toast.error('Cari hesaplar yÃ¼klenemedi')
+      toast.error('Cari hesaplar yüklenemedi')
     } finally {
       setLoading(false)
     }
@@ -70,9 +70,9 @@ const AccountCardList: React.FC = () => {
 
   const getTypeLabel = (type: string) => {
     const types: Record<string, string> = {
-      customer: 'MÃ¼ÅŸteri',
-      supplier: 'TedarikÃ§i',
-      both: 'Her Ä°kisi'
+      customer: 'Müþteri',
+      supplier: 'Tedarikçi',
+      both: 'Her Ýkisi'
     }
     return types[type] || type
   }
@@ -94,11 +94,11 @@ const AccountCardList: React.FC = () => {
     })
     
     if (balance > 0) {
-      return <span className="text-red-600 font-medium">â‚º{formatted} BorÃ§</span>
+      return <span className="text-red-600 font-medium">?{formatted} Borç</span>
     } else if (balance < 0) {
-      return <span className="text-green-600 font-medium">â‚º{formatted} Alacak</span>
+      return <span className="text-green-600 font-medium">?{formatted} Alacak</span>
     }
-    return <span className="text-neutral-600">â‚º0,00</span>
+    return <span className="text-neutral-600">?0,00</span>
   }
 
   const stats = accountCards.reduce((acc, card) => {
@@ -116,7 +116,7 @@ const AccountCardList: React.FC = () => {
             <div>
               <h1 className="text-2xl font-bold text-neutral-900">Cari Hesaplar</h1>
               <p className="text-sm text-neutral-600 mt-1">
-                MÃ¼ÅŸteri ve tedarikÃ§i hesap kartlarÄ±
+                Müþteri ve tedarikçi hesap kartlarý
               </p>
             </div>
             <button
@@ -146,9 +146,9 @@ const AccountCardList: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-neutral-600 mb-1">Toplam BorÃ§</p>
+                <p className="text-sm text-neutral-600 mb-1">Toplam Borç</p>
                 <p className="text-2xl font-bold text-red-600">
-                  â‚º{stats.debit.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                  ?{stats.debit.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                 </p>
               </div>
               <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
@@ -162,7 +162,7 @@ const AccountCardList: React.FC = () => {
               <div>
                 <p className="text-sm text-neutral-600 mb-1">Toplam Alacak</p>
                 <p className="text-2xl font-bold text-green-600">
-                  â‚º{stats.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                  ?{stats.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                 </p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -194,10 +194,10 @@ const AccountCardList: React.FC = () => {
                 onChange={(e) => setTypeFilter(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
               >
-                <option value="all">TÃ¼m Tipler</option>
-                <option value="customer">MÃ¼ÅŸteri</option>
-                <option value="supplier">TedarikÃ§i</option>
-                <option value="both">Her Ä°kisi</option>
+                <option value="all">Tüm Tipler</option>
+                <option value="customer">Müþteri</option>
+                <option value="supplier">Tedarikçi</option>
+                <option value="both">Her Ýkisi</option>
               </select>
             </div>
 
@@ -207,7 +207,7 @@ const AccountCardList: React.FC = () => {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900"
               >
-                <option value="all">TÃ¼m Durumlar</option>
+                <option value="all">Tüm Durumlar</option>
                 <option value="active">Aktif</option>
                 <option value="inactive">Pasif</option>
               </select>
@@ -220,13 +220,13 @@ const AccountCardList: React.FC = () => {
           {loading ? (
             <div className="p-12 text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-900 mx-auto"></div>
-              <p className="mt-4 text-neutral-600">YÃ¼kleniyor...</p>
+              <p className="mt-4 text-neutral-600">Yükleniyor...</p>
             </div>
           ) : accountCards.length === 0 ? (
             <div className="p-12 text-center">
               <DollarSign className="mx-auto text-neutral-400 mb-4" size={48} />
-              <p className="text-lg font-medium">Cari hesap bulunamadÄ±</p>
-              <p className="text-sm mt-2 text-neutral-600">Yeni cari hesap oluÅŸturarak baÅŸlayÄ±n</p>
+              <p className="text-lg font-medium">Cari hesap bulunamadý</p>
+              <p className="text-sm mt-2 text-neutral-600">Yeni cari hesap oluþturarak baþlayýn</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -246,7 +246,7 @@ const AccountCardList: React.FC = () => {
                       Bakiye
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Ä°ÅŸlemler
+                      Ýþlemler
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                       Durum
@@ -280,7 +280,7 @@ const AccountCardList: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-neutral-600">
-                          {card._count.transactions} iÅŸlem
+                          {card._count.transactions} iþlem
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -303,7 +303,7 @@ const AccountCardList: React.FC = () => {
                         <button
                           onClick={() => navigate(`/account-cards/${card.id}/edit`)}
                           className="text-neutral-600 hover:text-neutral-900"
-                          title="DÃ¼zenle"
+                          title="Düzenle"
                         >
                           <Edit2 size={18} />
                         </button>
@@ -323,7 +323,7 @@ const AccountCardList: React.FC = () => {
                 disabled={page === 1}
                 className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Ã–nceki
+                Önceki
               </button>
               <span className="text-sm text-neutral-600">
                 Sayfa {page} / {totalPages}

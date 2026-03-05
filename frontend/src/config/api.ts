@@ -10,7 +10,7 @@
 // Raw environment value (might include '/api' or trailing slash)
 // Default to production backend if VITE_API_URL is not set
 // CRITICAL: Always use production backend (env vars not loading in Cloud Run)
-const RAW = import.meta.env.VITE_API_URL || 'https://canary-backend-672344972017.europe-west1.run.app';
+const RAW = import.meta.env.VITE_API_URL || 'https://canary-backend-242329244691.europe-west1.run.app';
 
 // Log what we're actually getting from environment
 console.log('🔍 ENV CHECK:', {

@@ -58,7 +58,8 @@ const allowedOrigins = [
   'http://localhost:19000', // Expo dev
   'http://localhost:19006', // Expo web
   'https://frontend-jecbee0xl-umityamans-projects.vercel.app', // Production Vercel URL
-  'https://canary-frontend-672344972017.europe-west1.run.app', // GCP Cloud Run Frontend (main)
+  'https://canary-frontend-672344972017.europe-west1.run.app', // GCP Cloud Run Frontend (old)
+  'https://canary-frontend-242329244691.europe-west1.run.app', // GCP Cloud Run Frontend (new)
   'https://canary-frontend-dw25vffosa-ew.a.run.app', // GCP Cloud Run Frontend (service URL)
   process.env.FRONTEND_URL, // Production frontend URL (configurable)
   process.env.MOBILE_APP_URL, // Mobile app URL
@@ -69,8 +70,13 @@ app.use(cors({
     // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
     
-    // TEMPORARY: Allow all Vercel preview deployments
+    // Allow all Vercel preview deployments
     if (origin && origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+
+    // Allow all GCP Cloud Run deployments for this project
+    if (origin && origin.includes('run.app')) {
       return callback(null, true);
     }
     

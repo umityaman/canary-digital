@@ -35,26 +35,7 @@ export default defineConfig({
     // Rollup options
     rollupOptions: {
       output: {
-        // Manual chunking for better caching
-        manualChunks(id) {
-          // Design tokens in main chunk to avoid undefined errors
-          if (id.includes('design-tokens')) {
-            return 'index'
-          }
-          // Vendor chunks
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
-            return 'react-vendor'
-          }
-          if (id.includes('node_modules/lucide-react')) {
-            return 'ui-vendor'
-          }
-          if (id.includes('node_modules/chart.js') || id.includes('node_modules/react-chartjs-2')) {
-            return 'chart-vendor'
-          }
-          if (id.includes('node_modules/zustand')) {
-            return 'state-vendor'
-          }
-        },
+        // Let Vite handle chunking automatically to avoid React loading order issues
       },
     },
     
